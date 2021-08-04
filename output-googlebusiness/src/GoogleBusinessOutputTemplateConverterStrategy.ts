@@ -4,12 +4,16 @@ import {
   MessageValue,
   MultipleResponsesOutputTemplateConverterStrategy,
   OutputTemplate,
+  OutputTemplateConverterStrategyConfig,
   QuickReplyValue,
   removeSSML,
 } from '@jovotech/output';
 import { GoogleBusinessResponse, RepresentativeType, Suggestion } from './models';
 
-export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleResponsesOutputTemplateConverterStrategy<GoogleBusinessResponse> {
+export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleResponsesOutputTemplateConverterStrategy<
+  GoogleBusinessResponse,
+  OutputTemplateConverterStrategyConfig
+> {
   responseClass = GoogleBusinessResponse;
 
   // TODO improve code

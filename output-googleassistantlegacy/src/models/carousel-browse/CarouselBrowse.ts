@@ -7,6 +7,7 @@ import {
   Type,
   ValidateNested,
 } from '@jovotech/output';
+import { CAROUSEL_MAX_SIZE, CAROUSEL_MIN_SIZE } from '../../constants';
 import { ImageDisplayOptions } from '../basic-card/BasicCard';
 import { Item } from './Item';
 
@@ -15,8 +16,8 @@ export class CarouselBrowse {
   @ValidateNested({
     each: true,
   })
-  @ArrayMinSize(2)
-  @ArrayMaxSize(10)
+  @ArrayMinSize(CAROUSEL_MIN_SIZE)
+  @ArrayMaxSize(CAROUSEL_MAX_SIZE)
   @Type(() => Item)
   items: Item[];
 

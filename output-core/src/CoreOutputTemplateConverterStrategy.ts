@@ -1,9 +1,16 @@
-import { mergeInstances, OutputTemplate, OutputTemplateConverterStrategy } from '@jovotech/output';
+import {
+  ListenValue,
+  mergeInstances,
+  OutputTemplate,
+  OutputTemplateConverterStrategy,
+} from '@jovotech/output';
+import { OutputTemplateConverterStrategyConfig } from '@jovotech/output/src';
 import { CorePlatformResponse } from './models';
 
-export class CorePlatformOutputTemplateConverterStrategy
-  implements OutputTemplateConverterStrategy<CorePlatformResponse>
-{
+export class CoreOutputTemplateConverterStrategy extends OutputTemplateConverterStrategy<
+  CorePlatformResponse,
+  OutputTemplateConverterStrategyConfig
+> {
   responseClass = CorePlatformResponse;
 
   toResponse(output: OutputTemplate | OutputTemplate[]): CorePlatformResponse {
@@ -20,11 +27,10 @@ export class CorePlatformOutputTemplateConverterStrategy
         request: {},
       },
     };
-    // TODO check listen-condition
-    let lastListen: boolean | undefined;
+    let lastListen: ListenValue | undefined;
     output.forEach((outputItem) => {
       const listen = outputItem.platforms?.CorePlatform?.listen ?? outputItem.listen;
-      if (typeof listen === 'boolean') {
+      if (typeof listen === 'boolean' || typeof listen === 'object') {
         lastListen = listen;
       }
       if (outputItem.platforms?.CorePlatform?.nativeResponse) {

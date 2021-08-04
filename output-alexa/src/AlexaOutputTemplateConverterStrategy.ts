@@ -4,10 +4,12 @@ import {
   mergeInstances,
   MessageValue,
   OutputTemplate,
+  OutputTemplateConverterStrategyConfig,
   QuickReplyValue,
   SingleResponseOutputTemplateConverterStrategy,
   toSSML,
 } from '@jovotech/output';
+import { SLOT_TYPE_VALUES_MAX_SIZE } from './constants';
 import {
   AlexaResponse,
   AplRenderDocumentDirective,
@@ -19,20 +21,20 @@ import {
   SlotType,
 } from './models';
 
-export interface AlexaOutputTemplateConverterStrategyConfig {
+export interface AlexaOutputTemplateConverterStrategyConfig
+  extends OutputTemplateConverterStrategyConfig {
   genericOutputToApl: boolean;
 }
 
-export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<AlexaResponse> {
+export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<
+  AlexaResponse,
+  AlexaOutputTemplateConverterStrategyConfig
+> {
   platformName = 'Alexa';
   responseClass = AlexaResponse;
 
-  constructor(
-    public config: Partial<AlexaOutputTemplateConverterStrategyConfig> = {
-      genericOutputToApl: true,
-    },
-  ) {
-    super();
+  getDefaultConfig(): AlexaOutputTemplateConverterStrategyConfig {
+    return { ...super.getDefaultConfig(), genericOutputToApl: true };
   }
 
   buildResponse(output: OutputTemplate): AlexaResponse {
@@ -183,7 +185,7 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
   private convertDynamicEntityToSlotType(entity: DynamicEntity): SlotType {
     return {
       name: entity.name,
-      values: (entity.values || []).map((value) => ({
+      values: (entity.values || []).slice(0, SLOT_TYPE_VALUES_MAX_SIZE).map((value) => ({
         id: value.id,
         name: {
           value: value.value,

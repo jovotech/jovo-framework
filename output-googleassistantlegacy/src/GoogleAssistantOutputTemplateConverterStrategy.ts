@@ -2,6 +2,7 @@ import {
   mergeInstances,
   MessageValue,
   OutputTemplate,
+  OutputTemplateConverterStrategyConfig,
   QuickReplyValue,
   SingleResponseOutputTemplateConverterStrategy,
   toSSML,
@@ -10,7 +11,10 @@ import { GoogleAssistantResponse, SimpleResponse, Suggestion } from './index';
 
 // TODO: CHECK: Theoretically, this platform can have multiple messages but we have never used this feature so far.
 // In case we want to support that, the implementation of this strategy has to be adjusted.
-export class GoogleAssistantOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<GoogleAssistantResponse> {
+export class GoogleAssistantOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<
+  GoogleAssistantResponse,
+  OutputTemplateConverterStrategyConfig
+> {
   platformName = 'GoogleAssistant';
   responseClass = GoogleAssistantResponse;
 

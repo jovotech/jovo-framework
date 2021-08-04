@@ -4,6 +4,7 @@ import {
   MessageValue,
   MultipleResponsesOutputTemplateConverterStrategy,
   OutputTemplate,
+  OutputTemplateConverterStrategyConfig,
   QuickReply,
   QuickReplyValue,
   removeSSML,
@@ -19,7 +20,10 @@ import {
   TemplateType,
 } from './models';
 
-export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleResponsesOutputTemplateConverterStrategy<FacebookMessengerResponse> {
+export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleResponsesOutputTemplateConverterStrategy<
+  FacebookMessengerResponse,
+  OutputTemplateConverterStrategyConfig
+> {
   responseClass = FacebookMessengerResponse;
 
   // TODO: improve code

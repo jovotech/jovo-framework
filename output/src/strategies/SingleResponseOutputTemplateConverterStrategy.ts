@@ -2,6 +2,7 @@ import {
   mergeInstances,
   Message,
   OutputTemplate,
+  OutputTemplateConverterStrategyConfig,
   OutputTemplatePlatforms,
   plainToClass,
   PlatformOutputTemplate,
@@ -10,8 +11,8 @@ import { OutputTemplateConverterStrategy } from '../OutputTemplateConverterStrat
 
 export abstract class SingleResponseOutputTemplateConverterStrategy<
   RESPONSE extends Record<string, unknown>,
-> implements OutputTemplateConverterStrategy<RESPONSE>
-{
+  CONFIG extends OutputTemplateConverterStrategyConfig,
+> extends OutputTemplateConverterStrategy<RESPONSE, CONFIG> {
   abstract responseClass: new () => RESPONSE;
   abstract platformName: keyof OutputTemplatePlatforms;
 

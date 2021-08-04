@@ -9,6 +9,7 @@ import {
   ValidateNested,
 } from '@jovotech/output';
 import AplListJson from '../../apl/List.json';
+import { APL_LIST_MIN_SIZE } from '../../constants';
 import { AplHeader } from './AplHeader';
 import { AplRenderDocumentDirective } from './AplRenderDocumentDirective';
 
@@ -27,10 +28,7 @@ export class AplList {
   header?: AplHeader;
 
   @IsArray()
-  @ArrayMinSize(2)
-  @IsInstance(Card, {
-    each: true,
-  })
+  @ArrayMinSize(APL_LIST_MIN_SIZE)
   @ValidateNested({
     each: true,
   })

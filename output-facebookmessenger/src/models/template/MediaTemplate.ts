@@ -12,6 +12,7 @@ import {
   Type,
   ValidateNested,
 } from '@jovotech/output';
+import { MEDIA_TEMPLATE_BUTTONS_MAX_SIZE, MEDIA_TEMPLATE_ELEMENTS_SIZE } from '../../constants';
 import { TransformButton } from '../../decorators/transformation/TransformButton';
 import { Button } from '../button/Button';
 import { Template, TemplateType } from './Template';
@@ -50,7 +51,7 @@ export class MediaTemplateElement {
 
   @IsOptional()
   @IsArray()
-  @ArrayMaxSize(1)
+  @ArrayMaxSize(MEDIA_TEMPLATE_BUTTONS_MAX_SIZE)
   @ValidateNested({ each: true })
   @TransformButton()
   buttons?: Button[];
@@ -65,8 +66,8 @@ export class MediaTemplate extends Template<TemplateType.Media> {
   sharable: boolean;
 
   @IsArray()
-  @ArrayMinSize(1)
-  @ArrayMaxSize(1)
+  @ArrayMinSize(MEDIA_TEMPLATE_ELEMENTS_SIZE)
+  @ArrayMaxSize(MEDIA_TEMPLATE_ELEMENTS_SIZE)
   @ValidateNested({ each: true })
   @Type(() => MediaTemplateElement)
   elements: [MediaTemplateElement];

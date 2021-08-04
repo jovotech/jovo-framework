@@ -8,9 +8,10 @@ import {
   ValidateIf,
   ValidateNested,
 } from '@jovotech/output';
+import { TABLE_CARD_BUTTONS_MAX_SIZE } from '../../constants';
 import { Button } from '../common/Button';
-import { ColumnProperties } from './ColumnProperties';
 import { Image } from '../common/Image';
+import { ColumnProperties } from './ColumnProperties';
 import { Row } from './Row';
 
 export class TableCard {
@@ -46,7 +47,7 @@ export class TableCard {
 
   @IsOptional()
   @IsArray()
-  @ArrayMaxSize(1)
+  @ArrayMaxSize(TABLE_CARD_BUTTONS_MAX_SIZE)
   @ValidateNested({
     each: true,
   })

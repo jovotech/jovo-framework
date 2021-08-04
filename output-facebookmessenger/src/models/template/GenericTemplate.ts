@@ -14,6 +14,11 @@ import {
   Type,
   ValidateNested,
 } from '@jovotech/output';
+import {
+  GENERIC_TEMPLATE_BUTTONS_MAX_SIZE,
+  GENERIC_TEMPLATE_ELEMENT_TEXT_MAX_LENGTH,
+  GENERIC_TEMPLATE_MAX_SIZE,
+} from '../../constants';
 import { TransformButton } from '../../decorators/transformation/TransformButton';
 import { Button } from '../button/Button';
 import { WebViewHeightRatio } from '../button/LinkButton';
@@ -49,13 +54,13 @@ export class GenericTemplateDefaultAction {
 export class GenericTemplateElement {
   @IsString()
   @IsNotEmpty()
-  @MaxLength(80)
+  @MaxLength(GENERIC_TEMPLATE_ELEMENT_TEXT_MAX_LENGTH)
   title: string;
 
   @IsOptional()
   @IsString()
   @IsNotEmpty()
-  @MaxLength(80)
+  @MaxLength(GENERIC_TEMPLATE_ELEMENT_TEXT_MAX_LENGTH)
   subtitle?: string;
 
   @IsOptional()
@@ -69,7 +74,7 @@ export class GenericTemplateElement {
 
   @IsOptional()
   @IsArray()
-  @ArrayMaxSize(3)
+  @ArrayMaxSize(GENERIC_TEMPLATE_BUTTONS_MAX_SIZE)
   @ValidateNested({ each: true })
   @TransformButton()
   buttons?: Button[];
@@ -97,7 +102,7 @@ export class GenericTemplate extends Template<TemplateType.Generic> {
   image_aspect_ratio?: ImageAspectRatio;
 
   @IsArray()
-  @ArrayMaxSize(10)
+  @ArrayMaxSize(GENERIC_TEMPLATE_MAX_SIZE)
   @ValidateNested({ each: true })
   @Type(() => GenericTemplateElement)
   elements: GenericTemplateElement[];

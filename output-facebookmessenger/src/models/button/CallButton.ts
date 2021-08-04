@@ -1,4 +1,5 @@
 import { Equals, IsNotEmpty, IsPhoneNumber, IsString, MaxLength } from '@jovotech/output';
+import {BUTTON_TITLE_MAX_LENGTH} from '../../constants';
 import { Button, ButtonType } from './Button';
 
 export class CallButton extends Button<ButtonType.Call> {
@@ -7,7 +8,7 @@ export class CallButton extends Button<ButtonType.Call> {
 
   @IsString()
   @IsNotEmpty()
-  @MaxLength(20)
+  @MaxLength(BUTTON_TITLE_MAX_LENGTH)
   title: string;
 
   @IsPhoneNumber()

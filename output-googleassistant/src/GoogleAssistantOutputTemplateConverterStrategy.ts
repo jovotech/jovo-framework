@@ -4,6 +4,7 @@ import {
   mergeInstances,
   MessageValue,
   OutputTemplate,
+  OutputTemplateConverterStrategyConfig,
   QuickReplyValue,
   SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
@@ -17,7 +18,10 @@ import {
   TypeOverrideModeLike,
 } from './models';
 
-export class GoogleAssistantOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<GoogleAssistantResponse> {
+export class GoogleAssistantOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<
+  GoogleAssistantResponse,
+  OutputTemplateConverterStrategyConfig
+> {
   platformName = 'GoogleAssistant';
   responseClass = GoogleAssistantResponse;
 
@@ -76,7 +80,9 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
       if (!response.prompt) {
         response.prompt = {};
       }
-      response.prompt.suggestions = quickReplies.map(this.convertQuickReplyToSuggestion);
+      response.prompt.suggestions = quickReplies
+        .slice(0, 8)
+        .map(this.convertQuickReplyToSuggestion);
     }
 
     const card = output.platforms?.GoogleAssistant?.card || output.card;

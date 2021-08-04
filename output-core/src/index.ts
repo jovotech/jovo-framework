@@ -11,4 +11,4 @@ declare module '@jovotech/output/dist/types/models/OutputTemplatePlatforms' {
 registerOutputPlatform('CorePlatform', CorePlatformOutputTemplate);
 
 export * from './models';
-export * from './CorePlatformOutputTemplateConverterStrategy';
+export * from './CoreOutputTemplateConverterStrategy';

@@ -1,4 +1,5 @@
 import { IsInt, IsNotEmpty, IsString, Min } from '@jovotech/output';
+import { APL_INDEX_MIN } from '../../constants';
 import { AplDirective } from './AplDirective';
 
 export class AplIndexListDirective<TYPE extends string> extends AplDirective<TYPE> {
@@ -7,6 +8,6 @@ export class AplIndexListDirective<TYPE extends string> extends AplDirective<TYP
   listId: string;
 
   @IsInt()
-  @Min(0)
+  @Min(APL_INDEX_MIN)
   startIndex: number;
 }

@@ -1,4 +1,5 @@
 import { Card, Carousel, Message, QuickReply, removeSSML } from '@jovotech/output';
+import { GENERIC_TEMPLATE_MAX_SIZE } from './constants';
 import {
   GenericTemplateElement,
   Message as FacebookMessengerMessage,
@@ -30,7 +31,9 @@ export function augmentModelPrototypes(): void {
   Carousel.prototype.toFacebookMessengerGenericTemplate = function () {
     return {
       template_type: TemplateType.Generic,
-      elements: this.items.map((item) => item.toFacebookMessengerGenericTemplateElement!()),
+      elements: this.items
+        .slice(0, GENERIC_TEMPLATE_MAX_SIZE)
+        .map((item) => item.toFacebookMessengerGenericTemplateElement!()),
     };
   };
 

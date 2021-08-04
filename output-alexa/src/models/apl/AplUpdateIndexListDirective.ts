@@ -1,4 +1,5 @@
 import { Equals, IsArray, IsInt, Min, Type, ValidateNested } from '@jovotech/output';
+import { APL_LIST_VERSION_MIN } from '../../constants';
 import { AplIndexListDirective } from './AplIndexListDirective';
 import { AplOperation, AplOperationType } from './AplOperation';
 import { AplDeleteItemOperation } from './operations/AplDeleteItemOperation';
@@ -12,7 +13,7 @@ export class AplUpdateIndexListDirective extends AplIndexListDirective<'Alexa.Pr
   type: 'Alexa.Presentation.APL.UpdateIndexListData';
 
   @IsInt()
-  @Min(0)
+  @Min(APL_LIST_VERSION_MIN)
   listVersion: number;
 
   @IsArray()

@@ -11,6 +11,7 @@ import {
   validate,
   ValidateNested,
 } from '@jovotech/output';
+import { SUGGESTIONS_MAX_SIZE } from '../constants';
 import { Image } from './Image';
 import { Representative } from './Representative';
 import { RichCard } from './RichCard';
@@ -29,7 +30,7 @@ export class GoogleBusinessResponse {
 
   @IsOptional()
   @IsArray()
-  @ArrayMaxSize(13)
+  @ArrayMaxSize(SUGGESTIONS_MAX_SIZE)
   @ValidateNested({ each: true })
   @Type(() => Suggestion)
   suggestions?: Suggestion[];

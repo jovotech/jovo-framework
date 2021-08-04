@@ -6,6 +6,7 @@ import {
   MessageValue,
   removeSSMLSpeakTags,
 } from '@jovotech/output';
+import { SIMPLE_RESPONSE_DISPLAY_TEXT_MAX_LENGTH } from '../../constants';
 import { IsValidSimpleResponseString } from '../../decorators/validation/IsValidSimpleResponseString';
 
 export class SimpleResponse {
@@ -18,7 +19,7 @@ export class SimpleResponse {
   @IsOptional()
   @IsString()
   @IsNotEmpty()
-  @MaxLength(640)
+  @MaxLength(SIMPLE_RESPONSE_DISPLAY_TEXT_MAX_LENGTH)
   displayText?: string;
 
   toMessage?(): MessageValue {

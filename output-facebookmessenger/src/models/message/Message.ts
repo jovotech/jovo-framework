@@ -9,6 +9,7 @@ import {
   validate,
   ValidateNested,
 } from '@jovotech/output';
+import { MESSAGE_TEXT_MAX_LENGTH, PAYLOAD_MAX_LENGTH } from '../../constants';
 import { EmailQuickReply } from '../quick-reply/EmailQuickReply';
 import { PhoneNumberQuickReply } from '../quick-reply/PhoneNumberQuickReply';
 import { QuickReply, QuickReplyContentType } from '../quick-reply/QuickReply';
@@ -25,8 +26,8 @@ export class Message {
       if (!value) {
         return '$property should not be empty';
       }
-      if (value.length > 2000) {
-        return '$property can not exceed 2000 characters';
+      if (value.length > MESSAGE_TEXT_MAX_LENGTH) {
+        return `$property can not exceed ${MESSAGE_TEXT_MAX_LENGTH} characters`;
       }
       return;
     },
@@ -70,6 +71,6 @@ export class Message {
 
   @IsOptional()
   @IsString()
-  @MaxLength(1000)
+  @MaxLength(PAYLOAD_MAX_LENGTH)
   metadata?: string;
 }

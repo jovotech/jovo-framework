@@ -51,5 +51,6 @@ export * from './decorators/validation/CastedMaxLength';
 export * from './decorators/validation/IsValidGameMetaDataString';
 
 export * from './models';
+export * from './constants';
 
 export * from './FacebookMessengerOutputTemplateConverterStrategy';

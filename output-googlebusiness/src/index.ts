@@ -43,5 +43,6 @@ export * from './decorators/validation/IsValidSuggestedActionObject';
 export * from './decorators/validation/IsValidSuggestionObject';
 
 export * from './models';
+export * from './constants';
 
 export * from './GoogleBusinessOutputTemplateConverterStrategy';

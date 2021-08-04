@@ -4,9 +4,11 @@ import {
   mergeInstances,
   MessageValue,
   OutputTemplate,
+  OutputTemplateConverterStrategyConfig,
   QuickReplyValue,
   SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
+import { QUICK_REPLIES_MAX_SIZE } from './constants';
 import {
   DialogflowResponse,
   EntityOverrideMode,
@@ -16,7 +18,10 @@ import {
 } from './models';
 
 // TODO CHECK: Theoretically, multiple messages are supported in the response, in the future this could be refactored for that.
-export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<DialogflowResponse> {
+export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<
+  DialogflowResponse,
+  OutputTemplateConverterStrategyConfig
+> {
   platformName = 'Dialogflow';
   responseClass = DialogflowResponse;
 
@@ -54,7 +59,9 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
       response.fulfillment_messages.push({
         message: {
           quick_replies: {
-            quick_replies: quickReplies.map(this.convertQuickReplyToDialogflowQuickReply),
+            quick_replies: quickReplies
+              .slice(0, QUICK_REPLIES_MAX_SIZE)
+              .map(this.convertQuickReplyToDialogflowQuickReply),
           },
         },
       });

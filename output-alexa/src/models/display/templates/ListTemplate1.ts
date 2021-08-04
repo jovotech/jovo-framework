@@ -10,6 +10,7 @@ import {
   Type,
   ValidateNested,
 } from '@jovotech/output';
+import { DISPLAY_TEMPLATE_TITLE_MAX_LENGTH, LIST_TEMPLATE_MIN_SIZE } from '../../../constants';
 import { Image } from '../../common/Image';
 import {
   BackButtonVisibility,
@@ -33,7 +34,7 @@ export class ListTemplate1 implements DisplayTemplate<DisplayTemplateType.List1>
 
   @IsString()
   @IsNotEmpty()
-  @MaxLength(200)
+  @MaxLength(DISPLAY_TEMPLATE_TITLE_MAX_LENGTH)
   title: string;
 
   @IsOptional()
@@ -42,7 +43,7 @@ export class ListTemplate1 implements DisplayTemplate<DisplayTemplateType.List1>
   backgroundImage?: Image;
 
   @IsArray()
-  @ArrayMinSize(1)
+  @ArrayMinSize(LIST_TEMPLATE_MIN_SIZE)
   @ValidateNested({
     each: true,
   })

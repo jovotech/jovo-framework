@@ -1,4 +1,5 @@
 import { EnumLike, IsEnum, IsInt, Min } from '@jovotech/output';
+import { APL_INDEX_MIN } from '../../constants';
 
 export enum AplOperationType {
   InsertItem = 'InsertItem',
@@ -15,6 +16,6 @@ export class AplOperation<TYPE extends AplOperationTypeLike = AplOperationTypeLi
   type: TYPE;
 
   @IsInt()
-  @Min(0)
+  @Min(APL_INDEX_MIN)
   index: number;
 }

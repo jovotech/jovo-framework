@@ -46,5 +46,6 @@ declare module '@jovotech/output/dist/types/models/OutputTemplatePlatforms' {
 registerOutputPlatform('GoogleAssistant', GoogleAssistantOutputTemplate);
 
 export * from './models';
+export * from './constants';
 
 export * from './GoogleAssistantOutputTemplateConverterStrategy';

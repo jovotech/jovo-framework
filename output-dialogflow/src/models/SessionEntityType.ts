@@ -8,6 +8,7 @@ import {
   Type,
   ValidateNested,
 } from '@jovotech/output';
+import { SESSION_ENTITY_TYPE_SYNONYMS_MIN_SIZE } from '../constants';
 import { EntitySynonymsContainValue } from '../decorators/validation/EntitySynonymsContainValue';
 
 export enum EntityOverrideMode {
@@ -38,7 +39,7 @@ export class Entity {
   value: string;
 
   @IsArray()
-  @ArrayMinSize(1)
+  @ArrayMinSize(SESSION_ENTITY_TYPE_SYNONYMS_MIN_SIZE)
   @IsString({ each: true })
   @IsNotEmpty({ each: true })
   @EntitySynonymsContainValue()

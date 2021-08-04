@@ -1,11 +1,19 @@
 import { plainToClass } from 'class-transformer';
 import { validate, ValidationError } from 'class-validator';
-import { JovoResponse, OutputTemplate, OutputTemplateConverterStrategy } from '.';
+import {
+  JovoResponse,
+  OutputTemplate,
+  OutputTemplateConverterStrategy,
+  OutputTemplateConverterStrategyConfig,
+} from '.';
 import { OutputValidationError } from './errors/OutputValidationError';
 
-// TODO: check if validation should happen before and after conversion
-export class OutputTemplateConverter<RESPONSE extends JovoResponse> {
-  constructor(public strategy: OutputTemplateConverterStrategy<RESPONSE>) {}
+export class OutputTemplateConverter<
+  STRATEGY extends OutputTemplateConverterStrategy<RESPONSE, CONFIG>,
+  RESPONSE extends JovoResponse = InstanceType<STRATEGY['responseClass']>,
+  CONFIG extends OutputTemplateConverterStrategyConfig = STRATEGY['config'],
+> {
+  constructor(readonly strategy: STRATEGY) {}
 
   async validateOutput(output: OutputTemplate | OutputTemplate[]): Promise<ValidationError[]> {
     return this.validate(output, OutputTemplate);
@@ -17,28 +25,53 @@ export class OutputTemplateConverter<RESPONSE extends JovoResponse> {
 
   async toResponse(output: OutputTemplate | OutputTemplate[]): Promise<RESPONSE | RESPONSE[]> {
     const instancedOutput: OutputTemplate | OutputTemplate[] = plainToClass(OutputTemplate, output);
-    let errors = await this.validateOutput(instancedOutput);
-    if (errors.length) {
-      throw new OutputValidationError(errors, 'Can not convert.\n');
+
+    const validationConfig = this.strategy.config.validation;
+
+    const shouldValidateBefore =
+      typeof validationConfig === 'object' ? validationConfig.before : validationConfig;
+    if (shouldValidateBefore) {
+      const errors = await this.validateOutput(instancedOutput);
+      if (errors.length) {
+        throw new OutputValidationError(errors, 'Can not convert.\n');
+      }
     }
     const response = this.strategy.toResponse(instancedOutput);
-    errors = await this.validateResponse(response);
-    if (errors.length) {
-      throw new OutputValidationError(errors, 'Conversion caused invalid response.\n');
+
+    const shouldValidateAfter =
+      typeof validationConfig === 'object' ? validationConfig.after : validationConfig;
+    if (shouldValidateAfter) {
+      const errors = await this.validateResponse(response);
+      if (errors.length) {
+        throw new OutputValidationError(errors, 'Conversion caused invalid response.\n');
+      }
     }
+
     return response;
   }
 
   async fromResponse(response: RESPONSE | RESPONSE[]): Promise<OutputTemplate | OutputTemplate[]> {
     const responseInstance = plainToClass(this.strategy.responseClass, response);
-    let errors = await this.validateResponse(responseInstance);
-    if (errors.length) {
-      throw new OutputValidationError(errors, 'Can not parse.\n');
+
+    const validationConfig = this.strategy.config.validation;
+
+    const shouldValidateBefore =
+      typeof validationConfig === 'object' ? validationConfig.before : validationConfig;
+    if (shouldValidateBefore) {
+      const errors = await this.validateResponse(responseInstance);
+      if (errors.length) {
+        throw new OutputValidationError(errors, 'Can not parse.\n');
+      }
     }
     const output = this.strategy.fromResponse(responseInstance);
-    errors = await this.validateOutput(output);
-    if (errors.length) {
-      throw new OutputValidationError(errors, 'Conversion caused invalid output.\n');
+
+    const shouldValidateAfter =
+      typeof validationConfig === 'object' ? validationConfig.after : validationConfig;
+    if (shouldValidateAfter) {
+      const errors = await this.validateOutput(output);
+      if (errors.length) {
+        throw new OutputValidationError(errors, 'Conversion caused invalid output.\n');
+      }
     }
     return output;
   }
