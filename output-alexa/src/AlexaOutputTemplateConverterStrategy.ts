@@ -1,4 +1,5 @@
 import {
+  DynamicEntities,
   DynamicEntitiesMode,
   DynamicEntity,
   mergeInstances,
@@ -9,7 +10,7 @@ import {
   SingleResponseOutputTemplateConverterStrategy,
   toSSML,
 } from '@jovotech/output';
-import { SLOT_TYPE_VALUES_MAX_SIZE } from './constants';
+import { ALEXA_STRING_MAX_LENGTH, SLOT_TYPE_VALUES_MAX_SIZE } from './constants';
 import {
   AlexaResponse,
   AplRenderDocumentDirective,
@@ -37,7 +38,88 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
     return { ...super.getDefaultConfig(), genericOutputToApl: true };
   }
 
-  buildResponse(output: OutputTemplate): AlexaResponse {
+  prepareOutput(output: OutputTemplate | OutputTemplate[]): OutputTemplate {
+    const singleOutput = super.prepareOutput(output);
+
+    if (singleOutput.platforms?.Alexa?.message) {
+      singleOutput.platforms.Alexa.message = this.sanitizeMessage(
+        singleOutput.platforms.Alexa.message,
+        'platforms.Alexa.message',
+      );
+    } else if (singleOutput.message) {
+      singleOutput.message = this.sanitizeMessage(singleOutput.message, 'message');
+    }
+
+    if (singleOutput.platforms?.Alexa?.reprompt) {
+      singleOutput.platforms.Alexa.reprompt = this.sanitizeMessage(
+        singleOutput.platforms.Alexa.reprompt,
+        'platforms.Alexa.reprompt',
+      );
+    } else if (singleOutput.reprompt) {
+      singleOutput.reprompt = this.sanitizeMessage(singleOutput.reprompt, 'reprompt');
+    }
+
+    if (
+      singleOutput.platforms?.Alexa?.listen &&
+      typeof singleOutput.platforms.Alexa.listen === 'object' &&
+      singleOutput.platforms.Alexa.listen.entities?.types?.length
+    ) {
+      singleOutput.platforms.Alexa.listen.entities = this.sanitizeDynamicEntities(
+        singleOutput.platforms.Alexa.listen.entities,
+        'platforms.Alexa.listen.entities.types',
+      );
+    } else if (
+      singleOutput.listen &&
+      typeof singleOutput.listen === 'object' &&
+      singleOutput.listen.entities?.types?.length
+    ) {
+      singleOutput.listen.entities = this.sanitizeDynamicEntities(
+        singleOutput.listen.entities,
+        'listen.entities.types',
+      );
+    }
+
+    return singleOutput;
+  }
+
+  private sanitizeMessage(
+    message: MessageValue,
+    path: string,
+    maxLength = ALEXA_STRING_MAX_LENGTH,
+  ): MessageValue {
+    // subtract length of text that gets added with SSML
+    const ssmlMaxLength = maxLength - `<speak></speak>`.length;
+    const messageLength = typeof message === 'object' ? message.text.length : message.length;
+    if (!this.shouldSanitize('maxLength') || messageLength <= ssmlMaxLength) {
+      return message;
+    }
+    if (typeof message === 'object') {
+      message.text = message.text.slice(0, ssmlMaxLength);
+    } else {
+      message = message.slice(0, ssmlMaxLength);
+    }
+    this.logStringTruncationWarning(path, maxLength, 'AlexaOutputSanitization');
+    return message;
+  }
+
+  private sanitizeDynamicEntities(
+    dynamicEntities: DynamicEntities,
+    path: string,
+    maxSize = SLOT_TYPE_VALUES_MAX_SIZE,
+  ): DynamicEntities {
+    if (
+      !this.shouldSanitize('maxSize') ||
+      !dynamicEntities?.types?.length ||
+      dynamicEntities.types.length <= maxSize
+    ) {
+      return dynamicEntities;
+    }
+    dynamicEntities.types = dynamicEntities.types.slice(0, maxSize);
+    this.logArrayTruncationWarning(path, maxSize, 'AlexaOutputSanitization');
+    return dynamicEntities;
+  }
+
+  toResponse(output: OutputTemplate): AlexaResponse {
     const response: AlexaResponse = {
       version: '1.0',
       response: {},
