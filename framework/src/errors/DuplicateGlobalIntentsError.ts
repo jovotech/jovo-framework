@@ -18,11 +18,12 @@ export function buildDuplicateGlobalIntentsErrorMessage(
   return `Duplicate global intent names detected:${separator}${duplicateEntriesText}.`;
 }
 
-// TODO improve
+// TODO improve to also display path of the components that cause the error
 export class DuplicateGlobalIntentsError extends JovoError {
   constructor(entries: [string, HandlerMetadata[]][]) {
     super({
       message: buildDuplicateGlobalIntentsErrorMessage(entries),
+      hint: 'Check the intentMap as well.',
     });
   }
 }

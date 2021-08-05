@@ -1,5 +1,5 @@
 import _merge from 'lodash.merge';
-import { DeepPartial, OmitIndex } from '.';
+import { DeepPartial } from '.';
 import { MiddlewareCollection } from './MiddlewareCollection';
 import { Plugin, PluginConfig } from './Plugin';
 
@@ -42,13 +42,13 @@ export abstract class Extensible<
   abstract initializeMiddlewareCollection(): MiddlewareCollection<MIDDLEWARES>;
 
   use(...plugins: Plugin[]): this {
-    for (let i = 0, len = plugins.length; i < len; i++) {
-      const name = plugins[i].constructor.name;
-      this.plugins[name] = plugins[i];
-      if (plugins[i].install) {
-        plugins[i].install?.(this);
+    plugins.forEach((plugin) => {
+      const name = plugin.constructor.name;
+      this.plugins[name] = plugin;
+      if (plugin.install) {
+        plugin.install?.(this);
       }
-    }
+    });
     return this;
   }
 

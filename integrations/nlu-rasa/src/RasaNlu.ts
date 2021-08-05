@@ -3,7 +3,6 @@ import {
   AxiosRequestConfig,
   AxiosResponse,
   DeepPartial,
-  EntityMap,
   HandleRequest,
   Jovo,
   NluData,
@@ -40,11 +39,7 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
     };
   }
 
-  constructor(config?: RasaNluConfig) {
-    super(config);
-  }
-
-  async process(handleRequest: HandleRequest, jovo: Jovo): Promise<RasaNluData | undefined> {
+  async process(handleRequest: HandleRequest, jovo: Jovo): Promise<NluData | undefined> {
     const text = jovo.$request.getRawText();
     if (!text) return;
     try {
@@ -85,6 +80,7 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
         return undefined;
       }
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.error('Error while retrieving nlu-data from Rasa-server.', e);
       return;
     }

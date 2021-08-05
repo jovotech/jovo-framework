@@ -1,12 +1,8 @@
-import { HandleRequest } from './HandleRequest';
+import { AnyObject, UnknownObject } from './index';
 import { Jovo } from './Jovo';
-import { PersistableSessionData } from './JovoSession';
-import { PersistableUserData } from './JovoUser';
 import { PluginConfig } from './Plugin';
 
-export interface Data {
-  [key: string]: any;
-}
+export interface Data extends AnyObject {}
 
 export interface RequestData extends Data {}
 
@@ -22,20 +18,19 @@ export interface Entity {
   name: string;
   id?: string;
   key?: string;
-  value?: unknown;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  value?: any;
 }
 
-export type EntityMap = Record<string, Entity>;
+export interface EntityMap {
+  [key: string]: Entity | undefined;
+}
 
-export interface AsrData {
-  [key: string]: unknown;
-
+export interface AsrData extends UnknownObject {
   text?: string;
 }
 
-export interface NluData {
-  [key: string]: unknown;
-
+export interface NluData extends UnknownObject {
   intent?: {
     name: string;
   };
@@ -49,18 +44,33 @@ export interface Intent {
 
 export type IntentMap = Partial<Record<string, string>>;
 
-export type JovoConditionFunction = (
-  handleRequest: HandleRequest,
-  jovo: Jovo,
-) => boolean | Promise<boolean>;
+export type JovoConditionFunction = (jovo: Jovo) => boolean | Promise<boolean>;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type JovoAnyFunction = (jovo: Jovo) => Promise<any>;
+
+export interface StoredElement extends UnknownObject {
+  enabled?: boolean;
+}
+
+export interface StoredElementHistory extends StoredElement, UnknownObject {
+  size?: number;
+  asr?: StoredElement | boolean;
+  state?: StoredElement | boolean;
+  output?: StoredElement | boolean;
+  nlu?: StoredElement | boolean;
+  request?: StoredElement | boolean;
+  response?: StoredElement | boolean;
+}
 
 export interface DbPluginConfig extends PluginConfig {
-  storedElements: {
-    $user: {
-      enabled: boolean;
-    };
-    $session: {
-      enabled: boolean;
-    };
-  };
+  storedElements?: DbPluginStoredElementsConfig;
+}
+
+export interface DbPluginStoredElementsConfig extends UnknownObject {
+  user?: StoredElement | boolean;
+  session?: StoredElement | boolean;
+  history?: StoredElementHistory | boolean;
+  createdAt?: StoredElement | boolean;
+  updateAt?: StoredElement | boolean;
 }

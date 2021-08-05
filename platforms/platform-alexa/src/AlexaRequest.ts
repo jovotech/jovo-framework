@@ -1,9 +1,13 @@
-import { Entity, EntityMap, JovoRequest, JovoRequestType, RequestType } from '@jovotech/framework';
-import {ResolutionPerAuthorityStatusCode} from '@jovotech/output-alexa';
 import {
-  DYNAMIC_ENTITY_MATCHES_PREFIX,
-  STATIC_ENTITY_MATCHES_PREFIX,
-} from './constants';
+  Entity,
+  EntityMap,
+  JovoRequest,
+  JovoRequestType,
+  RequestType,
+  UnknownObject,
+} from '@jovotech/framework';
+import { ResolutionPerAuthorityStatusCode } from '@jovotech/output-alexa';
+import { DYNAMIC_ENTITY_MATCHES_PREFIX, STATIC_ENTITY_MATCHES_PREFIX } from './constants';
 import { AuthorityResolution, Context, Request, Session } from './interfaces';
 
 export class AlexaRequest extends JovoRequest {
@@ -83,7 +87,7 @@ export class AlexaRequest extends JovoRequest {
     return this.request?.type ? requestTypeMap[this.request?.type] : undefined;
   }
 
-  getSessionData(): Record<string, unknown> | undefined {
+  getSessionData(): UnknownObject | undefined {
     return this.session?.attributes;
   }
 
@@ -97,5 +101,13 @@ export class AlexaRequest extends JovoRequest {
 
   isAplSupported(): boolean {
     return !!this.context?.System?.device?.supportedInterfaces?.['Alexa.Presentation.APL'];
+  }
+
+  getApiEndpoint(): string {
+    return this.context!.System.apiEndpoint;
+  }
+
+  getApiAccessToken(): string {
+    return this.context!.System.apiAccessToken;
   }
 }

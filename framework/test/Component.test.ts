@@ -3,14 +3,21 @@ import {
   BaseComponent,
   Component,
   ComponentDeclaration,
+  ComponentMetadata,
   MetadataStorage,
   PluginConfig,
 } from '../src';
+
 import { EmptyComponent, ExampleComponent, ExampleComponentPlugin } from './utilities';
 
-// TODO implement more tests
 describe('registering components', () => {
   let app: App;
+
+  function expectNodeMetadataAtToEqual(path: string[], equals: ComponentMetadata) {
+    const node = app.componentTree.getNodeAt(path);
+    expect(node?.metadata).toEqual(equals);
+  }
+
   const metadataStorage = MetadataStorage.getInstance();
   beforeEach(() => {
     app = new App();
@@ -18,116 +25,115 @@ describe('registering components', () => {
   });
 
   test('via BaseComponent-constructor and undecorated component', () => {
-    app.useComponents(EmptyComponent);
-    expect(app.components).toEqual({
-      EmptyComponent: { target: EmptyComponent, options: {} },
-    });
+    app.use(EmptyComponent);
+    expectNodeMetadataAtToEqual(['EmptyComponent'], new ComponentMetadata(EmptyComponent, {}));
   });
 
   describe('via ComponentPlugin', () => {
     test('no config passed', () => {
       app.use(new ExampleComponentPlugin());
-      expect(app.components).toEqual({
-        ExampleComponent: { target: ExampleComponent, options: {} },
-      });
+      expectNodeMetadataAtToEqual(
+        ['ExampleComponent'],
+        new ComponentMetadata(ExampleComponent, {}),
+      );
     });
 
     test('config passed', () => {
       app.use(new ExampleComponentPlugin({ component: { text: 'edited' } }));
-      expect(app.components).toEqual({
-        ExampleComponent: { target: ExampleComponent, options: { config: { text: 'edited' } } },
-      });
+      expectNodeMetadataAtToEqual(
+        ['ExampleComponent'],
+        new ComponentMetadata(ExampleComponent, {
+          config: {
+            text: 'edited',
+          },
+        }),
+      );
     });
   });
 
   describe('via ComponentDeclaration-instance', () => {
     test('no options passed', () => {
-      app.useComponents(new ComponentDeclaration(ExampleComponent));
-      expect(app.components).toEqual({
-        ExampleComponent: { target: ExampleComponent, options: {} },
-      });
+      app.use(new ComponentDeclaration(ExampleComponent));
+      expectNodeMetadataAtToEqual(
+        ['ExampleComponent'],
+        new ComponentMetadata(ExampleComponent, {}),
+      );
     });
 
     test('options with config passed', () => {
-      app.useComponents(
+      app.use(
         new ComponentDeclaration(ExampleComponent, {
           config: {
             text: 'edited',
           },
         }),
       );
-      expect(app.components).toEqual({
-        ExampleComponent: { target: ExampleComponent, options: { config: { text: 'edited' } } },
-      });
+      expectNodeMetadataAtToEqual(
+        ['ExampleComponent'],
+        new ComponentMetadata(ExampleComponent, {
+          config: {
+            text: 'edited',
+          },
+        }),
+      );
     });
 
     test('options with name passed', () => {
-      app.useComponents(
+      app.use(
         new ComponentDeclaration(ExampleComponent, {
           name: 'NewComponentName',
         }),
       );
-      expect(app.components).toEqual({
-        NewComponentName: { target: ExampleComponent, options: { name: 'NewComponentName' } },
-      });
+      expectNodeMetadataAtToEqual(
+        ['NewComponentName'],
+        new ComponentMetadata(ExampleComponent, { name: 'NewComponentName' }),
+      );
     });
 
     test('options with components passed', () => {
-      app.useComponents(
-        new ComponentDeclaration(ExampleComponent, { components: [EmptyComponent] }),
+      app.use(new ComponentDeclaration(ExampleComponent, { components: [EmptyComponent] }));
+      expectNodeMetadataAtToEqual(
+        ['ExampleComponent'],
+        new ComponentMetadata(ExampleComponent, { components: [EmptyComponent] }),
       );
-      expect(app.components).toEqual({
-        ExampleComponent: {
-          target: ExampleComponent,
-          options: { components: [EmptyComponent] },
-          components: {
-            EmptyComponent: {
-              options: {},
-              target: EmptyComponent,
-            },
-          },
-        },
-      });
     });
   });
 
   describe('via ComponentDeclaration-object', () => {
     test('no options passed', () => {
-      app.useComponents({ component: ExampleComponent });
-      expect(app.components).toEqual({
-        ExampleComponent: { target: ExampleComponent, options: {} },
-      });
+      app.use({ component: ExampleComponent });
+      expectNodeMetadataAtToEqual(
+        ['ExampleComponent'],
+        new ComponentMetadata(ExampleComponent, {}),
+      );
     });
 
     test('options with config passed', () => {
-      app.useComponents(
+      app.use(
         new ComponentDeclaration(ExampleComponent, {
           config: {
             text: 'edited',
           },
         }),
       );
-      expect(app.components).toEqual({
-        ExampleComponent: { target: ExampleComponent, options: { config: { text: 'edited' } } },
-      });
+      expectNodeMetadataAtToEqual(
+        ['ExampleComponent'],
+        new ComponentMetadata(ExampleComponent, {
+          config: {
+            text: 'edited',
+          },
+        }),
+      );
     });
 
     test('options with components passed', () => {
-      app.useComponents(
-        new ComponentDeclaration(ExampleComponent, { components: [EmptyComponent] }),
+      app.use(new ComponentDeclaration(ExampleComponent, { components: [EmptyComponent] }));
+      expectNodeMetadataAtToEqual(
+        ['ExampleComponent'],
+        new ComponentMetadata(ExampleComponent, {
+          components: [EmptyComponent],
+        }),
       );
-      expect(app.components).toEqual({
-        ExampleComponent: {
-          target: ExampleComponent,
-          options: { components: [EmptyComponent] },
-          components: {
-            EmptyComponent: {
-              options: {},
-              target: EmptyComponent,
-            },
-          },
-        },
-      });
     });
   });
 
@@ -140,10 +146,11 @@ describe('registering components', () => {
         }
       }
 
-      app.useComponents(DecoratedComponent);
-      expect(app.components).toEqual({
-        DecoratedComponent: { target: DecoratedComponent, options: {} },
-      });
+      app.use(DecoratedComponent);
+      expectNodeMetadataAtToEqual(
+        ['DecoratedComponent'],
+        new ComponentMetadata(DecoratedComponent, {}),
+      );
     });
 
     test('config passed in decorator', () => {
@@ -158,17 +165,15 @@ describe('registering components', () => {
         }
       }
 
-      app.useComponents(DecoratedComponent);
-      expect(app.components).toEqual({
-        DecoratedComponent: {
-          target: DecoratedComponent,
-          options: {
-            config: {
-              test: true,
-            },
+      app.use(DecoratedComponent);
+      expectNodeMetadataAtToEqual(
+        ['DecoratedComponent'],
+        new ComponentMetadata(DecoratedComponent, {
+          config: {
+            test: true,
           },
-        },
-      });
+        }),
+      );
     });
 
     test('config passed in decorator and declaration', () => {
@@ -183,19 +188,15 @@ describe('registering components', () => {
         }
       }
 
-      app.useComponents(
-        new ComponentDeclaration(DecoratedComponent, { config: { test: 'declaration' } }),
-      );
-      expect(app.components).toEqual({
-        DecoratedComponent: {
-          target: DecoratedComponent,
-          options: {
-            config: {
-              test: 'declaration',
-            },
+      app.use(new ComponentDeclaration(DecoratedComponent, { config: { test: 'declaration' } }));
+      expectNodeMetadataAtToEqual(
+        ['DecoratedComponent'],
+        new ComponentMetadata(DecoratedComponent, {
+          config: {
+            test: 'declaration',
           },
-        },
-      });
+        }),
+      );
     });
   });
 });

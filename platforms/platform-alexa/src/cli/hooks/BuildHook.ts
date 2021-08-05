@@ -20,26 +20,30 @@ import {
   deleteFolderRecursive,
   printHighlight,
   getResolvedLocales,
+  REVERSE_ARROWS,
 } from '@jovotech/cli-core';
-import type { BuildContext, BuildEvents, ParseContextBuild } from '@jovotech/cli-command-build';
+import type { BuildContext, BuildEvents } from '@jovotech/cli-command-build';
 import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 import { JovoModelAlexa, JovoModelAlexaData } from 'jovo-model-alexa';
 import { JovoModelData, NativeFileInformation } from 'jovo-model';
 
 import DefaultFiles from '../utils/DefaultFiles.json';
-import { PluginContextAlexa, SupportedLocales, SupportedLocalesType } from '../utils';
+import { AlexaContext, SupportedLocales, SupportedLocalesType } from '../utils';
 import { AlexaCli } from '..';
 
-export interface BuildContextAlexa extends Omit<PluginContextAlexa, 'flags'>, BuildContext {}
+export interface AlexaBuildContext extends AlexaContext, BuildContext {}
 
 export class BuildHook extends PluginHook<BuildEvents> {
   $plugin!: AlexaCli;
-  $context!: BuildContextAlexa;
+  $context!: AlexaBuildContext;
 
   install(): void {
     this.middlewareCollection = {
-      'parse': [this.checkForPlatform.bind(this)],
-      'before.build': [this.checkForCleanBuild.bind(this), this.validateLocales.bind(this)],
+      'before.build': [
+        this.checkForPlatform.bind(this),
+        this.checkForCleanBuild.bind(this),
+        this.validateLocales.bind(this),
+      ],
       'build': [this.validateModels.bind(this), this.build.bind(this)],
       'reverse.build': [this.buildReverse.bind(this)],
     };
@@ -47,11 +51,10 @@ export class BuildHook extends PluginHook<BuildEvents> {
 
   /**
    * Checks if the currently selected platform matches this CLI plugin.
-   * @param context - Context containing information after flags and args have been parsed by the CLI.
    */
-  checkForPlatform(context: ParseContextBuild): void {
+  checkForPlatform(): void {
     // Check if this plugin should be used or not.
-    if (context.flags.platform && !context.flags.platform.includes(this.$plugin.$id)) {
+    if (!this.$context.platforms.includes(this.$plugin.$id)) {
       this.uninstall();
     }
   }
@@ -177,7 +180,14 @@ export class BuildHook extends PluginHook<BuildEvents> {
     }
 
     // Try to resolve the locale according to the locale map provided in this.$plugin.$config.locales.
-    const buildLocaleMap: { [locale: string]: string } = {};
+    // If en resolves to en-US, this loop will generate { 'en-US': 'en' }
+    const buildLocaleMap: { [locale: string]: string } = selectedLocales.reduce(
+      (localeMap: { [locale: string]: string }, locale: string) => {
+        localeMap[locale] = locale;
+        return localeMap;
+      },
+      {},
+    );
     for (const modelLocale in this.$plugin.$config.locales) {
       const resolvedLocales: string[] = getResolvedLocales(
         modelLocale,
@@ -188,8 +198,6 @@ export class BuildHook extends PluginHook<BuildEvents> {
       for (const selectedLocale of selectedLocales) {
         if (resolvedLocales.includes(selectedLocale)) {
           buildLocaleMap[selectedLocale] = modelLocale;
-        } else {
-          buildLocaleMap[selectedLocale] = selectedLocale;
         }
       }
     }
@@ -213,7 +221,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
         await backupTask.run();
       }
     }
-    const reverseBuildTask: Task = new Task('Reversing model files');
+    const reverseBuildTask: Task = new Task(`${REVERSE_ARROWS} Reversing model files`);
     for (const [platformLocale, modelLocale] of Object.entries(buildLocaleMap)) {
       const taskDetails: string = platformLocale === modelLocale ? '' : `(${modelLocale})`;
       const localeTask: Task = new Task(`${platformLocale} ${taskDetails}`, async () => {

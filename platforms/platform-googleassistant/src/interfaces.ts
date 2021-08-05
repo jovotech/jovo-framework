@@ -1,3 +1,5 @@
+import { AnyObject } from '@jovotech/framework';
+
 export interface Handler {
   name?: string;
 }
@@ -9,7 +11,7 @@ export interface Intent {
 
 export interface IntentParameterValue {
   original: string;
-  resolved: string | PermissionResult | Record<string, any>;
+  resolved: string | PermissionResult | AnyObject;
 }
 
 export type PermissionStatus = 'PERMISSION_DENIED' | 'PERMISSION_GRANTED' | 'ALREADY_GRANTED';

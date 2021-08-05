@@ -10,10 +10,10 @@ export class MiddlewareCollection<MIDDLEWARES extends string[] = string[]> {
   readonly middlewares: Record<string, Middleware>;
 
   constructor(...names: MIDDLEWARES) {
-    this.middlewares = {};
-    for (let i = 0, len = names.length; i < len; i++) {
-      this.middlewares[names[i]] = new Middleware(names[i]);
-    }
+    this.middlewares = names.reduce((middlewares: Record<string, Middleware>, middlewareName) => {
+      middlewares[middlewareName] = new Middleware(middlewareName);
+      return middlewares;
+    }, {});
   }
 
   get names(): Array<PossibleMiddlewareName<MIDDLEWARES> | string> {
@@ -35,14 +35,13 @@ export class MiddlewareCollection<MIDDLEWARES extends string[] = string[]> {
   add(...names: string[]): this;
   add(...middlewares: Middleware[]): this;
   add(...namesOrMiddlewares: Array<Middleware | string>): this {
-    for (let i = 0, len = namesOrMiddlewares.length; i < len; i++) {
-      const nameOrMiddleware = namesOrMiddlewares[i];
+    namesOrMiddlewares.forEach((nameOrMiddleware) => {
       if (typeof nameOrMiddleware === 'string') {
         this.middlewares[nameOrMiddleware] = new Middleware(nameOrMiddleware);
       } else {
         this.middlewares[nameOrMiddleware.name] = nameOrMiddleware;
       }
-    }
+    });
     return this;
   }
 
@@ -63,22 +62,23 @@ export class MiddlewareCollection<MIDDLEWARES extends string[] = string[]> {
   remove(...names: PossibleMiddlewareName<MIDDLEWARES>[]): this;
   remove(...names: string[]): this;
   remove(...names: Array<string | PossibleMiddlewareName<MIDDLEWARES>>): this {
-    for (let i = 0, len = names.length; i < len; i++) {
-      if (this.has(names[i])) {
-        delete this.middlewares[names[i]];
+    names.forEach((name) => {
+      if (this.has(name)) {
+        delete this.middlewares[name];
       }
-    }
+    });
     return this;
   }
 
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  async run<T extends any[]>(name: PossibleMiddlewareName<MIDDLEWARES>, ...args: T): Promise<void>;
-  async run<T extends any[]>(name: string, ...args: T): Promise<void>;
-  async run<T extends any[]>(
+  async run<T extends unknown[]>(
+    name: PossibleMiddlewareName<MIDDLEWARES>,
+    ...args: T
+  ): Promise<void>;
+  async run<T extends unknown[]>(name: string, ...args: T): Promise<void>;
+  async run<T extends unknown[]>(
     name: string | PossibleMiddlewareName<MIDDLEWARES>,
     ...args: T
   ): Promise<void> {
-    /*  eslint-enable @typescript-eslint/no-explicit-any */
     const middleware = this.get(name);
     if (!middleware) return;
     const beforeName = `before.${name}`;
@@ -97,24 +97,24 @@ export class MiddlewareCollection<MIDDLEWARES extends string[] = string[]> {
   disable(...names: PossibleMiddlewareName<MIDDLEWARES>[]): this;
   disable(...names: string[]): this;
   disable(...names: Array<string | PossibleMiddlewareName<MIDDLEWARES>>): this {
-    for (let i = 0, len = names.length; i < len; i++) {
-      const middleware = this.get(names[i]);
+    names.forEach((name) => {
+      const middleware = this.get(name);
       if (middleware) {
         middleware.enabled = false;
       }
-    }
+    });
     return this;
   }
 
   enable(...names: PossibleMiddlewareName<MIDDLEWARES>[]): this;
   enable(...names: string[]): this;
   enable(...names: Array<string | PossibleMiddlewareName<MIDDLEWARES>>): this {
-    for (let i = 0, len = names.length; i < len; i++) {
-      const middleware = this.get(names[i]);
+    names.forEach((name) => {
+      const middleware = this.get(name);
       if (middleware) {
         middleware.enabled = true;
       }
-    }
+    });
     return this;
   }
 }

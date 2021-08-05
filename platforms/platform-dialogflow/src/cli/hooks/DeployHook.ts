@@ -1,8 +1,4 @@
-import type {
-  DeployPlatformContext,
-  DeployPlatformEvents,
-  ParseContextDeployPlatform,
-} from '@jovotech/cli-command-deploy';
+import type { DeployPlatformContext, DeployPlatformEvents } from '@jovotech/cli-command-deploy';
 import {
   execAsync,
   flags,
@@ -21,21 +17,23 @@ import AdmZip from 'adm-zip';
 import { DialogflowCli } from '..';
 import { activateServiceAccount, getGcloudAccessToken } from '../utils';
 
-export interface DeployPlatformContextDialogflow extends DeployPlatformContext {
+export interface DialogflowDeployPlatformContext extends DeployPlatformContext {
   flags: DeployPlatformContext['flags'] & { 'project-id'?: string };
-  projectId?: string;
-  pathToZip: string;
+  dialogflow: {
+    projectId?: string;
+    pathToZip?: string;
+  };
 }
 
 export class DeployHook extends PluginHook<DeployPlatformEvents> {
   $plugin!: DialogflowCli;
-  $context!: DeployPlatformContextDialogflow;
+  $context!: DialogflowDeployPlatformContext;
 
   install(): void {
     this.middlewareCollection = {
       'install': [this.addCliOptions.bind(this)],
-      'parse': [this.checkForPlatform.bind(this)],
       'before.deploy:platform': [
+        this.checkForPlatform.bind(this),
         this.checkForGcloudCli.bind(this),
         this.updatePluginContext.bind(this),
         this.checkForPlatformsFolder.bind(this),
@@ -62,9 +60,9 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
    * Checks if the currently selected platform matches this CLI plugin.
    * @param context - Context containing information after flags and args have been parsed by the CLI.
    */
-  checkForPlatform(context: ParseContextDeployPlatform): void {
+  checkForPlatform(): void {
     // Check if this plugin should be used or not.
-    if (context.args.platform && context.args.platform !== this.$plugin.$id) {
+    if (!this.$context.platforms.includes(this.$plugin.$id)) {
       this.uninstall();
     }
   }
@@ -85,9 +83,14 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
    * Updates the current plugin context with platform-specific values.
    */
   updatePluginContext(): void {
-    this.$context.projectId = this.$context.flags['project-id'] || this.$plugin.$config.projectId;
+    if (!this.$context.dialogflow) {
+      this.$context.dialogflow = {};
+    }
 
-    if (!this.$context.projectId) {
+    this.$context.dialogflow.projectId =
+      this.$context.flags['project-id'] || this.$plugin.$config.projectId;
+
+    if (!this.$context.dialogflow.projectId) {
       throw new JovoCliError(
         'Could not find project ID.',
         this.$plugin.constructor.name,
@@ -117,11 +120,11 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
 
     const zipTask: Task = new Task('Compressing dialogflow configuration', async () => {
       await this.zipDialogflowFiles();
-      return `>> ${this.$context.pathToZip}`;
+      return `${this.$context.dialogflow.pathToZip}`;
     });
 
     const uploadTask: Task = new Task(
-      `Uploading your agent for project ${printHighlight(this.$context.projectId!)}`,
+      `Uploading your agent for project ${printHighlight(this.$context.dialogflow.projectId!)}`,
       async () => {
         const keyFilePath: string | undefined = this.$plugin.$config.keyFile;
         if (keyFilePath) {
@@ -139,13 +142,13 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
           try {
             await axios({
               method: 'POST',
-              url: `https://dialogflow.googleapis.com/v2/projects/${this.$context.projectId}/agent:restore`,
+              url: `https://dialogflow.googleapis.com/v2/projects/${this.$context.dialogflow.projectId}/agent:restore`,
               headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
               },
               data: {
-                agentContent: readFileSync(this.$context.pathToZip, 'base64'),
+                agentContent: readFileSync(this.$context.dialogflow.pathToZip!, 'base64'),
               },
             });
           } catch (error) {
@@ -165,7 +168,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
         const accessToken: string = await getGcloudAccessToken();
         await axios({
           method: 'POST',
-          url: `https://dialogflow.googleapis.com/v2/projects/${this.$context.projectId}/agent:train`,
+          url: `https://dialogflow.googleapis.com/v2/projects/${this.$context.dialogflow.projectId}/agent:train`,
           headers: {
             'Authorization': `Bearer ${accessToken}`,
             'Content-Type': 'application/json',
@@ -180,7 +183,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
       }
     });
 
-    if (!this.$context.projectId) {
+    if (!this.$context.dialogflow.projectId) {
       uploadTask.disable();
       trainTask.disable();
     }
@@ -192,12 +195,15 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
 
   async zipDialogflowFiles(): Promise<void> {
     // Remove existing zip file.
-    this.$context.pathToZip = joinPaths(this.$plugin.getPlatformPath(), 'dialogflow_agent.zip');
-    if (existsSync(this.$context.pathToZip)) {
-      unlinkSync(this.$context.pathToZip);
+    this.$context.dialogflow.pathToZip = joinPaths(
+      this.$plugin.getPlatformPath(),
+      'dialogflow_agent.zip',
+    );
+    if (existsSync(this.$context.dialogflow.pathToZip)) {
+      unlinkSync(this.$context.dialogflow.pathToZip);
     }
     const zip: AdmZip = new AdmZip();
     zip.addLocalFolder(this.$plugin.getPlatformPath());
-    zip.writeZip(this.$context.pathToZip);
+    zip.writeZip(this.$context.dialogflow.pathToZip);
   }
 }

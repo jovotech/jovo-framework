@@ -1,13 +1,7 @@
 import { JovoUser } from '@jovotech/framework';
-import { GoogleBusinessResponse } from '@jovotech/output-googlebusiness';
-import { GoogleBusinessBot } from './GoogleBusinessBot';
-import { GoogleBusinessRequest } from './GoogleBusinessRequest';
+import { GoogleBusiness } from './GoogleBusiness';
 
-export class GoogleBusinessUser extends JovoUser<
-  GoogleBusinessRequest,
-  GoogleBusinessResponse,
-  GoogleBusinessBot
-> {
+export class GoogleBusinessUser extends JovoUser<GoogleBusiness> {
   get id(): string {
     return this.jovo.$request.conversationId || 'GoogleBusinessUser';
   }

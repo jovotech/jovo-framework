@@ -7,6 +7,7 @@ import {
   NluPlugin,
   Platform,
   PluginConfig,
+  UnknownObject,
 } from '@jovotech/framework';
 import { promises } from 'fs';
 import { JovoModelNlpjs } from 'jovo-model-nlpjs';
@@ -36,7 +37,7 @@ export interface NlpJsEntity {
 export type SetupModelFunction = (parent: Platform, nlp: Nlp) => void | Promise<void>;
 
 export interface NlpjsNluConfig extends PluginConfig {
-  languageMap: Record<string, unknown>;
+  languageMap: UnknownObject;
   preTrainedModelFilePath: string;
   useModel: boolean;
   modelsPath: string;
