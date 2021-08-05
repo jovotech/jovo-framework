@@ -16,16 +16,15 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
   abstract responseClass: new () => RESPONSE;
   abstract platformName: keyof OutputTemplatePlatforms;
 
-  abstract fromResponse(response: RESPONSE): OutputTemplate;
-
-  toResponse(output: OutputTemplate | OutputTemplate[]): RESPONSE {
-    const mergedOutput = Array.isArray(output) ? this.mergeOutputTemplates(output) : output;
-    return this.buildResponse(mergedOutput);
+  prepareOutput(output: OutputTemplate | OutputTemplate[]): OutputTemplate {
+    output = super.prepareOutput(output);
+    return Array.isArray(output) ? this.mergeOutputTemplates(output) : output;
   }
 
-  abstract buildResponse(output: OutputTemplate): RESPONSE;
+  abstract toResponse(output: OutputTemplate): RESPONSE;
+  abstract fromResponse(response: RESPONSE): OutputTemplate;
 
-  mergeOutputTemplates(output: OutputTemplate[]): OutputTemplate {
+  protected mergeOutputTemplates(output: OutputTemplate[]): OutputTemplate {
     return output.reduce(
       (accumulator, current) => this.mergeOutputTemplateWith(accumulator, current),
       {},

@@ -1,5 +1,5 @@
 import { PartialDeep } from 'type-fest';
-import { OutputTemplate } from '.';
+import { OutputTemplate, plainToClass } from '.';
 import _defaultsDeep from 'lodash.defaultsdeep';
 
 export interface SanitizationConfig {
@@ -30,7 +30,15 @@ export abstract class OutputTemplateConverterStrategy<
     this.config = _defaultsDeep(this.getDefaultConfig(), config || {});
   }
 
+  prepareOutput(output: OutputTemplate | OutputTemplate[]): OutputTemplate | OutputTemplate[] {
+    return plainToClass(OutputTemplate, output);
+  }
+
   abstract toResponse(output: OutputTemplate | OutputTemplate[]): RESPONSE | RESPONSE[];
+
+  prepareResponse(response: RESPONSE | RESPONSE[]): RESPONSE | RESPONSE[] {
+    return plainToClass(this.responseClass, response);
+  }
 
   abstract fromResponse(response: RESPONSE | RESPONSE[]): OutputTemplate | OutputTemplate[];
 
