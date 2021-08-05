@@ -49,4 +49,36 @@ export abstract class OutputTemplateConverterStrategy<
       validation: true,
     } as CONFIG;
   }
+
+  protected shouldSanitize(rule: keyof SanitizationConfig): boolean {
+    return typeof this.config.sanitization === 'object'
+      ? this.config.sanitization[rule]
+      : this.config.sanitization;
+  }
+
+  protected logSanitizationWarning(message: string, prefix = 'OutputSanitization'): void {
+    console.warn(`[${prefix}]`, message);
+  }
+
+  protected logStringTruncationWarning(path: string, maxLength: number, prefix?: string): void {
+    return this.logTruncationWarning(path, maxLength, false, prefix);
+  }
+
+  protected logArrayTruncationWarning(path: string, maxSize: number, prefix?: string): void {
+    return this.logTruncationWarning(path, maxSize, true, prefix);
+  }
+
+  private logTruncationWarning(
+    path: string,
+    maxLengthOrSize: number,
+    isArray: boolean,
+    prefix?: string,
+  ): void {
+    return this.logSanitizationWarning(
+      `${path} was truncated due to exceeding the limit of ${maxLengthOrSize} ${
+        isArray ? 'items' : 'characters'
+      }.`,
+      prefix,
+    );
+  }
 }
