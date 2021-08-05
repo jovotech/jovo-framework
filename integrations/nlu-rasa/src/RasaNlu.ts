@@ -3,6 +3,7 @@ import {
   AxiosRequestConfig,
   AxiosResponse,
   DeepPartial,
+  EntityMap,
   HandleRequest,
   Jovo,
   NluData,
@@ -16,15 +17,15 @@ export interface RasaNluConfig extends PluginConfig {
   serverPath?: string;
   //activate alternative intent classifications in $nlu
   //and constrain the number of alternatives by number and/or an confidence cutoff
-  alternativeIntents?: { maxAlternatives?: number; confidenceCutoff?: number };
+  alternativeIntents: { maxAlternatives: number; confidenceCutoff: number };
 }
 
-interface RasaNluData extends NluData {
+export interface RasaNluData extends NluData {
   intent: {
     name: string;
     confidence: number;
   };
-  alternativeIntents?: RasaIntent[];
+  alternativeIntents: RasaIntent[];
   entities: EntityMap;
 }
 
@@ -36,6 +37,7 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
     return {
       serverUrl: 'http://localhost:5005',
       serverPath: '/model/parse',
+      alternativeIntents: { maxAlternatives: 15, confidenceCutoff: 0.0 },
     };
   }
 
@@ -45,28 +47,31 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
     try {
       const rasaResponse = await this.sendTextToRasaServer(text || '');
       if (rasaResponse.data.intent.name) {
-        const ents: EntityMap = {};
-        rasaResponse.data.entities.map((entity: RasaEntity) => {
-          let entityAlias = entity.entity;
+        const reducer = (entityMap: EntityMap, rasaEntity: RasaEntity): EntityMap => {
+          let entityAlias = rasaEntity.entity;
           // roles can distinguish entities of the same type e.g. departure and destination in
           // a travel use case and should therefore be preferred as entity name
-          if (entity.role) {
-            entityAlias = entity.role;
+          if (rasaEntity.role) {
+            entityAlias = rasaEntity.role;
           }
-          ents[entityAlias] = {
+          entityMap.entityAlias = {
             id: entityAlias,
             key: entityAlias,
-            name: entity.entity,
-            value: entity.value,
+            name: rasaEntity.entity,
+            value: rasaEntity.value,
           };
-        });
 
+          return entityMap;
+        };
+
+        const jovoEntities: EntityMap = rasaResponse.data.entities.reduce(reducer, {});
         const nluResult: RasaNluData = {
           intent: {
             name: rasaResponse.data.intent.name,
             confidence: rasaResponse.data.intent.confidence,
           },
-          entities: ents,
+          alternativeIntents: [],
+          entities: jovoEntities,
         };
 
         if (this.config.alternativeIntents) {
@@ -93,13 +98,12 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
     return axios.post(`${this.config.serverUrl}${this.config.serverPath}`, { text }, config);
   }
 
-  private mapAlternativeIntents(altIntents: RasaIntent[]) {
+  private mapAlternativeIntents(allIntents: RasaIntent[]): RasaIntent[] {
     // remove first element, because its the classified intent
-    altIntents.splice(0, 1);
-    const cutoff = this.config.alternativeIntents?.confidenceCutoff ?? 1.0;
+    const alternativeIntents = allIntents.slice(1);
 
-    return altIntents
-      .filter((a) => a.confidence > cutoff)
-      .slice(0, this.config.alternativeIntents?.maxAlternatives ?? 7);
+    return alternativeIntents
+      .filter((a) => a.confidence > this.config.alternativeIntents.confidenceCutoff)
+      .slice(0, this.config.alternativeIntents.maxAlternatives);
   }
 }
