@@ -1,5 +1,6 @@
 import {
   DeepPartial,
+  EntityMap,
   Extensible,
   HandleRequest,
   Jovo,
@@ -63,7 +64,7 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
     };
   }
 
-  async initialize(parent: Extensible): Promise<void> {
+  async initialize(parent: Platform): Promise<void> {
     this.nlpjs = new Nlp({
       languages: Object.keys(this.config.languageMap),
       autoLoad: this.config.useModel,
@@ -97,16 +98,18 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
     const language = jovo.$request.getLocale()?.substr(0, 2) || 'en';
     const nlpResult = await this.nlpjs?.process(language, text);
 
-    const entities = nlpResult?.entities?.map((entity: NlpJsEntity) => {
-      return {
-        [entity.entity]: {
+    const entities = (nlpResult?.entities || []).reduce(
+      (entityMap: EntityMap, entity: NlpJsEntity) => {
+        entityMap[entity.entity] = {
           id: entity.option,
           key: entity.option,
           name: entity.entity,
           value: entity.utteranceText,
-        },
-      };
-    });
+        };
+        return entityMap;
+      },
+      {},
+    );
 
     return nlpResult?.intent
       ? {
