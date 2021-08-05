@@ -9,6 +9,7 @@ import {
   QuickReplyValue,
   removeSSML,
 } from '@jovotech/output';
+import { MESSAGE_TEXT_MAX_LENGTH } from './constants';
 import {
   FacebookMessengerResponse,
   GenericTemplate,
@@ -26,8 +27,33 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
 > {
   responseClass = FacebookMessengerResponse;
 
-  // TODO: improve code
-  convertTemplate(output: OutputTemplate): FacebookMessengerResponse | FacebookMessengerResponse[] {
+  // maybe we need more context here, like index of template
+  protected sanitizeOutput(output: OutputTemplate, index?: number): OutputTemplate {
+    const pathPrefix = index ? `[${index}]` : '';
+    if (output.platforms?.FacebookMessenger?.message) {
+      output.platforms.FacebookMessenger.message = this.sanitizeMessage(
+        output.platforms.FacebookMessenger.message,
+        `${pathPrefix}platforms.FacebookMessenger.message`,
+      );
+    } else if (output.message) {
+      output.message = this.sanitizeMessage(output.message, `${pathPrefix}message`);
+    }
+
+    return output;
+  }
+
+  protected sanitizeMessage(
+    message: MessageValue,
+    path: string,
+    maxLength = MESSAGE_TEXT_MAX_LENGTH,
+    offset?: number,
+  ): MessageValue {
+    return super.sanitizeMessage(message, path, maxLength, offset);
+  }
+
+  // TODO: Fix a bug, enumerating both the normal object and platform-specific causes everything to be sent
+  // TODO: fix missing quick-replies
+  convertOutput(output: OutputTemplate): FacebookMessengerResponse | FacebookMessengerResponse[] {
     const getResponseBase: () => FacebookMessengerResponse = () => ({
       messaging_type: MessagingType.Response,
       recipient: {
@@ -122,9 +148,7 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
       ? { text: removeSSML(message) }
       : message.toFacebookMessengerMessage?.() || {
           text: removeSSML(message.displayText || message.text),
-          quick_replies: message.quickReplies?.map((quickReply) =>
-            this.convertQuickReplyToFacebookMessengerQuickReply(quickReply),
-          ),
+          quick_replies: [],
         };
   }
 

@@ -25,31 +25,26 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
   platformName = 'Dialogflow';
   responseClass = DialogflowResponse;
 
-  prepareOutput(output: OutputTemplate | OutputTemplate[]): OutputTemplate {
-    const singleOutput = super.prepareOutput(output);
-
-    if (singleOutput.platforms?.Dialogflow?.message) {
-      singleOutput.platforms.Dialogflow.message = this.sanitizeMessage(
-        singleOutput.platforms.Dialogflow.message,
+  protected sanitizeOutput(output: OutputTemplate): OutputTemplate {
+    if (output.platforms?.Dialogflow?.message) {
+      output.platforms.Dialogflow.message = this.sanitizeMessage(
+        output.platforms.Dialogflow.message,
         'platforms.Dialogflow.message',
       );
-    } else if (singleOutput.message) {
-      singleOutput.message = this.sanitizeMessage(singleOutput.message, 'message');
+    } else if (output.message) {
+      output.message = this.sanitizeMessage(output.message, 'message');
     }
 
-    if (singleOutput.platforms?.Dialogflow?.quickReplies) {
-      singleOutput.platforms.Dialogflow.quickReplies = this.sanitizeQuickReplies(
-        singleOutput.platforms.Dialogflow.quickReplies,
+    if (output.platforms?.Dialogflow?.quickReplies) {
+      output.platforms.Dialogflow.quickReplies = this.sanitizeQuickReplies(
+        output.platforms.Dialogflow.quickReplies,
         'platforms.Dialogflow.quickReplies',
       );
-    } else if (singleOutput.quickReplies) {
-      singleOutput.quickReplies = this.sanitizeQuickReplies(
-        singleOutput.quickReplies,
-        'quickReplies',
-      );
+    } else if (output.quickReplies) {
+      output.quickReplies = this.sanitizeQuickReplies(output.quickReplies, 'quickReplies');
     }
 
-    return singleOutput;
+    return output;
   }
 
   protected sanitizeMessage(
@@ -61,29 +56,13 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
     return super.sanitizeMessage(message, path, maxLength, offset);
   }
 
-  private sanitizeQuickReplies(quickReplies: QuickReplyValue[], path: string): QuickReplyValue[] {
-    if (!this.shouldSanitize('maxSize') || quickReplies.length <= QUICK_REPLIES_MAX_SIZE) {
-      return quickReplies;
-    }
-    quickReplies = quickReplies.slice(0, QUICK_REPLIES_MAX_SIZE);
-    this.logArrayTruncationWarning(path, QUICK_REPLIES_MAX_SIZE);
-    if (!this.shouldSanitize('maxLength')) {
-      return quickReplies;
-    }
-    return quickReplies.map((quickReply, index) => {
-      const quickReplyTextLength =
-        typeof quickReply === 'string' ? quickReply.length : quickReply.text.length;
-      if (quickReplyTextLength <= QUICK_REPLY_MAX_LENGTH) {
-        return quickReply;
-      }
-      if (typeof quickReply === 'object') {
-        quickReply.text = quickReply.text.slice(0, QUICK_REPLY_MAX_LENGTH);
-      } else {
-        quickReply = quickReply.slice(0, QUICK_REPLY_MAX_LENGTH);
-      }
-      this.logStringTruncationWarning(`${path}[${index}]`, QUICK_REPLY_MAX_LENGTH);
-      return quickReply;
-    });
+  protected sanitizeQuickReplies(
+    quickReplies: QuickReplyValue[],
+    path: string,
+    maxSize = QUICK_REPLIES_MAX_SIZE,
+    maxLength = QUICK_REPLY_MAX_LENGTH,
+  ): QuickReplyValue[] {
+    return super.sanitizeQuickReplies(quickReplies, path, maxSize, maxLength);
   }
 
   toResponse(output: OutputTemplate): DialogflowResponse {

@@ -16,8 +16,12 @@ export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleRespo
 > {
   responseClass = GoogleBusinessResponse;
 
+  protected sanitizeOutput(output: OutputTemplate, index?: number): OutputTemplate {
+    return output;
+  }
+
   // TODO improve code
-  convertTemplate(output: OutputTemplate): GoogleBusinessResponse {
+  convertOutput(output: OutputTemplate): GoogleBusinessResponse {
     const getResponseBase: () => GoogleBusinessResponse = () => ({
       // TODO determine whether uuid should be used here or that's something that the developer has to do
       messageId: '*',

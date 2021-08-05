@@ -18,8 +18,12 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
 
   prepareOutput(output: OutputTemplate | OutputTemplate[]): OutputTemplate {
     output = super.prepareOutput(output);
-    return Array.isArray(output) ? this.mergeOutputTemplates(output) : output;
+    if (Array.isArray(output)) {
+      output = this.mergeOutputTemplates(output);
+    }
+    return !!this.config.sanitization ? this.sanitizeOutput(output) : output;
   }
+  protected abstract sanitizeOutput(output: OutputTemplate): OutputTemplate;
 
   abstract toResponse(output: OutputTemplate): RESPONSE;
   abstract fromResponse(response: RESPONSE): OutputTemplate;

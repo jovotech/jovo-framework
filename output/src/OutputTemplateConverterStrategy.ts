@@ -1,6 +1,13 @@
 import _defaultsDeep from 'lodash.defaultsdeep';
 import { PartialDeep } from 'type-fest';
-import { DynamicEntities, MessageValue, OutputTemplate, plainToClass } from '.';
+import {
+  Carousel,
+  DynamicEntities,
+  MessageValue,
+  OutputTemplate,
+  plainToClass,
+  QuickReplyValue,
+} from '.';
 
 export interface SanitizationConfig {
   maxSize: boolean;
@@ -91,6 +98,53 @@ export abstract class OutputTemplateConverterStrategy<
     dynamicEntities.types = dynamicEntities.types.slice(0, maxSize);
     this.logArrayTruncationWarning(path, maxSize);
     return dynamicEntities;
+  }
+
+  protected sanitizeQuickReplies(
+    quickReplies: QuickReplyValue[],
+    path: string,
+    maxSize: number,
+    maxLength: number,
+  ): QuickReplyValue[] {
+    if (!this.shouldSanitize('maxSize') || quickReplies.length <= maxSize) {
+      return quickReplies;
+    }
+    quickReplies = quickReplies.slice(0, maxSize);
+    this.logArrayTruncationWarning(path, maxSize);
+    if (!this.shouldSanitize('maxLength')) {
+      return quickReplies;
+    }
+    return quickReplies.map((quickReply, index) => {
+      const quickReplyTextLength =
+        typeof quickReply === 'string' ? quickReply.length : quickReply.text.length;
+      if (quickReplyTextLength <= maxLength) {
+        return quickReply;
+      }
+      if (typeof quickReply === 'object') {
+        quickReply.text = quickReply.text.slice(0, maxLength);
+      } else {
+        quickReply = quickReply.slice(0, maxLength);
+      }
+      this.logStringTruncationWarning(`${path}[${index}]`, maxLength);
+      return quickReply;
+    });
+  }
+
+  protected sanitizeCarousel(
+    carousel: Carousel,
+    path: string,
+    minSize: number,
+    maxSize: number,
+  ): Carousel {
+    if (
+      !this.shouldSanitize('maxSize') ||
+      (carousel.items.length >= minSize && carousel.items.length <= maxSize)
+    ) {
+      return carousel;
+    }
+    carousel.items = carousel.items.slice(0, maxSize);
+    this.logArrayTruncationWarning(path, maxSize);
+    return carousel;
   }
 
   protected logSanitizationWarning(message: string): void {

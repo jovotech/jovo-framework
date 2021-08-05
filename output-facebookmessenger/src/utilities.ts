@@ -41,21 +41,6 @@ export function augmentModelPrototypes(): void {
     const message: FacebookMessengerMessage = {
       text: removeSSML(this.displayText || this.text),
     };
-    if (this.quickReplies) {
-      message.quick_replies = this.quickReplies.map((quickReply) => {
-        return typeof quickReply === 'string'
-          ? {
-              content_type: QuickReplyContentType.Text,
-              title: quickReply,
-              payload: quickReply,
-            }
-          : quickReply.toFacebookQuickReply?.() || {
-              content_type: QuickReplyContentType.Text,
-              title: quickReply.text,
-              payload: quickReply.value || quickReply.text,
-            };
-      });
-    }
     return message;
   };
 

@@ -38,48 +38,46 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
     return { ...super.getDefaultConfig(), genericOutputToApl: true };
   }
 
-  prepareOutput(output: OutputTemplate | OutputTemplate[]): OutputTemplate {
-    const singleOutput = super.prepareOutput(output);
-
-    if (singleOutput.platforms?.Alexa?.message) {
-      singleOutput.platforms.Alexa.message = this.sanitizeMessage(
-        singleOutput.platforms.Alexa.message,
+  sanitizeOutput(output: OutputTemplate): OutputTemplate {
+    if (output.platforms?.Alexa?.message) {
+      output.platforms.Alexa.message = this.sanitizeMessage(
+        output.platforms.Alexa.message,
         'platforms.Alexa.message',
       );
-    } else if (singleOutput.message) {
-      singleOutput.message = this.sanitizeMessage(singleOutput.message, 'message');
+    } else if (output.message) {
+      output.message = this.sanitizeMessage(output.message, 'message');
     }
 
-    if (singleOutput.platforms?.Alexa?.reprompt) {
-      singleOutput.platforms.Alexa.reprompt = this.sanitizeMessage(
-        singleOutput.platforms.Alexa.reprompt,
+    if (output.platforms?.Alexa?.reprompt) {
+      output.platforms.Alexa.reprompt = this.sanitizeMessage(
+        output.platforms.Alexa.reprompt,
         'platforms.Alexa.reprompt',
       );
-    } else if (singleOutput.reprompt) {
-      singleOutput.reprompt = this.sanitizeMessage(singleOutput.reprompt, 'reprompt');
+    } else if (output.reprompt) {
+      output.reprompt = this.sanitizeMessage(output.reprompt, 'reprompt');
     }
 
     if (
-      singleOutput.platforms?.Alexa?.listen &&
-      typeof singleOutput.platforms.Alexa.listen === 'object' &&
-      singleOutput.platforms.Alexa.listen.entities?.types?.length
+      output.platforms?.Alexa?.listen &&
+      typeof output.platforms.Alexa.listen === 'object' &&
+      output.platforms.Alexa.listen.entities?.types?.length
     ) {
-      singleOutput.platforms.Alexa.listen.entities = this.sanitizeDynamicEntities(
-        singleOutput.platforms.Alexa.listen.entities,
+      output.platforms.Alexa.listen.entities = this.sanitizeDynamicEntities(
+        output.platforms.Alexa.listen.entities,
         'platforms.Alexa.listen.entities.types',
       );
     } else if (
-      singleOutput.listen &&
-      typeof singleOutput.listen === 'object' &&
-      singleOutput.listen.entities?.types?.length
+      output.listen &&
+      typeof output.listen === 'object' &&
+      output.listen.entities?.types?.length
     ) {
-      singleOutput.listen.entities = this.sanitizeDynamicEntities(
-        singleOutput.listen.entities,
+      output.listen.entities = this.sanitizeDynamicEntities(
+        output.listen.entities,
         'listen.entities.types',
       );
     }
 
-    return singleOutput;
+    return output;
   }
 
   protected sanitizeMessage(

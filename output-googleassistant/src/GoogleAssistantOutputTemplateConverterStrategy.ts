@@ -1,4 +1,5 @@
 import {
+  Carousel,
   DynamicEntitiesMode,
   DynamicEntity,
   mergeInstances,
@@ -8,6 +9,13 @@ import {
   QuickReplyValue,
   SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
+import {
+  COLLECTION_MAX_SIZE,
+  COLLECTION_MIN_SIZE,
+  SUGGESTION_TITLE_MAX_LENGTH,
+  SUGGESTIONS_MAX_SIZE,
+  TEXT_MAX_LENGTH,
+} from './constants';
 import {
   GoogleAssistantResponse,
   Session,
@@ -25,7 +33,74 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
   platformName = 'GoogleAssistant';
   responseClass = GoogleAssistantResponse;
 
-  buildResponse(output: OutputTemplate): GoogleAssistantResponse {
+  protected sanitizeOutput(output: OutputTemplate): OutputTemplate {
+    if (output.platforms?.GoogleAssistant?.message) {
+      output.platforms.GoogleAssistant.message = this.sanitizeMessage(
+        output.platforms.GoogleAssistant.message,
+        'platforms.GoogleAssistant.message',
+      );
+    } else if (output.message) {
+      output.message = this.sanitizeMessage(output.message, 'message');
+    }
+
+    if (output.platforms?.GoogleAssistant?.reprompt) {
+      output.platforms.GoogleAssistant.reprompt = this.sanitizeMessage(
+        output.platforms.GoogleAssistant.reprompt,
+        'platforms.GoogleAssistant.reprompt',
+      );
+    } else if (output.reprompt) {
+      output.reprompt = this.sanitizeMessage(output.reprompt, 'reprompt');
+    }
+
+    if (output.platforms?.GoogleAssistant?.quickReplies) {
+      output.platforms.GoogleAssistant.quickReplies = this.sanitizeQuickReplies(
+        output.platforms.GoogleAssistant.quickReplies,
+        'platforms.GoogleAssistant.quickReplies',
+      );
+    } else if (output.quickReplies) {
+      output.quickReplies = this.sanitizeQuickReplies(output.quickReplies, 'quickReplies');
+    }
+
+    if (output.platforms?.GoogleAssistant?.carousel) {
+      output.platforms.GoogleAssistant.carousel = this.sanitizeCarousel(
+        output.platforms.GoogleAssistant.carousel,
+        'platforms.GoogleAssistant.carousel',
+      );
+    } else if (output.carousel) {
+      output.carousel = this.sanitizeCarousel(output.carousel, 'carousel');
+    }
+
+    return output;
+  }
+
+  protected sanitizeMessage(
+    message: MessageValue,
+    path: string,
+    maxLength = TEXT_MAX_LENGTH,
+    offset?: number,
+  ): MessageValue {
+    return super.sanitizeMessage(message, path, maxLength, offset);
+  }
+
+  protected sanitizeQuickReplies(
+    quickReplies: QuickReplyValue[],
+    path: string,
+    maxSize = SUGGESTIONS_MAX_SIZE,
+    maxLength = SUGGESTION_TITLE_MAX_LENGTH,
+  ): QuickReplyValue[] {
+    return super.sanitizeQuickReplies(quickReplies, path, maxSize, maxLength);
+  }
+
+  protected sanitizeCarousel(
+    carousel: Carousel,
+    path: string,
+    minSize = COLLECTION_MIN_SIZE,
+    maxSize = COLLECTION_MAX_SIZE,
+  ): Carousel {
+    return super.sanitizeCarousel(carousel, path, minSize, maxSize);
+  }
+
+  toResponse(output: OutputTemplate): GoogleAssistantResponse {
     const response: GoogleAssistantResponse = {};
 
     function getEmptySession(): Session {

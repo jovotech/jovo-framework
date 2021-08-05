@@ -10,14 +10,16 @@ export abstract class MultipleResponsesOutputTemplateConverterStrategy<
 > extends OutputTemplateConverterStrategy<RESPONSE, CONFIG> {
   abstract responseClass: new () => RESPONSE;
 
-  fromResponse(response: RESPONSE): OutputTemplate;
-  fromResponse(responses: RESPONSE[]): OutputTemplate[];
-  fromResponse(responseOrResponses: RESPONSE | RESPONSE[]): OutputTemplate | OutputTemplate[] {
-    return Array.isArray(responseOrResponses)
-      ? responseOrResponses.map((responseItem) => this.convertResponse(responseItem))
-      : this.convertResponse(responseOrResponses);
+  prepareOutput(output: OutputTemplate | OutputTemplate[]): OutputTemplate | OutputTemplate[] {
+    output = super.prepareOutput(output);
+    if (!this.config.sanitization) {
+      return output;
+    }
+    return Array.isArray(output) ? output.map(this.sanitizeOutput) : this.sanitizeOutput(output);
   }
+  protected abstract sanitizeOutput(output: OutputTemplate, index?: number): OutputTemplate;
 
+  abstract convertOutput(output: OutputTemplate): RESPONSE | RESPONSE[];
   abstract convertResponse(response: RESPONSE): OutputTemplate;
 
   toResponse(output: OutputTemplate): RESPONSE;
@@ -25,7 +27,7 @@ export abstract class MultipleResponsesOutputTemplateConverterStrategy<
   toResponse(output: OutputTemplate | OutputTemplate[]): RESPONSE | RESPONSE[] {
     return Array.isArray(output)
       ? output
-          .map((outputItem) => this.convertTemplate(outputItem))
+          .map((outputItem) => this.convertOutput(outputItem))
           .reduce((accumulator: RESPONSE[], currentValue) => {
             if (Array.isArray(currentValue)) {
               accumulator.push(...currentValue);
@@ -34,8 +36,14 @@ export abstract class MultipleResponsesOutputTemplateConverterStrategy<
             }
             return accumulator;
           }, [])
-      : this.convertTemplate(output);
+      : this.convertOutput(output);
   }
 
-  abstract convertTemplate(output: OutputTemplate): RESPONSE | RESPONSE[];
+  fromResponse(response: RESPONSE): OutputTemplate;
+  fromResponse(responses: RESPONSE[]): OutputTemplate[];
+  fromResponse(responseOrResponses: RESPONSE | RESPONSE[]): OutputTemplate | OutputTemplate[] {
+    return Array.isArray(responseOrResponses)
+      ? responseOrResponses.map((responseItem) => this.convertResponse(responseItem))
+      : this.convertResponse(responseOrResponses);
+  }
 }
