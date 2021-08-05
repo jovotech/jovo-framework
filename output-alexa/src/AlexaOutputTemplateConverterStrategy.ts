@@ -85,7 +85,7 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
   protected sanitizeMessage(
     message: MessageValue,
     path: string,
-    maxLength: number = ALEXA_STRING_MAX_LENGTH,
+    maxLength = ALEXA_STRING_MAX_LENGTH,
     offset = SSML_OFFSET,
   ): MessageValue {
     return super.sanitizeMessage(message, path, maxLength, offset);
@@ -94,7 +94,7 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
   protected sanitizeDynamicEntities(
     dynamicEntities: DynamicEntities,
     path: string,
-    maxSize: number = SLOT_TYPE_VALUES_MAX_SIZE,
+    maxSize = SLOT_TYPE_VALUES_MAX_SIZE,
     offset?: number,
   ): DynamicEntities {
     return super.sanitizeDynamicEntities(dynamicEntities, path, maxSize, offset);
