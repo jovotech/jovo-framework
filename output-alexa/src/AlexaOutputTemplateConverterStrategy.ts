@@ -95,9 +95,8 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
     dynamicEntities: DynamicEntities,
     path: string,
     maxSize = SLOT_TYPE_VALUES_MAX_SIZE,
-    offset?: number,
   ): DynamicEntities {
-    return super.sanitizeDynamicEntities(dynamicEntities, path, maxSize, offset);
+    return super.sanitizeDynamicEntities(dynamicEntities, path, maxSize);
   }
 
   toResponse(output: OutputTemplate): AlexaResponse {

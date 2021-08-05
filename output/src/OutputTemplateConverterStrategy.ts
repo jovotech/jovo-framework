@@ -1,6 +1,6 @@
+import _defaultsDeep from 'lodash.defaultsdeep';
 import { PartialDeep } from 'type-fest';
 import { DynamicEntities, MessageValue, OutputTemplate, plainToClass } from '.';
-import _defaultsDeep from 'lodash.defaultsdeep';
 
 export interface SanitizationConfig {
   maxSize: boolean;
@@ -80,17 +80,15 @@ export abstract class OutputTemplateConverterStrategy<
     dynamicEntities: DynamicEntities,
     path: string,
     maxSize: number,
-    offset = 0,
   ): DynamicEntities {
-    const actualMaxSize = maxSize - offset;
     if (
       !this.shouldSanitize('maxSize') ||
       !dynamicEntities?.types?.length ||
-      dynamicEntities.types.length <= actualMaxSize
+      dynamicEntities.types.length <= maxSize
     ) {
       return dynamicEntities;
     }
-    dynamicEntities.types = dynamicEntities.types.slice(0, actualMaxSize);
+    dynamicEntities.types = dynamicEntities.types.slice(0, maxSize);
     this.logArrayTruncationWarning(path, maxSize);
     return dynamicEntities;
   }
