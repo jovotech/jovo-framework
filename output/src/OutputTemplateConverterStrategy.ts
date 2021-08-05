@@ -1,5 +1,5 @@
 import { PartialDeep } from 'type-fest';
-import { OutputTemplate, plainToClass } from '.';
+import { DynamicEntities, MessageValue, OutputTemplate, plainToClass } from '.';
 import _defaultsDeep from 'lodash.defaultsdeep';
 
 export interface SanitizationConfig {
@@ -56,29 +56,63 @@ export abstract class OutputTemplateConverterStrategy<
       : this.config.sanitization;
   }
 
-  protected logSanitizationWarning(message: string, prefix = 'OutputSanitization'): void {
-    console.warn(`[${prefix}]`, message);
-  }
-
-  protected logStringTruncationWarning(path: string, maxLength: number, prefix?: string): void {
-    return this.logTruncationWarning(path, maxLength, false, prefix);
-  }
-
-  protected logArrayTruncationWarning(path: string, maxSize: number, prefix?: string): void {
-    return this.logTruncationWarning(path, maxSize, true, prefix);
-  }
-
-  private logTruncationWarning(
+  protected sanitizeMessage(
+    message: MessageValue,
     path: string,
-    maxLengthOrSize: number,
-    isArray: boolean,
-    prefix?: string,
-  ): void {
+    maxLength: number,
+    offset = 0,
+  ): MessageValue {
+    const actualMaxLength = maxLength - offset;
+    const messageLength = typeof message === 'object' ? message.text.length : message.length;
+    if (!this.shouldSanitize('maxLength') || messageLength <= actualMaxLength) {
+      return message;
+    }
+    if (typeof message === 'object') {
+      message.text = message.text.slice(0, actualMaxLength);
+    } else {
+      message = message.slice(0, actualMaxLength);
+    }
+    this.logStringTruncationWarning(path, maxLength);
+    return message;
+  }
+
+  protected sanitizeDynamicEntities(
+    dynamicEntities: DynamicEntities,
+    path: string,
+    maxSize: number,
+    offset = 0,
+  ): DynamicEntities {
+    const actualMaxSize = maxSize - offset;
+    if (
+      !this.shouldSanitize('maxSize') ||
+      !dynamicEntities?.types?.length ||
+      dynamicEntities.types.length <= actualMaxSize
+    ) {
+      return dynamicEntities;
+    }
+    dynamicEntities.types = dynamicEntities.types.slice(0, actualMaxSize);
+    this.logArrayTruncationWarning(path, maxSize);
+    return dynamicEntities;
+  }
+
+  protected logSanitizationWarning(message: string): void {
+    // TODO check format: prefix, no prefix?
+    console.warn(message);
+  }
+
+  protected logStringTruncationWarning(path: string, maxLength: number): void {
+    return this.logTruncationWarning(path, maxLength, false);
+  }
+
+  protected logArrayTruncationWarning(path: string, maxSize: number): void {
+    return this.logTruncationWarning(path, maxSize, true);
+  }
+
+  private logTruncationWarning(path: string, maxLengthOrSize: number, isArray: boolean): void {
     return this.logSanitizationWarning(
       `${path} was truncated due to exceeding the limit of ${maxLengthOrSize} ${
         isArray ? 'items' : 'characters'
       }.`,
-      prefix,
     );
   }
 }

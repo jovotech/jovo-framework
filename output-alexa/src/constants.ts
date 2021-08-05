@@ -1,4 +1,5 @@
 export const ALEXA_STRING_MAX_LENGTH = 8000;
+export const SSML_OFFSET = `<speak></speak>`.length;
 
 export const APL_GRADIENT_INPUT_RANGE_MIN = 0;
 export const APL_GRADIENT_INPUT_RANGE_MAX = 1;

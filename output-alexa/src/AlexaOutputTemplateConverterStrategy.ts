@@ -10,7 +10,7 @@ import {
   SingleResponseOutputTemplateConverterStrategy,
   toSSML,
 } from '@jovotech/output';
-import { ALEXA_STRING_MAX_LENGTH, SLOT_TYPE_VALUES_MAX_SIZE } from './constants';
+import { ALEXA_STRING_MAX_LENGTH, SLOT_TYPE_VALUES_MAX_SIZE, SSML_OFFSET } from './constants';
 import {
   AlexaResponse,
   AplRenderDocumentDirective,
@@ -82,41 +82,22 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
     return singleOutput;
   }
 
-  private sanitizeMessage(
+  protected sanitizeMessage(
     message: MessageValue,
     path: string,
-    maxLength = ALEXA_STRING_MAX_LENGTH,
+    maxLength: number = ALEXA_STRING_MAX_LENGTH,
+    offset = SSML_OFFSET,
   ): MessageValue {
-    // subtract length of text that gets added with SSML
-    const ssmlMaxLength = maxLength - `<speak></speak>`.length;
-    const messageLength = typeof message === 'object' ? message.text.length : message.length;
-    if (!this.shouldSanitize('maxLength') || messageLength <= ssmlMaxLength) {
-      return message;
-    }
-    if (typeof message === 'object') {
-      message.text = message.text.slice(0, ssmlMaxLength);
-    } else {
-      message = message.slice(0, ssmlMaxLength);
-    }
-    this.logStringTruncationWarning(path, maxLength, 'AlexaOutputSanitization');
-    return message;
+    return super.sanitizeMessage(message, path, maxLength, offset);
   }
 
-  private sanitizeDynamicEntities(
+  protected sanitizeDynamicEntities(
     dynamicEntities: DynamicEntities,
     path: string,
-    maxSize = SLOT_TYPE_VALUES_MAX_SIZE,
+    maxSize: number = SLOT_TYPE_VALUES_MAX_SIZE,
+    offset?: number,
   ): DynamicEntities {
-    if (
-      !this.shouldSanitize('maxSize') ||
-      !dynamicEntities?.types?.length ||
-      dynamicEntities.types.length <= maxSize
-    ) {
-      return dynamicEntities;
-    }
-    dynamicEntities.types = dynamicEntities.types.slice(0, maxSize);
-    this.logArrayTruncationWarning(path, maxSize, 'AlexaOutputSanitization');
-    return dynamicEntities;
+    return super.sanitizeDynamicEntities(dynamicEntities, path, maxSize, offset);
   }
 
   toResponse(output: OutputTemplate): AlexaResponse {
