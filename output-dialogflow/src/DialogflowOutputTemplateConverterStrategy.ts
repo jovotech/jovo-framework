@@ -8,7 +8,7 @@ import {
   QuickReplyValue,
   SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
-import { QUICK_REPLIES_MAX_SIZE } from './constants';
+import { QUICK_REPLIES_MAX_SIZE, QUICK_REPLY_MAX_LENGTH, TEXT_MAX_LENGTH } from './constants';
 import {
   DialogflowResponse,
   EntityOverrideMode,
@@ -25,7 +25,68 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
   platformName = 'Dialogflow';
   responseClass = DialogflowResponse;
 
-  buildResponse(output: OutputTemplate): DialogflowResponse {
+  prepareOutput(output: OutputTemplate | OutputTemplate[]): OutputTemplate {
+    const singleOutput = super.prepareOutput(output);
+
+    if (singleOutput.platforms?.Dialogflow?.message) {
+      singleOutput.platforms.Dialogflow.message = this.sanitizeMessage(
+        singleOutput.platforms.Dialogflow.message,
+        'platforms.Dialogflow.message',
+      );
+    } else if (singleOutput.message) {
+      singleOutput.message = this.sanitizeMessage(singleOutput.message, 'message');
+    }
+
+    if (singleOutput.platforms?.Dialogflow?.quickReplies) {
+      singleOutput.platforms.Dialogflow.quickReplies = this.sanitizeQuickReplies(
+        singleOutput.platforms.Dialogflow.quickReplies,
+        'platforms.Dialogflow.quickReplies',
+      );
+    } else if (singleOutput.quickReplies) {
+      singleOutput.quickReplies = this.sanitizeQuickReplies(
+        singleOutput.quickReplies,
+        'quickReplies',
+      );
+    }
+
+    return singleOutput;
+  }
+
+  protected sanitizeMessage(
+    message: MessageValue,
+    path: string,
+    maxLength = TEXT_MAX_LENGTH,
+    offset?: number,
+  ): MessageValue {
+    return super.sanitizeMessage(message, path, maxLength, offset);
+  }
+
+  private sanitizeQuickReplies(quickReplies: QuickReplyValue[], path: string): QuickReplyValue[] {
+    if (!this.shouldSanitize('maxSize') || quickReplies.length <= QUICK_REPLIES_MAX_SIZE) {
+      return quickReplies;
+    }
+    quickReplies = quickReplies.slice(0, QUICK_REPLIES_MAX_SIZE);
+    this.logArrayTruncationWarning(path, QUICK_REPLIES_MAX_SIZE);
+    if (!this.shouldSanitize('maxLength')) {
+      return quickReplies;
+    }
+    return quickReplies.map((quickReply, index) => {
+      const quickReplyTextLength =
+        typeof quickReply === 'string' ? quickReply.length : quickReply.text.length;
+      if (quickReplyTextLength <= QUICK_REPLY_MAX_LENGTH) {
+        return quickReply;
+      }
+      if (typeof quickReply === 'object') {
+        quickReply.text = quickReply.text.slice(0, QUICK_REPLY_MAX_LENGTH);
+      } else {
+        quickReply = quickReply.slice(0, QUICK_REPLY_MAX_LENGTH);
+      }
+      this.logStringTruncationWarning(`${path}[${index}]`, QUICK_REPLY_MAX_LENGTH);
+      return quickReply;
+    });
+  }
+
+  toResponse(output: OutputTemplate): DialogflowResponse {
     const response: DialogflowResponse = {};
 
     const listen = output.platforms?.Dialogflow?.listen ?? output.listen;
