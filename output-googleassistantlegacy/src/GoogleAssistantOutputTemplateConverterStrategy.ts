@@ -31,30 +31,15 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
   responseClass = GoogleAssistantResponse;
 
   protected sanitizeOutput(output: OutputTemplate): OutputTemplate {
-    if (output.platforms?.GoogleAssistant?.quickReplies) {
-      output.platforms.GoogleAssistant.quickReplies = this.sanitizeQuickReplies(
-        output.platforms.GoogleAssistant.quickReplies,
-        'platforms.GoogleAssistant.quickReplies',
-      );
-    } else if (output.quickReplies) {
+    if (output.quickReplies) {
       output.quickReplies = this.sanitizeQuickReplies(output.quickReplies, 'quickReplies');
     }
 
-    if (output.platforms?.GoogleAssistant?.card) {
-      output.platforms.GoogleAssistant.card = this.sanitizeCard(
-        output.platforms.GoogleAssistant.card,
-        'platforms.GoogleAssistant.card',
-      );
-    } else if (output.card) {
+    if (output.card) {
       output.card = this.sanitizeCard(output.card, 'card');
     }
 
-    if (output.platforms?.GoogleAssistant?.carousel) {
-      output.platforms.GoogleAssistant.carousel = this.sanitizeCarousel(
-        output.platforms.GoogleAssistant.carousel,
-        'platforms.GoogleAssistant.carousel',
-      );
-    } else if (output.carousel) {
+    if (output.carousel) {
       output.carousel = this.sanitizeCarousel(output.carousel, 'carousel');
     }
     return output;
@@ -98,36 +83,36 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
     };
 
     // TODO: fully determine when to set listen
-    const listen = output.platforms?.GoogleAssistant?.listen ?? output.listen;
+    const listen = output.listen;
     if (typeof listen !== 'undefined') {
       response.expectUserResponse = !!listen;
     }
 
-    const message = output.platforms?.GoogleAssistant?.message || output.message;
+    const message = output.message;
     if (message) {
       response.richResponse.items.push({
         simpleResponse: this.convertMessageToSimpleResponse(message),
       });
     }
 
-    const reprompt = output.platforms?.GoogleAssistant?.reprompt || output.reprompt;
+    const reprompt = output.reprompt;
     if (reprompt) {
       response.noInputPrompts = [this.convertMessageToSimpleResponse(reprompt)];
     }
 
-    const quickReplies = output.platforms?.GoogleAssistant?.quickReplies || output.quickReplies;
+    const quickReplies = output.quickReplies;
     if (quickReplies?.length) {
       response.richResponse.suggestions = quickReplies.map(this.convertQuickReplyToSuggestion);
     }
 
-    const card = output.platforms?.GoogleAssistant?.card || output.card;
+    const card = output.card;
     if (card) {
       response.richResponse.items.push({
         basicCard: card.toGoogleAssistantBasicCard?.(),
       });
     }
 
-    const carousel = output.platforms?.GoogleAssistant?.carousel || output.carousel;
+    const carousel = output.carousel;
     if (carousel) {
       response.systemIntent = {
         intent: 'actions.intent.OPTION',
