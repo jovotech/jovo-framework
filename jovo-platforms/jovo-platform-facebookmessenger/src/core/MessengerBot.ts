@@ -116,7 +116,7 @@ export class MessengerBot extends Jovo {
 
   // Output methods
   setText(text: string): this {
-    _set(this.$output.FacebookMessenger, 'Overwrite.Text', text);
+    _set(this.$output, 'FacebookMessenger.Overwrite.Text', text);
     return this;
   }
 
@@ -130,18 +130,18 @@ export class MessengerBot extends Jovo {
         ? new TextQuickReply(quickReply.label || quickReply.value, quickReply.value)
         : quickReply;
     });
-    _set(this.$output.FacebookMessenger, 'Overwrite.QuickReplies', facebookQuickReplies);
+    _set(this.$output, 'FacebookMessenger.Overwrite.QuickReplies', facebookQuickReplies);
     return this;
   }
 
   addQuickReply(quickReply: QuickReply | GenericQuickReply | string): this {
-    const quickReplies = _get(this.$output.FacebookMessenger, 'Overwrite.QuickReplies');
+    const quickReplies = _get(this.$output, 'FacebookMessenger.Overwrite.QuickReplies');
     quickReplies.push(
       typeof quickReply === 'object' && 'value' in quickReply
         ? new TextQuickReply(quickReply.label || quickReply.value, quickReply.value)
         : quickReply,
     );
-    _set(this.$output.FacebookMessenger, 'Overwrite.QuickReplies', quickReplies);
+    _set(this.$output, 'FacebookMessenger.Overwrite.QuickReplies', quickReplies);
     return this;
   }
 

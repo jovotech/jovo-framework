@@ -105,6 +105,7 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
 
     app.middleware('platform.output')!.use(this.output.bind(this));
     app.middleware('response')!.use(this.response.bind(this));
+    app.middleware('after.response')!.use(this.afterResponse.bind(this));
 
     this.use(new FacebookMessengerCore());
 
@@ -288,6 +289,13 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
         Log.error(e.response?.data);
       }
     }
+  }
+
+  async afterResponse(handleRequest: HandleRequest) {
+    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== this.getAppType()) {
+      return Promise.resolve();
+    }
+    await handleRequest.host.setResponse(handleRequest.jovo.$response);
   }
 
   makeTestSuite(): TestSuite<FacebookMessengerRequestBuilder, FacebookMessengerResponseBuilder> {
