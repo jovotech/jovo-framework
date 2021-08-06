@@ -8,15 +8,14 @@ export abstract class MultipleResponsesOutputTemplateConverterStrategy<
   RESPONSE extends Record<string, unknown>,
   CONFIG extends OutputTemplateConverterStrategyConfig,
 > extends OutputTemplateConverterStrategy<RESPONSE, CONFIG> {
-  abstract responseClass: new () => RESPONSE;
-
   prepareOutput(output: OutputTemplate | OutputTemplate[]): OutputTemplate | OutputTemplate[] {
     output = super.prepareOutput(output);
-    if (!this.config.sanitization) {
+    if (!this.shouldSanitize()) {
       return output;
     }
     return Array.isArray(output) ? output.map(this.sanitizeOutput) : this.sanitizeOutput(output);
   }
+
   protected abstract sanitizeOutput(output: OutputTemplate, index?: number): OutputTemplate;
 
   abstract convertOutput(output: OutputTemplate): RESPONSE | RESPONSE[];

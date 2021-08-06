@@ -94,23 +94,6 @@ describe('validation - Message', () => {
   testOptionalStringProperty(Message, 'displayText', {
     text: 'foo',
   });
-
-  test('quickReplies - optional', async () => {
-    await validateAndExpectLength(Message, { text: 'foo' }, 0);
-  });
-  test('quickReplies - invalid: wrong type', async () => {
-    await validateAndExpectLength(Message, { text: 'foo', quickReplies: {} as any }, 1);
-  });
-  test('quickReplies - invalid: invalid element', async () => {
-    await validateAndExpectLength(Message, { text: 'foo', quickReplies: [2] as any }, 1);
-  });
-  test('quickReplies - valid', async () => {
-    await validateAndExpectLength(
-      Message,
-      { text: 'foo', quickReplies: ['foo', { text: 'bar' }] },
-      0,
-    );
-  });
 });
 
 describe('validation - Card', () => {

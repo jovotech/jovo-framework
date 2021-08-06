@@ -5,6 +5,8 @@ import {
   DynamicEntities,
   MessageValue,
   OutputTemplate,
+  OutputTemplateBase,
+  OutputTemplatePlatforms,
   plainToClass,
   QuickReplyValue,
 } from '.';
@@ -21,6 +23,7 @@ export interface ValidationConfig {
 
 export interface OutputTemplateConverterStrategyConfig {
   [key: string]: unknown;
+
   omitWarnings: boolean;
   sanitization: SanitizationConfig | boolean;
   validation: ValidationConfig | boolean;
@@ -31,13 +34,29 @@ export abstract class OutputTemplateConverterStrategy<
   CONFIG extends OutputTemplateConverterStrategyConfig,
 > {
   readonly config: CONFIG;
-  responseClass: new () => RESPONSE;
+  abstract readonly platformName: keyof OutputTemplatePlatforms;
+  abstract readonly responseClass: new () => RESPONSE;
 
   constructor(config?: PartialDeep<CONFIG>) {
     this.config = _defaultsDeep(this.getDefaultConfig(), config || {});
   }
 
+  getDefaultConfig(): CONFIG {
+    return {
+      omitWarnings: false,
+      sanitization: true,
+      validation: true,
+    } as CONFIG;
+  }
+
+  /**
+   * Prepare the output by applying the platform-specific output that is related to the strategy.
+   * Additionally, instances are initialized based on the objects.
+   */
   prepareOutput(output: OutputTemplate | OutputTemplate[]): OutputTemplate | OutputTemplate[] {
+    output = Array.isArray(output)
+      ? output.map((outputItem: OutputTemplate) => this.getPlatformSpecificOutput(outputItem))
+      : this.getPlatformSpecificOutput(output);
     return plainToClass(OutputTemplate, output);
   }
 
@@ -49,15 +68,39 @@ export abstract class OutputTemplateConverterStrategy<
 
   abstract fromResponse(response: RESPONSE | RESPONSE[]): OutputTemplate | OutputTemplate[];
 
-  getDefaultConfig(): CONFIG {
-    return {
-      omitWarnings: false,
-      sanitization: true,
-      validation: true,
-    } as CONFIG;
+  protected getPlatformSpecificOutput(output: OutputTemplate): OutputTemplate {
+    return OutputTemplate.getKeys().reduce((outputCopy, outputKey) => {
+      if (outputKey === 'platforms') {
+        // remove the platforms-output of all other platforms due to not being used anyways
+        if (output.platforms?.[this.platformName]) {
+          outputCopy.platforms = {};
+          outputCopy.platforms[this.platformName] = output.platforms?.[this.platformName];
+        }
+        return outputCopy;
+      }
+      const newValue = this.getOutputValue(output, outputKey);
+      if (newValue) {
+        outputCopy[outputKey] = newValue;
+      }
+      return outputCopy;
+    }, {} as OutputTemplate);
   }
 
-  protected shouldSanitize(rule: keyof SanitizationConfig): boolean {
+  protected getOutputValue<KEY extends keyof OutputTemplateBase>(
+    output: OutputTemplate,
+    key: KEY,
+  ): OutputTemplateBase[KEY] {
+    const platformValue = output.platforms?.[this.platformName]?.[key];
+    if (platformValue === null) {
+      return undefined;
+    }
+    return platformValue ?? output[key];
+  }
+
+  protected shouldSanitize(rule?: keyof SanitizationConfig): boolean {
+    if (!rule) {
+      return !!this.config.sanitization;
+    }
     return typeof this.config.sanitization === 'object'
       ? this.config.sanitization[rule]
       : this.config.sanitization;
