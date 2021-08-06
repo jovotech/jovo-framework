@@ -4,8 +4,7 @@
     "framework",
     "platforms/**",
     "integrations/**",
-    "examples/**",
-    "../botify/chatbots/team/botify-team-bot/"
+    "examples/**"
   ],
   "ignoreChanges": [
     "*.md",

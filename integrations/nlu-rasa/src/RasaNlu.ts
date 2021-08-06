@@ -45,19 +45,16 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
     const text = jovo.$request.getRawText();
     if (!text) return;
     try {
-      const rasaResponse = await this.sendTextToRasaServer(text || '');
-      if (rasaResponse.data.intent.name) {
-        return {
-          intent: {
-            name: rasaResponse.data.intent.name,
-            confidence: rasaResponse.data.intent.confidence,
-          },
-          alternativeIntents: this.mapAlternativeIntents(rasaResponse.data.intent_ranking),
-          entities: rasaResponse.data.entities.reduce(RasaNlu.mapEntities, {}),
-        };
-      } else {
-        return undefined;
-      }
+      const rasaResponse = await this.sendTextToRasaServer(text);
+
+      return {
+        intent: {
+          name: rasaResponse.data.intent.name,
+          confidence: rasaResponse.data.intent.confidence,
+        },
+        alternativeIntents: this.mapAlternativeIntents(rasaResponse.data.intent_ranking),
+        entities: rasaResponse.data.entities.reduce(RasaNlu.mapEntities, {}),
+      };
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error('Error while retrieving nlu-data from Rasa-server: ', e);
