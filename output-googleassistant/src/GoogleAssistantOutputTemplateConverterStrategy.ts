@@ -34,39 +34,19 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
   responseClass = GoogleAssistantResponse;
 
   protected sanitizeOutput(output: OutputTemplate): OutputTemplate {
-    if (output.platforms?.GoogleAssistant?.message) {
-      output.platforms.GoogleAssistant.message = this.sanitizeMessage(
-        output.platforms.GoogleAssistant.message,
-        'platforms.GoogleAssistant.message',
-      );
-    } else if (output.message) {
+    if (output.message) {
       output.message = this.sanitizeMessage(output.message, 'message');
     }
 
-    if (output.platforms?.GoogleAssistant?.reprompt) {
-      output.platforms.GoogleAssistant.reprompt = this.sanitizeMessage(
-        output.platforms.GoogleAssistant.reprompt,
-        'platforms.GoogleAssistant.reprompt',
-      );
-    } else if (output.reprompt) {
+    if (output.reprompt) {
       output.reprompt = this.sanitizeMessage(output.reprompt, 'reprompt');
     }
 
-    if (output.platforms?.GoogleAssistant?.quickReplies) {
-      output.platforms.GoogleAssistant.quickReplies = this.sanitizeQuickReplies(
-        output.platforms.GoogleAssistant.quickReplies,
-        'platforms.GoogleAssistant.quickReplies',
-      );
-    } else if (output.quickReplies) {
+    if (output.quickReplies) {
       output.quickReplies = this.sanitizeQuickReplies(output.quickReplies, 'quickReplies');
     }
 
-    if (output.platforms?.GoogleAssistant?.carousel) {
-      output.platforms.GoogleAssistant.carousel = this.sanitizeCarousel(
-        output.platforms.GoogleAssistant.carousel,
-        'platforms.GoogleAssistant.carousel',
-      );
-    } else if (output.carousel) {
+    if (output.carousel) {
       output.carousel = this.sanitizeCarousel(output.carousel, 'carousel');
     }
 
@@ -107,7 +87,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
       return { id: '', params: {}, languageCode: '' };
     }
 
-    const listen = output.platforms?.GoogleAssistant?.listen ?? output.listen;
+    const listen = output.listen;
     if (listen === false) {
       response.scene = {
         name: '',
@@ -129,7 +109,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
       );
     }
 
-    const message = output.platforms?.GoogleAssistant?.message || output.message;
+    const message = output.message;
     if (message) {
       if (!response.prompt) {
         response.prompt = {};
@@ -137,7 +117,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
       response.prompt.firstSimple = this.convertMessageToSimple(message);
     }
 
-    const reprompt = output.platforms?.GoogleAssistant?.reprompt || output.reprompt;
+    const reprompt = output.reprompt;
     if (reprompt) {
       if (!response.session) {
         response.session = getEmptySession();
@@ -150,7 +130,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
       };
     }
 
-    const quickReplies = output.platforms?.GoogleAssistant?.quickReplies || output.quickReplies;
+    const quickReplies = output.quickReplies;
     if (quickReplies?.length) {
       if (!response.prompt) {
         response.prompt = {};
@@ -160,7 +140,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
         .map(this.convertQuickReplyToSuggestion);
     }
 
-    const card = output.platforms?.GoogleAssistant?.card || output.card;
+    const card = output.card;
     if (card) {
       if (!response.prompt) {
         response.prompt = {};
@@ -171,7 +151,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
       response.prompt.content.card = card.toGoogleAssistantCard?.();
     }
 
-    const carousel = output.platforms?.GoogleAssistant?.carousel || output.carousel;
+    const carousel = output.carousel;
     if (carousel) {
       const collectionData = carousel.toGoogleAssistantCollectionData?.();
       if (collectionData) {
