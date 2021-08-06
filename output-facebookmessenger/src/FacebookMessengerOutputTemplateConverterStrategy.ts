@@ -1,6 +1,4 @@
 import {
-  Card,
-  Carousel,
   MessageValue,
   MultipleResponsesOutputTemplateConverterStrategy,
   OutputTemplate,
@@ -26,18 +24,16 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
   OutputTemplateConverterStrategyConfig
 > {
   responseClass = FacebookMessengerResponse;
+  platformName: 'FacebookMessenger';
 
   // maybe we need more context here, like index of template
   protected sanitizeOutput(output: OutputTemplate, index?: number): OutputTemplate {
     const pathPrefix = index ? `[${index}]` : '';
-    if (output.platforms?.FacebookMessenger?.message) {
-      output.platforms.FacebookMessenger.message = this.sanitizeMessage(
-        output.platforms.FacebookMessenger.message,
-        `${pathPrefix}platforms.FacebookMessenger.message`,
-      );
-    } else if (output.message) {
+    if (output.message) {
       output.message = this.sanitizeMessage(output.message, `${pathPrefix}message`);
     }
+
+    // TODO implement complete sanitization
 
     return output;
   }
@@ -51,8 +47,6 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
     return super.sanitizeMessage(message, path, maxLength, offset);
   }
 
-  // TODO: Fix a bug, enumerating both the normal object and platform-specific causes everything to be sent
-  // TODO: fix missing quick-replies
   convertOutput(output: OutputTemplate): FacebookMessengerResponse | FacebookMessengerResponse[] {
     const getResponseBase: () => FacebookMessengerResponse = () => ({
       messaging_type: MessagingType.Response,
@@ -60,60 +54,49 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
         id: '',
       },
     });
-    let response: FacebookMessengerResponse | FacebookMessengerResponse[] = getResponseBase();
+    let result: FacebookMessengerResponse | FacebookMessengerResponse[] = getResponseBase();
 
-    const addToResponse = (message: FacebookMessengerMessage) => {
-      if (!Array.isArray(response) && response.message) {
-        response = [response];
+    const addResponseMessage = (message: FacebookMessengerMessage) => {
+      if (!Array.isArray(result) && result.message) {
+        result = [result];
       }
-      if (Array.isArray(response)) {
-        const newResponse = getResponseBase();
-        newResponse.message = message;
-        response.push(newResponse);
+      if (Array.isArray(result)) {
+        const newResult = getResponseBase();
+        newResult.message = message;
+        result.push(newResult);
       } else {
-        response.message = message;
+        result.message = message;
       }
     };
 
-    const conversionMap: Partial<
-      Record<keyof OutputTemplate, (val: any) => FacebookMessengerMessage>
-    > = {
-      message: (message: MessageValue) => this.convertMessageToFacebookMessengerMessage(message),
-      card: (card: Card) => ({
-        attachment: {
-          type: MessageAttachmentType.Template,
-          payload: card.toFacebookMessengerGenericTemplate!(),
-        },
-      }),
-      carousel: (carousel: Carousel) => ({
-        attachment: {
-          type: MessageAttachmentType.Template,
-          payload: carousel.toFacebookMessengerGenericTemplate!(),
-        },
-      }),
-    };
-
-    const enumerateOutputTemplate = (outputTemplate: OutputTemplate) => {
-      for (const key in outputTemplate) {
-        if (outputTemplate.hasOwnProperty(key) && outputTemplate[key]) {
-          const conversionFn = conversionMap[key];
-          if (conversionFn) {
-            addToResponse(conversionFn(outputTemplate[key]));
-          }
-        }
+    const message = output.message;
+    if (message) {
+      const facebookMessage = this.convertMessageToFacebookMessengerMessage(message);
+      const quickReplies = output.quickReplies;
+      if (quickReplies) {
+        facebookMessage.quick_replies = quickReplies.map(
+          this.convertQuickReplyToFacebookMessengerQuickReply,
+        );
       }
-    };
 
-    enumerateOutputTemplate(output);
-    if (output.platforms?.FacebookMessenger) {
-      enumerateOutputTemplate(output.platforms.FacebookMessenger);
+      addResponseMessage(facebookMessage);
     }
 
-    // TODO determine what to do with nativeResponse!
-    // if (output.platforms?.FacebookMessenger?.nativeResponse) {
-    // }
+    const card = output.card;
+    if (card?.toFacebookMessengerMessage) {
+      addResponseMessage(card.toFacebookMessengerMessage());
+    }
 
-    return response;
+    const carousel = output.carousel;
+    if (carousel?.toFacebookMessengerMessage) {
+      addResponseMessage(carousel.toFacebookMessengerMessage());
+    }
+
+    if (output.platforms?.FacebookMessenger?.nativeResponse) {
+      // TODO determine what to do with nativeResponse
+    }
+
+    return result;
   }
 
   convertResponse(response: FacebookMessengerResponse): OutputTemplate {

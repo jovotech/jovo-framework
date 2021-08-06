@@ -3,6 +3,7 @@ import { GENERIC_TEMPLATE_MAX_SIZE } from './constants';
 import {
   GenericTemplateElement,
   Message as FacebookMessengerMessage,
+  MessageAttachmentType,
   QuickReplyContentType,
   TemplateType,
 } from './models';
@@ -28,12 +29,30 @@ export function augmentModelPrototypes(): void {
     };
   };
 
+  Card.prototype.toFacebookMessengerMessage = function () {
+    return {
+      attachment: {
+        type: MessageAttachmentType.Template,
+        payload: this.toFacebookMessengerGenericTemplate!(),
+      },
+    };
+  };
+
   Carousel.prototype.toFacebookMessengerGenericTemplate = function () {
     return {
       template_type: TemplateType.Generic,
       elements: this.items
         .slice(0, GENERIC_TEMPLATE_MAX_SIZE)
         .map((item) => item.toFacebookMessengerGenericTemplateElement!()),
+    };
+  };
+
+  Carousel.prototype.toFacebookMessengerMessage = function () {
+    return {
+      attachment: {
+        type: MessageAttachmentType.Template,
+        payload: this.toFacebookMessengerGenericTemplate!(),
+      },
     };
   };
 
