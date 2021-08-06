@@ -1,7 +1,6 @@
 import { Type } from 'class-transformer';
 import {
   IsArray,
-  IsBoolean,
   IsBooleanOrInstance,
   IsInstance,
   IsOptional,
@@ -14,6 +13,12 @@ import { Card } from './Card';
 import { Carousel } from './Carousel';
 import { Message, MessageValue } from './Message';
 import { QuickReply, QuickReplyValue } from './QuickReply';
+
+export type AllowNull<T> = {
+  [P in keyof T]: T[P] | null;
+};
+
+export type NullableOutputTemplateBase = AllowNull<OutputTemplateBase>;
 
 export class OutputTemplateBase {
   [key: string]: unknown;
