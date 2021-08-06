@@ -26,21 +26,11 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
   responseClass = DialogflowResponse;
 
   protected sanitizeOutput(output: OutputTemplate): OutputTemplate {
-    if (output.platforms?.Dialogflow?.message) {
-      output.platforms.Dialogflow.message = this.sanitizeMessage(
-        output.platforms.Dialogflow.message,
-        'platforms.Dialogflow.message',
-      );
-    } else if (output.message) {
+    if (output.message) {
       output.message = this.sanitizeMessage(output.message, 'message');
     }
 
-    if (output.platforms?.Dialogflow?.quickReplies) {
-      output.platforms.Dialogflow.quickReplies = this.sanitizeQuickReplies(
-        output.platforms.Dialogflow.quickReplies,
-        'platforms.Dialogflow.quickReplies',
-      );
-    } else if (output.quickReplies) {
+    if (output.quickReplies) {
       output.quickReplies = this.sanitizeQuickReplies(output.quickReplies, 'quickReplies');
     }
 
@@ -68,7 +58,7 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
   toResponse(output: OutputTemplate): DialogflowResponse {
     const response: DialogflowResponse = {};
 
-    const listen = output.platforms?.Dialogflow?.listen ?? output.listen;
+    const listen = output.listen;
     if (typeof listen === 'object' && listen.entities?.types?.length) {
       const entityOverrideMode: EntityOverrideMode =
         listen.entities.mode === DynamicEntitiesMode.Merge
@@ -79,7 +69,7 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
       );
     }
 
-    const message = output.platforms?.Dialogflow?.message || output.message;
+    const message = output.message;
     if (message) {
       if (!response.fulfillment_messages) {
         response.fulfillment_messages = [];
@@ -91,7 +81,7 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
       });
     }
 
-    const quickReplies = output.platforms?.Dialogflow?.quickReplies || output.quickReplies;
+    const quickReplies = output.quickReplies;
     if (quickReplies?.length) {
       if (!response.fulfillment_messages) {
         response.fulfillment_messages = [];
@@ -107,7 +97,7 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
       });
     }
 
-    const card = output.platforms?.Dialogflow?.card || output.card;
+    const card = output.card;
     if (card) {
       if (!response.fulfillment_messages) {
         response.fulfillment_messages = [];
