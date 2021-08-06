@@ -23,7 +23,9 @@ export class OutputTemplateConverter<
     return this.validate(response, this.strategy.responseClass);
   }
 
-  async toResponse(output: OutputTemplate | OutputTemplate[]): Promise<RESPONSE | RESPONSE[]> {
+  async toResponse(
+    output: OutputTemplate | OutputTemplate[],
+  ): Promise<ReturnType<STRATEGY['toResponse']>> {
     const instancedOutput: OutputTemplate | OutputTemplate[] = this.strategy.prepareOutput(output);
 
     const validationConfig = this.strategy.config.validation;
@@ -48,10 +50,12 @@ export class OutputTemplateConverter<
       }
     }
 
-    return response;
+    return response as ReturnType<STRATEGY['toResponse']>;
   }
 
-  async fromResponse(response: RESPONSE | RESPONSE[]): Promise<OutputTemplate | OutputTemplate[]> {
+  async fromResponse(
+    response: RESPONSE | RESPONSE[],
+  ): Promise<ReturnType<STRATEGY['fromResponse']>> {
     const responseInstance = this.strategy.prepareResponse(response);
 
     const validationConfig = this.strategy.config.validation;
@@ -76,7 +80,7 @@ export class OutputTemplateConverter<
       }
     }
 
-    return output;
+    return output as ReturnType<STRATEGY['fromResponse']>;
   }
 
   private async validate<T = unknown>(
