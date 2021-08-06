@@ -15,12 +15,14 @@ export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleRespo
   OutputTemplateConverterStrategyConfig
 > {
   responseClass = GoogleBusinessResponse;
+  platformName = 'GoogleBusiness';
 
   protected sanitizeOutput(output: OutputTemplate, index?: number): OutputTemplate {
+    // TODO implement sanitization
+
     return output;
   }
 
-  // TODO improve code
   convertOutput(output: OutputTemplate): GoogleBusinessResponse {
     const getResponseBase: () => GoogleBusinessResponse = () => ({
       // TODO determine whether uuid should be used here or that's something that the developer has to do
@@ -29,69 +31,56 @@ export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleRespo
         representativeType: RepresentativeType.Bot,
       },
     });
-    let response: GoogleBusinessResponse | GoogleBusinessResponse[] = getResponseBase();
+    let result: GoogleBusinessResponse | GoogleBusinessResponse[] = getResponseBase();
 
-    const addToResponse = <KEY extends 'text' | 'image' | 'richCard'>(
+    const addResponse = <KEY extends 'text' | 'image' | 'richCard'>(
       key: KEY,
       content: GoogleBusinessResponse[KEY],
     ) => {
-      if (!Array.isArray(response) && (response.text || response.image || response.richCard)) {
-        response = [response];
+      if (!Array.isArray(result) && (result.text || result.image || result.richCard)) {
+        result = [result];
       }
-      if (Array.isArray(response)) {
-        const newResponse = getResponseBase();
-        newResponse[key] = content;
-        response.push(newResponse);
+      if (Array.isArray(result)) {
+        const newResult = getResponseBase();
+        newResult[key] = content;
+        result.push(newResult);
       } else {
-        response[key] = content;
+        result[key] = content;
       }
     };
 
-    const conversionMap: Partial<
-      Record<
-        keyof OutputTemplate,
-        (
-          val: any,
-        ) =>
-          | GoogleBusinessResponse['text']
-          | GoogleBusinessResponse['image']
-          | GoogleBusinessResponse['richCard']
-      >
-    > = {
-      message: (message: MessageValue) => this.convertMessageToGoogleBusinessText(message),
-      card: (card: Card) => ({ standaloneCard: card.toGoogleBusinessCard!() }),
-      carousel: (carousel: Carousel) => ({ carouselCard: carousel.toGoogleBusinessCarousel!() }),
-    };
-
-    const responseKeyMap: Record<keyof OutputTemplate, 'text' | 'image' | 'richCard' | undefined> =
-      {
-        message: 'text',
-        card: 'richCard',
-        carousel: 'richCard',
-      };
-
-    const enumerateOutputTemplate = (outputTemplate: OutputTemplate) => {
-      for (const key in outputTemplate) {
-        if (outputTemplate.hasOwnProperty(key) && outputTemplate[key]) {
-          const conversionFn = conversionMap[key];
-          const responseKey = responseKeyMap[key];
-          if (conversionFn && responseKey) {
-            addToResponse(responseKey, conversionFn(outputTemplate[key]));
-          }
-        }
-      }
-    };
-
-    enumerateOutputTemplate(output);
-    if (output.platforms?.GoogleBusiness) {
-      enumerateOutputTemplate(output.platforms.GoogleBusiness);
+    const message = output.message;
+    if (message) {
+      addResponse('text', this.convertMessageToGoogleBusinessText(message));
     }
 
-    // TODO determine what to do with nativeResponse!
-    // if (output.platforms?.GoogleBusiness?.nativeResponse) {
-    // }
+    const card = output.card;
+    if (card?.toGoogleBusinessRichCard) {
+      addResponse('richCard', card.toGoogleBusinessRichCard());
+    }
 
-    return response;
+    const carousel = output.carousel;
+    if (carousel?.toGoogleBusinessRichCard) {
+      addResponse('richCard', carousel.toGoogleBusinessRichCard());
+    }
+
+    if (output.platforms?.GoogleBusiness?.nativeResponse) {
+      // TODO determine what to do with nativeResponse!
+    }
+
+    // TODO check, currently this is only added to the last element
+    const quickReplies = output.quickReplies;
+    if (quickReplies?.length) {
+      if (Array.isArray(result)) {
+        result[result.length - 1].suggestions = quickReplies.map(
+          this.convertQuickReplyToGoogleBusinessSuggestion,
+        );
+      } else {
+        result.suggestions = quickReplies.map(this.convertQuickReplyToGoogleBusinessSuggestion);
+      }
+    }
+
+    return result;
   }
 
   convertResponse(response: GoogleBusinessResponse): OutputTemplate {
