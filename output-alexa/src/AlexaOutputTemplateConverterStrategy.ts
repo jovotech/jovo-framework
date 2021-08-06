@@ -38,35 +38,16 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
     return { ...super.getDefaultConfig(), genericOutputToApl: true };
   }
 
-  sanitizeOutput(output: OutputTemplate): OutputTemplate {
-    if (output.platforms?.Alexa?.message) {
-      output.platforms.Alexa.message = this.sanitizeMessage(
-        output.platforms.Alexa.message,
-        'platforms.Alexa.message',
-      );
-    } else if (output.message) {
+  protected sanitizeOutput(output: OutputTemplate): OutputTemplate {
+    if (output.message) {
       output.message = this.sanitizeMessage(output.message, 'message');
     }
 
-    if (output.platforms?.Alexa?.reprompt) {
-      output.platforms.Alexa.reprompt = this.sanitizeMessage(
-        output.platforms.Alexa.reprompt,
-        'platforms.Alexa.reprompt',
-      );
-    } else if (output.reprompt) {
+    if (output.reprompt) {
       output.reprompt = this.sanitizeMessage(output.reprompt, 'reprompt');
     }
 
     if (
-      output.platforms?.Alexa?.listen &&
-      typeof output.platforms.Alexa.listen === 'object' &&
-      output.platforms.Alexa.listen.entities?.types?.length
-    ) {
-      output.platforms.Alexa.listen.entities = this.sanitizeDynamicEntities(
-        output.platforms.Alexa.listen.entities,
-        'platforms.Alexa.listen.entities.types',
-      );
-    } else if (
       output.listen &&
       typeof output.listen === 'object' &&
       output.listen.entities?.types?.length
@@ -110,7 +91,7 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
       response.response.directives.push(...directives);
     };
 
-    const listen = output.platforms?.Alexa?.listen ?? output.listen;
+    const listen = output.listen;
     if (typeof listen !== 'undefined') {
       response.response.shouldEndSession = !listen;
 
@@ -126,19 +107,19 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
       }
     }
 
-    const message = output.platforms?.Alexa?.message || output.message;
+    const message = output.message;
     if (message) {
       response.response.outputSpeech = this.convertMessageToOutputSpeech(message);
     }
 
-    const reprompt = output.platforms?.Alexa?.reprompt || output.reprompt;
+    const reprompt = output.reprompt;
     if (reprompt) {
       response.response.reprompt = {
         outputSpeech: this.convertMessageToOutputSpeech(reprompt),
       };
     }
 
-    const card = output.platforms?.Alexa?.card || output.card;
+    const card = output.card;
     if (card) {
       if (this.config.genericOutputToApl) {
         addToDirectives(card.toApl?.() as AplRenderDocumentDirective);
@@ -147,18 +128,12 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
       }
     }
 
-    const carousel = output.platforms?.Alexa?.carousel || output.carousel;
+    const carousel = output.carousel;
     if (carousel && this.config.genericOutputToApl) {
       addToDirectives(carousel.toApl?.() as AplRenderDocumentDirective);
     }
 
-    const list = output.platforms?.Alexa?.list;
-    if (list && this.config.genericOutputToApl) {
-      addToDirectives(list.toApl?.() as AplRenderDocumentDirective);
-    }
-
-    const quickReplies: QuickReplyValue[] | undefined =
-      output.platforms?.Alexa?.quickReplies || output.quickReplies;
+    const quickReplies = output.quickReplies;
     if (quickReplies && this.config.genericOutputToApl) {
       const directive: AplRenderDocumentDirective | undefined = response.response
         .directives?.[0] as AplRenderDocumentDirective | undefined;
@@ -178,6 +153,11 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
           },
         );
       }
+    }
+
+    const list = output.platforms?.Alexa?.list;
+    if (list && this.config.genericOutputToApl) {
+      addToDirectives(list.toApl?.() as AplRenderDocumentDirective);
     }
 
     if (output.platforms?.Alexa?.nativeResponse) {
