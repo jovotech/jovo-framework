@@ -8,11 +8,11 @@ import {
   ValidateNested,
 } from '@jovotech/output';
 import { Context } from './Context';
-import { CorePlatformResponse } from './CorePlatformResponse';
+import { CoreResponse } from './CoreResponse';
 import { Session } from './Session';
 import { User } from './User';
 
-export class CorePlatformOutputTemplateResponse implements Partial<CorePlatformResponse> {
+export class CoreOutputTemplateResponse implements Partial<CoreResponse> {
   [key: string]: unknown;
 
   @IsOptional()

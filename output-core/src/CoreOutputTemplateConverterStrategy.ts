@@ -5,17 +5,18 @@ import {
   OutputTemplateConverterStrategy,
 } from '@jovotech/output';
 import { OutputTemplateConverterStrategyConfig } from '@jovotech/output/src';
-import { CorePlatformResponse } from './models';
+import { CoreResponse } from './models';
 
 export class CoreOutputTemplateConverterStrategy extends OutputTemplateConverterStrategy<
-  CorePlatformResponse,
+  CoreResponse,
   OutputTemplateConverterStrategyConfig
 > {
-  responseClass = CorePlatformResponse;
+  responseClass = CoreResponse;
+  platformName: 'Core';
 
-  toResponse(output: OutputTemplate | OutputTemplate[]): CorePlatformResponse {
+  toResponse(output: OutputTemplate | OutputTemplate[]): CoreResponse {
     output = Array.isArray(output) ? output : [output];
-    const response: CorePlatformResponse = {
+    const response: CoreResponse = {
       version: '4.0.0',
       type: 'jovo-platform-core',
       output,
@@ -41,7 +42,7 @@ export class CoreOutputTemplateConverterStrategy extends OutputTemplateConverter
     return response;
   }
 
-  fromResponse(response: CorePlatformResponse): OutputTemplate[] {
+  fromResponse(response: CoreResponse): OutputTemplate[] {
     return response.output;
   }
 }
