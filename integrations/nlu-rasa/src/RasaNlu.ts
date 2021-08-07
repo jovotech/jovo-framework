@@ -53,7 +53,7 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
           confidence: rasaResponse.data.intent.confidence,
         },
         alternativeIntents: this.mapAlternativeIntents(rasaResponse.data.intent_ranking),
-        entities: rasaResponse.data.entities.reduce(RasaNlu.mapEntities, {}),
+        entities: rasaResponse.data.entities.reduce(this.mapEntities, {}),
       };
     } catch (e) {
       // eslint-disable-next-line no-console
@@ -78,7 +78,7 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
       .slice(0, this.config.alternativeIntents.maxAlternatives);
   }
 
-  private static mapEntities(entityMap: EntityMap, rasaEntity: RasaEntity): EntityMap {
+  private mapEntities(entityMap: EntityMap, rasaEntity: RasaEntity): EntityMap {
     let entityAlias = rasaEntity.entity;
     // roles can distinguish entities of the same type e.g. departure and destination in
     // a travel use case and should therefore be preferred as entity name
