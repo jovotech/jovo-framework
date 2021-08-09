@@ -36,17 +36,17 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
   protected sanitizeOutput(output: OutputTemplate, index?: number): OutputTemplate {
     const pathPrefix = index ? `[${index}]` : '';
     if (output.message) {
-      output.message = this.sanitizeMessage(output.message, `${pathPrefix}message`);
+      output.message = this.sanitizeMessage(output.message, `${pathPrefix}.message`);
     }
 
     if (output.carousel) {
-      output.carousel = this.sanitizeCarousel(output.carousel, `${pathPrefix}carousel`);
+      output.carousel = this.sanitizeCarousel(output.carousel, `${pathPrefix}.carousel`);
     }
 
     if (output.quickReplies) {
       output.quickReplies = this.sanitizeQuickReplies(
         output.quickReplies,
-        `${pathPrefix}quickReplies`,
+        `${pathPrefix}.quickReplies`,
       );
     }
 

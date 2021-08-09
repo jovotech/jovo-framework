@@ -29,17 +29,17 @@ export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleRespo
     const pathPrefix = index ? `[${index}]` : '';
 
     if (output.card) {
-      output.card = this.sanitizeCard(output.card, `${pathPrefix}card`);
+      output.card = this.sanitizeCard(output.card, `${pathPrefix}.card`);
     }
 
     if (output.carousel) {
-      output.carousel = this.sanitizeCarousel(output.carousel, `${pathPrefix}carousel`);
+      output.carousel = this.sanitizeCarousel(output.carousel, `${pathPrefix}.carousel`);
     }
 
     if (output.quickReplies) {
       output.quickReplies = this.sanitizeQuickReplies(
         output.quickReplies,
-        `${pathPrefix}quickReplies`,
+        `${pathPrefix}.quickReplies`,
       );
     }
 
