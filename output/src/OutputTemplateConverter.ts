@@ -5,6 +5,7 @@ import {
   OutputTemplate,
   OutputTemplateConverterStrategy,
   OutputTemplateConverterStrategyConfig,
+  ValidationConfig,
 } from '.';
 import { OutputValidationError } from './errors/OutputValidationError';
 
@@ -28,13 +29,7 @@ export class OutputTemplateConverter<
   ): Promise<ReturnType<STRATEGY['toResponse']>> {
     const instancedOutput: OutputTemplate | OutputTemplate[] = this.strategy.prepareOutput(output);
 
-    const validationConfig = this.strategy.config.validation;
-    const shouldValidateBefore =
-      typeof validationConfig === 'object' ? validationConfig.before : validationConfig;
-    const shouldValidateAfter =
-      typeof validationConfig === 'object' ? validationConfig.after : validationConfig;
-
-    if (shouldValidateBefore) {
+    if (this.shouldValidate('before')) {
       const errors = await this.validateOutput(instancedOutput);
       if (errors.length) {
         throw new OutputValidationError(errors, 'Can not convert.\n');
@@ -43,7 +38,7 @@ export class OutputTemplateConverter<
 
     const response = this.strategy.toResponse(instancedOutput);
 
-    if (shouldValidateAfter) {
+    if (this.shouldValidate('after')) {
       const errors = await this.validateResponse(response);
       if (errors.length) {
         throw new OutputValidationError(errors, 'Conversion caused invalid response.\n');
@@ -58,13 +53,7 @@ export class OutputTemplateConverter<
   ): Promise<ReturnType<STRATEGY['fromResponse']>> {
     const responseInstance = this.strategy.prepareResponse(response);
 
-    const validationConfig = this.strategy.config.validation;
-    const shouldValidateBefore =
-      typeof validationConfig === 'object' ? validationConfig.before : validationConfig;
-    const shouldValidateAfter =
-      typeof validationConfig === 'object' ? validationConfig.after : validationConfig;
-
-    if (shouldValidateBefore) {
+    if (this.shouldValidate('before')) {
       const errors = await this.validateResponse(responseInstance);
       if (errors.length) {
         throw new OutputValidationError(errors, 'Can not parse.\n');
@@ -73,7 +62,7 @@ export class OutputTemplateConverter<
 
     const output = this.strategy.fromResponse(responseInstance);
 
-    if (shouldValidateAfter) {
+    if (this.shouldValidate('after')) {
       const errors = await this.validateOutput(output);
       if (errors.length) {
         throw new OutputValidationError(errors, 'Conversion caused invalid output.\n');
@@ -81,6 +70,15 @@ export class OutputTemplateConverter<
     }
 
     return output as ReturnType<STRATEGY['fromResponse']>;
+  }
+
+  private shouldValidate(key?: keyof ValidationConfig): boolean {
+    if (!key) {
+      return !!this.strategy.config.validation;
+    }
+    return typeof this.strategy.config.validation === 'object'
+      ? this.strategy.config.validation[key]
+      : this.strategy.config.validation;
   }
 
   private async validate<T = unknown>(
