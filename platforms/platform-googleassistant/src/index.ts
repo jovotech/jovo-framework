@@ -17,10 +17,12 @@ declare module '@jovotech/framework/dist/types/Extensible' {
 declare module '@jovotech/framework/dist/types/JovoSession' {
   interface JovoSession {
     _GA_REPROMPTS_?: SessionParamsReprompts;
+    _GA_SELECTION_INTENT_?: string;
   }
 
   interface PersistableSessionData {
     _GA_REPROMPTS_?: SessionParamsReprompts;
+    _GA_SELECTION_INTENT_?: string;
   }
 }
 

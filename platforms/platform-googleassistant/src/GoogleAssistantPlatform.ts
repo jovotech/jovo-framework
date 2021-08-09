@@ -1,23 +1,24 @@
 import {
   AnyObject,
   App,
+  EntityMap,
   ExtensibleConfig,
   HandleRequest,
   InternalIntent,
-  Jovo,
   Platform,
   RequestType,
 } from '@jovotech/framework';
 import {
   GoogleAssistantOutputTemplateConverterStrategy,
   GoogleAssistantResponse,
+  SlotFillingStatus,
 } from '@jovotech/output-googleassistant';
+import _mergeWith from 'lodash.mergewith';
 import { GoogleAssistant } from './GoogleAssistant';
 import { GoogleAssistantDevice } from './GoogleAssistantDevice';
 import { GoogleAssistantRepromptComponent } from './GoogleAssistantRepromptComponent';
 import { GoogleAssistantRequest } from './GoogleAssistantRequest';
 import { GoogleAssistantUser } from './GoogleAssistantUser';
-import _mergeWith from 'lodash.mergewith';
 
 export interface GoogleAssistantConfig extends ExtensibleConfig {}
 
@@ -76,15 +77,30 @@ export class GoogleAssistantPlatform extends Platform<
     return response;
   }
 
-  beforeRequest: (handleRequest: HandleRequest, jovo: Jovo) => void = (
-    handleRequest: HandleRequest,
-    jovo: Jovo,
-  ) => {
-    // TODO this is just a workaround until $input is implemented and used instead of the intentName for routing
-    if (jovo.$type.type === RequestType.Launch) {
-      jovo.$nlu.intent = {
+  beforeRequest = (handleRequest: HandleRequest, googleAssistant: GoogleAssistant) => {
+    if (googleAssistant.$type.type === RequestType.Launch) {
+      googleAssistant.$nlu.intent = {
         name: InternalIntent.Launch,
       };
+    }
+    // TODO check condition
+    // A request on selection has no intent, should have FINAl slotFillingStatus and at least one entry in intent.params
+    if (
+      googleAssistant.$request.intent &&
+      !googleAssistant.$request.intent?.name &&
+      googleAssistant.$request.scene?.slotFillingStatus === SlotFillingStatus.Final &&
+      Object.keys(googleAssistant.$request.intent?.params || {}).length &&
+      googleAssistant.$request.session?.params?._GA_SELECTION_INTENT_
+    ) {
+      if (!googleAssistant.$nlu) {
+        googleAssistant.$nlu = {};
+      }
+      if (!googleAssistant.$nlu.intent) {
+        googleAssistant.$nlu.intent = { name: '' };
+      }
+      // set intent
+      googleAssistant.$nlu.intent.name =
+        googleAssistant.$request.session.params._GA_SELECTION_INTENT_;
     }
   };
 }
