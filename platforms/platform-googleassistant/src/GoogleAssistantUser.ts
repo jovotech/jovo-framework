@@ -1,4 +1,5 @@
-import { axios, AxiosRequestConfig, Headers, JovoError, JovoUser } from '@jovotech/framework';
+import { axios, JovoError, JovoUser } from '@jovotech/framework';
+import { AccountLinkingStatus, UserVerificationStatus } from '@jovotech/output-googleassistant';
 import { GoogleAssistant } from './GoogleAssistant';
 import { GoogleAccountProfile } from './interfaces';
 
@@ -11,16 +12,16 @@ export class GoogleAssistantUser extends JovoUser<GoogleAssistant> {
   }
 
   isAccountLinked(): boolean {
-    return this.jovo.$request.user?.accountLinkingStatus === 'LINKED';
+    return this.jovo.$request.user?.accountLinkingStatus === AccountLinkingStatus.Linked;
   }
 
   isVerified(): boolean {
-    return this.jovo.$request.user?.verificationStatus === 'VERIFIED';
+    return this.jovo.$request.user?.verificationStatus === UserVerificationStatus.Verified;
   }
 
   async getGoogleProfile(): Promise<GoogleAccountProfile> {
-    const headers: Headers = this.jovo.$server.getRequestHeaders();
-    const token: string = headers.authorization as string;
+    const headers = this.jovo.$server.getRequestHeaders();
+    const token = headers.authorization as string;
 
     if (!token) {
       throw new JovoError({
@@ -31,14 +32,11 @@ export class GoogleAssistantUser extends JovoUser<GoogleAssistant> {
       });
     }
 
-    const config: AxiosRequestConfig = {
-      method: 'GET',
-      url: `https://oauth2.googleapis.com/tokeninfo?id_token=${token}`,
-    };
-
     try {
-      const res = await axios(config);
-      return res.data as GoogleAccountProfile;
+      const response = await axios.get<GoogleAccountProfile>(
+        `https://oauth2.googleapis.com/tokeninfo?id_token=${token}`,
+      );
+      return response.data;
     } catch (error) {
       throw new JovoError({ message: error.message });
     }
