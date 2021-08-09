@@ -21,7 +21,6 @@ export class GoogleBusinessResponse {
   [key: string]: unknown;
 
   @IsString()
-  @IsNotEmpty()
   messageId: string;
 
   @ValidateNested()
