@@ -82,29 +82,22 @@ export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleRespo
     return super.sanitizeCarousel(carousel, path, minSize, maxSize);
   }
 
-  convertOutput(output: OutputTemplate): GoogleBusinessResponse {
+  convertOutput(output: OutputTemplate): GoogleBusinessResponse | GoogleBusinessResponse[] {
     const getResponseBase: () => GoogleBusinessResponse = () => ({
       messageId: '',
       representative: {
         representativeType: RepresentativeType.Bot,
       },
     });
-    let result: GoogleBusinessResponse | GoogleBusinessResponse[] = getResponseBase();
+    const responses: GoogleBusinessResponse[] = [];
 
     const addResponse = <KEY extends 'text' | 'image' | 'richCard'>(
       key: KEY,
       content: GoogleBusinessResponse[KEY],
     ) => {
-      if (!Array.isArray(result) && (result.text || result.image || result.richCard)) {
-        result = [result];
-      }
-      if (Array.isArray(result)) {
-        const newResult = getResponseBase();
-        newResult[key] = content;
-        result.push(newResult);
-      } else {
-        result[key] = content;
-      }
+      const newResult = getResponseBase();
+      newResult[key] = content;
+      responses.push(newResult);
     };
 
     const message = output.message;
@@ -126,19 +119,20 @@ export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleRespo
       // TODO determine what to do with nativeResponse!
     }
 
-    // TODO check, currently this is only added to the last element
     const quickReplies = output.quickReplies;
     if (quickReplies?.length) {
-      if (Array.isArray(result)) {
-        result[result.length - 1].suggestions = quickReplies.map(
+      const lastResponseWithContent = responses
+        .slice()
+        .reverse()
+        .find((response) => !!response.text || !!response.richCard);
+      if (lastResponseWithContent) {
+        lastResponseWithContent.suggestions = quickReplies.map(
           this.convertQuickReplyToGoogleBusinessSuggestion,
         );
-      } else {
-        result.suggestions = quickReplies.map(this.convertQuickReplyToGoogleBusinessSuggestion);
       }
     }
 
-    return result;
+    return responses.length === 1 ? responses[0] : responses;
   }
 
   convertResponse(response: GoogleBusinessResponse): OutputTemplate {

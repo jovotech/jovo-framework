@@ -81,55 +81,54 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
   }
 
   convertOutput(output: OutputTemplate): FacebookMessengerResponse | FacebookMessengerResponse[] {
-    const getResponseBase: () => FacebookMessengerResponse = () => ({
+    const makeResponse: (message: FacebookMessengerMessage) => FacebookMessengerResponse = (
+      message,
+    ) => ({
       messaging_type: MessagingType.Response,
       recipient: {
         id: '',
       },
+      message,
     });
-    let result: FacebookMessengerResponse | FacebookMessengerResponse[] = getResponseBase();
+    const responses: FacebookMessengerResponse[] = [];
 
-    const addResponseMessage = (message: FacebookMessengerMessage) => {
-      if (!Array.isArray(result) && result.message) {
-        result = [result];
-      }
-      if (Array.isArray(result)) {
-        const newResult = getResponseBase();
-        newResult.message = message;
-        result.push(newResult);
-      } else {
-        result.message = message;
-      }
+    const addMessageToResponses = (message: FacebookMessengerMessage) => {
+      responses.push(makeResponse(message));
     };
 
     const message = output.message;
     if (message) {
-      const facebookMessage = this.convertMessageToFacebookMessengerMessage(message);
-      const quickReplies = output.quickReplies;
-      if (quickReplies) {
-        facebookMessage.quick_replies = quickReplies.map(
-          this.convertQuickReplyToFacebookMessengerQuickReply,
-        );
-      }
-
-      addResponseMessage(facebookMessage);
+      addMessageToResponses(this.convertMessageToFacebookMessengerMessage(message));
     }
 
     const card = output.card;
     if (card?.toFacebookMessengerMessage) {
-      addResponseMessage(card.toFacebookMessengerMessage());
+      addMessageToResponses(card.toFacebookMessengerMessage());
     }
 
     const carousel = output.carousel;
     if (carousel?.toFacebookMessengerMessage) {
-      addResponseMessage(carousel.toFacebookMessengerMessage());
+      addMessageToResponses(carousel.toFacebookMessengerMessage());
     }
 
     if (output.platforms?.FacebookMessenger?.nativeResponse) {
       // TODO determine what to do with nativeResponse
     }
 
-    return result;
+    const quickReplies = output.quickReplies;
+    if (quickReplies?.length) {
+      const lastResponseWithMessage = responses
+        .slice()
+        .reverse()
+        .find((response) => !!response.message);
+      if (lastResponseWithMessage?.message) {
+        lastResponseWithMessage.message.quick_replies = quickReplies.map(
+          this.convertQuickReplyToFacebookMessengerQuickReply,
+        );
+      }
+    }
+
+    return responses.length === 1 ? responses[0] : responses;
   }
 
   convertResponse(response: FacebookMessengerResponse): OutputTemplate {
