@@ -8,6 +8,14 @@ import {
   QuickReplyValue,
   removeSSML,
 } from '@jovotech/output';
+import {
+  CARD_CONTENT_DESCRIPTION_MAX_LENGTH,
+  CARD_CONTENT_TITLE_MAX_LENGTH,
+  CAROUSEL_MAX_SIZE,
+  CAROUSEL_MIN_SIZE,
+  SUGGESTION_TEXT_MAX_LENGTH,
+  SUGGESTIONS_MAX_SIZE,
+} from './constants';
 import { GoogleBusinessResponse, RepresentativeType, Suggestion } from './models';
 
 export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleResponsesOutputTemplateConverterStrategy<
@@ -18,9 +26,60 @@ export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleRespo
   platformName = 'GoogleBusiness';
 
   protected sanitizeOutput(output: OutputTemplate, index?: number): OutputTemplate {
-    // TODO implement sanitization
+    const pathPrefix = index ? `[${index}]` : '';
+
+    if (output.card) {
+      output.card = this.sanitizeCard(output.card, `${pathPrefix}card`);
+    }
+
+    if (output.carousel) {
+      output.carousel = this.sanitizeCarousel(output.carousel, `${pathPrefix}carousel`);
+    }
+
+    if (output.quickReplies) {
+      output.quickReplies = this.sanitizeQuickReplies(
+        output.quickReplies,
+        `${pathPrefix}quickReplies`,
+      );
+    }
 
     return output;
+  }
+
+  protected sanitizeCard(card: Card, path: string): Card {
+    if (!this.shouldSanitize('maxLength')) {
+      return card;
+    }
+
+    if (card.title.length > CARD_CONTENT_TITLE_MAX_LENGTH) {
+      card.title = card.title.slice(0, CARD_CONTENT_TITLE_MAX_LENGTH);
+      this.logStringTruncationWarning(`${path}.title`, CARD_CONTENT_TITLE_MAX_LENGTH);
+    }
+
+    if (card.content && card.content.length > CARD_CONTENT_DESCRIPTION_MAX_LENGTH) {
+      card.content = card.content.slice(0, CARD_CONTENT_DESCRIPTION_MAX_LENGTH);
+      this.logStringTruncationWarning(`${path}.content`, CARD_CONTENT_DESCRIPTION_MAX_LENGTH);
+    }
+
+    return card;
+  }
+
+  protected sanitizeQuickReplies(
+    quickReplies: QuickReplyValue[],
+    path: string,
+    maxSize = SUGGESTIONS_MAX_SIZE,
+    maxLength = SUGGESTION_TEXT_MAX_LENGTH,
+  ): QuickReplyValue[] {
+    return super.sanitizeQuickReplies(quickReplies, path, maxSize, maxLength);
+  }
+
+  protected sanitizeCarousel(
+    carousel: Carousel,
+    path: string,
+    minSize = CAROUSEL_MIN_SIZE,
+    maxSize = CAROUSEL_MAX_SIZE,
+  ): Carousel {
+    return super.sanitizeCarousel(carousel, path, minSize, maxSize);
   }
 
   convertOutput(output: OutputTemplate): GoogleBusinessResponse {
