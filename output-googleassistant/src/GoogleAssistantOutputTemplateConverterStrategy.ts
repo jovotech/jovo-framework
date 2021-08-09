@@ -92,7 +92,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
 
     const carousel = output.platforms?.GoogleAssistant?.carousel || output.carousel;
     // if a carousel exists and selection.entityType is set for it (otherwise carousel can't be displayed)
-    if (carousel?.selection?.entityType) {
+    if (carousel?.selection?.entityType && carousel?.selection?.intent) {
       const collectionData = carousel.toGoogleAssistantCollectionData?.();
       if (collectionData) {
         if (!response.session) {
@@ -102,6 +102,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
           response.session.typeOverrides = [];
         }
         response.session.typeOverrides.push(collectionData.typeOverride);
+        response.session.params._GA_SELECTION_INTENT_ = carousel.selection.intent;
 
         if (!response.prompt) {
           response.prompt = {};

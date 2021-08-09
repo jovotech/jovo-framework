@@ -93,6 +93,11 @@ export class SessionParams {
   @ValidateNested()
   @Type(() => SessionParamsReprompts)
   _GA_REPROMPTS_?: SessionParamsReprompts;
+
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  _GA_SELECTION_INTENT_?: string;
 }
 
 export class TypeOverride {
