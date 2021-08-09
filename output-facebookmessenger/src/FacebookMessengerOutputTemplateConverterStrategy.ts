@@ -1,4 +1,5 @@
 import {
+  Carousel,
   MessageValue,
   MultipleResponsesOutputTemplateConverterStrategy,
   OutputTemplate,
@@ -7,7 +8,12 @@ import {
   QuickReplyValue,
   removeSSML,
 } from '@jovotech/output';
-import { MESSAGE_TEXT_MAX_LENGTH } from './constants';
+import { QUICK_REPLY_MAX_LENGTH } from '../../output-dialogflow';
+import {
+  GENERIC_TEMPLATE_MAX_SIZE,
+  GENERIC_TEMPLATE_MIN_SIZE,
+  MESSAGE_TEXT_MAX_LENGTH,
+} from './constants';
 import {
   FacebookMessengerResponse,
   GenericTemplate,
@@ -33,7 +39,16 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
       output.message = this.sanitizeMessage(output.message, `${pathPrefix}message`);
     }
 
-    // TODO implement complete sanitization
+    if (output.carousel) {
+      output.carousel = this.sanitizeCarousel(output.carousel, `${pathPrefix}carousel`);
+    }
+
+    if (output.quickReplies) {
+      output.quickReplies = this.sanitizeQuickReplies(
+        output.quickReplies,
+        `${pathPrefix}quickReplies`,
+      );
+    }
 
     return output;
   }
@@ -45,6 +60,24 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
     offset?: number,
   ): MessageValue {
     return super.sanitizeMessage(message, path, maxLength, offset);
+  }
+
+  protected sanitizeCarousel(
+    carousel: Carousel,
+    path: string,
+    minSize = GENERIC_TEMPLATE_MIN_SIZE,
+    maxSize = GENERIC_TEMPLATE_MAX_SIZE,
+  ): Carousel {
+    return super.sanitizeCarousel(carousel, path, minSize, maxSize);
+  }
+
+  protected sanitizeQuickReplies(
+    quickReplies: QuickReplyValue[],
+    path: string,
+    maxSize = Infinity,
+    maxLength = QUICK_REPLY_MAX_LENGTH,
+  ): QuickReplyValue[] {
+    return super.sanitizeQuickReplies(quickReplies, path, maxSize, maxLength);
   }
 
   convertOutput(output: OutputTemplate): FacebookMessengerResponse | FacebookMessengerResponse[] {
