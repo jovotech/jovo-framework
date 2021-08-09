@@ -191,7 +191,9 @@ export abstract class OutputTemplateConverterStrategy<
   }
 
   protected logSanitizationWarning(message: string): void {
-    // TODO check format: prefix, no prefix?
+    if (this.config.omitWarnings) {
+      return;
+    }
     console.warn(message);
   }
 
@@ -204,6 +206,9 @@ export abstract class OutputTemplateConverterStrategy<
   }
 
   private logTruncationWarning(path: string, maxLengthOrSize: number, isArray: boolean): void {
+    const pathStartsWithIndex = /^\[[\d+]].*/.test(path);
+    const rootPath = `$output${pathStartsWithIndex ? '' : '.'}`;
+    path = rootPath + path;
     return this.logSanitizationWarning(
       `${path} was truncated due to exceeding the limit of ${maxLengthOrSize} ${
         isArray ? 'items' : 'characters'
