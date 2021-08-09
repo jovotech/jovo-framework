@@ -13,7 +13,9 @@ export abstract class MultipleResponsesOutputTemplateConverterStrategy<
     if (!this.shouldSanitize()) {
       return output;
     }
-    return Array.isArray(output) ? output.map(this.sanitizeOutput) : this.sanitizeOutput(output);
+    return Array.isArray(output)
+      ? output.map((outputItem, index) => this.sanitizeOutput(outputItem, index))
+      : this.sanitizeOutput(output);
   }
 
   protected abstract sanitizeOutput(output: OutputTemplate, index?: number): OutputTemplate;
