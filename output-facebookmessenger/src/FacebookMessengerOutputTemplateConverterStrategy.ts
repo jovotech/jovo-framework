@@ -8,11 +8,11 @@ import {
   QuickReplyValue,
   removeSSML,
 } from '@jovotech/output';
-import { QUICK_REPLY_MAX_LENGTH } from '../../output-dialogflow';
 import {
   GENERIC_TEMPLATE_MAX_SIZE,
   GENERIC_TEMPLATE_MIN_SIZE,
   MESSAGE_TEXT_MAX_LENGTH,
+  QUICK_REPLY_TITLE_MAX_LENGTH,
 } from './constants';
 import {
   FacebookMessengerResponse,
@@ -75,7 +75,7 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
     quickReplies: QuickReplyValue[],
     path: string,
     maxSize = Infinity,
-    maxLength = QUICK_REPLY_MAX_LENGTH,
+    maxLength = QUICK_REPLY_TITLE_MAX_LENGTH,
   ): QuickReplyValue[] {
     return super.sanitizeQuickReplies(quickReplies, path, maxSize, maxLength);
   }
