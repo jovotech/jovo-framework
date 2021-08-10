@@ -1,9 +1,9 @@
 import { BaseOutput, Output, OutputOptions, OutputTemplate } from '@jovotech/framework';
-import { PermissionScope } from './AskForPermissionOutput';
+import { PermissionScopeLike } from '@jovotech/output-alexa';
 
 export interface AskForPermissionConsentCardOutputOptions extends OutputOptions {
   type?: 'AskForPermissionsConsent';
-  permissions?: PermissionScope[];
+  permissions?: PermissionScopeLike[];
 }
 
 @Output()

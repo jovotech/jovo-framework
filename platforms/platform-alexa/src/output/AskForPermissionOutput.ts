@@ -1,13 +1,9 @@
 import { BaseOutput, Output, OutputOptions, OutputTemplate } from '@jovotech/framework';
-
-export type PermissionScope =
-  | 'alexa::alerts:reminders:skill:readwrite'
-  | 'alexa::alerts:timers:skill:readwrite'
-  | string;
+import { PermissionScopeLike } from '@jovotech/output-alexa';
 
 export interface AskForPermissionOutputOptions extends OutputOptions {
   token?: string;
-  permissionScope?: PermissionScope;
+  permissionScope?: PermissionScopeLike;
 }
 
 @Output()
