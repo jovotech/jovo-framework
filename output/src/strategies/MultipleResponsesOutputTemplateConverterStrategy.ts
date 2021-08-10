@@ -4,6 +4,9 @@ import {
   OutputTemplateConverterStrategyConfig,
 } from '../OutputTemplateConverterStrategy';
 
+/**
+ * Strategy that can have multiple OutputTemplates and multiple Responses.
+ */
 export abstract class MultipleResponsesOutputTemplateConverterStrategy<
   RESPONSE extends Record<string, unknown>,
   CONFIG extends OutputTemplateConverterStrategyConfig,

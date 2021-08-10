@@ -10,6 +10,14 @@ import {
 } from '..';
 import { OutputTemplateConverterStrategy } from '../OutputTemplateConverterStrategy';
 
+/**
+ * Strategy that merges multiple OutputTemplates into a single OutputTemplate and only converts the merged OutputTemplate to a response.
+ * - Strings get concatenated and separated by a whitespace.
+ * - Quick Replies get merged into a single array.
+ * - Card/Carousel the last in the array is used.
+ * - nativeResponses get merged.
+ * - Listen gets chosen by priority: objects > boolean
+ */
 export abstract class SingleResponseOutputTemplateConverterStrategy<
   RESPONSE extends Record<string, unknown>,
   CONFIG extends OutputTemplateConverterStrategyConfig,
