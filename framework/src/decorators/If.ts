@@ -1,10 +1,6 @@
-import { BaseComponent } from '../BaseComponent';
 import { JovoConditionFunction } from '../interfaces';
 import { createHandlerOptionDecorator } from '../metadata/HandlerOptionMetadata';
 
-export const If = <
-  COMPONENT extends BaseComponent = BaseComponent,
-  KEY extends keyof COMPONENT = keyof COMPONENT
->(
+export const If: (conditionFunction: JovoConditionFunction) => MethodDecorator = (
   conditionFunction: JovoConditionFunction,
-) => createHandlerOptionDecorator<COMPONENT, KEY>({ if: conditionFunction });
+) => createHandlerOptionDecorator({ if: conditionFunction });

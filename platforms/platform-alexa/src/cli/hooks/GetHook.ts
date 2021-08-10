@@ -11,7 +11,7 @@ import {
   promptOverwrite,
   Task,
   DOWNLOAD,
-  MAGNIFYING_GLASS
+  MAGNIFYING_GLASS,
 } from '@jovotech/cli-core';
 import type { GetContext, GetEvents } from '@jovotech/cli-command-get';
 import type { BuildEvents } from '@jovotech/cli-command-build';
@@ -109,9 +109,12 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
     // If no skill id and thus no specified project can be found, try to prompt for one.
     if (!this.$context.alexa.skillId) {
       let skills: AskSkillList = { skills: [] };
-      const getSkillListTask: Task = new Task(`${MAGNIFYING_GLASS} Getting a list of all your skills`, async () => {
-        skills = await smapi.listSkills(this.$context.alexa.askProfile);
-      });
+      const getSkillListTask: Task = new Task(
+        `${MAGNIFYING_GLASS} Getting a list of all your skills`,
+        async () => {
+          skills = await smapi.listSkills(this.$context.alexa.askProfile);
+        },
+      );
 
       await getSkillListTask.run();
       const list = prepareSkillList(skills);

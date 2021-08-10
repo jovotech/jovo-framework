@@ -7,7 +7,7 @@ export interface ExampleComponentConfig extends PluginConfig {
 }
 
 export class ExampleComponent extends BaseComponent<ExampleComponentConfig> {
-  getDefaultConfig() {
+  getDefaultConfig(): ExampleComponentConfig {
     return {
       text: 'default',
     };

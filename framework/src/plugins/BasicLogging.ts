@@ -17,17 +17,18 @@ declare module '../Extensible' {
 }
 
 export interface BasicLoggingConfig extends PluginConfig {
-  logging?: boolean;
   request?: boolean;
   response?: boolean;
   requestObjects?: string[];
   responseObjects?: string[];
-  maskRequestObjects?: string[];
-  maskResponseObjects?: string[];
+  maskedRequestObjects?: string[];
+  maskedResponseObjects?: string[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   maskValue?: any;
-  excludeRequestObjects?: string[];
-  excludeResponseObjects?: string[];
+  excludedRequestObjects?: string[];
+  excludedResponseObjects?: string[];
   styling?: boolean;
+  indentation?: string;
   colorizeSettings?: {
     colors: {
       BRACE?: string;
@@ -47,17 +48,16 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
   getDefaultConfig(): BasicLoggingConfig {
     return {
       enabled: true,
-      logging: undefined,
       request: false,
       maskValue: '[ Hidden ]',
       requestObjects: [],
-      maskRequestObjects: [],
-      excludeRequestObjects: [],
+      maskedRequestObjects: [],
+      excludedRequestObjects: [],
       response: false,
-      maskResponseObjects: [],
-      excludeResponseObjects: [],
+      maskedResponseObjects: [],
+      excludedResponseObjects: [],
       responseObjects: [],
-      space: '   ',
+      indentation: '  ',
       styling: true,
       colorizeSettings: {
         colors: {
@@ -84,8 +84,8 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
 
     const requestCopy = JSON.parse(JSON.stringify(jovo.$request));
 
-    if (this.config.maskRequestObjects && this.config.maskRequestObjects.length > 0) {
-      this.config.maskRequestObjects.forEach((maskPath: string) => {
+    if (this.config.maskedRequestObjects && this.config.maskedRequestObjects.length > 0) {
+      this.config.maskedRequestObjects.forEach((maskPath: string) => {
         const value = _get(requestCopy, maskPath);
         if (value) {
           let newValue = this.config.maskValue;
@@ -97,30 +97,28 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
       });
     }
 
-    if (this.config.excludeRequestObjects && this.config.excludeRequestObjects.length > 0) {
-      this.config.excludeRequestObjects.forEach((excludePath: string) => {
+    if (this.config.excludedRequestObjects && this.config.excludedRequestObjects.length > 0) {
+      this.config.excludedRequestObjects.forEach((excludePath: string) => {
         _unset(requestCopy, excludePath);
       });
     }
 
+    /* eslint-disable no-console */
     if (this.config.styling) {
       console.log(chalk.bgWhite.black('\n\n >>>>> Request - ' + new Date().toISOString() + ' '));
     }
 
     if (this.config.requestObjects && this.config.requestObjects.length > 0) {
       this.config.requestObjects.forEach((path: string) => {
-        // tslint:disable-next-line
-        console.log(colorize(JSON.stringify(_get(requestCopy, path), null, 2)));
+        console.log(
+          colorize(JSON.stringify(_get(requestCopy, path), null, this.config.indentation || 2)),
+        );
       });
     } else {
-      // tslint:disable-next-line
-      console.log(colorize(JSON.stringify(requestCopy, null, 2)));
-
-      // tslint:disable-next-line:no-console
-      console.log();
+      console.log(colorize(JSON.stringify(requestCopy, null, 2), this.config.colorizeSettings));
     }
 
-    console.log(colorize(JSON.stringify(jovo.$request, null, 2), this.config.colorizeSettings));
+    /* eslint-enable no-console */
   };
   logResponse = async (handleRequest: HandleRequest, jovo: Jovo): Promise<void> => {
     jovo.$data._BASIC_LOGGING_STOP = new Date().getTime();
@@ -132,8 +130,8 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
 
     const responseCopy = JSON.parse(JSON.stringify(jovo.$response));
 
-    if (this.config.maskResponseObjects && this.config.maskResponseObjects.length > 0) {
-      this.config.maskResponseObjects.forEach((maskPath: string) => {
+    if (this.config.maskedResponseObjects && this.config.maskedResponseObjects.length > 0) {
+      this.config.maskedResponseObjects.forEach((maskPath: string) => {
         const value = _get(responseCopy, maskPath);
         if (value) {
           let newValue = this.config.maskValue;
@@ -145,13 +143,13 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
       });
     }
 
-    if (this.config.excludeResponseObjects && this.config.excludeResponseObjects.length > 0) {
-      this.config.excludeResponseObjects.forEach((excludePath: string) => {
+    if (this.config.excludedResponseObjects && this.config.excludedResponseObjects.length > 0) {
+      this.config.excludedResponseObjects.forEach((excludePath: string) => {
         _unset(responseCopy, excludePath);
       });
     }
-    // tslint:disable-next-line:no-console
 
+    /* eslint-disable no-console */
     if (this.config.styling) {
       console.log(
         chalk.bgGray.white('\n\n <<<<< Response - ' + new Date().toISOString() + ' ') +
@@ -165,14 +163,21 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
         if (!handleRequest.jovo) {
           return;
         }
-        // tslint:disable-next-line
         console.log(
-          colorize(JSON.stringify(_get(responseCopy, path), null, 2), this.config.colorizeSettings),
+          colorize(
+            JSON.stringify(_get(responseCopy, path), null, this.config.indentation || 2),
+            this.config.colorizeSettings,
+          ),
         );
       });
     } else {
-      // tslint:disable-next-line
-      console.log(colorize(JSON.stringify(responseCopy, null, 2), this.config.colorizeSettings));
+      console.log(
+        colorize(
+          JSON.stringify(responseCopy, null, this.config.indentation || 2),
+          this.config.colorizeSettings,
+        ),
+      );
     }
+    /* eslint-enable no-console */
   };
 }

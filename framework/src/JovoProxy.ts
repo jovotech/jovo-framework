@@ -33,7 +33,7 @@ export class JovoProxy extends Jovo {
     });
   }
 
-  toJSON() {
+  toJSON(): JovoProxy {
     return { ...this, jovo: undefined };
   }
 }

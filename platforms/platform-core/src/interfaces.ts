@@ -1,4 +1,4 @@
-import { Entity, JovoSession, RequestTypeLike } from '@jovotech/framework';
+import { Entity, JovoSession, RequestTypeLike, UnknownObject } from '@jovotech/framework';
 
 export enum RequestType {
   Launch = 'LAUNCH',
@@ -30,7 +30,7 @@ export interface Request {
   body: RequestBody;
   locale?: string;
   nlu?: Nlu;
-  data?: Record<string, unknown>;
+  data?: UnknownObject;
 }
 
 export interface Nlu {
@@ -65,7 +65,7 @@ export interface Session {
 export interface User {
   id: string;
   accessToken?: string;
-  data?: Record<string, unknown>;
+  data?: UnknownObject;
 }
 
 export interface Device {

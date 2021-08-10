@@ -1,5 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type MiddlewareFunction<T extends any[] = any[]> = (...args: T) => Promise<any> | any;
+export type MiddlewareFunction<T extends unknown[] = any[]> = (
+  ...args: T
+) => Promise<unknown> | unknown;
 
 export class Middleware<NAME extends string = string> {
   readonly fns: MiddlewareFunction[];
@@ -14,9 +16,7 @@ export class Middleware<NAME extends string = string> {
     return this;
   }
 
-  // TODO determine better type for data
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async run<T extends any[]>(...args: T): Promise<void> {
+  async run<T extends unknown[]>(...args: T): Promise<void> {
     if (!this.enabled) {
       return;
     }

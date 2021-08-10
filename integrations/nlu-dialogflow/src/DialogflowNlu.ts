@@ -58,6 +58,7 @@ export class DialogflowNlu extends NluPlugin<DialogflowNluConfig> {
         ? { intent: { name: dialogflowResponse.data.queryResult.intent.displayName } }
         : undefined;
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.error('Error while retrieving nlu-data from Dialogflow.', e);
       return;
     }

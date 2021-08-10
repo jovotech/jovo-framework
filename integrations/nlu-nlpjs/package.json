@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/nlu-nlpjs",
-  "version": "4.0.0-alpha.16",
+  "version": "4.0.0-alpha.18",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -27,7 +27,7 @@
     "jovo-model-nlpjs": "^3.0.0"
   },
   "devDependencies": {
-    "@jovotech/framework": "^4.0.0-alpha.16",
+    "@jovotech/framework": "^4.0.0-alpha.18",
     "@types/jest": "^26.0.20",
     "@types/node": "^10.17.50",
     "@types/tv4": "^1.2.29",

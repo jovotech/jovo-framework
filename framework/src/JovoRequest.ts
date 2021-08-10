@@ -1,3 +1,4 @@
+import { UnknownObject } from './index';
 import { EntityMap, NluData } from './interfaces';
 import { JovoRequestType } from './Jovo';
 import { JovoSession } from './JovoSession';
@@ -17,7 +18,7 @@ export abstract class JovoRequest {
 
   abstract getSessionId(): string | undefined;
 
-  abstract getSessionData(): Record<string, unknown> | undefined;
+  abstract getSessionData(): UnknownObject | undefined;
 
   abstract isNewSession(): boolean | undefined;
 

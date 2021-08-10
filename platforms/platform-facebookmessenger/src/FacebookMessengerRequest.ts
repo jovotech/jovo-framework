@@ -2,8 +2,8 @@ import {
   EntityMap,
   JovoRequest,
   JovoRequestType,
-  JovoSession,
   RequestType,
+  UnknownObject,
 } from '@jovotech/framework';
 import { FACEBOOK_LAUNCH_PAYLOAD } from '.';
 import { MessagingData } from './interfaces';
@@ -46,7 +46,7 @@ export class FacebookMessengerRequest extends JovoRequest {
     };
   }
 
-  getSessionData(): Record<string, unknown> | undefined {
+  getSessionData(): UnknownObject | undefined {
     return undefined;
   }
 

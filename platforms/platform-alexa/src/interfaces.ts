@@ -69,7 +69,7 @@ export interface System {
   person: Person;
   device: Device;
   apiEndpoint: string;
-  apiAccessToken?: string;
+  apiAccessToken: string;
 }
 
 export interface Viewport {
@@ -96,14 +96,35 @@ export interface Experience {
 export type TouchMethod = 'SINGLE';
 export type InputMechanism = 'DIRECTION';
 
+export interface AudioPlayerInterface {}
+export interface AlexaPresentationAplInterface {
+  runtime: {
+    maxVersion: string;
+  };
+}
+export interface AlexaPresentationAplTInterface extends AlexaPresentationAplInterface {}
+export interface AlexaPresentationHtmlInterface extends AlexaPresentationAplInterface {}
+
+export interface DisplayInterface {
+  templateVersion?: string;
+  markupVersion?: string;
+}
+
+export interface VideoAppInterface {}
+export interface GeolocationInterface {}
+export interface NavigationInterface {}
+
 export interface Device {
   deviceId: string;
   supportedInterfaces?: {
-    'Alexa.Presentation.APL'?: {
-      runtime: {
-        maxVersion: string;
-      };
-    };
+    'Alexa.Presentation.APL'?: AlexaPresentationAplInterface;
+    'AudioPlayer'?: AudioPlayerInterface;
+    'Alexa.Presentation.APLT'?: AlexaPresentationAplTInterface;
+    'Alexa.Presentation.HTML'?: AlexaPresentationHtmlInterface;
+    'Display'?: DisplayInterface;
+    'VideoApp'?: VideoAppInterface;
+    'Geolocation'?: GeolocationInterface;
+    'Navigation'?: NavigationInterface;
   };
 }
 

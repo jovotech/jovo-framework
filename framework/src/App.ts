@@ -13,10 +13,15 @@ import { OutputPlugin } from './plugins/OutputPlugin';
 import { RouterPlugin } from './plugins/RouterPlugin';
 import { Server } from './Server';
 
+export interface AppRoutingConfig {
+  intentMap?: IntentMap;
+  intentsToSkipUnhandled?: string[];
+}
+
 export interface AppConfig extends ExtensibleConfig {
-  intentMap: IntentMap;
-  logging?: BasicLoggingConfig | boolean;
   i18n?: I18NextOptions;
+  logging?: BasicLoggingConfig | boolean;
+  routing?: AppRoutingConfig;
 }
 
 export type AppInitConfig = ExtensibleInitConfig<AppConfig> & {
@@ -72,7 +77,7 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
     return Object.values(this.plugins).filter((plugin) => plugin instanceof Platform) as Platform[];
   }
 
-  configure(config: AppInitConfig) {
+  configure(config: AppInitConfig): void {
     _merge(this.config, { ...config, components: undefined, plugins: undefined });
     const usables: Usable[] = [...(config?.plugins || []), ...(config?.components || [])];
     this.use(...usables);
@@ -90,9 +95,7 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
 
   getDefaultConfig(): AppConfig {
     return {
-      plugin: {},
-      intentMap: {},
-      logging: {},
+      logging: true,
     };
   }
 
@@ -139,6 +142,12 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
     await handleRequest.middlewareCollection.run('response', handleRequest, jovo);
 
     await handleRequest.dismount();
+
+    // TODO determine what to do if there is not response
+    if (!jovo.$response) {
+      return;
+    }
+
     await server.setResponse(jovo.$response);
   }
 }

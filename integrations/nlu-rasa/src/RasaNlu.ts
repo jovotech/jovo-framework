@@ -3,10 +3,8 @@ import {
   AxiosRequestConfig,
   AxiosResponse,
   DeepPartial,
-  Extensible,
   HandleRequest,
   Jovo,
-  JovoError,
   NluData,
   NluPlugin,
   PluginConfig,
@@ -38,6 +36,7 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
         ? { intent: { name: rasaResponse.data.intent.name } }
         : undefined;
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.error('Error while retrieving nlu-data from Rasa-server.', e);
       return;
     }

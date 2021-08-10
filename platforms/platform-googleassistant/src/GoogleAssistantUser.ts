@@ -1,13 +1,7 @@
 import { JovoUser } from '@jovotech/framework';
-import { GoogleAssistantResponse } from '@jovotech/output-googleassistant';
-import { GoogleAction } from './GoogleAction';
-import { GoogleAssistantRequest } from './GoogleAssistantRequest';
+import { GoogleAssistant } from './GoogleAssistant';
 
-export class GoogleAssistantUser extends JovoUser<
-  GoogleAssistantRequest,
-  GoogleAssistantResponse,
-  GoogleAction
-> {
+export class GoogleAssistantUser extends JovoUser<GoogleAssistant> {
   get id(): string {
     return (
       (this.jovo.$request.user?.params as Record<'userId' | string, string> | undefined)?.userId ||

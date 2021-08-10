@@ -1,12 +1,13 @@
 import {
   DeepPartial,
-  Extensible,
+  EntityMap,
   HandleRequest,
   Jovo,
   NluData,
   NluPlugin,
   Platform,
   PluginConfig,
+  UnknownObject,
 } from '@jovotech/framework';
 import { promises } from 'fs';
 import { JovoModelNlpjs } from 'jovo-model-nlpjs';
@@ -36,7 +37,7 @@ export interface NlpJsEntity {
 export type SetupModelFunction = (parent: Platform, nlp: Nlp) => void | Promise<void>;
 
 export interface NlpjsNluConfig extends PluginConfig {
-  languageMap: Record<string, unknown>;
+  languageMap: UnknownObject;
   preTrainedModelFilePath: string;
   useModel: boolean;
   modelsPath: string;
@@ -62,7 +63,7 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
     };
   }
 
-  async initialize(parent: Extensible): Promise<void> {
+  async initialize(parent: Platform): Promise<void> {
     this.nlpjs = new Nlp({
       languages: Object.keys(this.config.languageMap),
       autoLoad: this.config.useModel,
@@ -96,16 +97,18 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
     const language = jovo.$request.getLocale()?.substr(0, 2) || 'en';
     const nlpResult = await this.nlpjs?.process(language, text);
 
-    const entities = nlpResult?.entities?.map((entity: NlpJsEntity) => {
-      return {
-        [entity.entity]: {
+    const entities = (nlpResult?.entities || []).reduce(
+      (entityMap: EntityMap, entity: NlpJsEntity) => {
+        entityMap[entity.entity] = {
           id: entity.option,
           key: entity.option,
           name: entity.entity,
           value: entity.utteranceText,
-        },
-      };
-    });
+        };
+        return entityMap;
+      },
+      {},
+    );
 
     return nlpResult?.intent
       ? {

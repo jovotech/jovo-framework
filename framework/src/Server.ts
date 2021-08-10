@@ -1,5 +1,7 @@
 // TODO implement
 
+import { AnyObject } from './index';
+
 export interface Headers {
   [header: string]: string | string[] | undefined;
 }
@@ -7,6 +9,9 @@ export interface Headers {
 export interface QueryParams {
   [header: string]: string | string[] | undefined;
 }
+
+export type ServerResponseType = string | number | AnyObject;
+export type ServerResponse = ServerResponseType | ServerResponseType[];
 
 export abstract class Server {
   /**
@@ -17,7 +22,7 @@ export abstract class Server {
   /**
      Returns request object
      **/
-  abstract getRequestObject(): Record<string, any>;
+  abstract getRequestObject(): AnyObject;
 
   /**
      Returns query params
@@ -37,7 +42,7 @@ export abstract class Server {
   /**
      Sets response object
      **/
-  abstract setResponse(response: any): Promise<void>;
+  abstract setResponse(response: ServerResponse): Promise<void>;
 
   /**
      Calls fail method of server

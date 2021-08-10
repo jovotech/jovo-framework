@@ -1,3 +1,4 @@
+import type { AnyObject } from '@jovotech/framework';
 import type { Message } from '@jovotech/output-dialogflow';
 
 export interface DetectIntentRequest {
@@ -10,7 +11,7 @@ export interface DetectIntentRequest {
     contexts?: Context[];
     resetContexts?: boolean;
     sessionEntityTypes?: SessionEntityType[];
-    payload?: Record<string, any>;
+    payload?: AnyObject;
     sentimentAnalysisRequestConfig?: SentimentAnalysisRequestConfig;
     webhookHeaders?: Record<string, string>;
   };
@@ -18,11 +19,10 @@ export interface DetectIntentRequest {
     text: TextInput;
   };
 }
-
 export interface Context {
   name: string;
   lifespanCount?: number;
-  parameters?: Record<string, any>;
+  parameters?: AnyObject;
 }
 
 export interface TextInput {
@@ -58,16 +58,16 @@ export interface DetectIntentResponse {
     queryText: string;
     languageCode: string;
     action: string;
-    parameters: Record<string, any>;
+    parameters: AnyObject;
     allRequiredParamsPresent: boolean;
     fulfillmentText?: string;
     fulfillmentMessages?: Message[];
     webhookSource: string;
-    webhookPayload?: Record<string, any>;
+    webhookPayload?: AnyObject;
     outputContexts?: Context[];
     intent: DetectedIntent;
     intentDetectionConfidence: number;
-    diagnosticInfo?: Record<string, any>;
+    diagnosticInfo?: AnyObject;
     sentimentAnalysisResult?: {
       queryTextSentiment: {
         score: number;
@@ -81,8 +81,7 @@ export interface DetectIntentResponse {
   };
 }
 
-export interface DetectedIntent {
-  [key: string]: any;
+export interface DetectedIntent extends AnyObject {
   name: string;
   displayName: string;
   endInteraction: boolean;
