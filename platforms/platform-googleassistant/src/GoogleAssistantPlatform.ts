@@ -74,6 +74,9 @@ export class GoogleAssistantPlatform extends Platform<
         }
       },
     );
+    if (response.scene && googleAssistant.$request.scene?.name) {
+      response.scene.name = googleAssistant.$request.scene.name;
+    }
     return response;
   }
 
