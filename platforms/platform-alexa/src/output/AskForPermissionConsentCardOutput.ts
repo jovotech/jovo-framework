@@ -17,7 +17,7 @@ export class AskForPermissionConsentCardOutput extends BaseOutput<AskForPermissi
             response: {
               card: {
                 type: 'AskForPermissionsConsent',
-                permissions: this.options.permissionScope,
+                permissions: this.options.permissions,
               },
             },
           },
