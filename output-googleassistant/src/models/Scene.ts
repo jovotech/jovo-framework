@@ -26,7 +26,6 @@ export type SlotFillingStatusLike = EnumLike<SlotFillingStatus>;
 
 export class Scene {
   @IsString()
-  @IsNotEmpty()
   name: string;
 
   @IsOptional()
