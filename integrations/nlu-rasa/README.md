@@ -90,6 +90,12 @@ You can access the `alternativeIntents` array like this:
 this.$nlu.alternativeIntents
 ```
 
+Since the `alternativeIntents` is specific to the `RasaNluData` type, you can do type casting like this:
+
+```typescript
+const alternativeIntents = (this.$nlu as RasaNluData | undefined)?.alternativeIntents;
+```
+
 ## Jovo Model
 
 You can use the [Jovo Model](https://www.jovo.tech/marketplace/jovo-model) to turn the language model files in your `models` folder into Rasa NLU training data. [Learn more about the Rasa Jovo Model integration here](https://www.jovo.tech/marketplace/jovo-model/rasa).
