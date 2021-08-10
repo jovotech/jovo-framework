@@ -1,7 +1,6 @@
 import {
   DeepPartial,
   EntityMap,
-  Extensible,
   HandleRequest,
   Jovo,
   NluData,
