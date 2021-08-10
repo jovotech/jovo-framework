@@ -155,7 +155,7 @@ Under the hood, the `AskForRemindersPermissionOutput` extends the `AskForPermiss
 
 ```typescript
 {
-  message: `<speak>${this.options.message}</speak>`,
+  message: this.options.message,
   platforms: {
     Alexa: {
       nativeResponse: {
@@ -229,7 +229,7 @@ Under the hood, the `AskForPermissionsConsentCardOutput` looks like this:
 
 ```typescript
 {
-  message: `<speak>${this.options.message}</speak>`,
+  message: this.options.message,
   platforms: {
     Alexa: {
       nativeResponse: {
