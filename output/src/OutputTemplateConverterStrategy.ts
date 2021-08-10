@@ -12,7 +12,9 @@ import {
 } from '.';
 
 export interface SanitizationConfig {
+  // truncate arrays that exceed maximum length
   maxSize: boolean;
+  // truncate strings that exceed maximum length
   maxLength: boolean;
 }
 
