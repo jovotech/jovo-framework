@@ -31,27 +31,41 @@ export type AppInitConfig = ExtensibleInitConfig<AppConfig> & {
 export type Usable = Plugin | ComponentConstructor | ComponentDeclaration;
 
 export type AppBaseMiddlewares = [
+  'request.start',
   'request',
+  'request.end',
+  'interpretation.start',
   'interpretation.asr',
   'interpretation.nlu',
-  'dialog.context',
-  'dialog.logic',
+  'interpretation.end',
+  'dialogue.start',
+  'dialogue.router',
+  'dialogue.logic',
+  'dialogue.end',
+  'response.start',
   'response.output',
   'response.tts',
-  'response',
+  'response.end',
 ];
 
 export type AppBaseMiddleware = ArrayElement<AppBaseMiddlewares>;
 
 export const BASE_APP_MIDDLEWARES: AppBaseMiddlewares = [
+  'request.start',
   'request',
+  'request.end',
+  'interpretation.start',
   'interpretation.asr',
   'interpretation.nlu',
-  'dialog.context',
-  'dialog.logic',
+  'interpretation.end',
+  'dialogue.start',
+  'dialogue.router',
+  'dialogue.logic',
+  'dialogue.end',
+  'response.start',
   'response.output',
   'response.tts',
-  'response',
+  'response.end',
 ];
 
 export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
@@ -132,14 +146,24 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
     const jovo = relatedPlatform.createJovoInstance(this, handleRequest);
 
     // RIDR-pipeline
+    await handleRequest.middlewareCollection.run('request.start', handleRequest, jovo);
     await handleRequest.middlewareCollection.run('request', handleRequest, jovo);
+    await handleRequest.middlewareCollection.run('request.end', handleRequest, jovo);
+
+    await handleRequest.middlewareCollection.run('interpretation.start', handleRequest, jovo);
     await handleRequest.middlewareCollection.run('interpretation.asr', handleRequest, jovo);
     await handleRequest.middlewareCollection.run('interpretation.nlu', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('dialog.context', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('dialog.logic', handleRequest, jovo);
+    await handleRequest.middlewareCollection.run('interpretation.end', handleRequest, jovo);
+
+    await handleRequest.middlewareCollection.run('dialogue.start', handleRequest, jovo);
+    await handleRequest.middlewareCollection.run('dialogue.router', handleRequest, jovo);
+    await handleRequest.middlewareCollection.run('dialogue.logic', handleRequest, jovo);
+    await handleRequest.middlewareCollection.run('dialogue.end', handleRequest, jovo);
+
+    await handleRequest.middlewareCollection.run('response.start', handleRequest, jovo);
     await handleRequest.middlewareCollection.run('response.output', handleRequest, jovo);
     await handleRequest.middlewareCollection.run('response.tts', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('response', handleRequest, jovo);
+    await handleRequest.middlewareCollection.run('response.end', handleRequest, jovo);
 
     await handleRequest.dismount();
 

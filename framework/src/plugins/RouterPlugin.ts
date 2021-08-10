@@ -31,7 +31,7 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
   }
 
   install(app: App): Promise<void> | void {
-    app.middlewareCollection.use('before.dialog.logic', this.setRoute);
+    app.middlewareCollection.use('before.dialogue.logic', this.setRoute);
   }
 
   initialize(parent: App): Promise<void> | void {

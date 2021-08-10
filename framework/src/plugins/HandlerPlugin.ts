@@ -21,7 +21,7 @@ export class HandlerPlugin extends Plugin<HandlerPluginConfig> {
   }
 
   install(app: App): Promise<void> | void {
-    app.middlewareCollection.use('dialog.logic', this.handle);
+    app.middlewareCollection.use('dialogue.logic', this.handle);
   }
 
   private handle = async (handleRequest: HandleRequest, jovo: Jovo) => {

@@ -83,8 +83,8 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
   }
 
   async install(parent: App): Promise<void> {
-    parent.middlewareCollection.use('after.request', this.loadData);
-    parent.middlewareCollection.use('before.response', this.saveData);
+    parent.middlewareCollection.use('request.end', this.loadData);
+    parent.middlewareCollection.use('response.start', this.saveData);
   }
 
   createTable = async (): Promise<void> => {
