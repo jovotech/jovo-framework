@@ -14,18 +14,13 @@ export interface SnipsNluSlot {
   };
 }
 
-export interface SnipsNluResult {
+export interface SnipsNluResponse {
   input: string;
   intent: {
     intentName?: string;
     probability: number;
   };
   slots: SnipsNluSlot[];
-}
-
-export interface SnipsNluResponse {
-  status: string;
-  result: SnipsNluResult;
 }
 
 export interface SnipsNluConfig extends PluginConfig {
