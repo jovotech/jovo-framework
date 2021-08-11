@@ -28,6 +28,9 @@ export class GoogleBusinessPlatform extends Platform<
   GoogleBusinessRequest,
   GoogleBusinessResponse,
   GoogleBusiness,
+  GoogleBusinessUser,
+  GoogleBusinessDevice,
+  GoogleBusinessPlatform,
   GoogleBusinessConfig
 > {
   outputTemplateConverterStrategy = new GoogleBusinessOutputTemplateConverterStrategy();
@@ -68,6 +71,8 @@ export class GoogleBusinessPlatform extends Platform<
 
   finalizeResponse(
     response: GoogleBusinessResponse[] | GoogleBusinessResponse,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    googleBusiness: GoogleBusiness,
   ):
     | GoogleBusinessResponse[]
     | Promise<GoogleBusinessResponse>

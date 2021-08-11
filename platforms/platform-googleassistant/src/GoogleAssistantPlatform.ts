@@ -22,6 +22,9 @@ export class GoogleAssistantPlatform extends Platform<
   GoogleAssistantRequest,
   GoogleAssistantResponse,
   GoogleAssistant,
+  GoogleAssistantUser,
+  GoogleAssistantDevice,
+  GoogleAssistantPlatform,
   GoogleAssistantConfig
 > {
   outputTemplateConverterStrategy = new GoogleAssistantOutputTemplateConverterStrategy();

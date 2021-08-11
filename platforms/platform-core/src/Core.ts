@@ -1,5 +1,15 @@
 import { Jovo } from '@jovotech/framework';
-import { CorePlatformResponse } from '@jovotech/output-core';
-import { CorePlatformRequest } from './CorePlatformRequest';
+import { CorePlatform } from './CorePlatform';
+import { CoreDevice } from './CoreDevice';
+import { CoreRequest } from './CoreRequest';
+import { CoreUser } from './CoreUser';
+import { CoreResponse } from '.';
 
-export class Core extends Jovo<CorePlatformRequest, CorePlatformResponse> {}
+export class Core extends Jovo<
+  CoreRequest,
+  CoreResponse,
+  Core,
+  CoreUser,
+  CoreDevice,
+  CorePlatform
+> {}
