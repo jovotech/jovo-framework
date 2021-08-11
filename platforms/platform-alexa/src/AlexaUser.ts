@@ -1,8 +1,7 @@
 import { JovoUser } from '@jovotech/framework';
-import { AlexaResponse } from '@jovotech/output-alexa';
+import { Alexa } from './Alexa';
 
 import { AlexaRequest } from './AlexaRequest';
-import { Alexa } from './Alexa';
 import { ProfileProperty, sendCustomerProfileApiRequest } from './api';
 import {
   AbsoluteReminder,
@@ -16,7 +15,7 @@ import {
   deleteReminder,
 } from './api/ReminderApi';
 
-export class AlexaUser extends JovoUser<AlexaRequest, AlexaResponse, Alexa> {
+export class AlexaUser extends JovoUser<Alexa> {
   constructor(jovo: Alexa) {
     super(jovo);
   }
