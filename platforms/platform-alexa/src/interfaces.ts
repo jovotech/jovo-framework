@@ -61,7 +61,7 @@ export interface Speed {
   accuracyInMetersPerSecond?: number; // [0, MAX_INTEGER]
 }
 
-export type PermissionStatus = 'GRANTED' | 'DENIED';
+export type PermissionStatus = 'GRANTED' | 'DENIED' | 'ACCEPTED' | 'NOT_ANSWERED';
 
 export interface System {
   application: Application;
@@ -210,6 +210,9 @@ export interface Request {
     // Connections.Response
     purchaseResult?: string;
     productId?: string;
+    isCardThrown?: boolean;
+    permissionScope?: string;
+    status?: PermissionStatus;
   };
   error?: {
     // System.ExceptionEncountered
