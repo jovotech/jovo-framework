@@ -194,7 +194,6 @@ export function handleReminderApiErrors(error: AxiosError): Error | void {
     const { message, code } = error.response?.data;
     let errorCode: AlexaApiErrorCode = AlexaApiErrorCode.ERROR;
 
-    console.log(error.response?.data);
     if (error.response?.status === 401) {
       errorCode = AlexaApiErrorCode.NO_USER_PERMISSION;
     }
