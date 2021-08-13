@@ -21,7 +21,7 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
   install(parent: Extensible): Promise<void> | void {
     super.install(parent);
 
-    parent.middlewareCollection.use('$output', this.generateDynamicEntities.bind(this));
+    parent.middlewareCollection.use('$output', this.trainDynamicEntities.bind(this));
   }
 
   getDefaultConfig(): SnipsNluConfig {
@@ -50,7 +50,7 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
       },
       data: { text },
     };
-    const snipsNluResponse: SnipsNluResponse = await this.sendToSnips(config);
+    const snipsNluResponse: SnipsNluResponse = await this.sendRequestToSnips(config);
     const nluData: NluData = {};
     if (snipsNluResponse.intent.intentName) {
       nluData.intent = { name: snipsNluResponse.intent.intentName };
@@ -68,7 +68,7 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
     return nluData;
   }
 
-  private async generateDynamicEntities(handleRequest: HandleRequest, jovo: Jovo): Promise<void> {
+  private async trainDynamicEntities(handleRequest: HandleRequest, jovo: Jovo): Promise<void> {
     const outputs: OutputTemplate[] = Array.isArray(jovo.$output) ? jovo.$output : [jovo.$output];
     const locale: string = this.getLocale(jovo.$request);
 
@@ -155,7 +155,7 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
           data: requestData,
         };
 
-        this.sendToSnips(config);
+        this.sendRequestToSnips(config);
       }
     }
   }
@@ -168,7 +168,7 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
    * Sends a request to a configured Snips NLU Server
    * @param requestConfig - Request configuration
    */
-  private async sendToSnips(requestConfig: AxiosRequestConfig): Promise<SnipsNluResponse> {
+  private async sendRequestToSnips(requestConfig: AxiosRequestConfig): Promise<SnipsNluResponse> {
     const config: AxiosRequestConfig = {
       method: 'POST',
       baseURL: this.config.serverUrl,
