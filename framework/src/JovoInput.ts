@@ -14,14 +14,11 @@ export enum InputType {
 export type InputTypeLike = EnumLike<InputType> | string;
 
 export abstract class JovoInputBase<TYPE extends InputTypeLike = InputTypeLike> {
-  constructor(public type: TYPE | `${TYPE}`) {}
+  asr?: AsrData;
+  nlu?: NluData;
+
+  constructor(public type: TYPE) {}
 }
-
-export type JovoInput = TypeJovoInput | IntentJovoInput | TextJovoInput | SpeechJovoInput;
-
-export class TypeJovoInput extends JovoInputBase<
-  InputType.Launch | InputType.End | InputType.Error
-> {}
 
 export class IntentJovoInput extends JovoInputBase<InputType.Intent> {
   constructor(public intent: string, public entities?: EntityMap) {
@@ -30,18 +27,20 @@ export class IntentJovoInput extends JovoInputBase<InputType.Intent> {
 }
 
 export class TextJovoInput extends JovoInputBase<InputType.Text | InputType.TranscribedSpeech> {
-  nlu?: NluData;
-
   constructor(public text: string) {
     super(InputType.Text);
   }
 }
 
 export class SpeechJovoInput extends JovoInputBase<InputType.Speech> {
-  asr?: AsrData;
-  nlu?: NluData;
-
   constructor(public speech: string) {
     super(InputType.Speech);
   }
 }
+
+export class TypeJovoInput extends JovoInputBase<
+  InputType.Launch | InputType.End | InputType.Error
+> {}
+
+// TODO implement handling for custom input types
+export type JovoInput = IntentJovoInput | TextJovoInput | SpeechJovoInput | TypeJovoInput;
