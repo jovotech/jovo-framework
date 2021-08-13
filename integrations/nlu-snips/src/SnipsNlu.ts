@@ -174,7 +174,6 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
       baseURL: this.config.serverUrl,
       ...requestConfig,
     };
-    console.log(config);
     try {
       const response: AxiosResponse<SnipsNluResponse> = await axios.request(config);
       return response.data;
