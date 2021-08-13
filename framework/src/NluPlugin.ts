@@ -3,12 +3,30 @@ import { Extensible } from './Extensible';
 import { HandleRequest } from './HandleRequest';
 import { NluData } from './interfaces';
 import { Jovo } from './Jovo';
-import { InputType } from './JovoInput';
+import { InputType, InputTypeLike } from './JovoInput';
 import { Platform } from './Platform';
 import { Plugin, PluginConfig } from './Plugin';
 
-export abstract class NluPlugin<CONFIG extends PluginConfig = PluginConfig> extends Plugin<CONFIG> {
-  abstract process(handleRequest: HandleRequest, jovo: Jovo): Promise<NluData | undefined>;
+export interface NluPluginInputConfig {
+  supportedTypes: InputTypeLike[];
+}
+
+export interface NluPluginConfig extends PluginConfig {
+  input: NluPluginInputConfig;
+}
+
+export abstract class NluPlugin<
+  CONFIG extends NluPluginConfig = NluPluginConfig,
+> extends Plugin<CONFIG> {
+  abstract process(jovo: Jovo, text: string): Promise<NluData | undefined>;
+
+  getDefaultConfig(): CONFIG {
+    return {
+      input: {
+        supportedTypes: [InputType.Text, InputType.TranscribedSpeech, InputType.Speech],
+      },
+    } as CONFIG;
+  }
 
   install(parent: Extensible): Promise<void> | void {
     if (!(parent instanceof Platform)) {
@@ -17,13 +35,15 @@ export abstract class NluPlugin<CONFIG extends PluginConfig = PluginConfig> exte
     parent.middlewareCollection.use('$nlu', this.nlu);
   }
 
+  protected isInputTypeSupported(inputType: InputTypeLike): boolean {
+    return this.config.input.supportedTypes.includes(inputType);
+  }
+
   protected nlu = async (handleRequest: HandleRequest, jovo: Jovo): Promise<void> => {
-    // if it's start or end, just skip
-    if ([InputType.Launch, InputType.End].includes(jovo.$input.type)) {
+    if (!jovo.$input.text || !this.isInputTypeSupported(jovo.$input.type)) {
       return;
     }
-    // otherwise call the process-method and use result-data if it exists
-    const nluProcessResult = await this.process(handleRequest, jovo);
+    const nluProcessResult = await this.process(jovo, jovo.$input.text);
     if (nluProcessResult) {
       jovo.$input.nlu = nluProcessResult;
       jovo.$entities = nluProcessResult.entities || {};

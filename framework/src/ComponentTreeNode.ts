@@ -1,6 +1,6 @@
 import { BaseComponent, ComponentConstructor, ComponentDeclaration } from './BaseComponent';
 import { ComponentTree, Tree } from './ComponentTree';
-import { InternalIntent } from './enums';
+import { InternalHandler } from './enums';
 import { HandlerNotFoundError } from './errors/HandlerNotFoundError';
 import { PickWhere } from './index';
 import { Jovo } from './Jovo';
@@ -57,7 +57,7 @@ export class ComponentTreeNode<COMPONENT extends BaseComponent = BaseComponent> 
     ARGS extends unknown[] = any[],
   >({
     jovo,
-    handler = InternalIntent.Start,
+    handler = InternalHandler.Start,
     callArgs,
   }: ExecuteHandlerOptions<COMPONENT, HANDLER, ARGS>): Promise<void> {
     const componentInstance = new (this.metadata.target as ComponentConstructor<COMPONENT>)(

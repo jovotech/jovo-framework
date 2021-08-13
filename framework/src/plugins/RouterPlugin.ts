@@ -39,17 +39,7 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
   }
 
   private setRoute = async (handleRequest: HandleRequest, jovo: Jovo) => {
-    // TODO determine order
-    const intentName =
-      jovo.$nlu.intent?.name ||
-      jovo.$request.getIntentName() ||
-      jovo.$request.getRequestType()?.type;
-    if (!intentName) {
-      // TODO determine what to do if no intent was passed (probably UNHANDLED)
-      // in the future other data can be passed and used by the handler, but for now just use the intent-name
-      return;
-    }
-    jovo.$route = await new RoutingExecutor(jovo).execute(intentName);
+    jovo.$route = await new RoutingExecutor(jovo).execute();
   };
 
   private checkForDuplicateGlobalHandlers(app: App): Promise<void> {

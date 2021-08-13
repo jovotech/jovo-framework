@@ -3,7 +3,6 @@ import _cloneDeep from 'lodash.clonedeep';
 import _merge from 'lodash.merge';
 import _set from 'lodash.set';
 import { App, AppConfig } from './App';
-import { RequestTypeLike } from './enums';
 import { HandleRequest } from './HandleRequest';
 import {
   BaseComponent,
@@ -55,11 +54,6 @@ export interface JovoPersistableData {
   updatedAt?: string;
 }
 
-export interface JovoRequestType {
-  type?: RequestTypeLike;
-  subType?: string;
-  optional?: boolean;
-}
 
 export interface JovoComponentInfo<
   DATA extends ComponentData = ComponentData,
@@ -133,13 +127,9 @@ export abstract class Jovo<
 
     this.$data = {};
     this.$device = this.$platform.createDeviceInstance(this as unknown as JOVO);
-    this.$entities =
-      (this.$input.type === InputType.Intent
-        ? this.$input.entities || this.$input.nlu?.entities
-        : this.$input.nlu?.entities) || {};
+    this.$entities = this.getEntityMap();
     this.$history = new JovoHistory();
-    const session = this.getSession();
-    this.$session = session instanceof JovoSession ? session : new JovoSession(session);
+    this.$session = this.getSession();
     this.$user = this.$platform.createUserInstance(this as unknown as JOVO);
   }
 
@@ -430,9 +420,13 @@ export abstract class Jovo<
     });
   }
 
-  //TODO: needs to be evaluated
-  getSession(): Partial<JovoSession> | undefined {
-    return this.$request.getSession();
+  getSession(): JovoSession {
+    const session = this.$request.getSession();
+    return session instanceof JovoSession ? session : new JovoSession(session);
+  }
+
+  getEntityMap(): EntityMap {
+    return this.$input.entities || this.$input.nlu?.entities || {};
   }
 
   //TODO: needs to be evaluated
