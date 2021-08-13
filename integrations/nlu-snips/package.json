@@ -43,5 +43,8 @@
   "prettier": "../../.prettierrc.js",
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "jovo-model": "^3.0.1"
   }
 }

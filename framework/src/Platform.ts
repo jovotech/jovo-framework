@@ -99,6 +99,7 @@ export abstract class Platform<
     propagateMiddleware('request', '$request');
     propagateMiddleware('interpretation.asr', '$asr');
     propagateMiddleware('interpretation.nlu', '$nlu');
+    propagateMiddleware('response.output', '$output');
   }
 
   createJovoInstance<APP extends App>(app: APP, handleRequest: HandleRequest): JOVO {

@@ -26,4 +26,7 @@ export interface SnipsNluResponse {
 export interface SnipsNluConfig extends PluginConfig {
   serverUrl: string;
   serverPath: string;
+  engineId: string;
+  modelsDirectory: string;
+  language: string;
 }
