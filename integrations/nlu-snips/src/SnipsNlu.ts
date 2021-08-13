@@ -68,26 +68,6 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
     return nluData;
   }
 
-  private async createDynamicEntitiesEngine(
-    entity: string,
-    locale: string,
-    sessionId: string,
-    data: JovoModelData,
-  ) {
-    const config: AxiosRequestConfig = {
-      url: '/engine/train',
-      params: {
-        locale,
-        entity,
-        engine_id: this.config.engineId,
-        session_id: sessionId,
-      },
-      data,
-    };
-
-    return await this.sendToSnips(config);
-  }
-
   private async generateDynamicEntities(handleRequest: HandleRequest, jovo: Jovo): Promise<void> {
     const outputs: OutputTemplate[] = Array.isArray(jovo.$output) ? jovo.$output : [jovo.$output];
     const locale: string = this.getLocale(jovo.$request);
@@ -103,61 +83,79 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
         return;
       }
 
-          // TODO: If input type does not exist, throw error?
-          if (!model.inputTypes) {
-            continue;
+      for (const entity of listen.entities.types || []) {
+        const requestData: JovoModelData = { invocation: '', intents: [], inputTypes: [] };
+
+        // Get intent and values from Jovo model
+        // TODO: Read model location from project configuration instead of passing it to config again?
+        const modelPath = resolve(joinPaths(this.config.modelsDirectory, locale));
+        let model: JovoModelData | undefined;
+        try {
+          model = require(modelPath);
+        } finally {
+          if (!model) {
+            throw new JovoError({
+              message: `Couldn't find a language model for locale ${locale}.`,
+            });
+          }
+        }
+
+        if (!model.inputTypes) {
+          continue;
+        }
+
+        const originalInputType: InputType | undefined = model.inputTypes.find(
+          (inputType) => inputType.name === entity.name,
+        );
+
+        if (!originalInputType) {
+          continue;
+        }
+
+        if (!originalInputType.values) {
+          originalInputType.values = [];
+        }
+
+        // Merge values from original input type with dynamic ones
+        originalInputType.values.push(...(entity.values || []));
+        requestData.inputTypes!.push(originalInputType);
+
+        if (!model.intents) {
+          continue;
+        }
+
+        // Find all intents the input type is used in and provide them in the request to the Snips NLU server
+        const intents: Intent[] = model.intents.filter((intent) => {
+          if (!intent.inputs) {
+            return;
           }
 
-          const originalInputType: InputType | undefined = model.inputTypes.find(
-            (inputType) => inputType.name === entity.name,
-          );
-
-          // TODO: If input type does not exist, throw error?
-          if (!originalInputType) {
-            continue;
-          }
-
-          if (!originalInputType.values) {
-            originalInputType.values = [];
-          }
-
-          // Merge values from original input type with dynamic ones
-          originalInputType.values.push(...(entity.values || []));
-          requestData.inputTypes!.push(originalInputType);
-
-          // TODO: What to do here?
-          if (!model.intents) {
-            continue;
-          }
-
-          const intents: Intent[] = model.intents.filter((intent) => {
-            if (!intent.inputs) {
+          return intent.inputs.some((input) => {
+            if (!input.type) {
               return;
             }
-
-            return intent.inputs!.some((input) => {
-              if (!input.type) {
-                // TODO What to do here?
-                return;
-              }
-              if (typeof input.type === 'object') {
-                return input.type.snips === entity.name;
-              } else {
-                return input.type === entity.name;
-              }
-            });
+            if (typeof input.type === 'object') {
+              return input.type.snips === entity.name;
+            } else {
+              return input.type === entity.name;
+            }
           });
+        });
 
-          requestData.intents!.push(...intents);
+        requestData.intents!.push(...intents);
 
-          // TODO: Async? In parallel?
-          await this.createDynamicEntitiesEngine(
-            entity.name,
-            locale,
-            jovo.$session.id!,
-            requestData,
-          );
-        }
+        const config: AxiosRequestConfig = {
+          url: '/engine/train/dynamic-entities',
+          params: {
+            locale: locale.substring(0, 2),
+            entity: entity.name,
+            engine_id: this.config.engineId,
+            session_id: jovo.$session.id!,
+          },
+          data: requestData,
+        };
+
+        this.sendToSnips(config);
       }
     }
   }
