@@ -1,4 +1,5 @@
 import { join as joinPaths, resolve } from 'path';
+import { v4 as uuidV4 } from 'uuid';
 import {
   axios,
   AxiosRequestConfig,
@@ -26,8 +27,6 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
   getDefaultConfig(): SnipsNluConfig {
     return {
       serverUrl: 'http://localhost:5000/',
-      serverPath: '/engine/parse',
-      engineId: '',
       modelsDirectory: 'models',
       fallbackLanguage: 'en',
       serverPath: '',
@@ -45,13 +44,13 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
     const config: AxiosRequestConfig = {
       url: '/engine/parse',
       params: {
-        locale: this.getLanguage(jovo.$request),
+        locale: this.getLocale(jovo.$request).substring(0, 2),
         engine_id: this.config.engineId,
+        session_id: jovo.$session.id!,
       },
       data: { text },
     };
     const snipsNluResponse: SnipsNluResponse = await this.sendToSnips(config);
-    console.log(snipsNluResponse);
     const nluData: NluData = {};
     if (snipsNluResponse.intent.intentName) {
       nluData.intent = { name: snipsNluResponse.intent.intentName };
@@ -91,7 +90,7 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
 
   private async generateDynamicEntities(handleRequest: HandleRequest, jovo: Jovo): Promise<void> {
     const outputs: OutputTemplate[] = Array.isArray(jovo.$output) ? jovo.$output : [jovo.$output];
-    const locale: string = jovo.$request.getLocale()!.substr(0, 2);
+    const locale: string = this.getLocale(jovo.$request);
 
     for (const output of outputs) {
       const listen = output.platforms?.[jovo.$platform.constructor.name]?.listen ?? output.listen;
@@ -100,23 +99,9 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
         return;
       }
 
-      // TODO: What if mode is either MERGE or CLEAR?
-      // TODO: Create engine for every dynamic entity or just one per request?
-      if (listen.entities.mode === DynamicEntitiesMode.Replace) {
-        for (const entity of listen.entities.types || []) {
-          const requestData: JovoModelData = { invocation: '', intents: [], inputTypes: [] };
-
-          // Get intent and values from Jovo model
-          // TODO: Read model location from configuration instead of passing it to config again?
-          const modelPath = resolve(joinPaths(this.config.modelsDirectory, locale));
-          let model: JovoModelData | undefined;
-          try {
-            model = require(modelPath);
-          } finally {
-            if (!model) {
-              throw new JovoError({ message: 'Model does not exist' });
-            }
-          }
+      if (listen.entities.mode === DynamicEntitiesMode.Clear) {
+        return;
+      }
 
           // TODO: If input type does not exist, throw error?
           if (!model.inputTypes) {
@@ -177,10 +162,14 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
     }
   }
 
-  private getLanguage(request: JovoRequest): string {
-    return request.getLocale()!.substr(0, 2) || this.config.language;
+  private getLocale(request: JovoRequest): string {
+    return request.getLocale() || this.config.fallbackLanguage;
   }
 
+  /**
+   * Sends a request to a configured Snips NLU Server
+   * @param requestConfig - Request configuration
+   */
   private async sendToSnips(requestConfig: AxiosRequestConfig): Promise<SnipsNluResponse> {
     const config: AxiosRequestConfig = {
       method: 'POST',
