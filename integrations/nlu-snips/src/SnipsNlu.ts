@@ -29,7 +29,9 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
       serverPath: '/engine/parse',
       engineId: '',
       modelsDirectory: 'models',
-      language: 'en',
+      fallbackLanguage: 'en',
+      serverPath: '',
+      engineId: uuidV4(),
     };
   }
 

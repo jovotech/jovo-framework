@@ -45,6 +45,7 @@
     "access": "public"
   },
   "dependencies": {
-    "jovo-model": "^3.0.1"
+    "jovo-model": "^3.0.1",
+    "uuid": "^8.3.2"
   }
 }

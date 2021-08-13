@@ -28,5 +28,5 @@ export interface SnipsNluConfig extends PluginConfig {
   serverPath: string;
   engineId: string;
   modelsDirectory: string;
-  language: string;
+  fallbackLanguage: string;
 }
