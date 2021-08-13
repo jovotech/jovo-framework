@@ -3,7 +3,7 @@ import _cloneDeep from 'lodash.clonedeep';
 import _merge from 'lodash.merge';
 import _set from 'lodash.set';
 import { App, AppConfig } from './App';
-import { RequestType, RequestTypeLike } from './enums';
+import { RequestTypeLike } from './enums';
 import { HandleRequest } from './HandleRequest';
 import {
   BaseComponent,
@@ -17,6 +17,8 @@ import {
   I18NextResourcesLanguageKeys,
   I18NextResourcesNamespaceKeysOfLanguage,
   I18NextTOptions,
+  InputType,
+  JovoInput,
   MetadataStorage,
   OutputConstructor,
   PersistableSessionData,
@@ -26,15 +28,15 @@ import {
   StateStackItem,
   UnknownObject,
 } from './index';
-import { AsrData, EntityMap, NluData, RequestData } from './interfaces';
+import { EntityMap, RequestData } from './interfaces';
+import { JovoDevice } from './JovoDevice';
+import { JovoHistory, JovoHistoryItem, PersistableHistoryData } from './JovoHistory';
 import { JovoRequest } from './JovoRequest';
 import { JovoSession } from './JovoSession';
 import { JovoUser } from './JovoUser';
 import { Platform } from './Platform';
 import { JovoRoute } from './plugins/RouterPlugin';
 import { forEachDeep } from './utilities';
-import { JovoHistory, JovoHistoryItem, PersistableHistoryData } from './JovoHistory';
-import { JovoDevice } from './JovoDevice';
 
 export type JovoConstructor<
   REQUEST extends JovoRequest,
@@ -106,20 +108,18 @@ export abstract class Jovo<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   PLATFORM extends Platform<REQUEST, RESPONSE, JOVO, USER, DEVICE, PLATFORM> = any,
 > {
-  $asr: AsrData;
-  $data: RequestData;
-  $entities: EntityMap;
-  $nlu: NluData;
-  $output: OutputTemplate | OutputTemplate[];
   $request: REQUEST;
+  $input: JovoInput;
+  $output: OutputTemplate | OutputTemplate[];
   $response?: RESPONSE | RESPONSE[];
+
+  $data: RequestData;
+  $device: DEVICE;
+  $entities: EntityMap;
+  $history: JovoHistory;
   $route?: JovoRoute;
   $session: JovoSession;
-  $type: JovoRequestType;
   $user: USER;
-  $device: DEVICE;
-
-  $history: JovoHistory;
 
   constructor(
     readonly $app: App,
@@ -127,18 +127,20 @@ export abstract class Jovo<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly $platform: PLATFORM,
   ) {
-    this.$asr = {};
-    this.$data = {};
-    this.$output = [];
     this.$request = this.$platform.createRequestInstance($handleRequest.server.getRequestObject());
+    this.$input = this.$request.getInput();
+    this.$output = [];
+
+    this.$data = {};
+    this.$device = this.$platform.createDeviceInstance(this as unknown as JOVO);
+    this.$entities =
+      (this.$input.type === InputType.Intent
+        ? this.$input.entities || this.$input.nlu?.entities
+        : this.$input.nlu?.entities) || {};
+    this.$history = new JovoHistory();
     const session = this.getSession();
     this.$session = session instanceof JovoSession ? session : new JovoSession(session);
-    this.$type = this.$request.getRequestType() || { type: RequestType.Unknown, optional: true };
-    this.$nlu = this.$request.getNluData() || {};
-    this.$entities = this.$nlu.entities || {};
-    this.$history = new JovoHistory();
     this.$user = this.$platform.createUserInstance(this as unknown as JOVO);
-    this.$device = this.$platform.createDeviceInstance(this as unknown as JOVO);
   }
 
   get $config(): AppConfig {
@@ -469,12 +471,13 @@ export abstract class Jovo<
 
   getCurrentHistoryItem(): JovoHistoryItem {
     return {
-      output: this.$output,
-      nlu: this.$nlu,
+      request: this.$request,
+      input: this.$input,
+
       state: this.$state,
       entities: this.$entities,
-      asr: this.$asr,
-      request: this.$request,
+
+      output: this.$output,
       response: this.$response,
     };
   }

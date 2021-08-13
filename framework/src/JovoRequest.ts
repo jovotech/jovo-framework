@@ -1,10 +1,12 @@
-import { UnknownObject } from './index';
+import { JovoInput, UnknownObject } from './index';
 import { EntityMap, NluData } from './interfaces';
 import { JovoRequestType } from './Jovo';
 import { JovoSession } from './JovoSession';
 
 export abstract class JovoRequest {
   [key: string]: unknown;
+
+  abstract getInput(): JovoInput;
 
   abstract getEntities(): EntityMap | undefined;
 
