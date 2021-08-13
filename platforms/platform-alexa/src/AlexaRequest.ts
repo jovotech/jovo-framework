@@ -110,4 +110,8 @@ export class AlexaRequest extends JovoRequest {
   getApiAccessToken(): string {
     return this.context!.System.apiAccessToken;
   }
+
+  getDeviceId(): string {
+    return this.context!.System.device.deviceId;
+  }
 }

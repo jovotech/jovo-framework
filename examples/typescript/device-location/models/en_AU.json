@@ -15,6 +15,12 @@
         "no",
         "no thanks"
       ]
+    },
+    {
+      "name": "UseDeviceLocationIntent",
+      "phrases": [
+        "use my device location"
+      ]
     }
   ]
 }

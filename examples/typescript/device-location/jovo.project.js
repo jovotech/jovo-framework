@@ -11,11 +11,19 @@ const { ProjectConfig } = require('@jovotech/cli-core');
 |
 */
 const project = new ProjectConfig({
-	endpoint: '${JOVO_WEBHOOK_URL}',
-	plugins: [
-		// Add Jovo CLI plugins here
-		new AlexaCli(),
-	],
+  endpoint: '${JOVO_WEBHOOK_URL}',
+  plugins: [
+    // Add Jovo CLI plugins here
+    new AlexaCli({
+      manifest: {
+        permissions: [
+          {
+            name: 'read::alexa:device:all:address:country_and_postal_code',
+          },
+        ],
+      },
+    }),
+  ],
 });
 
 module.exports = project;
