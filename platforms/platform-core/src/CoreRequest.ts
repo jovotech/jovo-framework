@@ -1,5 +1,12 @@
-import { EntityMap, JovoRequest, JovoRequestType, UnknownObject } from '@jovotech/framework';
-import { Context, Request, RequestBodyText } from './interfaces';
+import {
+  AsrData,
+  EntityMap,
+  InputTypeLike,
+  JovoInput,
+  JovoRequest,
+  UnknownObject,
+} from '@jovotech/framework';
+import { Context, Request, RequestBodyAudio, RequestBodyText } from './interfaces';
 
 export class CoreRequest extends JovoRequest {
   version?: string;
@@ -7,24 +14,35 @@ export class CoreRequest extends JovoRequest {
   request?: Request;
   context?: Context;
 
-  getEntities(): EntityMap | undefined {
-    return this.request?.nlu?.inputs;
-  }
-
-  getIntentName(): string | undefined {
-    return this.request?.nlu?.intent;
-  }
-
   getLocale(): string | undefined {
     return this.request?.locale;
   }
 
-  getRawText(): string | undefined {
+  getIntent(): JovoInput['intent'] {
+    return this.request?.nlu?.intent;
+  }
+
+  getEntities(): EntityMap | undefined {
+    return this.request?.nlu?.inputs;
+  }
+
+  getInputType(): InputTypeLike | undefined {
+    return this.request?.type;
+  }
+
+  getInputText(): JovoInput['text'] {
     return (this.request?.body as RequestBodyText | undefined)?.text;
   }
 
-  getRequestType(): JovoRequestType | undefined {
-    return this.request?.type ? { type: this.request.type } : undefined;
+  getInputAudio(): JovoInput['audio'] {
+    const audio = (this.request?.body as RequestBodyAudio | undefined)?.audio;
+    if (!audio) {
+      return;
+    }
+    return {
+      sampleRate: audio?.sampleRate,
+      base64: audio.b64string,
+    };
   }
 
   getSessionData(): UnknownObject | undefined {

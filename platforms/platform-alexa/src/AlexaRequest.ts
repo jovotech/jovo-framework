@@ -88,12 +88,8 @@ export class AlexaRequest extends JovoRequest {
   getInputText(): JovoInput['text'] {
     return;
   }
-  getInputAudio(): JovoInput['text'] {
+  getInputAudio(): JovoInput['audio'] {
     return;
-  }
-
-  getAsrData(): AsrData | undefined {
-    return undefined;
   }
 
   getSessionData(): UnknownObject | undefined {

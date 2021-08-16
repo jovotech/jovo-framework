@@ -1,8 +1,9 @@
 import {
   EntityMap,
+  InputType,
+  InputTypeLike,
+  JovoInput,
   JovoRequest,
-  JovoRequestType,
-  RequestType,
   UnknownObject,
 } from '@jovotech/framework';
 import { FACEBOOK_LAUNCH_PAYLOAD } from '.';
@@ -22,28 +23,27 @@ export class FacebookMessengerRequest extends JovoRequest {
   inputs?: EntityMap;
   locale?: string;
 
-  getEntities(): EntityMap | undefined {
-    return this.inputs;
-  }
-
-  getIntentName(): string | undefined {
-    return this.nlu?.intentName;
-  }
-
   getLocale(): string | undefined {
     return this.locale;
   }
 
-  getRawText(): string | undefined {
-    return this.messaging?.[0]?.message?.text || this.messaging?.[0]?.postback?.title;
+  getIntent(): JovoInput['intent'] {
+    return this.nlu?.intentName;
   }
 
-  getRequestType(): JovoRequestType | undefined {
+  getEntities(): EntityMap | undefined {
+    return this.inputs;
+  }
+
+  getInputType(): InputTypeLike | undefined {
     const postbackPayload = this.messaging?.[0]?.postback?.payload;
-    // TODO determine whether it should be possible to configure launch-payload
-    return {
-      type: postbackPayload === FACEBOOK_LAUNCH_PAYLOAD ? RequestType.Launch : RequestType.Intent,
-    };
+    return postbackPayload === FACEBOOK_LAUNCH_PAYLOAD ? InputType.Launch : InputType.Intent;
+  }
+  getInputText(): JovoInput['text'] {
+    return this.messaging?.[0]?.message?.text || this.messaging?.[0]?.postback?.title;
+  }
+  getInputAudio(): JovoInput['audio'] {
+    return;
   }
 
   getSessionData(): UnknownObject | undefined {

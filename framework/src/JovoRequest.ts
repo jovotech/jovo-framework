@@ -21,7 +21,9 @@ export abstract class JovoRequest {
   abstract getInputText(): JovoInput['text'];
   abstract getInputAudio(): JovoInput['audio'];
 
-  abstract getAsrData(): AsrData | undefined;
+  getAsrData(): AsrData | undefined {
+    return {};
+  }
   getNluData(): NluData | undefined {
     const nluData: NluData = {};
     const intent = this.getIntent();
