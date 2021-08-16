@@ -92,7 +92,7 @@ Under the hood, Jovo translates the `reprompt` into an `outputSpeech` object ([s
 }
 ```
 
-**Note**: For Alexa to wait a user to answer a question, the [listen property](#listen) needs to be added.
+**Note**: For Alexa to wait for a user to answer a question, the [listen property](#listen) needs to be added.
 
 ### Listen
 
