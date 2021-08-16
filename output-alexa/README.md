@@ -239,7 +239,7 @@ For Alexa, you can add output elements inside an `Alexa` object:
 
 ### Native Response
 
-You can add response objects that should show up exactly like this in the Alexa response object using the [`nativeResponse` object](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md#native-response):
+The [`nativeResponse` property](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md#native-response) allows you to add native elements exactly how they would be added to the Alexa JSON response.
 
 ```typescript
 {
@@ -253,8 +253,6 @@ You can add response objects that should show up exactly like this in the Alexa 
   }
 }
 ```
-
-The `nativeResponse` object allows you to add native elements exactly how they would be added to the Alexa JSON response. Learn more about the [response format in the official Alexa documentation](https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-and-response-json-reference.html#response-format).
 
 For example, an APL RenderDcument directive ([see official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/alexa-presentation-language/apl-interface.html#renderdocument-directive)) could be added like this:
 
@@ -279,3 +277,5 @@ For example, an APL RenderDcument directive ([see official Alexa docs](https://d
   }
 }
 ```
+
+Learn more about the [response format in the official Alexa documentation](https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-and-response-json-reference.html#response-format).
