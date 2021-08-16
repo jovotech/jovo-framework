@@ -29,7 +29,7 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
       serverUrl: 'http://localhost:5000/',
       modelsDirectory: 'models',
       fallbackLanguage: 'en',
-      serverPath: '',
+      serverPath: '/engine/parse',
       engineId: uuidV4(),
     };
   }
@@ -42,7 +42,7 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
     }
 
     const config: AxiosRequestConfig = {
-      url: '/engine/parse',
+      url: this.config.serverPath,
       params: {
         locale: this.getLocale(jovo.$request).substring(0, 2),
         engine_id: this.config.engineId,
@@ -68,6 +68,12 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
     return nluData;
   }
 
+  /**
+   * Asynchronously trains dynamic entities. Sends the relevant portion of the Jovo langauge model to
+   * the Snips NLU server.
+   * @param handleRequest - Current HandleRequest object
+   * @param jovo - Current Jovo object
+   */
   private async trainDynamicEntities(handleRequest: HandleRequest, jovo: Jovo): Promise<void> {
     const outputs: OutputTemplate[] = Array.isArray(jovo.$output) ? jovo.$output : [jovo.$output];
     const locale: string = this.getLocale(jovo.$request);
@@ -75,11 +81,11 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
     for (const output of outputs) {
       const listen = output.platforms?.[jovo.$platform.constructor.name]?.listen ?? output.listen;
 
-      if (typeof listen !== 'object' || !listen.entities) {
-        return;
-      }
-
-      if (listen.entities.mode === DynamicEntitiesMode.Clear) {
+      if (
+        typeof listen !== 'object' ||
+        !listen.entities ||
+        listen.entities.mode === DynamicEntitiesMode.Clear
+      ) {
         return;
       }
 
