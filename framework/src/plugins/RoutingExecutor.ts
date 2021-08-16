@@ -51,7 +51,9 @@ export class RoutingExecutor {
 
   setSkipForRouteMatches(rankedRouteMatches: RouteMatch[]): void {
     const isIntentToSkipUnhandled =
-      this.jovo.$handleRequest.config.routing?.intentsToSkipUnhandled?.includes(this.getIntent());
+      this.jovo.$handleRequest.config.routing?.intentsToSkipUnhandled?.includes(
+        this.getMappedIntentName(),
+      );
     // if the mapped intent is an intent that is supposed to skip UNHANDLED
     if (isIntentToSkipUnhandled) {
       // set skip: true for all UNHANDLED-matches
@@ -112,7 +114,7 @@ export class RoutingExecutor {
       const intentNames = componentMetadata.isGlobal
         ? metadata.intentNames
         : metadata.globalIntentNames;
-      const intentName = this.getIntent();
+      const intentName = this.getMappedIntentName();
       return intentNames.includes(intentName) || intentNames.includes(BuiltInHandler.Unhandled);
     }
     return !!metadata.options?.types?.includes(this.jovo.$input.type);
@@ -158,7 +160,7 @@ export class RoutingExecutor {
 
   private isLocalHandlerMatching(metadata: HandlerMetadata, subState?: string): boolean {
     if (this.jovo.$input.type === InputType.Intent) {
-      const intentName = this.getIntent();
+      const intentName = this.getMappedIntentName();
       return (
         (metadata.intentNames.includes(intentName) ||
           metadata.intentNames.includes(BuiltInHandler.Unhandled)) &&
@@ -218,18 +220,9 @@ export class RoutingExecutor {
     return isPlatformSupported && isConditionFulfilled;
   }
 
-  private getIntent(): string {
-    function getIntentName(intent: Intent | string): string {
-      return typeof intent === 'string' ? intent : intent.name;
-    }
-    // TODO check if sufficient
-    const intent =
-      this.jovo.$input.type === InputType.Intent && this.jovo.$input.intent
-        ? getIntentName(this.jovo.$input.intent)
-        : this.jovo.$input.nlu.intent
-        ? getIntentName(this.jovo.$input.nlu.intent)
-        : BuiltInHandler.Unhandled;
-    return this.jovo.$config.routing?.intentMap?.[intent] || intent;
+  private getMappedIntentName(): string {
+    const intentName = this.jovo.$input.getIntentName() || BuiltInHandler.Unhandled;
+    return this.jovo.$config.routing?.intentMap?.[intentName] || intentName;
   }
 
   private createHandlerMetadataToRouteMatchMapper(

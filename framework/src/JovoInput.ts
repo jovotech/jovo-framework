@@ -1,5 +1,5 @@
 import { EnumLike } from '@jovotech/output';
-import { AsrData, EntityMap, NluData } from './interfaces';
+import { AsrData, EntityMap, Intent, NluData } from './interfaces';
 
 export enum InputType {
   Launch = 'LAUNCH',
@@ -37,5 +37,16 @@ export class JovoInput {
   constructor(public type: InputTypeLike) {
     this.asr = {};
     this.nlu = {};
+  }
+
+  getIntentName(): string | undefined {
+    function getIntentName(intent: Intent | string): string {
+      return typeof intent === 'string' ? intent : intent.name;
+    }
+    return this.type === InputType.Intent && this.intent
+      ? getIntentName(this.intent)
+      : this.nlu.intent
+      ? getIntentName(this.nlu.intent)
+      : undefined;
   }
 }
