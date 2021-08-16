@@ -1,5 +1,5 @@
 import { BaseComponent, ComponentConstructor } from '../BaseComponent';
-import { InternalHandler } from '../enums';
+import { BuiltInHandler } from '../enums';
 import { DuplicateChildComponentsError } from '../errors/DuplicateChildComponentsError';
 import { ComponentMetadata, ComponentOptions } from '../metadata/ComponentMetadata';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
@@ -41,10 +41,10 @@ export function Component<COMPONENT extends BaseComponent = BaseComponent>(
       }
     });
     // make launch global if it is set
-    if (target.prototype[InternalHandler.Launch]) {
+    if (target.prototype[BuiltInHandler.Launch]) {
       // unshift to not overwrite any other explicitly set HandlerOptionMetadata when merging
       metadataStorage.handlerOptionMetadata.unshift(
-        new HandlerOptionMetadata(target, InternalHandler.Launch as keyof COMPONENT, {
+        new HandlerOptionMetadata(target, BuiltInHandler.Launch as keyof COMPONENT, {
           global: true,
         }) as HandlerOptionMetadata,
       );

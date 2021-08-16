@@ -1,5 +1,5 @@
 import { ComponentTreeNode } from '../ComponentTreeNode';
-import { InternalHandler } from '../enums';
+import { BuiltInHandler } from '../enums';
 import { MatchingRouteNotFoundError } from '../errors/MatchingRouteNotFoundError';
 import { Jovo } from '../Jovo';
 import { ComponentMetadata } from '../metadata/ComponentMetadata';
@@ -54,7 +54,7 @@ export class RoutingExecutor {
     if (isIntentToSkipUnhandled) {
       // set skip: true for all UNHANDLED-matches
       rankedRouteMatches.forEach((match) => {
-        if (match.type === InternalHandler.Unhandled) {
+        if (match.type === BuiltInHandler.Unhandled) {
           match.skip = true;
         }
       });
@@ -62,7 +62,7 @@ export class RoutingExecutor {
 
     // find the first RouteMatch that is UNHANDLED
     const firstRouteMatchIndexWithUnhandled = rankedRouteMatches.findIndex(
-      (match) => match.type === InternalHandler.Unhandled,
+      (match) => match.type === BuiltInHandler.Unhandled,
     );
     // find index of the last RouteMatch that has prioritizedOverUnhandled in a reversed matches-array
     const lastReversedRouteMatchIndexWithPrioritizedOverUnhandled = rankedRouteMatches
@@ -110,7 +110,7 @@ export class RoutingExecutor {
       ? metadata.intentNames
       : metadata.globalIntentNames;
     const intentName = this.getIntent();
-    return intentNames.includes(intentName) || intentNames.includes(InternalHandler.Unhandled);
+    return intentNames.includes(intentName) || intentNames.includes(BuiltInHandler.Unhandled);
   }
 
   private async getGlobalRouteMatches(): Promise<RouteMatch[]> {
@@ -155,7 +155,7 @@ export class RoutingExecutor {
     const intentName = this.getIntent();
     return (
       (metadata.intentNames.includes(intentName) ||
-        metadata.intentNames.includes(InternalHandler.Unhandled)) &&
+        metadata.intentNames.includes(BuiltInHandler.Unhandled)) &&
       (subState ? metadata.options?.subState === subState : !metadata.options?.subState)
     );
   }
@@ -226,9 +226,9 @@ export class RoutingExecutor {
   }
 
   private compareRouteMatchRanking(match: RouteMatch, otherMatch: RouteMatch): number {
-    const matchIsUnhandled = match.metadata.intentNames.includes(InternalHandler.Unhandled);
+    const matchIsUnhandled = match.metadata.intentNames.includes(BuiltInHandler.Unhandled);
     const otherMatchIsUnhandled = otherMatch.metadata.intentNames.includes(
-      InternalHandler.Unhandled,
+      BuiltInHandler.Unhandled,
     );
     if (matchIsUnhandled && !otherMatchIsUnhandled) {
       return 1;

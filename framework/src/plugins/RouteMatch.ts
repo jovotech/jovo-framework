@@ -1,4 +1,4 @@
-import { InternalHandler } from '../enums';
+import { BuiltInHandler } from '../enums';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
 
 export class RouteMatch {
@@ -39,8 +39,8 @@ export class RouteMatch {
   }
 
   get type(): string | undefined {
-    return this.metadata.intentNames.includes(InternalHandler.Unhandled)
-      ? InternalHandler.Unhandled
+    return this.metadata.intentNames.includes(BuiltInHandler.Unhandled)
+      ? BuiltInHandler.Unhandled
       : undefined;
   }
 
