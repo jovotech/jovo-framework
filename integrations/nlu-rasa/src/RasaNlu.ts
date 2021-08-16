@@ -6,12 +6,12 @@ import {
   HandleRequest,
   Jovo,
   NluData,
-  NluPlugin,
+  NluPlugin, NluPluginConfig,
   PluginConfig,
 } from '@jovotech/framework';
 import { RasaResponse } from './interfaces';
 
-export interface RasaNluConfig extends PluginConfig {
+export interface RasaNluConfig extends NluPluginConfig {
   serverUrl: string;
   serverPath: string;
 }
@@ -22,16 +22,15 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
   // TODO fully determine default config
   getDefaultConfig(): RasaNluConfig {
     return {
+      ...super.getDefaultConfig(),
       serverUrl: 'http://localhost:5005',
       serverPath: '/model/parse',
     };
   }
 
-  async process(handleRequest: HandleRequest, jovo: Jovo): Promise<NluData | undefined> {
-    const text = jovo.$request.getRawText();
-    if (!text) return;
+  async process(jovo: Jovo, text: string): Promise<NluData | undefined> {
     try {
-      const rasaResponse = await this.sendTextToRasaServer(text || '');
+      const rasaResponse = await this.sendTextToRasaServer(text);
       return rasaResponse?.data?.intent?.name
         ? { intent: { name: rasaResponse.data.intent.name } }
         : undefined;
