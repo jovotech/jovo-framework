@@ -68,6 +68,7 @@ export * from './I18Next';
 export * from './Jovo';
 export * from './JovoError';
 export * from './JovoInput';
+export * from './JovoInputBuilder';
 export * from './JovoProxy';
 export * from './JovoRequest';
 export * from './JovoSession';

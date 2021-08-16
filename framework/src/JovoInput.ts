@@ -11,6 +11,8 @@ export enum InputType {
   Speech = 'SPEECH',
 }
 
+export const DEFAULT_INPUT_TYPE = InputType.Intent;
+
 export type InputTypeLike = EnumLike<InputType> | string;
 
 export class JovoInput {
