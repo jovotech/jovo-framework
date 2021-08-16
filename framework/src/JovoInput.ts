@@ -16,8 +16,8 @@ export const DEFAULT_INPUT_TYPE = InputType.Intent;
 export type InputTypeLike = EnumLike<InputType> | string;
 
 export class JovoInput {
-  asr?: AsrData;
-  nlu?: NluData;
+  asr: AsrData;
+  nlu: NluData;
 
   // InputType.Intent
   intent?: NluData['intent'];
@@ -29,5 +29,8 @@ export class JovoInput {
   // InputType.Speech
   base64Audio?: string;
 
-  constructor(public type: InputTypeLike) {}
+  constructor(public type: InputTypeLike) {
+    this.asr = {};
+    this.nlu = {};
+  }
 }

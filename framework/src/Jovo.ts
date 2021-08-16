@@ -426,7 +426,7 @@ export abstract class Jovo<
   }
 
   getEntityMap(): EntityMap {
-    return this.$input.entities || this.$input.nlu?.entities || {};
+    return this.$input.entities || this.$input.nlu.entities || {};
   }
 
   //TODO: needs to be evaluated

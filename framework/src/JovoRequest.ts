@@ -41,8 +41,8 @@ export abstract class JovoRequest {
       .set('entities', this.getEntities())
       .set('text', this.getInputText())
       .set('base64Audio', this.getInputAudio())
-      .set('asr', this.getAsrData())
-      .set('nlu', this.getNluData())
+      .set('asr', this.getAsrData() || {})
+      .set('nlu', this.getNluData() || {})
       .build();
   }
 

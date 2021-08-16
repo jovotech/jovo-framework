@@ -226,7 +226,7 @@ export class RoutingExecutor {
     const intent =
       this.jovo.$input.type === InputType.Intent && this.jovo.$input.intent
         ? getIntentName(this.jovo.$input.intent)
-        : this.jovo.$input.nlu?.intent
+        : this.jovo.$input.nlu.intent
         ? getIntentName(this.jovo.$input.nlu.intent)
         : BuiltInHandler.Unhandled;
     return this.jovo.$config.routing?.intentMap?.[intent] || intent;
