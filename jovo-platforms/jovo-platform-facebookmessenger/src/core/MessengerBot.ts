@@ -230,6 +230,41 @@ export class MessengerBot extends Jovo {
     return message.send(this.pageAccessToken, this.version);
   }
 
+  async showTyping(delayInMs: number): Promise<void> {
+    const typingOnRequest = await new SenderAction(
+      { id: this.$user.getId()! },
+      SenderActionType.TypingOn,
+    );
+    const typingOnResponse = typingOnRequest.send(this.pageAccessToken, this.version);
+
+    const typingOffRequest = new SenderAction(
+      { id: this.$user.getId()! },
+      SenderActionType.TypingOff,
+    );
+
+    const typingOffResponse = typingOffRequest.send(this.pageAccessToken, this.version);
+
+    this.setResponses({
+      typingOn: typingOnRequest,
+      typingOff: typingOffRequest,
+      delayInMs: delayInMs,
+    });
+
+    const promises: Array<Promise<SendMessageResponse | unknown>> = [typingOnResponse];
+
+    // Remove delay when this method is being used in testing
+    if (this.$host.headers['jovo-test'] !== 'true') {
+      const delay = new Promise((resolve) => setTimeout(resolve, delayInMs));
+      promises.push(delay);
+    }
+
+    promises.push(typingOffResponse);
+
+    for (let i = 0; i < promises.length; i++) {
+      await promises[i];
+    }
+  }
+
   get version(): string {
     return _get(this.$config, 'plugin.FacebookMessenger.version', DEFAULT_VERSION);
   }
