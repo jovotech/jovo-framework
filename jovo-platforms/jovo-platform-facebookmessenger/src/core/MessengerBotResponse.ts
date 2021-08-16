@@ -75,13 +75,13 @@ export class MessengerBotResponse implements JovoResponse {
 
     if (typeof speechText === 'string') {
       return (
-        SpeechBuilder.removeSSML(speechText) === (this.message?.[0] as TextMessage).message.text
+        SpeechBuilder.removeSSML(speechText) === (this.message?.[0] as TextMessage)?.message?.text
       );
     }
 
     if (Array.isArray(speechText)) {
       return speechText.some((text) => {
-        return SpeechBuilder.removeSSML(text) === (this.message?.[0] as TextMessage).message.text;
+        return SpeechBuilder.removeSSML(text) === (this.message?.[0] as TextMessage)?.message?.text;
       });
     }
 
