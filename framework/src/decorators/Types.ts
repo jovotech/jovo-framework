@@ -1,6 +1,5 @@
-import { RequestTypeLike } from '../enums';
+import { InputTypeLike } from '../JovoInput';
 import { createHandlerOptionDecorator } from '../metadata/HandlerOptionMetadata';
 
-export const Types: (...types: RequestTypeLike[]) => MethodDecorator = (
-  ...types: RequestTypeLike[]
-) => createHandlerOptionDecorator({ types });
+export const Types: (...types: InputTypeLike[]) => MethodDecorator = (...types: InputTypeLike[]) =>
+  createHandlerOptionDecorator({ types });

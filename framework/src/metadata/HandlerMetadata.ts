@@ -1,5 +1,5 @@
 import { BaseComponent, ComponentConstructor } from '../BaseComponent';
-import { RequestTypeLike, UnknownObject } from '../index';
+import { InputTypeLike, UnknownObject } from '../index';
 import { Intent, JovoConditionFunction } from '../interfaces';
 import { HandlerOptionMetadata } from './HandlerOptionMetadata';
 import { MethodDecoratorMetadata } from './MethodDecoratorMetadata';
@@ -14,7 +14,7 @@ export interface RoutesOptions {
   subState?: string;
   intents?: Array<string | Intent>;
   touch?: Array<string | Intent>;
-  types?: RequestTypeLike[];
+  types?: InputTypeLike[];
   gestures?: Array<string | Intent>;
   prioritizedOverUnhandled?: boolean;
 }
