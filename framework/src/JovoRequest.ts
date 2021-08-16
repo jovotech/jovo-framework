@@ -37,7 +37,7 @@ export abstract class JovoRequest {
 
   getInput(): JovoInput {
     return new JovoInputBuilder(this.getInputType() || DEFAULT_INPUT_TYPE)
-      .set('intent', this.getIntent)
+      .set('intent', this.getIntent())
       .set('entities', this.getEntities())
       .set('text', this.getInputText())
       .set('base64Audio', this.getInputAudio())
