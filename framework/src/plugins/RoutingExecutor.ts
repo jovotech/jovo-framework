@@ -1,7 +1,9 @@
 import { ComponentTreeNode } from '../ComponentTreeNode';
 import { BuiltInHandler } from '../enums';
 import { MatchingRouteNotFoundError } from '../errors/MatchingRouteNotFoundError';
+import { Intent } from '../interfaces';
 import { Jovo } from '../Jovo';
+import { InputType } from '../JovoInput';
 import { ComponentMetadata } from '../metadata/ComponentMetadata';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
 import { MetadataStorage } from '../metadata/MetadataStorage';
@@ -106,11 +108,14 @@ export class RoutingExecutor {
     metadata: HandlerMetadata,
     componentMetadata: ComponentMetadata,
   ): boolean {
-    const intentNames = componentMetadata.isGlobal
-      ? metadata.intentNames
-      : metadata.globalIntentNames;
-    const intentName = this.getIntent();
-    return intentNames.includes(intentName) || intentNames.includes(BuiltInHandler.Unhandled);
+    if (this.jovo.$input.type === InputType.Intent) {
+      const intentNames = componentMetadata.isGlobal
+        ? metadata.intentNames
+        : metadata.globalIntentNames;
+      const intentName = this.getIntent();
+      return intentNames.includes(intentName) || intentNames.includes(BuiltInHandler.Unhandled);
+    }
+    return !!metadata.options?.types?.includes(this.jovo.$input.type);
   }
 
   private async getGlobalRouteMatches(): Promise<RouteMatch[]> {
@@ -152,12 +157,15 @@ export class RoutingExecutor {
   }
 
   private isLocalHandlerMatching(metadata: HandlerMetadata, subState?: string): boolean {
-    const intentName = this.getIntent();
-    return (
-      (metadata.intentNames.includes(intentName) ||
-        metadata.intentNames.includes(BuiltInHandler.Unhandled)) &&
-      (subState ? metadata.options?.subState === subState : !metadata.options?.subState)
-    );
+    if (this.jovo.$input.type === InputType.Intent) {
+      const intentName = this.getIntent();
+      return (
+        (metadata.intentNames.includes(intentName) ||
+          metadata.intentNames.includes(BuiltInHandler.Unhandled)) &&
+        (subState ? metadata.options?.subState === subState : !metadata.options?.subState)
+      );
+    }
+    return !!metadata.options?.types?.includes(this.jovo.$input.type);
   }
 
   private async getLocalRouteMatches(): Promise<RouteMatch[]> {
@@ -211,9 +219,16 @@ export class RoutingExecutor {
   }
 
   private getIntent(): string {
+    function getIntentName(intent: Intent | string): string {
+      return typeof intent === 'string' ? intent : intent.name;
+    }
     // TODO check if sufficient
     const intent =
-      this.jovo.$input.intent || this.jovo.$input.nlu?.intent?.name || this.jovo.$input.type;
+      this.jovo.$input.type === InputType.Intent && this.jovo.$input.intent
+        ? getIntentName(this.jovo.$input.intent)
+        : this.jovo.$input.nlu?.intent
+        ? getIntentName(this.jovo.$input.nlu.intent)
+        : BuiltInHandler.Unhandled;
     return this.jovo.$config.routing?.intentMap?.[intent] || intent;
   }
 
