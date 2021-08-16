@@ -1,6 +1,7 @@
 import { BaseComponent, ComponentConstructor } from '../BaseComponent';
 import { BuiltInHandler } from '../enums';
 import { DuplicateChildComponentsError } from '../errors/DuplicateChildComponentsError';
+import { InputType } from '../JovoInput';
 import { ComponentMetadata, ComponentOptions } from '../metadata/ComponentMetadata';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
 import { HandlerOptionMetadata } from '../metadata/HandlerOptionMetadata';
@@ -37,18 +38,15 @@ export function Component<COMPONENT extends BaseComponent = BaseComponent>(
         (optionMetadata) => optionMetadata.target === target && optionMetadata.propertyKey === key,
       );
       if (!hasHandlerMetadata && !hasHandlerOptionMetadata) {
-        metadataStorage.addHandlerMetadata(new HandlerMetadata(target, key as keyof COMPONENT));
+        const isLaunchOrEnd = key === BuiltInHandler.Launch || key === BuiltInHandler.End;
+        metadataStorage.addHandlerMetadata(
+          new HandlerMetadata(target, key as keyof COMPONENT, {
+            global: isLaunchOrEnd,
+            types: isLaunchOrEnd ? [key as BuiltInHandler.Launch | BuiltInHandler.End] : undefined,
+          }),
+        );
       }
     });
-    // make launch global if it is set
-    if (target.prototype[BuiltInHandler.Launch]) {
-      // unshift to not overwrite any other explicitly set HandlerOptionMetadata when merging
-      metadataStorage.handlerOptionMetadata.unshift(
-        new HandlerOptionMetadata(target, BuiltInHandler.Launch as keyof COMPONENT, {
-          global: true,
-        }) as HandlerOptionMetadata,
-      );
-    }
     metadataStorage.addComponentMetadata(new ComponentMetadata<COMPONENT>(target, options));
     return;
   };
