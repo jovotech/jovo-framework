@@ -1,4 +1,5 @@
 import { PluginConfig } from '@jovotech/framework';
+import { JovoModelData } from 'jovo-model';
 
 export interface SnipsNluSlot {
   entity: string;
@@ -24,9 +25,12 @@ export interface SnipsNluResponse {
 }
 
 export interface SnipsNluConfig extends PluginConfig {
+  // TODO: Better naming?
   serverUrl: string;
   serverPath: string;
   engineId: string;
-  modelsDirectory: string;
+  modelsDirectory?: string;
+  models?: Record<string, JovoModelData>;
+  passModels?: boolean;
   fallbackLanguage: string;
 }

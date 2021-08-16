@@ -78,6 +78,24 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
     const outputs: OutputTemplate[] = Array.isArray(jovo.$output) ? jovo.$output : [jovo.$output];
     const locale: string = this.getLocale(jovo.$request);
 
+    const model: JovoModelData =
+      this.config.models?.[locale] ||
+      (this.config.modelsDirectory
+        ? require(resolve(joinPaths(this.config.modelsDirectory, locale)))
+        : {});
+
+    if (!model.inputTypes) {
+      throw new JovoError({
+        message: `No input types found for language model for locale ${locale}`,
+      });
+    }
+
+    if (!model.intents) {
+      throw new JovoError({
+        message: `No intents found for language model for locale ${locale}`,
+      });
+    }
+
     for (const output of outputs) {
       const listen = output.platforms?.[jovo.$platform.constructor.name]?.listen ?? output.listen;
 
@@ -91,24 +109,6 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
 
       for (const entity of listen.entities.types || []) {
         const requestData: JovoModelData = { invocation: '', intents: [], inputTypes: [] };
-
-        // Get intent and values from Jovo model
-        // TODO: Read model location from project configuration instead of passing it to config again?
-        const modelPath = resolve(joinPaths(this.config.modelsDirectory, locale));
-        let model: JovoModelData | undefined;
-        try {
-          model = require(modelPath);
-        } finally {
-          if (!model) {
-            throw new JovoError({
-              message: `Couldn't find a language model for locale ${locale}.`,
-            });
-          }
-        }
-
-        if (!model.inputTypes) {
-          continue;
-        }
 
         const originalInputType: InputType | undefined = model.inputTypes.find(
           (inputType) => inputType.name === entity.name,
@@ -125,10 +125,6 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
         // Merge values from original input type with dynamic ones
         originalInputType.values.push(...(entity.values || []));
         requestData.inputTypes!.push(originalInputType);
-
-        if (!model.intents) {
-          continue;
-        }
 
         // Find all intents the input type is used in and provide them in the request to the Snips NLU server
         const intents: Intent[] = model.intents.filter((intent) => {
