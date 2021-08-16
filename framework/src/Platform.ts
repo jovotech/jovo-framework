@@ -13,10 +13,10 @@ import {
   JovoUser,
 } from '.';
 import { Extensible, ExtensibleConfig } from './Extensible';
+import { JovoDevice, JovoDeviceConstructor } from './JovoDevice';
 import { JovoRequest } from './JovoRequest';
 import { JovoUserConstructor } from './JovoUser';
 import { MiddlewareCollection } from './MiddlewareCollection';
-import { JovoDevice, JovoDeviceConstructor } from './JovoDevice';
 
 export type PlatformBaseMiddlewares = [
   '$init',

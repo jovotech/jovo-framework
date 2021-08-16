@@ -3,11 +3,10 @@ import {
   AxiosRequestConfig,
   AxiosResponse,
   DeepPartial,
-  HandleRequest,
   Jovo,
   NluData,
-  NluPlugin, NluPluginConfig,
-  PluginConfig,
+  NluPlugin,
+  NluPluginConfig,
 } from '@jovotech/framework';
 import { RasaResponse } from './interfaces';
 

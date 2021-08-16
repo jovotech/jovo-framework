@@ -16,7 +16,6 @@ import {
   I18NextResourcesLanguageKeys,
   I18NextResourcesNamespaceKeysOfLanguage,
   I18NextTOptions,
-  InputType,
   JovoInput,
   MetadataStorage,
   OutputConstructor,
@@ -53,7 +52,6 @@ export interface JovoPersistableData {
   createdAt?: string;
   updatedAt?: string;
 }
-
 
 export interface JovoComponentInfo<
   DATA extends ComponentData = ComponentData,

@@ -1,12 +1,12 @@
-import { URL } from 'url';
 import {
-  AxiosResponse,
-  AxiosRequestConfig,
   axios,
-  Method,
+  AxiosRequestConfig,
+  AxiosResponse,
   JovoError,
   JovoErrorOptions,
+  Method,
 } from '@jovotech/framework';
+import { URL } from 'url';
 
 export enum AlexaApiErrorCode {
   PARSE_ERROR = 'PARSE_ERROR',

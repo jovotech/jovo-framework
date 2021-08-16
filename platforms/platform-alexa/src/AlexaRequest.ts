@@ -1,5 +1,4 @@
 import {
-  AsrData,
   Entity,
   EntityMap,
   InputType,

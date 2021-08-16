@@ -1,10 +1,8 @@
 import { BaseComponent, ComponentConstructor } from '../BaseComponent';
 import { BuiltInHandler } from '../enums';
 import { DuplicateChildComponentsError } from '../errors/DuplicateChildComponentsError';
-import { InputType } from '../JovoInput';
 import { ComponentMetadata, ComponentOptions } from '../metadata/ComponentMetadata';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
-import { HandlerOptionMetadata } from '../metadata/HandlerOptionMetadata';
 import { MetadataStorage } from '../metadata/MetadataStorage';
 import { getMethodKeys } from '../utilities';
 

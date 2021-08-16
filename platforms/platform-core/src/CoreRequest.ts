@@ -1,5 +1,4 @@
 import {
-  AsrData,
   EntityMap,
   InputTypeLike,
   JovoInput,

@@ -1,7 +1,6 @@
 import { ComponentTreeNode } from '../ComponentTreeNode';
 import { BuiltInHandler } from '../enums';
 import { MatchingRouteNotFoundError } from '../errors/MatchingRouteNotFoundError';
-import { Intent } from '../interfaces';
 import { Jovo } from '../Jovo';
 import { InputType } from '../JovoInput';
 import { ComponentMetadata } from '../metadata/ComponentMetadata';
