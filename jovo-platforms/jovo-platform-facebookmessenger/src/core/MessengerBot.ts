@@ -120,6 +120,12 @@ export class MessengerBot extends Jovo {
     return this;
   }
 
+  private setResponses(message: any): void {
+    const currentResponses = _get(this.$output, 'FacebookMessenger.responses') ?? [];
+    const responses = [...currentResponses, message];
+    _set(this.$output, 'FacebookMessenger.responses', responses);
+  }
+
   showQuickReplies(quickReplies: Array<QuickReply | GenericQuickReply | string>): this {
     return this.setQuickReplies(quickReplies);
   }
@@ -147,6 +153,7 @@ export class MessengerBot extends Jovo {
 
   async showText(options: TextMessageOptions): Promise<AxiosResponse<SendMessageResponse>> {
     const message = new TextMessage({ id: this.$user.getId()! }, { ...options });
+    this.setResponses(message);
     return message.send(this.pageAccessToken, this.version);
   }
 
@@ -154,6 +161,7 @@ export class MessengerBot extends Jovo {
     options: AttachmentMessageOptions,
   ): Promise<AxiosResponse<SendMessageResponse>> {
     const message = new AttachmentMessage({ id: this.$user.getId()! }, options);
+    this.setResponses(message);
     return message.send(this.pageAccessToken, this.version);
   }
 
@@ -165,6 +173,7 @@ export class MessengerBot extends Jovo {
       template_type: TemplateType.Airline,
     };
     const message = new AirlineTemplate({ id: this.$user.getId()! }, payload);
+    this.setResponses(message);
     return message.send(this.pageAccessToken, this.version);
   }
 
@@ -176,6 +185,7 @@ export class MessengerBot extends Jovo {
       template_type: TemplateType.Button,
     };
     const message = new ButtonTemplate({ id: this.$user.getId()! }, payload);
+    this.setResponses(message);
     return message.send(this.pageAccessToken, this.version);
   }
 
@@ -187,6 +197,7 @@ export class MessengerBot extends Jovo {
       template_type: TemplateType.Generic,
     };
     const message = new GenericTemplate({ id: this.$user.getId()! }, payload);
+    this.setResponses(message);
     return message.send(this.pageAccessToken, this.version);
   }
 
@@ -198,6 +209,7 @@ export class MessengerBot extends Jovo {
       template_type: TemplateType.Media,
     };
     const message = new MediaTemplate({ id: this.$user.getId()! }, payload);
+    this.setResponses(message);
     return message.send(this.pageAccessToken, this.version);
   }
 
@@ -209,6 +221,7 @@ export class MessengerBot extends Jovo {
       template_type: TemplateType.Receipt,
     };
     const message = new ReceiptTemplate({ id: this.$user.getId()! }, payload);
+    this.setResponses(message);
     return message.send(this.pageAccessToken, this.version);
   }
 

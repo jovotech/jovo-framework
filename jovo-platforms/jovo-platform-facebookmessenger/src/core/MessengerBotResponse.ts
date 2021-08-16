@@ -19,7 +19,10 @@ export class MessengerBotResponse implements JovoResponse {
     const response = Object.create(MessengerBotResponse.prototype);
     return Object.assign(response, json);
   }
-  message?: Message;
+
+  // Make message an array to handle cases where the bot is able to send
+  // multiple responses in one invocation.
+  message?: Message[];
 
   getReprompt(): string | undefined {
     return undefined;
@@ -66,16 +69,23 @@ export class MessengerBotResponse implements JovoResponse {
   }
 
   isTell(speechText?: string | string[]): boolean {
-    if (speechText && this.message) {
-      return this.message instanceof TextMessage
-        ? typeof speechText === 'string'
-          ? SpeechBuilder.removeSSML(speechText) === this.message.message.text
-          : speechText.some((text) => {
-              return SpeechBuilder.removeSSML(text) === (this.message as TextMessage).message.text;
-            })
-        : false;
+    if (!speechText || !this.message) {
+      return false;
     }
-    return this.message instanceof TextMessage;
+
+    if (typeof speechText === 'string') {
+      return (
+        SpeechBuilder.removeSSML(speechText) === (this.message?.[0] as TextMessage).message.text
+      );
+    }
+
+    if (Array.isArray(speechText)) {
+      return speechText.some((text) => {
+        return SpeechBuilder.removeSSML(text) === (this.message?.[0] as TextMessage).message.text;
+      });
+    }
+
+    return false;
   }
 
   setSessionAttributes(sessionAttributes: SessionData): this {
