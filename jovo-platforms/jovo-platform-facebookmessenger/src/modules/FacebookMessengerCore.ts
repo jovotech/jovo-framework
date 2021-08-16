@@ -49,10 +49,9 @@ export class FacebookMessengerCore implements Plugin {
   }
 
   async type(messengerBot: MessengerBot) {
-    let type: EnumRequestType = EnumRequestType.INTENT;
-
-    const payload = _get(messengerBot, '$request.messaging[0].postback.payload');
-    if (!!payload && !!this.launchPayload && payload === this.launchPayload) {
+    let type =
+      _get(messengerBot, '$request.messaging[0].postback.payload') ?? EnumRequestType.INTENT;
+    if (!!type && !!this.launchPayload && type === this.launchPayload) {
       type = EnumRequestType.LAUNCH;
     }
 
