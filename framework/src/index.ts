@@ -90,6 +90,7 @@ export * from './decorators/Output';
 export * from './decorators/Platforms';
 export * from './decorators/PrioritizedOverUnhandled';
 export * from './decorators/SubState';
+export * from './decorators/Types';
 
 export * from './errors/ComponentNotFoundError';
 export * from './errors/DuplicateChildComponentsError';
