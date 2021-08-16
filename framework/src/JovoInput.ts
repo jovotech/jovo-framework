@@ -18,7 +18,7 @@ export class JovoInput {
   nlu?: NluData;
 
   // InputType.Intent
-  intent?: string;
+  intent?: NluData['intent'];
   entities?: EntityMap;
 
   // InputType.Text, InputType.TranscribedSpeech, InputType.Speech
