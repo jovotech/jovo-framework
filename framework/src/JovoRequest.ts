@@ -19,7 +19,7 @@ export abstract class JovoRequest {
 
   abstract getInputType(): InputTypeLike | undefined;
   abstract getInputText(): JovoInput['text'];
-  abstract getInputAudio(): JovoInput['text'];
+  abstract getInputAudio(): JovoInput['audio'];
 
   abstract getAsrData(): AsrData | undefined;
   getNluData(): NluData | undefined {
@@ -40,7 +40,7 @@ export abstract class JovoRequest {
       .set('intent', this.getIntent())
       .set('entities', this.getEntities())
       .set('text', this.getInputText())
-      .set('base64Audio', this.getInputAudio())
+      .set('audio', this.getInputAudio())
       .set('asr', this.getAsrData() || {})
       .set('nlu', this.getNluData() || {})
       .build();
@@ -49,6 +49,7 @@ export abstract class JovoRequest {
   abstract getSessionData(): UnknownObject | undefined;
   abstract getSessionId(): string | undefined;
   abstract isNewSession(): boolean | undefined;
+
   getSession(): Partial<JovoSession> | undefined {
     const sessionId = this.getSessionId();
     const sessionData = this.getSessionData();

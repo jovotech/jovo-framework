@@ -15,6 +15,11 @@ export const DEFAULT_INPUT_TYPE = InputType.Intent;
 
 export type InputTypeLike = EnumLike<InputType> | string;
 
+export interface AudioInput {
+  base64: string;
+  sampleRate: number;
+}
+
 export class JovoInput {
   asr: AsrData;
   nlu: NluData;
@@ -27,7 +32,7 @@ export class JovoInput {
   text?: string;
 
   // InputType.Speech
-  base64Audio?: string;
+  audio?: AudioInput;
 
   constructor(public type: InputTypeLike) {
     this.asr = {};
