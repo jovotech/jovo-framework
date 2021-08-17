@@ -21,8 +21,8 @@ export interface AudioInput {
 }
 
 export class JovoInput {
-  asr: AsrData;
-  nlu: NluData;
+  asr?: AsrData;
+  nlu?: NluData;
 
   // InputType.Intent
   intent?: NluData['intent'];
@@ -34,10 +34,7 @@ export class JovoInput {
   // InputType.Speech
   audio?: AudioInput;
 
-  constructor(public type: InputTypeLike) {
-    this.asr = {};
-    this.nlu = {};
-  }
+  constructor(public type: InputTypeLike) {}
 
   getIntentName(): string | undefined {
     function getIntentName(intent: Intent | string): string {
@@ -45,7 +42,7 @@ export class JovoInput {
     }
     return this.type === InputType.Intent && this.intent
       ? getIntentName(this.intent)
-      : this.nlu.intent
+      : this.nlu?.intent
       ? getIntentName(this.nlu.intent)
       : undefined;
   }
