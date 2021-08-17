@@ -14,6 +14,7 @@ import {
   Type,
   ValidateNested,
 } from '@jovotech/output';
+import { ADDRESS_COUNTRY_LENGTH, RECEIPT_TEMPLATE_ELEMENTS_MAX_SIZE } from '../../constants';
 import { Template, TemplateType } from './Template';
 
 export class ReceiptAddress {
@@ -39,7 +40,7 @@ export class ReceiptAddress {
   state: string;
 
   @IsString()
-  @Length(2)
+  @Length(ADDRESS_COUNTRY_LENGTH)
   country: string;
 }
 
@@ -131,7 +132,7 @@ export class ReceiptTemplate extends Template<TemplateType.Receipt> {
 
   @IsOptional()
   @IsArray()
-  @ArrayMaxSize(100)
+  @ArrayMaxSize(RECEIPT_TEMPLATE_ELEMENTS_MAX_SIZE)
   @ValidateNested({ each: true })
   @Type(() => ReceiptTemplateElement)
   elements?: ReceiptTemplateElement[];

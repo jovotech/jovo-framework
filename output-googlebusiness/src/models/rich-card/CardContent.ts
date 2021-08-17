@@ -9,20 +9,25 @@ import {
   Type,
   ValidateNested,
 } from '@jovotech/output';
-import { Media } from './Media';
+import {
+  CARD_CONTENT_DESCRIPTION_MAX_LENGTH,
+  CARD_CONTENT_SUGGESTIONS_MAX_SIZE,
+  CARD_CONTENT_TITLE_MAX_LENGTH,
+} from '../../constants';
 import { Suggestion } from '../Suggestion';
+import { Media } from './Media';
 
 export class CardContent {
   @IsOptional()
   @IsString()
   @IsNotEmpty()
-  @MaxLength(200)
+  @MaxLength(CARD_CONTENT_TITLE_MAX_LENGTH)
   title?: string;
 
   @IsOptional()
   @IsString()
   @IsNotEmpty()
-  @MaxLength(2000)
+  @MaxLength(CARD_CONTENT_DESCRIPTION_MAX_LENGTH)
   description?: string;
 
   @IsOptional()
@@ -32,7 +37,7 @@ export class CardContent {
 
   @IsOptional()
   @IsArray()
-  @ArrayMaxSize(4)
+  @ArrayMaxSize(CARD_CONTENT_SUGGESTIONS_MAX_SIZE)
   @ValidateNested({ each: true })
   @Type(() => Suggestion)
   suggestions?: Suggestion[];

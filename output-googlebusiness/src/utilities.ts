@@ -24,10 +24,22 @@ export function augmentModelPrototypes(): void {
     return card;
   };
 
+  Card.prototype.toGoogleBusinessRichCard = function () {
+    return {
+      standaloneCard: this.toGoogleBusinessCard!(),
+    };
+  };
+
   Carousel.prototype.toGoogleBusinessCarousel = function () {
     return {
       cardWidth: CardWidth.Medium,
       cardContents: this.items.map((card) => card.toGoogleBusinessCard?.() || {}),
+    };
+  };
+
+  Carousel.prototype.toGoogleBusinessRichCard = function () {
+    return {
+      carouselCard: this.toGoogleBusinessCarousel!(),
     };
   };
 

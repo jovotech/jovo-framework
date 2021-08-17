@@ -4,9 +4,11 @@ import {
   mergeInstances,
   MessageValue,
   OutputTemplate,
+  OutputTemplateConverterStrategyConfig,
   QuickReplyValue,
   SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
+import { QUICK_REPLIES_MAX_SIZE, QUICK_REPLY_MAX_LENGTH, TEXT_MAX_LENGTH } from './constants';
 import {
   DialogflowResponse,
   EntityOverrideMode,
@@ -16,14 +18,47 @@ import {
 } from './models';
 
 // TODO CHECK: Theoretically, multiple messages are supported in the response, in the future this could be refactored for that.
-export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<DialogflowResponse> {
+export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<
+  DialogflowResponse,
+  OutputTemplateConverterStrategyConfig
+> {
   platformName = 'Dialogflow';
   responseClass = DialogflowResponse;
 
-  buildResponse(output: OutputTemplate): DialogflowResponse {
+  protected sanitizeOutput(output: OutputTemplate): OutputTemplate {
+    if (output.message) {
+      output.message = this.sanitizeMessage(output.message, 'message');
+    }
+
+    if (output.quickReplies) {
+      output.quickReplies = this.sanitizeQuickReplies(output.quickReplies, 'quickReplies');
+    }
+
+    return output;
+  }
+
+  protected sanitizeMessage(
+    message: MessageValue,
+    path: string,
+    maxLength = TEXT_MAX_LENGTH,
+    offset?: number,
+  ): MessageValue {
+    return super.sanitizeMessage(message, path, maxLength, offset);
+  }
+
+  protected sanitizeQuickReplies(
+    quickReplies: QuickReplyValue[],
+    path: string,
+    maxSize = QUICK_REPLIES_MAX_SIZE,
+    maxLength = QUICK_REPLY_MAX_LENGTH,
+  ): QuickReplyValue[] {
+    return super.sanitizeQuickReplies(quickReplies, path, maxSize, maxLength);
+  }
+
+  toResponse(output: OutputTemplate): DialogflowResponse {
     const response: DialogflowResponse = {};
 
-    const listen = output.platforms?.Dialogflow?.listen ?? output.listen;
+    const listen = output.listen;
     if (typeof listen === 'object' && listen.entities?.types?.length) {
       const entityOverrideMode: EntityOverrideMode =
         listen.entities.mode === DynamicEntitiesMode.Merge
@@ -34,7 +69,7 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
       );
     }
 
-    const message = output.platforms?.Dialogflow?.message || output.message;
+    const message = output.message;
     if (message) {
       if (!response.fulfillment_messages) {
         response.fulfillment_messages = [];
@@ -46,7 +81,7 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
       });
     }
 
-    const quickReplies = output.platforms?.Dialogflow?.quickReplies || output.quickReplies;
+    const quickReplies = output.quickReplies;
     if (quickReplies?.length) {
       if (!response.fulfillment_messages) {
         response.fulfillment_messages = [];
@@ -54,13 +89,15 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
       response.fulfillment_messages.push({
         message: {
           quick_replies: {
-            quick_replies: quickReplies.map(this.convertQuickReplyToDialogflowQuickReply),
+            quick_replies: quickReplies
+              .slice(0, QUICK_REPLIES_MAX_SIZE)
+              .map(this.convertQuickReplyToDialogflowQuickReply),
           },
         },
       });
     }
 
-    const card = output.platforms?.Dialogflow?.card || output.card;
+    const card = output.card;
     if (card) {
       if (!response.fulfillment_messages) {
         response.fulfillment_messages = [];

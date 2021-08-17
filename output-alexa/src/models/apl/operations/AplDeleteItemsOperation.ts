@@ -1,4 +1,5 @@
 import { Equals, IsInt, Min } from '@jovotech/output';
+import { APL_OPERATION_COUNT_MIN } from '../../../constants';
 import { AplOperation, AplOperationType } from '../AplOperation';
 
 export class AplDeleteItemsOperation extends AplOperation<AplOperationType.DeleteItems> {
@@ -6,6 +7,6 @@ export class AplDeleteItemsOperation extends AplOperation<AplOperationType.Delet
   type: AplOperationType.DeleteItems;
 
   @IsInt()
-  @Min(1)
+  @Min(APL_OPERATION_COUNT_MIN)
   count: number;
 }

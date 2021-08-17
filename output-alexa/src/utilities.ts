@@ -1,6 +1,7 @@
 import { Card, Carousel, CarouselItem, Message } from '@jovotech/output';
 import AplCardJson from './apl/Card.json';
 import AplCarouselJson from './apl/Carousel.json';
+import { ALEXA_STRING_MAX_LENGTH } from './constants';
 import {
   AplRenderDocumentDirective,
   Card as AlexaCard,
@@ -15,8 +16,8 @@ export function validateAlexaString(value: unknown): string | undefined | null |
   if (!value) {
     return '$property should not be empty';
   }
-  if (value.length > 8000) {
-    return '$property can not exceed 8000 characters';
+  if (value.length > ALEXA_STRING_MAX_LENGTH) {
+    return `$property can not exceed ${ALEXA_STRING_MAX_LENGTH} characters`;
   }
   return;
 }

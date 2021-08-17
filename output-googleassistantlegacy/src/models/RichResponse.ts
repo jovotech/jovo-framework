@@ -6,6 +6,7 @@ import {
   Type,
   ValidateNested,
 } from '@jovotech/output';
+import { RICH_RESPONSE_ITEMS_MIN_SIZE, SUGGESTIONS_MAX_SIZE } from '../constants';
 import { IsValidRichResponseItemArray } from '../decorators/validation/IsValidRichResponseItemArray';
 import { Suggestion } from './common/Suggestion';
 import { LinkOutSuggestion } from './LinkOutSuggestion';
@@ -13,7 +14,7 @@ import { RichResponseItem } from './RichResponseItem';
 
 export class RichResponse {
   @IsArray()
-  @ArrayMinSize(1)
+  @ArrayMinSize(RICH_RESPONSE_ITEMS_MIN_SIZE)
   @ValidateNested({
     each: true,
   })
@@ -23,7 +24,7 @@ export class RichResponse {
 
   @IsOptional()
   @IsArray()
-  @ArrayMaxSize(8)
+  @ArrayMaxSize(SUGGESTIONS_MAX_SIZE)
   @ValidateNested({ each: true })
   @Type(() => Suggestion)
   suggestions?: Suggestion[];

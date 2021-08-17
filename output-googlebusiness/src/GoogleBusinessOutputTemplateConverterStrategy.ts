@@ -4,86 +4,135 @@ import {
   MessageValue,
   MultipleResponsesOutputTemplateConverterStrategy,
   OutputTemplate,
+  OutputTemplateConverterStrategyConfig,
   QuickReplyValue,
   removeSSML,
 } from '@jovotech/output';
+import {
+  CARD_CONTENT_DESCRIPTION_MAX_LENGTH,
+  CARD_CONTENT_TITLE_MAX_LENGTH,
+  CAROUSEL_MAX_SIZE,
+  CAROUSEL_MIN_SIZE,
+  SUGGESTION_TEXT_MAX_LENGTH,
+  SUGGESTIONS_MAX_SIZE,
+} from './constants';
 import { GoogleBusinessResponse, RepresentativeType, Suggestion } from './models';
 
-export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleResponsesOutputTemplateConverterStrategy<GoogleBusinessResponse> {
+export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleResponsesOutputTemplateConverterStrategy<
+  GoogleBusinessResponse,
+  OutputTemplateConverterStrategyConfig
+> {
   responseClass = GoogleBusinessResponse;
+  platformName = 'GoogleBusiness';
 
-  // TODO improve code
-  convertTemplate(output: OutputTemplate): GoogleBusinessResponse {
+  protected sanitizeOutput(output: OutputTemplate, index?: number): OutputTemplate {
+    const pathPrefix = index ? `[${index}]` : '';
+
+    if (output.card) {
+      output.card = this.sanitizeCard(output.card, `${pathPrefix}.card`);
+    }
+
+    if (output.carousel) {
+      output.carousel = this.sanitizeCarousel(output.carousel, `${pathPrefix}.carousel`);
+    }
+
+    if (output.quickReplies) {
+      output.quickReplies = this.sanitizeQuickReplies(
+        output.quickReplies,
+        `${pathPrefix}.quickReplies`,
+      );
+    }
+
+    return output;
+  }
+
+  protected sanitizeCard(card: Card, path: string): Card {
+    if (!this.shouldSanitize('maxLength')) {
+      return card;
+    }
+
+    if (card.title.length > CARD_CONTENT_TITLE_MAX_LENGTH) {
+      card.title = card.title.slice(0, CARD_CONTENT_TITLE_MAX_LENGTH);
+      this.logStringTruncationWarning(`${path}.title`, CARD_CONTENT_TITLE_MAX_LENGTH);
+    }
+
+    if (card.content && card.content.length > CARD_CONTENT_DESCRIPTION_MAX_LENGTH) {
+      card.content = card.content.slice(0, CARD_CONTENT_DESCRIPTION_MAX_LENGTH);
+      this.logStringTruncationWarning(`${path}.content`, CARD_CONTENT_DESCRIPTION_MAX_LENGTH);
+    }
+
+    return card;
+  }
+
+  protected sanitizeQuickReplies(
+    quickReplies: QuickReplyValue[],
+    path: string,
+    maxSize = SUGGESTIONS_MAX_SIZE,
+    maxLength = SUGGESTION_TEXT_MAX_LENGTH,
+  ): QuickReplyValue[] {
+    return super.sanitizeQuickReplies(quickReplies, path, maxSize, maxLength);
+  }
+
+  protected sanitizeCarousel(
+    carousel: Carousel,
+    path: string,
+    minSize = CAROUSEL_MIN_SIZE,
+    maxSize = CAROUSEL_MAX_SIZE,
+  ): Carousel {
+    return super.sanitizeCarousel(carousel, path, minSize, maxSize);
+  }
+
+  convertOutput(output: OutputTemplate): GoogleBusinessResponse | GoogleBusinessResponse[] {
     const getResponseBase: () => GoogleBusinessResponse = () => ({
-      // TODO determine whether uuid should be used here or that's something that the developer has to do
-      messageId: '*',
+      messageId: '',
       representative: {
         representativeType: RepresentativeType.Bot,
       },
     });
-    let response: GoogleBusinessResponse | GoogleBusinessResponse[] = getResponseBase();
+    const responses: GoogleBusinessResponse[] = [];
 
-    const addToResponse = <KEY extends 'text' | 'image' | 'richCard'>(
+    const addResponse = <KEY extends 'text' | 'image' | 'richCard'>(
       key: KEY,
       content: GoogleBusinessResponse[KEY],
     ) => {
-      if (!Array.isArray(response) && (response.text || response.image || response.richCard)) {
-        response = [response];
-      }
-      if (Array.isArray(response)) {
-        const newResponse = getResponseBase();
-        newResponse[key] = content;
-        response.push(newResponse);
-      } else {
-        response[key] = content;
-      }
+      const newResult = getResponseBase();
+      newResult[key] = content;
+      responses.push(newResult);
     };
 
-    const conversionMap: Partial<
-      Record<
-        keyof OutputTemplate,
-        (
-          val: any,
-        ) =>
-          | GoogleBusinessResponse['text']
-          | GoogleBusinessResponse['image']
-          | GoogleBusinessResponse['richCard']
-      >
-    > = {
-      message: (message: MessageValue) => this.convertMessageToGoogleBusinessText(message),
-      card: (card: Card) => ({ standaloneCard: card.toGoogleBusinessCard!() }),
-      carousel: (carousel: Carousel) => ({ carouselCard: carousel.toGoogleBusinessCarousel!() }),
-    };
-
-    const responseKeyMap: Record<keyof OutputTemplate, 'text' | 'image' | 'richCard' | undefined> =
-      {
-        message: 'text',
-        card: 'richCard',
-        carousel: 'richCard',
-      };
-
-    const enumerateOutputTemplate = (outputTemplate: OutputTemplate) => {
-      for (const key in outputTemplate) {
-        if (outputTemplate.hasOwnProperty(key) && outputTemplate[key]) {
-          const conversionFn = conversionMap[key];
-          const responseKey = responseKeyMap[key];
-          if (conversionFn && responseKey) {
-            addToResponse(responseKey, conversionFn(outputTemplate[key]));
-          }
-        }
-      }
-    };
-
-    enumerateOutputTemplate(output);
-    if (output.platforms?.GoogleBusiness) {
-      enumerateOutputTemplate(output.platforms.GoogleBusiness);
+    const message = output.message;
+    if (message) {
+      addResponse('text', this.convertMessageToGoogleBusinessText(message));
     }
 
-    // TODO determine what to do with nativeResponse!
-    // if (output.platforms?.GoogleBusiness?.nativeResponse) {
-    // }
+    const card = output.card;
+    if (card?.toGoogleBusinessRichCard) {
+      addResponse('richCard', card.toGoogleBusinessRichCard());
+    }
 
-    return response;
+    const carousel = output.carousel;
+    if (carousel?.toGoogleBusinessRichCard) {
+      addResponse('richCard', carousel.toGoogleBusinessRichCard());
+    }
+
+    if (output.platforms?.GoogleBusiness?.nativeResponse) {
+      // TODO determine what to do with nativeResponse!
+    }
+
+    const quickReplies = output.quickReplies;
+    if (quickReplies?.length) {
+      const lastResponseWithContent = responses
+        .slice()
+        .reverse()
+        .find((response) => !!response.text || !!response.richCard);
+      if (lastResponseWithContent) {
+        lastResponseWithContent.suggestions = quickReplies.map(
+          this.convertQuickReplyToGoogleBusinessSuggestion,
+        );
+      }
+    }
+
+    return responses.length === 1 ? responses[0] : responses;
   }
 
   convertResponse(response: GoogleBusinessResponse): OutputTemplate {

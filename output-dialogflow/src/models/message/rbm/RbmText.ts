@@ -7,6 +7,7 @@ import {
   Type,
   ArrayMinSize,
 } from '@jovotech/output';
+import { RBM_TEXT_SUGGESTIONS_MIN_SIZE } from '../../../constants';
 import { RbmSuggestion } from './RbmSuggestion';
 
 export class RbmText {
@@ -16,7 +17,7 @@ export class RbmText {
 
   @IsOptional()
   @IsArray()
-  @ArrayMinSize(1)
+  @ArrayMinSize(RBM_TEXT_SUGGESTIONS_MIN_SIZE)
   @ValidateNested()
   @Type(() => RbmSuggestion)
   rbm_suggestion?: RbmSuggestion[];

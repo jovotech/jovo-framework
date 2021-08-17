@@ -13,7 +13,7 @@ import { Session } from './Session';
 import { User } from './User';
 
 // TODO: Find better names for output and repromptOutputs!
-export class CorePlatformResponse extends JovoResponse {
+export class CoreResponse extends JovoResponse {
   @IsString()
   @IsNotEmpty()
   version: string;

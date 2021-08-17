@@ -1,7 +1,7 @@
 import {
   ArrayMaxSize,
-  formatValidationErrors,
   Card,
+  formatValidationErrors,
   IsArray,
   IsEnum,
   IsNotEmpty,
@@ -13,6 +13,11 @@ import {
   validate,
   ValidateNested,
 } from '@jovotech/output';
+import {
+  BASIC_CARD_BUTTONS_MAX_SIZE,
+  BASIC_CARD_TEXT_MAX_LENGTH,
+  BASIC_CARD_WITH_IMAGE_TEXT_MAX_LENGTH,
+} from '../../constants';
 import { Button } from '../common/Button';
 import { Image } from '../common/Image';
 
@@ -42,7 +47,9 @@ export class BasicCard {
       if (!value) {
         return '$property should not be empty';
       }
-      const maxLength = (args.object as BasicCard).image ? 500 : 750;
+      const maxLength = (args.object as BasicCard).image
+        ? BASIC_CARD_WITH_IMAGE_TEXT_MAX_LENGTH
+        : BASIC_CARD_TEXT_MAX_LENGTH;
       if (value.length >= maxLength) {
         return `$property must be shorter than or equal to ${maxLength} characters`;
       }
@@ -74,7 +81,7 @@ export class BasicCard {
 
   @IsOptional()
   @IsArray()
-  @ArrayMaxSize(1)
+  @ArrayMaxSize(BASIC_CARD_BUTTONS_MAX_SIZE)
   @ValidateNested({ each: true })
   @Type(() => Button)
   buttons?: [Button];

@@ -9,6 +9,7 @@ import {
   Type,
   ValidateNested,
 } from '@jovotech/output';
+import { COLLECTION_MAX_SIZE, COLLECTION_MIN_SIZE } from '../../constants';
 import { ImageFill, ImageFillLike } from '../common/Image';
 
 export class Collection {
@@ -23,8 +24,8 @@ export class Collection {
   subtitle?: string;
 
   @IsArray()
-  @ArrayMinSize(2)
-  @ArrayMaxSize(10)
+  @ArrayMinSize(COLLECTION_MIN_SIZE)
+  @ArrayMaxSize(COLLECTION_MAX_SIZE)
   @ValidateNested({ each: true })
   @Type(() => CollectionItem)
   items: CollectionItem[];

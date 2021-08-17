@@ -7,6 +7,7 @@ import {
   Type,
   ValidateNested,
 } from '@jovotech/output';
+import { BODY_TEMPLATE_MAIN_TEXT_MAX_LENGTH } from '../../../constants';
 import { MainTextMaxLength } from '../../../decorators/validation/MainTextMaxLength';
 import { Image } from '../../common/Image';
 import {
@@ -38,7 +39,7 @@ export class BodyTemplate6 implements DisplayTemplate<DisplayTemplateType.Body6>
   @Type(() => Image)
   image: Image;
 
-  @MainTextMaxLength(85)
+  @MainTextMaxLength(BODY_TEMPLATE_MAIN_TEXT_MAX_LENGTH)
   @ValidateNested()
   @Type(() => TextContent)
   textContent: TextContent;

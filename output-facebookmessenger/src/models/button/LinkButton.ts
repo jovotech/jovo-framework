@@ -7,8 +7,8 @@ import {
   IsString,
   IsUrl,
   MaxLength,
-  ValidateIf,
 } from '@jovotech/output';
+import { BUTTON_TITLE_MAX_LENGTH } from '../../constants';
 import { Button, ButtonType } from './Button';
 
 export enum WebViewHeightRatio {
@@ -30,7 +30,7 @@ export class LinkButton extends Button<ButtonType.Link> {
 
   @IsString()
   @IsNotEmpty()
-  @MaxLength(20)
+  @MaxLength(BUTTON_TITLE_MAX_LENGTH)
   title: string;
 
   @IsUrl()

@@ -8,6 +8,7 @@ import {
   IsString,
   Min,
 } from '@jovotech/output';
+import { APL_LIST_VERSION_MIN } from '../../constants';
 import { AplIndexListDirective } from './AplIndexListDirective';
 
 export class AplSendIndexListDataDirective extends AplIndexListDirective<'Alexa.Presentation.APL.SendIndexListData'> {
@@ -21,7 +22,7 @@ export class AplSendIndexListDataDirective extends AplIndexListDirective<'Alexa.
 
   @IsOptional()
   @IsInt()
-  @Min(0)
+  @Min(APL_LIST_VERSION_MIN)
   listVersion?: number;
 
   @IsOptional()

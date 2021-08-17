@@ -6,6 +6,7 @@ import {
   IsString,
   MaxLength,
 } from '@jovotech/output';
+import { QUICK_REPLIES_MAX_SIZE, QUICK_REPLY_MAX_LENGTH } from '../../constants';
 
 export class QuickReplies {
   @IsOptional()
@@ -15,8 +16,8 @@ export class QuickReplies {
 
   @IsOptional()
   @IsArray()
-  @ArrayMaxSize(10)
-  @MaxLength(20, { each: true })
+  @ArrayMaxSize(QUICK_REPLIES_MAX_SIZE)
+  @MaxLength(QUICK_REPLY_MAX_LENGTH, { each: true })
   @IsString({ each: true })
   @IsNotEmpty({ each: true })
   quick_replies?: string[];

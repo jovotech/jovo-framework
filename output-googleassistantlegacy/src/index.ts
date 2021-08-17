@@ -53,5 +53,6 @@ export * from './decorators/validation/IsValidRichResponseItemObject';
 export * from './decorators/validation/IsValidSimpleResponseString';
 
 export * from './models';
+export * from './constants';
 
 export * from './GoogleAssistantOutputTemplateConverterStrategy';

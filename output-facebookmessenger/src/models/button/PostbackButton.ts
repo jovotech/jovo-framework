@@ -1,4 +1,5 @@
 import { Equals, IsNotEmpty, IsString, MaxLength } from '@jovotech/output';
+import { BUTTON_TITLE_MAX_LENGTH, PAYLOAD_MAX_LENGTH } from '../../constants';
 import { Button, ButtonType } from './Button';
 
 export class PostbackButton extends Button<ButtonType.Postback> {
@@ -7,11 +8,11 @@ export class PostbackButton extends Button<ButtonType.Postback> {
 
   @IsString()
   @IsNotEmpty()
-  @MaxLength(20)
+  @MaxLength(BUTTON_TITLE_MAX_LENGTH)
   title: string;
 
   @IsString()
   @IsNotEmpty()
-  @MaxLength(1000)
+  @MaxLength(PAYLOAD_MAX_LENGTH)
   payload: string;
 }

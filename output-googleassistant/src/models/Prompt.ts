@@ -1,4 +1,5 @@
 import {
+  ArrayMaxSize,
   IsArray,
   IsBoolean,
   IsNotEmpty,
@@ -11,6 +12,7 @@ import {
   Type,
   ValidateNested,
 } from '@jovotech/output';
+import { SUGGESTIONS_MAX_SIZE, TEXT_MAX_LENGTH } from '../constants';
 import { IsValidContentObject } from '../decorators/validation/IsValidContentObject';
 import { Image } from './common/Image';
 import { Link } from './common/Link';
@@ -43,7 +45,7 @@ export class Simple {
   @IsOptional()
   @IsString()
   @IsNotEmpty()
-  @MaxLength(640)
+  @MaxLength(TEXT_MAX_LENGTH)
   text?: string;
 
   toMessage?(): MessageValue {
@@ -105,6 +107,7 @@ export class Prompt {
 
   @IsOptional()
   @IsArray()
+  @ArrayMaxSize(SUGGESTIONS_MAX_SIZE)
   @ValidateNested({ each: true })
   @Type(() => Suggestion)
   suggestions?: Suggestion[];

@@ -7,9 +7,9 @@ import {
   IsUrl,
   MaxLength,
   Type,
-  ValidateIf,
   ValidateNested,
 } from '@jovotech/output';
+import { MERCHANT_ORDER_ID_MAX_LENGTH, ORDER_NOTE_MAX_LENGTH } from '../../constants';
 import { IsValidOrderExtension } from '../../decorators/validation/IsValidOrderExtension';
 import { Image } from '../common/Image';
 import { Action } from './Action';
@@ -31,7 +31,7 @@ export class Order {
 
   @IsString()
   @IsNotEmpty()
-  @MaxLength(128)
+  @MaxLength(MERCHANT_ORDER_ID_MAX_LENGTH)
   merchantOrderId: string;
 
   @IsOptional()
@@ -92,7 +92,7 @@ export class Order {
   @IsOptional()
   @IsString()
   @IsNotEmpty()
-  @MaxLength(1000)
+  @MaxLength(ORDER_NOTE_MAX_LENGTH)
   note?: string;
 
   @IsOptional()

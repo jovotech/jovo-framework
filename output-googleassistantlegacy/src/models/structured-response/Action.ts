@@ -1,4 +1,5 @@
 import { IsEnum, IsNotEmpty, MaxLength, IsString, Type, ValidateNested } from '@jovotech/output';
+import { ACTION_TITLE_MAX_LENGTH } from '../../constants';
 import { OpenUrlAction } from '../common/OpenUrlAction';
 import { ActionMetadata } from './ActionMetadata';
 
@@ -22,7 +23,7 @@ export class Action {
 
   @IsString()
   @IsNotEmpty()
-  @MaxLength(100)
+  @MaxLength(ACTION_TITLE_MAX_LENGTH)
   title: string;
 
   @ValidateNested()

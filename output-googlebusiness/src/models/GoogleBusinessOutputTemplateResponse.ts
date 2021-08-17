@@ -12,6 +12,7 @@ import {
   validate,
   ValidateNested,
 } from '@jovotech/output';
+import { SUGGESTIONS_MAX_SIZE } from '../constants';
 import { GoogleBusinessResponse } from './GoogleBusinessResponse';
 import { Image } from './Image';
 import { Representative } from './Representative';
@@ -38,7 +39,7 @@ export class GoogleBusinessOutputTemplateResponse implements Partial<GoogleBusin
 
   @IsOptional()
   @IsArray()
-  @ArrayMaxSize(13)
+  @ArrayMaxSize(SUGGESTIONS_MAX_SIZE)
   @ValidateNested({ each: true })
   @Type(() => Suggestion)
   suggestions?: Suggestion[];

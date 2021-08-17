@@ -11,14 +11,15 @@ import { augmentModelPrototypes } from './utilities';
 declare module '@jovotech/output/dist/types/models/Card' {
   interface Card {
     toFacebookMessengerGenericTemplate?(): GenericTemplate;
-
     toFacebookMessengerGenericTemplateElement?(): GenericTemplateElement;
+    toFacebookMessengerMessage?(): FacebookMessengerMessage;
   }
 }
 
 declare module '@jovotech/output/dist/types/models/Carousel' {
   interface Carousel {
     toFacebookMessengerGenericTemplate?(): GenericTemplate;
+    toFacebookMessengerMessage?(): FacebookMessengerMessage;
   }
 }
 
@@ -51,5 +52,6 @@ export * from './decorators/validation/CastedMaxLength';
 export * from './decorators/validation/IsValidGameMetaDataString';
 
 export * from './models';
+export * from './constants';
 
 export * from './FacebookMessengerOutputTemplateConverterStrategy';
