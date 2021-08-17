@@ -3,7 +3,6 @@ import {
   AxiosRequestConfig,
   AxiosResponse,
   DeepPartial,
-  HandleRequest,
   Jovo,
   NluData,
   NluPlugin,

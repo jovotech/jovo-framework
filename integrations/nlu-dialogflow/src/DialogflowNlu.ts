@@ -1,6 +1,5 @@
 import {
   DeepPartial,
-  HandleRequest,
   Jovo,
   JovoError,
   NluData,

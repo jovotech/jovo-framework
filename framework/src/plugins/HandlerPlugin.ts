@@ -1,4 +1,3 @@
-import { HandleRequest } from '../HandleRequest';
 import { App, PluginConfig, StateStackItem } from '../index';
 import { Jovo } from '../Jovo';
 import { Plugin } from '../Plugin';

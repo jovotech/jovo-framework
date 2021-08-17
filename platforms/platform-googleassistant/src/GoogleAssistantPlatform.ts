@@ -2,8 +2,8 @@ import {
   AnyObject,
   App,
   ExtensibleConfig,
-  HandleRequest,
   Jovo,
+  MiddlewareFunction,
   Platform,
 } from '@jovotech/framework';
 import {
@@ -70,7 +70,7 @@ export class GoogleAssistantPlatform extends Platform<
     return response;
   }
 
-  onRequestStart = (jovo: Jovo) => {
+  onRequestStart: MiddlewareFunction = (jovo: Jovo) => {
     // if the request is a no-input-request and a state exists, add the reprompt-component to the top
     const intentName = jovo.$googleAssistant?.$request?.intent?.name;
     if (

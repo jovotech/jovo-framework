@@ -3,7 +3,6 @@ import {
   DbItem,
   DbPlugin,
   DbPluginConfig,
-  HandleRequest,
   Jovo,
   PersistableSessionData,
   PersistableUserData,

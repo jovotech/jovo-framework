@@ -51,9 +51,8 @@ export class RoutingExecutor {
   }
 
   setSkipForRouteMatches(intentName: string, rankedRouteMatches: RouteMatch[]): void {
-    const isIntentToSkipUnhandled = this.jovo.$handleRequest.config.routing?.intentsToSkipUnhandled?.includes(
-      intentName,
-    );
+    const isIntentToSkipUnhandled =
+      this.jovo.$handleRequest.config.routing?.intentsToSkipUnhandled?.includes(intentName);
     // if the mapped intent is an intent that is supposed to skip UNHANDLED
     if (isIntentToSkipUnhandled) {
       // set skip: true for all UNHANDLED-matches
@@ -116,9 +115,8 @@ export class RoutingExecutor {
       const handlerMetadataToRouteMatchMapper = this.createHandlerMetadataToRouteMatchMapper(
         node.path,
       );
-      const relatedHandlerMetadata = MetadataStorage.getInstance().getMergedHandlerMetadataOfComponent(
-        node.metadata.target,
-      );
+      const relatedHandlerMetadata =
+        MetadataStorage.getInstance().getMergedHandlerMetadataOfComponent(node.metadata.target);
       for (const metadata of relatedHandlerMetadata) {
         // if the conditions are no fulfilled, do not add the handler
         if (!(await this.areHandlerConditionsFulfilled(metadata))) {
@@ -157,18 +155,16 @@ export class RoutingExecutor {
     let subState = latestStateStackItem.$subState;
 
     // get the current node
-    let node:
-      | ComponentTreeNode
-      | undefined = this.jovo.$handleRequest.componentTree.getNodeAtOrFail(currentComponentPath);
+    let node: ComponentTreeNode | undefined =
+      this.jovo.$handleRequest.componentTree.getNodeAtOrFail(currentComponentPath);
     // loop all nodes and their parent's as long as root is reached
     while (node) {
       // create a map-callback for the given node's path
       const handlerMetadataToRouteMatchMapper = this.createHandlerMetadataToRouteMatchMapper(
         node.path,
       );
-      const relatedHandlerMetadata = MetadataStorage.getInstance().getMergedHandlerMetadataOfComponent(
-        node.metadata.target,
-      );
+      const relatedHandlerMetadata =
+        MetadataStorage.getInstance().getMergedHandlerMetadataOfComponent(node.metadata.target);
 
       for (const metadata of relatedHandlerMetadata) {
         // if the conditions are no fulfilled, do not add the handler

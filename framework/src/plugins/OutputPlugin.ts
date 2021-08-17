@@ -1,6 +1,5 @@
 import { OutputTemplateConverter } from '@jovotech/output';
 import { App } from '../App';
-import { HandleRequest } from '../HandleRequest';
 import { Jovo } from '../Jovo';
 import { Plugin, PluginConfig } from '../Plugin';
 

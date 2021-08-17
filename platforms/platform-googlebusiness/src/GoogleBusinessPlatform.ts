@@ -3,7 +3,6 @@ import {
   Extensible,
   ExtensibleConfig,
   ExtensibleInitConfig,
-  HandleRequest,
   Jovo,
   Platform,
 } from '@jovotech/framework';
