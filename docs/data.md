@@ -119,16 +119,14 @@ this.$history.prev
 // Alternatively access it using the items array
 this.$history.items[0]
 
-/* Sample result if output and nlu are enabled
+/* Sample result if output and input are enabled
 {
   output: {
-    message: 'Hello World!'
+    message: 'Hello World!',
   },
-  nlu: {
-    intent: {
-      name: 'HelloWorldIntent'
-    }
-  }
+  input: {
+    intent: 'HelloWorldIntent',
+  },
 }
 */
 ```
@@ -151,17 +149,16 @@ new FileDb({
 }),
 ```
 
-You can add the following elements to the history:
+You can add the following [Jovo properties](./jovo-properties.md) to the history:
 
-* `output`: Stores `this.$output`
-* `state`: Stores `this.$state`
-* `nlu`: Stores `this.$nlu`
-* `entities`: Stores `this.$entities`
-* `asr`: Stores `this.$asr`
 * `request`: Stores `this.$request`
+* `input`: Stores `this.$input`
+* `output`: Stores `this.$output`
 * `response`: Stores `this.$response`
+* `state`: Stores `this.$state`
+* `entities`: Stores `this.$entities`
 
-You can even add your own cutom data to the history. Add any property with a function that returns the data to be stored. Here is an example for a `someCustomData` property:
+You can even add your own custom data to the history. Add any property with a function that returns the data to be stored. Here is an example for a `someCustomData` property:
 
 ```typescript
 new FileDb({
@@ -189,11 +186,9 @@ Here is an example how the history is then stored in a database:
           "output": {
             "message": "Yes! I love pizza, too."
           },
-          "nlu": {
-            "intent": {
-              "name": "AMAZON.YesIntent"
-            },
-            "entities": {}
+          "input": {
+            "type": "INTENT",
+            "intent": "AMAZON.YesIntent",
           },
           "state": [
             {
@@ -207,7 +202,9 @@ Here is an example how the history is then stored in a database:
             "message": "Hello World! Do you like pizza?",
             "listen": true
           },
-          "nlu": {},
+          "input": {
+            "TYPE": "LAUNCH"
+          },
           "state": [
             {
               "componentPath": "LoveHatePizzaComponent"
