@@ -8,7 +8,7 @@ Learn more about output templates for Google Assistant.
   - [Listen](#listen)
   - [Quick Replies (Suggestions)](#quick-replies-suggestions)
   - [Card](#card)
-  - [Carousel (Collection Browse)](#carousel-collection-browse)
+  - [Carousel (Collection)](#carousel-collection)
 - [Google Assistant-specific Output Elements](#google-assistant-specific-output-elements)
   - [Native Response](#native-response)
 
@@ -146,9 +146,9 @@ You can display a basic card ([see the official Google Assistant docs](https://d
 }
 ```
 
-### Carousel (Collection Browse)
+### Carousel (Collection)
 
-You can display a collection browse element ([see the official Google Assistant docs](https://developers.google.com/assistant/conversational/prompts-selection?hl=en)) by using the `carousel` property:
+You can display a collection ([see the official Google Assistant docs](https://developers.google.com/assistant/conversational/prompts-selection?hl=en)) by using the `carousel` property:
 
 ```typescript
 {
