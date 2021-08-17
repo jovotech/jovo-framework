@@ -1,5 +1,14 @@
 # Google Assistant Platform Integration
 
+The Google Assistant [platform integration](../docs/platforms.md) allows you to build custom Google Conversational Actions using Jovo.
+
+- [Getting Started](#getting-started)
+- [Platform-Specific Features](#platform-specific-features)
+    - [Google Assistant Concepts](#google-assistant-concepts)
+    - [User](#user)
+    - [Output](#output)
+- [Deployment](#deployment)
+
 ## Getting Started
 
 You can install the plugin like this:
