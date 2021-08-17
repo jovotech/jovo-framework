@@ -20,16 +20,18 @@ export class HandlerPlugin extends Plugin<HandlerPluginConfig> {
     return {};
   }
 
-  install(app: App): Promise<void> | void {
-    app.middlewareCollection.use('dialogue.logic', this.handle);
+  install(parent: App): Promise<void> | void {
+    parent.middlewareCollection.use('dialogue.logic', this.handle);
   }
 
-  private handle = async (handleRequest: HandleRequest, jovo: Jovo) => {
+  private handle = async (jovo: Jovo) => {
     if (!jovo.$route) {
       return;
     }
     // get the node at the resolved route-path
-    const componentNode = handleRequest.componentTree.getNodeAtOrFail(jovo.$route.resolved.path);
+    const componentNode = jovo.$handleRequest.componentTree.getNodeAtOrFail(
+      jovo.$route.resolved.path,
+    );
     // update the state-stack if the component is not global
     if (!componentNode.metadata.isGlobal) {
       const stackItem: StateStackItem = {
@@ -47,7 +49,7 @@ export class HandlerPlugin extends Plugin<HandlerPluginConfig> {
       }
     }
     // update the active component node in handleRequest to keep track of the state
-    handleRequest.$activeComponentNode = componentNode;
+    jovo.$handleRequest.$activeComponentNode = componentNode;
     // execute the component's handler
     await componentNode.executeHandler({
       jovo,

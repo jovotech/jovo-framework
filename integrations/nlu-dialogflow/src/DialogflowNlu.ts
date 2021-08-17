@@ -37,7 +37,7 @@ export class DialogflowNlu extends NluPlugin<DialogflowNluConfig> {
     };
   }
 
-  async process(handleRequest: HandleRequest, jovo: Jovo): Promise<NluData | undefined> {
+  async process(jovo: Jovo): Promise<NluData | undefined> {
     const text = jovo.$request.getRawText();
     if (!text) return;
     if (!jovo.$session.id) {

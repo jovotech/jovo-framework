@@ -1,4 +1,4 @@
-import { App, DbItem, DbPlugin, DbPluginConfig, HandleRequest, Jovo } from '@jovotech/framework';
+import { App, DbItem, DbPlugin, DbPluginConfig, Jovo } from '@jovotech/framework';
 import fs from 'fs';
 import path from 'path';
 import process from 'process';
@@ -57,7 +57,7 @@ export class FileDb extends DbPlugin<FileDbConfig> {
     });
   };
 
-  loadData = async (handleRequest: HandleRequest, jovo: Jovo): Promise<void> => {
+  loadData = async (jovo: Jovo): Promise<void> => {
     const dbItem = await this.getDbItem(jovo.$user.id);
     if (dbItem) {
       jovo.$user.isNew = false;
@@ -65,7 +65,7 @@ export class FileDb extends DbPlugin<FileDbConfig> {
     }
   };
 
-  saveData = async (handleRequest: HandleRequest, jovo: Jovo): Promise<void> => {
+  saveData = async (jovo: Jovo): Promise<void> => {
     const fileDataStr = await fs.promises.readFile(this.pathToFile, 'utf8');
     const users = fileDataStr.length > 0 ? JSON.parse(fileDataStr) : [];
     const id = jovo.$user.id;

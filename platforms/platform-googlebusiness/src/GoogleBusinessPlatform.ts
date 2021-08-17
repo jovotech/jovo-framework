@@ -58,7 +58,7 @@ export class GoogleBusinessPlatform extends Platform<
 
   install(parent: Extensible): void {
     super.install(parent);
-    parent.middlewareCollection.use('before.request', this.beforeRequest);
+    parent.middlewareCollection.use('before.request.start', this.beforeRequestStart);
   }
 
   isRequestRelated(request: AnyObject | GoogleBusinessRequest): boolean {
@@ -88,11 +88,11 @@ export class GoogleBusinessPlatform extends Platform<
     return response;
   }
 
-  private beforeRequest = (handleRequest: HandleRequest, jovo: Jovo) => {
+  private beforeRequestStart = (jovo: Jovo) => {
     // if the request is a typing-indicator-request or a receipt-request, just ignore it and send 200 to not get it sent multiple times
     if (jovo.$googleBusiness?.$request?.userStatus || jovo.$googleBusiness?.$request?.receipts) {
       jovo.$response = {} as GoogleBusinessResponse;
-      handleRequest.stopMiddlewareExecution();
+      jovo.$handleRequest.stopMiddlewareExecution();
     }
   };
 }

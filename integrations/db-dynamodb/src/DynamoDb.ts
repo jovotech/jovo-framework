@@ -123,7 +123,7 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
     return data.Item as DbItem;
   };
 
-  loadData = async (handleRequest: HandleRequest, jovo: Jovo): Promise<void> => {
+  loadData = async (jovo: Jovo): Promise<void> => {
     this.checkRequirements();
     const dbItem = await this.getDbItem(jovo.$user.id);
 
@@ -133,7 +133,7 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
     }
   };
 
-  saveData = async (handleRequest: HandleRequest, jovo: Jovo): Promise<void> => {
+  saveData = async (jovo: Jovo): Promise<void> => {
     this.checkRequirements();
 
     const params = {

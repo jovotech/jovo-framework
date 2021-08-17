@@ -1,4 +1,4 @@
-import { ArrayElement } from './index';
+import { ArrayElement, Jovo } from './index';
 import { Middleware, MiddlewareFunction } from './Middleware';
 
 export type PossibleMiddlewareName<MIDDLEWARES extends string[]> =
@@ -70,28 +70,38 @@ export class MiddlewareCollection<MIDDLEWARES extends string[] = string[]> {
     return this;
   }
 
-  async run<T extends unknown[]>(
-    name: PossibleMiddlewareName<MIDDLEWARES>,
-    ...args: T
-  ): Promise<void>;
-  async run<T extends unknown[]>(name: string, ...args: T): Promise<void>;
-  async run<T extends unknown[]>(
-    name: string | PossibleMiddlewareName<MIDDLEWARES>,
-    ...args: T
+  async run(name: PossibleMiddlewareName<MIDDLEWARES>, jovo: Jovo): Promise<void>;
+  async run(name: string, jovo: Jovo): Promise<void>;
+  async run(names: PossibleMiddlewareName<MIDDLEWARES>[], jovo: Jovo): Promise<void>;
+  async run(names: string[], jovo: Jovo): Promise<void>;
+  async run(
+    nameOrNames:
+      | string
+      | PossibleMiddlewareName<MIDDLEWARES>
+      | Array<string | PossibleMiddlewareName<MIDDLEWARES>>,
+    jovo: Jovo,
   ): Promise<void> {
-    const middleware = this.get(name);
-    if (!middleware) return;
-    const beforeName = `before.${name}`;
-    if (this.has(beforeName)) {
-      await this.run(beforeName, ...args);
-    }
+    const names = typeof nameOrNames === 'string' ? [nameOrNames] : nameOrNames;
 
-    await middleware.run(...args);
+    // make a promise-chain to run middlewares sequentially
+    const chain = names.reduce((chain: Promise<void>, name) => {
+      const middleware = this.get(name);
+      if (!middleware) return chain;
+      const beforeName = `before.${name}`;
+      if (this.has(beforeName)) {
+        chain.then(() => this.run(beforeName, jovo));
+      }
 
-    const afterName = `after.${name}`;
-    if (this.has(afterName)) {
-      await this.run(afterName, ...args);
-    }
+      chain.then(() => middleware.run(jovo));
+
+      const afterName = `after.${name}`;
+      if (this.has(afterName)) {
+        chain.then(() => this.run(afterName, jovo));
+      }
+
+      return chain;
+    }, Promise.resolve());
+    await chain;
   }
 
   disable(...names: PossibleMiddlewareName<MIDDLEWARES>[]): this;

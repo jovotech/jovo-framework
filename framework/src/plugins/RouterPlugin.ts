@@ -30,15 +30,15 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
     return {};
   }
 
-  install(app: App): Promise<void> | void {
-    app.middlewareCollection.use('before.dialogue.logic', this.setRoute);
+  install(parent: App): Promise<void> | void {
+    parent.middlewareCollection.use('dialogue.router', this.setRoute);
   }
 
   initialize(parent: App): Promise<void> | void {
     return this.checkForDuplicateGlobalHandlers(parent);
   }
 
-  private setRoute = async (handleRequest: HandleRequest, jovo: Jovo) => {
+  private setRoute = async (jovo: Jovo) => {
     // TODO determine order
     const intentName =
       jovo.$nlu.intent?.name ||

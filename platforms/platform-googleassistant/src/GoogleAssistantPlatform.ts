@@ -39,7 +39,7 @@ export class GoogleAssistantPlatform extends Platform<
 
   install(parent: App): void {
     super.install(parent);
-    parent.middlewareCollection.use('before.request', this.beforeRequest);
+    parent.middlewareCollection.use('request.start', this.onRequestStart);
   }
 
   initialize(parent: App): void {
@@ -70,10 +70,7 @@ export class GoogleAssistantPlatform extends Platform<
     return response;
   }
 
-  beforeRequest: (handleRequest: HandleRequest, jovo: Jovo) => void = (
-    handleRequest: HandleRequest,
-    jovo: Jovo,
-  ) => {
+  onRequestStart = (jovo: Jovo) => {
     // if the request is a no-input-request and a state exists, add the reprompt-component to the top
     const intentName = jovo.$googleAssistant?.$request?.intent?.name;
     if (

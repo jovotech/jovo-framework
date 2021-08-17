@@ -30,7 +30,7 @@ export type AppInitConfig = ExtensibleInitConfig<AppConfig> & {
 
 export type Usable = Plugin | ComponentConstructor | ComponentDeclaration;
 
-export type AppBaseMiddlewares = [
+export const APP_MIDDLEWARES = [
   'request.start',
   'request',
   'request.end',
@@ -46,29 +46,11 @@ export type AppBaseMiddlewares = [
   'response.output',
   'response.tts',
   'response.end',
-];
+] as const;
+export type AppMiddleware = ArrayElement<typeof APP_MIDDLEWARES>;
+export type AppMiddlewares = AppMiddleware[];
 
-export type AppBaseMiddleware = ArrayElement<AppBaseMiddlewares>;
-
-export const BASE_APP_MIDDLEWARES: AppBaseMiddlewares = [
-  'request.start',
-  'request',
-  'request.end',
-  'interpretation.start',
-  'interpretation.asr',
-  'interpretation.nlu',
-  'interpretation.end',
-  'dialogue.start',
-  'dialogue.router',
-  'dialogue.logic',
-  'dialogue.end',
-  'response.start',
-  'response.output',
-  'response.tts',
-  'response.end',
-];
-
-export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
+export class App extends Extensible<AppConfig, AppMiddlewares> {
   readonly componentTree: ComponentTree;
   readonly i18n: I18Next;
 
@@ -97,13 +79,13 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
     this.use(...usables);
   }
 
-  initializeMiddlewareCollection(): MiddlewareCollection<AppBaseMiddlewares> {
-    return new MiddlewareCollection(...BASE_APP_MIDDLEWARES);
+  initializeMiddlewareCollection(): MiddlewareCollection<AppMiddlewares> {
+    return new MiddlewareCollection(...APP_MIDDLEWARES);
   }
 
-  middleware(name: AppBaseMiddleware): Middleware | undefined;
+  middleware(name: AppMiddleware): Middleware | undefined;
   middleware(name: string): Middleware | undefined;
-  middleware(name: string | AppBaseMiddleware): Middleware | undefined {
+  middleware(name: string | AppMiddleware): Middleware | undefined {
     return this.middlewareCollection.get(name);
   }
 
@@ -146,24 +128,29 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
     const jovo = relatedPlatform.createJovoInstance(this, handleRequest);
 
     // RIDR-pipeline
-    await handleRequest.middlewareCollection.run('request.start', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('request', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('request.end', handleRequest, jovo);
+    await handleRequest.middlewareCollection.run(
+      [
+        'request.start',
+        'request',
+        'request.end',
 
-    await handleRequest.middlewareCollection.run('interpretation.start', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('interpretation.asr', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('interpretation.nlu', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('interpretation.end', handleRequest, jovo);
+        'interpretation.start',
+        'interpretation.asr',
+        'interpretation.nlu',
+        'interpretation.end',
 
-    await handleRequest.middlewareCollection.run('dialogue.start', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('dialogue.router', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('dialogue.logic', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('dialogue.end', handleRequest, jovo);
+        'dialogue.start',
+        'dialogue.router',
+        'dialogue.logic',
+        'dialogue.end',
 
-    await handleRequest.middlewareCollection.run('response.start', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('response.output', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('response.tts', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('response.end', handleRequest, jovo);
+        'response.start',
+        'response.output',
+        'response.tts',
+        'response.end',
+      ],
+      jovo,
+    );
 
     await handleRequest.dismount();
 
