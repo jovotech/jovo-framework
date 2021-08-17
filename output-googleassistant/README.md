@@ -148,7 +148,7 @@ You can display a basic card ([see the official Google Assistant docs](https://d
 
 ### Carousel (Collection)
 
-You can display a collection ([see the official Google Assistant docs](https://developers.google.com/assistant/conversational/prompts-selection?hl=en)) by using the `carousel` property:
+You can display a collection ([see the official Google Assistant docs](https://developers.google.com/assistant/conversational/prompts-selection?hl=en#collection)) by using the `carousel` property:
 
 ```typescript
 {
