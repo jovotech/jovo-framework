@@ -29,8 +29,12 @@ export interface SnipsNluConfig extends PluginConfig {
   serverUrl: string;
   serverPath: string;
   engineId: string;
-  modelsDirectory?: string;
-  models?: Record<string, JovoModelData>;
-  passModels?: boolean;
   fallbackLanguage: string;
+  dynamicEntities?: {
+    enabled: boolean;
+    serverPath: string;
+    modelsDirectory?: string;
+    models?: Record<string, JovoModelData>;
+    passModels?: boolean;
+  };
 }

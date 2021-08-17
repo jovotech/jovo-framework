@@ -31,6 +31,10 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
       fallbackLanguage: 'en',
       serverPath: '/engine/parse',
       engineId: uuidV4(),
+      dynamicEntities: {
+        enabled: false,
+        serverPath: '/engine/train/dynamic-entities',
+      },
     };
   }
 
@@ -79,9 +83,9 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
     const locale: string = this.getLocale(jovo.$request);
 
     const model: JovoModelData =
-      this.config.models?.[locale] ||
-      (this.config.modelsDirectory
-        ? require(resolve(joinPaths(this.config.modelsDirectory, locale)))
+      this.config.dynamicEntities?.models?.[locale] ||
+      (this.config.dynamicEntities?.modelsDirectory
+        ? require(resolve(joinPaths(this.config.dynamicEntities.modelsDirectory, locale)))
         : {});
 
     if (!model.inputTypes) {
