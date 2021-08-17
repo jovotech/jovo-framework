@@ -64,7 +64,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
         response.session = getEmptySession();
       }
       const text = typeof reprompt === 'string' ? reprompt : reprompt.displayText || reprompt.text;
-      response.session.params._GA_REPROMPTS_ = {
+      response.session.params._GOOGLE_ASSISTANT_REPROMPTS_ = {
         NO_INPUT_1: text,
         NO_INPUT_2: text,
         NO_INPUT_FINAL: text,
@@ -102,7 +102,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
           response.session.typeOverrides = [];
         }
         response.session.typeOverrides.push(collectionData.typeOverride);
-        response.session.params._GA_SELECTION_INTENT_ = carousel.selection.intent;
+        response.session.params._GOOGLE_ASSISTANT_SELECTION_INTENT_ = carousel.selection.intent;
 
         if (!response.prompt) {
           response.prompt = {};
@@ -128,7 +128,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
     if (simple?.toMessage) {
       output.message = simple.toMessage();
     }
-    const reprompts = response.session?.params?._GA_REPROMPTS_ as
+    const reprompts = response.session?.params?._GOOGLE_ASSISTANT_REPROMPTS_ as
       | Record<'NO_INPUT_1' | 'NO_INPUT_2' | 'NO_INPUT_FINAL', string>
       | undefined;
     const reprompt = reprompts?.NO_INPUT_1 || reprompts?.NO_INPUT_2 || reprompts?.NO_INPUT_FINAL;
