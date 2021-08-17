@@ -11,16 +11,16 @@ export class GoogleAssistantRepromptComponent extends BaseComponent {
   async googleAssistantNoInput(): Promise<void> {
     // could be improved to only the the string that is related to the current intent
     const prompt =
-      this.$session._GA_REPROMPTS_?.NO_INPUT_1 ||
-      this.$session._GA_REPROMPTS_?.NO_INPUT_2 ||
-      this.$session._GA_REPROMPTS_?.NO_INPUT_FINAL;
+      this.$session._GOOGLE_ASSISTANT_REPROMPTS_?.NO_INPUT_1 ||
+      this.$session._GOOGLE_ASSISTANT_REPROMPTS_?.NO_INPUT_2 ||
+      this.$session._GOOGLE_ASSISTANT_REPROMPTS_?.NO_INPUT_FINAL;
     if (prompt) {
       await this.$send({
         message: prompt,
       });
       // only delete reprompts on final reprompt
       if (this.$nlu.intent?.name === GoogleAssistantSystemIntent.NoInputFinal) {
-        delete this.$session._GA_REPROMPTS_;
+        delete this.$session._GOOGLE_ASSISTANT_REPROMPTS_;
       }
     }
   }

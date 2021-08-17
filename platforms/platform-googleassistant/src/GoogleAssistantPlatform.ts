@@ -93,7 +93,7 @@ export class GoogleAssistantPlatform extends Platform<
       !googleAssistant.$request.intent?.name &&
       googleAssistant.$request.scene?.slotFillingStatus === SlotFillingStatus.Final &&
       Object.keys(googleAssistant.$request.intent?.params || {}).length &&
-      googleAssistant.$request.session?.params?._GA_SELECTION_INTENT_
+      googleAssistant.$request.session?.params?._GOOGLE_ASSISTANT_SELECTION_INTENT_
     ) {
       if (!googleAssistant.$nlu) {
         googleAssistant.$nlu = {};
@@ -103,7 +103,7 @@ export class GoogleAssistantPlatform extends Platform<
       }
       // set intent
       googleAssistant.$nlu.intent.name =
-        googleAssistant.$request.session.params._GA_SELECTION_INTENT_;
+        googleAssistant.$request.session.params._GOOGLE_ASSISTANT_SELECTION_INTENT_;
     }
   };
 }

@@ -22,15 +22,17 @@ export class GoogleAssistant extends Jovo<
 > {
   constructor($app: App, $handleRequest: HandleRequest, $platform: GoogleAssistantPlatform) {
     super($app, $handleRequest, $platform);
-    if (this.$request.session?.params?._GA_REPROMPTS_) {
-      this.$session._GA_REPROMPTS_ = this.$request.session.params._GA_REPROMPTS_;
+    if (this.$request.session?.params?._GOOGLE_ASSISTANT_REPROMPTS_) {
+      this.$session._GOOGLE_ASSISTANT_REPROMPTS_ =
+        this.$request.session.params._GOOGLE_ASSISTANT_REPROMPTS_;
     }
   }
 
   getPersistableData(): JovoPersistableData {
     const persistableData = super.getPersistableData();
     if (persistableData.session) {
-      persistableData.session._GA_REPROMPTS_ = this.$session._GA_REPROMPTS_;
+      persistableData.session._GOOGLE_ASSISTANT_REPROMPTS_ =
+        this.$session._GOOGLE_ASSISTANT_REPROMPTS_;
     }
     return persistableData;
   }
@@ -38,8 +40,8 @@ export class GoogleAssistant extends Jovo<
   setPersistableData(data: JovoPersistableData, config?: DbPluginStoredElementsConfig) {
     super.setPersistableData(data, config);
     if ((typeof config?.session === 'object' && config.session.enabled) || config?.session) {
-      if (data.session?._GA_REPROMPTS_) {
-        this.$session._GA_REPROMPTS_ = data.session?._GA_REPROMPTS_;
+      if (data.session?._GOOGLE_ASSISTANT_REPROMPTS_) {
+        this.$session._GOOGLE_ASSISTANT_REPROMPTS_ = data.session?._GOOGLE_ASSISTANT_REPROMPTS_;
       }
     }
   }
