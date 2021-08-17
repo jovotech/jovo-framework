@@ -12,10 +12,8 @@ import {
 } from '.';
 
 export interface SanitizationConfig {
-  // truncate arrays that exceed maximum length
-  maxArraySize: boolean;
-  // truncate strings that exceed maximum length
-  maxStringLength: boolean;
+  trimArrays: boolean;
+  trimStrings: boolean;
 }
 
 export interface ValidationConfig {
@@ -116,7 +114,7 @@ export abstract class OutputTemplateConverterStrategy<
   ): MessageValue {
     const actualMaxLength = maxLength - offset;
     const messageLength = typeof message === 'object' ? message.text.length : message.length;
-    if (!this.shouldSanitize('maxStringLength') || messageLength <= actualMaxLength) {
+    if (!this.shouldSanitize('trimStrings') || messageLength <= actualMaxLength) {
       return message;
     }
     if (typeof message === 'object') {
@@ -134,7 +132,7 @@ export abstract class OutputTemplateConverterStrategy<
     maxSize: number,
   ): DynamicEntities {
     if (
-      !this.shouldSanitize('maxArraySize') ||
+      !this.shouldSanitize('trimArrays') ||
       !dynamicEntities?.types?.length ||
       dynamicEntities.types.length <= maxSize
     ) {
@@ -151,12 +149,12 @@ export abstract class OutputTemplateConverterStrategy<
     maxSize: number,
     maxLength: number,
   ): QuickReplyValue[] {
-    if (!this.shouldSanitize('maxArraySize') || quickReplies.length <= maxSize) {
+    if (!this.shouldSanitize('trimArrays') || quickReplies.length <= maxSize) {
       return quickReplies;
     }
     quickReplies = quickReplies.slice(0, maxSize);
     this.logArrayTruncationWarning(path, maxSize);
-    if (!this.shouldSanitize('maxStringLength')) {
+    if (!this.shouldSanitize('trimStrings')) {
       return quickReplies;
     }
     return quickReplies.map((quickReply, index) => {
@@ -182,7 +180,7 @@ export abstract class OutputTemplateConverterStrategy<
     maxSize: number,
   ): Carousel {
     if (
-      !this.shouldSanitize('maxArraySize') ||
+      !this.shouldSanitize('trimArrays') ||
       (carousel.items.length >= minSize && carousel.items.length <= maxSize)
     ) {
       return carousel;
