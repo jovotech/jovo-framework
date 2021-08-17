@@ -254,7 +254,7 @@ The [`nativeResponse` property](https://github.com/jovotech/jovo-output/blob/mas
 }
 ```
 
-For example, an APL RenderDcument directive ([see official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/alexa-presentation-language/apl-interface.html#renderdocument-directive)) could be added like this:
+For example, an APL RenderDocument directive ([see official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/alexa-presentation-language/apl-interface.html#renderdocument-directive)) could be added like this:
 
 ```typescript
 {
