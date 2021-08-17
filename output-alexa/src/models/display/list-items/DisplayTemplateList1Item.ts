@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsOptional, IsString, Type, ValidateNested } from '@jovotech/output';
+import { DISPLAY_TEMPLATE_ITEM_MAIN_TEXT_MAX_LENGTH } from '../../../constants';
 import { MainTextMaxLength } from '../../../decorators/validation/MainTextMaxLength';
 import { Image } from '../../common/Image';
 import { TextContent } from '../TextContent';
@@ -13,7 +14,7 @@ export class DisplayTemplateList1Item {
   @Type(() => Image)
   image?: Image;
 
-  @MainTextMaxLength(84)
+  @MainTextMaxLength(DISPLAY_TEMPLATE_ITEM_MAIN_TEXT_MAX_LENGTH)
   @ValidateNested()
   @Type(() => TextContent)
   textContent: TextContent;

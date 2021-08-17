@@ -8,6 +8,7 @@ import {
   Type,
   ValidateNested,
 } from '@jovotech/output';
+import { AUDIO_STREAM_TOKEN_MAX_LENGTH } from '../../constants';
 import { AudioItemStreamCaption } from './AudioItemStreamCaption';
 
 export class AudioItemStream {
@@ -16,13 +17,13 @@ export class AudioItemStream {
 
   @IsString()
   @IsNotEmpty()
-  @MaxLength(1024)
+  @MaxLength(AUDIO_STREAM_TOKEN_MAX_LENGTH)
   token: string;
 
   @IsOptional()
   @IsString()
   @IsNotEmpty()
-  @MaxLength(1024)
+  @MaxLength(AUDIO_STREAM_TOKEN_MAX_LENGTH)
   expectedPreviousToken?: string;
 
   @IsNumber()

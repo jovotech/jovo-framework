@@ -61,6 +61,7 @@ export * from './decorators/validation/IsValidAlexaString';
 export * from './decorators/validation/IsValidOutputSpeechString';
 
 export * from './models';
+export * from './constants';
 
 export * from './AlexaOutputTemplateConverterStrategy';
 

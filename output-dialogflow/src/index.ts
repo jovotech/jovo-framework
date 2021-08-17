@@ -41,3 +41,4 @@ export * from './decorators/validation/IsValidTelephonySynthesizeSpeechString';
 export * from './DialogflowOutputTemplateConverterStrategy';
 
 export * from './models';
+export * from './constants';

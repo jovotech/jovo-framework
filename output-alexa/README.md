@@ -11,6 +11,7 @@ Learn more about output templates for Alexa.
   - [Carousel](#carousel)
 - [Alexa-specific Output Elements](#alexa-specific-output-elements)
   - [Native Response](#native-response)
+- [Alexa Output Configuration](#alexa-output-configuration)
 
 
 ## Introduction
@@ -279,3 +280,25 @@ For example, an APL RenderDocument directive ([see official Alexa docs](https://
 ```
 
 Learn more about the [response format in the official Alexa documentation](https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-and-response-json-reference.html#response-format).
+
+## Alexa Output Configuration
+
+This is the default output configuration for Alexa:
+
+```typescript
+const app = new App({
+  // ...
+
+  plugins: [
+    new AlexaPlatform({
+      output: {
+        genericOutputToApl: true,
+      },
+    }),
+  ],
+});
+```
+
+It includes the following properties:
+
+* `genericOutputToApl`: Determines if generic output like `quickReplies`, `card`, and `carousel` should automatically be converted into an APL directive.

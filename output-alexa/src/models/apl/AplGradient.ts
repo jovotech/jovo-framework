@@ -11,6 +11,11 @@ import {
   Max,
   Min,
 } from '@jovotech/output';
+import {
+  APL_GRADIENT_COLOR_RANGE_MIN_SIZE,
+  APL_GRADIENT_INPUT_RANGE_MAX,
+  APL_GRADIENT_INPUT_RANGE_MIN,
+} from '../../constants';
 
 export enum AplGradientType {
   Linear = 'linear',
@@ -31,7 +36,7 @@ export class AplGradient {
   angle?: number;
 
   @IsArray()
-  @ArrayMinSize(2)
+  @ArrayMinSize(APL_GRADIENT_COLOR_RANGE_MIN_SIZE)
   @IsString({ each: true })
   @IsNotEmpty({ each: true })
   colorRange: string[];
@@ -44,10 +49,10 @@ export class AplGradient {
   @IsOptional()
   @IsArray()
   @IsNumber({}, { each: true })
-  @Min(0, {
+  @Min(APL_GRADIENT_INPUT_RANGE_MIN, {
     each: true,
   })
-  @Max(1, {
+  @Max(APL_GRADIENT_INPUT_RANGE_MAX, {
     each: true,
   })
   inputRange?: number[];

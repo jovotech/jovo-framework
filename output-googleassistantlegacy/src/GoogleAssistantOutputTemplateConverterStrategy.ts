@@ -1,20 +1,81 @@
 import {
+  Card,
+  Carousel,
   mergeInstances,
   MessageValue,
   OutputTemplate,
+  OutputTemplateConverterStrategyConfig,
   QuickReplyValue,
   SingleResponseOutputTemplateConverterStrategy,
   toSSML,
 } from '@jovotech/output';
-import { GoogleAssistantResponse, SimpleResponse, Suggestion } from './index';
+import {
+  BASIC_CARD_TEXT_MAX_LENGTH,
+  BASIC_CARD_WITH_IMAGE_TEXT_MAX_LENGTH,
+  CAROUSEL_MAX_SIZE,
+  CAROUSEL_MIN_SIZE,
+  GoogleAssistantResponse,
+  SimpleResponse,
+  Suggestion,
+  SUGGESTION_TITLE_MAX_LENGTH,
+  SUGGESTIONS_MAX_SIZE,
+} from './index';
 
 // TODO: CHECK: Theoretically, this platform can have multiple messages but we have never used this feature so far.
 // In case we want to support that, the implementation of this strategy has to be adjusted.
-export class GoogleAssistantOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<GoogleAssistantResponse> {
+export class GoogleAssistantOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<
+  GoogleAssistantResponse,
+  OutputTemplateConverterStrategyConfig
+> {
   platformName = 'GoogleAssistant';
   responseClass = GoogleAssistantResponse;
 
-  buildResponse(output: OutputTemplate): GoogleAssistantResponse {
+  protected sanitizeOutput(output: OutputTemplate): OutputTemplate {
+    if (output.quickReplies) {
+      output.quickReplies = this.sanitizeQuickReplies(output.quickReplies, 'quickReplies');
+    }
+
+    if (output.card) {
+      output.card = this.sanitizeCard(output.card, 'card');
+    }
+
+    if (output.carousel) {
+      output.carousel = this.sanitizeCarousel(output.carousel, 'carousel');
+    }
+    return output;
+  }
+
+  protected sanitizeQuickReplies(
+    quickReplies: QuickReplyValue[],
+    path: string,
+    maxSize = SUGGESTIONS_MAX_SIZE,
+    maxLength = SUGGESTION_TITLE_MAX_LENGTH,
+  ): QuickReplyValue[] {
+    return super.sanitizeQuickReplies(quickReplies, path, maxSize, maxLength);
+  }
+
+  protected sanitizeCard(card: Card, path: string): Card {
+    const maxLength = card.imageUrl
+      ? BASIC_CARD_WITH_IMAGE_TEXT_MAX_LENGTH
+      : BASIC_CARD_TEXT_MAX_LENGTH;
+    if (!this.shouldSanitize('maxLength') || !card.content || card.content.length <= maxLength) {
+      return card;
+    }
+    card.content = card.content.slice(0, maxLength);
+    this.logStringTruncationWarning(path, maxLength);
+    return card;
+  }
+
+  protected sanitizeCarousel(
+    carousel: Carousel,
+    path: string,
+    minSize = CAROUSEL_MIN_SIZE,
+    maxSize = CAROUSEL_MAX_SIZE,
+  ): Carousel {
+    return super.sanitizeCarousel(carousel, path, minSize, maxSize);
+  }
+
+  toResponse(output: OutputTemplate): GoogleAssistantResponse {
     const response: GoogleAssistantResponse = {
       richResponse: {
         items: [],
@@ -22,36 +83,36 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
     };
 
     // TODO: fully determine when to set listen
-    const listen = output.platforms?.GoogleAssistant?.listen ?? output.listen;
+    const listen = output.listen;
     if (typeof listen !== 'undefined') {
       response.expectUserResponse = !!listen;
     }
 
-    const message = output.platforms?.GoogleAssistant?.message || output.message;
+    const message = output.message;
     if (message) {
       response.richResponse.items.push({
         simpleResponse: this.convertMessageToSimpleResponse(message),
       });
     }
 
-    const reprompt = output.platforms?.GoogleAssistant?.reprompt || output.reprompt;
+    const reprompt = output.reprompt;
     if (reprompt) {
       response.noInputPrompts = [this.convertMessageToSimpleResponse(reprompt)];
     }
 
-    const quickReplies = output.platforms?.GoogleAssistant?.quickReplies || output.quickReplies;
+    const quickReplies = output.quickReplies;
     if (quickReplies?.length) {
       response.richResponse.suggestions = quickReplies.map(this.convertQuickReplyToSuggestion);
     }
 
-    const card = output.platforms?.GoogleAssistant?.card || output.card;
+    const card = output.card;
     if (card) {
       response.richResponse.items.push({
         basicCard: card.toGoogleAssistantBasicCard?.(),
       });
     }
 
-    const carousel = output.platforms?.GoogleAssistant?.carousel || output.carousel;
+    const carousel = output.carousel;
     if (carousel) {
       response.systemIntent = {
         intent: 'actions.intent.OPTION',

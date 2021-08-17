@@ -1,13 +1,16 @@
 import {
+  DynamicEntities,
   DynamicEntitiesMode,
   DynamicEntity,
   mergeInstances,
   MessageValue,
   OutputTemplate,
+  OutputTemplateConverterStrategyConfig,
   QuickReplyValue,
   SingleResponseOutputTemplateConverterStrategy,
   toSSML,
 } from '@jovotech/output';
+import { ALEXA_STRING_MAX_LENGTH, SLOT_TYPE_VALUES_MAX_SIZE, SSML_OFFSET } from './constants';
 import {
   AlexaResponse,
   AplRenderDocumentDirective,
@@ -19,23 +22,63 @@ import {
   SlotType,
 } from './models';
 
-export interface AlexaOutputTemplateConverterStrategyConfig {
+export interface AlexaOutputTemplateConverterStrategyConfig
+  extends OutputTemplateConverterStrategyConfig {
   genericOutputToApl: boolean;
 }
 
-export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<AlexaResponse> {
+export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<
+  AlexaResponse,
+  AlexaOutputTemplateConverterStrategyConfig
+> {
   platformName = 'Alexa';
   responseClass = AlexaResponse;
 
-  constructor(
-    public config: Partial<AlexaOutputTemplateConverterStrategyConfig> = {
-      genericOutputToApl: true,
-    },
-  ) {
-    super();
+  getDefaultConfig(): AlexaOutputTemplateConverterStrategyConfig {
+    return { ...super.getDefaultConfig(), genericOutputToApl: true };
   }
 
-  buildResponse(output: OutputTemplate): AlexaResponse {
+  protected sanitizeOutput(output: OutputTemplate): OutputTemplate {
+    if (output.message) {
+      output.message = this.sanitizeMessage(output.message, 'message');
+    }
+
+    if (output.reprompt) {
+      output.reprompt = this.sanitizeMessage(output.reprompt, 'reprompt');
+    }
+
+    if (
+      output.listen &&
+      typeof output.listen === 'object' &&
+      output.listen.entities?.types?.length
+    ) {
+      output.listen.entities = this.sanitizeDynamicEntities(
+        output.listen.entities,
+        'listen.entities.types',
+      );
+    }
+
+    return output;
+  }
+
+  protected sanitizeMessage(
+    message: MessageValue,
+    path: string,
+    maxLength = ALEXA_STRING_MAX_LENGTH,
+    offset = SSML_OFFSET,
+  ): MessageValue {
+    return super.sanitizeMessage(message, path, maxLength, offset);
+  }
+
+  protected sanitizeDynamicEntities(
+    dynamicEntities: DynamicEntities,
+    path: string,
+    maxSize = SLOT_TYPE_VALUES_MAX_SIZE,
+  ): DynamicEntities {
+    return super.sanitizeDynamicEntities(dynamicEntities, path, maxSize);
+  }
+
+  toResponse(output: OutputTemplate): AlexaResponse {
     const response: AlexaResponse = {
       version: '1.0',
       response: {},
@@ -48,7 +91,7 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
       response.response.directives.push(...directives);
     };
 
-    const listen = output.platforms?.Alexa?.listen ?? output.listen;
+    const listen = output.listen;
     if (typeof listen !== 'undefined') {
       response.response.shouldEndSession = !listen;
 
@@ -64,19 +107,19 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
       }
     }
 
-    const message = output.platforms?.Alexa?.message || output.message;
+    const message = output.message;
     if (message) {
       response.response.outputSpeech = this.convertMessageToOutputSpeech(message);
     }
 
-    const reprompt = output.platforms?.Alexa?.reprompt || output.reprompt;
+    const reprompt = output.reprompt;
     if (reprompt) {
       response.response.reprompt = {
         outputSpeech: this.convertMessageToOutputSpeech(reprompt),
       };
     }
 
-    const card = output.platforms?.Alexa?.card || output.card;
+    const card = output.card;
     if (card) {
       if (this.config.genericOutputToApl) {
         addToDirectives(card.toApl?.() as AplRenderDocumentDirective);
@@ -85,18 +128,12 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
       }
     }
 
-    const carousel = output.platforms?.Alexa?.carousel || output.carousel;
+    const carousel = output.carousel;
     if (carousel && this.config.genericOutputToApl) {
       addToDirectives(carousel.toApl?.() as AplRenderDocumentDirective);
     }
 
-    const list = output.platforms?.Alexa?.list;
-    if (list && this.config.genericOutputToApl) {
-      addToDirectives(list.toApl?.() as AplRenderDocumentDirective);
-    }
-
-    const quickReplies: QuickReplyValue[] | undefined =
-      output.platforms?.Alexa?.quickReplies || output.quickReplies;
+    const quickReplies = output.quickReplies;
     if (quickReplies && this.config.genericOutputToApl) {
       const directive: AplRenderDocumentDirective | undefined = response.response
         .directives?.[0] as AplRenderDocumentDirective | undefined;
@@ -116,6 +153,11 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
           },
         );
       }
+    }
+
+    const list = output.platforms?.Alexa?.list;
+    if (list && this.config.genericOutputToApl) {
+      addToDirectives(list.toApl?.() as AplRenderDocumentDirective);
     }
 
     if (output.platforms?.Alexa?.nativeResponse) {
@@ -183,7 +225,7 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
   private convertDynamicEntityToSlotType(entity: DynamicEntity): SlotType {
     return {
       name: entity.name,
-      values: (entity.values || []).map((value) => ({
+      values: (entity.values || []).slice(0, SLOT_TYPE_VALUES_MAX_SIZE).map((value) => ({
         id: value.id,
         name: {
           value: value.value,

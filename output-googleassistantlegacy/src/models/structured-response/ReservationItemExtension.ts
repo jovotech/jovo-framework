@@ -9,6 +9,7 @@ import {
   Type,
   ValidateNested,
 } from '@jovotech/output';
+import { USER_STATUS_LABEL_MAX_LENGTH } from '../../constants';
 import { Location } from './Location';
 import { StaffFacilitator } from './StaffFacilitator';
 import { Time } from './Time';
@@ -35,7 +36,7 @@ export class ReservationItemExtension {
 
   @IsString()
   @IsNotEmpty()
-  @MaxLength(50)
+  @MaxLength(USER_STATUS_LABEL_MAX_LENGTH)
   userVisibleStatusLabel: string;
 
   @IsEnum(ReservationType)
