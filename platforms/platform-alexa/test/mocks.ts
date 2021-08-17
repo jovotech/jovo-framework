@@ -1,9 +1,9 @@
 import nock, { Scope } from 'nock';
 
-interface MockSpec {
+interface AlexaMockSpec {
   response: {
     body: any;
-    statusCode: 200 | 403;
+    statusCode: 200 | 403 | 401;
   };
 
   method: 'GET' | 'POST';
@@ -14,7 +14,7 @@ interface MockSpec {
   times?: number;
 }
 
-export function mockAlexaApi(spec: MockSpec): Scope {
+export function mockAlexaApi(spec: AlexaMockSpec): Scope {
   const url = spec.endpoint || 'https://api.amazonalexa.com';
   return nock(url, {
     reqheaders: {
@@ -22,8 +22,7 @@ export function mockAlexaApi(spec: MockSpec): Scope {
       'Authorization': `Bearer ${spec.permissionToken}`,
     },
   })
-  // TODO: Can we pass method here somehow?
-    .get(spec.path)
+    .intercept(spec.path, spec.method)
     .times(spec.times || 1)
     .reply(spec.response.statusCode, spec.response.body);
 }
