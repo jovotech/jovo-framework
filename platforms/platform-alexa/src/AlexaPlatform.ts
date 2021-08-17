@@ -45,7 +45,7 @@ export class AlexaPlatform extends Platform<
   }
 
   mount(parent: HandleRequest): void {
-    parent.middlewareCollection.use('before.request', this.beforeRequest);
+    parent.middlewareCollection.use('request.start', this.onRequestStart);
   }
 
   isRequestRelated(request: AnyObject | AlexaRequest): boolean {
@@ -64,7 +64,7 @@ export class AlexaPlatform extends Platform<
     return response;
   }
 
-  private beforeRequest = (handleRequest: HandleRequest, jovo: Jovo) => {
+  private onRequestStart = (jovo: Jovo) => {
     if (!(jovo.$platform instanceof AlexaPlatform)) {
       return;
     }

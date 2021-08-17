@@ -1,12 +1,10 @@
 import {
   AnyObject,
   App,
-  EntityMap,
   ExtensibleConfig,
-  HandleRequest,
-  InternalIntent,
+  Jovo,
+  MiddlewareFunction,
   Platform,
-  RequestType,
 } from '@jovotech/framework';
 import {
   GoogleAssistantOutputTemplateConverterStrategy,
@@ -43,7 +41,7 @@ export class GoogleAssistantPlatform extends Platform<
 
   install(parent: App): void {
     super.install(parent);
-    parent.middlewareCollection.use('before.request', this.beforeRequest);
+    parent.middlewareCollection.use('request.start', this.onRequestStart);
   }
 
   initialize(parent: App): void {
@@ -80,30 +78,23 @@ export class GoogleAssistantPlatform extends Platform<
     return response;
   }
 
-  beforeRequest = (handleRequest: HandleRequest, googleAssistant: GoogleAssistant) => {
-    if (googleAssistant.$type.type === RequestType.Launch) {
-      googleAssistant.$nlu.intent = {
-        name: InternalIntent.Launch,
-      };
-    }
-    // TODO check condition
-    // A request on selection has no intent, should have FINAl slotFillingStatus and at least one entry in intent.params
+  onRequestStart: MiddlewareFunction = (jovo: Jovo) => {
+    const request = jovo.$googleAssistant?.$request;
+    // if it is a selection-event
     if (
-      googleAssistant.$request.intent &&
-      !googleAssistant.$request.intent?.name &&
-      googleAssistant.$request.scene?.slotFillingStatus === SlotFillingStatus.Final &&
-      Object.keys(googleAssistant.$request.intent?.params || {}).length &&
-      googleAssistant.$request.session?.params?._GOOGLE_ASSISTANT_SELECTION_INTENT_
+      request?.intent?.name &&
+      request.scene?.slotFillingStatus === SlotFillingStatus.Final &&
+      Object.keys(request.intent?.params || {}).length &&
+      request.session?.params?._GOOGLE_ASSISTANT_SELECTION_INTENT_
     ) {
-      if (!googleAssistant.$nlu) {
-        googleAssistant.$nlu = {};
+      if (!jovo.$nlu) {
+        jovo.$nlu = {};
       }
-      if (!googleAssistant.$nlu.intent) {
-        googleAssistant.$nlu.intent = { name: '' };
+      if (!jovo.$nlu.intent) {
+        jovo.$nlu.intent = { name: '' };
       }
       // set intent
-      googleAssistant.$nlu.intent.name =
-        googleAssistant.$request.session.params._GOOGLE_ASSISTANT_SELECTION_INTENT_;
+      jovo.$nlu.intent.name = request.session.params._GOOGLE_ASSISTANT_SELECTION_INTENT_;
     }
   };
 }

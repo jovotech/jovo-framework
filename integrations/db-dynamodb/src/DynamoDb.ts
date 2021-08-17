@@ -3,7 +3,6 @@ import {
   DbItem,
   DbPlugin,
   DbPluginConfig,
-  HandleRequest,
   Jovo,
   PersistableSessionData,
   PersistableUserData,
@@ -83,8 +82,8 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
   }
 
   async install(parent: App): Promise<void> {
-    parent.middlewareCollection.use('after.request', this.loadData);
-    parent.middlewareCollection.use('before.response', this.saveData);
+    parent.middlewareCollection.use('request.end', this.loadData);
+    parent.middlewareCollection.use('response.start', this.saveData);
   }
 
   createTable = async (): Promise<void> => {
@@ -123,7 +122,7 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
     return data.Item as DbItem;
   };
 
-  loadData = async (handleRequest: HandleRequest, jovo: Jovo): Promise<void> => {
+  loadData = async (jovo: Jovo): Promise<void> => {
     this.checkRequirements();
     const dbItem = await this.getDbItem(jovo.$user.id);
 
@@ -133,7 +132,7 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
     }
   };
 
-  saveData = async (handleRequest: HandleRequest, jovo: Jovo): Promise<void> => {
+  saveData = async (jovo: Jovo): Promise<void> => {
     this.checkRequirements();
 
     const params = {

@@ -1,7 +1,6 @@
 import {
   DeepPartial,
   EntityMap,
-  HandleRequest,
   Jovo,
   NluData,
   NluPlugin,
@@ -91,7 +90,7 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
     }
   }
 
-  async process(handleRequest: HandleRequest, jovo: Jovo): Promise<NluData | undefined> {
+  async process(jovo: Jovo): Promise<NluData | undefined> {
     const text = jovo.$request.getRawText();
     if (!text) return;
     const language = jovo.$request.getLocale()?.substr(0, 2) || 'en';
