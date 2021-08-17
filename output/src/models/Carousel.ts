@@ -1,6 +1,7 @@
 import { Type } from 'class-transformer';
 import {
   ArrayMinSize,
+  CarouselItem,
   IsArray,
   IsInstance,
   IsNotEmpty,
@@ -8,7 +9,7 @@ import {
   IsString,
   ValidateNested,
 } from '..';
-import { Card } from './Card';
+import { CarouselSelection } from './CarouselSelection';
 
 export class Carousel {
   @IsOptional()
@@ -18,12 +19,15 @@ export class Carousel {
 
   @IsArray()
   @ArrayMinSize(2)
-  @IsInstance(Card, {
-    each: true,
-  })
   @ValidateNested({
     each: true,
   })
-  @Type(() => Card)
-  items: Card[];
+  @Type(() => CarouselItem)
+  items: CarouselItem[];
+
+  @IsOptional()
+  @IsInstance(CarouselSelection)
+  @ValidateNested()
+  @Type(() => CarouselSelection)
+  selection?: CarouselSelection;
 }

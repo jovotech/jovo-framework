@@ -123,7 +123,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
         response.session = getEmptySession();
       }
       const text = typeof reprompt === 'string' ? reprompt : reprompt.displayText || reprompt.text;
-      response.session.params._GA_REPROMPTS_ = {
+      response.session.params._GOOGLE_ASSISTANT_REPROMPTS_ = {
         NO_INPUT_1: text,
         NO_INPUT_2: text,
         NO_INPUT_FINAL: text,
@@ -152,13 +152,18 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
     }
 
     const carousel = output.carousel;
-    if (carousel) {
+    // if a carousel exists and selection.entityType is set for it (otherwise carousel can't be displayed)
+    if (carousel?.selection?.entityType && carousel?.selection?.intent) {
       const collectionData = carousel.toGoogleAssistantCollectionData?.();
       if (collectionData) {
         if (!response.session) {
           response.session = getEmptySession();
         }
-        response.session.typeOverrides = [collectionData.typeOverride];
+        if (!response.session.typeOverrides) {
+          response.session.typeOverrides = [];
+        }
+        response.session.typeOverrides.push(collectionData.typeOverride);
+        response.session.params._GOOGLE_ASSISTANT_SELECTION_INTENT_ = carousel.selection.intent;
 
         if (!response.prompt) {
           response.prompt = {};
@@ -184,7 +189,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
     if (simple?.toMessage) {
       output.message = simple.toMessage();
     }
-    const reprompts = response.session?.params?._GA_REPROMPTS_ as
+    const reprompts = response.session?.params?._GOOGLE_ASSISTANT_REPROMPTS_ as
       | Record<'NO_INPUT_1' | 'NO_INPUT_2' | 'NO_INPUT_FINAL', string>
       | undefined;
     const reprompt = reprompts?.NO_INPUT_1 || reprompts?.NO_INPUT_2 || reprompts?.NO_INPUT_FINAL;
@@ -199,7 +204,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
     if (response.session?.typeOverrides?.length) {
       // only the first should be sufficient
       const mode =
-        response.session.typeOverrides[0].mode === TypeOverrideMode.Merge
+        response.session.typeOverrides[0].typeOverrideMode === TypeOverrideMode.Merge
           ? DynamicEntitiesMode.Merge
           : DynamicEntitiesMode.Replace;
 
@@ -268,7 +273,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
   ): TypeOverride {
     return {
       name: entity.name,
-      mode,
+      typeOverrideMode: mode,
       synonym: {
         entries: (entity.values || []).map((entityValue) => ({
           name: entityValue.id || entityValue.value,

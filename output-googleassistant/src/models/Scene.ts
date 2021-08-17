@@ -1,4 +1,5 @@
 import {
+  EnumLike,
   IsEnum,
   IsNotEmpty,
   IsObject,
@@ -14,10 +15,22 @@ export class NextScene {
   name: string;
 }
 
+export enum SlotFillingStatus {
+  Unspecified = 'UNSPECIFIED',
+  Initialized = 'INITIALIZED',
+  Collecting = 'COLLECTING',
+  Final = 'FINAL',
+}
+
+export type SlotFillingStatusLike = EnumLike<SlotFillingStatus>;
+
 export class Scene {
   @IsString()
-  @IsNotEmpty()
   name: string;
+
+  @IsOptional()
+  @IsEnum(SlotFillingStatus)
+  slotFillingStatus?: SlotFillingStatusLike;
 
   @IsObject()
   slots: Record<string, unknown>;
