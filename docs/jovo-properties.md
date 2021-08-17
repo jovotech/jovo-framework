@@ -14,6 +14,7 @@ Jovo properties are reserved variables that part of the Jovo `this` object.
 - [Context Properties](#context-properties)
   - [$data](#data)
   - [$session](#session)
+  - [$state](#state)
   - [$user](#user)
   - [$device](#device)
   - [$history](#history)
@@ -132,6 +133,15 @@ this.$session.data.key = value;
 
 [Learn more about session data here](./data.md#session-data).
 
+### $state
+
+The `$state` property is the state stack that gets built as part of the [routing and state management](./routing.md).
+
+```typescript
+this.$state
+```
+
+[Learn more about the `$state` stack here](./state-stack.md).
 
 ### $user
 
