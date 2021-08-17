@@ -13,9 +13,9 @@ import {
 
 export interface SanitizationConfig {
   // truncate arrays that exceed maximum length
-  maxSize: boolean;
+  maxArraySize: boolean;
   // truncate strings that exceed maximum length
-  maxLength: boolean;
+  maxStringLength: boolean;
 }
 
 export interface ValidationConfig {
@@ -116,7 +116,7 @@ export abstract class OutputTemplateConverterStrategy<
   ): MessageValue {
     const actualMaxLength = maxLength - offset;
     const messageLength = typeof message === 'object' ? message.text.length : message.length;
-    if (!this.shouldSanitize('maxLength') || messageLength <= actualMaxLength) {
+    if (!this.shouldSanitize('maxStringLength') || messageLength <= actualMaxLength) {
       return message;
     }
     if (typeof message === 'object') {
@@ -134,7 +134,7 @@ export abstract class OutputTemplateConverterStrategy<
     maxSize: number,
   ): DynamicEntities {
     if (
-      !this.shouldSanitize('maxSize') ||
+      !this.shouldSanitize('maxArraySize') ||
       !dynamicEntities?.types?.length ||
       dynamicEntities.types.length <= maxSize
     ) {
@@ -151,12 +151,12 @@ export abstract class OutputTemplateConverterStrategy<
     maxSize: number,
     maxLength: number,
   ): QuickReplyValue[] {
-    if (!this.shouldSanitize('maxSize') || quickReplies.length <= maxSize) {
+    if (!this.shouldSanitize('maxArraySize') || quickReplies.length <= maxSize) {
       return quickReplies;
     }
     quickReplies = quickReplies.slice(0, maxSize);
     this.logArrayTruncationWarning(path, maxSize);
-    if (!this.shouldSanitize('maxLength')) {
+    if (!this.shouldSanitize('maxStringLength')) {
       return quickReplies;
     }
     return quickReplies.map((quickReply, index) => {
@@ -182,7 +182,7 @@ export abstract class OutputTemplateConverterStrategy<
     maxSize: number,
   ): Carousel {
     if (
-      !this.shouldSanitize('maxSize') ||
+      !this.shouldSanitize('maxArraySize') ||
       (carousel.items.length >= minSize && carousel.items.length <= maxSize)
     ) {
       return carousel;
