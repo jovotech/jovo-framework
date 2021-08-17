@@ -27,14 +27,14 @@ import {
   UnknownObject,
 } from './index';
 import { AsrData, EntityMap, NluData, RequestData } from './interfaces';
+import { JovoDevice } from './JovoDevice';
+import { JovoHistory, JovoHistoryItem, PersistableHistoryData } from './JovoHistory';
 import { JovoRequest } from './JovoRequest';
 import { JovoSession } from './JovoSession';
 import { JovoUser } from './JovoUser';
 import { Platform } from './Platform';
 import { JovoRoute } from './plugins/RouterPlugin';
 import { forEachDeep } from './utilities';
-import { JovoHistory, JovoHistoryItem, PersistableHistoryData } from './JovoHistory';
-import { JovoDevice } from './JovoDevice';
 
 export type JovoConstructor<
   REQUEST extends JovoRequest,

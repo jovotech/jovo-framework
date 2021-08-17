@@ -3,7 +3,6 @@ import {
   AxiosRequestConfig,
   AxiosResponse,
   DeepPartial,
-  HandleRequest,
   Jovo,
   NluData,
   NluPlugin,
@@ -27,7 +26,7 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
     };
   }
 
-  async process(handleRequest: HandleRequest, jovo: Jovo): Promise<NluData | undefined> {
+  async process(jovo: Jovo): Promise<NluData | undefined> {
     const text = jovo.$request.getRawText();
     if (!text) return;
     try {
