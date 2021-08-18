@@ -1,9 +1,10 @@
-import { IsOptional, Type, ValidateNested } from '@jovotech/output';
+import { IsOptional, Type, ValidateNested, IsString } from '@jovotech/output';
 import { Session } from './Session';
 import { User } from './User';
 
 export class Request {
   @IsOptional()
+  @IsString()
   id?: string;
 }
 

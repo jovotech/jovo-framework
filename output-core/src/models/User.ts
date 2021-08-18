@@ -1,7 +1,8 @@
-import { IsObject, IsString } from '@jovotech/output';
+import { IsObject, IsString, IsOptional } from '@jovotech/output';
 
 export class User {
   @IsString()
+  @IsOptional()
   id?: string;
 
   @IsObject()
