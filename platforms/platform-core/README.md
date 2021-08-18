@@ -1,6 +1,6 @@
 # Core Platform
 
-The Jovo Core Platform is a standalone [platform integration](../docs/platforms.md) that can be used to deploy a voice experiences to custom devices and hardware, including the web, mobile apps, and Raspberry Pi.
+The Jovo Core Platform is a standalone [platform integration](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/platforms.md) that can be used to deploy a voice experiences to custom devices and hardware, including the web, mobile apps, and Raspberry Pi.
 - [Introduction](#introduction)
 - [Getting Started](#getting-started)
 - [Requests and Responses](#requests-and-responses)
@@ -37,7 +37,7 @@ You can install the plugin like this:
 $ npm install @jovotech/platform-core --save
 ```
 
-Add it as plugin to your [app configuration](../docs/app-config.md), e.g. `app.ts`:
+Add it as plugin to your [app configuration](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/app-config.md), e.g. `app.ts`:
 
 ```typescript
 import { App } from '@jovotech/framework';
@@ -54,7 +54,7 @@ const app = new App({
 
 ## Requests and Responses
 
-In a Jovo app, each interaction goes through the [RIDR Lifecycle](../docs/ridr-lifecycle.md) that starts with a [request](#requests) from the client and ends with a [response](#responses) back to the client.
+In a Jovo app, each interaction goes through the [RIDR Lifecycle](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/ridr-lifecycle.md) that starts with a [request](#requests) from the client and ends with a [response](#responses) back to the client.
 
 ### Requests
 
@@ -82,7 +82,7 @@ The request usually contains data like an audio file or raw text ([find all samp
     "device": {
       "capabilities": [
         "AUDIO",
-        "TEXT"
+        "SCREEN"
       ]
     },
     "session": {
@@ -99,25 +99,15 @@ The request usually contains data like an audio file or raw text ([find all samp
 }
 ```
 
-Request types include:
-* `LAUNCH`
-* `INTENT`
-* `TRANSCRIBED_SPEECH`
-* `TEXT`
-* `SPEECH`
-* `END`
-* `ERROR`
+The `input` property follows the same structure as the [Jovo `$input` property](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/input.md).
 
-Capabilities include:
-* `AUDIO`
-* `HTML`
-* `TEXT`
+The `device` property follows the same structure as the [Jovo `$device` property](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/device.md).
 
 
 
 ### Responses
 
-The response contains all the information that is needed by the client to display content ([find all sample response JSONs here](https://github.com/jovotech/jovo-framework/tree/v4dev/platforms/platform-core/sample-responses), `TODO: These are missing right now`):
+The response contains all the information that is needed by the client to display content:
 
 ```json
 {
@@ -144,7 +134,7 @@ The response contains all the information that is needed by the client to displa
 }
 ```
 
-The `output` is added in the same structure as [Jovo output templates](../docs/output.md).
+The `output` is added in the same structure as [Jovo output templates](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md).
 
 ## Platform-Specific Features
 
