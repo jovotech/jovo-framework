@@ -22,7 +22,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/output-googlebusiness": "^4.0.0-alpha.9",
+    "@jovotech/output-googlebusiness": "^4.0.0-beta.0",
     "google-auth-library": "^7.0.4",
     "uuid": "^8.3.2"
   },

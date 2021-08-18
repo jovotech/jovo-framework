@@ -22,7 +22,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/output-core": "^4.0.0-alpha.9",
+    "@jovotech/output-core": "^4.0.0-beta.0",
     "lodash.merge": "^4.6.2"
   },
   "devDependencies": {
