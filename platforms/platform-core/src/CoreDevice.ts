@@ -1,9 +1,9 @@
-import { Capability, JovoDevice } from '@jovotech/framework';
+import { CapabilityType, JovoDevice } from '@jovotech/framework';
 import { Core } from './Core';
 
-export type CorePlatformCapability = Capability;
+export type CorePlatformCapabilityType = CapabilityType;
 
-export class CoreDevice extends JovoDevice<Core, CorePlatformCapability> {
+export class CoreDevice extends JovoDevice<Core, CorePlatformCapabilityType> {
   setCapabilitiesFromRequest(): void {
     // needs to be implemented
   }
