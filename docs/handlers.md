@@ -203,7 +203,7 @@ showMenu() {
 
 As components have their own state management system, we usually recommend using the `$delegate` method if you have steps that need an additional state. However, sometimes it might be more convenient to have all handlers in one component.
 
-For this, you can set a `subState` in your handlers
+For this, you can set a `$subState` in your handlers
 
 ```typescript
 this.$subState = 'YourSubState';
@@ -319,7 +319,7 @@ Here is an example of an `if` condition that says a handler should only be trigg
 ```typescript
 @Handle({
   // ...
-  if: (jovo) => jovo.$user.$data.hasAlreadyPlayedToday
+  if: (jovo) => jovo.$user.data.hasAlreadyPlayedToday
 })
 yourHandler() {
   // ...
@@ -329,7 +329,7 @@ yourHandler() {
 It's also possible to use the `@If` convenience decorator:
 
 ```typescript
-@If((jovo) => jovo.$user.$data.hasAlreadyPlayedToday))
+@If((jovo) => jovo.$user.data.hasAlreadyPlayedToday))
 yourHandler() {
   // ...
 }
@@ -373,7 +373,7 @@ yourHandler() {
   
   // ...
 
-  this.$user.$data.someKey = 'someValue';
+  this.$user.data.someKey = 'someValue';
 
   // ...
 }
