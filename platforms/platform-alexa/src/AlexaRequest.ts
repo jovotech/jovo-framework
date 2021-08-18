@@ -1,20 +1,36 @@
 import {
   Entity,
   EntityMap,
+  InputType,
+  InputTypeLike,
+  JovoInput,
   JovoRequest,
-  JovoRequestType,
-  RequestType,
   UnknownObject,
 } from '@jovotech/framework';
 import { ResolutionPerAuthorityStatusCode } from '@jovotech/output-alexa';
 import { DYNAMIC_ENTITY_MATCHES_PREFIX, STATIC_ENTITY_MATCHES_PREFIX } from './constants';
 import { AuthorityResolution, Context, Request, Session } from './interfaces';
 
+export const ALEXA_REQUEST_TYPE_TO_INPUT_TYPE_MAP: Record<string, InputTypeLike> = {
+  'LaunchRequest': InputType.Launch,
+  'IntentRequest': InputType.Intent,
+  'SessionEndedRequest': InputType.End,
+  'System.ExceptionEncountered': InputType.Error,
+};
+
 export class AlexaRequest extends JovoRequest {
   version?: string;
   context?: Context;
   session?: Session;
   request?: Request;
+
+  getLocale(): string | undefined {
+    return this.request?.locale;
+  }
+
+  getIntent(): JovoInput['intent'] {
+    return this.request?.intent?.name;
+  }
 
   getEntities(): EntityMap | undefined {
     const slots = this.request?.intent?.slots;
@@ -65,40 +81,27 @@ export class AlexaRequest extends JovoRequest {
     );
   }
 
-  getIntentName(): string | undefined {
-    return this.request?.intent?.name;
+  getInputType(): InputTypeLike | undefined {
+    return this.request?.type ? ALEXA_REQUEST_TYPE_TO_INPUT_TYPE_MAP[this.request.type] : undefined;
   }
-
-  getLocale(): string | undefined {
-    return this.request?.locale;
-  }
-
-  getRawText(): string | undefined {
+  getInputText(): JovoInput['text'] {
     return;
   }
-
-  getRequestType(): JovoRequestType | undefined {
-    const requestTypeMap: Record<string, JovoRequestType> = {
-      'LaunchRequest': { type: RequestType.Launch },
-      'IntentRequest': { type: RequestType.Intent },
-      'SessionEndedRequest': { type: RequestType.End, subType: this.request?.reason },
-      'System.ExceptionEncountered': { type: RequestType.OnError },
-    };
-    return this.request?.type ? requestTypeMap[this.request?.type] : undefined;
+  getInputAudio(): JovoInput['audio'] {
+    return;
   }
 
   getSessionData(): UnknownObject | undefined {
     return this.session?.attributes;
   }
-
   getSessionId(): string | undefined {
     return this.session?.sessionId;
   }
-
   isNewSession(): boolean | undefined {
     return this.session?.new;
   }
 
+  // platform-specific
   isAplSupported(): boolean {
     return !!this.context?.System?.device?.supportedInterfaces?.['Alexa.Presentation.APL'];
   }

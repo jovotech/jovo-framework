@@ -10,7 +10,7 @@ Jovo offers a variety of integrations that allow you to store elements like user
 The following database integrations are currently working with Jovo `v4`:
 
 * `FileDb`: File-based system for local prototyping. Added to the `app.dev` stage by default.
-* `DynamoDb` (*in development*): NoSQL database by AWS, typically used together with AWS Lambda.
+* `DynamoDb`: NoSQL database by AWS, typically used together with AWS Lambda.
 
 ## Configuration
 

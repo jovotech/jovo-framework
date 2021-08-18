@@ -82,8 +82,8 @@ showMenu() {
 
 The `@Handle` includes two types of properties:
 
-* [Routing properties](#routing-properties): The router first looks if the handler matches a specific route, e.g. [`intents`](#intents)
-* [Condition properties](#condition-properties): After that, it is evaluated if there are additional conditions that have to be fulfilled, e.g. [`platforms`](#platforms)
+* [Routing properties](#routing-properties): The router first looks if the handler matches a specific route, e.g. [`intents`](#intents) or [`types](#types).
+* [Condition properties](#condition-properties): After that, it is evaluated if there are additional conditions that have to be fulfilled, e.g. [`platforms`](#platforms).
 
 
 ### Routing Properties
@@ -93,16 +93,19 @@ Routing properties define the core elements a router is looking for when determi
 They include:
 
 * [`intents`](#intents)
+* [`types`](#types)
 * [`global`](#global-handlers)
 * [`subState`](#substate)
 * [`prioritizedOverUnhandled`](#prioritizedOverUnhandled)
 #### Intents
 
-The `intents` array specifies which incoming intents the handler should be able to fulfil. For example, This handler responds to only the `ShowMenuIntent`:
+The `intents` property specifies which incoming intents the handler should be able to fulfill. The property can be both a string or an array of strings.
+
+For example, This handler responds to only the `ShowMenuIntent`:
 
 ```typescript
 @Handle({
-  intents: ['ShowMenuIntent']
+  intents: 'ShowMenuIntent'
 })
 showMenu() {
   // ...
@@ -132,6 +135,33 @@ showMenu() {
   // ...
 }
 ```
+
+#### Types
+
+The `types` property specifies which [input types](./input.md) the handler should be able to fulfill. The property can be both a string or an array of strings.
+
+```typescript
+@Handle({
+  types: 'LAUNCH',
+})
+welcomeNewUser() {
+  // ...
+}
+```
+
+It's also possible to use the `@Types` convenience decorator:
+
+```typescript
+import { Types } from '@jovotech/framework';
+
+// ...
+
+@Types('LAUNCH')
+welcomeNewUser() {
+  // ...
+}
+```
+
 
 #### Global Handlers
 
@@ -285,7 +315,7 @@ Currently, they include:
 * [`if`](#if)
 #### Platforms
 
-You can specify that a handler is only responsible for specific platforms. Pass the name of each platform (the same as the class name that you're importing in your `app.ts`) as a string:
+You can specify that a handler is only responsible for specific platforms. The `platforms` property can be both a string or an array of strings with the names of each platform (the same as the class name that you're importing in your `app.ts`):
 
 ```typescript
 @Handle({
@@ -304,7 +334,7 @@ import { Platforms } from '@jovotech/framework';
 
 // ...
 
-@Platforms(['Alexa', 'GoogleAssistant'])
+@Platforms('Alexa')
 yourHandler() {
   // ...
 }

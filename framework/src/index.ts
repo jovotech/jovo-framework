@@ -70,6 +70,8 @@ export * from './HandleRequest';
 export * from './I18Next';
 export * from './Jovo';
 export * from './JovoError';
+export * from './JovoInput';
+export * from './JovoInputBuilder';
 export * from './JovoProxy';
 export * from './JovoRequest';
 export * from './JovoSession';
@@ -92,6 +94,7 @@ export * from './decorators/Output';
 export * from './decorators/Platforms';
 export * from './decorators/PrioritizedOverUnhandled';
 export * from './decorators/SubState';
+export * from './decorators/Types';
 
 export * from './errors/ComponentNotFoundError';
 export * from './errors/DuplicateChildComponentsError';

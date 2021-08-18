@@ -7,10 +7,11 @@ import {
   AnyObject,
   EntityMap,
   ExtensibleConfig,
+  InputTypeLike,
   Jovo,
   JovoDevice,
+  JovoInput,
   JovoRequest,
-  JovoRequestType,
   JovoResponse,
   JovoUser,
   MiddlewareCollection,
@@ -19,34 +20,34 @@ import {
 } from '../../src';
 
 export class ExamplePlatformRequest extends JovoRequest {
-  getEntities(): EntityMap | undefined {
-    return undefined;
-  }
-
-  getIntentName(): string | undefined {
-    return undefined;
-  }
-
   getLocale(): string | undefined {
     return undefined;
   }
 
-  getRawText(): string | undefined {
+  getIntent(): JovoInput['intent'] {
     return undefined;
   }
 
-  getRequestType(): JovoRequestType | undefined {
+  getEntities(): EntityMap | undefined {
+    return undefined;
+  }
+
+  getInputType(): InputTypeLike | undefined {
+    return undefined;
+  }
+  getInputText(): JovoInput['text'] {
+    return undefined;
+  }
+  getInputAudio(): JovoInput['audio'] {
     return undefined;
   }
 
   getSessionData(): UnknownObject | undefined {
     return undefined;
   }
-
   getSessionId(): string | undefined {
     return undefined;
   }
-
   isNewSession(): boolean | undefined {
     return undefined;
   }
