@@ -8,7 +8,7 @@ import {
   Type,
   ValidateNested,
 } from '@jovotech/output';
-import {COLLECTION_MIN_SIZE, LIST_MAX_SIZE} from '../../constants';
+import { COLLECTION_MIN_SIZE, LIST_MAX_SIZE } from '../../constants';
 
 export class List {
   @IsOptional()

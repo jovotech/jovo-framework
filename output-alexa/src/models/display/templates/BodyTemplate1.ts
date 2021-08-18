@@ -8,7 +8,10 @@ import {
   Type,
   ValidateNested,
 } from '@jovotech/output';
-import {BODY_TEMPLATE_MAIN_TEXT_MAX_LENGTH, DISPLAY_TEMPLATE_TITLE_MAX_LENGTH} from '../../../constants';
+import {
+  BODY_TEMPLATE_MAIN_TEXT_MAX_LENGTH,
+  DISPLAY_TEMPLATE_TITLE_MAX_LENGTH,
+} from '../../../constants';
 import { MainTextMaxLength } from '../../../decorators/validation/MainTextMaxLength';
 import { Image } from '../../common/Image';
 import {

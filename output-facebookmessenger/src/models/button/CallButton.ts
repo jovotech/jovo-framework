@@ -1,5 +1,5 @@
 import { Equals, IsNotEmpty, IsPhoneNumber, IsString, MaxLength } from '@jovotech/output';
-import {BUTTON_TITLE_MAX_LENGTH} from '../../constants';
+import { BUTTON_TITLE_MAX_LENGTH } from '../../constants';
 import { Button, ButtonType } from './Button';
 
 export class CallButton extends Button<ButtonType.Call> {

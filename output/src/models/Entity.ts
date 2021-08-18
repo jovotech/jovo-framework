@@ -4,7 +4,7 @@ export type EntityMap = Record<string, Entity>;
 
 export class Entity {
   [key: string]: unknown;
-  
+
   @IsString()
   @IsNotEmpty()
   value: string;
