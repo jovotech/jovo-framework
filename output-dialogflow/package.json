@@ -35,7 +35,7 @@
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
-    "@jovotech/output": ">=4.0.0-alpha.9 <4.0.0"
+    "@jovotech/output": ">=4.0.0-beta.0 <4.0.0"
   },
   "bugs": {
     "url": "https://github.com/jovotech/jovo-output/issues"
