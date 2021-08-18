@@ -1,4 +1,4 @@
-import { registerPlatformSpecificJovoReference, isNode } from '@jovotech/framework';
+import { registerPlatformSpecificJovoReference } from '@jovotech/framework';
 import { GoogleAssistant } from './GoogleAssistant';
 import { GoogleAssistantPlatform } from './GoogleAssistantPlatform';
 import type { GoogleAssistantCli as GoogleAssistantCliType } from './cli';

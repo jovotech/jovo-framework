@@ -1,4 +1,4 @@
-import { registerPlatformSpecificJovoReference, isNode } from '@jovotech/framework';
+import { registerPlatformSpecificJovoReference } from '@jovotech/framework';
 import { AlexaPlatform, AlexaConfig } from './AlexaPlatform';
 import { Alexa } from './Alexa';
 import type { AlexaCli as AlexaCliType } from './cli';
