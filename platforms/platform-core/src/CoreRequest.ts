@@ -1,57 +1,51 @@
 import {
-  EntityMap,
   InputTypeLike,
   JovoInput,
   JovoRequest,
+  OmitWhere,
   UnknownObject,
 } from '@jovotech/framework';
-import { Context, Request, RequestBodyAudio, RequestBodyText } from './interfaces';
+import { Context } from './interfaces';
 
 export class CoreRequest extends JovoRequest {
   version?: string;
-  type?: 'jovo-platform-core' | string;
-  request?: Request;
+  platform?: 'core' | string;
+  id?: string; // UUID v4
+  timestamp?: string; // Always in local time, ISO 8601 YYYY-MM-DDTHH:mm:ss.sssZ
+  timeZone?: string; // IANA time zone names e.g. Europe/Berlin
+  locale?: string; // e.g. de-DE, en-US
+  data?: UnknownObject; // this.$request
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  input?: OmitWhere<JovoInput, Function>;
   context?: Context;
 
   getLocale(): string | undefined {
-    return this.request?.locale;
+    return this.locale;
   }
 
   getIntent(): JovoInput['intent'] {
-    return this.request?.nlu?.intent;
+    return this.input?.intent;
   }
-
-  getEntities(): EntityMap | undefined {
-    return this.request?.nlu?.inputs;
+  getEntities(): JovoInput['entities'] {
+    return this.input?.entities;
   }
 
   getInputType(): InputTypeLike | undefined {
-    return this.request?.type;
+    return this.input?.type;
   }
-
   getInputText(): JovoInput['text'] {
-    return (this.request?.body as RequestBodyText | undefined)?.text;
+    return this.input?.text;
   }
-
   getInputAudio(): JovoInput['audio'] {
-    const audio = (this.request?.body as RequestBodyAudio | undefined)?.audio;
-    if (!audio) {
-      return;
-    }
-    return {
-      sampleRate: audio?.sampleRate,
-      base64: audio.b64string,
-    };
+    return this.input?.audio;
   }
 
   getSessionData(): UnknownObject | undefined {
     return this.context?.session?.data;
   }
-
   getSessionId(): string | undefined {
     return this.context?.session?.id;
   }
-
   isNewSession(): boolean | undefined {
     return this.context?.session?.new;
   }
