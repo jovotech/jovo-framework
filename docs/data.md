@@ -49,10 +49,10 @@ You can store data only for a specific component like this:
 this.$component.data.someKey = 'someValue';
 ```
 
-This data is stored in the `state` stack:
+This data is stored in the `$state` stack:
 
 ```typescript
-state = [
+$state = [
   {
     componentPath: 'SomeComponent',
     data: {
@@ -62,7 +62,7 @@ state = [
 ]
 ```
 
-The `state` is stored as [session data](#session-data). Once the component is removed from it, the data is removed as well.
+The `$state` is stored as [session data](#session-data). Once the component is removed from it, the data is removed as well.
 
 ### Session Data
 
@@ -154,7 +154,7 @@ new FileDb({
 You can add the following elements to the history:
 
 * `output`: Stores `this.$output`
-* `state`: Stores `this.$state`
+* `$state`: Stores `this.$state`
 * `nlu`: Stores `this.$nlu`
 * `entities`: Stores `this.$entities`
 * `asr`: Stores `this.$asr`
