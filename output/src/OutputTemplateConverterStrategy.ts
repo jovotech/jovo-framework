@@ -81,7 +81,7 @@ export abstract class OutputTemplateConverterStrategy<
         return outputCopy;
       }
       const newValue = this.getOutputValue(output, outputKey);
-      if (newValue) {
+      if (typeof newValue !== 'undefined') {
         outputCopy[outputKey] = newValue;
       }
       return outputCopy;

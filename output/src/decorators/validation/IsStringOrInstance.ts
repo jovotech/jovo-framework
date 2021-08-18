@@ -22,7 +22,7 @@ export function IsStringOrInstance(
         async validate(value: any, args: ValidationArguments) {
           if (typeof value === 'string' && value.length) {
             return true;
-          } else if (value instanceof args.constraints[0]) {
+          } else if (typeof value === 'object' && value instanceof args.constraints[0]) {
             const errors = await validate(value);
             args.constraints[1] = errors;
             return !errors.length;

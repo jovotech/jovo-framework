@@ -1,21 +1,19 @@
 import {
-  Card,
-  Carousel,
   IsArray,
-  IsBooleanOrInstance,
   IsInstance,
   IsOptional,
-  IsStringOrInstance,
   Listen,
   ListenValue,
-  Message,
-  MessageValue,
   NullableOutputTemplateBase,
-  QuickReply,
-  QuickReplyValue,
   Type,
   ValidateNested,
 } from '..';
+import { IsBooleanOrInstance } from '../decorators/validation/IsBooleanOrInstance';
+import { IsStringOrInstance } from '../decorators/validation/IsStringOrInstance';
+import { Card } from './Card';
+import { Carousel } from './Carousel';
+import { Message, MessageValue } from './Message';
+import { QuickReply, QuickReplyValue } from './QuickReply';
 
 export class PlatformOutputTemplate<
   RESPONSE extends Record<string, unknown> = Record<string, unknown>,
