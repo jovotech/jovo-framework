@@ -33,27 +33,30 @@ export type OmitIndex<T, I extends string | number> = {
 };
 
 export {
-  JovoResponse,
-  OutputTemplateConverterStrategy,
-  OutputTemplateConverter,
-  OutputTemplate,
-  OutputTemplateBase,
-  OutputTemplatePlatforms,
-  Carousel,
   Card,
-  QuickReply,
-  QuickReplyValue,
-  Message,
-  MessageValue,
-  PlatformOutputTemplate,
-  OutputValidationError,
-  Listen,
-  ListenValue,
+  Carousel,
+  CarouselItem,
+  CarouselItemSelection,
+  CarouselSelection,
   DynamicEntity,
   DynamicEntitiesModeLike,
   DynamicEntities,
   DynamicEntityValue,
   DynamicEntitiesMode,
+  JovoResponse,
+  Listen,
+  ListenValue,
+  Message,
+  MessageValue,
+  OutputTemplateConverterStrategy,
+  OutputTemplateConverter,
+  OutputTemplate,
+  OutputTemplateBase,
+  OutputTemplatePlatforms,
+  OutputValidationError,
+  PlatformOutputTemplate,
+  QuickReply,
+  QuickReplyValue,
 } from '@jovotech/output';
 
 export * from './App';
@@ -67,6 +70,8 @@ export * from './HandleRequest';
 export * from './I18Next';
 export * from './Jovo';
 export * from './JovoError';
+export * from './JovoInput';
+export * from './JovoInputBuilder';
 export * from './JovoProxy';
 export * from './JovoRequest';
 export * from './JovoSession';
@@ -89,6 +94,7 @@ export * from './decorators/Output';
 export * from './decorators/Platforms';
 export * from './decorators/PrioritizedOverUnhandled';
 export * from './decorators/SubState';
+export * from './decorators/Types';
 
 export * from './errors/ComponentNotFoundError';
 export * from './errors/DuplicateChildComponentsError';

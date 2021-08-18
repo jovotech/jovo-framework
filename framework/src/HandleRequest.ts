@@ -7,8 +7,8 @@ import { Server } from './Server';
 
 export class HandleRequest extends Extensible<AppConfig, AppMiddlewares> {
   readonly componentTree!: ComponentTree;
-  $activeComponentNode?: ComponentTreeNode;
-  $platform!: Platform;
+  activeComponentNode?: ComponentTreeNode;
+  platform!: Platform;
 
   constructor(readonly app: App, readonly server: Server) {
     super(_cloneDeep(app.config) as AppInitConfig);

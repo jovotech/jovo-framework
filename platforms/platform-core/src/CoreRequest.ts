@@ -1,5 +1,11 @@
-import { EntityMap, JovoRequest, JovoRequestType, UnknownObject } from '@jovotech/framework';
-import { Context, Input } from './interfaces';
+import {
+  InputTypeLike,
+  JovoInput,
+  JovoRequest,
+  OmitWhere,
+  UnknownObject,
+} from '@jovotech/framework';
+import { Context } from './interfaces';
 
 export class CoreRequest extends JovoRequest {
   version?: string;
@@ -9,37 +15,37 @@ export class CoreRequest extends JovoRequest {
   timeZone?: string; // IANA time zone names e.g. Europe/Berlin
   locale?: string; // e.g. de-DE, en-US
   data?: UnknownObject; // this.$request
-  input?: Input;
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  input?: OmitWhere<JovoInput, Function>;
   context?: Context;
-
-  getEntities(): EntityMap | undefined {
-    return this.input?.entities;
-  }
-
-  getIntentName(): string | undefined {
-    return typeof this.input?.intent === 'string' ? this.input?.intent : this.input?.intent?.name;
-  }
 
   getLocale(): string | undefined {
     return this.locale;
   }
 
-  getRawText(): string | undefined {
-    return this.input?.text;
+  getIntent(): JovoInput['intent'] {
+    return this.input?.intent;
+  }
+  getEntities(): JovoInput['entities'] {
+    return this.input?.entities;
   }
 
-  getRequestType(): JovoRequestType | undefined {
+  getInputType(): InputTypeLike | undefined {
     return this.input?.type;
+  }
+  getInputText(): JovoInput['text'] {
+    return this.input?.text;
+  }
+  getInputAudio(): JovoInput['audio'] {
+    return this.input?.audio;
   }
 
   getSessionData(): UnknownObject | undefined {
     return this.context?.session?.data;
   }
-
   getSessionId(): string | undefined {
     return this.context?.session?.id;
   }
-
   isNewSession(): boolean | undefined {
     return this.context?.session?.new;
   }

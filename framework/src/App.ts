@@ -124,7 +124,7 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
     if (!relatedPlatform) {
       throw new MatchingPlatformNotFoundError(server.getRequestObject());
     }
-    handleRequest.$platform = relatedPlatform;
+    handleRequest.platform = relatedPlatform;
     const jovo = relatedPlatform.createJovoInstance(this, handleRequest);
 
     // RIDR-pipeline

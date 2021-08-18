@@ -37,18 +37,18 @@ export class HandlerPlugin extends Plugin<HandlerPluginConfig> {
         component: componentNode.path.join('.'),
       };
       // if no state-stack exists, initialize it and add the new item
-      if (!jovo.$session.$state?.length) {
-        jovo.$session.$state = [stackItem];
+      if (!jovo.$session.state?.length) {
+        jovo.$session.state = [stackItem];
       } else {
-        const currentStateStackItem = jovo.$session.$state[jovo.$session.$state.length - 1];
+        const currentStateStackItem = jovo.$session.state[jovo.$session.state.length - 1];
         // if the component path is a different one, omit every custom component data (resolve, config, $data)
         if (stackItem.component !== currentStateStackItem.component) {
-          jovo.$session.$state[jovo.$session.$state.length - 1] = stackItem;
+          jovo.$session.state[jovo.$session.state.length - 1] = stackItem;
         }
       }
     }
     // update the active component node in handleRequest to keep track of the state
-    jovo.$handleRequest.$activeComponentNode = componentNode;
+    jovo.$handleRequest.activeComponentNode = componentNode;
     // execute the component's handler
     await componentNode.executeHandler({
       jovo,

@@ -1,21 +1,11 @@
 import {
+  AudioInput,
   Capability,
   EntityMap,
   InputType,
   JovoSession,
-  RequestTypeLike,
   UnknownObject,
 } from '@jovotech/framework';
-
-export interface Input<TYPE extends RequestTypeLike = RequestTypeLike> {
-  type: InputType;
-  text?: TYPE extends InputType.Text ? string : never;
-  intent?: TYPE extends InputType.Intent ? Intent | string : never;
-  entities?: TYPE extends InputType.Intent ? EntityMap : never;
-
-  alternativeIntents?: TYPE extends InputType.Intent ? Array<Intent | string> : never;
-  audio?: TYPE extends InputType.Speech ? RequestAudioData : never;
-}
 
 export interface Intent {
   name: string;

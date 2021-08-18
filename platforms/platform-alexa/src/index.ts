@@ -1,6 +1,6 @@
-import { registerPlatformSpecificJovoReference, isNode } from '@jovotech/framework';
-import { AlexaPlatform, AlexaConfig } from './AlexaPlatform';
+import { isNode, registerPlatformSpecificJovoReference } from '@jovotech/framework';
 import { Alexa } from './Alexa';
+import { AlexaConfig, AlexaPlatform } from './AlexaPlatform';
 import type { AlexaCli as AlexaCliType } from './cli';
 
 declare module '@jovotech/framework/dist/types/Extensible' {

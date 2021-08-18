@@ -254,7 +254,7 @@ As a rule of thumb, a global component can be seen as a "last resort" that is on
 For data that is only relevant for this specific component, you can use component data:
 
 ```typescript
-this.$component.$data.someKey = 'someValue';
+this.$component.data.someKey = 'someValue';
 ```
 
 This is then added to the [`$state` stack](./state-stack.md) and lost once the component resolves:

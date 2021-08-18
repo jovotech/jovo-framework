@@ -30,7 +30,7 @@ The Request step starts the interaction and captures necessary data.
 
 This step includes a few things, depending on the platform you're building for:
 
-* Platforms like Alexa and Google Assistat do a lot of the gruntwork (capturing input, doing speech recognition and natural language understanding) for you  and already come with fully populated JSON requests that include a user ID, data about the user inquiry (sometimes even `intents` and `entities`) and more
+* Platforms like Alexa and Google Assistant do a lot of the grunt work (capturing input, doing speech recognition and natural language understanding) for you  and already come with fully populated JSON requests that include a user ID, data about the user inquiry (sometimes even `intents` and `entities`) and more
 * For custom interfaces (for example web, mobile, or custom hardware), you need to take care of the user input recording yourself. Jovo helps with this process. [Take a look at our clients for more information](https://www.jovo.tech/marketplace/tag/clients).
 
 This step populates the Jovo `$request` object.
@@ -45,12 +45,10 @@ Some platforms (like Alexa and Google Assistant) already come with structured da
 Here are some of the things that might happen in this step:
 
 * [ASR](https://www.jovo.tech/marketplace/tag/asr): If the `$request` contains raw audio, a speech recognition service could be used to turn it into raw text
-* [NLU](https://www.jovo.tech/marketplace/tag/nlu): A natural language understanding service turns raw text into structured input (`intents`, `entities`)
+* [NLU](./nlu.md): A natural language understanding service turns raw text into structured input (`intents`, `entities`)
 * Potentially, you can plug in any other service, e.g. emotion detection, sentiment analysis, and more
 
-This step populates the Jovo `$input` object, among others (like `$nlu`, depending on the integration).
-
-> The `$input` object is currently in development.
+This step populates the [Jovo `$input` object](./input.md).
 
 
 ## Dialogue & Logic
@@ -67,7 +65,7 @@ Here are some of the things that happen in this step:
 * Services: Utility classes that keep business logic separated dialogue (handlers)
 * [Output](./output.md): The result of a handler is to return an appropriate output
 
-The Dialogue & Logic step usually ends with a populated Jovo `$output` object.
+The Dialogue & Logic step usually ends with a populated [Jovo `$output` object](./output.md).
 
 
 ## Response
