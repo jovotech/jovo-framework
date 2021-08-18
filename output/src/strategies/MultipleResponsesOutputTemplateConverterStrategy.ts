@@ -26,8 +26,6 @@ export abstract class MultipleResponsesOutputTemplateConverterStrategy<
   abstract convertOutput(output: OutputTemplate): RESPONSE | RESPONSE[];
   abstract convertResponse(response: RESPONSE): OutputTemplate;
 
-  toResponse(output: OutputTemplate): RESPONSE;
-  toResponse(outputs: OutputTemplate[]): RESPONSE[];
   toResponse(output: OutputTemplate | OutputTemplate[]): RESPONSE | RESPONSE[] {
     return Array.isArray(output)
       ? output
@@ -43,8 +41,6 @@ export abstract class MultipleResponsesOutputTemplateConverterStrategy<
       : this.convertOutput(output);
   }
 
-  fromResponse(response: RESPONSE): OutputTemplate;
-  fromResponse(responses: RESPONSE[]): OutputTemplate[];
   fromResponse(responseOrResponses: RESPONSE | RESPONSE[]): OutputTemplate | OutputTemplate[] {
     return Array.isArray(responseOrResponses)
       ? responseOrResponses.map((responseItem) => this.convertResponse(responseItem))
