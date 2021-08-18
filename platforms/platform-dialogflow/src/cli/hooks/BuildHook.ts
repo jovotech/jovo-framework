@@ -21,8 +21,8 @@ import _merge from 'lodash.merge';
 import _mergeWith from 'lodash.mergewith';
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs';
 import { FileBuilder, FileObject, FileObjectEntry } from '@jovotech/filebuilder';
-import { JovoModelData, NativeFileInformation } from 'jovo-model';
-import { JovoModelDialogflow } from 'jovo-model-dialogflow';
+import { JovoModelData, NativeFileInformation } from '@jovotech/model';
+import { JovoModelDialogflow } from '@jovotech/model-dialogflow';
 import { join as joinPaths } from 'path';
 
 import { DialogflowAgent, SupportedLocales, SupportedLocalesType } from '../utils';

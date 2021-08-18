@@ -9,7 +9,7 @@ import {
   UnknownObject,
 } from '@jovotech/framework';
 import { promises } from 'fs';
-import { JovoModelNlpjs } from 'jovo-model-nlpjs';
+import { JovoModelNlpjs } from '@jovotech/model-nlpjs';
 import { join } from 'path';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires

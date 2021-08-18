@@ -19,8 +19,8 @@ import {
 } from '@jovotech/cli-core';
 import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs';
-import { JovoModelData, NativeFileInformation } from 'jovo-model';
-import { JovoModelAlexa, JovoModelAlexaData } from 'jovo-model-alexa';
+import { JovoModelData, NativeFileInformation } from '@jovotech/model';
+import { JovoModelAlexa, JovoModelAlexaData } from '@jovotech/model-alexa';
 import _get from 'lodash.get';
 import _has from 'lodash.has';
 import _merge from 'lodash.merge';

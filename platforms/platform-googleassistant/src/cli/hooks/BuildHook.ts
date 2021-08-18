@@ -22,8 +22,8 @@ import {
 } from '@jovotech/cli-core';
 import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'fs';
-import { JovoModelData, NativeFileInformation } from 'jovo-model';
-import { JovoModelGoogle } from 'jovo-model-google';
+import { JovoModelData, NativeFileInformation } from '@jovotech/model';
+import { JovoModelGoogle } from '@jovotech/model-google';
 import _get from 'lodash.get';
 import _has from 'lodash.has';
 import _merge from 'lodash.merge';

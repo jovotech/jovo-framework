@@ -1,7 +1,7 @@
 import JovoCliCore, { getRawString, JovoCli, InstallContext } from '@jovotech/cli-core';
 
-import { JovoModelGoogle } from 'jovo-model-google';
-import { JovoModelData } from 'jovo-model';
+import { JovoModelGoogle } from '@jovotech/model-google';
+import { JovoModelData } from '@jovotech/model';
 import { BuildContextGoogle } from '../../dist/types/cli/hooks/BuildHook';
 
 import { BuildHook } from '../../src/cli/hooks/BuildHook';
@@ -14,7 +14,7 @@ jest.mock('@jovotech/cli-core', () => ({
     $project: { hasModelFiles: jest.fn(), saveModel: jest.fn(), backupModel: jest.fn() },
   }),
 }));
-jest.mock('jovo-model-google');
+jest.mock('@jovotech/model-google');
 
 beforeEach(() => {
   const plugin: Plugin = new Plugin();
