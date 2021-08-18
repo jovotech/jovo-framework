@@ -11,6 +11,7 @@ import {
   RichResponse,
   SimpleResponse,
   SystemIntent,
+  SUGGESTIONS_MAX_SIZE,
 } from '../src';
 
 const outputConverter = new OutputTemplateConverter(
@@ -217,13 +218,19 @@ describe('toResponse', () => {
         }),
       ).rejects.toThrowError(OutputValidationError);
     });
-    test('output.quickReplies is set but has more than 8 items', () => {
+    test('output.quickReplies is set but has more than 8 items', async () => {
+      const quickReplies = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
       return expect(
-        outputConverter.toResponse({
+        await outputConverter.toResponse({
           message: 'foo',
-          quickReplies: ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'],
+          quickReplies,
         }),
-      ).rejects.toThrowError(OutputValidationError);
+      ).toEqual({
+        richResponse: {
+          items: [{ simpleResponse: { ssml: toSSML('foo') } }],
+          suggestions: quickReplies.slice(0, SUGGESTIONS_MAX_SIZE).map((title) => ({ title })),
+        },
+      });
     });
     test('output.quickReplies is array of string and QuickReply', () => {
       return convertToResponseAndExpectToEqual(
