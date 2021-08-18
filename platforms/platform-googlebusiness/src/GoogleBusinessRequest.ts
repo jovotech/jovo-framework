@@ -1,8 +1,9 @@
 import {
   EntityMap,
+  InputType,
+  InputTypeLike,
+  JovoInput,
   JovoRequest,
-  JovoRequestType,
-  RequestType,
   UnknownObject,
 } from '@jovotech/framework';
 import { Receipt } from './interfaces';
@@ -46,38 +47,36 @@ export class GoogleBusinessRequest extends JovoRequest {
     createTime: string; // RFC3339 UTC "Zulu" format
   };
 
-  getEntities(): EntityMap | undefined {
-    return undefined;
-  }
-
-  getIntentName(): string | undefined {
-    return undefined;
-  }
-
   getLocale(): string | undefined {
     return this.context?.resolvedLocale || this.context?.userInfo?.userDeviceLocale;
   }
 
-  getRawText(): string | undefined {
+  getIntent(): JovoInput['intent'] {
+    return undefined;
+  }
+
+  getEntities(): EntityMap | undefined {
+    return undefined;
+  }
+
+  getInputType(): InputTypeLike | undefined {
+    return InputType.Intent;
+  }
+  getInputText(): JovoInput['text'] {
     return (
       this.message?.text || this.suggestionResponse?.postbackData || this.suggestionResponse?.text
     );
   }
-
-  getRequestType(): JovoRequestType | undefined {
-    return {
-      type: RequestType.Intent,
-    };
+  getInputAudio(): JovoInput['audio'] {
+    return;
   }
 
   getSessionData(): UnknownObject | undefined {
     return undefined;
   }
-
   getSessionId(): string | undefined {
     return this.conversationId;
   }
-
   isNewSession(): boolean | undefined {
     return undefined;
   }

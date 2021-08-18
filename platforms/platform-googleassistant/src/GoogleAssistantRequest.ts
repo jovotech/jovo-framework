@@ -1,12 +1,13 @@
 import {
   EntityMap,
+  InputType,
+  InputTypeLike,
+  JovoInput,
   JovoRequest,
-  JovoRequestType,
-  RequestType,
   UnknownObject,
 } from '@jovotech/framework';
 import type { Device, Home, Scene, Session, User } from '@jovotech/output-googleassistant';
-import { GoogleAssistantSystemIntent, GoogleAssistantSystemRequestType } from './enums';
+import { GoogleAssistantSystemInputType, GoogleAssistantSystemIntent } from './enums';
 import { Context, Handler, Intent } from './interfaces';
 
 export class GoogleAssistantRequest extends JovoRequest {
@@ -18,6 +19,14 @@ export class GoogleAssistantRequest extends JovoRequest {
   home?: Home;
   device?: Device;
   context?: Context;
+
+  getLocale(): string | undefined {
+    return this.user?.locale;
+  }
+
+  getIntent(): JovoInput['intent'] {
+    return this.intent?.name;
+  }
 
   getEntities(): EntityMap | undefined {
     const entities: EntityMap = {};
@@ -35,48 +44,34 @@ export class GoogleAssistantRequest extends JovoRequest {
     return entities;
   }
 
-  getIntentName(): string | undefined {
-    return this.intent?.name;
-  }
-
-  getLocale(): string | undefined {
-    return this.user?.locale;
-  }
-
-  getRawText(): string | undefined {
-    return this.intent?.query;
-  }
-
-  getRequestType(): JovoRequestType | undefined {
+  getInputType(): InputTypeLike | undefined {
     if (
       this.intent?.name === GoogleAssistantSystemIntent.Main &&
       !Object.keys(this.session?.params || {}).length
     ) {
-      return {
-        type: RequestType.Launch,
-      };
+      return InputType.Launch;
     }
     if (this.intent?.name === GoogleAssistantSystemIntent.Cancel) {
-      return {
-        type: RequestType.End,
-      };
+      return InputType.End;
     }
     if (this.intent?.params.AccountLinkingSlot) {
-      return {
-        type: GoogleAssistantSystemRequestType.ON_SIGN_IN,
-      };
+      return GoogleAssistantSystemInputType.ON_SIGN_IN;
     }
     return undefined;
+  }
+  getInputText(): JovoInput['text'] {
+    return this.intent?.query;
+  }
+  getInputAudio(): JovoInput['audio'] {
+    return;
   }
 
   getSessionData(): UnknownObject | undefined {
     return this.session?.params;
   }
-
   getSessionId(): string | undefined {
     return this.session?.id;
   }
-
   isNewSession(): boolean | undefined {
     return !this.getSessionData();
   }
