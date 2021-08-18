@@ -154,19 +154,45 @@ You can display a collection ([see the official Google Assistant docs](https://d
 {
   // ...
   carousel: {
+    title: 'Select an element',
+    selection: {
+      intent: 'SelectElementIntent',
+      entityType: 'ElementType',
+    },
     items: [
       {
-        title: 'Element 1',
+        title: 'Element A',
         content: 'To my right, you will see element 2.'
+        selection: {
+          entities: {
+            element: {
+              value: 'a'
+            }
+          }
+        }
       },
       {
-        title: 'Element 2',
-        content: 'Hi there!'
+        title: 'Element B',
+        content: 'Hi there!',
+        selection: {
+          entities: {
+            element: {
+              value: 'b'
+            }
+          }
+        }
       }
-    ]
+    ],
   },
 }
 ```
+
+It includes the following properties:
+
+* `selection` (required): This is used to map a selection of an item to both an `intent` and an `entityType`. The type is needed to create a type override ([see official Google documentation](https://developers.google.com/assistant/conversational/webhooks?hl=en&tool=builder#runtime_type_overrides)).
+* `items` (required): An array of elements to be displayed. They also need to include a `selection` property with an `entities` map.
+* `title` (optional): A string that gets displayed at the top.
+
 
 ## Google Assistant-specific Output Elements
 
