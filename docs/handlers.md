@@ -388,101 +388,18 @@ A handler usually concludes with one of these tasks:
 
 ### Return Output
 
-In most cases, the goal of a handler is to return output to the user. [You can find more information on output here](./output.md).
-
-This can be done in multiple ways using the `$send` method:
-
-* [Send an output object](#send-an-output-object)
-* [Send an output class](#send-an-output-class)
-* [Send multiple responses](#send-multiple-responses)
-
-#### Send an Output Object
-
-You can directly add an output object to the `$send` method:
+In most cases, the goal of a handler is to return output to the user.
 
 ```typescript
 yourHandler() {
   
   // ...
 
-  return this.$send({ /* output */ });
-}
-```
-This object can contain all output template elements that are described in the [output documentation](./output.md).
-
-Here is an example output that just contains a `message`:
-
-```typescript
-yourHandler() {
-  
-  // ...
-
-  return this.$send({ message: 'Hello World!' });
+  return this.$send(/* output */);
 }
 ```
 
-#### Send an Output Class
-
-For more complex output, we recommend using [output classes](./output.md).
-
-The below example imports an output class called `SomeOutput` and passes it to `$send` together with potential options:
-
-```typescript
-import { SomeOutput } from './output/SomeOutput';
-
-// ...
-
-yourHandler() {
-  
-  // ...
-
-  return this.$send(SomeOutput, { /* output options */ });
-}
-```
-
-The options can also override reserved properties from the output class, like the `message`:
-
-```typescript
-import { SomeOutput } from './output/SomeOutput';
-
-// ...
-
-yourHandler() {
-  
-  // ...
-
-  return this.$send(SomeOutput, { message: 'This overrides the message from SomeOutput' });
-}
-```
-
-#### Send Multiple Responses
-
-It may be necessary to spread output across a handler, or even across components.
-
-This is possible with multiple `$send` calls.
-
-The below example uses two `$send` method calls:
-
-```typescript
-import { SomeOutput } from './output/SomeOutput';
-
-// ...
-
-yourHandler() {
-
-  this.$send({ message: 'Alright, one second.' });
-  
-  // ...
-
-  return this.$send(SomeOutput, { /* output options */ });
-}
-```
-
-Multiple `$send` calls result in the following behavior, depending on the platform:
-
-* Synchronous platforms like Amazon Alexa only support one response. The output is stored in an array and later merged into a single response. `message` elements are concatenated while for other elements that are only supported once (like `card` or `carousel`), the last one gets used.
-* Asynchronous platforms like Facebook Messenger support multiple responses. Each response is sent to the platform asynchronously, which leads to multiple chat bubbles for each `message` element.
-
+[You can find more information on output here](./output.md).
 
 ### Redirect to Components
 
