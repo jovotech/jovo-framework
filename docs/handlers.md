@@ -203,10 +203,10 @@ showMenu() {
 
 As components have their own state management system, we usually recommend using the `$delegate` method if you have steps that need an additional state. However, sometimes it might be more convenient to have all handlers in one component.
 
-For this, you can set a `subState` in your handlers
+For this, you can set a `$subState` in your handlers
 
 ```typescript
-this.subState = 'YourSubState';
+this.$subState = 'YourSubState';
 ```
 
 Jovo then adds it to the component's state in the `$state` stack:
