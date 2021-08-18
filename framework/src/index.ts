@@ -25,6 +25,13 @@ export type PickWhere<T, U> = Pick<
     [K in keyof T]: T[K] extends U ? K : never;
   }[keyof T]
 >;
+// Construct object from properties of T that do not extend U.
+export type OmitWhere<T, U> = Omit<
+  T,
+  {
+    [K in keyof T]: T[K] extends U ? K : never;
+  }[keyof T]
+>;
 // If K equals I return never, otherwise return the key.
 export type FilterKey<K, I> = A.Equals<K, I> extends 1 ? never : K;
 // Omit index signature of T if it equals index-signature I.
