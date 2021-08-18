@@ -30,7 +30,7 @@
     "@jovotech/cli-core": "^4.0.0-beta.1",
     "@jovotech/filebuilder": "^0.0.1",
     "@jovotech/framework": "^4.0.0-alpha.18",
-    "@jovotech/output-alexa": "^4.0.0-beta.0",
+    "@jovotech/output-alexa": "^4.0.0-beta.1",
     "chalk": "^4.1.0",
     "jovo-model": "^3.0.1",
     "jovo-model-alexa": "^3.0.1",

@@ -31,7 +31,7 @@
     "@jovotech/cli-core": "^4.0.0-beta.1",
     "@jovotech/filebuilder": "^0.0.1",
     "@jovotech/framework": "^4.0.0-alpha.18",
-    "@jovotech/output-googleassistant": "^4.0.0-beta.0",
+    "@jovotech/output-googleassistant": "^4.0.0-beta.1",
     "global-dirs": "^3.0.0",
     "indent-string": "^4.0.0",
     "jovo-model": "^3.0.1",
