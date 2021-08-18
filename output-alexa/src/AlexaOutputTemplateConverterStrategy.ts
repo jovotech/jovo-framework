@@ -2,6 +2,7 @@ import {
   DynamicEntities,
   DynamicEntitiesMode,
   DynamicEntity,
+  DynamicEntityMap,
   mergeInstances,
   MessageValue,
   OutputTemplate,
@@ -97,11 +98,16 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
 
       if (typeof listen === 'object' && listen.entities) {
         const directive = new DialogUpdateDynamicEntitiesDirective();
-        if (listen.entities.mode !== DynamicEntitiesMode.Clear) {
-          directive.updateBehavior = DynamicEntitiesUpdateBehavior.Replace;
-          directive.types = (listen.entities.types || []).map(this.convertDynamicEntityToSlotType);
-        } else {
+        if (listen.entities.mode === DynamicEntitiesMode.Clear) {
           directive.updateBehavior = DynamicEntitiesUpdateBehavior.Clear;
+        } else if (listen.entities.types) {
+          directive.updateBehavior = DynamicEntitiesUpdateBehavior.Replace;
+          directive.types = Object.keys(listen.entities.types).map((entityName) =>
+            this.convertDynamicEntityToSlotType(
+              entityName,
+              ((listen.entities as DynamicEntities).types as DynamicEntityMap)[entityName],
+            ),
+          );
         }
         addToDirectives(directive);
       }
@@ -202,7 +208,10 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
       output.listen = {
         entities: {
           mode: lastDialogUpdateDirective.updateBehavior,
-          types: lastDialogUpdateDirective.types.map(this.convertSlotTypeToDynamicEntity),
+          types: lastDialogUpdateDirective.types.reduce((map: DynamicEntityMap, type) => {
+            map[type.name] = this.convertSlotTypeToDynamicEntity(type);
+            return map;
+          }, {}),
         },
       };
     }
@@ -222,9 +231,9 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
         };
   }
 
-  private convertDynamicEntityToSlotType(entity: DynamicEntity): SlotType {
+  private convertDynamicEntityToSlotType(name: string, entity: DynamicEntity): SlotType {
     return {
-      name: entity.name,
+      name: name,
       values: (entity.values || []).slice(0, SLOT_TYPE_VALUES_MAX_SIZE).map((value) => ({
         id: value.id,
         name: {
@@ -237,7 +246,6 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
 
   private convertSlotTypeToDynamicEntity(slotType: SlotType): DynamicEntity {
     return {
-      name: slotType.name,
       values: slotType.values.map((value) => ({
         id: value.id || value.name.value,
         value: value.name.value,

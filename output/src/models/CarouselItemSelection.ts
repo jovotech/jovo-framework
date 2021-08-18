@@ -1,4 +1,13 @@
-import { Entity, IsArray, IsNotEmpty, IsOptional, IsString, Type, ValidateNested } from '..';
+import {
+  Entity,
+  EntityMap,
+  IsNotEmpty,
+  IsObject,
+  IsOptional,
+  IsString,
+  TransformMap,
+  ValidateNested,
+} from '..';
 
 export class CarouselItemSelection {
   @IsString()
@@ -6,8 +15,8 @@ export class CarouselItemSelection {
   intent: string;
 
   @IsOptional()
-  @IsArray()
+  @IsObject()
   @ValidateNested({ each: true })
-  @Type(() => Entity)
-  entities?: Entity[];
+  @TransformMap(() => Entity)
+  entities?: EntityMap;
 }

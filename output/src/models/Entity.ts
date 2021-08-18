@@ -1,10 +1,10 @@
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-export class Entity {
-  @IsString()
-  @IsNotEmpty()
-  name: string;
+export type EntityMap = Record<string, Entity>;
 
+export class Entity {
+  [key: string]: unknown;
+  
   @IsString()
   @IsNotEmpty()
   value: string;

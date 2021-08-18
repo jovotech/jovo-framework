@@ -134,12 +134,11 @@ It's also possible to add entities:
     {
       text: 'Button A',
       intent: 'ButtonIntent',
-      entities: [
-        {
-          name: 'button',
+      entities: {
+        button: {
           value: 'a',
-        },
-      ]
+        }
+      },
     }
   ]
 }
@@ -195,12 +194,11 @@ You can make it clickable by adding a `selection` object. Once an element is sel
         content: 'To my right, you will see element B.',
         selection: {
           intent: 'ElementIntent',
-          entities: [
-            {
-              name: 'element',
+          entities: {
+            element: {
               value: 'A',
             },
-          ],
+          },
         },
       },
       {
@@ -208,18 +206,19 @@ You can make it clickable by adding a `selection` object. Once an element is sel
         content: 'Hi there!',
         selection: {
           intent: 'ElementIntent',
-          entities: [
-            {
-              name: 'element',
+          entities: {
+            element: {
               value: 'B',
             },
-          ],
+          },
         },
       }
     ]
   },
 }
 ```
+
+In the example above, a tap on an element triggers the `ElementIntent` and contains an entity of the name `element`.
 
 ## Alexa-specific Output Elements
 

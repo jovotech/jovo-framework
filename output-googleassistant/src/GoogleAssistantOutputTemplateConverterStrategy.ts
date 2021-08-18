@@ -1,7 +1,9 @@
 import {
   Carousel,
+  DynamicEntities,
   DynamicEntitiesMode,
   DynamicEntity,
+  DynamicEntityMap,
   mergeInstances,
   MessageValue,
   OutputTemplate,
@@ -96,7 +98,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
           name: 'actions.scene.END_CONVERSATION',
         },
       };
-    } else if (typeof listen === 'object' && listen.entities?.types?.length) {
+    } else if (typeof listen === 'object' && listen.entities?.types) {
       const typeOverrideMode: TypeOverrideMode =
         listen.entities.mode === DynamicEntitiesMode.Merge
           ? TypeOverrideMode.Merge
@@ -104,8 +106,12 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
       if (!response.session) {
         response.session = getEmptySession();
       }
-      response.session.typeOverrides = listen.entities.types.map((entity) =>
-        this.convertDynamicEntityToTypeOverride(entity, typeOverrideMode),
+      response.session.typeOverrides = Object.keys(listen.entities).map((entityName) =>
+        this.convertDynamicEntityToTypeOverride(
+          entityName,
+          ((listen.entities as DynamicEntities).types as DynamicEntityMap)[entityName],
+          typeOverrideMode,
+        ),
       );
     }
 
@@ -211,7 +217,10 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
       output.listen = {
         entities: {
           mode,
-          types: response.session.typeOverrides.map(this.convertTypeOverrideToDynamicEntity),
+          types: response.session.typeOverrides.reduce((map: DynamicEntityMap, typeOverride) => {
+            map[typeOverride.name] = this.convertTypeOverrideToDynamicEntity(typeOverride);
+            return map;
+          }, {}),
         },
       };
     }
@@ -268,11 +277,12 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
   }
 
   private convertDynamicEntityToTypeOverride(
+    entityName: string,
     entity: DynamicEntity,
     mode: TypeOverrideModeLike = TypeOverrideMode.Replace,
   ): TypeOverride {
     return {
-      name: entity.name,
+      name: entityName,
       typeOverrideMode: mode,
       synonym: {
         entries: (entity.values || []).map((entityValue) => ({
@@ -285,7 +295,6 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
 
   private convertTypeOverrideToDynamicEntity(typeOverride: TypeOverride): DynamicEntity {
     return {
-      name: typeOverride.name,
       values: (typeOverride.synonym?.entries || []).map((entry) => ({
         id: entry.name,
         value: entry.name,

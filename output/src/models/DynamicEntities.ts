@@ -1,4 +1,12 @@
-import { DynamicEntity, EnumLike, IsArray, IsEnum, IsOptional, Type, ValidateNested } from '..';
+import {
+  DynamicEntity,
+  EnumLike,
+  IsEnum,
+  IsObject,
+  IsOptional,
+  TransformMap,
+  ValidateNested,
+} from '..';
 
 export enum DynamicEntitiesMode {
   Replace = 'REPLACE',
@@ -8,14 +16,16 @@ export enum DynamicEntitiesMode {
 
 export type DynamicEntitiesModeLike = EnumLike<DynamicEntitiesMode>;
 
+export type DynamicEntityMap = Record<string, DynamicEntity>;
+
 export class DynamicEntities {
   @IsOptional()
   @IsEnum(DynamicEntitiesMode)
   mode?: DynamicEntitiesModeLike;
 
   @IsOptional()
-  @IsArray()
+  @IsObject()
   @ValidateNested({ each: true })
-  @Type(() => DynamicEntity)
-  types?: DynamicEntity[];
+  @TransformMap(() => DynamicEntity)
+  types?: DynamicEntityMap;
 }

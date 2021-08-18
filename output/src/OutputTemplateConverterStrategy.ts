@@ -3,6 +3,7 @@ import { PartialDeep } from 'type-fest';
 import {
   Carousel,
   DynamicEntities,
+  DynamicEntityMap,
   MessageValue,
   OutputTemplate,
   OutputTemplateBase,
@@ -14,6 +15,7 @@ import {
 export interface SanitizationConfig {
   trimArrays: boolean;
   trimStrings: boolean;
+  trimMaps: boolean;
 }
 
 export interface ValidationConfig {
@@ -122,24 +124,32 @@ export abstract class OutputTemplateConverterStrategy<
     } else {
       message = message.slice(0, actualMaxLength);
     }
-    this.logStringTruncationWarning(path, maxLength);
+    this.logStringTrimWarning(path, maxLength);
     return message;
   }
 
   protected sanitizeDynamicEntities(
     dynamicEntities: DynamicEntities,
     path: string,
-    maxSize: number,
+    maxEntries: number,
   ): DynamicEntities {
     if (
-      !this.shouldSanitize('trimArrays') ||
-      !dynamicEntities?.types?.length ||
-      dynamicEntities.types.length <= maxSize
+      !this.shouldSanitize('trimMaps') ||
+      !dynamicEntities?.types ||
+      Object.keys(dynamicEntities.types).length <= maxEntries
     ) {
       return dynamicEntities;
     }
-    dynamicEntities.types = dynamicEntities.types.slice(0, maxSize);
-    this.logArrayTruncationWarning(path, maxSize);
+    dynamicEntities.types = Object.keys(dynamicEntities)
+      .slice(0, maxEntries)
+      .reduce((map: DynamicEntityMap, entityKey) => {
+        if (!dynamicEntities.types) {
+          return map;
+        }
+        map[entityKey] = dynamicEntities.types[entityKey];
+        return map;
+      }, {});
+    this.logMapTrimWarning(path, maxEntries);
     return dynamicEntities;
   }
 
@@ -153,7 +163,7 @@ export abstract class OutputTemplateConverterStrategy<
       return quickReplies;
     }
     quickReplies = quickReplies.slice(0, maxSize);
-    this.logArrayTruncationWarning(path, maxSize);
+    this.logArrayTrimWarning(path, maxSize);
     if (!this.shouldSanitize('trimStrings')) {
       return quickReplies;
     }
@@ -168,7 +178,7 @@ export abstract class OutputTemplateConverterStrategy<
       } else {
         quickReply = quickReply.slice(0, maxLength);
       }
-      this.logStringTruncationWarning(`${path}[${index}]`, maxLength);
+      this.logStringTrimWarning(`${path}[${index}]`, maxLength);
       return quickReply;
     });
   }
@@ -186,7 +196,7 @@ export abstract class OutputTemplateConverterStrategy<
       return carousel;
     }
     carousel.items = carousel.items.slice(0, maxSize);
-    this.logArrayTruncationWarning(path, maxSize);
+    this.logArrayTrimWarning(path, maxSize);
     return carousel;
   }
 
@@ -197,22 +207,22 @@ export abstract class OutputTemplateConverterStrategy<
     console.warn(message);
   }
 
-  protected logStringTruncationWarning(path: string, maxLength: number): void {
-    return this.logTruncationWarning(path, maxLength, false);
+  protected logStringTrimWarning(path: string, maxLength: number): void {
+    return this.logSanitizationWarning(this.getTrimMessage(path, maxLength, 'characters'));
   }
 
-  protected logArrayTruncationWarning(path: string, maxSize: number): void {
-    return this.logTruncationWarning(path, maxSize, true);
+  protected logArrayTrimWarning(path: string, maxSize: number): void {
+    return this.logSanitizationWarning(this.getTrimMessage(path, maxSize, 'items'));
   }
 
-  private logTruncationWarning(path: string, maxLengthOrSize: number, isArray: boolean): void {
+  protected logMapTrimWarning(path: string, maxEntries: number): void {
+    return this.logSanitizationWarning(this.getTrimMessage(path, maxEntries, 'entries'));
+  }
+
+  private getTrimMessage(path: string, max: number, suffix: string): string {
     const pathStartsWithIndex = /^\[[\d+]].*/.test(path);
     const rootPath = `$output${pathStartsWithIndex ? '' : '.'}`;
     path = rootPath + path;
-    return this.logSanitizationWarning(
-      `${path} was truncated due to exceeding the limit of ${maxLengthOrSize} ${
-        isArray ? 'items' : 'characters'
-      }.`,
-    );
+    return `${path} was trimmed due to exceeding the limit of ${max} ${suffix}.`;
   }
 }

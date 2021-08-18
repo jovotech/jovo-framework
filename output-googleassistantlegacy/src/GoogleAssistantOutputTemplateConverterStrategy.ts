@@ -58,11 +58,11 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
     const maxLength = card.imageUrl
       ? BASIC_CARD_WITH_IMAGE_TEXT_MAX_LENGTH
       : BASIC_CARD_TEXT_MAX_LENGTH;
-    if (!this.shouldSanitize('maxLength') || !card.content || card.content.length <= maxLength) {
+    if (!this.shouldSanitize('trimStrings') || !card.content || card.content.length <= maxLength) {
       return card;
     }
     card.content = card.content.slice(0, maxLength);
-    this.logStringTruncationWarning(path, maxLength);
+    this.logStringTrimWarning(path, maxLength);
     return card;
   }
 

@@ -47,18 +47,18 @@ export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleRespo
   }
 
   protected sanitizeCard(card: Card, path: string): Card {
-    if (!this.shouldSanitize('maxLength')) {
+    if (!this.shouldSanitize('trimStrings')) {
       return card;
     }
 
     if (card.title.length > CARD_CONTENT_TITLE_MAX_LENGTH) {
       card.title = card.title.slice(0, CARD_CONTENT_TITLE_MAX_LENGTH);
-      this.logStringTruncationWarning(`${path}.title`, CARD_CONTENT_TITLE_MAX_LENGTH);
+      this.logStringTrimWarning(`${path}.title`, CARD_CONTENT_TITLE_MAX_LENGTH);
     }
 
     if (card.content && card.content.length > CARD_CONTENT_DESCRIPTION_MAX_LENGTH) {
       card.content = card.content.slice(0, CARD_CONTENT_DESCRIPTION_MAX_LENGTH);
-      this.logStringTruncationWarning(`${path}.content`, CARD_CONTENT_DESCRIPTION_MAX_LENGTH);
+      this.logStringTrimWarning(`${path}.content`, CARD_CONTENT_DESCRIPTION_MAX_LENGTH);
     }
 
     return card;

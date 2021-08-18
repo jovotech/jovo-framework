@@ -1,6 +1,8 @@
 import {
+  DynamicEntities,
   DynamicEntitiesMode,
   DynamicEntity,
+  DynamicEntityMap,
   mergeInstances,
   MessageValue,
   OutputTemplate,
@@ -59,13 +61,17 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
     const response: DialogflowResponse = {};
 
     const listen = output.listen;
-    if (typeof listen === 'object' && listen.entities?.types?.length) {
+    if (typeof listen === 'object' && listen.entities?.types) {
       const entityOverrideMode: EntityOverrideMode =
         listen.entities.mode === DynamicEntitiesMode.Merge
           ? EntityOverrideMode.Supplement
           : EntityOverrideMode.Override;
-      response.session_entity_types = listen.entities.types.map((entity) =>
-        this.convertDynamicEntityToSessionEntityType(entity, entityOverrideMode),
+      response.session_entity_types = Object.keys(listen.entities.types).map((entityName) =>
+        this.convertDynamicEntityToSessionEntityType(
+          entityName,
+          ((listen.entities as DynamicEntities).types as DynamicEntityMap)[entityName],
+          entityOverrideMode,
+        ),
       );
     }
 
@@ -144,7 +150,14 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
       output.listen = {
         entities: {
           mode,
-          types: response.session_entity_types.map(this.convertSessionEntityTypeToDynamicEntity),
+          types: response.session_entity_types.reduce(
+            (map: DynamicEntityMap, sessionEntityType) => {
+              map[sessionEntityType.name] =
+                this.convertSessionEntityTypeToDynamicEntity(sessionEntityType);
+              return map;
+            },
+            {},
+          ),
         },
       };
     }
@@ -167,12 +180,13 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
   }
 
   private convertDynamicEntityToSessionEntityType(
+    entityName: string,
     entity: DynamicEntity,
     entityOverrideMode: EntityOverrideModeLike,
   ): SessionEntityType {
     // name usually is a whole path that even includes the session-id, we will have to figure something out for that, but it should not be too complicated.
     return {
-      name: entity.name,
+      name: entityName,
       entity_override_mode: entityOverrideMode,
       entities: (entity.values || []).map((entityValue) => ({
         value: entityValue.id || entityValue.value,
@@ -186,7 +200,6 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
     sessionEntityType: SessionEntityType,
   ): DynamicEntity {
     return {
-      name: sessionEntityType.name,
       values: sessionEntityType.entities.map((entity) => ({
         id: entity.value,
         value: entity.value,
