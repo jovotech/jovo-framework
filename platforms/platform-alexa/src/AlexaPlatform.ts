@@ -69,8 +69,9 @@ export class AlexaPlatform extends Platform<
       return;
     }
     // Generate generic output to APL if supported and set in config
-    this.outputTemplateConverterStrategy.config.genericOutputToApl =
-      jovo.$alexa?.$request?.isAplSupported() && this.config.output?.genericOutputToApl;
+    this.outputTemplateConverterStrategy.config.genericOutputToApl = !!(
+      jovo.$alexa?.$request?.isAplSupported() && this.config.output?.genericOutputToApl
+    );
 
     if (jovo.$alexa?.$request?.request?.type === 'Alexa.Presentation.APL.UserEvent') {
       const requestArguments = jovo.$alexa.$request.request.arguments || [];
