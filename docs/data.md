@@ -17,7 +17,7 @@ There are different types of data that can be used in a Jovo app. For example, s
 
 These are the types of data that are usually only stored for a short amount of time ([short-term data storage](#short-term-data-storage)):
 
-* [Request data](#request-data): Only used for this specific interaction, stored in `this.data`.
+* [Request data](#request-data): Only used for this specific interaction, stored in `this.$data`.
 * [Component data](#component-data): Only used for this specific component, stored in `this.$component.data`.
 * [Session data](#session-data): Only used for this specific session, stored in `this.$session.data`.
 * [App data](#app-data): This is a special data type that keeps the data stored as long as the server is running, which can be usually for caching. Stored in `this.$app.data`.
@@ -36,7 +36,7 @@ Request data is written into the Jovo object (`this`) and only stored for a spec
 We recommend the following practice to store data in the Jovo object:
 
 ```typescript
-this.data.someKey = 'someValue';
+this.$data.someKey = 'someValue';
 ```
 
 ### Component Data
