@@ -1,6 +1,10 @@
-import { IsBoolean, IsObject } from '@jovotech/output';
+import { IsBoolean, IsObject, IsString, IsOptional } from '@jovotech/output';
 
 export class Session {
+  @IsString()
+  @IsOptional()
+  id?: string;
+
   @IsBoolean()
   end: boolean;
 
