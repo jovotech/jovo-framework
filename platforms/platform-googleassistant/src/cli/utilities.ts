@@ -1,18 +1,19 @@
 import { execAsync, JovoCliError } from '@jovotech/cli-core';
 
-export * from './interfaces';
 export * from './constants';
+export * from './interfaces';
 
 export async function checkForGactionsCli(): Promise<void> {
   try {
     await execAsync('gactions version');
   } catch (err) {
-    throw new JovoCliError(
-      'Jovo requires gactions CLI.',
-      'GoogleAssistantCli',
-      'Install the gactions CLI following this guide: ' +
+    throw new JovoCliError({
+      message: 'Jovo requires gactions CLI.',
+      module: 'GoogleAssistantCli',
+      learnMore:
+        'Install the gactions CLI following this guide: ' +
         'https://developers.google.com/assistant/conversational/quickstart#install_the_gactions_command-line_tool',
-    );
+    });
   }
 }
 
@@ -23,11 +24,11 @@ export async function checkForGactionsCli(): Promise<void> {
 export function getGactionsError(errorMessage: string): JovoCliError {
   // ToDo: Check for different errors.
   if (errorMessage.includes('command requires authentication')) {
-    return new JovoCliError(
-      'Missing authentication.',
-      'GoogleAssistantCli',
-      'Try to run "gactions login" first.',
-    );
+    return new JovoCliError({
+      message: 'Missing authentication.',
+      module: 'GoogleAssistantCli',
+      hint: 'Try to run "gactions login" first.',
+    });
   }
 
   const errorToken = 'Server did not return HTTP 200.';
@@ -36,12 +37,12 @@ export function getGactionsError(errorMessage: string): JovoCliError {
       errorMessage.substring(errorMessage.indexOf(errorToken) + errorToken.length),
     );
 
-    return new JovoCliError(
-      error.message,
-      'GoogleAssistantCli',
-      error.details[0].fieldViolations?.[0].description,
-    );
+    return new JovoCliError({
+      message: error.message,
+      module: 'GoogleAssistantCli',
+      details: error.details[0].fieldViolations?.[0].description,
+    });
   }
 
-  return new JovoCliError(errorMessage, 'GoogleAssistantCli');
+  return new JovoCliError({ message: errorMessage, module: 'GoogleAssistantCli' });
 }
