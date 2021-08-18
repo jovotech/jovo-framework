@@ -1,7 +1,6 @@
 import {
   IsArray,
   IsNotEmpty,
-  IsOptional,
   IsString,
   JovoResponse,
   OutputTemplate,
@@ -9,8 +8,6 @@ import {
   ValidateNested,
 } from '@jovotech/output';
 import { Context } from './Context';
-import { Session } from './Session';
-import { User } from './User';
 
 // TODO: Find better names for output and repromptOutputs!
 export class CoreResponse extends JovoResponse {
@@ -20,21 +17,12 @@ export class CoreResponse extends JovoResponse {
 
   @IsString()
   @IsNotEmpty()
-  type: string;
+  platform: string;
 
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => OutputTemplate)
   output: OutputTemplate[];
-
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => User)
-  user?: User;
-
-  @ValidateNested()
-  @Type(() => Session)
-  session: Session;
 
   @ValidateNested()
   @Type(() => Context)

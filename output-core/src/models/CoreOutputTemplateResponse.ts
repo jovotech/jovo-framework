@@ -9,8 +9,6 @@ import {
 } from '@jovotech/output';
 import { Context } from './Context';
 import { CoreResponse } from './CoreResponse';
-import { Session } from './Session';
-import { User } from './User';
 
 export class CoreOutputTemplateResponse implements Partial<CoreResponse> {
   [key: string]: unknown;
@@ -19,11 +17,6 @@ export class CoreOutputTemplateResponse implements Partial<CoreResponse> {
   @IsString()
   @IsNotEmpty()
   version?: string;
-
-  @IsOptional()
-  @IsString()
-  @IsNotEmpty()
-  type?: string;
 
   @IsOptional()
   @IsArray()
@@ -36,16 +29,6 @@ export class CoreOutputTemplateResponse implements Partial<CoreResponse> {
   @ValidateNested({ each: true })
   @Type(() => OutputTemplate)
   repromptOutput?: OutputTemplate[];
-
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => User)
-  user?: User;
-
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => Session)
-  session?: Session;
 
   @IsOptional()
   @ValidateNested()
