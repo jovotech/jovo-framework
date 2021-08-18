@@ -21,7 +21,7 @@ declare module '@jovotech/framework/dist/types/Jovo' {
 
 registerPlatformSpecificJovoReference('$alexa', Alexa);
 
-export const AlexaCli: typeof AlexaCliType = process.env.JOVO_CLI_SESSION
+export const AlexaCli: typeof AlexaCliType = process.env.JOVO_CLI_RUNTIME
   ? // eslint-disable-next-line @typescript-eslint/no-var-requires
     require('./cli').AlexaCli
   : null;
