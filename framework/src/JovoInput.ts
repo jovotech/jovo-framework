@@ -7,7 +7,7 @@ export enum InputType {
   Error = 'ERROR',
   Intent = 'INTENT',
   Text = 'TEXT',
-  TranscribedSpeech = 'TRANSCRIBED_SPEECH ',
+  TranscribedSpeech = 'TRANSCRIBED_SPEECH',
   Speech = 'SPEECH',
 }
 
