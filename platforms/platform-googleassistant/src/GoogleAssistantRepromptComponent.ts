@@ -3,11 +3,11 @@ import { GoogleAssistantSystemIntent } from './enums';
 
 @Global()
 export class GoogleAssistantRepromptComponent extends BaseComponent {
-  @Intents([
+  @Intents(
     GoogleAssistantSystemIntent.NoInput1,
     GoogleAssistantSystemIntent.NoInput2,
     GoogleAssistantSystemIntent.NoInputFinal,
-  ])
+  )
   async googleAssistantNoInput(): Promise<void> {
     // could be improved to only the the string that is related to the current intent
     const prompt =
@@ -19,7 +19,7 @@ export class GoogleAssistantRepromptComponent extends BaseComponent {
         message: prompt,
       });
       // only delete reprompts on final reprompt
-      if (this.$nlu.intent?.name === GoogleAssistantSystemIntent.NoInputFinal) {
+      if (this.$input.getIntentName() === GoogleAssistantSystemIntent.NoInputFinal) {
         delete this.$session._GOOGLE_ASSISTANT_REPROMPTS_;
       }
     }

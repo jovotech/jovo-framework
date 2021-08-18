@@ -87,14 +87,11 @@ export class GoogleAssistantPlatform extends Platform<
       Object.keys(request.intent?.params || {}).length &&
       request.session?.params?._GOOGLE_ASSISTANT_SELECTION_INTENT_
     ) {
-      if (!jovo.$nlu) {
-        jovo.$nlu = {};
-      }
-      if (!jovo.$nlu.intent) {
-        jovo.$nlu.intent = { name: '' };
+      if(!jovo.$input.nlu) {
+        jovo.$input.nlu = {};
       }
       // set intent
-      jovo.$nlu.intent.name = request.session.params._GOOGLE_ASSISTANT_SELECTION_INTENT_;
+      jovo.$input.nlu.intent = request.session.params._GOOGLE_ASSISTANT_SELECTION_INTENT_
     }
   };
 }
