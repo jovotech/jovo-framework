@@ -154,7 +154,7 @@ new FileDb({
 You can add the following elements to the history:
 
 * `output`: Stores `this.$output`
-* `state`: Stores `this.state`
+* `state`: Stores `this.$state`
 * `nlu`: Stores `this.$nlu`
 * `entities`: Stores `this.$entities`
 * `asr`: Stores `this.$asr`
