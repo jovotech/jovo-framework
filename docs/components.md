@@ -254,7 +254,7 @@ As a rule of thumb, a global component can be seen as a "last resort" that is on
 For data that is only relevant for this specific component, you can use component data:
 
 ```typescript
-this.$component.$data.someKey = 'someValue';
+this.$component.data.someKey = 'someValue';
 ```
 
 This is then added to the [`$state` stack](./state-stack.md) and lost once the component resolves:
@@ -319,7 +319,7 @@ A folder allows for a modular approach where all relevant elements of a componen
 
 ### Output
 
-This folder contains all output classes that are used by the Jovo `$send` command. Learn more about this in our [handlers documentation](./handlers.md).
+This folder contains all output classes that are used by the Jovo `$send` command. Learn more about this in our [output classes documentation](./output-classes.md).
 
 ### Models
 

@@ -46,7 +46,7 @@ export class AlexaPlatform extends Platform<
   }
 
   mount(parent: HandleRequest): void {
-    parent.middlewareCollection.use('before.request', this.beforeRequest);
+    parent.middlewareCollection.use('request.start', this.onRequestStart);
   }
 
   isRequestRelated(request: AnyObject | AlexaRequest): boolean {
@@ -65,13 +65,14 @@ export class AlexaPlatform extends Platform<
     return response;
   }
 
-  private beforeRequest = (handleRequest: HandleRequest, jovo: Jovo) => {
+  private onRequestStart = (jovo: Jovo) => {
     if (!(jovo.$platform instanceof AlexaPlatform)) {
       return;
     }
     // Generate generic output to APL if supported and set in config
-    this.outputTemplateConverterStrategy.config.genericOutputToApl =
-      jovo.$alexa?.$request?.isAplSupported() && this.config.output?.genericOutputToApl;
+    this.outputTemplateConverterStrategy.config.genericOutputToApl = !!(
+      jovo.$alexa?.$request?.isAplSupported() && this.config.output?.genericOutputToApl
+    );
 
     if (jovo.$alexa?.$request?.request?.type === 'Alexa.Presentation.APL.UserEvent') {
       const requestArguments = jovo.$alexa.$request.request.arguments || [];

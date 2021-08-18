@@ -7,6 +7,7 @@ Learn more about one of the key concepts of Jovo: The RIDR (Request - Interpreta
 - [Interpretation](#interpretation)
 - [Dialogue & Logic](#dialogue--logic)
 - [Response](#response)
+- [Middlewares](#middlewares)
 
 ## Introduction
 
@@ -22,7 +23,6 @@ RIDR includes four key elements:
 * [Response](#response): Turning structured output into native platform responses
 
 You can find a long-form introduction to RIDR on [Context-First: An Introduction to Voice and Multimodal Interactions](https://www.context-first.com/introduction-voice-multimodal-interactions/).
-
 
 ## Request
 
@@ -73,3 +73,25 @@ The Dialogue & Logic step usually ends with a populated [Jovo `$output` object](
 In the final Response step, the `$output` object from the previous step is translated into a native platform `$response`.
 
 This response is then returned back to the platform.
+
+## Middlewares
+
+For a detailed look into all the framework middlewares that are executed as part of the RIDR Lifecycle, take a look at table below.
+
+Middleware | Description
+--- | --- 
+`request.start` | Enters the `request` middleware group
+`request` | Turns the raw JSON request into a `$request` object
+`request.end` | Leaves the `request` middleware group with propagated `$request` object
+`interpretation.start` | Enters the `interpretation` middleware group
+`interpretation.asr` | ASR/SLU integrations turn speech audio into raw text
+`interpretation.nlu` | NLU integrations turn raw text into structured input
+`interpretation.end` | Leaves the `interpretation` middleware group with propagated `$nlu` object
+`dialogue.start` | Enters the `dialogue` middleware group
+`dialogue.router` | Uses information from the `interpretation` steps to find the right component and handler
+`dialogue.logic` | Executes the component and handler logic
+`dialogue.end` | Leaves the `dialogue` middleware group with propagated `$output` object
+`response.start` | Enters the `response` middleware group
+`response.output` | Turns `$output` into a raw JSN response
+`response.tts` | TTS integrations turn text into speech output
+`response.end` | Leaves the `response` middleware group with propagated `$response` object

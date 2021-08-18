@@ -1,6 +1,5 @@
 import { InvalidParentError } from './errors/InvalidParentError';
 import { Extensible } from './Extensible';
-import { HandleRequest } from './HandleRequest';
 import { NluData } from './interfaces';
 import { Jovo } from './Jovo';
 import { InputType, InputTypeLike } from './JovoInput';
@@ -32,14 +31,14 @@ export abstract class NluPlugin<
     if (!(parent instanceof Platform)) {
       throw new InvalidParentError(this.constructor.name, 'Platform');
     }
-    parent.middlewareCollection.use('$nlu', this.nlu);
+    parent.middlewareCollection.use('interpretation.nlu', this.nlu);
   }
 
   protected isInputTypeSupported(inputType: InputTypeLike): boolean {
     return this.config.input.supportedTypes.includes(inputType);
   }
 
-  protected nlu = async (handleRequest: HandleRequest, jovo: Jovo): Promise<void> => {
+  protected nlu = async (jovo: Jovo): Promise<void> => {
     if (!jovo.$input.text || !this.isInputTypeSupported(jovo.$input.type)) {
       return;
     }

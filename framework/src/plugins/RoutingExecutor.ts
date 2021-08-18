@@ -176,7 +176,7 @@ export class RoutingExecutor {
     const routeMatches: RouteMatch[] = [];
     const latestStateStackItem = this.jovo.$state[this.jovo.$state.length - 1];
     const currentComponentPath = latestStateStackItem.component.split('.');
-    let subState = latestStateStackItem.$subState;
+    let subState = latestStateStackItem.subState;
 
     // get the current node
     let node: ComponentTreeNode | undefined =

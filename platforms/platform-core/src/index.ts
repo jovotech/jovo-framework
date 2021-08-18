@@ -23,5 +23,5 @@ export * from './Core';
 export * from './CorePlatform';
 export * from './CoreRequest';
 export * from './CoreUser';
-export type { CorePlatformResponse as CoreResponse } from '@jovotech/output-core';
+export type { CoreResponse } from '@jovotech/output-core';
 export * from './interfaces';

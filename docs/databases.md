@@ -56,8 +56,8 @@ The default configuration for each database integration is this:
 new FileDb({
   // ...
   storedElements: {
-    user: true, // this.$user.$data
-    session: false, // this.$session.$data
+    user: true, // this.$user.data
+    session: false, // this.$session.data
     history: false, // this.$history
     createdAt: true,
     updatedAt: true,
@@ -65,9 +65,9 @@ new FileDb({
 }),
 ```
 
-* `user`: Persist user data across sessions using `this.$user.$data`. Enabled by default.
-* `session`: Persist session data across interactions using `this.$session.$data`. This is necessary for some platforms (like Facebook Messenger) that don't allow for session storage.
-* `history`: Persist an interaction history and define which elements (e.g. `input` or `output`) data you want to store from previous requests and responses.
+* `user`: Persist user data across sessions using `this.$user.data`. Enabled by default.
+* `session`: Persist session data across interactions using `this.$session.data`. This is necessary for some platforms (like Facebook Messenger) that don't allow for session storage.
+* `history`: Persist an interaction history and define which elements (e.g. `nlu` or `output`) data you want to store from previous requests and responses.
 * `createdAt` and `updatedAt`: These timestamps are enabled by default.
 
 [Learn more about the different data types here](./data.md).
