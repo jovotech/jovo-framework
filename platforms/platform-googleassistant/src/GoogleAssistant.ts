@@ -4,7 +4,6 @@ import {
   HandleRequest,
   Jovo,
   JovoPersistableData,
-  Platform,
 } from '@jovotech/framework';
 import { GoogleAssistantResponse } from '@jovotech/output-googleassistant';
 import { GoogleAssistantDevice } from './GoogleAssistantDevice';
@@ -37,7 +36,7 @@ export class GoogleAssistant extends Jovo<
     return persistableData;
   }
 
-  setPersistableData(data: JovoPersistableData, config?: DbPluginStoredElementsConfig) {
+  setPersistableData(data: JovoPersistableData, config?: DbPluginStoredElementsConfig): void {
     super.setPersistableData(data, config);
     if ((typeof config?.session === 'object' && config.session.enabled) || config?.session) {
       if (data.session?._GOOGLE_ASSISTANT_REPROMPTS_) {
