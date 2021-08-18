@@ -62,12 +62,22 @@ The following capabilities are currently available in the generic `$device` clas
 Some platforms like Alexa offer specific capabilities like APL. You can access them by prepending the platform name like this:
 
 ```typescript
-import { AlexaCapability } from "./AlexaDevice";
+import { AlexaCapability } from "@jovotech/platform-alexa";
+import { GoogleAssistantCapability } from "@jovotech/platform-googleassistant";
 
 this.$device.supports(AlexaCapability.Apl)
 // or
 this.$device.supports('ALEXA:APL')
+
+this.$device.supports(GoogleAssistantCapability.InteractiveCanvas)
+// or
+this.$device.supports('GOOGLE_ASSISTANT:INTERACTIVE_CANVAS')
+
+
 ```
+
+
+
 
 If a platform offers specific device features beyond capabilities, you can access its `$device` object as part of the platform object. Here is an example for Amazon Alexa:
 
