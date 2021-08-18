@@ -1,41 +1,24 @@
-import { Entity, JovoSession, RequestTypeLike, UnknownObject } from '@jovotech/framework';
+import {
+  Capability,
+  EntityMap,
+  InputType,
+  JovoSession,
+  RequestTypeLike,
+  UnknownObject,
+} from '@jovotech/framework';
 
-export enum RequestType {
-  Launch = 'LAUNCH',
-  Intent = 'INTENT',
-  TranscribedText = 'TRANSCRIBED_TEXT',
-  Text = 'TEXT',
-  Event = 'EVENT',
-  Audio = 'AUDIO',
-  End = 'END',
-  Error = 'ERROR',
+export interface Input<TYPE extends RequestTypeLike = RequestTypeLike> {
+  type: InputType;
+  text?: TYPE extends InputType.Text ? string : never;
+  intent?: TYPE extends InputType.Intent ? Intent | string : never;
+  entities?: TYPE extends InputType.Intent ? EntityMap : never;
+
+  alternativeIntents?: TYPE extends InputType.Intent ? Array<Intent | string> : never;
+  audio?: TYPE extends InputType.Speech ? RequestAudioData : never;
 }
 
-export enum DeviceType {
-  Unspecified = 'UNSPECIFIED',
-  Audio = 'AUDIO',
-  Browser = 'BROWSER',
-}
-
-export enum Capability {
-  Audio = 'AUDIO',
-  Html = 'HTML',
-  Text = 'TEXT',
-}
-
-export interface Request {
-  id: string;
-  timestamp: string;
-  type: RequestTypeLike;
-  body: RequestBody;
-  locale?: string;
-  nlu?: Nlu;
-  data?: UnknownObject;
-}
-
-export interface Nlu {
-  intent?: string;
-  inputs?: Record<string, Entity>;
+export interface Intent {
+  name: string;
   confidence?: number;
 }
 
@@ -46,37 +29,23 @@ export interface RequestAudioData {
   data?: Float32Array;
 }
 
-export interface RequestBodyAudio {
-  audio?: RequestAudioData;
-}
-
-export interface RequestBodyText {
-  text?: string;
-}
-
-export type RequestBody = RequestBodyAudio | RequestBodyText;
-
 export interface Session {
   id: string;
   new: boolean;
   data?: JovoSession;
+  lastUpdatedAt?: string; // ISO 8601 YYYY-MM-DDTHH:mm:ss.sssZ
 }
 
 export interface User {
   id: string;
-  accessToken?: string;
   data?: UnknownObject;
 }
 
 export interface Device {
-  id?: string;
-  type: DeviceType;
-  capabilities: Record<Capability, string | boolean>;
+  capabilities: Array<Capability | string>;
 }
 
 export interface Context {
-  appId?: string;
-  platform?: string;
   device: Device;
   session: Session;
   user: User;

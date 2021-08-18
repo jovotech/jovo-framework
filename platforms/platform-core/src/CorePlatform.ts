@@ -7,7 +7,7 @@ import { CoreRequest } from './CoreRequest';
 import { CoreUser } from './CoreUser';
 
 export interface CorePlatformConfig extends ExtensibleConfig {
-  type: 'jovo-platform-core' | string;
+  type: 'core' | string;
 }
 
 export class CorePlatform extends Platform<
@@ -49,21 +49,27 @@ export class CorePlatform extends Platform<
 
   getDefaultConfig(): CorePlatformConfig {
     return {
-      type: 'jovo-platform-core',
+      type: 'core',
     };
   }
 
   isRequestRelated(request: AnyObject | CoreRequest): boolean {
-    return request.version && request.request?.type && request.type === this.config.type;
+    return (
+      request.version &&
+      request.timestamp &&
+      request.input?.type &&
+      request.platform === this.config.type
+    );
   }
 
   isResponseRelated(response: AnyObject | CoreResponse): boolean {
     return (
       response.version &&
       response.output &&
-      response.session &&
       response.context &&
-      response.type === this.config.type
+      response.context.user &&
+      response.context.session &&
+      response.platform === this.config.type
     );
   }
 
@@ -71,7 +77,7 @@ export class CorePlatform extends Platform<
     response: CoreResponse,
     corePlatformApp: Core,
   ): CoreResponse | Promise<CoreResponse> {
-    response.type = this.config.type;
+    response.platform = this.config.type;
     response.session.data = corePlatformApp.$session;
     return response;
   }

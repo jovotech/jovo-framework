@@ -1,30 +1,35 @@
 import { EntityMap, JovoRequest, JovoRequestType, UnknownObject } from '@jovotech/framework';
-import { Context, Request, RequestBodyText } from './interfaces';
+import { Context, Input } from './interfaces';
 
 export class CoreRequest extends JovoRequest {
   version?: string;
-  type?: 'jovo-platform-core' | string;
-  request?: Request;
+  platform?: 'core' | string;
+  id?: string; // UUID v4
+  timestamp?: string; // Always in local time, ISO 8601 YYYY-MM-DDTHH:mm:ss.sssZ
+  timeZone?: string; // IANA time zone names e.g. Europe/Berlin
+  locale?: string; // e.g. de-DE, en-US
+  data?: UnknownObject; // this.$request
+  input?: Input;
   context?: Context;
 
   getEntities(): EntityMap | undefined {
-    return this.request?.nlu?.inputs;
+    return this.input?.entities;
   }
 
   getIntentName(): string | undefined {
-    return this.request?.nlu?.intent;
+    return typeof this.input?.intent === 'string' ? this.input?.intent : this.input?.intent?.name;
   }
 
   getLocale(): string | undefined {
-    return this.request?.locale;
+    return this.locale;
   }
 
   getRawText(): string | undefined {
-    return (this.request?.body as RequestBodyText | undefined)?.text;
+    return this.input?.text;
   }
 
   getRequestType(): JovoRequestType | undefined {
-    return this.request?.type ? { type: this.request.type } : undefined;
+    return this.input?.type;
   }
 
   getSessionData(): UnknownObject | undefined {
