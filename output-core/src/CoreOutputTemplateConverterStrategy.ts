@@ -18,14 +18,17 @@ export class CoreOutputTemplateConverterStrategy extends OutputTemplateConverter
     output = Array.isArray(output) ? output : [output];
     const response: CoreResponse = {
       version: '4.0.0',
-      type: 'jovo-platform-core',
+      platform: 'core',
       output,
-      session: {
-        end: false,
-        data: {},
-      },
       context: {
         request: {},
+        session: {
+          end: false,
+          data: {},
+        },
+        user: {
+          data: {},
+        },
       },
     };
     let lastListen: ListenValue | undefined;
@@ -38,7 +41,7 @@ export class CoreOutputTemplateConverterStrategy extends OutputTemplateConverter
         mergeInstances(response, outputItem.platforms.CorePlatform.nativeResponse);
       }
     });
-    response.session.end = !lastListen;
+    response.context.session.end = !lastListen;
     return response;
   }
 
