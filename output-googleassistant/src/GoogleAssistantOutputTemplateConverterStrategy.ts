@@ -1,7 +1,9 @@
 import {
   Carousel,
+  DynamicEntities,
   DynamicEntitiesMode,
   DynamicEntity,
+  DynamicEntityMap,
   mergeInstances,
   MessageValue,
   OutputTemplate,
@@ -9,7 +11,6 @@ import {
   QuickReplyValue,
   SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
-import { DynamicEntities, DynamicEntityMap } from '@jovotech/output/dist/types';
 import {
   COLLECTION_MAX_SIZE,
   COLLECTION_MIN_SIZE,

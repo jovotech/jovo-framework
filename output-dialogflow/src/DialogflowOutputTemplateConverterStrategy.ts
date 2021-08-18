@@ -1,6 +1,8 @@
 import {
+  DynamicEntities,
   DynamicEntitiesMode,
   DynamicEntity,
+  DynamicEntityMap,
   mergeInstances,
   MessageValue,
   OutputTemplate,
@@ -8,7 +10,6 @@ import {
   QuickReplyValue,
   SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
-import { DynamicEntities, DynamicEntityMap } from '@jovotech/output/dist/types';
 import { QUICK_REPLIES_MAX_SIZE, QUICK_REPLY_MAX_LENGTH, TEXT_MAX_LENGTH } from './constants';
 import {
   DialogflowResponse,

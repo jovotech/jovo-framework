@@ -1,6 +1,8 @@
-import { OutputTemplate } from '../dist/types';
-import { SingleResponseOutputTemplateConverterStrategy } from '../src';
-import { JovoResponse } from '../src';
+import {
+  JovoResponse,
+  OutputTemplate,
+  SingleResponseOutputTemplateConverterStrategy,
+} from '../src';
 
 class ExampleResponse extends JovoResponse {}
 
