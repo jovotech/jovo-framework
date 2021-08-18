@@ -92,7 +92,12 @@ export class SessionParams {
   @IsObject()
   @ValidateNested()
   @Type(() => SessionParamsReprompts)
-  _GA_REPROMPTS_?: SessionParamsReprompts;
+  _GOOGLE_ASSISTANT_REPROMPTS_?: SessionParamsReprompts;
+
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  _GOOGLE_ASSISTANT_SELECTION_INTENT_?: string;
 }
 
 export class TypeOverride {
@@ -101,7 +106,7 @@ export class TypeOverride {
   name: string;
 
   @IsEnum(TypeOverrideMode)
-  mode: TypeOverrideModeLike;
+  typeOverrideMode: TypeOverrideModeLike;
 
   @IsOptional()
   @ValidateNested()

@@ -194,7 +194,7 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
     }
 
     // use reversed directives to actually get the last match instead of the first
-    const reversedDirectives = (response.response.directives || []).reverse();
+    const reversedDirectives = (response.response.directives?.slice() || []).reverse();
     const lastDialogUpdateDirective = reversedDirectives.find(
       (directive) => directive.type === 'Dialog.UpdateDynamicEntities',
     ) as DialogUpdateDynamicEntitiesDirective | undefined;
