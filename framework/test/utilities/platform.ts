@@ -1,17 +1,20 @@
-import { OutputTemplate, OutputTemplateConverterStrategy } from '@jovotech/output';
-import { OutputTemplateConverterStrategyConfig } from '../../../../jovo-output/output';
+import {
+  OutputTemplate,
+  OutputTemplateConverterStrategy,
+  OutputTemplateConverterStrategyConfig,
+} from '@jovotech/output';
 import {
   AnyObject,
   EntityMap,
   ExtensibleConfig,
   Jovo,
+  JovoDevice,
   JovoRequest,
   JovoRequestType,
   JovoResponse,
   JovoUser,
   MiddlewareCollection,
   Platform,
-  JovoDevice,
   UnknownObject,
 } from '../../src';
 
