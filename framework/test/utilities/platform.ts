@@ -1,16 +1,20 @@
-import { OutputTemplate, OutputTemplateConverterStrategy } from '@jovotech/output';
+import {
+  OutputTemplate,
+  OutputTemplateConverterStrategy,
+  OutputTemplateConverterStrategyConfig,
+} from '@jovotech/output';
 import {
   AnyObject,
   EntityMap,
   ExtensibleConfig,
   Jovo,
+  JovoDevice,
   JovoRequest,
   JovoRequestType,
   JovoResponse,
   JovoUser,
   MiddlewareCollection,
   Platform,
-  JovoDevice,
   UnknownObject,
 } from '../../src';
 
@@ -59,9 +63,11 @@ export class ExamplePlatformJovo extends Jovo<
   ExamplePlatform
 > {}
 
-export class ExamplePlatformOutputConverterStrategy
-  implements OutputTemplateConverterStrategy<ExamplePlatformResponse>
-{
+export class ExamplePlatformOutputConverterStrategy extends OutputTemplateConverterStrategy<
+  ExamplePlatformResponse,
+  OutputTemplateConverterStrategyConfig
+> {
+  platformName = 'Example';
   responseClass = ExamplePlatformResponse;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
