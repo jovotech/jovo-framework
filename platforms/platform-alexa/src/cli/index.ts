@@ -1,10 +1,10 @@
-import { join as joinPaths } from 'path';
 import { JovoCliPlugin, PluginHook, PluginType } from '@jovotech/cli-core';
+import { join as joinPaths } from 'path';
 import { BuildHook } from './hooks/BuildHook';
 import { DeployHook } from './hooks/DeployHook';
 import { GetHook } from './hooks/GetHook';
 import { NewHook } from './hooks/NewHook';
-import { AlexaCliConfig } from './utils/interfaces';
+import { AlexaCliConfig } from './interfaces';
 
 export class AlexaCli extends JovoCliPlugin {
   readonly $id: string = 'alexa';
