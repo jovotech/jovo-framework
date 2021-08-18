@@ -10,7 +10,7 @@ Jovo offers a variety of integrations that allow you to store elements like user
 The following database integrations are currently working with Jovo `v4`:
 
 * `FileDb`: File-based system for local prototyping. Added to the `app.dev` stage by default.
-* `DynamoDb` (*in development*): NoSQL database by AWS, typically used together with AWS Lambda.
+* `DynamoDb`: NoSQL database by AWS, typically used together with AWS Lambda.
 
 ## Configuration
 
@@ -67,7 +67,7 @@ new FileDb({
 
 * `user`: Persist user data across sessions using `this.$user.$data`. Enabled by default.
 * `session`: Persist session data across interactions using `this.$session.$data`. This is necessary for some platforms (like Facebook Messenger) that don't allow for session storage.
-* `history`: Persist an interaction history and define which elements (e.g. `nlu` or `output`) data you want to store from previous requests and responses.
+* `history`: Persist an interaction history and define which elements (e.g. `input` or `output`) data you want to store from previous requests and responses.
 * `createdAt` and `updatedAt`: These timestamps are enabled by default.
 
 [Learn more about the different data types here](./data.md).
