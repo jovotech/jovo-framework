@@ -27,27 +27,33 @@ You can access a device's capabilities like this:
 ```typescript
 this.$device.capabilities
 
-// Example result: [ 'screen', 'audio' ]
+// Example result: [ 'SCREEN', 'AUDIO' ] or [Capability.Screen, Capability.Audio]
 ```
 
-You can also use the `supports` method to check if the device supports specific capabilities.
+You can also use the `supports` method to check if the device supports specific capabilities. It expects the `Capability` enum or the string value. 
 
 ```typescript
+import { Capability } from '@jovotech/framework';
+
 this.$device.supports(capability: Capability)
 
 // Example for one capability
-if (this.$device.supports('screen')) {}
+if (this.$device.supports(Capability.Screen)) {}
+// or 
+if (this.$device.supports('SCREEN')) {}
 
 // Example for multiple capabilities
-if (this.$device.supports(['screen'] && this.$device.supports('video')) {}
+if (this.$device.supports(Capability.Screen) && this.$device.supports(Capability.Video)) {}
+// or
+if (this.$device.supports('SCREEN') && this.$device.supports('VIDEO')) {}
 ```
 
 The following capabilities are currently available in the generic `$device` class:
 
-* `audio`: It's possible to play audio output via SSML.
-* `long-form-audio`: It's possible to play long-form audio output, e.g. Alexa AudioPlayer or Google Assistant Media Response.
-* `screen`: It's possible to show visual output on a screen.
-* `video`: It's possible to play a video on a screen.
+* `AUDIO` or `Capability.Audio`: It's possible to play audio output via SSML.
+* `LONGFORM_AUDIO` or `Capability.LongformAudio`: It's possible to play long-form audio output, e.g. Alexa AudioPlayer or Google Assistant Media Response.
+* `SCREEN` or `Capability.Screen`: It's possible to show visual output on a screen.
+* `VIDEO` or `Capability.Video`: It's possible to play a video on a screen.
 
 
 
@@ -56,7 +62,11 @@ The following capabilities are currently available in the generic `$device` clas
 Some platforms like Alexa offer specific capabilities like APL. You can access them by prepending the platform name like this:
 
 ```typescript
-this.$device.supports('alexa:apl')
+import { AlexaCapability } from "./AlexaDevice";
+
+this.$device.supports(AlexaCapability.Apl)
+// or
+this.$device.supports('ALEXA:APL')
 ```
 
 If a platform offers specific device features beyond capabilities, you can access its `$device` object as part of the platform object. Here is an example for Amazon Alexa:
@@ -76,17 +86,20 @@ Here is an example for Alexa:
 
 ```typescript
 setCapabilitiesFromRequest(): void {
-  const supportedInterfaces = this.jovo.$request.context?.System?.device?.supportedInterfaces;
+    const supportedInterfaces = this.jovo.$request.context?.System?.device?.supportedInterfaces;
 
-  if (supportedInterfaces?.AudioPlayer) {
-    this.addCapability('audio', 'long-form-audio');
-  }
+    if (supportedCapabilites?.includes(GoogleAssistantNativeCapability.Speech)) {
+        this.addCapability(Capability.Audio);
+    }
 
-  if (supportedInterfaces?.['Alexa.Presentation.APL']) {
-    this.addCapability('screen', 'alexa:apl');
-  }
-
-  // ...
+    if (supportedCapabilites?.includes(GoogleAssistantNativeCapability.LongFormAudio)) {
+        this.addCapability(Capability.LongformAudio);
+    }
+    
+    if (supportedCapabilites?.includes(GoogleAssistantNativeCapability.RichResponse)) {
+        this.addCapability(Capability.Screen);
+    }
+// ...
 }
 ```
 
