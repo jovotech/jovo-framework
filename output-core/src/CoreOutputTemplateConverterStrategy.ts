@@ -3,8 +3,8 @@ import {
   mergeInstances,
   OutputTemplate,
   OutputTemplateConverterStrategy,
+  OutputTemplateConverterStrategyConfig,
 } from '@jovotech/output';
-import { OutputTemplateConverterStrategyConfig } from '@jovotech/output/src';
 import { CoreResponse } from './models';
 
 export class CoreOutputTemplateConverterStrategy extends OutputTemplateConverterStrategy<
