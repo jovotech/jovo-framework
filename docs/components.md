@@ -319,7 +319,7 @@ A folder allows for a modular approach where all relevant elements of a componen
 
 ### Output
 
-This folder contains all output classes that are used by the Jovo `$send` command. Learn more about this in our [handlers documentation](./handlers.md).
+This folder contains all output classes that are used by the Jovo `$send` command. Learn more about this in our [output classes documentation](./output-classes.md).
 
 ### Models
 
