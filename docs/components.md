@@ -198,10 +198,10 @@ The core of a class are [handlers](./handlers.md) that are responsible to turn s
 
 If you're used to building state machines (for example Jovo `v3`), you can see a Jovo component as a state.
 
-Once a component is entered, it is added to the Jovo [`$state` stack](./state-stack.md):
+Once a component is entered, it is added to the Jovo [`state` stack](./state-stack.md):
 
 ```typescript
-$state = [
+state = [
   {
     component: 'SomeComponent'
   }
@@ -214,14 +214,14 @@ There are two ways how a component can be entered:
 * Through one of its global handlers
 * By getting called from a different component using `$redirect` or `$delegate`
 
-You can find out more about the [`$state` stack here](./state-stack.md) and learn about component delegation in our [handlers documentation](./handlers.md).
+You can find out more about the [`state` stack here](./state-stack.md) and learn about component delegation in our [handlers documentation](./handlers.md).
 
 ### Global Components
 
 A Jovo project usually comes with a `GlobalComponent`. This (and potentially other components) is a special `global` component that has the following characteristics:
 
 * Each of its handlers is global, no need to add a `global` property.
-* It does not get added to the [`$state` stack](./state-stack.md) (except it uses `$delegate`, then it is added to the stack just until the delegation was resolved).
+* It does not get added to the [`state` stack](./state-stack.md) (except it uses `$delegate`, then it is added to the stack just until the delegation was resolved).
 * It does not store [component data](#component-data): If you want to store data, we recommend using [session data](./data.md#session-data).
 
 You can either add the `global` property to the [component options](#component-options):
@@ -254,13 +254,13 @@ As a rule of thumb, a global component can be seen as a "last resort" that is on
 For data that is only relevant for this specific component, you can use component data:
 
 ```typescript
-this.$component.$data.someKey = 'someValue';
+this.$component.data.someKey = 'someValue';
 ```
 
-This is then added to the [`$state` stack](./state-stack.md) and lost once the component resolves:
+This is then added to the [`state` stack](./state-stack.md) and lost once the component resolves:
 
 ```typescript
-$state = [
+state = [
   {
     component: 'SomeComponent',
     data: {
@@ -270,7 +270,7 @@ $state = [
 ]
 ```
 
-[Global components](#global-components) don't store component data because they're not added to the `$state` stack. We recommend using session data instead. [Learn more about the different Jovo data types here](./data.md).
+[Global components](#global-components) don't store component data because they're not added to the `state` stack. We recommend using session data instead. [Learn more about the different Jovo data types here](./data.md).
 
 
 ### Component Options

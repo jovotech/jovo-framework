@@ -206,13 +206,13 @@ As components have their own state management system, we usually recommend using
 For this, you can set a `subState` in your handlers
 
 ```typescript
-this.$subState = 'YourSubState';
+this.subState = 'YourSubState';
 ```
 
-Jovo then adds it to the component's state in the `$state` stack:
+Jovo then adds it to the component's state in the `state` stack:
 
 ```typescript
-$state = [
+state = [
   {
     component: 'YourComponent',
     subState: 'YourSubState',
@@ -319,7 +319,7 @@ Here is an example of an `if` condition that says a handler should only be trigg
 ```typescript
 @Handle({
   // ...
-  if: (jovo) => jovo.$user.$data.hasAlreadyPlayedToday
+  if: (jovo) => jovo.$user.data.hasAlreadyPlayedToday
 })
 yourHandler() {
   // ...
@@ -329,7 +329,7 @@ yourHandler() {
 It's also possible to use the `@If` convenience decorator:
 
 ```typescript
-@If((jovo) => jovo.$user.$data.hasAlreadyPlayedToday))
+@If((jovo) => jovo.$user.data.hasAlreadyPlayedToday))
 yourHandler() {
   // ...
 }
@@ -373,7 +373,7 @@ yourHandler() {
   
   // ...
 
-  this.$user.$data.someKey = 'someValue';
+  this.$user.data.someKey = 'someValue';
 
   // ...
 }
@@ -486,7 +486,7 @@ Multiple `$send` calls result in the following behavior, depending on the platfo
 
 ### Redirect to Components
 
-If you `$redirect` to a different component, the current one is removed from the `$state` stack. You can see this as a permanent redirect.
+If you `$redirect` to a different component, the current one is removed from the `state` stack. You can see this as a permanent redirect.
 
 If no handler name is specified, the redirect triggers the other component's `START` handler.
 
@@ -573,7 +573,7 @@ YesIntent() {
 }
 ```
 
-The component is then removed from the `$state` stack and the delegating component is called, looking for a handler that matches the event that is passed with `$resolve` (in the above example `yes`).
+The component is then removed from the `state` stack and the delegating component is called, looking for a handler that matches the event that is passed with `$resolve` (in the above example `yes`).
 
 ## Handler Types
 

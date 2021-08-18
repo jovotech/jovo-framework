@@ -22,12 +22,12 @@ There are multiple types of routing:
 
 The router goes through all handlers that potentially match the request (e.g. that accept a specific `intent`) and collects them in a `$route` object. It takes into consideration the following handlers:
 
-* Handlers from all components that are part of the `$state` stack
+* Handlers from all components that are part of the `state` stack
 * Global handlers from all root components
 
 The results are added to a `matches` object in the `$route`. In a below section, we go into detail how [handler matches](#handler-matches) work. 
 
-The matches are ranked by priority. The currently active component in the `$state` stack is the most important one, then the next components in the stack follow, until global handlers are reached. Learn more about [handler and component prioritization](#handler-and-component-prioritization) in the section below.
+The matches are ranked by priority. The currently active component in the `state` stack is the most important one, then the next components in the stack follow, until global handlers are reached. Learn more about [handler and component prioritization](#handler-and-component-prioritization) in the section below.
 
 Here's an example how the `matches` look like for a request with a `YesIntent`. This uses the [Jovo v4 sample template](https://github.com/jovotech/jovo-v4-template) as an example.
 
@@ -72,7 +72,7 @@ After `resolved` is determined, Jovo runs the specified handler.
 
 ### Handler Matches
 
-To find handlers that could potentially fulfill a request, the router first goes through the `$state` stack (for local and global handlers) and then through all [root components](./components.md#register-root-components) (for global handlers).
+To find handlers that could potentially fulfill a request, the router first goes through the `state` stack (for local and global handlers) and then through all [root components](./components.md#register-root-components) (for global handlers).
 
 If a handler matches a request is highly dependent on the metadata that is added using the `@Handle` decorator (or convenience decorators like `@Intents`). [Learn more about these decorators here](./handlers.md#handler-routing-and-the-handle-decorator).
 
@@ -83,7 +83,7 @@ A handler counts as match if:
 * It also matches other `@Handle` conditions like `platforms` and `if`
 * It is an `UNHANDLED` handler ([more on that below](#unhandled-prioritization))
 
-Let's take another look at our example from above. If there is a request with a `YesIntent`, the `LoveHatePizzaComponent.YesNoComponent` is in the `$state` stack, and contains a handler like this:
+Let's take another look at our example from above. If there is a request with a `YesIntent`, the `LoveHatePizzaComponent.YesNoComponent` is in the `state` stack, and contains a handler like this:
 
 ```typescript
 @Intents([ 'YesIntent' ])
@@ -139,9 +139,9 @@ For each component, the handlers are ranked in the following order:
 
 At the component-level, the ranking is as follows:
 
-* The most active component of the `$state` stack is ranked highest.
+* The most active component of the `state` stack is ranked highest.
 * After that, each lower component in the stack is ranked lower as well.
-* If there are no more components in the `$state` stack, global handlers are ranked at the lowest level.
+* If there are no more components in the `state` stack, global handlers are ranked at the lowest level.
 
 
 

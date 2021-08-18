@@ -153,18 +153,18 @@ export abstract class Jovo<
     return this.$handleRequest.plugins;
   }
 
-  get $state(): JovoSession['$state'] {
-    return this.$session.$state;
+  get $state(): JovoSession['state'] {
+    return this.$session.state;
   }
 
   get $subState(): string | undefined {
     if (!this.$state?.length) return;
-    return this.$state[this.$state.length - 1]?.$subState;
+    return this.$state[this.$state.length - 1]?.subState;
   }
 
   set $subState(value: string | undefined) {
     if (!this.$state?.length) return;
-    this.$state[this.$state.length - 1].$subState = value;
+    this.$state[this.$state.length - 1].subState = value;
   }
 
   get $component(): JovoComponentInfo {
@@ -177,16 +177,16 @@ export abstract class Jovo<
     const latestStateStackItem = this.$state[this.$state.length - 1];
     return {
       get $data(): ComponentData {
-        if (!latestStateStackItem.$data) {
-          latestStateStackItem.$data = {};
+        if (!latestStateStackItem.data) {
+          latestStateStackItem.data = {};
         }
-        return latestStateStackItem.$data;
+        return latestStateStackItem.data;
       },
       set $data(value: ComponentData) {
-        if (!latestStateStackItem.$data) {
-          latestStateStackItem.$data = {};
+        if (!latestStateStackItem.data) {
+          latestStateStackItem.data = {};
         }
-        latestStateStackItem.$data = value;
+        latestStateStackItem.data = value;
       },
       get $config(): UnknownObject | undefined {
         const deserializedStateConfig = _cloneDeep(latestStateStackItem.config);
@@ -303,7 +303,7 @@ export abstract class Jovo<
     // get the node with the given name relative to the currently active component-node
     const componentNode = this.$handleRequest.componentTree.getNodeRelativeToOrFail(
       componentName,
-      this.$handleRequest.$activeComponentNode?.path,
+      this.$handleRequest.activeComponentNode?.path,
     );
 
     // update the state-stack if the component is not global
@@ -313,7 +313,7 @@ export abstract class Jovo<
       };
       if (!this.$state?.length) {
         // initialize the state-stack if it is empty or does not exist
-        this.$session.$state = [stackItem];
+        this.$session.state = [stackItem];
       } else {
         // replace last item in stack
         this.$state[this.$state.length - 1] = stackItem;
@@ -321,7 +321,7 @@ export abstract class Jovo<
     }
 
     // update the active component node in handleRequest to keep track of the state
-    this.$handleRequest.$activeComponentNode = componentNode;
+    this.$handleRequest.activeComponentNode = componentNode;
     // execute the component's handler
     await componentNode.executeHandler({
       jovo: this.jovoReference,
@@ -343,15 +343,15 @@ export abstract class Jovo<
     // get the node with the given name relative to the currently active component-node
     const componentNode = this.$handleRequest.componentTree.getNodeRelativeToOrFail(
       componentName,
-      this.$handleRequest.$activeComponentNode?.path,
+      this.$handleRequest.activeComponentNode?.path,
     );
 
     // make sure the state-stack exists and is not empty, even if it is a global component
     // in order to do that we need to add the path of the currently active component
-    if (!this.$session.$state?.length) {
-      this.$session.$state = [
+    if (!this.$session.state?.length) {
+      this.$session.state = [
         {
-          component: (this.$handleRequest.$activeComponentNode?.path || []).join('.'),
+          component: (this.$handleRequest.activeComponentNode?.path || []).join('.'),
         },
       ];
     }
@@ -381,13 +381,13 @@ export abstract class Jovo<
       });
     }
     // push the delegating component to the state-stack
-    this.$session.$state.push({
+    this.$session.state.push({
       resolve: serializableResolve,
       config: serializableConfig,
       component: componentNode.path.join('.'),
     });
     // update the active component node in handleRequest to keep track of the state
-    this.$handleRequest.$activeComponentNode = componentNode;
+    this.$handleRequest.activeComponentNode = componentNode;
     // execute the component's handler
     await componentNode.executeHandler({
       jovo: this.jovoReference,
@@ -419,7 +419,7 @@ export abstract class Jovo<
     this.$state.pop();
 
     // update the active component node in handleRequest to keep track of the state
-    this.$handleRequest.$activeComponentNode = previousComponentNode;
+    this.$handleRequest.activeComponentNode = previousComponentNode;
     // execute the component's handler
     await previousComponentNode.executeHandler({
       jovo: this.jovoReference,
