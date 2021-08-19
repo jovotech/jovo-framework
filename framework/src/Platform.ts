@@ -36,7 +36,8 @@ export abstract class Platform<
   abstract readonly userClass: JovoUserConstructor<JOVO>;
   abstract readonly deviceClass: JovoDeviceConstructor<JOVO>;
 
-  abstract outputTemplateConverterStrategy: OutputTemplateConverterStrategy<RESPONSE>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  abstract outputTemplateConverterStrategy: OutputTemplateConverterStrategy<RESPONSE, any>;
 
   abstract isRequestRelated(request: REQUEST | AnyObject): boolean;
 

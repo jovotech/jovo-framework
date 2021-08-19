@@ -82,8 +82,8 @@ showMenu() {
 
 The `@Handle` includes two types of properties:
 
-* [Routing properties](#routing-properties): The router first looks if the handler matches a specific route, e.g. [`intents`](#intents)
-* [Condition properties](#condition-properties): After that, it is evaluated if there are additional conditions that have to be fulfilled, e.g. [`platforms`](#platforms)
+* [Routing properties](#routing-properties): The router first looks if the handler matches a specific route, e.g. [`intents`](#intents) or [`types](#types).
+* [Condition properties](#condition-properties): After that, it is evaluated if there are additional conditions that have to be fulfilled, e.g. [`platforms`](#platforms).
 
 
 ### Routing Properties
@@ -93,16 +93,19 @@ Routing properties define the core elements a router is looking for when determi
 They include:
 
 * [`intents`](#intents)
+* [`types`](#types)
 * [`global`](#global-handlers)
 * [`subState`](#substate)
 * [`prioritizedOverUnhandled`](#prioritizedOverUnhandled)
 #### Intents
 
-The `intents` array specifies which incoming intents the handler should be able to fulfil. For example, This handler responds to only the `ShowMenuIntent`:
+The `intents` property specifies which incoming intents the handler should be able to fulfill. The property can be both a string or an array of strings.
+
+For example, This handler responds to only the `ShowMenuIntent`:
 
 ```typescript
 @Handle({
-  intents: ['ShowMenuIntent']
+  intents: 'ShowMenuIntent'
 })
 showMenu() {
   // ...
@@ -132,6 +135,33 @@ showMenu() {
   // ...
 }
 ```
+
+#### Types
+
+The `types` property specifies which [input types](./input.md) the handler should be able to fulfill. The property can be both a string or an array of strings.
+
+```typescript
+@Handle({
+  types: 'LAUNCH',
+})
+welcomeNewUser() {
+  // ...
+}
+```
+
+It's also possible to use the `@Types` convenience decorator:
+
+```typescript
+import { Types } from '@jovotech/framework';
+
+// ...
+
+@Types('LAUNCH')
+welcomeNewUser() {
+  // ...
+}
+```
+
 
 #### Global Handlers
 
@@ -203,7 +233,7 @@ showMenu() {
 
 As components have their own state management system, we usually recommend using the `$delegate` method if you have steps that need an additional state. However, sometimes it might be more convenient to have all handlers in one component.
 
-For this, you can set a `subState` in your handlers
+For this, you can set a `$subState` in your handlers
 
 ```typescript
 this.$subState = 'YourSubState';
@@ -285,7 +315,7 @@ Currently, they include:
 * [`if`](#if)
 #### Platforms
 
-You can specify that a handler is only responsible for specific platforms. Pass the name of each platform (the same as the class name that you're importing in your `app.ts`) as a string:
+You can specify that a handler is only responsible for specific platforms. The `platforms` property can be both a string or an array of strings with the names of each platform (the same as the class name that you're importing in your `app.ts`):
 
 ```typescript
 @Handle({
@@ -304,7 +334,7 @@ import { Platforms } from '@jovotech/framework';
 
 // ...
 
-@Platforms(['Alexa', 'GoogleAssistant'])
+@Platforms('Alexa')
 yourHandler() {
   // ...
 }
@@ -319,7 +349,7 @@ Here is an example of an `if` condition that says a handler should only be trigg
 ```typescript
 @Handle({
   // ...
-  if: (jovo) => jovo.$user.$data.hasAlreadyPlayedToday
+  if: (jovo) => jovo.$user.data.hasAlreadyPlayedToday
 })
 yourHandler() {
   // ...
@@ -329,7 +359,7 @@ yourHandler() {
 It's also possible to use the `@If` convenience decorator:
 
 ```typescript
-@If((jovo) => jovo.$user.$data.hasAlreadyPlayedToday))
+@If((jovo) => jovo.$user.data.hasAlreadyPlayedToday))
 yourHandler() {
   // ...
 }
@@ -373,7 +403,7 @@ yourHandler() {
   
   // ...
 
-  this.$user.$data.someKey = 'someValue';
+  this.$user.data.someKey = 'someValue';
 
   // ...
 }
@@ -388,101 +418,18 @@ A handler usually concludes with one of these tasks:
 
 ### Return Output
 
-In most cases, the goal of a handler is to return output to the user. [You can find more information on output here](./output.md).
-
-This can be done in multiple ways using the `$send` method:
-
-* [Send an output object](#send-an-output-object)
-* [Send an output class](#send-an-output-class)
-* [Send multiple responses](#send-multiple-responses)
-
-#### Send an Output Object
-
-You can directly add an output object to the `$send` method:
+In most cases, the goal of a handler is to return output to the user.
 
 ```typescript
 yourHandler() {
   
   // ...
 
-  return this.$send({ /* output */ });
-}
-```
-This object can contain all output template elements that are described in the [output documentation](./output.md).
-
-Here is an example output that just contains a `message`:
-
-```typescript
-yourHandler() {
-  
-  // ...
-
-  return this.$send({ message: 'Hello World!' });
+  return this.$send(/* output */);
 }
 ```
 
-#### Send an Output Class
-
-For more complex output, we recommend using [output classes](./output.md).
-
-The below example imports an output class called `SomeOutput` and passes it to `$send` together with potential options:
-
-```typescript
-import { SomeOutput } from './output/SomeOutput';
-
-// ...
-
-yourHandler() {
-  
-  // ...
-
-  return this.$send(SomeOutput, { /* output options */ });
-}
-```
-
-The options can also override reserved properties from the output class, like the `message`:
-
-```typescript
-import { SomeOutput } from './output/SomeOutput';
-
-// ...
-
-yourHandler() {
-  
-  // ...
-
-  return this.$send(SomeOutput, { message: 'This overrides the message from SomeOutput' });
-}
-```
-
-#### Send Multiple Responses
-
-It may be necessary to spread output across a handler, or even across components.
-
-This is possible with multiple `$send` calls.
-
-The below example uses two `$send` method calls:
-
-```typescript
-import { SomeOutput } from './output/SomeOutput';
-
-// ...
-
-yourHandler() {
-
-  this.$send({ message: 'Alright, one second.' });
-  
-  // ...
-
-  return this.$send(SomeOutput, { /* output options */ });
-}
-```
-
-Multiple `$send` calls result in the following behavior, depending on the platform:
-
-* Synchronous platforms like Amazon Alexa only support one response. The output is stored in an array and later merged into a single response. `message` elements are concatenated while for other elements that are only supported once (like `card` or `carousel`), the last one gets used.
-* Asynchronous platforms like Facebook Messenger support multiple responses. Each response is sent to the platform asynchronously, which leads to multiple chat bubbles for each `message` element.
-
+[You can find more information on output here](./output.md).
 
 ### Redirect to Components
 

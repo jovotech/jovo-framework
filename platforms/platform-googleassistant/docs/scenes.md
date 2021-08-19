@@ -137,7 +137,7 @@ For example, in this scene, if the user is verified, the scene will transition t
 
 You can instruct a scene to collect required data for you. Once all slots have been collected, the attribute `scene.slots.status` will be set to `FINAL`, which you can act upon in the [`Conditions`](#conditions) stage. Once a slot has been filled, you can find the value in the session attributes under the property you specified with `writeSessionParam`.
 
-In the below example, we require a slot `age`, which has the type `actions.type.Number`. Once the user has filled this slot, the Jovo handler is called and we can access the value with `this.$session.$data.age`.
+In the below example, we require a slot `age`, which has the type `actions.type.Number`. Once the user has filled this slot, the Jovo handler is called and we can access the value with `this.$session.data.age`.
 
 ```javascript
 "MyCustomScene": {

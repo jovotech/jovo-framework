@@ -24,9 +24,9 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@jovotech/framework": "^4.0.0-alpha.18",
-    "@jovotech/output-alexa": "^4.0.0-alpha.12",
     "@jovotech/model": "^4.0.0-beta.1",
     "@jovotech/model-alexa": "^4.0.0-beta.1",
+    "@jovotech/output-alexa": "^4.0.0-beta.1",
     "chalk": "^4.1.0",
     "lodash.get": "^4.4.2",
     "lodash.has": "^4.5.2",

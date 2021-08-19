@@ -6,6 +6,6 @@ export enum GoogleAssistantSystemIntent {
   NoInputFinal = 'actions.intent.NO_INPUT_FINAL',
 }
 
-export enum GoogleAssistantSystemRequestType {
+export enum GoogleAssistantSystemInputType {
   ON_SIGN_IN = 'ON_SIGN_IN',
 }
