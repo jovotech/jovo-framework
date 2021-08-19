@@ -1,5 +1,10 @@
 import { InputTypeLike } from '../JovoInput';
 import { createHandlerOptionDecorator } from '../metadata/HandlerOptionMetadata';
 
-export const Types: (...types: InputTypeLike[]) => MethodDecorator = (...types: InputTypeLike[]) =>
-  createHandlerOptionDecorator({ types });
+export function Types(...types: InputTypeLike[]): MethodDecorator;
+export function Types(types: InputTypeLike[]): MethodDecorator;
+export function Types(types: InputTypeLike | InputTypeLike[]): MethodDecorator {
+  return createHandlerOptionDecorator({
+    types: typeof types === 'string' ? [types] : types,
+  });
+}
