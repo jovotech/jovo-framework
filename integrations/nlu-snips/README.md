@@ -9,7 +9,7 @@ Turn raw text into structured meaning with the Jovo Framework integration for th
 
 ## Introduction
 
-[Snips NLU](https://github.com/snipsco/snips-nlu) is an open source [natural language understanding (NLU)](https://www.jovo.tech/marketplace/tag/nlu) library.
+[Snips NLU](https://github.com/snipsco/snips-nlu) is an open source [natural language understanding (NLU)](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/nlu.md) library.
 
 Since it is an open source service, you can host Snips NLU on your own servers without any external API calls. You can learn how to set up a server in the [official Snips NLU documentation](https://snips-nlu.readthedocs.io/en/latest/).
 
@@ -21,7 +21,7 @@ You can use the Jovo Snips NLU integration for projects where you receive raw te
 You can install the plugin like this:
 
 ```sh
-$ npm install @jovotech/nlu-snips --save
+$ npm install @jovotech/nlu-snips
 ```
 
 NLU plugins can be added to Jovo platform integrations. Here is an example how it can be added to the Jovo Core Platform in `app.ts`:
@@ -51,21 +51,44 @@ new SnipsNlu({
   serverUrl: 'http://localhost:5000/',
   serverPath: '/engine/parse',
   fallbackLanguage: 'en',
-  modelsDirectory: 'models',
   engineId: '',
+  dynamicEntities: { /* ... */ },
 }),
 ```
 
 - `serverUrl` and `serverPath`: The API endpoint where the Snips NLU server can be reached.
-- `fallbackLanguage`: The language that gets used if the request doess not come with a language property. Default: `en`.
-- `modelsDirectory`: For [dynamic entities](#dynamic-entities), it is necessary to set the path to the Jovo Model files. Default: `models`.
+- `fallbackLanguage`: The language that gets used if the request does not come with a language property. Default: `en`.
 - `engineId`: This ID gets passed to the Snips NLU server. Default: Random `uuid`.
+- `dynamicEntities`: [See more information about dynamic entities below](#dynamic-entities).
 
 
 ## Dynamic Entities
 
-It is possible to set up Snips NLU to work with [dynamic entities](../../docs/entities.md).
+It is possible to set up Snips NLU to work with [dynamic entities](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/entities.md#dynamic-entities).
 
-The Jovo Snips NLU integration automatically parses the entities that are added to the `listen` object of the output, and sends them to the Snips NLU server along with the session ID.
+The Jovo Snips NLU integration automatically parses the entities that are added to the `listen` object of the [output template](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md), and sends them to the Snips NLU server along with the session ID.
 
 The Snips NLU server then trains an updated model just for the intents that use the `entities` from `listen`.
+
+This is the configuration for `dynamicEntities`:
+
+```typescript
+new SnipsNlu({
+  // ...
+  dynamicEntities: {
+    enabled: false,
+    serverPath: '/engine/train/dynamic-entities',
+    passModels: true;
+
+    // Either use models directory or import model files and
+    modelsDirectory: 'models';
+    models: [ en ];
+  },
+}),
+```
+
+* `enabled`: Setting this to `true` will enable the training of dynamic entities.
+* `serverPath`: This is the endpoint of the server that handles the training. Uses the same base `serverUrl` as the [main configuration](#configuration).
+* `passModels`: Since the server trains a new model that includes only the intents that use the dynamic entities, it needs access to the existing language model. You can either modify the server to access them, or pass the models using this NLU integration. If the latter, there are two options:
+  * `modelsDirectory`: Reference the folder that includes all the model files. If you're deploying the app, make sure that the models files are included in the bundle.
+  * `models`: Import the model files and reference them here. This property is prioritized over `modelsDirectory` if both are used.
