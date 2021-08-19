@@ -9,10 +9,12 @@ import {
   ROCKET,
   Task,
 } from '@jovotech/cli-core';
+import AdmZip from 'adm-zip';
+import axios, { AxiosError } from 'axios';
 import { existsSync, readFileSync, unlinkSync } from 'fs';
 import { join as joinPaths } from 'path';
 import { DialogflowCli } from '..';
-import { activateServiceAccount, getGcloudAccessToken } from '../utils';
+import { activateServiceAccount, getGcloudAccessToken } from '../utilities';
 
 export interface DialogflowDeployPlatformContext extends DeployPlatformContext {
   flags: DeployPlatformContext['flags'] & { 'project-id'?: string };

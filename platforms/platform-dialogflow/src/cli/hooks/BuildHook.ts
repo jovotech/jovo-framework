@@ -1,3 +1,4 @@
+import type { BuildContext, BuildEvents } from '@jovotech/cli-command-build';
 import {
   ANSWER_BACKUP,
   ANSWER_CANCEL,
@@ -15,19 +16,17 @@ import {
   Task,
   wait,
 } from '@jovotech/cli-core';
-import type { BuildContext, BuildEvents } from '@jovotech/cli-command-build';
-import _get from 'lodash.get';
-import _merge from 'lodash.merge';
-import _mergeWith from 'lodash.mergewith';
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs';
 import { FileBuilder, FileObject, FileObjectEntry } from '@jovotech/filebuilder';
 import { JovoModelData, NativeFileInformation } from '@jovotech/model';
 import { JovoModelDialogflow } from '@jovotech/model-dialogflow';
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs';
+import _get from 'lodash.get';
+import _merge from 'lodash.merge';
+import _mergeWith from 'lodash.mergewith';
 import { join as joinPaths } from 'path';
-
-import { DialogflowAgent, SupportedLocales, SupportedLocalesType } from '../utils';
-import DefaultFiles from '../utils/DefaultFiles.json';
 import { DialogflowCli } from '..';
+import DefaultFiles from '../DefaultFiles.json';
+import { DialogflowAgent, SupportedLocales, SupportedLocalesType } from '../utilities';
 
 export interface DialogflowBuildContext extends BuildContext {
   dialogflow: {

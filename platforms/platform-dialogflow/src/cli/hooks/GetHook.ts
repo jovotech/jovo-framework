@@ -16,9 +16,8 @@ import AdmZip from 'adm-zip';
 import axios, { AxiosError } from 'axios';
 import { existsSync, mkdirSync } from 'fs';
 import { join as joinPaths } from 'path';
-
 import { DialogflowCli } from '..';
-import { activateServiceAccount, getGcloudAccessToken } from '../utils';
+import { activateServiceAccount, getGcloudAccessToken } from '../utilities';
 
 export interface DialogflowGetContext extends GetContext {
   flags: GetContext['flags'] & { 'project-id'?: string };

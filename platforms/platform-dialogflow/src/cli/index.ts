@@ -4,7 +4,7 @@ import { join as joinPaths } from 'path';
 import { BuildHook } from './hooks/BuildHook';
 import { DeployHook } from './hooks/DeployHook';
 import { GetHook } from './hooks/GetHook';
-import { DialogflowConfig } from './utils';
+import { DialogflowConfig } from './utilities';
 
 export class DialogflowCli extends JovoCliPlugin {
   readonly $id: string = 'dialogflow';
