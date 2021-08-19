@@ -34,7 +34,7 @@ import { RasaNlu } from '@jovotech/nlu-rasa';
 
 // ...
 
-app.configure({
+const app = new App({
   plugins: [
     new CorePlatform({
       plugins: [new RasaNlu()],
@@ -87,13 +87,13 @@ new RasaNlu({
 You can access the `alternativeIntents` array like this:
 
 ```typescript
-this.$nlu.alternativeIntents
+this.$input.nlu.alternativeIntents
 ```
 
 Since the `alternativeIntents` is specific to the `RasaNluData` type, you can do type casting like this:
 
 ```typescript
-const alternativeIntents = (this.$nlu as RasaNluData | undefined)?.alternativeIntents;
+const alternativeIntents = (this.$input.nlu as RasaNluData | undefined)?.alternativeIntents;
 ```
 
 ## Jovo Model
