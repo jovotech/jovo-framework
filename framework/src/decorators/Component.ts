@@ -3,6 +3,7 @@ import { BuiltInHandler } from '../enums';
 import { DuplicateChildComponentsError } from '../errors/DuplicateChildComponentsError';
 import { ComponentMetadata, ComponentOptions } from '../metadata/ComponentMetadata';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
+import { HandlerOptionMetadata } from '../metadata/HandlerOptionMetadata';
 import { MetadataStorage } from '../metadata/MetadataStorage';
 import { getMethodKeys } from '../utilities';
 
@@ -26,8 +27,8 @@ export function Component<COMPONENT extends BaseComponent = BaseComponent>(
     const metadataStorage = MetadataStorage.getInstance();
 
     const keys = getMethodKeys(target.prototype);
+    // iterate all keys of methods of the target
     keys.forEach((key) => {
-      // it could be checked for more built-in Intents here in order to skip them in the future, i.e. START
       const hasHandlerMetadata = metadataStorage.handlerMetadata.some(
         (handlerMetadata) =>
           handlerMetadata.target === target && handlerMetadata.propertyKey === key,
@@ -35,14 +36,18 @@ export function Component<COMPONENT extends BaseComponent = BaseComponent>(
       const hasHandlerOptionMetadata = metadataStorage.handlerOptionMetadata.some(
         (optionMetadata) => optionMetadata.target === target && optionMetadata.propertyKey === key,
       );
-      if (!hasHandlerMetadata && !hasHandlerOptionMetadata) {
-        const isLaunchOrEnd = key === BuiltInHandler.Launch || key === BuiltInHandler.End;
-        metadataStorage.addHandlerMetadata(
-          new HandlerMetadata(target, key as keyof COMPONENT, {
-            global: isLaunchOrEnd,
-            types: isLaunchOrEnd ? [key as BuiltInHandler.Launch | BuiltInHandler.End] : undefined,
-          }),
+
+      // if it is LAUNCH or END
+      if (key === BuiltInHandler.Launch || key === BuiltInHandler.End) {
+        // unshift to not overwrite any other explicitly set HandlerOptionMetadata when merging
+        metadataStorage.handlerOptionMetadata.unshift(
+          new HandlerOptionMetadata(target, key as keyof COMPONENT, {
+            global: true,
+            types: [key],
+          }) as HandlerOptionMetadata,
         );
+      } else if (!hasHandlerMetadata && !hasHandlerOptionMetadata) {
+        metadataStorage.addHandlerMetadata(new HandlerMetadata(target, key as keyof COMPONENT));
       }
     });
     metadataStorage.addComponentMetadata(new ComponentMetadata<COMPONENT>(target, options));
