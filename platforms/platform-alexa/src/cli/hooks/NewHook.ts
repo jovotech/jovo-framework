@@ -1,7 +1,7 @@
-import { PluginHook, printHighlight, printUserInput, prompt, Log } from '@jovotech/cli-core';
 import type { NewContext, NewEvents } from '@jovotech/cli-command-new';
-
-import { SupportedLocales, SupportedLocalesType } from '../utils';
+import { Log, PluginHook, printHighlight, printUserInput, prompt } from '@jovotech/cli-core';
+import { SupportedLocales } from '../constants';
+import { SupportedLocalesType } from '../interfaces';
 
 export class NewHook extends PluginHook<NewEvents> {
   install(): void {

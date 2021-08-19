@@ -82,26 +82,21 @@ export class MiddlewareCollection<MIDDLEWARES extends string[] = string[]> {
     jovo: Jovo,
   ): Promise<void> {
     const names = typeof nameOrNames === 'string' ? [nameOrNames] : nameOrNames;
-
-    // make a promise-chain to run middlewares sequentially
-    const chain = names.reduce((chain: Promise<void>, name) => {
+    for (const name of names) {
       const middleware = this.get(name);
-      if (!middleware) return chain;
+      if (!middleware) continue;
       const beforeName = `before.${name}`;
       if (this.has(beforeName)) {
-        chain.then(() => this.run(beforeName, jovo));
+        await this.run(beforeName, jovo);
       }
 
-      chain.then(() => middleware.run(jovo));
+      await middleware.run(jovo);
 
       const afterName = `after.${name}`;
       if (this.has(afterName)) {
-        chain.then(() => this.run(afterName, jovo));
+        await this.run(afterName, jovo);
       }
-
-      return chain;
-    }, Promise.resolve());
-    await chain;
+    }
   }
 
   disable(...names: PossibleMiddlewareName<MIDDLEWARES>[]): this;

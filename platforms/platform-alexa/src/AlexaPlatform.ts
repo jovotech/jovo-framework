@@ -1,7 +1,5 @@
 import {
   AnyObject,
-  Entity,
-  EntityMap,
   ExtensibleConfig,
   HandleRequest,
   InputType,
@@ -84,15 +82,8 @@ export class AlexaPlatform extends Platform<
             jovo.$input.intent = argument.intent;
           }
           if (argument.entities) {
-            const entityMap: EntityMap = argument.entities.reduce(
-              (entityMap: EntityMap, entity: Entity) => {
-                entityMap[entity.name] = entity;
-                return entityMap;
-              },
-              {},
-            );
-            jovo.$input.entities = { ...entityMap };
-            jovo.$entities = entityMap;
+            jovo.$input.entities = { ...argument.entities };
+            jovo.$entities = argument.entities;
           }
         }
       });

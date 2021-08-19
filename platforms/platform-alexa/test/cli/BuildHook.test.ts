@@ -15,7 +15,7 @@ jest.mock('@jovotech/cli-core', () => ({
     },
   }),
 }));
-jest.mock('jovo-model-alexa');
+jest.mock('@jovotech/model-alexa');
 
 beforeEach(() => {
   const plugin: Plugin = new Plugin();

@@ -11,11 +11,11 @@ export async function activateServiceAccount(keyFilePath: string): Promise<void>
     if (error.stderr.includes('Activated service account')) {
       return;
     }
-    throw new JovoCliError(
-      'Could not activate your service account.',
-      'DialogflowCli',
-      error.stderr,
-    );
+    throw new JovoCliError({
+      message: 'Could not activate your service account.',
+      module: 'DialogflowCli',
+      details: error.stderr,
+    });
   }
 }
 
@@ -27,6 +27,10 @@ export async function getGcloudAccessToken(): Promise<string> {
     }
     return stdout.trim();
   } catch (error) {
-    throw new JovoCliError('Authorization failed.', 'DialogflowCli', error.stderr);
+    throw new JovoCliError({
+      message: 'Authorization failed.',
+      module: 'DialogflowCli',
+      details: error.stderr,
+    });
   }
 }
