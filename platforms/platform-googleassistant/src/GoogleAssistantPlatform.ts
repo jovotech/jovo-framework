@@ -2,6 +2,7 @@ import {
   AnyObject,
   App,
   ExtensibleConfig,
+  InputType,
   Jovo,
   MiddlewareFunction,
   Platform,
@@ -87,11 +88,8 @@ export class GoogleAssistantPlatform extends Platform<
       Object.keys(request.intent?.params || {}).length &&
       request.session?.params?._GOOGLE_ASSISTANT_SELECTION_INTENT_
     ) {
-      if(!jovo.$input.nlu) {
-        jovo.$input.nlu = {};
-      }
-      // set intent
-      jovo.$input.nlu.intent = request.session.params._GOOGLE_ASSISTANT_SELECTION_INTENT_
+      jovo.$input.type = InputType.Intent;
+      jovo.$input.intent = request.session.params._GOOGLE_ASSISTANT_SELECTION_INTENT_;
     }
   };
 }
