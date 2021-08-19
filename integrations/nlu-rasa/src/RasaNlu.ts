@@ -4,15 +4,14 @@ import {
   AxiosResponse,
   DeepPartial,
   EntityMap,
-  HandleRequest,
   Jovo,
   NluData,
   NluPlugin,
-  PluginConfig,
+  NluPluginConfig,
 } from '@jovotech/framework';
 import { RasaEntity, RasaIntent, RasaResponse } from './interfaces';
 
-export interface RasaNluConfig extends PluginConfig {
+export interface RasaNluConfig extends NluPluginConfig {
   serverUrl: string;
   serverPath: string;
   //activate alternative intent classifications in $nlu
@@ -32,18 +31,16 @@ export interface RasaNluData extends NluData {
 export type RasaNluInitConfig = DeepPartial<RasaNluConfig>;
 
 export class RasaNlu extends NluPlugin<RasaNluConfig> {
-  // TODO fully determine default config
   getDefaultConfig(): RasaNluConfig {
     return {
+      ...super.getDefaultConfig(),
       serverUrl: 'http://localhost:5005',
       serverPath: '/model/parse',
       alternativeIntents: { maxAlternatives: 15, confidenceCutoff: 0.0 },
     };
   }
 
-  async process(handleRequest: HandleRequest, jovo: Jovo): Promise<RasaNluData | undefined> {
-    const text = jovo.$request.getRawText();
-    if (!text) return;
+  async process(jovo: Jovo, text: string): Promise<RasaNluData | undefined> {
     try {
       const rasaResponse = await this.sendTextToRasaServer(text);
 
