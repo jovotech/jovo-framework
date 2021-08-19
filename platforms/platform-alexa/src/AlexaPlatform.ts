@@ -1,7 +1,5 @@
 import {
   AnyObject,
-  Entity,
-  EntityMap,
   ExtensibleConfig,
   HandleRequest,
   InputType,
