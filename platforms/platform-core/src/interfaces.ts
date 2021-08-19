@@ -1,11 +1,4 @@
-import {
-  AudioInput,
-  Capability,
-  EntityMap,
-  InputType,
-  JovoSession,
-  UnknownObject,
-} from '@jovotech/framework';
+import { Capability, JovoSession, UnknownObject } from '@jovotech/framework';
 
 export interface Intent {
   name: string;
