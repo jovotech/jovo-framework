@@ -23,18 +23,12 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/cli-command-build": "^4.0.0-beta.1",
-    "@jovotech/cli-command-deploy": "^4.0.0-beta.1",
-    "@jovotech/cli-command-get": "^4.0.0-beta.1",
-    "@jovotech/cli-command-new": "^4.0.0-beta.1",
-    "@jovotech/cli-core": "^4.0.0-beta.1",
-    "@jovotech/filebuilder": "^0.0.1",
     "@jovotech/framework": "^4.0.0-alpha.18",
     "@jovotech/output-googleassistant": "^4.0.0-beta.1",
     "global-dirs": "^3.0.0",
     "indent-string": "^4.0.0",
-    "jovo-model": "^3.0.1",
-    "jovo-model-google": "^3.0.8",
+    "@jovotech/model": "^4.0.0-beta.1",
+    "@jovotech/model-google": "^4.0.0-beta.1",
     "lodash.get": "^4.4.2",
     "lodash.has": "^4.5.2",
     "lodash.merge": "^4.6.2",
@@ -56,6 +50,12 @@
     "@types/tv4": "^1.2.29",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
+    "@jovotech/cli-command-build": "^4.0.0-beta.2",
+    "@jovotech/cli-command-deploy": "^4.0.0-beta.2",
+    "@jovotech/cli-command-get": "^4.0.0-beta.2",
+    "@jovotech/cli-command-new": "^4.0.0-beta.2",
+    "@jovotech/cli-core": "^4.0.0-beta.2",
+    "@jovotech/filebuilder": "^0.0.1",
     "eslint": "^7.17.0",
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.1",
@@ -68,7 +68,13 @@
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
-    "@jovotech/framework": ">=4.0.0-alpha.16 <4.0.0"
+    "@jovotech/framework": ">=4.0.0-alpha.16 <4.0.0",
+    "@jovotech/cli-command-build": "^4.0.0-beta.2",
+    "@jovotech/cli-command-deploy": "^4.0.0-beta.2",
+    "@jovotech/cli-command-get": "^4.0.0-beta.2",
+    "@jovotech/cli-command-new": "^4.0.0-beta.2",
+    "@jovotech/cli-core": "^4.0.0-beta.2",
+    "@jovotech/filebuilder": "^0.0.1"
   },
   "browser": {
     "@jovotech/cli-core": false,

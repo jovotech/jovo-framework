@@ -1,5 +1,5 @@
 import { execAsync } from '@jovotech/cli-core';
-import { getAskError } from '../utils';
+import { getAskError } from '../utilities';
 
 export async function getInteractionModel(
   skillId: string,

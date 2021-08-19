@@ -1,4 +1,4 @@
-import { isNode, registerPlatformSpecificJovoReference } from '@jovotech/framework';
+import { registerPlatformSpecificJovoReference } from '@jovotech/framework';
 import { SessionParamsReprompts } from '@jovotech/output-googleassistant';
 import type { GoogleAssistantCli as GoogleAssistantCliType } from './cli';
 import { GoogleAssistant } from './GoogleAssistant';
@@ -33,14 +33,14 @@ declare module '@jovotech/framework/dist/types/Jovo' {
 }
 registerPlatformSpecificJovoReference('$googleAssistant', GoogleAssistant);
 
-export const GoogleAssistantCli: typeof GoogleAssistantCliType = isNode()
+export const GoogleAssistantCli: typeof GoogleAssistantCliType = process.env.JOVO_CLI_RUNTIME
   ? // eslint-disable-next-line @typescript-eslint/no-var-requires
     require('./cli').GoogleAssistantCli
   : null;
+export type { GoogleAssistantResponse } from '@jovotech/output-googleassistant';
+export * from './enums';
 export * from './GoogleAssistant';
 export * from './GoogleAssistantPlatform';
 export * from './GoogleAssistantRequest';
 export * from './GoogleAssistantUser';
-export type { GoogleAssistantResponse } from '@jovotech/output-googleassistant';
 export * from './interfaces';
-export * from './enums';

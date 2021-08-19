@@ -14,7 +14,7 @@ import {
 import { existsSync, mkdirSync } from 'fs';
 import _get from 'lodash.get';
 import { GoogleAssistantCli } from '..';
-import { checkForGactionsCli, getGactionsError, GoogleContext } from '../utils';
+import { checkForGactionsCli, getGactionsError, GoogleContext } from '../utilities';
 
 export interface GoogleGetContext extends GetContext, GoogleContext {
   flags: GetContext['flags'] & { 'project-id'?: string };
@@ -74,11 +74,11 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
       this.$context.flags['project-id'] || _get(this.$plugin.$config, 'projectId');
 
     if (!this.$context.googleAssistant.projectId) {
-      throw new JovoCliError(
-        'Could not find projectId.',
-        'GoogleAssistantCli',
-        'Please provide a project id by using the flag "--project-id" or in your project configuration.',
-      );
+      throw new JovoCliError({
+        message: 'Could not find projectId.',
+        module: 'GoogleAssistantCli',
+        hint: 'Please provide a project id by using the flag "--project-id" or in your project configuration.',
+      });
     }
   }
 
