@@ -14,7 +14,7 @@ import { RasaEntity, RasaIntent, RasaResponse } from './interfaces';
 export interface RasaNluConfig extends NluPluginConfig {
   serverUrl: string;
   serverPath: string;
-  //activate alternative intent classifications in $nlu
+  //activate alternative intent classifications in $input.nlu
   //and constrain the number of alternatives by number and/or an confidence cutoff
   alternativeIntents: { maxAlternatives: number; confidenceCutoff: number };
 }
