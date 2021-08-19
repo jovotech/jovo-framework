@@ -3,16 +3,30 @@ import {
   AxiosRequestConfig,
   AxiosResponse,
   DeepPartial,
+  EntityMap,
+  HandleRequest,
   Jovo,
   NluData,
   NluPlugin,
-  NluPluginConfig,
+  PluginConfig,
 } from '@jovotech/framework';
-import { RasaResponse } from './interfaces';
+import { RasaEntity, RasaIntent, RasaResponse } from './interfaces';
 
-export interface RasaNluConfig extends NluPluginConfig {
+export interface RasaNluConfig extends PluginConfig {
   serverUrl: string;
   serverPath: string;
+  //activate alternative intent classifications in $nlu
+  //and constrain the number of alternatives by number and/or an confidence cutoff
+  alternativeIntents: { maxAlternatives: number; confidenceCutoff: number };
+}
+
+export interface RasaNluData extends NluData {
+  intent: {
+    name: string;
+    confidence: number;
+  };
+  alternativeIntents: RasaIntent[];
+  entities: EntityMap;
 }
 
 export type RasaNluInitConfig = DeepPartial<RasaNluConfig>;
@@ -21,21 +35,29 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
   // TODO fully determine default config
   getDefaultConfig(): RasaNluConfig {
     return {
-      ...super.getDefaultConfig(),
       serverUrl: 'http://localhost:5005',
       serverPath: '/model/parse',
+      alternativeIntents: { maxAlternatives: 15, confidenceCutoff: 0.0 },
     };
   }
 
-  async process(jovo: Jovo, text: string): Promise<NluData | undefined> {
+  async process(handleRequest: HandleRequest, jovo: Jovo): Promise<RasaNluData | undefined> {
+    const text = jovo.$request.getRawText();
+    if (!text) return;
     try {
       const rasaResponse = await this.sendTextToRasaServer(text);
-      return rasaResponse?.data?.intent?.name
-        ? { intent: { name: rasaResponse.data.intent.name } }
-        : undefined;
+
+      return {
+        intent: {
+          name: rasaResponse.data.intent.name,
+          confidence: rasaResponse.data.intent.confidence,
+        },
+        alternativeIntents: this.mapAlternativeIntents(rasaResponse.data.intent_ranking),
+        entities: rasaResponse.data.entities.reduce(this.mapEntities, {}),
+      };
     } catch (e) {
       // eslint-disable-next-line no-console
-      console.error('Error while retrieving nlu-data from Rasa-server.', e);
+      console.error('Error while retrieving nlu-data from Rasa-server: ', e);
       return;
     }
   }
@@ -45,5 +67,31 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
     config?: AxiosRequestConfig,
   ): Promise<AxiosResponse<RasaResponse>> {
     return axios.post(`${this.config.serverUrl}${this.config.serverPath}`, { text }, config);
+  }
+
+  private mapAlternativeIntents(allIntents: RasaIntent[]): RasaIntent[] {
+    // remove first element, because its the classified intent
+    const alternativeIntents = allIntents.slice(1);
+
+    return alternativeIntents
+      .filter((a) => a.confidence > this.config.alternativeIntents.confidenceCutoff)
+      .slice(0, this.config.alternativeIntents.maxAlternatives);
+  }
+
+  private mapEntities(entityMap: EntityMap, rasaEntity: RasaEntity): EntityMap {
+    let entityAlias = rasaEntity.entity;
+    // roles can distinguish entities of the same type e.g. departure and destination in
+    // a travel use case and should therefore be preferred as entity name
+    if (rasaEntity.role) {
+      entityAlias = rasaEntity.role;
+    }
+    entityMap.entityAlias = {
+      id: entityAlias,
+      key: entityAlias,
+      name: rasaEntity.entity,
+      value: rasaEntity.value,
+    };
+
+    return entityMap;
   }
 }
