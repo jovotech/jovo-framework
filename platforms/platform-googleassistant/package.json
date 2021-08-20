@@ -32,6 +32,7 @@
     "@jovotech/filebuilder": "^0.0.1",
     "@jovotech/framework": "^4.0.0-alpha.18",
     "@jovotech/output-googleassistant": "^4.0.0-alpha.9",
+    "copyfiles": "^2.4.1",
     "global-dirs": "^3.0.0",
     "indent-string": "^4.0.0",
     "jovo-model": "^3.0.1",
