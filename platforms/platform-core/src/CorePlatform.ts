@@ -19,28 +19,6 @@ export class CorePlatform extends Platform<
   CorePlatform,
   CorePlatformConfig
 > {
-  // TODO: determine how useful this is and if this is required somewhere
-  // Creates a class with the given name that only supports requests with the given type.
-  // Allows making new platforms on the fly
-  static create(
-    name: string,
-    type: CorePlatformConfig['type'],
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ): new (...args: any[]) => CorePlatform {
-    // workaround to make the anonymous' class name equal to `name`
-    const obj = {
-      [name]: class extends CorePlatform {
-        getDefaultConfig(): CorePlatformConfig {
-          return {
-            ...super.getDefaultConfig(),
-            type,
-          };
-        }
-      },
-    };
-    return obj[name];
-  }
-
   outputTemplateConverterStrategy = new CoreOutputTemplateConverterStrategy();
   requestClass = CoreRequest;
   jovoClass = Core;
