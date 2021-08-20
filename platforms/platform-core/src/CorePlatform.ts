@@ -7,7 +7,7 @@ import { CoreRequest } from './CoreRequest';
 import { CoreUser } from './CoreUser';
 
 export interface CorePlatformConfig extends ExtensibleConfig {
-  type: 'core' | string;
+  platform: 'core' | string;
 }
 
 export class CorePlatform extends Platform<
@@ -27,7 +27,7 @@ export class CorePlatform extends Platform<
 
   getDefaultConfig(): CorePlatformConfig {
     return {
-      type: 'core',
+      platform: 'core',
     };
   }
 
@@ -36,7 +36,7 @@ export class CorePlatform extends Platform<
       request.version &&
       request.timestamp &&
       request.input?.type &&
-      request.platform === this.config.type
+      request.platform === this.config.platform
     );
   }
 
@@ -47,7 +47,7 @@ export class CorePlatform extends Platform<
       response.context &&
       response.context.user &&
       response.context.session &&
-      response.platform === this.config.type
+      response.platform === this.config.platform
     );
   }
 
@@ -55,7 +55,7 @@ export class CorePlatform extends Platform<
     response: CoreResponse,
     corePlatformApp: Core,
   ): CoreResponse | Promise<CoreResponse> {
-    response.type = this.config.type;
+    response.platform = this.config.platform;
     response.context.session.data = corePlatformApp.$session;
     return response;
   }
