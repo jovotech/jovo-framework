@@ -44,6 +44,7 @@ export abstract class NluPlugin<
     }
     const nluProcessResult = await this.process(jovo, jovo.$input.text);
     if (nluProcessResult) {
+      jovo.$input.type = InputType.Intent;
       jovo.$input.nlu = nluProcessResult;
       jovo.$entities = nluProcessResult.entities || {};
     }
