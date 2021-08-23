@@ -366,7 +366,12 @@ export class GoogleAnalytics implements Analytics {
    * @returns {string} uuid: Hashed user id
    */
   protected getUserId(jovo: Jovo): string {
-    const idHash = crypto.createHash('sha256').update(jovo.$user.getId()!).digest('base64');
+    const userId = jovo.$user.getId();
+    if (!userId) {
+      return 'UKNOWN_USER';
+    }
+
+    const idHash = crypto.createHash('sha256').update(userId).digest('base64');
     return idHash;
   }
 

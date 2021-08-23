@@ -23,7 +23,6 @@ Thank you to all our existing sponsors and supporters! <3
 
 <a href="https://opencollective.com/jovo-framework#section-contributors"><img src="https://opencollective.com/jovo-framework/tiers/silver-sponsors.svg?avatarHeight=50&width=600" /></a>
 
-* [Dabble Lab](https://www.dabblelab.com/)
 * [Labworks.io](https://www.labworks.io/)
 * [Matchbox.io](https://matchbox.io/)
 * [Volley](https://volleythat.com/)
@@ -43,7 +42,7 @@ Thank you to all our existing sponsors and supporters! <3
 * [Future of Voice](https://www.futureofvoice.com/)
 * [Altervoice](https://www.altervoice.com/)
 * [Voicebot.ai](https://voicebot.ai/)
-* [The Bot Forge](https://www.thebotforge.io/)
+* [Adassa Innovations](https://adassainnovations.com/)
 
 
 ## Backers
@@ -69,3 +68,6 @@ Thank you to all our existing sponsors and supporters! <3
 * Mario Menti
 * Spokestack
 * Jargon
+* The Bot Forge
+* Dabble Lab
+

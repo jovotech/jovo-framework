@@ -40,6 +40,8 @@ export class InteractiveCanvas implements Plugin {
           url: htmlResponse.url,
           updatedState: htmlResponse.data,
           suppressMic: htmlResponse.suppress,
+          enableFullScreen: htmlResponse.enableFullScreen,
+          continueTtsDuringTouch: htmlResponse.continueTtsDuringTouch,
         },
       });
       _set(googleAction.$originalResponse, 'richResponse.items', richResponseItems);

@@ -2,6 +2,16 @@
 
 ### Latest Framework Version: 3.5.2<br><br>
 
+
+#### 2021-07-07 
+
+##### `jovo-platform-googleassistantconv [3.5.4]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googleassistantconv) | [npm](https://www.npmjs.com/package/jovo-platform-googleassistantconv)
+- [#948](https://github.com/jovotech/jovo-framework/pull/948) ✨ Add enableFullScreen and continueTtsDuringTouch ([@aswetlow](https://github.com/aswetlow))
+
+##### `jovo-platform-googleassistant [3.5.4]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googleassistant) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googleassistant) | [npm](https://www.npmjs.com/package/jovo-platform-googleassistant)
+- [#948](https://github.com/jovotech/jovo-framework/pull/948) ✨ Add enableFullScreen and continueTtsDuringTouch ([@aswetlow](https://github.com/aswetlow))
+
+
 ### 2021-05-10
 
 ##### `jovo-framework [3.5.2]`

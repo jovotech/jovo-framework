@@ -484,6 +484,8 @@ export interface HtmlResponse {
   updatedState: any; // tslint:disable-line
   suppressMic: boolean;
   url: string;
+  enableFullScreen?: boolean;
+  continueTtsDuringTouch?: boolean;
 }
 
 export interface Item {
