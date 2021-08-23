@@ -110,7 +110,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     app.use(
       new CorePlatform({
         ...this.config.corePlatform,
-        type: 'jovo-debugger',
+        platform: 'jovo-debugger',
         plugins: [new NlpjsNlu(this.config.nlpjsNlu)],
       }),
     );
