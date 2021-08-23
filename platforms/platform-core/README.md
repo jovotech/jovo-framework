@@ -2,7 +2,8 @@
 
 The Jovo Core Platform is a standalone [platform integration](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/platforms.md) that can be used to deploy a voice experiences to custom devices and hardware, including the web, mobile apps, and Raspberry Pi.
 - [Introduction](#introduction)
-- [Getting Started](#getting-started)
+- [Installation](#installation)
+- [Configuration](#configuration)
 - [Requests and Responses](#requests-and-responses)
   - [Requests](#requests)
   - [Responses](#responses)
@@ -29,12 +30,12 @@ Depending on the client, it may be necessary to add integrations to the platform
 
 After these integrations are added, building a Jovo app for custom clients is similar to building for platforms like Alexa and Google Assistant.
 
-## Getting Started
+## Installation
 
 You can install the plugin like this:
 
 ```sh
-$ npm install @jovotech/platform-core --save
+$ npm install @jovotech/platform-core
 ```
 
 Add it as plugin to your [app configuration](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/app-config.md), e.g. `app.ts`:
@@ -51,6 +52,20 @@ const app = new App({
   ],
 });
 ```
+
+## Configuration
+
+The Core Platform has the following default config properties:
+
+```typescript
+new CorePlatform({
+  platform: 'core',
+  plugins: [],
+})
+```
+
+* `platform`: The `platform` name that you can find in the [request documentation below](#request) can be overridden with this property.
+* `plugins`: You can add plugins to this array. For example, Core Platform requires an [NLU plugin](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/nlu.md) to turn raw text into structured meaning.
 
 ## Requests and Responses
 
