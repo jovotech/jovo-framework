@@ -26,19 +26,19 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
     const alexaRequest = jovo.$request as AlexaRequest;
 
     if (jovo.$type.subType?.includes('AlexaSkillEvent')) {
-      this.handleAlexaSkillEvents(jovo);
+      await this.handleAlexaSkillEvents(jovo);
       return;
     }
 
     await super.track(handleRequest);
   }
 
-  protected handleAlexaSkillEvents(jovo: Jovo) {
+  protected async handleAlexaSkillEvents(jovo: Jovo) {
     const eventName = jovo.$type.subType?.split('.')[1];
     if (!eventName) {
       return;
     }
-    jovo.$googleAnalytics.sendEvent({
+    await jovo.$googleAnalytics.sendEvent({
       eventCategory: 'AlexaSkillEvent',
       eventAction: eventName,
       eventLabel: this.getUserId(jovo),
