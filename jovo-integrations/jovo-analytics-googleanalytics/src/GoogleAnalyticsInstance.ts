@@ -120,13 +120,11 @@ export class GoogleAnalyticsInstance {
   }
 
   async sendEvent(params: Event) {
-
     await this.visitor!.event(params, (err: any) => {
       if (err) {
         throw new JovoError(err.message, ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics');
       }
     }).send();
-
   }
 
   sendTransaction(params: Transaction) {

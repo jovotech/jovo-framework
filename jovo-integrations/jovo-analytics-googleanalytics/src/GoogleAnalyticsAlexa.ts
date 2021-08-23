@@ -30,10 +30,7 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
       return;
     }
 
-
-
     await super.track(handleRequest);
-
   }
 
   protected async handleAlexaSkillEvents(jovo: Jovo) {
