@@ -3,6 +3,7 @@ import {
   App,
   DeepPartial,
   Extensible,
+  ExtensibleInitConfig,
   HandleRequest,
   InvalidParentError,
   Jovo,
@@ -54,9 +55,8 @@ export interface JovoUpdateData<KEY extends keyof Jovo | string = keyof Jovo | s
   path: KEY extends keyof Jovo ? KEY : string;
 }
 
-// TODO: implement config
 export interface JovoDebuggerConfig extends PluginConfig {
-  corePlatform: DeepPartial<CorePlatformConfig>;
+  corePlatform: ExtensibleInitConfig<CorePlatformConfig>;
   nlpjsNlu: NlpjsNluInitConfig;
   webhookUrl: string;
   languageModelEnabled: boolean;
@@ -107,10 +107,10 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   }
 
   private installDebuggerPlatform(app: App) {
-    const JovoDebuggerPlatform = CorePlatform.create('JovoDebuggerPlatform', 'jovo-debugger');
     app.use(
-      new JovoDebuggerPlatform({
+      new CorePlatform({
         ...this.config.corePlatform,
+        platform: 'jovo-debugger',
         plugins: [new NlpjsNlu(this.config.nlpjsNlu)],
       }),
     );
