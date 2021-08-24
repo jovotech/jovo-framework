@@ -133,12 +133,13 @@ A `SPEECH` input means that the platform sent a request that contains a speech a
 {
   type: 'SPEECH',
   audio: {
-    // Recorded audio
+    base64: '...',
+    sampleRate: 44100,
   },
 }
 ```
 
-This audio gets turned into transcribed speech by using an ASR integration.
+The `audio` typically includes a [Base64](https://en.wikipedia.org/wiki/Base64) string and a sample rate. It usually gets turned into transcribed speech by using an ASR integration.
 
 ### TRANSCRIBED_SPEECH
 
