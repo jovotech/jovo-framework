@@ -1,26 +1,25 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
-import _get from 'lodash.get';
-import _set from 'lodash.set';
+import type { BuildEvents } from '@jovotech/cli-command-build';
+import type { GetContext, GetEvents } from '@jovotech/cli-command-get';
 import {
   ANSWER_CANCEL,
+  DOWNLOAD,
   flags,
   InstallContext,
+  MAGNIFYING_GLASS,
   PluginHook,
   printAskProfile,
   promptListForProjectId,
   promptOverwrite,
   Task,
-  DOWNLOAD,
-  MAGNIFYING_GLASS,
 } from '@jovotech/cli-core';
-import type { GetContext, GetEvents } from '@jovotech/cli-command-get';
-import type { BuildEvents } from '@jovotech/cli-command-build';
 import { FileBuilder, FileObject } from '@jovotech/filebuilder';
-
-import * as smapi from '../smapi';
-import { AskSkillList, checkForAskCli, AlexaContext, prepareSkillList } from '../utils';
-import defaultFiles from '../utils/DefaultFiles.json';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import _get from 'lodash.get';
+import _set from 'lodash.set';
 import { AlexaCli } from '..';
+import defaultFiles from '../DefaultFiles.json';
+import * as smapi from '../smapi';
+import { AlexaContext, AskSkillList, checkForAskCli, prepareSkillList } from '../utilities';
 
 export interface GetContextAlexa extends AlexaContext, GetContext {
   flags: GetContext['flags'] & { 'ask-profile'?: string; 'skill-id'?: string };

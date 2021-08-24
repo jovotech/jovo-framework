@@ -1,5 +1,4 @@
-import _get from 'lodash.get';
-import _set from 'lodash.set';
+import type { DeployPlatformContext, DeployPlatformEvents } from '@jovotech/cli-command-deploy';
 import {
   flags,
   getResolvedLocales,
@@ -12,12 +11,12 @@ import {
   Task,
 } from '@jovotech/cli-core';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
-import type { DeployPlatformEvents, DeployPlatformContext } from '@jovotech/cli-command-deploy';
-
-import * as smapi from '../smapi';
-import { checkForAskCli, AlexaContext, SupportedLocales } from '../utils';
-import DefaultFiles from '../utils/DefaultFiles.json';
+import _get from 'lodash.get';
+import _set from 'lodash.set';
 import { AlexaCli } from '..';
+import DefaultFiles from '../DefaultFiles.json';
+import * as smapi from '../smapi';
+import { AlexaContext, checkForAskCli, SupportedLocales } from '../utilities';
 
 export interface DeployPlatformContextAlexa extends AlexaContext, DeployPlatformContext {
   flags: DeployPlatformContext['flags'] & { 'ask-profile'?: string; 'skill-id'?: string };
@@ -86,11 +85,11 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
    */
   checkForPlatformsFolder(): void {
     if (!existsSync(this.$plugin.getPlatformPath())) {
-      throw new JovoCliError(
-        `Couldn't find the platform folder "${this.$plugin.platformDirectory}/".`,
-        this.$plugin.constructor.name,
-        `Please use "jovo build" to create platform-specific files.`,
-      );
+      throw new JovoCliError({
+        message: `Couldn't find the platform folder "${this.$plugin.platformDirectory}/".`,
+        module: this.$plugin.constructor.name,
+        hint: `Please use "jovo build" to create platform-specific files.`,
+      });
     }
   }
 
@@ -214,7 +213,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
       if (err instanceof JovoCliError) {
         throw err;
       }
-      throw new JovoCliError(err.message, this.$plugin.constructor.name);
+      throw new JovoCliError({ message: err.message, module: this.$plugin.constructor.name });
     }
   }
 
@@ -249,10 +248,10 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     try {
       return JSON.parse(readFileSync(this.$plugin.getAskConfigPath(), 'utf8'));
     } catch (err) {
-      throw new JovoCliError(
-        'Could not read ask configuration file.',
-        this.$plugin.constructor.name,
-      );
+      throw new JovoCliError({
+        message: 'Could not read ask configuration file.',
+        module: this.$plugin.constructor.name,
+      });
     }
   }
 
@@ -284,7 +283,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
 
       return info;
     } catch (err) {
-      throw new JovoCliError(err.message, this.$plugin.constructor.name);
+      throw new JovoCliError({ message: err.message, module: this.$plugin.constructor.name });
     }
   }
 

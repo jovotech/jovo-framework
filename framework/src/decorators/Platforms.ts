@@ -1,4 +1,9 @@
 import { createHandlerOptionDecorator } from '../metadata/HandlerOptionMetadata';
 
-export const Platforms: (platforms: string[]) => MethodDecorator = (platforms: string[]) =>
-  createHandlerOptionDecorator({ platforms });
+export function Platforms(...platforms: string[]): MethodDecorator;
+export function Platforms(platforms: string[]): MethodDecorator;
+export function Platforms(platforms: string | string[]): MethodDecorator {
+  return createHandlerOptionDecorator({
+    platforms: typeof platforms === 'string' ? [platforms] : platforms,
+  });
+}

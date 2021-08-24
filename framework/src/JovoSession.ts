@@ -3,8 +3,8 @@ import { ComponentData, SessionData } from './interfaces';
 
 export interface StateStackItem extends UnknownObject {
   component: string;
-  $subState?: string;
-  $data?: ComponentData;
+  subState?: string;
+  data?: ComponentData;
 
   resolve?: Record<string, string>;
   config?: UnknownObject;
@@ -24,16 +24,16 @@ export class JovoSession {
   [key: string]: unknown;
 
   id?: string;
-  $data: SessionData;
-  $state?: StateStack;
+  data: SessionData;
+  state?: StateStack;
   isNew: boolean;
   createdAt: Date;
   updatedAt: Date;
 
   constructor(data?: Partial<JovoSession>) {
     this.id = data?.id;
-    this.$data = data?.$data || {};
-    this.$state = data?.$state;
+    this.data = data?.data || {};
+    this.state = data?.state;
     this.isNew = data?.isNew ?? true;
     this.updatedAt = new Date();
     this.createdAt = this.isNew
@@ -46,8 +46,8 @@ export class JovoSession {
   getPersistableData(): PersistableSessionData {
     return {
       id: this.id,
-      data: this.$data,
-      state: this.$state,
+      data: this.data,
+      state: this.state,
       createdAt: this.createdAt.toISOString(),
       updatedAt: this.updatedAt.toISOString(),
     };
@@ -55,8 +55,8 @@ export class JovoSession {
 
   setPersistableData(data?: PersistableSessionData): this {
     this.id = data?.id || this.id;
-    this.$data = data?.data || this.$data;
-    this.$state = data?.state || this.$state;
+    this.data = data?.data || this.data;
+    this.state = data?.state || this.state;
 
     this.updatedAt = new Date();
     this.createdAt = this.isNew ? new Date() : new Date(data?.createdAt || new Date());

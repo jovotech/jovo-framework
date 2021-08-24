@@ -1,5 +1,5 @@
 import { BaseComponent, ComponentConstructor } from '../BaseComponent';
-import { InternalIntent } from '../enums';
+import { BuiltInHandler } from '../enums';
 import { DuplicateChildComponentsError } from '../errors/DuplicateChildComponentsError';
 import { ComponentMetadata, ComponentOptions } from '../metadata/ComponentMetadata';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
@@ -27,8 +27,8 @@ export function Component<COMPONENT extends BaseComponent = BaseComponent>(
     const metadataStorage = MetadataStorage.getInstance();
 
     const keys = getMethodKeys(target.prototype);
+    // iterate all keys of methods of the target
     keys.forEach((key) => {
-      // it could be checked for more built-in Intents here in order to skip them in the future, i.e. START
       const hasHandlerMetadata = metadataStorage.handlerMetadata.some(
         (handlerMetadata) =>
           handlerMetadata.target === target && handlerMetadata.propertyKey === key,
@@ -36,19 +36,20 @@ export function Component<COMPONENT extends BaseComponent = BaseComponent>(
       const hasHandlerOptionMetadata = metadataStorage.handlerOptionMetadata.some(
         (optionMetadata) => optionMetadata.target === target && optionMetadata.propertyKey === key,
       );
-      if (!hasHandlerMetadata && !hasHandlerOptionMetadata) {
+
+      // if it is LAUNCH or END
+      if (key === BuiltInHandler.Launch || key === BuiltInHandler.End) {
+        // unshift to not overwrite any other explicitly set HandlerOptionMetadata when merging
+        metadataStorage.handlerOptionMetadata.unshift(
+          new HandlerOptionMetadata(target, key as keyof COMPONENT, {
+            global: true,
+            types: [key],
+          }) as HandlerOptionMetadata,
+        );
+      } else if (!hasHandlerMetadata && !hasHandlerOptionMetadata) {
         metadataStorage.addHandlerMetadata(new HandlerMetadata(target, key as keyof COMPONENT));
       }
     });
-    // make launch global if it is set
-    if (target.prototype[InternalIntent.Launch]) {
-      // unshift to not overwrite any other explicitly set HandlerOptionMetadata when merging
-      metadataStorage.handlerOptionMetadata.unshift(
-        new HandlerOptionMetadata(target, InternalIntent.Launch as keyof COMPONENT, {
-          global: true,
-        }) as HandlerOptionMetadata,
-      );
-    }
     metadataStorage.addComponentMetadata(new ComponentMetadata<COMPONENT>(target, options));
     return;
   };

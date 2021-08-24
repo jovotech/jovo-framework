@@ -3,7 +3,7 @@ import colorize from 'json-colorizer';
 import _get from 'lodash.get';
 import _set from 'lodash.set';
 import _unset from 'lodash.unset';
-import { App, HandleRequest, Jovo } from '../index';
+import { App, Jovo } from '../index';
 import { Plugin, PluginConfig } from '../Plugin';
 
 declare module '../Extensible' {
@@ -71,11 +71,11 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
   }
 
   install(parent: App): Promise<void> | void {
-    parent.middlewareCollection.use('after.request', this.logRequest);
-    parent.middlewareCollection.use('after.response', this.logResponse);
+    parent.middlewareCollection.use('request.start', this.logRequest);
+    parent.middlewareCollection.use('response.end', this.logResponse);
   }
 
-  logRequest = async (handleRequest: HandleRequest, jovo: Jovo): Promise<void> => {
+  logRequest = async (jovo: Jovo): Promise<void> => {
     jovo.$data._BASIC_LOGGING_START = new Date().getTime();
 
     if (!this.config.request) {
@@ -120,7 +120,7 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
 
     /* eslint-enable no-console */
   };
-  logResponse = async (handleRequest: HandleRequest, jovo: Jovo): Promise<void> => {
+  logResponse = async (jovo: Jovo): Promise<void> => {
     jovo.$data._BASIC_LOGGING_STOP = new Date().getTime();
     const duration = jovo.$data._BASIC_LOGGING_STOP - jovo.$data._BASIC_LOGGING_START;
 
@@ -160,9 +160,6 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
     }
     if (this.config.responseObjects && this.config.responseObjects.length > 0) {
       this.config.responseObjects.forEach((path: string) => {
-        if (!handleRequest.jovo) {
-          return;
-        }
         console.log(
           colorize(
             JSON.stringify(_get(responseCopy, path), null, this.config.indentation || 2),

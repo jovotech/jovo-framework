@@ -3,6 +3,7 @@ import {
   App,
   DeepPartial,
   Extensible,
+  ExtensibleInitConfig,
   HandleRequest,
   InvalidParentError,
   Jovo,
@@ -54,9 +55,8 @@ export interface JovoUpdateData<KEY extends keyof Jovo | string = keyof Jovo | s
   path: KEY extends keyof Jovo ? KEY : string;
 }
 
-// TODO: implement config
 export interface JovoDebuggerConfig extends PluginConfig {
-  corePlatform: DeepPartial<CorePlatformConfig>;
+  corePlatform: ExtensibleInitConfig<CorePlatformConfig>;
   nlpjsNlu: NlpjsNluInitConfig;
   webhookUrl: string;
   languageModelEnabled: boolean;
@@ -107,10 +107,10 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   }
 
   private installDebuggerPlatform(app: App) {
-    const JovoDebuggerPlatform = CorePlatform.create('JovoDebuggerPlatform', 'jovo-debugger');
     app.use(
-      new JovoDebuggerPlatform({
+      new CorePlatform({
         ...this.config.corePlatform,
+        platform: 'jovo-debugger',
         plugins: [new NlpjsNlu(this.config.nlpjsNlu)],
       }),
     );
@@ -133,9 +133,8 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     );
     this.socket.on(JovoDebuggerEvent.DebuggerRequest, this.onDebuggerRequest.bind(this, app));
 
-    // TODO determine whether it should be called here
-    app.middlewareCollection.use('before.request', this.onRequest);
-    app.middlewareCollection.use('after.response', this.onResponse);
+    app.middlewareCollection.use('request.start', this.onRequest);
+    app.middlewareCollection.use('response.end', this.onResponse);
 
     this.patchHandleRequestToIncludeUniqueId();
     this.patchPlatformsToCreateJovoAsProxy(app.platforms);
@@ -314,25 +313,25 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     await app.handle(new MockServer(request));
   };
 
-  private onRequest = (handleRequest: HandleRequest, jovo: Jovo) => {
+  private onRequest = (jovo: Jovo) => {
     if (!this.socket) {
       // TODO: implement error
       throw new Error();
     }
     const payload: JovoDebuggerPayload<JovoRequest> = {
-      requestId: handleRequest.debuggerRequestId,
+      requestId: jovo.$handleRequest.debuggerRequestId,
       data: jovo.$request,
     };
     this.socket.emit(JovoDebuggerEvent.AppRequest, payload);
   };
 
-  private onResponse = (handleRequest: HandleRequest, jovo: Jovo) => {
+  private onResponse = (jovo: Jovo) => {
     if (!this.socket) {
       // TODO: implement error
       throw new Error();
     }
     const payload: JovoDebuggerPayload = {
-      requestId: handleRequest.debuggerRequestId,
+      requestId: jovo.$handleRequest.debuggerRequestId,
       data: jovo.$response,
     };
     this.socket.emit(JovoDebuggerEvent.AppResponse, payload);

@@ -1,12 +1,10 @@
-import { BASE_PLATFORM_MIDDLEWARES } from '../src';
+import { APP_MIDDLEWARES } from '../src';
 import { EmptyPlatform, ExamplePlatform } from './utilities';
 
 describe('middlewareCollection', () => {
   test('no middlewareCollection was specified: default set used', () => {
     const platform = new ExamplePlatform();
-    expect(Object.keys(platform.middlewareCollection.middlewares)).toEqual(
-      BASE_PLATFORM_MIDDLEWARES,
-    );
+    expect(Object.keys(platform.middlewareCollection.middlewares)).toEqual(APP_MIDDLEWARES);
   });
 
   test('middlewareCollection was specified: default overwritten', () => {
