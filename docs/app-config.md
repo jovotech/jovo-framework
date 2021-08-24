@@ -191,6 +191,33 @@ Especially with apps that work across different platforms, it might happen that 
 }
 ```
 
+For platforms like Alexa that already come with an intent in their requests, the mapped intent name is added to the root of the [`$input` object](./input.md):
+
+```typescript
+{
+  type: 'INTENT',
+  intent: 'HelpIntent',
+}
+```
+
+If you're using an [NLU integration](./nlu.md), the original intent stays in the `nlu` property and the mapped intent is added to the root of `$input`:
+
+```typescript
+{
+  type: 'TEXT',
+  text: 'My name is Max',
+  nlu: {
+    intent: 'MyNameIsIntent',
+    entities: {
+      name: {
+        value: 'Max',
+      },
+    },
+  },
+  intent: 'MappedMyNameIsIntent',
+}
+```
+
 #### intentsToSkipUnhandled
 
 `intentsToSkipUnhandled` includes all intents that shouldn't be fulfilled by an [`UNHANDLED` handler](./handlers.md#unhandled).
