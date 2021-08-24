@@ -2,7 +2,6 @@ import { ComponentTreeNode } from '../ComponentTreeNode';
 import { BuiltInHandler } from '../enums';
 import { MatchingRouteNotFoundError } from '../errors/MatchingRouteNotFoundError';
 import { Jovo } from '../Jovo';
-import { InputType } from '../JovoInput';
 import { ComponentMetadata } from '../metadata/ComponentMetadata';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
 import { MetadataStorage } from '../metadata/MetadataStorage';
@@ -49,10 +48,10 @@ export class RoutingExecutor {
   }
 
   setSkipForRouteMatches(rankedRouteMatches: RouteMatch[]): void {
+    const intentName = this.jovo.$input.getIntentName();
     const isIntentToSkipUnhandled =
-      this.jovo.$handleRequest.config.routing?.intentsToSkipUnhandled?.includes(
-        this.getMappedIntentName(),
-      );
+      intentName &&
+      this.jovo.$handleRequest.config.routing?.intentsToSkipUnhandled?.includes(intentName);
     // if the mapped intent is an intent that is supposed to skip UNHANDLED
     if (isIntentToSkipUnhandled) {
       // set skip: true for all UNHANDLED-matches
@@ -109,14 +108,17 @@ export class RoutingExecutor {
     metadata: HandlerMetadata,
     componentMetadata: ComponentMetadata,
   ): boolean {
-    if (this.jovo.$input.type === InputType.Intent) {
-      const intentNames = componentMetadata.isGlobal
-        ? metadata.intentNames
-        : metadata.globalIntentNames;
-      const intentName = this.getMappedIntentName();
-      return intentNames.includes(intentName) || intentNames.includes(BuiltInHandler.Unhandled);
+    if (metadata.options?.types?.includes(this.jovo.$input.type)) {
+      return true;
     }
-    return !!metadata.options?.types?.includes(this.jovo.$input.type);
+    const intentNames = componentMetadata.isGlobal
+      ? metadata.intentNames
+      : metadata.globalIntentNames;
+    const intentName = this.jovo.$input.getIntentName();
+    return (
+      (intentName && intentNames.includes(intentName)) ||
+      intentNames.includes(BuiltInHandler.Unhandled)
+    );
   }
 
   private async getGlobalRouteMatches(): Promise<RouteMatch[]> {
@@ -158,15 +160,15 @@ export class RoutingExecutor {
   }
 
   private isLocalHandlerMatching(metadata: HandlerMetadata, subState?: string): boolean {
-    if (this.jovo.$input.type === InputType.Intent) {
-      const intentName = this.getMappedIntentName();
-      return (
-        (metadata.intentNames.includes(intentName) ||
-          metadata.intentNames.includes(BuiltInHandler.Unhandled)) &&
-        (subState ? metadata.options?.subState === subState : !metadata.options?.subState)
-      );
+    if (metadata.options?.types?.includes(this.jovo.$input.type)) {
+      return true;
     }
-    return !!metadata.options?.types?.includes(this.jovo.$input.type);
+    const intentName = this.jovo.$input.getIntentName();
+    return (
+      ((intentName && metadata.intentNames.includes(intentName)) ||
+        metadata.intentNames.includes(BuiltInHandler.Unhandled)) &&
+      (subState ? metadata.options?.subState === subState : !metadata.options?.subState)
+    );
   }
 
   private async getLocalRouteMatches(): Promise<RouteMatch[]> {
@@ -217,11 +219,6 @@ export class RoutingExecutor {
       metadata.options?.platforms?.includes(this.jovo.$platform.constructor.name);
     const isConditionFulfilled = !metadata.options?.if || (await metadata.options?.if?.(this.jovo));
     return isPlatformSupported && isConditionFulfilled;
-  }
-
-  private getMappedIntentName(): string {
-    const intentName = this.jovo.$input.getIntentName() || BuiltInHandler.Unhandled;
-    return this.jovo.$config.routing?.intentMap?.[intentName] || intentName;
   }
 
   private createHandlerMetadataToRouteMatchMapper(
