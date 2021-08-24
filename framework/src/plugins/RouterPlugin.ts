@@ -40,7 +40,10 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
   }
 
   private setRoute = async (jovo: Jovo) => {
-    jovo.$input.intent = this.getMappedIntent(jovo.$input, jovo.$config.routing?.intentMap);
+    const mappedIntent = this.getMappedIntent(jovo.$input, jovo.$config.routing?.intentMap);
+    if (mappedIntent) {
+      jovo.$input.intent = mappedIntent;
+    }
     jovo.$route = await new RoutingExecutor(jovo).execute();
   };
 
@@ -48,7 +51,8 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
     const intent = input.intent || input.nlu?.intent;
     if (!intent) return;
     const intentName = typeof intent === 'string' ? intent : intent.name;
-    const mappedIntentName = intentMap?.[intentName] || intentName;
+    const mappedIntentName = intentMap?.[intentName];
+    if (!mappedIntentName) return;
     return input.intent && typeof input.intent === 'object'
       ? { ...input.intent, name: mappedIntentName }
       : mappedIntentName;

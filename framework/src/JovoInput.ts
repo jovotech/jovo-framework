@@ -31,10 +31,13 @@ export class JovoInput {
   constructor(public type: InputTypeLike) {}
 
   getIntentName(): string | undefined {
-    return !this.intent
-      ? undefined
-      : typeof this.intent === 'object'
-      ? this.intent.name
-      : this.intent;
+    function getIntentName(intent: Intent | string): string {
+      return typeof intent === 'string' ? intent : intent.name;
+    }
+    return this.intent
+      ? getIntentName(this.intent)
+      : this.nlu?.intent
+      ? getIntentName(this.nlu.intent)
+      : undefined;
   }
 }
