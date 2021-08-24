@@ -2,7 +2,6 @@ import {
   AnyObject,
   App,
   ExtensibleConfig,
-  InputType,
   Jovo,
   MiddlewareFunction,
   Platform,
