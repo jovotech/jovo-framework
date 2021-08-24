@@ -106,7 +106,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
       if (!response.session) {
         response.session = getEmptySession();
       }
-      response.session.typeOverrides = Object.keys(listen.entities).map((entityName) =>
+      response.session.typeOverrides = Object.keys(listen.entities.types).map((entityName) =>
         this.convertDynamicEntityToTypeOverride(
           entityName,
           ((listen.entities as DynamicEntities).types as DynamicEntityMap)[entityName],
