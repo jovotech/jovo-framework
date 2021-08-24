@@ -28,7 +28,7 @@ Once the configuration is done, the File DB database integration will create a f
 Most Jovo templates already come with FileDb as default database integration for local development. If you're starting from scratch, though, you can install the plugin like this:
 
 ```sh
-$ npm install @jovotech/db-filedb --save
+$ npm install @jovotech/db-filedb
 ```
 
 We strongly recommend to only use this database integration for local prototyping. Add it as plugin to your `app.dev.ts` file like this:

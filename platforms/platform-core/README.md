@@ -34,7 +34,7 @@ After these integrations are added, building a Jovo app for custom clients is si
 You can install the plugin like this:
 
 ```sh
-$ npm install @jovotech/platform-core --save
+$ npm install @jovotech/platform-core
 ```
 
 Add it as plugin to your [app configuration](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/app-config.md), e.g. `app.ts`:

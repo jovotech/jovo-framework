@@ -12,7 +12,7 @@ The Amazon Alexa [platform integration](../docs/platforms.md) allows you to buil
 You can install the plugin like this:
 
 ```sh
-$ npm install @jovotech/platform-alexa --save
+$ npm install @jovotech/platform-alexa
 ```
 
 Add it as plugin to your [app configuration](../docs/app-config.md), e.g. `app.ts`:
