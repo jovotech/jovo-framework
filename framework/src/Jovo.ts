@@ -427,11 +427,6 @@ export abstract class Jovo<
     return this.$input.entities || this.$input.nlu?.entities || {};
   }
 
-  //TODO: needs to be evaluated
-  isNewSession(): boolean {
-    return this.$session.isNew;
-  }
-
   getPersistableData(): JovoPersistableData {
     return {
       user: this.$user.getPersistableData(),
