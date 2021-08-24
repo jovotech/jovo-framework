@@ -83,8 +83,10 @@ export class GoogleAssistantPlatform extends Platform<
     const request = jovo.$googleAssistant?.$request;
     // if it is a selection-event
     if (
-      request?.intent?.name &&
-      request.scene?.slotFillingStatus === SlotFillingStatus.Final &&
+      request?.intent &&
+      !request?.intent?.name &&
+      (request.scene?.slotFillingStatus === SlotFillingStatus.Final ||
+        request.scene?.slotFillingStatus === SlotFillingStatus.Unspecified) &&
       Object.keys(request.intent?.params || {}).length &&
       request.session?.params?._GOOGLE_ASSISTANT_SELECTION_INTENT_
     ) {
