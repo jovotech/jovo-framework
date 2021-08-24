@@ -23,27 +23,18 @@ export interface AudioInput {
 export class JovoInput {
   asr?: AsrData;
   nlu?: NluData;
-
-  // InputType.Intent
   intent?: NluData['intent'];
   entities?: EntityMap;
-
-  // InputType.Text, InputType.TranscribedSpeech, InputType.Speech
   text?: string;
-
-  // InputType.Speech
   audio?: AudioInput;
 
   constructor(public type: InputTypeLike) {}
 
   getIntentName(): string | undefined {
-    function getIntentName(intent: Intent | string): string {
-      return typeof intent === 'string' ? intent : intent.name;
-    }
-    return this.type === InputType.Intent && this.intent
-      ? getIntentName(this.intent)
-      : this.nlu?.intent
-      ? getIntentName(this.nlu.intent)
-      : undefined;
+    return !this.intent
+      ? undefined
+      : typeof this.intent === 'object'
+      ? this.intent.name
+      : this.intent;
   }
 }
