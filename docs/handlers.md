@@ -63,7 +63,7 @@ ShowMenuIntent() {
 }
 ```
 
-This does not offer a lot of flexibility, though. For better control, we recommend using the `@Handle` decorator. The `@Handle` decorator contains a set of elements that define when a handler should be triggered.. This way, you can even add multiple of intents and name the handler however you like.
+This does not offer a lot of flexibility, though. For better control, we recommend using the `@Handle` decorator. The `@Handle` decorator contains a set of elements that define when a handler should be triggered.. This way, you can even add multiple intents and name the handler however you like.
 
 For example, this handler responds the `ShowMenuIntent` and `YesIntent`:
 
@@ -99,9 +99,9 @@ They include:
 * [`prioritizedOverUnhandled`](#prioritizedOverUnhandled)
 #### Intents
 
-The `intents` property specifies which incoming intents the handler should be able to fulfill. The property can be both a string or an array of strings.
+The `intents` property specifies which incoming intents the handler should be able to fulfill. The property can be both a string or an array.
 
-For example, This handler responds to only the `ShowMenuIntent`:
+For example, this handler responds to only the `ShowMenuIntent`:
 
 ```typescript
 @Handle({
@@ -123,6 +123,17 @@ showMenu() {
 }
 ```
 
+Sometimes, a handler should be [`global`](#global-handlers) for only some of the `intents`. For this, you can turn an intent string into an object:
+
+```typescript
+@Handle({
+  intents: [ { name: 'ShowMenuIntent', global: true }, 'YesIntent' ]
+})
+showMenu() {
+  // ...
+}
+```
+
 It's also possible to use the `@Intents` convenience decorator:
 
 ```typescript
@@ -131,6 +142,15 @@ import { Intents } from '@jovotech/framework';
 // ...
 
 @Intents(['ShowMenuIntent', 'YesIntent'])
+showMenu() {
+  // ...
+}
+```
+
+This decorator supports the same structure as the `intents` property in `@Handle`. Additionally, it supports rest parameters, so you don't need to add an array for it to recognize multiple intents:
+
+```typescript
+@Intents('ShowMenuIntent', 'YesIntent')
 showMenu() {
   // ...
 }
@@ -162,6 +182,14 @@ welcomeNewUser() {
 }
 ```
 
+This decorator supports the same structure as the `types` property in `@Handle`. Additionally, it supports rest parameters, so you don't need to add an array for it to recognize multiple types:
+
+```typescript
+@Types('LAUNCH', 'SomeOtherInputType')
+welcomeNewUser() {
+  // ...
+}
+```
 
 #### Global Handlers
 
@@ -222,7 +250,7 @@ Alternatively, you can make an intent an object and add `global` to it:
 
 ```typescript
 @Handle({
-  intents: [ { name: 'ShowMenuIntent', global: true }, 'YesIntent']
+  intents: [ { name: 'ShowMenuIntent', global: true }, 'YesIntent' ]
 })
 showMenu() {
   // ...
@@ -315,7 +343,7 @@ Currently, they include:
 * [`if`](#if)
 #### Platforms
 
-You can specify that a handler is only responsible for specific platforms. The `platforms` property can be both a string or an array of strings with the names of each platform (the same as the class name that you're importing in your `app.ts`):
+You can specify that a handler is only responsible for specific platforms. The `platforms` property can be both a string or an array of strings with the names of each platform:
 
 ```typescript
 @Handle({
@@ -335,6 +363,15 @@ import { Platforms } from '@jovotech/framework';
 // ...
 
 @Platforms('Alexa')
+yourHandler() {
+  // ...
+}
+```
+
+This decorator supports the same structure as the `platforms` property in `@Handle`. Additionally, it supports rest parameters, so you don't need to add an array for it to recognize multiple platforms:
+
+```typescript
+@Platforms('Alexa', 'GoogleAssistant')
 yourHandler() {
   // ...
 }
