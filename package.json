@@ -13,7 +13,7 @@
     "eslint": "lerna exec npm run eslint --ignore @jovotech/examples-* --ignore @jovotech/e2e",
     "rimraf": "lerna exec npm run rimraf --ignore @jovotech/examples-*",
     "test": "lerna exec npm run test --ignore @jovotech/examples-*",
-    "publish": "lerna publish --no-push"
+    "publish": "lerna publish"
   },
   "author": "jovotech",
   "license": "Apache-2.0",
