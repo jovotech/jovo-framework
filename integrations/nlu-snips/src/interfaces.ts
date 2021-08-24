@@ -1,4 +1,4 @@
-import { PluginConfig } from '@jovotech/framework';
+import { NluPluginConfig, PluginConfig } from '@jovotech/framework';
 import { JovoModelData } from 'jovo-model';
 
 export interface SnipsNluSlot {
@@ -24,7 +24,7 @@ export interface SnipsNluResponse {
   slots: SnipsNluSlot[];
 }
 
-export interface SnipsNluConfig extends PluginConfig {
+export interface SnipsNluConfig extends NluPluginConfig {
   // TODO: Better naming?
   serverUrl: string;
   serverPath: string;
