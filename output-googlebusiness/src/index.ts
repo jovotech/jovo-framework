@@ -37,14 +37,14 @@ declare module '@jovotech/output/dist/types/models/QuickReply' {
 // augment the prototypes of the generic models to have methods to convert to the GoogleAssistant-variant
 augmentModelPrototypes();
 
-// Make GoogleAssistantOutputTemplate available for the OutputTemplatePlatforms-object via the GoogleAssistant-key.
+// Make GoogleAssistantOutputTemplate available for the OutputTemplatePlatforms-object via the googleBusiness-key.
 declare module '@jovotech/output/dist/types/models/OutputTemplatePlatforms' {
   interface OutputTemplatePlatforms {
-    GoogleBusiness?: GoogleBusinessOutputTemplate;
+    googleBusiness?: GoogleBusinessOutputTemplate;
   }
 }
 // Additionally, make class-validator and class-transformer aware of the added property.
-registerOutputPlatform('GoogleBusiness', GoogleBusinessOutputTemplate);
+registerOutputPlatform('googleBusiness', GoogleBusinessOutputTemplate);
 
 export * from './decorators/validation/IsValidRichCardObject';
 export * from './decorators/validation/IsValidSuggestedActionObject';

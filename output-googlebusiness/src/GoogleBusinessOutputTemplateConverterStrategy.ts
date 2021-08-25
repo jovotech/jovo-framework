@@ -23,7 +23,7 @@ export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleRespo
   OutputTemplateConverterStrategyConfig
 > {
   responseClass = GoogleBusinessResponse;
-  platformName = 'GoogleBusiness';
+  platformName = 'googleBusiness';
 
   protected sanitizeOutput(output: OutputTemplate, index?: number): OutputTemplate {
     const pathPrefix = index ? `[${index}]` : '';
@@ -115,7 +115,7 @@ export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleRespo
       addResponse('richCard', carousel.toGoogleBusinessRichCard());
     }
 
-    if (output.platforms?.GoogleBusiness?.nativeResponse) {
+    if (output.platforms?.googleBusiness?.nativeResponse) {
       // TODO determine what to do with nativeResponse!
     }
 
