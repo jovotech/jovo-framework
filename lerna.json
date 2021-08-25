@@ -4,14 +4,10 @@
     "framework",
     "platforms/**",
     "integrations/**",
-    "examples/**"
+    "examples/**",
+    "../jovo-framework-v4-testapp"
   ],
-  "ignoreChanges": [
-    "*.md",
-    "*.json",
-    "*.txt",
-    "test/**"
-  ],
+  "ignoreChanges": ["*.md", "*.json", "*.txt", "test/**"],
   "command": {
     "publish": {
       "message": ":bookmark: Publish"

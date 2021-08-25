@@ -1,6 +1,21 @@
+import { FileDb } from '@jovotech/db-filedb';
+import { JovoDebugger } from '@jovotech/plugin-debugger';
 import { app } from './app';
-import './server.express';
-import { Alexa } from '@jovotech/platform-alexa';
-app.use(new Alexa());
 
-export { app };
+/*
+|--------------------------------------------------------------------------
+| STAGE CONFIGURATION
+|--------------------------------------------------------------------------
+|
+| This configuration gets merged into the default app config
+| Learn more here: www.jovo.tech/docs/staging
+|
+*/
+app.use(
+  new FileDb({
+    pathToFile: '../db/db.json',
+  }),
+  new JovoDebugger(),
+);
+
+export * from './server.express';

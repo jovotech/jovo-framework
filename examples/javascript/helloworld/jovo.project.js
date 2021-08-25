@@ -1,5 +1,4 @@
-const { ProjectConfig } = require('@jovotech/cli');
-const { AlexaCli } = require('@jovotech/platform-alexa');
+const { ProjectConfig } = require('@jovotech/cli-core');
 
 /*
   |--------------------------------------------------------------------------
@@ -13,16 +12,8 @@ const { AlexaCli } = require('@jovotech/platform-alexa');
 
 const project = new ProjectConfig({
   endpoint: '${JOVO_WEBHOOK_URL}',
-  plugins: [new AlexaCli()],
-  hooks: {
-    'before.build': [
-      // require('./cli/hooks/getCmsDataBeforeBuild')
-    ],
-  },
-  defaultStage: 'dev',
-  stages: {
-    // dev: require('./cli/jovo.project.dev')
-  },
+  plugins: [],
 });
+
 
 module.exports = project;

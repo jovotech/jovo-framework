@@ -1,5 +1,6 @@
 import { app } from './app';
 import { FileDb } from '@jovotech/db-filedb';
+import { JovoDebugger } from '@jovotech/plugin-debugger';
 /*
 |--------------------------------------------------------------------------
 | STAGE CONFIGURATION
@@ -11,8 +12,9 @@ import { FileDb } from '@jovotech/db-filedb';
 */
 app.use(
   new FileDb({
-    pathToFile: './../../db/db.json',
+    pathToFile: '../db/db.json',
   }),
+  new JovoDebugger(),
 );
 
 export * from './server.express';

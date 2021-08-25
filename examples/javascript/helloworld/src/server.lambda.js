@@ -1,5 +1,7 @@
 import { app } from './app';
+import { Lambda } from '@jovotech/server-lambda';
+
 export const handler = async (event, context, callback) => {
-  // await app.bootstrap();
-  await app.handle(event);
+  await app.initialize();
+  await app.handle(new Lambda(event, context, callback));
 };

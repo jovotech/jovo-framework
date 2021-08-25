@@ -1,15 +1,59 @@
-import { App } from "@jovotech/framework";
+import { App } from '@jovotech/framework';
+import { Alexa } from '@jovotech/platform-alexa';
 
-function readonly(target) {
-  target.descriptor.writable = false;
-  return target;
-}
+/*
+  |--------------------------------------------------------------------------
+  | APP CONFIGURATION
+  |--------------------------------------------------------------------------
+  |
+  | All relevant components, plugins, and configurations for your Jovo app
+  | Learn more here: www.jovo.tech/docs/app-config
+  |
+  */
+const app = new App({
+  /*
+    |--------------------------------------------------------------------------
+    | Components
+    |--------------------------------------------------------------------------
+    |
+    | Components contain the Jovo app logic
+    | Learn more here: www.jovo.tech/docs/components
+    |
+    */
 
-const app = new App();
-class Foo {
-  @readonly
-  getBar() {
-    return this.bar;
-  }
-}
-export { app };
+  components: [],
+
+  /*
+    |--------------------------------------------------------------------------
+    | Plugins
+    |--------------------------------------------------------------------------
+    |
+    | Includes platforms, database integrations, third-party plugins, and more
+    | Learn more here: www.jovo.tech/docs/plugins, www.jovo.tech/marketplace
+    |
+    */
+
+  plugins: [new Alexa()],
+
+  /*
+    |--------------------------------------------------------------------------
+    | Other options
+    |--------------------------------------------------------------------------
+    |
+    | Includes all other configuration options like logging
+    | Learn more here: www.jovo.tech/docs/app-config
+    |
+    */
+
+  logging: true,
+
+  routing: {
+    intentMap: {
+      'AMAZON.StopIntent': 'END',
+    },
+  },
+});
+
+module.exports = {
+  app,
+};

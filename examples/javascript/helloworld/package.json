@@ -1,28 +1,56 @@
 {
-	"name": "@jovotech/examples-js-hello-world",
-	"version": "4.0.0-alpha.4",
-	"private": true,
-	"description": "",
-	"scripts": {
-		"test": "jest",
-		"start": "node /dist/server.express.js",
-		"start:dev": "nodemon --exec babel-node ./src/server.express.js",
-		"build": "babel ./src --out-dir ./dist",
-		"bundle:express": "npm run build && ncc build ./dist/server.express.js --source-map --minify --out ./out",
-		"bundle:lambda": "npm run build && ncc build ./dist/server.express.js --source-map --minify --out ./out && bestzip ./bundle.zip out/",
-		"webpack": "webpack --entry ./src/host/fastify.js --mode=development --progress --watch",
-		"babel": "./node_modules/.bin/babel ./src --out-dir ./dist"
-	},
-	"author": "jovotech",
-	"license": "Apache-2.0",
-	"devDependencies": {
-		"@babel/cli": "^7.12.10",
-		"@babel/core": "^7.12.10",
-		"@babel/node": "^7.12.10",
-		"@babel/plugin-proposal-class-properties": "^7.12.1",
-		"@babel/plugin-proposal-decorators": "^7.12.1",
-		"@babel/plugin-transform-modules-commonjs": "^7.12.1",
-		"@babel/plugin-transform-runtime": "^7.12.10",
-		"@babel/preset-env": "^7.12.11"
-	}
+  "name": "@jovotech/examples-js-helloworld",
+  "private": true,
+  "version": "4.0.0-beta.2",
+  "description": "A sample JavaScript voice app that works with the Jovo Framework",
+  "scripts": {
+    "build": "babel src --out-dir dist",
+    "start": "node ./dist/app.dev.js --jovo-webhook",
+    "start:dev": "babel-watch src/app.dev.js",
+    "bundle:dev": "ncc build src/app.dev.ts -m -s -o bundle/",
+    "bundle:prod": "npm run build && ncc build ./dist/app.prod.js --source-map -o bundle/ && cd bundle/ && bestzip ./../bundle.zip index.js index.js.map sourcemap-register.js",
+    "prebundle": "rimraf bundle",
+    "bundle": "esbuild --bundle --sourcemap --platform=node --outfile=bundle/index.js",
+    "postbundle": "cd bundle && bestzip ../bundle.zip * && cd ..",
+    "eslint": "eslint src test --fix",
+    "test": "jest -c jest.config.js"
+  },
+  "author": "jovotech",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@jovotech/db-filedb": "^4.0.0-beta.1",
+    "@jovotech/framework": "^4.0.0-beta.1",
+    "@jovotech/platform-alexa": "^4.0.0-beta.2",
+    "@jovotech/plugin-debugger": "^4.0.0-beta.1",
+    "@jovotech/server-express": "^4.0.0-beta.1",
+    "@jovotech/server-lambda": "^4.0.0-beta.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.14.5",
+    "@babel/core": "^7.14.6",
+    "@babel/node": "^7.14.7",
+    "@babel/plugin-proposal-decorators": "^7.14.5",
+    "@babel/plugin-transform-runtime": "^7.14.5",
+    "@babel/preset-env": "^7.14.7",
+    "@babel/register": "^7.14.5",
+    "@babel/runtime": "^7.14.6",
+    "babel-jest": "^27.0.6",
+    "bestzip": "^2.1.7",
+    "eslint": "^7.17.0",
+    "eslint-config-prettier": "^7.1.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "jest": "^26.6.3",
+    "nodemon": "^2.0.10",
+    "prettier": "^2.2.1",
+    "rimraf": "^3.0.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jovotech/jovo-framework.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jovotech/jovo-framework"
+  },
+  "homepage": "https://github.com/jovotech/jovo-framework#readme",
+  "prettier": "../../../.prettierrc.js"
 }

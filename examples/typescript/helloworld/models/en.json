@@ -1,0 +1,66 @@
+{
+  "invocation": "my test app",
+  "intents": [
+    {
+      "name": "HelloWorldIntent",
+      "phrases": ["hello", "say hello", "say hello world"]
+    },
+    {
+      "name": "FruitIntent",
+      "phrases": ["{fruit}", "fruit {fruit}", "i want {fruit}"],
+      "inputs": [
+        {
+          "name": "fruit",
+          "type": "FruitType"
+        }
+      ]
+    },
+    {
+      "name": "YesIntent",
+      "alexa": {
+        "name": "AMAZON.YesIntent"
+      },
+      "phrases": ["yes", "yes please", "sure"]
+    },
+    {
+      "name": "NoIntent",
+      "alexa": {
+        "name": "AMAZON.NoIntent"
+      },
+      "phrases": ["no", "no thanks"]
+    }
+  ],
+  "inputTypes": [
+    {
+      "name": "FruitType",
+      "values": [
+        {
+          "value": "strawberry"
+        },
+        {
+          "value": "pear"
+        }
+      ]
+    }
+  ],
+  "alexa": {
+    "interactionModel": {
+      "languageModel": {
+        "intents": [
+          {
+            "name": "AMAZON.CancelIntent",
+            "samples": []
+          },
+          {
+            "name": "AMAZON.HelpIntent",
+            "samples": []
+          },
+          {
+            "name": "AMAZON.StopIntent",
+            "samples": []
+          }
+        ]
+      }
+    }
+  }
+}

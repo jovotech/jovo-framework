@@ -1,6 +1,10 @@
-import { app } from './app';
-import './server.lambda';
+/*
+|--------------------------------------------------------------------------
+|--------------------------------------------------------------------------
+|
+| This configuration gets merged into the default app config
+| Learn more here: www.jovo.tech/docs/staging
+|
+*/
 
-app.use();
-
-export { app };
+export * from './server.lambda';
