@@ -1,5 +1,5 @@
 import { App } from '@jovotech/framework';
-import { Alexa } from '@jovotech/platform-alexa';
+import { AlexaPlatform } from '@jovotech/platform-alexa';
 
 /*
   |--------------------------------------------------------------------------
@@ -33,7 +33,7 @@ const app = new App({
     |
     */
 
-  plugins: [new Alexa()],
+  plugins: [new AlexaPlatform()],
 
   /*
     |--------------------------------------------------------------------------
