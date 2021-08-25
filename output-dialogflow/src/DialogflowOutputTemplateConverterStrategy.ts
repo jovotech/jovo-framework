@@ -24,7 +24,7 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
   DialogflowResponse,
   OutputTemplateConverterStrategyConfig
 > {
-  platformName = 'dialogflow';
+  platformName = 'dialogflow' as const;
   responseClass = DialogflowResponse;
 
   protected sanitizeOutput(output: OutputTemplate): OutputTemplate {

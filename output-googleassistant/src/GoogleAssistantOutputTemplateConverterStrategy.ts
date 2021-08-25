@@ -32,7 +32,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
   GoogleAssistantResponse,
   OutputTemplateConverterStrategyConfig
 > {
-  platformName = 'googleAssistant';
+  platformName = 'googleAssistant' as const;
   responseClass = GoogleAssistantResponse;
 
   protected sanitizeOutput(output: OutputTemplate): OutputTemplate {

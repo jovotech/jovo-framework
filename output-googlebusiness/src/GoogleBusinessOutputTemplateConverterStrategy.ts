@@ -23,7 +23,7 @@ export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleRespo
   OutputTemplateConverterStrategyConfig
 > {
   responseClass = GoogleBusinessResponse;
-  platformName = 'googleBusiness';
+  platformName = 'googleBusiness' as const;
 
   protected sanitizeOutput(output: OutputTemplate, index?: number): OutputTemplate {
     const pathPrefix = index ? `[${index}]` : '';

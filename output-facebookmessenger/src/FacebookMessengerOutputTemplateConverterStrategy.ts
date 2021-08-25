@@ -30,7 +30,7 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
   OutputTemplateConverterStrategyConfig
 > {
   responseClass = FacebookMessengerResponse;
-  platformName = 'facebookMessenger';
+  platformName = 'facebookMessenger' as const;
 
   // maybe we need more context here, like index of template
   protected sanitizeOutput(output: OutputTemplate, index?: number): OutputTemplate {
