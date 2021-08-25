@@ -7,7 +7,7 @@ import {
 class ExampleResponse extends JovoResponse {}
 
 class ExampleStrategy extends SingleResponseOutputTemplateConverterStrategy<ExampleResponse, any> {
-  readonly platformName = 'Example';
+  readonly platformName = 'example' as const;
   readonly responseClass: { new (): ExampleResponse };
 
   toResponse(output: OutputTemplate): ExampleResponse {
@@ -105,7 +105,7 @@ describe('prepareOutput', () => {
       const preparedOutput = strategy.prepareOutput([
         {
           platforms: {
-            Example: {
+            example: {
               nativeResponse: {
                 foo: 'bar',
               },
@@ -114,7 +114,7 @@ describe('prepareOutput', () => {
         },
         {
           platforms: {
-            Example: {
+            example: {
               nativeResponse: {
                 bar: 'foo',
               },
@@ -124,7 +124,7 @@ describe('prepareOutput', () => {
       ]);
       expect(preparedOutput).toEqual({
         platforms: {
-          Example: {
+          example: {
             nativeResponse: {
               foo: 'bar',
               bar: 'foo',
@@ -138,14 +138,14 @@ describe('prepareOutput', () => {
       const preparedOutput = strategy.prepareOutput([
         {
           platforms: {
-            Example: {
+            example: {
               message: 'Hello',
             },
           },
         },
         {
           platforms: {
-            Example: {
+            example: {
               message: 'World!',
             },
           },
@@ -154,7 +154,7 @@ describe('prepareOutput', () => {
       expect(preparedOutput).toEqual({
         message: 'Hello World!',
         platforms: {
-          Example: {
+          example: {
             message: 'Hello World!',
           },
         },
@@ -165,14 +165,14 @@ describe('prepareOutput', () => {
       const preparedOutput = strategy.prepareOutput([
         {
           platforms: {
-            Example: {
+            example: {
               quickReplies: ['foo'],
             },
           },
         },
         {
           platforms: {
-            Example: {
+            example: {
               quickReplies: ['bar'],
             },
           },
@@ -181,7 +181,7 @@ describe('prepareOutput', () => {
       expect(preparedOutput).toEqual({
         quickReplies: ['foo', 'bar'],
         platforms: {
-          Example: {
+          example: {
             quickReplies: ['foo', 'bar'],
           },
         },
@@ -192,7 +192,7 @@ describe('prepareOutput', () => {
       const preparedOutput = strategy.prepareOutput([
         {
           platforms: {
-            Example: {
+            example: {
               card: {
                 title: 'foo',
               },
@@ -201,7 +201,7 @@ describe('prepareOutput', () => {
         },
         {
           platforms: {
-            Example: {
+            example: {
               card: {
                 title: 'bar',
               },
@@ -214,7 +214,7 @@ describe('prepareOutput', () => {
           title: 'bar',
         },
         platforms: {
-          Example: {
+          example: {
             card: {
               title: 'bar',
             },
@@ -227,7 +227,7 @@ describe('prepareOutput', () => {
       const preparedOutput = strategy.prepareOutput([
         {
           platforms: {
-            Example: {
+            example: {
               carousel: {
                 title: 'foo',
                 items: [],
@@ -237,7 +237,7 @@ describe('prepareOutput', () => {
         },
         {
           platforms: {
-            Example: {
+            example: {
               carousel: {
                 title: 'bar',
                 items: [],
@@ -252,7 +252,7 @@ describe('prepareOutput', () => {
           items: [],
         },
         platforms: {
-          Example: {
+          example: {
             carousel: {
               title: 'bar',
               items: [],

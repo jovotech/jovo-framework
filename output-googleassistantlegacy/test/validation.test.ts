@@ -28,7 +28,7 @@ describe('validation - OutputTemplate', () => {
     return validateAndExpectLength(
       OutputTemplate,
       {
-        platforms: { GoogleAssistant: 2 },
+        platforms: { googleAssistant: 2 },
       } as any,
       1,
     );
@@ -39,7 +39,7 @@ describe('validation - OutputTemplate', () => {
       OutputTemplate,
       {
         platforms: {
-          GoogleAssistant: {
+          googleAssistant: {
             quickReplies: 2 as any,
           },
         },
@@ -53,7 +53,7 @@ describe('validation - OutputTemplate', () => {
       OutputTemplate,
       {
         platforms: {
-          GoogleAssistant: {
+          googleAssistant: {
             message: 'foo',
             quickReplies: [],
           },

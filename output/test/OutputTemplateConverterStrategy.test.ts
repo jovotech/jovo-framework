@@ -8,7 +8,7 @@ import {
 class ExampleResponse extends JovoResponse {}
 
 class ExampleStrategy extends OutputTemplateConverterStrategy<ExampleResponse, any> {
-  readonly platformName = 'Example';
+  readonly platformName = 'example' as const;
   readonly responseClass = ExampleResponse;
 
   fromResponse(response: ExampleResponse[] | ExampleResponse): OutputTemplate | OutputTemplate[] {
@@ -22,7 +22,7 @@ class ExampleStrategy extends OutputTemplateConverterStrategy<ExampleResponse, a
 
 declare module '../src' {
   interface OutputTemplatePlatforms {
-    Example?: PlatformOutputTemplate;
+    example?: PlatformOutputTemplate;
   }
 }
 
@@ -34,7 +34,7 @@ describe('prepareOutput', () => {
       const preparedOutput = strategy.prepareOutput({
         message: 'foo',
         platforms: {
-          Example: {
+          example: {
             message: 'bar',
           },
         },
@@ -42,7 +42,7 @@ describe('prepareOutput', () => {
       expect(preparedOutput).toEqual({
         message: 'bar',
         platforms: {
-          Example: {
+          example: {
             message: 'bar',
           },
         },
@@ -54,7 +54,7 @@ describe('prepareOutput', () => {
         {
           message: 'foo',
           platforms: {
-            Example: {
+            example: {
               message: 'bar',
             },
           },
@@ -62,7 +62,7 @@ describe('prepareOutput', () => {
         {
           message: 'Hello',
           platforms: {
-            Example: {
+            example: {
               message: 'World',
             },
           },
@@ -72,7 +72,7 @@ describe('prepareOutput', () => {
         {
           message: 'bar',
           platforms: {
-            Example: {
+            example: {
               message: 'bar',
             },
           },
@@ -80,7 +80,7 @@ describe('prepareOutput', () => {
         {
           message: 'World',
           platforms: {
-            Example: {
+            example: {
               message: 'World',
             },
           },
@@ -92,10 +92,10 @@ describe('prepareOutput', () => {
       const preparedOutput = strategy.prepareOutput({
         message: 'foo',
         platforms: {
-          Example: {
+          example: {
             message: 'bar',
           },
-          Alexa: {
+          alexa: {
             message: 'more',
           },
         },
@@ -103,7 +103,7 @@ describe('prepareOutput', () => {
       expect(preparedOutput).toEqual({
         message: 'bar',
         platforms: {
-          Example: {
+          example: {
             message: 'bar',
           },
         },
