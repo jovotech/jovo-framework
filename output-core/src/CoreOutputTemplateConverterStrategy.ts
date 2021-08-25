@@ -33,12 +33,12 @@ export class CoreOutputTemplateConverterStrategy extends OutputTemplateConverter
     };
     let lastListen: ListenValue | undefined;
     output.forEach((outputItem) => {
-      const listen = outputItem.platforms?.CorePlatform?.listen ?? outputItem.listen;
+      const listen = outputItem.platforms?.core?.listen ?? outputItem.listen;
       if (typeof listen === 'boolean' || typeof listen === 'object') {
         lastListen = listen;
       }
-      if (outputItem.platforms?.CorePlatform?.nativeResponse) {
-        mergeInstances(response, outputItem.platforms.CorePlatform.nativeResponse);
+      if (outputItem.platforms?.core?.nativeResponse) {
+        mergeInstances(response, outputItem.platforms.core.nativeResponse);
       }
     });
     response.context.session.end = !lastListen;
