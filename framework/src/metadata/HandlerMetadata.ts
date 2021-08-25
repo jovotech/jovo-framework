@@ -1,12 +1,14 @@
+import { UnknownObject } from '..';
 import { BaseComponent, ComponentConstructor } from '../BaseComponent';
-import { InputTypeLike, UnknownObject } from '../index';
+import { RegisteredPlatformName } from '../decorators/Platforms';
 import { Intent, JovoConditionFunction } from '../interfaces';
+import { InputTypeLike } from '../JovoInput';
 import { HandlerOptionMetadata } from './HandlerOptionMetadata';
 import { MethodDecoratorMetadata } from './MethodDecoratorMetadata';
 
 export interface ConditionsOptions {
   if?: JovoConditionFunction;
-  platforms?: string[];
+  platforms?: Array<string | RegisteredPlatformName>;
 }
 
 export interface RoutesOptions {
