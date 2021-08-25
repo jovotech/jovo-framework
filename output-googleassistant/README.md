@@ -33,7 +33,7 @@ You can also add platform-specific output to an output template. [Learn more abo
 {
   // ...
   platforms: {
-    GoogleAssistant: {
+    googleAssistant: {
       // ...
     }
   }
@@ -198,13 +198,13 @@ It includes the following properties:
 
 It is possible to add platform-specific output elements to an output template. [Learn more in the Jovo output documentation](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md#platform-specific-output-elements).
 
-For Google Assistant, you can add output elements inside an `GoogleAssistant` object:
+For Google Assistant, you can add output elements inside an `googleAssistant` object:
 
 ```typescript
 {
   // ...
   platforms: {
-    GoogleAssistant: {
+    googleAssistant: {
       // ...
     }
   }
@@ -219,7 +219,7 @@ The [`nativeResponse` property](https://github.com/jovotech/jovo-output/blob/mas
 {
   // ...
   platforms: {
-    GoogleAssistant: {
+    googleAssistant: {
       nativeResponse: {
         // ...
       }
@@ -234,7 +234,7 @@ For example, you can add `scene` information ([see the official Google docs](htt
 {
   // ...
   platforms: {
-    GoogleAssistant: {
+    googleAssistant: {
       nativeResponse: {
         scene: {
           name: 'SceneName',
