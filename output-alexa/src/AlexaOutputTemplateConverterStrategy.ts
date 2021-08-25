@@ -32,7 +32,7 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
   AlexaResponse,
   AlexaOutputTemplateConverterStrategyConfig
 > {
-  platformName = 'Alexa';
+  platformName = 'alexa' as const;
   responseClass = AlexaResponse;
 
   getDefaultConfig(): AlexaOutputTemplateConverterStrategyConfig {
@@ -161,13 +161,13 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
       }
     }
 
-    const list = output.platforms?.Alexa?.list;
+    const list = output.platforms?.alexa?.list;
     if (list && this.config.genericOutputToApl) {
       addToDirectives(list.toApl?.() as AplRenderDocumentDirective);
     }
 
-    if (output.platforms?.Alexa?.nativeResponse) {
-      mergeInstances(response, output.platforms.Alexa.nativeResponse);
+    if (output.platforms?.alexa?.nativeResponse) {
+      mergeInstances(response, output.platforms.alexa.nativeResponse);
     }
 
     return response;
