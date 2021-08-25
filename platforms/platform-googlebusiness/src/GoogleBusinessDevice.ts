@@ -3,8 +3,7 @@ import { GoogleBusiness } from './GoogleBusiness';
 
 export type GoogleBusinessCapabilityType = CapabilityType;
 
-export class GoogleBusinessDevice extends JovoDevice<GoogleBusiness, GoogleBusinessCapabilityType> {
-  setCapabilitiesFromRequest(): void {
-    // needs to be implemented
-  }
-}
+export class GoogleBusinessDevice extends JovoDevice<
+  GoogleBusiness,
+  GoogleBusinessCapabilityType
+> {}
