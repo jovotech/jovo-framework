@@ -16,7 +16,7 @@ After successfully installing the Jovo CLI, you can install the template using o
 $ jovo new <directory>
 
 ## Alternative
-$ jovo new <directory> --template helloworld
+$ jovo new <directory> --template basic
 ```
 
 > Read more about `jovo new` [here](https://www.jovo.tech/marketplace/jovo-cli#jovo-new).
