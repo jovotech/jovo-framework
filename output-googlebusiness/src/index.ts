@@ -34,7 +34,7 @@ declare module '@jovotech/output/dist/types/models/QuickReply' {
   }
 }
 
-// augment the prototypes of the generic models to have methods to convert to the GoogleAssistant-variant
+// augment the prototypes of the generic models to have methods to convert to the GoogleBusiness-variant
 augmentModelPrototypes();
 
 // Make GoogleAssistantOutputTemplate available for the OutputTemplatePlatforms-object via the googleBusiness-key.
