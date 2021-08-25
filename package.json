@@ -14,7 +14,7 @@
     "rimraf": "lerna exec npm run rimraf --ignore @jovotech/examples-*",
     "test": "lerna exec npm run test --ignore @jovotech/examples-*",
     "preparePublish": "npm run bootstrap && npm run rimraf && npm run prettier && npm run eslint && npm run build && npm run test",
-    "publish": "lerna publish"
+    "publish": "lerna publish --no-push"
   },
   "author": "jovotech",
   "license": "Apache-2.0",
