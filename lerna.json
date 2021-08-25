@@ -4,8 +4,7 @@
     "framework",
     "platforms/**",
     "integrations/**",
-    "examples/**",
-    "../jovo-framework-v4-testapp"
+    "examples/**"
   ],
   "ignoreChanges": ["*.md", "*.json", "*.txt", "test/**"],
   "command": {
