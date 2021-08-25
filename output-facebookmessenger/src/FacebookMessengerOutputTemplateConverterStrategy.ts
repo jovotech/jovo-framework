@@ -30,7 +30,7 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
   OutputTemplateConverterStrategyConfig
 > {
   responseClass = FacebookMessengerResponse;
-  platformName = 'FacebookMessenger';
+  platformName = 'facebookMessenger';
 
   // maybe we need more context here, like index of template
   protected sanitizeOutput(output: OutputTemplate, index?: number): OutputTemplate {
@@ -111,7 +111,7 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
       addMessageToResponses(carousel.toFacebookMessengerMessage());
     }
 
-    if (output.platforms?.FacebookMessenger?.nativeResponse) {
+    if (output.platforms?.facebookMessenger?.nativeResponse) {
       // TODO determine what to do with nativeResponse
     }
 
