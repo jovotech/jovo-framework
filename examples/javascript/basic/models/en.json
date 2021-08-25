@@ -6,16 +6,6 @@
       "phrases": ["hello", "say hello", "say hello world"]
     },
     {
-      "name": "FruitIntent",
-      "phrases": ["{fruit}", "fruit {fruit}", "i want {fruit}"],
-      "inputs": [
-        {
-          "name": "fruit",
-          "type": "FruitType"
-        }
-      ]
-    },
-    {
       "name": "YesIntent",
       "alexa": {
         "name": "AMAZON.YesIntent"
@@ -28,19 +18,6 @@
         "name": "AMAZON.NoIntent"
       },
       "phrases": ["no", "no thanks"]
-    }
-  ],
-  "inputTypes": [
-    {
-      "name": "FruitType",
-      "values": [
-        {
-          "value": "strawberry"
-        },
-        {
-          "value": "pear"
-        }
-      ]
     }
   ],
   "alexa": {
