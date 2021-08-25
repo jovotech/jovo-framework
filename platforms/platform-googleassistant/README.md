@@ -95,7 +95,7 @@ For output that is only used for Google Assistant, you can add the following to 
 {
   // ...
   platforms: {
-    GoogleAssistant: {
+    googleAssistant: {
       // ...
     }
   }
@@ -108,7 +108,7 @@ You can add response objects that should show up exactly like this in the Google
 {
   // ...
   platforms: {
-    GoogleAssistant: {
+    googleAssistant: {
       nativeResponse: {
         // ...
       }

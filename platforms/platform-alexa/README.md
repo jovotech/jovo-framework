@@ -90,7 +90,7 @@ async getEmail() {
       return this.$send({
         message: 'Please grant access to your email address.',
         platforms: {
-          Alexa: {
+          alexa: {
             card: {
               type: 'AskForPermissionsConsent',
               permissions: [
