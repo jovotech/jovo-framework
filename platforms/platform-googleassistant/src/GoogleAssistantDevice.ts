@@ -17,6 +17,4 @@ export type GoogleAssistantCapabilityType =
 export class GoogleAssistantDevice extends JovoDevice<
   GoogleAssistant,
   GoogleAssistantCapabilityType
-> {
-  setCapabilitiesFromRequest(): void {}
-}
+> {}
