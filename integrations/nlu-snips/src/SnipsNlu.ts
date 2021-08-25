@@ -11,7 +11,7 @@ import {
   NluPlugin,
   OutputTemplate,
 } from '@jovotech/framework';
-import { EntityType, Intent, IntentEntityType, JovoModelData } from '@jovotech/model';
+import { EntityType, IntentEntityType, JovoModelData } from '@jovotech/model';
 import { join as joinPaths, resolve } from 'path';
 import { v4 as uuidV4 } from 'uuid';
 import { SnipsNluConfig, SnipsNluResponse } from './interfaces';
@@ -20,7 +20,7 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
   install(parent: Extensible): Promise<void> | void {
     super.install(parent);
 
-    parent.middlewareCollection.use('$output', this.trainDynamicEntities.bind(this));
+    parent.middlewareCollection.use('response.output', this.trainDynamicEntities.bind(this));
   }
 
   getDefaultConfig(): SnipsNluConfig {
@@ -29,12 +29,13 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
         supportedTypes: [],
       },
       serverUrl: 'http://localhost:5000/',
-      modelsDirectory: 'models',
       fallbackLanguage: 'en',
       serverPath: '/engine/parse',
       engineId: uuidV4(),
       dynamicEntities: {
         enabled: false,
+        passModels: true,
+        modelsDirectory: 'models',
         serverPath: '/engine/train/dynamic-entities',
       },
     };
@@ -78,24 +79,6 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
     const outputs: OutputTemplate[] = Array.isArray(jovo.$output) ? jovo.$output : [jovo.$output];
     const locale: string = this.getLocale(jovo.$request);
 
-    const model: JovoModelData =
-      this.config.dynamicEntities?.models?.[locale] ||
-      (this.config.dynamicEntities?.modelsDirectory
-        ? require(resolve(joinPaths(this.config.dynamicEntities.modelsDirectory, locale)))
-        : {});
-
-    if (!model.entityTypes) {
-      throw new JovoError({
-        message: `No entity types found for language model for locale ${locale}`,
-      });
-    }
-
-    if (!model.intents) {
-      throw new JovoError({
-        message: `No intents found for language model for locale ${locale}`,
-      });
-    }
-
     for (const output of outputs) {
       const listen = output.platforms?.[jovo.$platform.constructor.name]?.listen ?? output.listen;
 
@@ -108,48 +91,81 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
       }
 
       for (const [entityKey, entityData] of Object.entries(listen.entities.types || {})) {
-        const requestData: JovoModelData = {
-          version: '4.0',
-          invocation: '',
-          intents: {},
-          entityTypes: {},
-        };
+        const buildRequestData = (): JovoModelData | undefined => {
+          let model: JovoModelData | undefined;
 
-        const originalInputType: EntityType | undefined = model.entityTypes?.[entityKey];
-        if (!originalInputType) {
-          continue;
-        }
-
-        if (!originalInputType.values) {
-          originalInputType.values = [];
-        }
-
-        // Merge values from original input type with dynamic ones
-        originalInputType.values.push(...(entityData.values || []));
-        requestData.entityTypes![entityKey] = originalInputType;
-
-        // Find all intents the entity type is used in and provide them in the request to the Snips NLU server
-        for (const [intentKey, intentData] of Object.entries(model.intents || [])) {
-          if (!intentData.entities) {
-            continue;
+          try {
+            model =
+              this.config.dynamicEntities?.models?.[locale] ||
+              (this.config.dynamicEntities?.modelsDirectory
+                ? require(resolve(joinPaths(this.config.dynamicEntities.modelsDirectory, locale)))
+                : null);
+          } catch (error) {
+            throw new JovoError({ message: error.message });
           }
 
-          for (const [entityKey, entityData] of Object.entries(intentData.entities)) {
-            if (!entityData.type) {
+          if (!model) {
+            throw new JovoError({
+              message: `Please provide a language model for locale ${locale}.`,
+            });
+          }
+
+          const originalInputType: EntityType | undefined = model!.entityTypes?.[entityKey];
+          if (!originalInputType) {
+            return;
+          }
+
+          if (!originalInputType.values) {
+            originalInputType.values = [];
+          }
+
+          // Merge values from original input type with dynamic ones
+          originalInputType.values.push(...(entityData.values || []));
+
+          const requestData: JovoModelData = {
+            version: '4.0',
+            invocation: '',
+            intents: {},
+            entityTypes: {
+              [entityKey]: originalInputType,
+            },
+          };
+
+          // Find all intents the entity type is used in and provide them in the request to the Snips NLU server
+          for (const [intentKey, intentData] of Object.entries(model!.intents || {})) {
+            if (!intentData.entities) {
               continue;
             }
 
-            const isEqualEntityType = (entityType: IntentEntityType | string): boolean => {
-              if (typeof entityType === 'object') {
-                return entityType.snips === entityKey;
-              } else {
-                return entityType === entityKey;
+            for (const [entityKey, entityData] of Object.entries(intentData.entities || {})) {
+              if (!entityData.type) {
+                continue;
               }
-            };
 
-            if (isEqualEntityType(entityData.type)) {
-              requestData.intents![intentKey] = intentData;
+              const isEqualEntityType = (entityType: IntentEntityType | string): boolean => {
+                if (typeof entityType === 'object') {
+                  return entityType.snips === entityKey;
+                } else {
+                  return entityType === entityKey;
+                }
+              };
+
+              if (isEqualEntityType(entityData.type)) {
+                requestData.intents![intentKey] = intentData;
+              }
             }
+          }
+
+          return requestData;
+        };
+
+        let requestData: JovoModelData | Record<string, unknown> | undefined = {};
+
+        if (this.config.dynamicEntities?.passModels) {
+          requestData = buildRequestData();
+
+          if (!requestData) {
+            return;
           }
         }
 
