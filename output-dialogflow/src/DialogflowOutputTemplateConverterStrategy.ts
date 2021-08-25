@@ -24,7 +24,7 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
   DialogflowResponse,
   OutputTemplateConverterStrategyConfig
 > {
-  platformName = 'Dialogflow';
+  platformName = 'dialogflow';
   responseClass = DialogflowResponse;
 
   protected sanitizeOutput(output: OutputTemplate): OutputTemplate {
@@ -115,8 +115,8 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
       });
     }
 
-    if (output.platforms?.Dialogflow?.nativeResponse) {
-      mergeInstances(response, output.platforms.Dialogflow.nativeResponse);
+    if (output.platforms?.dialogflow?.nativeResponse) {
+      mergeInstances(response, output.platforms.dialogflow.nativeResponse);
     }
 
     return response;

@@ -23,14 +23,14 @@ declare module '@jovotech/output/dist/types/models/QuickReply' {
 // augment the prototypes of the generic models to have methods to convert to the Dialogflow-variant
 augmentModelPrototypes();
 
-// Make DialogflowOutputTemplate available for the OutputTemplatePlatforms-object via the Dialogflow-key.
+// Make DialogflowOutputTemplate available for the OutputTemplatePlatforms-object via the dialogflow-key.
 declare module '@jovotech/output/dist/types/models/OutputTemplatePlatforms' {
   interface OutputTemplatePlatforms {
-    Dialogflow?: DialogflowOutputTemplate;
+    dialogflow?: DialogflowOutputTemplate;
   }
 }
 // Additionally, make class-validator and class-transformer aware of the added property.
-registerOutputPlatform('Dialogflow', DialogflowOutputTemplate);
+registerOutputPlatform('dialogflow', DialogflowOutputTemplate);
 
 export * from './decorators/validation/EntitySynonymsContainValue';
 export * from './decorators/validation/IsValidMessageContentObject';
