@@ -1,5 +1,5 @@
-import { NluPluginConfig, PluginConfig } from '@jovotech/framework';
-import { JovoModelData } from 'jovo-model';
+import { NluPluginConfig } from '@jovotech/framework';
+import { JovoModelData } from '@jovotech/model';
 
 export interface SnipsNluSlot {
   entity: string;
