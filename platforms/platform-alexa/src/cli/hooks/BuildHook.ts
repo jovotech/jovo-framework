@@ -279,7 +279,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
       });
     }
 
-    const skillId = _get(this.$plugin.$config, 'options.skillId');
+    const skillId: string | undefined = _get(this.$plugin.$config, 'skillId');
     const skillIdPath = '[".ask/"]["ask-states.json"].profiles.default.skillId';
     // Check whether skill id has already been set.
     if (skillId && !_has(projectFiles, skillIdPath)) {
