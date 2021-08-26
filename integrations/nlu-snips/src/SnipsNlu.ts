@@ -25,9 +25,7 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
 
   getDefaultConfig(): SnipsNluConfig {
     return {
-      input: {
-        supportedTypes: [],
-      },
+      ...super.getDefaultConfig(),
       serverUrl: 'http://localhost:5000/',
       fallbackLanguage: 'en',
       serverPath: '/engine/parse',
