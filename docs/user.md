@@ -5,7 +5,7 @@ Learn more about the Jovo `$user` property.
 - [User Data](#user-data)
   - [Store Data](#store-data)
   - [Read Data](#read-data)
-  - [Metadata](#metadata)
+- [User Metadata](#user-metadata)
 
 ## Introduction
 
@@ -15,7 +15,7 @@ The `$user` property contains data and features about the specific user interact
 this.$user
 ```
 
-The user class is mainly used to store [user data](#user-data) that needs to be persisted across sessions. The property also includes [metadata](#metadata) about the user.
+The user class is mainly used to store [user data](#user-data) that needs to be persisted across sessions. The property also includes [metadata](#user-metadata) about the user.
 
 In addition to the data, platforms offer their own user specific features (for example, retrieving a user's email address from their profile) that can be found in the respective platform's documentation.
 
@@ -54,9 +54,9 @@ this.$user.data.key
 const score = this.$user.data.score;
 ```
 
-### Metadata
+## User Metadata
 
-Additionally to the persisted data, you can also access the following metadata:
+Additionally to the persisted data, you can also access the following information about the user:
 
 * `this.$user.id`: The user's ID is also the key to their database entry.
 * `this.$user.createdAt`: When was this user's database entry created?
