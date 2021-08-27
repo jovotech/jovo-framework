@@ -31,7 +31,7 @@ const project = new ProjectConfig({
 
 The CLI plugin hooks into the [`build` command](#build-command) to generate Google Assistant project files, including a conversation model based on the Jovo Model in the [`models` folder](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/models.md) of your project.
 
-You can then use the [`deploy` command](#deploy-command) to update your Google Action project in the [Google Actions Console](https://console.actions.google.com/). You can also use the [`get` command](#get-command) to 
+You can then use the [`deploy` command](#deploy-command) to update your Google Action project in the [Google Actions Console](https://console.actions.google.com/). You can also use the [`get` command](#get-command) to synchronize local files after making edits to the project in the console.
 
 This CLI plugin uses the official `gactions` CLI provided by Google for deployment. [Follow the official Google Assistant docs to install and configure `gactions` CLI](https://developers.google.com/assistant/actionssdk/gactions#install_the_gactions_command-line_tool). A tip: To find the right path where to put the `gactions` binary, you can for example type `which jovov4` into your command line and place it into the same parent folder.
 

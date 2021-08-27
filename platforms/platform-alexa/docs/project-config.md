@@ -8,8 +8,9 @@ Learn how to build and deploy Alexa projects using the Jovo CLI.
   - [skillId](#skillid)
   - [askProfile](#askprofile)
   - [files](#files)
-- [Build Command](#build-command)
-- [Deploy Command](#deploy-command)
+- [build Command](#build-command)
+- [deploy Command](#deploy-command)
+- [get Command](#get-command)
 
 ## Introduction
 
@@ -31,7 +32,7 @@ const project = new ProjectConfig({
 
 The CLI plugin hooks into the [`build` command](#build-command) to generate Alexa project files, including an Alexa Interaction Model based on the Jovo Model in the [`models` folder](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/models.md) of your project.
 
-You can then use the [`deploy` command](#deploy-command) to update your Alexa Skill project in the [Alexa Developer Console](https://developer.amazon.com/alexa/console/ask#/).
+You can then use the [`deploy` command](#deploy-command) to update your Alexa Skill project in the [Alexa Developer Console](https://developer.amazon.com/alexa/console/ask#/). You can also use the [`get` command](#get-command) to synchronize local files after making edits to the project in the console.
 
 This CLI plugin uses the official ASK (Alexa Skills Kit) CLI provided by Amazon for deployment. [Follow the official Alexa docs to install and configure ASK CLI](https://developer.amazon.com/en-US/docs/alexa/smapi/quick-start-alexa-skills-kit-command-line-interface.html).
 
@@ -220,7 +221,7 @@ new AlexaCli({
 You can find all [supported APL viewports in the official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/alexa-presentation-language/apl-select-the-viewport-profiles-your-skill-supports.html#configure-the-supported-viewports-with-the-ask-cli-or-smapi).
 
 
-## Build Command
+## build Command
 
 The `build` command creates a `platform.alexa` folder inside the `build` directory in the root of your Jovo project.
 
@@ -233,7 +234,7 @@ It uses [configuration](#configuration) from the `jovo.project.js` and files in 
 The folder then contains an `ask-resources.json` file and a `skill-package` folder as explained in the [official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/smapi/ask-cli-intro.html#skill-project-structure).
 
 
-## Deploy Command
+## deploy Command
 
 After generating the files using the [`build` command](#build-command), you can deploy the Skill project like this:
 
@@ -242,3 +243,14 @@ $ jovov4 deploy:platform alexa
 ```
 
 After successful deployment, you can open the [Alexa Developer Console](https://developer.amazon.com/alexa/console/ask#/) and see the changes there.
+
+
+## get Command
+
+You can synchronize an Alexa Skill by pulling files from the [Alexa Developer Console](https://developer.amazon.com/alexa/console/ask#/) into your `build` directory like this.
+
+```sh
+$ jovov4 get alexa
+```
+
+This is helpful if you've made any updates to the Skill's configuration (for example updating interfaces) that you now want to add to the `jovo.project.js` file using the [`files` configuration](#files).
