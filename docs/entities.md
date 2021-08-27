@@ -50,13 +50,11 @@ Each entity is an object that contains the following information:
 	value: 'entityValue',
 	id: 'entityValueId',
   key: 'mappedEntityValue',
-	raw: { /* ... */	}
 }
 ```
 * `value`: The value retrieved from the user input.
 * `key`: If the entity value was a synonym, the "main" value of the language model will be provided here.
 * `id`: Some platforms and NLUs provide the possibility to add IDs to their entity values. If there is no ID available, the `id` will be the same as the `value`.
-* `raw`: If there is more information available from the platform or NLU integration, it is added here.
 
 
 ## Dynamic Entities
