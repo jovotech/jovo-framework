@@ -79,14 +79,15 @@ This will set `listen` to `true` and add dynamic entities to all platforms/NLUs 
 	entities: {
 		mode: 'REPLACE', // default
 		types: {
-			name: 'PizzaType',
-			values: [
-        {
-	        value: 'peperoni'
-					synonyms: [ 'salami' ], // optional
-					id: 'someId', // optional
-        },
-	    ],
+			PizzaType: {
+				values: [
+					{
+						value: 'peperoni'
+						synonyms: [ 'salami' ], // optional
+						id: 'someId', // optional
+					},
+				],
+			},
 		},
 	},
 }
