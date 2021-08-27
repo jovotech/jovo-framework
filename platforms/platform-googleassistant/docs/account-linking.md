@@ -135,7 +135,7 @@ To trigger account linking, you can instruct your Google Action to handle the ne
 {
   // ...
   platforms: {
-    GoogleAssistant: {
+    googleAssistant: {
       nativeResponse: {
         scene: {
           name: this.$googleAssistant!.$request.scene?.name || '', // Current scene
