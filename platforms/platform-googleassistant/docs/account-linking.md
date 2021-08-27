@@ -4,6 +4,7 @@ Learn how to use account linking with Google Conversational Actions and Jovo.
 - [Introduction](#introduction)
 - [Google Sign-In](#google-sign-in)
   - [Configure Account Linking Scenes](#configure-account-linking-scenes)
+  - [Enable Account Linking in the Actions Console](#enable-account-linking-in-the-actions-console)
   - [Trigger Account Linking Flow](#trigger-account-linking-flow)
   - [Access the Google Account Profile](#access-the-google-account-profile)
 
@@ -13,15 +14,15 @@ Account linking enables you to connect your Google Action to other systems. In t
 
 There are several types of account linking that are supported for Google Conversational Actions:
 
-* [Google sign-in](#google-sign-in) to get access to the user's Google profile
+* [Google Sign-In](#google-sign-in) to get access to the user's Google profile
 * oAuth account linking to connect the user to a external system
 
 
 ## Google Sign-In
 
-Google sign-in offers a streamlined process to connect a user's Google profile to their Google Action. This can even be done via voice. Learn more about Google sign-in [in the official Google docs](https://developers.google.com/assistant/identity/google-sign-in)
+Google Sign-In offers a streamlined process to connect a user's Google profile to their Google Action user ID. This can even be done via voice. Learn more about Google Sign-In [in the official Google Assistant docs](https://developers.google.com/assistant/identity/google-sign-in).
 
-To implement Google sign-in, you need to [configure account linking scenes](#configure-account-linking-scenes) and then [trigger account linking from the conversational experience](#trigger-account-linking-flow). After successful linking, you can [access the Google profile](#access-the-google-account-profile). 
+To implement Google Sign-In, you need to [configure account linking scenes](#configure-account-linking-scenes), [enable account linking in the Actions Console](#enable-account-linking-in-the-actions-console), and then [trigger account linking from the conversational experience](#trigger-account-linking-flow). After successful linking, you can [access the Google profile](#access-the-google-account-profile). 
 
 ### Configure Account Linking Scenes
 
@@ -29,13 +30,13 @@ You can use the Google Assistant concept of [scenes](./scenes.md) to implement a
 
 There are multiple ways of setting up these scenes. We recommend creating them inside your [model](./model.md) to deploy them directly to the Google Conversational Actions Console.
 
-Below are two example scenes called `AccountLinkingScene` and `AccountLinkingScene_AccountLinking`:
+Below are two example scenes called `SignIn` and `SignIn_AccountLinking`. It doesn't matter how you name the first one, but it's important that the latter one is name `<SceneName>_AccountLinking`.
 
 ```javascript
 "googleAssistant": {
   "custom": {
     "scenes": {
-      "AccountLinkingScene": {
+      "SignIn": {
         "conditionalEvents": [
           {
             "condition": "user.verificationStatus != \"VERIFIED\"",
@@ -45,7 +46,7 @@ Below are two example scenes called `AccountLinkingScene` and `AccountLinkingSce
           },
           {
             "condition": "user.verificationStatus == \"VERIFIED\"",
-            "transitionToScene": "AccountLinkingScene_AccountLinking"
+            "transitionToScene": "SignIn_AccountLinking"
           }
         ],
         "intentEvents": [
@@ -57,7 +58,7 @@ Below are two example scenes called `AccountLinkingScene` and `AccountLinkingSce
           }
         ]
       },
-      "AccountLinkingScene_AccountLinking": {
+      "SignIn_AccountLinking": {
         "conditionalEvents": [
           {
             "condition": "session.params.AccountLinkingSlot == \"LINKED\"",
@@ -103,7 +104,18 @@ Below are two example scenes called `AccountLinkingScene` and `AccountLinkingSce
 }
 ```
 
-`AccountLinkingScene` propagates the request to `AccountLinkingScene_AccountLinking`, depending on whether the user is verified or not, which in turn sends the result from the account linking process to your webhook handler.
+The `SignIn` scene transitions to the `SignIn_AccountLinking` scene if the user is verified (eligible to do account linking).
+
+After adding the scenes, you can use the `build` and `deploy` commands to update the Action in the developer console. [Learn more about how to use the Google Assistant CLI integration](./project-config.md).
+
+### Enable Account Linking in the Actions Console
+
+In addition to setting up scenes, you need to enable account linking in the [Google Actions Console](https://console.actions.google.com/).
+
+You can find account linking in the "Develop" section. Enable it and select the following:
+
+* Account creation: Select `yes`
+* Linking type: Select `Google Sign in`
 
 ### Trigger Account Linking Flow
 
@@ -117,7 +129,7 @@ this.$googleAssistant.$user.isAccountLinked()
 this.$googleAssistant.$user.isVerified()
 ```
 
-To trigger account linking, you can instruct your Google Action to handle the next conversation step with the specified scene in the output:
+To trigger account linking, you can instruct your Google Action to handle the next conversation step with the specified scene in the output ([see the docs for Google Assistant output](https://github.com/jovotech/jovo-output/blob/master/output-googleassistant/README.md)):
 
 ```typescript
 {
@@ -126,8 +138,10 @@ To trigger account linking, you can instruct your Google Action to handle the ne
     GoogleAssistant: {
       nativeResponse: {
         scene: {
+          name: this.$googleAssistant!.$request.scene?.name || '', // Current scene
+          slots: this.$googleAssistant!.$request.scene?.slots || {}, // Current slots
           next: {
-            name: 'AccountLinkingScene',
+            name: 'SignIn',
           }
         }
       }
@@ -136,23 +150,29 @@ To trigger account linking, you can instruct your Google Action to handle the ne
 }
 ```
 
-After the user has responded to your account linking request, you will receive a request to notify you about the result.
+After the user has gone through account linking, you receive a request of the type `ON_SIGN_IN` to notify you about the result. You can create a handler for this request by using the [`types` property](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/handlers.md#types):
 
-// TODO: `ON_SIGN_IN`
+```typescript
+@Types('ON_SIGN_IN')
+userSignedIn() {
+
+    // ...
+}
+```
 
 
 ### Access the Google Account Profile
 
-After the user has successfully linked their account using Google sign-in, you can access their profile information using the `getGoogleProfile` method:
+After the user has successfully linked their account using Google Sign-In, you can access their profile information using the `getGoogleProfile` method:
 
 ```typescript
 await this.$googleAssistant.$user.getGoogleProfile()
 
 // Example
-async someHandler() {
+async userSignedIn() {
 
     try {
-      const googleProfile = await this.$googleAssistant.$user.getGoogleProfile();
+      const googleProfile = await this.$googleAssistant!.$user.getGoogleProfile();
 
       // ...
 
