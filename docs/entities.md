@@ -13,13 +13,13 @@ For example, a user saying "*my name is max*" could result in a `MyNameIsIntent`
 
 ```typescript
 {
-	type: 'INTENT',
-	intent: 'MyNameIsIntent',
-	entities: {
-		name: {
-			value: 'Max',
-		},
-	},
+  type: 'INTENT',
+  intent: 'MyNameIsIntent',
+  entities: {
+    name: {
+      value: 'Max',
+    },
+  },
 }
 ```
 
@@ -47,8 +47,8 @@ Each entity is an object that contains the following information:
 
 ```typescript
 {
-	value: 'entityValue',
-	id: 'entityValueId',
+  value: 'entityValue',
+  id: 'entityValueId',
   key: 'mappedEntityValue',
 }
 ```
@@ -65,10 +65,10 @@ You can add dynamic entities to the `listen` property:
 
 ```typescript
 {
-	message: 'Which type of pizza do you like?',
-	listen: {
-		entities: [ /* ... */ ]
-	}
+  message: 'Which type of pizza do you like?',
+  listen: {
+    entities: { /* ... */ }
+  }
 }
 ```
 
@@ -76,20 +76,20 @@ This will set `listen` to `true` and add dynamic entities to all platforms/NLUs 
 
 ```typescript
 {
-	entities: {
-		mode: 'REPLACE', // default
-		types: {
-			PizzaType: {
-				values: [
-					{
-						value: 'peperoni'
-						synonyms: [ 'salami' ], // optional
-						id: 'someId', // optional
-					},
-				],
-			},
-		},
-	},
+  entities: {
+    mode: 'REPLACE', // default
+    types: {
+      PizzaType: {
+        values: [
+          {
+            value: 'peperoni'
+            synonyms: [ 'salami' ], // optional
+            id: 'someId', // optional
+          },
+        ],
+      },
+    },
+  },
 }
 ```
 
