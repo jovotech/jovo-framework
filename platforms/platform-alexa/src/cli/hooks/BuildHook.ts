@@ -20,7 +20,7 @@ import {
 import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs';
 import { JovoModelData, NativeFileInformation } from '@jovotech/model';
-import { JovoModelAlexa, JovoModelAlexaData } from '@jovotech/model-alexa';
+import { JovoModelAlexa } from '@jovotech/model-alexa';
 import _get from 'lodash.get';
 import _has from 'lodash.has';
 import _merge from 'lodash.merge';
@@ -398,7 +398,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * Loads a platform-specific model.
    * @param locale - Locale of the model.
    */
-  getPlatformModel(locale: string): JovoModelAlexaData {
+  getPlatformModel(locale: string): JovoModelData {
     const content: string = readFileSync(this.$plugin.getModelPath(locale), 'utf-8');
     return JSON.parse(content);
   }
