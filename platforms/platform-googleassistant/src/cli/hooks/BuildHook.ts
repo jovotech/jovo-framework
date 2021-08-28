@@ -412,7 +412,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * https://developers.google.com/assistant/conversational/build/projects?hl=en&tool=sdk#add_resources
    */
   copyResourcesToProjectFiles(): Promise<void> {
-    const input = `${this.$cli.$projectPath}/resources`;
+    const input = `${this.$cli.$projectPath}/${this.$plugin.$config.resourcesDirectory}`;
     const output = `${this.$plugin.getPlatformPath()}/resources`;
     return new Promise((resolve, reject) =>
       copyfiles([input, output], {}, (err: Error) => {
