@@ -1,6 +1,8 @@
 import { App } from '../App';
 import { DuplicateGlobalIntentsError } from '../errors/DuplicateGlobalIntentsError';
+import { Intent, IntentMap } from '../interfaces';
 import { Jovo } from '../Jovo';
+import { JovoInput } from '../JovoInput';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
 import { MetadataStorage } from '../metadata/MetadataStorage';
 import { Plugin, PluginConfig } from '../Plugin';
@@ -38,8 +40,23 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
   }
 
   private setRoute = async (jovo: Jovo) => {
+    const mappedIntent = this.getMappedIntent(jovo.$input, jovo.$config.routing?.intentMap);
+    if (mappedIntent) {
+      jovo.$input.intent = mappedIntent;
+    }
     jovo.$route = await new RoutingExecutor(jovo).execute();
   };
+
+  private getMappedIntent(input: JovoInput, intentMap?: IntentMap): Intent | string | undefined {
+    const intent = input.intent || input.nlu?.intent;
+    if (!intent) return;
+    const intentName = typeof intent === 'string' ? intent : intent.name;
+    const mappedIntentName = intentMap?.[intentName];
+    if (!mappedIntentName) return;
+    return input.intent && typeof input.intent === 'object'
+      ? { ...input.intent, name: mappedIntentName }
+      : mappedIntentName;
+  }
 
   private checkForDuplicateGlobalHandlers(app: App): Promise<void> {
     return new Promise((resolve, reject) => {

@@ -2,7 +2,6 @@ import {
   AnyObject,
   App,
   ExtensibleConfig,
-  InputType,
   Jovo,
   MiddlewareFunction,
   Platform,
@@ -83,12 +82,13 @@ export class GoogleAssistantPlatform extends Platform<
     const request = jovo.$googleAssistant?.$request;
     // if it is a selection-event
     if (
-      request?.intent?.name &&
-      request.scene?.slotFillingStatus === SlotFillingStatus.Final &&
+      request?.intent &&
+      !request?.intent?.name &&
+      (request.scene?.slotFillingStatus === SlotFillingStatus.Final ||
+        request.scene?.slotFillingStatus === SlotFillingStatus.Unspecified) &&
       Object.keys(request.intent?.params || {}).length &&
       request.session?.params?._GOOGLE_ASSISTANT_SELECTION_INTENT_
     ) {
-      jovo.$input.type = InputType.Intent;
       jovo.$input.intent = request.session.params._GOOGLE_ASSISTANT_SELECTION_INTENT_;
     }
   };

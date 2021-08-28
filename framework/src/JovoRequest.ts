@@ -1,11 +1,4 @@
-import {
-  AsrData,
-  DEFAULT_INPUT_TYPE,
-  InputTypeLike,
-  JovoInput,
-  NluData,
-  UnknownObject,
-} from './index';
+import { DEFAULT_INPUT_TYPE, InputTypeLike, JovoInput, UnknownObject } from './index';
 import { JovoInputBuilder } from './JovoInputBuilder';
 import { JovoSession } from './JovoSession';
 
@@ -21,30 +14,12 @@ export abstract class JovoRequest {
   abstract getInputText(): JovoInput['text'];
   abstract getInputAudio(): JovoInput['audio'];
 
-  getAsrData(): AsrData | undefined {
-    return {};
-  }
-  getNluData(): NluData | undefined {
-    const nluData: NluData = {};
-    const intent = this.getIntent();
-    if (intent) {
-      nluData.intent = intent;
-    }
-    const entities = this.getEntities();
-    if (entities) {
-      nluData.entities = entities;
-    }
-    return nluData;
-  }
-
   getInput(): JovoInput {
     return new JovoInputBuilder(this.getInputType() || DEFAULT_INPUT_TYPE)
       .set('intent', this.getIntent())
       .set('entities', this.getEntities())
       .set('text', this.getInputText())
       .set('audio', this.getInputAudio())
-      .set('asr', this.getAsrData() || {})
-      .set('nlu', this.getNluData() || {})
       .build();
   }
 

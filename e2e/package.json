@@ -1,7 +1,7 @@
 {
   "name": "@jovotech/e2e",
   "private": true,
-  "version": "4.0.0-beta.0",
+  "version": "4.0.0-beta.2",
   "description": "",
   "scripts": {
     "prettier": "prettier -w -l test",
@@ -12,8 +12,8 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/framework": "^4.0.0-beta.0",
-    "@jovotech/platform-alexa": "^4.0.0-beta.0"
+    "@jovotech/framework": "^4.0.0-beta.1",
+    "@jovotech/platform-alexa": "^4.0.0-beta.2"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",

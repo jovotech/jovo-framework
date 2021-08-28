@@ -82,7 +82,7 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
     if (rasaEntity.role) {
       entityAlias = rasaEntity.role;
     }
-    entityMap.entityAlias = {
+    entityMap[entityAlias] = {
       id: entityAlias,
       key: entityAlias,
       name: rasaEntity.entity,
