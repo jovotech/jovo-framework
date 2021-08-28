@@ -1,40 +1,51 @@
-import { EntityMap, JovoRequest, JovoRequestType, UnknownObject } from '@jovotech/framework';
-import { Context, Request, RequestBodyText } from './interfaces';
+import {
+  InputTypeLike,
+  JovoInput,
+  JovoRequest,
+  OmitWhere,
+  UnknownObject,
+} from '@jovotech/framework';
+import { Context } from './interfaces';
 
 export class CoreRequest extends JovoRequest {
   version?: string;
-  type?: 'jovo-platform-core' | string;
-  request?: Request;
+  platform?: 'core' | string;
+  id?: string; // UUID v4
+  timestamp?: string; // Always in local time, ISO 8601 YYYY-MM-DDTHH:mm:ss.sssZ
+  timeZone?: string; // IANA time zone names e.g. Europe/Berlin
+  locale?: string; // e.g. de-DE, en-US
+  data?: UnknownObject; // this.$request
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  input?: OmitWhere<JovoInput, Function>;
   context?: Context;
 
-  getEntities(): EntityMap | undefined {
-    return this.request?.nlu?.inputs;
-  }
-
-  getIntentName(): string | undefined {
-    return this.request?.nlu?.intent;
-  }
-
   getLocale(): string | undefined {
-    return this.request?.locale;
+    return this.locale;
   }
 
-  getRawText(): string | undefined {
-    return (this.request?.body as RequestBodyText | undefined)?.text;
+  getIntent(): JovoInput['intent'] {
+    return this.input?.intent;
+  }
+  getEntities(): JovoInput['entities'] {
+    return this.input?.entities;
   }
 
-  getRequestType(): JovoRequestType | undefined {
-    return this.request?.type ? { type: this.request.type } : undefined;
+  getInputType(): InputTypeLike | undefined {
+    return this.input?.type;
+  }
+  getInputText(): JovoInput['text'] {
+    return this.input?.text;
+  }
+  getInputAudio(): JovoInput['audio'] {
+    return this.input?.audio;
   }
 
   getSessionData(): UnknownObject | undefined {
     return this.context?.session?.data;
   }
-
   getSessionId(): string | undefined {
     return this.context?.session?.id;
   }
-
   isNewSession(): boolean | undefined {
     return this.context?.session?.new;
   }

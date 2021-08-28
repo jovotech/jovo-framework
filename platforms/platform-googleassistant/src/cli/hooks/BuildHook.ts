@@ -3,6 +3,7 @@ import {
   ANSWER_BACKUP,
   ANSWER_CANCEL,
   deleteFolderRecursive,
+  DISK,
   flags,
   getResolvedLocales,
   InstallContext,
@@ -16,14 +17,13 @@ import {
   promptOverwriteReverseBuild,
   REVERSE_ARROWS,
   STATION,
-  DISK,
   Task,
   wait,
 } from '@jovotech/cli-core';
 import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'fs';
-import { JovoModelData, NativeFileInformation } from 'jovo-model';
-import { JovoModelGoogle } from 'jovo-model-google';
+import { JovoModelData, NativeFileInformation } from '@jovotech/model';
+import { JovoModelGoogle } from '@jovotech/model-google';
 import _get from 'lodash.get';
 import _has from 'lodash.has';
 import _merge from 'lodash.merge';
@@ -33,10 +33,13 @@ import { join as joinPaths } from 'path';
 import * as yaml from 'yaml';
 import copyfiles from 'copyfiles';
 import { GoogleAssistantCli } from '..';
-import { GoogleActionActions, GoogleContext, SupportedLocalesType } from '../utils';
-import { SupportedLocales } from '../utils';
-
-import DefaultFiles from '../utils/DefaultFiles.json';
+import DefaultFiles from '../DefaultFiles.json';
+import {
+  GoogleActionActions,
+  GoogleContext,
+  SupportedLocales,
+  SupportedLocalesType,
+} from '../utilities';
 
 export interface BuildContextGoogle extends BuildContext, GoogleContext {
   flags: BuildContext['flags'] & { 'project-id'?: string };
@@ -100,11 +103,11 @@ export class BuildHook extends PluginHook<BuildEvents> {
       this.$context.flags['project-id'] || _get(this.$plugin.$config, 'projectId');
 
     if (!this.$context.googleAssistant.projectId) {
-      throw new JovoCliError(
-        'Could not find project ID.',
-        this.$plugin.constructor.name,
-        'Please provide a project ID by using the flag "--project-id" or in your project configuration.',
-      );
+      throw new JovoCliError({
+        message: 'Could not find project ID.',
+        module: this.$plugin.constructor.name,
+        hint: 'Please provide a project ID by using the flag "--project-id" or in your project configuration.',
+      });
     }
 
     // Set default locale.
@@ -140,20 +143,23 @@ export class BuildHook extends PluginHook<BuildEvents> {
         SupportedLocales.includes(genericLocale as SupportedLocalesType) &&
         !locales.includes(genericLocale as SupportedLocalesType)
       ) {
-        throw new JovoCliError(
-          `Locale ${printHighlight(locale)} requires a generic locale ${printHighlight(
+        throw new JovoCliError({
+          message: `Locale ${printHighlight(locale)} requires a generic locale ${printHighlight(
             genericLocale,
           )}.`,
-          this.$plugin.constructor.name,
-        );
+          module: this.$plugin.constructor.name,
+        });
       }
 
       if (!SupportedLocales.includes(locale)) {
-        throw new JovoCliError(
-          `Locale ${printHighlight(locale)} is not supported by Google Conversational Actions.`,
-          this.$plugin.constructor.name,
-          'For more information on multiple language support: https://developers.google.com/assistant/console/languages-locales',
-        );
+        throw new JovoCliError({
+          message: `Locale ${printHighlight(
+            locale,
+          )} is not supported by Google Conversational Actions.`,
+          module: this.$plugin.constructor.name,
+          learnMore:
+            'For more information on multiple language support: https://developers.google.com/assistant/console/languages-locales',
+        });
       }
     }
   }
@@ -200,11 +206,11 @@ export class BuildHook extends PluginHook<BuildEvents> {
         if (platformLocales.includes(locale)) {
           selectedLocales.push(locale);
         } else {
-          throw new JovoCliError(
-            `Could not find platform models for locale: ${printHighlight(locale)}`,
-            this.$plugin.constructor.name,
-            `Available locales include: ${platformLocales.join(', ')}`,
-          );
+          throw new JovoCliError({
+            message: `Could not find platform models for locale: ${printHighlight(locale)}`,
+            module: this.$plugin.constructor.name,
+            hint: `Available locales include: ${platformLocales.join(', ')}`,
+          });
         }
       }
     }
@@ -261,10 +267,10 @@ export class BuildHook extends PluginHook<BuildEvents> {
         jovoModel.importNative(platformFiles, modelLocale);
         const nativeData: JovoModelData | undefined = jovoModel.exportJovoModel();
         if (!nativeData) {
-          throw new JovoCliError(
-            'Something went wrong while exporting your Jovo model.',
-            this.$plugin.constructor.name,
-          );
+          throw new JovoCliError({
+            message: 'Something went wrong while exporting your Jovo model.',
+            module: this.$plugin.constructor.name,
+          });
         }
 
         nativeData.invocation = this.getPlatformInvocationName(platformLocale);
@@ -543,11 +549,11 @@ export class BuildHook extends PluginHook<BuildEvents> {
     }
 
     if (!defaultLocale) {
-      throw new JovoCliError(
-        'Could not find a default locale.',
-        this.$plugin.constructor.name,
-        'Try adding the property "defaultLocale" to your project.js.',
-      );
+      throw new JovoCliError({
+        message: 'Could not find a default locale.',
+        module: this.$plugin.constructor.name,
+        hint: 'Try adding the property "defaultLocale" to your project.js.',
+      });
     }
 
     this.$context.googleAssistant.defaultLocale = defaultLocale;
@@ -583,10 +589,10 @@ export class BuildHook extends PluginHook<BuildEvents> {
       const platformInvocation: string = invocation[this.$plugin.constructor.name];
 
       if (!platformInvocation) {
-        throw new JovoCliError(
-          `Can\'t find invocation name for locale ${locale}.`,
-          this.$plugin.constructor.name,
-        );
+        throw new JovoCliError({
+          message: `Can\'t find invocation name for locale ${locale}.`,
+          module: this.$plugin.constructor.name,
+        });
       }
 
       return platformInvocation;

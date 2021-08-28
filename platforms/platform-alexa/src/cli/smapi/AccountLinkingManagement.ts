@@ -1,6 +1,6 @@
-import { existsSync } from 'fs';
 import { execAsync } from '@jovotech/cli-core';
-import { getAskError } from '../utils';
+import { existsSync } from 'fs';
+import { getAskError } from '../utilities';
 
 export async function getAccountLinkingInformation(
   skillId: string,

@@ -1,5 +1,13 @@
-import { EntityMap, JovoRequest, JovoRequestType, UnknownObject } from '@jovotech/framework';
+import {
+  EntityMap,
+  InputType,
+  InputTypeLike,
+  JovoInput,
+  JovoRequest,
+  UnknownObject,
+} from '@jovotech/framework';
 import type { Device, Home, Scene, Session, User } from '@jovotech/output-googleassistant';
+import { GoogleAssistantSystemInputType, GoogleAssistantSystemIntent } from './enums';
 import { Context, Handler, Intent } from './interfaces';
 
 export class GoogleAssistantRequest extends JovoRequest {
@@ -11,6 +19,14 @@ export class GoogleAssistantRequest extends JovoRequest {
   home?: Home;
   device?: Device;
   context?: Context;
+
+  getLocale(): string | undefined {
+    return this.user?.locale;
+  }
+
+  getIntent(): JovoInput['intent'] {
+    return this.intent?.name;
+  }
 
   getEntities(): EntityMap | undefined {
     const entities: EntityMap = {};
@@ -28,31 +44,34 @@ export class GoogleAssistantRequest extends JovoRequest {
     return entities;
   }
 
-  getIntentName(): string | undefined {
-    return this.intent?.name;
+  getInputType(): InputTypeLike | undefined {
+    if (
+      this.intent?.name === GoogleAssistantSystemIntent.Main &&
+      !Object.keys(this.session?.params || {}).length
+    ) {
+      return InputType.Launch;
+    }
+    if (this.intent?.name === GoogleAssistantSystemIntent.Cancel) {
+      return InputType.End;
+    }
+    if (this.intent?.params.AccountLinkingSlot) {
+      return GoogleAssistantSystemInputType.ON_SIGN_IN;
+    }
+    return undefined;
   }
-
-  getLocale(): string | undefined {
-    return this.user?.locale;
-  }
-
-  getRawText(): string | undefined {
+  getInputText(): JovoInput['text'] {
     return this.intent?.query;
   }
-
-  getRequestType(): JovoRequestType | undefined {
-    // TODO: implement
-    return undefined;
+  getInputAudio(): JovoInput['audio'] {
+    return;
   }
 
   getSessionData(): UnknownObject | undefined {
     return this.session?.params;
   }
-
   getSessionId(): string | undefined {
     return this.session?.id;
   }
-
   isNewSession(): boolean | undefined {
     return !this.getSessionData();
   }

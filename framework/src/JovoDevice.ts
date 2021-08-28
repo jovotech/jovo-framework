@@ -1,12 +1,19 @@
 import { Jovo } from './Jovo';
 
-export type Capability = 'screen' | 'audio' | 'long-form-audio' | string;
+export enum Capability {
+  Screen = 'SCREEN',
+  Audio = 'AUDIO',
+  LongformAudio = 'LONGFORM_AUDIO',
+  Video = 'VIDEO',
+}
+
+export type CapabilityType = Capability | `${Capability}` | string;
 
 export type JovoDeviceConstructor<JOVO extends Jovo> = new (jovo: JOVO) => JOVO['$device'];
 
 export abstract class JovoDevice<
   JOVO extends Jovo = Jovo,
-  CAPABILITY extends Capability = Capability,
+  CAPABILITY extends CapabilityType = CapabilityType,
 > {
   capabilities: CAPABILITY[] = [];
 

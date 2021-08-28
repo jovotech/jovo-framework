@@ -12,9 +12,7 @@ export interface SessionData extends Data {}
 
 export interface UserData extends Data {}
 
-export interface Entity {
-  [key: string]: unknown | undefined;
-
+export interface Entity extends UnknownObject {
   name: string;
   id?: string;
   key?: string;
@@ -31,9 +29,7 @@ export interface AsrData extends UnknownObject {
 }
 
 export interface NluData extends UnknownObject {
-  intent?: {
-    name: string;
-  };
+  intent?: string | Intent;
   entities?: EntityMap;
 }
 

@@ -1,6 +1,5 @@
 import { App } from '../App';
 import { DuplicateGlobalIntentsError } from '../errors/DuplicateGlobalIntentsError';
-import { HandleRequest } from '../HandleRequest';
 import { Jovo } from '../Jovo';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
 import { MetadataStorage } from '../metadata/MetadataStorage';
@@ -30,26 +29,16 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
     return {};
   }
 
-  install(app: App): Promise<void> | void {
-    app.middlewareCollection.use('before.dialog.logic', this.setRoute);
+  install(parent: App): Promise<void> | void {
+    parent.middlewareCollection.use('dialogue.router', this.setRoute);
   }
 
   initialize(parent: App): Promise<void> | void {
     return this.checkForDuplicateGlobalHandlers(parent);
   }
 
-  private setRoute = async (handleRequest: HandleRequest, jovo: Jovo) => {
-    // TODO determine order
-    const intentName =
-      jovo.$nlu.intent?.name ||
-      jovo.$request.getIntentName() ||
-      jovo.$request.getRequestType()?.type;
-    if (!intentName) {
-      // TODO determine what to do if no intent was passed (probably UNHANDLED)
-      // in the future other data can be passed and used by the handler, but for now just use the intent-name
-      return;
-    }
-    jovo.$route = await new RoutingExecutor(jovo).execute(intentName);
+  private setRoute = async (jovo: Jovo) => {
+    jovo.$route = await new RoutingExecutor(jovo).execute();
   };
 
   private checkForDuplicateGlobalHandlers(app: App): Promise<void> {

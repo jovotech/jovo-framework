@@ -18,13 +18,13 @@ There are different types of data that can be used in a Jovo app. For example, s
 These are the types of data that are usually only stored for a short amount of time ([short-term data storage](#short-term-data-storage)):
 
 * [Request data](#request-data): Only used for this specific interaction, stored in `this.$data`.
-* [Component data](#component-data): Only used for this specific component, stored in `this.$component.$data`.
-* [Session data](#session-data): Only used for this specific session, stored in `this.$session.$data`.
-* [App data](#app-data): This is a special data type that keeps the data stored as long as the server is running, which can be usually for caching. Stored in `this.$app.$data`.
+* [Component data](#component-data): Only used for this specific component, stored in `this.$component.data`.
+* [Session data](#session-data): Only used for this specific session, stored in `this.$session.data`.
+* [App data](#app-data): This is a special data type that keeps the data stored as long as the server is running, which can be usually for caching. Stored in `this.$app.data`.
 
 And here are some types of data that are typically persisted across user sessions ([long-term data storage](#long-term-data-storage)):
 
-* [User data](#user-data): User specific data stored in `this.$user.$data`.
+* [User data](#user-data): User specific data stored in `this.$user.data`.
 * [History](#history): Data from previous interactions, accessible via `this.$history`.
 
 ## Short-term Data Storage
@@ -46,7 +46,7 @@ Sometimes, a [component](./components.md) might need to gather information that 
 You can store data only for a specific component like this: 
 
 ```typescript
-this.$component.$data.someKey = 'someValue';
+this.$component.data.someKey = 'someValue';
 ```
 
 This data is stored in the `$state` stack:
@@ -71,7 +71,7 @@ Session data (sometimes also called session attributes) stores data that is only
 You can store elements into the session data like this:
 
 ```typescript
-this.$session.$data.someKey = 'someValue';
+this.$session.data.someKey = 'someValue';
 ```
 
 Most platforms offer some kind of local storage that allows you to store session dta in the JSON response back to the platform, which can then be accessed in the next request (as long as the session stays active).
@@ -87,7 +87,7 @@ Other platforms (like Facebook Messenger) don't support this. For them, you need
 App data is a special data type that stores data into the app object, which exists as long as the server is running:
 
 ```typescript
-this.$app.$data.someKey = 'someValue';
+this.$app.data.someKey = 'someValue';
 ```
 
 For example, this can be used for non-user-specific information that needs an API call that is not necessary to be executed at every request. By storing data in the app object, the API call only needs to be done once while the server is running (or the serverless function like AWS Lambda is warm).
@@ -103,7 +103,7 @@ The Jovo `$user` object uses [database integrations](./databases.md) to persist 
 The data can be stored like this:
 
 ```typescript
-this.$user.$data.someKey = 'someValue';
+this.$user.data.someKey = 'someValue';
 ```
 
 ### History
@@ -119,16 +119,14 @@ this.$history.prev
 // Alternatively access it using the items array
 this.$history.items[0]
 
-/* Sample result if output and nlu are enabled
+/* Sample result if output and input are enabled
 {
   output: {
-    message: 'Hello World!'
+    message: 'Hello World!',
   },
-  nlu: {
-    intent: {
-      name: 'HelloWorldIntent'
-    }
-  }
+  input: {
+    intent: 'HelloWorldIntent',
+  },
 }
 */
 ```
@@ -151,17 +149,16 @@ new FileDb({
 }),
 ```
 
-You can add the following elements to the history:
+You can add the following [Jovo properties](./jovo-properties.md) to the history:
 
-* `output`: Stores `this.$output`
-* `state`: Stores `this.$state`
-* `nlu`: Stores `this.$nlu`
-* `entities`: Stores `this.$entities`
-* `asr`: Stores `this.$asr`
 * `request`: Stores `this.$request`
+* `input`: Stores `this.$input`
+* `output`: Stores `this.$output`
 * `response`: Stores `this.$response`
+* `state`: Stores `this.$state`
+* `entities`: Stores `this.$entities`
 
-You can even add your own cutom data to the history. Add any property with a function that returns the data to be stored. Here is an example for a `someCustomData` property:
+You can even add your own custom data to the history. Add any property with a function that returns the data to be stored. Here is an example for a `someCustomData` property:
 
 ```typescript
 new FileDb({
@@ -189,11 +186,9 @@ Here is an example how the history is then stored in a database:
           "output": {
             "message": "Yes! I love pizza, too."
           },
-          "nlu": {
-            "intent": {
-              "name": "AMAZON.YesIntent"
-            },
-            "entities": {}
+          "input": {
+            "type": "INTENT",
+            "intent": "AMAZON.YesIntent",
           },
           "state": [
             {
@@ -207,7 +202,9 @@ Here is an example how the history is then stored in a database:
             "message": "Hello World! Do you like pizza?",
             "listen": true
           },
-          "nlu": {},
+          "input": {
+            "TYPE": "LAUNCH"
+          },
           "state": [
             {
               "componentPath": "LoveHatePizzaComponent"

@@ -1,6 +1,5 @@
 import { OutputTemplateConverter } from '@jovotech/output';
 import { App } from '../App';
-import { HandleRequest } from '../HandleRequest';
 import { Jovo } from '../Jovo';
 import { Plugin, PluginConfig } from '../Plugin';
 
@@ -25,7 +24,7 @@ export class OutputPlugin extends Plugin<OutputPluginConfig> {
     app.middlewareCollection.get('response.output')?.use(this.handle);
   }
 
-  private handle = async (handleRequest: HandleRequest, jovo: Jovo) => {
+  private handle = async (jovo: Jovo) => {
     const converter = new OutputTemplateConverter(jovo.$platform.outputTemplateConverterStrategy);
     // TODO: catch possible errors
     const response = await converter.toResponse(jovo.$output);

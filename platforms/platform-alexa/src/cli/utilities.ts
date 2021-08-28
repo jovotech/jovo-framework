@@ -1,11 +1,10 @@
+import { execAsync, JovoCliError } from '@jovotech/cli-core';
 import chalk from 'chalk';
 import _get from 'lodash.get';
-import { execAsync, JovoCliError } from '@jovotech/cli-core';
-
 import { AskSkillList } from './interfaces';
 
-export * from './interfaces';
 export * from './constants';
+export * from './interfaces';
 
 /**
  * Checks if ask cli is installed.
@@ -17,24 +16,24 @@ export async function checkForAskCli(): Promise<void> {
     const { stdout } = await execAsync(cmd);
     const majorVersion: string = stdout![0];
     if (parseInt(majorVersion) < 2) {
-      throw new JovoCliError(
-        'Jovo CLI requires ASK CLI @v2 or above.',
-        'AlexaCli',
-        'Please update your ASK CLI using "npm install ask-cli -g".',
-      );
+      throw new JovoCliError({
+        message: 'Jovo CLI requires ASK CLI @v2 or above.',
+        module: 'AlexaCli',
+        hint: 'Please update your ASK CLI using "npm install ask-cli -g".',
+      });
     }
   } catch (error) {
     if (error instanceof JovoCliError) {
       throw error;
     }
 
-    throw new JovoCliError(
-      'Jovo CLI requires ASK CLI',
-      'AlexaCli',
-      '',
-      'Install the ASK CLI with "npm install ask-cli -g".',
-      'Read more here: https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html',
-    );
+    throw new JovoCliError({
+      message: 'Jovo CLI requires ASK CLI',
+      module: 'AlexaCli',
+      hint: 'Install the ASK CLI with "npm install ask-cli -g".',
+      learnMore:
+        'Read more here: https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html',
+    });
   }
 }
 
@@ -86,7 +85,7 @@ export function getAskError(method: string, stderr: string): JovoCliError {
       violations = payload.detail.response.message;
     }
 
-    return new JovoCliError(`${method}: ${message}`, module, violations);
+    return new JovoCliError({ message: `${method}: ${message}`, module, details: violations });
   } else {
     // Try parsing for alternative error message.
     let i: number, pathRegex: RegExp;
@@ -99,7 +98,7 @@ export function getAskError(method: string, stderr: string): JovoCliError {
       i = stderr.indexOf('ENOENT');
       pathRegex = /'(\/.*\/)*(.*)'/g;
     } else {
-      return new JovoCliError(stderr, module);
+      return new JovoCliError({ message: stderr, module });
     }
 
     // Check for different error messages, if a file cannot be found.
@@ -109,20 +108,20 @@ export function getAskError(method: string, stderr: string): JovoCliError {
     // File-specific error messages
     if (match && match.length > 2) {
       if (match[2] === 'cli_config') {
-        return new JovoCliError(
-          `ASK CLI is unable to find your configuration file at ${match[1]}.`,
+        return new JovoCliError({
+          message: `ASK CLI is unable to find your configuration file at ${match[1]}.`,
           module,
-          "Please configure at least one ask profile using the command 'ask configure'.",
-        );
+          hint: "Please configure at least one ask profile using the command 'ask configure'.",
+        });
       }
 
-      return new JovoCliError(
-        `ASK CLI is unable to find your ${match[2]} at ${match[1]}.`,
+      return new JovoCliError({
+        message: `ASK CLI is unable to find your ${match[2]} at ${match[1]}.`,
         module,
-        "If this error persists, try rebuilding your platform folder with 'jovo build'.",
-      );
+        hint: "If this error persists, try rebuilding your platform folder with 'jovo build'.",
+      });
     }
   }
 
-  return new JovoCliError(stderr, module);
+  return new JovoCliError({ message: stderr, module });
 }
