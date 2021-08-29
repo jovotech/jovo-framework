@@ -415,8 +415,10 @@ export class BuildHook extends PluginHook<BuildEvents> {
     const input = `${this.$cli.$projectPath}/${this.$plugin.$config.resourcesDirectory}`;
     const output = `${this.$plugin.getPlatformPath()}/resources`;
     return new Promise((resolve, reject) =>
-      copyfiles([input, output], {}, (err: Error) => {
-        if (err) return reject(err);
+      copyfiles([input, output], {}, (err: Error | undefined) => {
+        if (err) {
+          return reject(err);
+        }
         return resolve();
       }),
     );
