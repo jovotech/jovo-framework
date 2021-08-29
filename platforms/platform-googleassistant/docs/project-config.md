@@ -6,6 +6,7 @@ Learn how to build and deploy Google Assistant projects using the Jovo CLI.
 - [Configuration](#configuration)
   - [projectId](#projectid)
   - [locales](#locales)
+  - [resourcesDirectory](#resourcesdirectory)
   - [files](#files)
 - [build Command](#build-command)
 - [deploy Command](#deploy-command)
@@ -44,6 +45,7 @@ You can add configurations like this:
 new GoogleAssistantCli({
   projectId: '<yourProjectId>',
   locales: { /* ... */ },
+  resourcesDirectory: 'resources',
   files: { /* ... */ },
 })
 ```
@@ -52,6 +54,7 @@ The following options are currently supported:
 
 * [`projectId`](#projectid) (required): The Google Action project ID that the project should be deployed to.
 * [`locales`](#locales): Defines how the locales in the [`models` folder](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/models.md) should be mapped to Google Assistant locales.
+* [`resourcesDirectory`](#resourcesdirectory): The folder where resources are maintained.
 * [`files`](#files): This can be used to add or override files in your Google Assistant `build` folder.
 
 
@@ -125,6 +128,19 @@ new GoogleAssistantCli({
 })
 ```
 
+### resourcesDirectory
+
+Google Assistant offers the ability to maintain resources/assets in a local folder and reference them in your settings using a `$resources` variable. [Learn more in the official Google Assistant docs](https://developers.google.com/assistant/conversational/build/projects?hl=en&tool=sdk#add_resources).
+
+By default, the directory is called `resources` in the root of your Jovo project. You can also make changes to this setup using the `resourcesDirectory` option:
+
+```js
+new GoogleAssistantCli({
+  resourcesDirectory: 'resources',
+})
+```
+
+During the [`build` command](#build-command), these files are then copied over to the `build` folder.
 
 ### files
 
