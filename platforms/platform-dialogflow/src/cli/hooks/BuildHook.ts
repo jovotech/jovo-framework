@@ -17,7 +17,7 @@ import {
   wait,
 } from '@jovotech/cli-core';
 import { FileBuilder, FileObject, FileObjectEntry } from '@jovotech/filebuilder';
-import { JovoModelData, NativeFileInformation } from '@jovotech/model';
+import { JovoModelData, JovoModelDataV3, NativeFileInformation } from '@jovotech/model';
 import { JovoModelDialogflow } from '@jovotech/model-dialogflow';
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs';
 import _get from 'lodash.get';
@@ -261,8 +261,11 @@ export class BuildHook extends PluginHook<BuildEvents> {
 
     try {
       for (const resolvedLocale of resolvedLocales) {
-        const model: JovoModelData = await this.getJovoModel(modelLocale);
-        const jovoModel: JovoModelDialogflow = new JovoModelDialogflow(model, resolvedLocale);
+        const model: JovoModelData | JovoModelDataV3 = await this.getJovoModel(modelLocale);
+        const jovoModel: JovoModelDialogflow = new JovoModelDialogflow(
+          model as JovoModelData,
+          resolvedLocale,
+        );
         const dialogflowModelFiles: NativeFileInformation[] =
           jovoModel.exportNative() as NativeFileInformation[];
 
@@ -443,8 +446,8 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * Loads a Jovo model specified by a locale and merges it with plugin-specific models.
    * @param locale - The locale that specifies which model to load.
    */
-  async getJovoModel(locale: string): Promise<JovoModelData> {
-    const model: JovoModelData = await this.$cli.$project!.getModel(locale);
+  async getJovoModel(locale: string): Promise<JovoModelData | JovoModelDataV3> {
+    const model: JovoModelData | JovoModelDataV3 = await this.$cli.$project!.getModel(locale);
 
     // Merge model with configured language model in project.js.
     _mergeWith(

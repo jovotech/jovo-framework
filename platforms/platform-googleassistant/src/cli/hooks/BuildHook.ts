@@ -22,7 +22,7 @@ import {
 } from '@jovotech/cli-core';
 import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'fs';
-import { JovoModelData, NativeFileInformation } from '@jovotech/model';
+import { JovoModelData, JovoModelDataV3, NativeFileInformation } from '@jovotech/model';
 import { JovoModelGoogle } from '@jovotech/model-google';
 import _get from 'lodash.get';
 import _has from 'lodash.has';
@@ -456,7 +456,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
 
     for (const locale of resolvedLocales) {
       const jovoModel = new JovoModelGoogle(
-        model,
+        model as JovoModelData,
         locale,
         this.$context.googleAssistant.defaultLocale,
       );
@@ -691,8 +691,8 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * Loads a Jovo model specified by a locale and merges it with plugin-specific models.
    * @param locale - The locale that specifies which model to load.
    */
-  async getJovoModel(locale: string): Promise<JovoModelData> {
-    const model: JovoModelData = await this.$cli.$project!.getModel(locale);
+  async getJovoModel(locale: string): Promise<JovoModelData | JovoModelDataV3> {
+    const model: JovoModelData | JovoModelDataV3 = await this.$cli.$project!.getModel(locale);
 
     // Merge model with configured language model in project.js.
     _mergeWith(

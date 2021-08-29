@@ -19,8 +19,8 @@ import {
 } from '@jovotech/cli-core';
 import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs';
-import { JovoModelData, NativeFileInformation } from '@jovotech/model';
-import { JovoModelAlexa, JovoModelAlexaData } from '@jovotech/model-alexa';
+import { JovoModelData, JovoModelDataV3, NativeFileInformation } from '@jovotech/model';
+import { JovoModelAlexa } from '@jovotech/model-alexa';
 import _get from 'lodash.get';
 import _has from 'lodash.has';
 import _merge from 'lodash.merge';
@@ -279,7 +279,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
       });
     }
 
-    const skillId = _get(this.$plugin.$config, 'options.skillId');
+    const skillId: string | undefined = _get(this.$plugin.$config, 'skillId');
     const skillIdPath = '[".ask/"]["ask-states.json"].profiles.default.skillId';
     // Check whether skill id has already been set.
     if (skillId && !_has(projectFiles, skillIdPath)) {
@@ -354,7 +354,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
 
     try {
       for (const locale of resolvedLocales) {
-        const jovoModel: JovoModelAlexa = new JovoModelAlexa(model, locale);
+        const jovoModel: JovoModelAlexa = new JovoModelAlexa(model as JovoModelData, locale);
         const alexaModelFiles: NativeFileInformation[] =
           jovoModel.exportNative() as NativeFileInformation[];
 
@@ -398,7 +398,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * Loads a platform-specific model.
    * @param locale - Locale of the model.
    */
-  getPlatformModel(locale: string): JovoModelAlexaData {
+  getPlatformModel(locale: string): JovoModelData {
     const content: string = readFileSync(this.$plugin.getModelPath(locale), 'utf-8');
     return JSON.parse(content);
   }
@@ -426,8 +426,8 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * Loads a Jovo model specified by a locale and merges it with plugin-specific models.
    * @param locale - The locale that specifies which model to load.
    */
-  async getJovoModel(locale: string): Promise<JovoModelData> {
-    const model: JovoModelData = await this.$cli.$project!.getModel(locale);
+  async getJovoModel(locale: string): Promise<JovoModelData | JovoModelDataV3> {
+    const model: JovoModelData | JovoModelDataV3 = await this.$cli.$project!.getModel(locale);
 
     // Merge model with configured language model in project.js.
     _mergeWith(
