@@ -28,7 +28,7 @@ Depending on the input type, the `$input` object contains different properties. 
 }
 ```
 
-If the request only contains raw text, the input of the type `TEXT` could look like this:
+If the request only contains raw text, the input of the [type `TEXT`](#text) could look like this:
 
 ```typescript
 {
@@ -125,6 +125,41 @@ A `TEXT` input happens when a platform sends raw text input.
 
 This text gets turned into structured meaning by using an [NLU integration](./nlu.md).
 
+Here is an example how the result could look like:
+
+```typescript
+{
+  type: 'TEXT',
+  text: 'My name is Max',
+  nlu: {
+    intent: 'MyNameIsIntent',
+    entities: {
+      name: {
+        value: 'Max',
+      },
+    },
+  },
+}
+```
+
+If the intent from the NLU is part of the [`intentMap` configuration](./app-config.md#intentmap), the original intent stays in the `nlu` object and an additonal `intent` property is added to `$input`:
+
+```typescript
+{
+  type: 'TEXT',
+  text: 'My name is Max',
+  nlu: {
+    intent: 'MyNameIsIntent',
+    entities: {
+      name: {
+        value: 'Max',
+      },
+    },
+  },
+  intent: 'MappedMyNameIsIntent',
+}
+```
+
 ### SPEECH
 
 A `SPEECH` input means that the platform sent a request that contains a speech audio file that needs to get transcribed.
@@ -133,12 +168,13 @@ A `SPEECH` input means that the platform sent a request that contains a speech a
 {
   type: 'SPEECH',
   audio: {
-    // Recorded audio
+    base64: '...',
+    sampleRate: 44100,
   },
 }
 ```
 
-This audio gets turned into transcribed speech by using an ASR integration.
+The `audio` typically includes a [Base64](https://en.wikipedia.org/wiki/Base64) string and a sample rate. It usually gets turned into transcribed speech by using an ASR integration.
 
 ### TRANSCRIBED_SPEECH
 

@@ -4,9 +4,9 @@ The Google Assistant [platform integration](../docs/platforms.md) allows you to 
 
 - [Getting Started](#getting-started)
 - [Platform-Specific Features](#platform-specific-features)
-    - [Google Assistant Concepts](#google-assistant-concepts)
-    - [User](#user)
-    - [Output](#output)
+  - [Google Assistant Concepts](#google-assistant-concepts)
+  - [User](#user)
+  - [Output](#output)
 - [Deployment](#deployment)
 
 ## Getting Started
@@ -14,7 +14,7 @@ The Google Assistant [platform integration](../docs/platforms.md) allows you to 
 You can install the plugin like this:
 
 ```sh
-$ npm install @jovotech/platform-googleassistant --save
+$ npm install @jovotech/platform-googleassistant
 ```
 
 Add it as plugin to your [app configuration](../docs/app-config.md), e.g. `app.ts`:

@@ -82,7 +82,9 @@ export class AlexaRequest extends JovoRequest {
   }
 
   getInputType(): InputTypeLike | undefined {
-    return this.request?.type ? ALEXA_REQUEST_TYPE_TO_INPUT_TYPE_MAP[this.request.type] : undefined;
+    return this.request?.type
+      ? ALEXA_REQUEST_TYPE_TO_INPUT_TYPE_MAP[this.request.type] || this.request.type
+      : undefined;
   }
   getInputText(): JovoInput['text'] {
     return;

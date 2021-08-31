@@ -22,7 +22,7 @@ Smaller NLP.js language models are fast to train and can even be used on serverl
 You can install the plugin like this:
 
 ```sh
-$ npm install @jovotech/nlu-nlpjs --save
+$ npm install @jovotech/nlu-nlpjs
 ```
 
 NLU plugins can be added to Jovo platform integrations. Here is an example how it can be added to the Jovo Core Platform in `app.ts`:

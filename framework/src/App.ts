@@ -128,29 +128,7 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
     const jovo = relatedPlatform.createJovoInstance(this, handleRequest);
 
     // RIDR-pipeline
-    await handleRequest.middlewareCollection.run(
-      [
-        'request.start',
-        'request',
-        'request.end',
-
-        'interpretation.start',
-        'interpretation.asr',
-        'interpretation.nlu',
-        'interpretation.end',
-
-        'dialogue.start',
-        'dialogue.router',
-        'dialogue.logic',
-        'dialogue.end',
-
-        'response.start',
-        'response.output',
-        'response.tts',
-        'response.end',
-      ],
-      jovo,
-    );
+    await handleRequest.middlewareCollection.run(APP_MIDDLEWARES.slice(), jovo);
 
     await handleRequest.dismount();
 
