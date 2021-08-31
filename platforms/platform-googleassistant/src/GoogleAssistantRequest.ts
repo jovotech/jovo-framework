@@ -37,7 +37,6 @@ export class GoogleAssistantRequest extends JovoRequest {
           id: this.intent?.params[param].resolved as string,
           value: this.intent?.params[param].original,
           key: this.intent?.params[param].resolved as string,
-          name: param,
         };
       }
     }
