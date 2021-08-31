@@ -13,7 +13,6 @@ export interface SessionData extends Data {}
 export interface UserData extends Data {}
 
 export interface Entity extends UnknownObject {
-  name: string;
   id?: string;
   key?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

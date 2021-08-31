@@ -60,12 +60,7 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
         nluData.entities = {};
       }
 
-      // TODO: Why is this a map when we do have to provide the name in the object itself?
-      nluData.entities[slot.slotName] = {
-        name: slot.slotName,
-        key: slot.value.value,
-        value: slot.rawValue,
-      };
+      nluData.entities[slot.slotName] = { key: slot.rawValue, value: slot.value.value };
     }
 
     return nluData;

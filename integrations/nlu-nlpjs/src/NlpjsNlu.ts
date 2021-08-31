@@ -8,8 +8,8 @@ import {
   Platform,
   UnknownObject,
 } from '@jovotech/framework';
-import { promises } from 'fs';
 import { JovoModelNlpjs } from '@jovotech/model-nlpjs';
+import { promises } from 'fs';
 import { join } from 'path';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -100,7 +100,6 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
         entityMap[entity.entity] = {
           id: entity.option,
           key: entity.option,
-          name: entity.entity,
           value: entity.utteranceText,
         };
         return entityMap;
