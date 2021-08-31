@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/platform-core",
-  "version": "4.0.0-beta.1",
+  "version": "4.0.0-beta.2",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -26,7 +26,7 @@
     "lodash.merge": "^4.6.2"
   },
   "devDependencies": {
-    "@jovotech/framework": "^4.0.0-beta.1",
+    "@jovotech/framework": "^4.0.0-beta.2",
     "@types/jest": "^26.0.20",
     "@types/lodash.merge": "^4.6.6",
     "@types/node": "^10.17.50",
