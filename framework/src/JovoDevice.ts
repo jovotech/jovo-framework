@@ -15,20 +15,14 @@ export abstract class JovoDevice<
   JOVO extends Jovo = Jovo,
   CAPABILITY extends CapabilityType = CapabilityType,
 > {
-  capabilities: CAPABILITY[] = [];
+  capabilities: CAPABILITY[];
 
   public constructor(readonly jovo: JOVO) {
-    this.setCapabilitiesFromRequest();
+    this.capabilities = (jovo.$request.getDeviceCapabilities() as CAPABILITY[]) || [];
   }
-
-  protected abstract setCapabilitiesFromRequest(): void;
 
   supports(capability: CAPABILITY): boolean {
     return this.capabilities.includes(capability);
-  }
-
-  addCapability(...capability: CAPABILITY[]): void {
-    this.capabilities = this.capabilities.concat(capability);
   }
 
   toJSON(): JovoDevice<JOVO> {

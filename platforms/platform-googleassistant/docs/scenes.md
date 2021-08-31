@@ -83,7 +83,7 @@ To activate a scene, you can actively invoke it with a global intent, or transit
 {
   // ...
   platforms: {
-    GoogleAssistant: {
+    googleAssistant: {
       nativeResponse: {
         scene: {
           next: {

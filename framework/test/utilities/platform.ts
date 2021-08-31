@@ -5,6 +5,7 @@ import {
 } from '@jovotech/output';
 import {
   AnyObject,
+  CapabilityType,
   EntityMap,
   ExtensibleConfig,
   InputTypeLike,
@@ -51,6 +52,10 @@ export class ExamplePlatformRequest extends JovoRequest {
   isNewSession(): boolean | undefined {
     return undefined;
   }
+
+  getDeviceCapabilities(): CapabilityType[] | undefined {
+    return;
+  }
 }
 
 export class ExamplePlatformResponse extends JovoResponse {}
@@ -88,11 +93,7 @@ export class ExamplePlatformUser extends JovoUser<ExamplePlatformJovo> {
   }
 }
 
-export class ExamplePlatformDevice extends JovoDevice<ExamplePlatformJovo> {
-  protected setCapabilitiesFromRequest(): void {
-    //
-  }
-}
+export class ExamplePlatformDevice extends JovoDevice<ExamplePlatformJovo> {}
 
 export class ExamplePlatform extends Platform<
   ExamplePlatformRequest,

@@ -9,7 +9,6 @@ This [database integration](../../docs/databases.md) allows you to store user sp
 - [Configuration](#configuration)
   - [table](#table)
   - [libraryConfig](#libraryconfig)
-- [Troubleshooting](#troubleshooting)
 
 ## Introduction
 
@@ -22,7 +21,7 @@ If you use AWS for your deployment, we recommend [FileDb](../db-filedb/README.md
 You can install the plugin like this:
 
 ```sh
-$ npm install @jovotech/db-dynamodb --save
+$ npm install @jovotech/db-dynamodb
 ```
 
 Add it as plugin to any stage you like, e.g. `app.prod.ts`:

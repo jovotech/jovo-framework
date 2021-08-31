@@ -1,6 +1,6 @@
 # Amazon Alexa Platform Integration
 
-The Amazon Alexa [platform integration](../docs/platforms.md) allows you to build custom Alexa Skills using Jovo.
+The Amazon Alexa [platform integration](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/platforms.md) allows you to build custom Alexa Skills using Jovo.
 
 - [Getting Started](#getting-started)
 - [Platform-Specific Features](#platform-specific-features)
@@ -12,10 +12,10 @@ The Amazon Alexa [platform integration](../docs/platforms.md) allows you to buil
 You can install the plugin like this:
 
 ```sh
-$ npm install @jovotech/platform-alexa --save
+$ npm install @jovotech/platform-alexa
 ```
 
-Add it as plugin to your [app configuration](../docs/app-config.md), e.g. `app.ts`:
+Add it as plugin to your [app configuration](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/platforms.md), e.g. `app.ts`:
 
 ```typescript
 import { App } from '@jovotech/framework';
@@ -30,7 +30,7 @@ const app = new App({
 });
 ```
 
-You can also add the CLI plugin to your [project configuration](../docs/project-config.md) in `jovo.project.js`:
+You can also add the CLI plugin to your [project configuration](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/project-config.md) in `jovo.project.js`:
 
 ```js
 const { ProjectConfig } = require('@jovotech/cli');
@@ -45,6 +45,8 @@ const project = new ProjectConfig({
   ]
 });
 ```
+
+[Learn more about the Alexa project configuration here](./docs/project-config.md).
 
 ## Platform-Specific Features
 
@@ -90,7 +92,7 @@ async getEmail() {
       return this.$send({
         message: 'Please grant access to your email address.',
         platforms: {
-          Alexa: {
+          alexa: {
             card: {
               type: 'AskForPermissionsConsent',
               permissions: [

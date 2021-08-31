@@ -10,7 +10,7 @@ export type ComponentConstructor<COMPONENT extends BaseComponent = BaseComponent
 ) => COMPONENT;
 
 export type ComponentConfig<COMPONENT extends BaseComponent = BaseComponent> =
-  COMPONENT['$component']['$config'];
+  COMPONENT['$component']['config'];
 
 export class ComponentDeclaration<
   COMPONENT_CONSTRUCTOR extends ComponentConstructor = ComponentConstructor,
@@ -26,6 +26,6 @@ export abstract class BaseComponent<
   CONFIG extends UnknownObject = UnknownObject,
 > extends JovoProxy {
   get $component(): JovoComponentInfo<DATA, CONFIG> {
-    return this.$component as { $data: DATA; $config: CONFIG | undefined };
+    return this.$component as { data: DATA; config: CONFIG | undefined };
   }
 }

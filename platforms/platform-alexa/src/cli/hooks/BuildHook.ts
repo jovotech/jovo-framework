@@ -19,8 +19,8 @@ import {
 } from '@jovotech/cli-core';
 import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs';
-import { JovoModelData, NativeFileInformation } from '@jovotech/model';
-import { JovoModelAlexa, JovoModelAlexaData } from '@jovotech/model-alexa';
+import { JovoModelData, JovoModelDataV3, NativeFileInformation } from '@jovotech/model';
+import { JovoModelAlexa } from '@jovotech/model-alexa';
 import _get from 'lodash.get';
 import _has from 'lodash.has';
 import _merge from 'lodash.merge';
@@ -96,7 +96,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
 
     for (const locale of this.$context.locales) {
       const localeTask = new Task(locale, async () => {
-        this.$cli.$project!.validateModel(locale, JovoModelAlexa.getValidator());
+        await this.$cli.$project!.validateModel(locale, JovoModelAlexa.getValidator());
         await wait(500);
       });
 
@@ -279,7 +279,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
       });
     }
 
-    const skillId = _get(this.$plugin.$config, 'options.skillId');
+    const skillId: string | undefined = _get(this.$plugin.$config, 'skillId');
     const skillIdPath = '[".ask/"]["ask-states.json"].profiles.default.skillId';
     // Check whether skill id has already been set.
     if (skillId && !_has(projectFiles, skillIdPath)) {
@@ -336,7 +336,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
         resolvedLocalesOutput === locale ? '' : `(${resolvedLocalesOutput})`;
 
       const localeTask: Task = new Task(`${locale} ${taskDetails}`, async () => {
-        this.buildLanguageModel(locale, resolvedLocales);
+        await this.buildLanguageModel(locale, resolvedLocales);
         await wait(500);
       });
       localeTask.indent(4);
@@ -349,12 +349,12 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * @param modelLocale - Locale of the Jovo model.
    * @param resolvedLocales - Locales to which to resolve the modelLocale.
    */
-  buildLanguageModel(modelLocale: string, resolvedLocales: string[]): void {
-    const model = this.getJovoModel(modelLocale);
+  async buildLanguageModel(modelLocale: string, resolvedLocales: string[]): Promise<void> {
+    const model = await this.getJovoModel(modelLocale);
 
     try {
       for (const locale of resolvedLocales) {
-        const jovoModel: JovoModelAlexa = new JovoModelAlexa(model, locale);
+        const jovoModel: JovoModelAlexa = new JovoModelAlexa(model as JovoModelData, locale);
         const alexaModelFiles: NativeFileInformation[] =
           jovoModel.exportNative() as NativeFileInformation[];
 
@@ -398,7 +398,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * Loads a platform-specific model.
    * @param locale - Locale of the model.
    */
-  getPlatformModel(locale: string): JovoModelAlexaData {
+  getPlatformModel(locale: string): JovoModelData {
     const content: string = readFileSync(this.$plugin.getModelPath(locale), 'utf-8');
     return JSON.parse(content);
   }
@@ -426,8 +426,8 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * Loads a Jovo model specified by a locale and merges it with plugin-specific models.
    * @param locale - The locale that specifies which model to load.
    */
-  getJovoModel(locale: string): JovoModelData {
-    const model: JovoModelData = this.$cli.$project!.getModel(locale);
+  async getJovoModel(locale: string): Promise<JovoModelData | JovoModelDataV3> {
+    const model: JovoModelData | JovoModelDataV3 = await this.$cli.$project!.getModel(locale);
 
     // Merge model with configured language model in project.js.
     _mergeWith(

@@ -85,7 +85,6 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
     entityMap[entityAlias] = {
       id: entityAlias,
       key: entityAlias,
-      name: rasaEntity.entity,
       value: rasaEntity.value,
     };
 

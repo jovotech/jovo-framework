@@ -57,8 +57,8 @@ export interface JovoComponentInfo<
   DATA extends ComponentData = ComponentData,
   CONFIG extends UnknownObject = UnknownObject,
 > {
-  $data: DATA;
-  $config?: CONFIG;
+  data: DATA;
+  config?: CONFIG;
 }
 
 export interface DelegateOptions<
@@ -161,24 +161,24 @@ export abstract class Jovo<
     // global components should not have component-data
     if (!this.$state?.length) {
       return {
-        $data: {},
+        data: {},
       };
     }
     const latestStateStackItem = this.$state[this.$state.length - 1];
     return {
-      get $data(): ComponentData {
+      get data(): ComponentData {
         if (!latestStateStackItem.data) {
           latestStateStackItem.data = {};
         }
         return latestStateStackItem.data;
       },
-      set $data(value: ComponentData) {
+      set data(value: ComponentData) {
         if (!latestStateStackItem.data) {
           latestStateStackItem.data = {};
         }
         latestStateStackItem.data = value;
       },
-      get $config(): UnknownObject | undefined {
+      get config(): UnknownObject | undefined {
         const deserializedStateConfig = _cloneDeep(latestStateStackItem.config);
         if (deserializedStateConfig) {
           // deserialize all found Output-constructors
@@ -203,7 +203,7 @@ export abstract class Jovo<
         }
         return deserializedStateConfig;
       },
-      set $config(value: UnknownObject | undefined) {
+      set config(value: UnknownObject | undefined) {
         latestStateStackItem.config = value;
       },
     };

@@ -157,7 +157,7 @@ Under the hood, the `AskForRemindersPermissionOutput` extends the `AskForPermiss
 {
   message: this.options.message,
   platforms: {
-    Alexa: {
+    alexa: {
       nativeResponse: {
         response: {
           directives: [
@@ -231,7 +231,7 @@ Under the hood, the `AskForPermissionsConsentCardOutput` looks like this:
 {
   message: this.options.message,
   platforms: {
-    Alexa: {
+    alexa: {
       nativeResponse: {
         response: {
           card: {

@@ -20,7 +20,7 @@
   "dependencies": {
     "@jovotech/db-filedb": "^4.0.0-beta.1",
     "@jovotech/framework": "^4.0.0-beta.1",
-    "@jovotech/platform-alexa": "^4.0.0-beta.2",
+    "@jovotech/platform-alexa": "^4.0.0-beta.3",
     "@jovotech/plugin-debugger": "^4.0.0-beta.1",
     "@jovotech/server-express": "^4.0.0-beta.1",
     "@jovotech/server-lambda": "^4.0.0-beta.1"

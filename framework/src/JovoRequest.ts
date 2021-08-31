@@ -1,4 +1,4 @@
-import { DEFAULT_INPUT_TYPE, InputTypeLike, JovoInput, UnknownObject } from './index';
+import { CapabilityType, DEFAULT_INPUT_TYPE, InputTypeLike, JovoInput, UnknownObject } from './index';
 import { JovoInputBuilder } from './JovoInputBuilder';
 import { JovoSession } from './JovoSession';
 
@@ -40,4 +40,6 @@ export abstract class JovoRequest {
           isNew: isNewSession,
         };
   }
+
+  abstract getDeviceCapabilities(): CapabilityType[] | undefined;
 }
