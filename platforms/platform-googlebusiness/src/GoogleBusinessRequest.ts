@@ -1,11 +1,5 @@
-import {
-  EntityMap,
-  InputType,
-  InputTypeLike,
-  JovoInput,
-  JovoRequest,
-  UnknownObject,
-} from '@jovotech/framework';
+import { EntityMap, InputType, InputTypeLike, JovoInput, JovoRequest, UnknownObject } from '@jovotech/framework';
+import { GoogleBusinessCapabilityType } from './GoogleBusinessDevice';
 import { Receipt } from './interfaces';
 
 export class GoogleBusinessRequest extends JovoRequest {
@@ -79,5 +73,9 @@ export class GoogleBusinessRequest extends JovoRequest {
   }
   isNewSession(): boolean | undefined {
     return undefined;
+  }
+
+  getDeviceCapabilities(): GoogleBusinessCapabilityType[] | undefined {
+    return;
   }
 }
