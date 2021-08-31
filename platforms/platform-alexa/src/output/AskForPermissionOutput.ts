@@ -12,7 +12,7 @@ export class AskForPermissionOutput extends BaseOutput<AskForPermissionOutputOpt
     return {
       message: this.options.message,
       platforms: {
-        Alexa: {
+        alexa: {
           nativeResponse: {
             response: {
               directives: [

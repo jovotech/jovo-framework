@@ -12,7 +12,7 @@ export class AskForPermissionConsentCardOutput extends BaseOutput<AskForPermissi
     return {
       message: this.options.message,
       platforms: {
-        Alexa: {
+        alexa: {
           nativeResponse: {
             response: {
               card: {
