@@ -1,4 +1,10 @@
-import { InputTypeLike, JovoInput, JovoRequest, OmitWhere, UnknownObject } from '@jovotech/framework';
+import {
+  InputTypeLike,
+  JovoInput,
+  JovoRequest,
+  OmitWhere,
+  UnknownObject,
+} from '@jovotech/framework';
 import { CoreCapabilityType } from './CoreDevice';
 import { Context } from './interfaces';
 
