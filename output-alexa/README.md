@@ -34,7 +34,7 @@ You can also add platform-specific output to an output template. [Learn more abo
 {
   // ...
   platforms: {
-    Alexa: {
+    alexa: {
       // ...
     }
   }
@@ -224,13 +224,13 @@ In the example above, a tap on an element triggers the `ElementIntent` and conta
 
 It is possible to add platform-specific output elements to an output template. [Learn more in the Jovo output documentation](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md#platform-specific-output-elements).
 
-For Alexa, you can add output elements inside an `Alexa` object:
+For Alexa, you can add output elements inside an `alexa` object:
 
 ```typescript
 {
   // ...
   platforms: {
-    Alexa: {
+    alexa: {
       // ...
     }
   }
@@ -245,7 +245,7 @@ The [`nativeResponse` property](https://github.com/jovotech/jovo-output/blob/mas
 {
   // ...
   platforms: {
-    Alexa: {
+    alexa: {
       nativeResponse: {
         // ...
       }
@@ -260,7 +260,7 @@ For example, an APL RenderDocument directive ([see official Alexa docs](https://
 {
   // ...
   platforms: {
-    Alexa: {
+    alexa: {
       nativeResponse: {
         response: {
           directives: [

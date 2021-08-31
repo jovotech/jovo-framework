@@ -27,7 +27,7 @@ You can also add platform-specific output to an output template. [Learn more abo
 {
   // ...
   platforms: {
-    Core: {
+    core: {
       // ...
     }
   }
@@ -45,13 +45,13 @@ The Core Platform supports exactly the same output elements as they appear in th
 
 It is possible to add platform-specific output elements to an output template. [Learn more in the Jovo output documentation](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md#platform-specific-output-elements).
 
-For Core, you can add output elements inside an `Core` object:
+For Core, you can add output elements inside an `core` object:
 
 ```typescript
 {
   // ...
   platforms: {
-    Core: {
+    core: {
       // ...
     }
   }
@@ -66,7 +66,7 @@ The [`nativeResponse` property](https://github.com/jovotech/jovo-output/blob/mas
 {
   // ...
   platforms: {
-    Core: {
+    core: {
       nativeResponse: {
         // ...
       }

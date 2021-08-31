@@ -32,7 +32,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
   GoogleAssistantResponse,
   OutputTemplateConverterStrategyConfig
 > {
-  platformName = 'GoogleAssistant';
+  platformName = 'googleAssistant' as const;
   responseClass = GoogleAssistantResponse;
 
   protected sanitizeOutput(output: OutputTemplate): OutputTemplate {
@@ -181,8 +181,8 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
       }
     }
 
-    if (output.platforms?.GoogleAssistant?.nativeResponse) {
-      mergeInstances(response, output.platforms.GoogleAssistant.nativeResponse);
+    if (output.platforms?.googleAssistant?.nativeResponse) {
+      mergeInstances(response, output.platforms.googleAssistant.nativeResponse);
     }
 
     return response;
