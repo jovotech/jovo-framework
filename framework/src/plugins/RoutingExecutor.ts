@@ -216,7 +216,9 @@ export class RoutingExecutor {
   private async areHandlerConditionsFulfilled(metadata: HandlerMetadata): Promise<boolean> {
     const isPlatformSupported =
       !metadata.options?.platforms?.length ||
-      metadata.options?.platforms?.includes(this.jovo.$platform.constructor.name);
+      metadata.options?.platforms?.includes(
+        this.jovo.$platform.outputTemplateConverterStrategy.platformName,
+      );
     const isConditionFulfilled = !metadata.options?.if || (await metadata.options?.if?.(this.jovo));
     return isPlatformSupported && isConditionFulfilled;
   }

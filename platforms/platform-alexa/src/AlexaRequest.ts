@@ -1,4 +1,5 @@
 import {
+  Capability,
   Entity,
   EntityMap,
   InputType,
@@ -8,6 +9,7 @@ import {
   UnknownObject,
 } from '@jovotech/framework';
 import { ResolutionPerAuthorityStatusCode } from '@jovotech/output-alexa';
+import { AlexaCapability, AlexaCapabilityType } from './AlexaDevice';
 import { DYNAMIC_ENTITY_MATCHES_PREFIX, STATIC_ENTITY_MATCHES_PREFIX } from './constants';
 import { AuthorityResolution, Context, Request, Session } from './interfaces';
 
@@ -113,5 +115,20 @@ export class AlexaRequest extends JovoRequest {
 
   getApiAccessToken(): string {
     return this.context!.System.apiAccessToken;
+  }
+
+  getDeviceCapabilities(): AlexaCapabilityType[] | undefined {
+    const supportedInterfaces = this.context?.System?.device?.supportedInterfaces;
+    if (!supportedInterfaces) {
+      return;
+    }
+    const capabilities: AlexaCapabilityType[] = [Capability.Audio];
+    if (supportedInterfaces.AudioPlayer) {
+      capabilities.push(Capability.LongformAudio);
+    }
+    if (supportedInterfaces['Alexa.Presentation.APL']) {
+      capabilities.push(Capability.Screen, AlexaCapability.Apl);
+    }
+    return capabilities;
   }
 }

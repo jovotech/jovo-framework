@@ -1,4 +1,5 @@
 import {
+  Capability,
   EntityMap,
   InputType,
   InputTypeLike,
@@ -7,7 +8,9 @@ import {
   UnknownObject,
 } from '@jovotech/framework';
 import type { Device, Home, Scene, Session, User } from '@jovotech/output-googleassistant';
+import { Capability as NativeCapability } from '@jovotech/output-googleassistant';
 import { GoogleAssistantSystemInputType, GoogleAssistantSystemIntent } from './enums';
+import { GoogleAssistantCapability, GoogleAssistantCapabilityType } from './GoogleAssistantDevice';
 import { Context, Handler, Intent } from './interfaces';
 
 export class GoogleAssistantRequest extends JovoRequest {
@@ -73,5 +76,29 @@ export class GoogleAssistantRequest extends JovoRequest {
   }
   isNewSession(): boolean | undefined {
     return !this.getSessionData();
+  }
+
+  getDeviceCapabilities(): GoogleAssistantCapabilityType[] | undefined {
+    const supportedCapabilities = this.device?.capabilities as GoogleAssistantCapabilityType[];
+    if (!supportedCapabilities) {
+      return;
+    }
+    const capabilities: GoogleAssistantCapabilityType[] = [];
+    if (supportedCapabilities?.includes(NativeCapability.Speech)) {
+      capabilities.push(Capability.Audio);
+    }
+    if (supportedCapabilities?.includes(NativeCapability.LongFormAudio)) {
+      capabilities.push(Capability.LongformAudio);
+    }
+    if (supportedCapabilities?.includes(NativeCapability.RichResponse)) {
+      capabilities.push(Capability.Screen);
+    }
+    if (supportedCapabilities?.includes(GoogleAssistantCapability.WebLink)) {
+      capabilities.push(GoogleAssistantCapability.WebLink);
+    }
+    if (supportedCapabilities?.includes(GoogleAssistantCapability.InteractiveCanvas)) {
+      capabilities.push(GoogleAssistantCapability.InteractiveCanvas);
+    }
+    return capabilities;
   }
 }

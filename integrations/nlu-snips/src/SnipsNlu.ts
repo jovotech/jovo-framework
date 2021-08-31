@@ -69,10 +69,12 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
   /**
    * Asynchronously trains dynamic entities. Sends the relevant portion of the Jovo langauge model to
    * the Snips NLU server.
-   * @param handleRequest - Current HandleRequest object
    * @param jovo - Current Jovo object
    */
   private async trainDynamicEntities(jovo: Jovo): Promise<void> {
+    if (!this.config.dynamicEntities?.enabled) {
+      return;
+    }
     const outputs: OutputTemplate[] = Array.isArray(jovo.$output) ? jovo.$output : [jovo.$output];
     const locale: string = this.getLocale(jovo.$request);
 
@@ -177,7 +179,14 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
           data: requestData,
         };
 
-        this.sendRequestToSnips(config);
+        // run in background
+        this.sendRequestToSnips(config)
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          .then(() => {})
+          .catch((e) => {
+            // eslint-disable-next-line no-console
+            console.error(e);
+          });
       }
     }
   }
