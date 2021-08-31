@@ -1,7 +1,7 @@
 {
   "name": "@jovotech/examples-mvp-v2",
   "private": true,
-  "version": "4.0.0-beta.2",
+  "version": "4.0.0-beta.3",
   "description": "A sample voice app that works with the Jovo Framework",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
@@ -17,7 +17,7 @@
   "dependencies": {
     "@jovotech/db-filedb": "^4.0.0-beta.1",
     "@jovotech/framework": "^4.0.0-beta.1",
-    "@jovotech/platform-alexa": "^4.0.0-beta.2",
+    "@jovotech/platform-alexa": "^4.0.0-beta.3",
     "@jovotech/plugin-debugger": "^4.0.0-beta.1",
     "@jovotech/server-express": "^4.0.0-beta.1",
     "@jovotech/server-lambda": "^4.0.0-beta.1"
