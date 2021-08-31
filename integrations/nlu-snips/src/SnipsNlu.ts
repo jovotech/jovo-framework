@@ -189,6 +189,7 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
           // eslint-disable-next-line @typescript-eslint/no-empty-function
           .then(() => {})
           .catch((e) => {
+            // eslint-disable-next-line no-console
             console.error(e);
           });
       }
