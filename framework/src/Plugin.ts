@@ -36,7 +36,7 @@ export abstract class Plugin<CONFIG extends PluginConfig = PluginConfig> {
 
   /**
    * Lifecycle Hook: Called when a copy of every plugin is created and mounted onto HandleRequest.
-   * This happens on every request.
+   * This happens on every request and should be used for registering middleware-functions.
    * Can be asynchronous.
    * @param parent
    */
