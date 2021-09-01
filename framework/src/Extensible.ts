@@ -16,15 +16,16 @@ export interface ExtensibleConfig extends PluginConfig {
   plugin?: ExtensiblePluginConfig;
 }
 
-export type ExtensibleInitConfig<CONFIG extends ExtensibleConfig = ExtensibleConfig> =
-  DeepPartial<CONFIG> & {
-    plugin?: never;
-    plugins?: Plugin[];
-  };
+export type ExtensibleInitConfig<CONFIG extends ExtensibleConfig = ExtensibleConfig> = DeepPartial<
+  CONFIG
+> & {
+  plugin?: never;
+  plugins?: Plugin[];
+};
 
 export abstract class Extensible<
   CONFIG extends ExtensibleConfig = ExtensibleConfig,
-  MIDDLEWARES extends string[] = string[],
+  MIDDLEWARES extends string[] = string[]
 > extends Plugin<CONFIG> {
   readonly plugins: ExtensiblePlugins;
   readonly middlewareCollection: MiddlewareCollection<MIDDLEWARES>;
@@ -97,16 +98,13 @@ export abstract class Extensible<
           continue;
         }
 
-        // get the current plugin's config
-        const config = plugin.config;
-
         // if this extensible has no plugin-config for nested child-plugins, create it
         if (!this.config.plugin) {
           this.config.plugin = {};
         }
         // make plugin-config of this extensible aware of the child-plugin's config
         // this way the config-tree will be rebuild with correct references
-        this.config.plugin[key] = config;
+        this.config.plugin[key] = plugin.config;
 
         await plugin.mount?.(this);
 
