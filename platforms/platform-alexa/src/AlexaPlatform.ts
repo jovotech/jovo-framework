@@ -21,7 +21,8 @@ export class AlexaPlatform extends Platform<
   AlexaPlatform,
   AlexaConfig
 > {
-  outputTemplateConverterStrategy: AlexaOutputTemplateConverterStrategy = new AlexaOutputTemplateConverterStrategy();
+  outputTemplateConverterStrategy: AlexaOutputTemplateConverterStrategy =
+    new AlexaOutputTemplateConverterStrategy();
   requestClass = AlexaRequest;
   jovoClass = Alexa;
   userClass = AlexaUser;

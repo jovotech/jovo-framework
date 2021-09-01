@@ -16,16 +16,15 @@ export interface ExtensibleConfig extends PluginConfig {
   plugin?: ExtensiblePluginConfig;
 }
 
-export type ExtensibleInitConfig<CONFIG extends ExtensibleConfig = ExtensibleConfig> = DeepPartial<
-  CONFIG
-> & {
-  plugin?: never;
-  plugins?: Plugin[];
-};
+export type ExtensibleInitConfig<CONFIG extends ExtensibleConfig = ExtensibleConfig> =
+  DeepPartial<CONFIG> & {
+    plugin?: never;
+    plugins?: Plugin[];
+  };
 
 export abstract class Extensible<
   CONFIG extends ExtensibleConfig = ExtensibleConfig,
-  MIDDLEWARES extends string[] = string[]
+  MIDDLEWARES extends string[] = string[],
 > extends Plugin<CONFIG> {
   readonly plugins: ExtensiblePlugins;
   readonly middlewareCollection: MiddlewareCollection<MIDDLEWARES>;

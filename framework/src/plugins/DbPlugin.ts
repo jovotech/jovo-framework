@@ -22,9 +22,9 @@ export interface DbItem extends AnyObject {
   updatedAt?: string;
 }
 
-export abstract class DbPlugin<CONFIG extends DbPluginConfig = DbPluginConfig> extends Plugin<
-  CONFIG
-> {
+export abstract class DbPlugin<
+  CONFIG extends DbPluginConfig = DbPluginConfig,
+> extends Plugin<CONFIG> {
   constructor(config?: ExtensibleInitConfig<CONFIG>) {
     super(config);
 
@@ -50,7 +50,7 @@ export abstract class DbPlugin<CONFIG extends DbPluginConfig = DbPluginConfig> e
   }
 
   getDefaultConfig(): CONFIG {
-    return ({
+    return {
       enabled: true,
       storedElements: {
         user: {
@@ -72,7 +72,7 @@ export abstract class DbPlugin<CONFIG extends DbPluginConfig = DbPluginConfig> e
         createdAt: true,
         updatedAt: true,
       },
-    } as unknown) as CONFIG;
+    } as unknown as CONFIG;
   }
 
   mount(parent: HandleRequest) {
