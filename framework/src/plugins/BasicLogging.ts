@@ -6,6 +6,12 @@ import _unset from 'lodash.unset';
 import { HandleRequest, Jovo } from '../index';
 import { Plugin, PluginConfig } from '../Plugin';
 
+declare module '../HandleRequest' {
+  interface HandleRequest {
+    basicLoggingStart: number;
+  }
+}
+
 declare module '../Extensible' {
   interface ExtensiblePluginConfig {
     BasicLogging?: BasicLoggingConfig;
@@ -80,7 +86,7 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
   }
 
   async logRequest(jovo: Jovo): Promise<void> {
-    jovo.$data._BASIC_LOGGING_START = new Date().getTime();
+    jovo.$handleRequest.basicLoggingStart = new Date().getTime();
 
     if (!this.config.request) {
       return;
@@ -126,8 +132,8 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
   }
 
   async logResponse(jovo: Jovo): Promise<void> {
-    jovo.$data._BASIC_LOGGING_STOP = new Date().getTime();
-    const duration = jovo.$data._BASIC_LOGGING_STOP - jovo.$data._BASIC_LOGGING_START;
+    const basicLoggingEnd = new Date().getTime();
+    const duration = basicLoggingEnd - jovo.$handleRequest.basicLoggingStart;
 
     if (!this.config.response) {
       return;
