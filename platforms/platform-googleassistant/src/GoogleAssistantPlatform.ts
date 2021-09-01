@@ -1,11 +1,4 @@
-import {
-  AnyObject,
-  App,
-  ExtensibleConfig,
-  Jovo,
-  MiddlewareFunction,
-  Platform,
-} from '@jovotech/framework';
+import { AnyObject, App, ExtensibleConfig, Jovo, Platform } from '@jovotech/framework';
 import {
   GoogleAssistantOutputTemplateConverterStrategy,
   GoogleAssistantResponse,
