@@ -32,14 +32,14 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
     return {};
   }
 
+  initialize(parent: App): Promise<void> | void {
+    return this.checkForDuplicateGlobalHandlers(parent);
+  }
+
   mount(parent: HandleRequest): Promise<void> | void {
     parent.middlewareCollection.use('dialogue.router', (jovo) => {
       return this.setRoute(jovo);
     });
-  }
-
-  initialize(parent: App): Promise<void> | void {
-    return this.checkForDuplicateGlobalHandlers(parent);
   }
 
   private async setRoute(jovo: Jovo): Promise<void> {

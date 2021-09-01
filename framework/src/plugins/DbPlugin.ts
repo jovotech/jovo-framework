@@ -1,4 +1,4 @@
-import { AnyObject } from '..';
+import { AnyObject, HandleRequest, InvalidParentError } from '..';
 import { ExtensibleInitConfig } from '../Extensible';
 import {
   DbPluginConfig,
@@ -22,9 +22,9 @@ export interface DbItem extends AnyObject {
   updatedAt?: string;
 }
 
-export abstract class DbPlugin<
-  CONFIG extends DbPluginConfig = DbPluginConfig,
-> extends Plugin<CONFIG> {
+export abstract class DbPlugin<CONFIG extends DbPluginConfig = DbPluginConfig> extends Plugin<
+  CONFIG
+> {
   constructor(config?: ExtensibleInitConfig<CONFIG>) {
     super(config);
 
@@ -48,8 +48,9 @@ export abstract class DbPlugin<
       }
     }
   }
+
   getDefaultConfig(): CONFIG {
-    return {
+    return ({
       enabled: true,
       storedElements: {
         user: {
@@ -71,8 +72,24 @@ export abstract class DbPlugin<
         createdAt: true,
         updatedAt: true,
       },
-    } as unknown as CONFIG;
+    } as unknown) as CONFIG;
   }
+
+  mount(parent: HandleRequest) {
+    if (!(parent instanceof HandleRequest)) {
+      throw new InvalidParentError(this.constructor.name, HandleRequest);
+    }
+
+    parent.middlewareCollection.use('request.end', (jovo) => {
+      return this.loadData(jovo);
+    });
+    parent.middlewareCollection.use('response.start', (jovo) => {
+      return this.saveData(jovo);
+    });
+  }
+
+  abstract loadData(jovo: Jovo): Promise<void>;
+  abstract saveData(jovo: Jovo): Promise<void>;
 
   async applyPersistableData(jovo: Jovo, item: DbItem): Promise<void> {
     const persistableData = jovo.getPersistableData();

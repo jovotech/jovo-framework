@@ -42,12 +42,18 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
   }
 
   async process(jovo: Jovo, text: string): Promise<NluData | undefined> {
+    if (!jovo.$session.id) {
+      throw new JovoError({
+        message: `Can not send request to Snips-NLU. Session-ID is missing.`,
+      });
+    }
+
     const config: AxiosRequestConfig = {
       url: this.config.serverPath,
       params: {
         locale: this.getLocale(jovo.$request).substring(0, 2),
         engine_id: this.config.engineId,
-        session_id: jovo.$session.id!,
+        session_id: jovo.$session.id,
       },
       data: { text },
     };

@@ -126,18 +126,27 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       throw new Error();
     }
 
-    this.socket.on(JovoDebuggerEvent.DebuggingAvailable, this.onDebuggingAvailable);
-    this.socket.on(
-      JovoDebuggerEvent.DebuggerLanguageModelRequest,
-      this.onDebuggerLanguageModelRequest,
-    );
-    this.socket.on(JovoDebuggerEvent.DebuggerRequest, this.onDebuggerRequest.bind(this, app));
-
-    app.middlewareCollection.use('request.start', this.onRequest);
-    app.middlewareCollection.use('response.end', this.onResponse);
+    this.socket.on(JovoDebuggerEvent.DebuggingAvailable, () => {
+      return this.onDebuggingAvailable();
+    });
+    this.socket.on(JovoDebuggerEvent.DebuggerLanguageModelRequest, () => {
+      return this.onDebuggerLanguageModelRequest();
+    });
+    this.socket.on(JovoDebuggerEvent.DebuggerRequest, (request: AnyObject) => {
+      return this.onDebuggerRequest(app, request);
+    });
 
     this.patchHandleRequestToIncludeUniqueId();
     this.patchPlatformsToCreateJovoAsProxy(app.platforms);
+  }
+
+  mount(parent: HandleRequest): Promise<void> | void {
+    parent.middlewareCollection.use('request.start', (jovo) => {
+      return this.onRequest(jovo);
+    });
+    parent.middlewareCollection.use('response.end', (jovo) => {
+      return this.onResponse(jovo);
+    });
   }
 
   // TODO: maybe find a better solution although this might work well because it is independent of the RIDR-pipeline
@@ -231,7 +240,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     };
   }
 
-  private onDebuggingAvailable = () => {
+  private onDebuggingAvailable(): void {
     if (!this.socket) {
       // TODO: implement error
       throw new Error();
@@ -252,9 +261,9 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       propagateStreamAsLog(process.stderr, this.socket);
       this.hasOverriddenWrite = true;
     }
-  };
+  }
 
-  private onDebuggerLanguageModelRequest = async () => {
+  private async onDebuggerLanguageModelRequest(): Promise<void> {
     if (!this.config.languageModelEnabled) return;
     if (!this.config.languageModelPath || !this.config.debuggerJsonPath) {
       // TODO: determine what to do (warning or error or nothing)
@@ -274,7 +283,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       console.warn('Can not emit language-model: Could not retrieve language-model.');
     }
     // TODO implement sending debuggerConfig if that is required
-  };
+  }
 
   private async getLanguageModel(): Promise<AnyObject> {
     const languageModel: AnyObject = {};
@@ -309,11 +318,11 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     return languageModel;
   }
 
-  private onDebuggerRequest = async (app: App, request: AnyObject) => {
+  private async onDebuggerRequest(app: App, request: AnyObject): Promise<void> {
     await app.handle(new MockServer(request));
-  };
+  }
 
-  private onRequest = (jovo: Jovo) => {
+  private onRequest(jovo: Jovo) {
     if (!this.socket) {
       // TODO: implement error
       throw new Error();
@@ -323,9 +332,9 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       data: jovo.$request,
     };
     this.socket.emit(JovoDebuggerEvent.AppRequest, payload);
-  };
+  }
 
-  private onResponse = (jovo: Jovo) => {
+  private onResponse(jovo: Jovo) {
     if (!this.socket) {
       // TODO: implement error
       throw new Error();
@@ -335,7 +344,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       data: jovo.$response,
     };
     this.socket.emit(JovoDebuggerEvent.AppResponse, payload);
-  };
+  }
 
   private async connectToWebhook() {
     const webhookId = await this.retrieveLocalWebhookId();
