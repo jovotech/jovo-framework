@@ -61,7 +61,7 @@ export class GoogleBusinessRequest extends JovoRequest {
   }
 
   getInputType(): InputTypeLike | undefined {
-    return InputType.Intent;
+    return InputType.Text;
   }
   getInputText(): JovoInput['text'] {
     return (
