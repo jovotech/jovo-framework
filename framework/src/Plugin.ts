@@ -22,6 +22,7 @@ export abstract class Plugin<CONFIG extends PluginConfig = PluginConfig> {
 
   /**
    * Lifecycle Hook: Called when the plugin is installed via `use`.
+   * This hook should be used for installing additional plugins or modifying the App-object in general.
    * Has to be synchronous.
    * @param parent
    */
