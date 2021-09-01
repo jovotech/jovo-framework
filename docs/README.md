@@ -14,7 +14,7 @@ Learn how to build your first project with Jovo `v4`, the framework that lets yo
 
 With Jovo `v4`, we've completely redesigned how Jovo apps are built. Over the last year, we translated everything we learned from 4 years Jovo into a completely new framework.
 
-If you're used to Jovo `v3`, you will see that there are quite some differences which make the framework more powerful, extensible, and fun to use. This guide is supposed to help you get started with a new Jovo project.
+If you're used to Jovo `v3`, you will see that there are a few differences which make the framework more powerful, extensible, and fun to use. Many of the underlying concepts stay the same, though. This guide is supposed to help you get started with a new Jovo project.
 
 Here are a few of the key concepts of Jovo `v4`:
 
