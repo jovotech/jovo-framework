@@ -17,10 +17,12 @@ import { v4 as uuidV4 } from 'uuid';
 import { SnipsNluConfig, SnipsNluResponse } from './interfaces';
 
 export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
-  install(parent: Extensible): Promise<void> | void {
-    super.install(parent);
+  mount(parent: Extensible): Promise<void> | void {
+    super.mount(parent);
 
-    parent.middlewareCollection.use('response.output', this.trainDynamicEntities.bind(this));
+    parent.middlewareCollection.use('response.output', (jovo) => {
+      return this.trainDynamicEntities(jovo);
+    });
   }
 
   getDefaultConfig(): SnipsNluConfig {
@@ -49,6 +51,7 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
       },
       data: { text },
     };
+
     const snipsNluResponse: SnipsNluResponse = await this.sendRequestToSnips(config);
     const nluData: NluData = {};
     if (snipsNluResponse.intent.intentName) {
