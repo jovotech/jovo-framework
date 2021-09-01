@@ -75,7 +75,7 @@ export abstract class DbPlugin<
     } as unknown as CONFIG;
   }
 
-  mount(parent: HandleRequest) {
+  mount(parent: HandleRequest): void {
     if (!(parent instanceof HandleRequest)) {
       throw new InvalidParentError(this.constructor.name, HandleRequest);
     }
