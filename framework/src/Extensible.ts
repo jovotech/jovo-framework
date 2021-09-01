@@ -45,9 +45,7 @@ export abstract class Extensible<
     plugins.forEach((plugin) => {
       const name = plugin.constructor.name;
       this.plugins[name] = plugin;
-      if (plugin.install) {
-        plugin.install?.(this);
-      }
+      plugin.install?.(this);
     });
     return this;
   }
