@@ -141,6 +141,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   }
 
   mount(parent: HandleRequest): Promise<void> | void {
+    this.socket = parent.app.plugins.JovoDebugger?.socket;
     parent.middlewareCollection.use('request.start', (jovo) => {
       return this.onRequest(jovo);
     });
