@@ -1,4 +1,4 @@
-import { OmitIndex, OutputTemplatePlatforms } from '../index';
+import { getValuesOfDecoratorRestParameter, OmitIndex, OutputTemplatePlatforms } from '../index';
 import { createHandlerOptionDecorator } from '../metadata/HandlerOptionMetadata';
 
 export type RegisteredPlatformName = Exclude<
@@ -6,12 +6,11 @@ export type RegisteredPlatformName = Exclude<
   number
 >;
 
-export function Platforms(...platforms: Array<RegisteredPlatformName | string>): MethodDecorator;
-export function Platforms(platforms: Array<RegisteredPlatformName | string>): MethodDecorator;
-export function Platforms(
-  platforms: RegisteredPlatformName | string | Array<RegisteredPlatformName | string>,
-): MethodDecorator {
+export function Platforms(platforms: Array<string | RegisteredPlatformName>): MethodDecorator;
+export function Platforms(...platforms: Array<string | RegisteredPlatformName>): MethodDecorator;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function Platforms(...platforms: any[]): MethodDecorator {
   return createHandlerOptionDecorator({
-    platforms: typeof platforms === 'string' ? [platforms] : platforms,
+    platforms: getValuesOfDecoratorRestParameter(platforms),
   });
 }
