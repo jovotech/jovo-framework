@@ -6,6 +6,7 @@ Learn how you can build your own plugins to customize and extend the Jovo Framew
 - [Jovo Plugin Structure](#jovo-plugin-structure)
   - [Plugin Lifecycle](#plugin-lifecycle)
   - [Plugin Configuration](#plugin-configuration)
+  - [Plugin Mounting](#plugin-mounting)
 - [Jovo Extensible Structure](#jovo-extensible-structure)
   - [Add a Plugin as a child](#add-a-plugin-as-a-child)
 - [Add a Plugin to the Jovo App](#add-a-plugin-to-the-jovo-app)
@@ -58,12 +59,12 @@ We recommend putting each plugin into a separate file in a `plugins` folder. In 
 
 Every plugin can have the following lifecycle-hooks by implementing the respective method:
 
-| name       | trigger                                                  | use-case                                                             | notes                    |
-| ---------- | -------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------ |
-| install    | plugin is installed via `use` (once)                     | installing other plugins as well as modifying `App`                  | Can only be synchronous. |
-| initialize | `App`.`initialize` is called (once)                      | time-consuming actions like API-calls that only need to be done once | Can be asynchronous.     |
-| mount      | plugins are mounted onto `HandleRequest` (every request) | registering middleware-functions                                     | Can be asynchronous.     |
-| dismount   | after the RIDR-lifecycle (every request)                 | cleanup                                                              | Can be asynchronous.     |
+| name       | trigger                                                                      | use-case                                                             | notes                    |
+| ---------- | ---------------------------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------ |
+| install    | plugin is installed via `use` (once)                                         | installing other plugins as well as modifying `App`                  | Can only be synchronous. |
+| initialize | `App`.`initialize` is called (once)                                          | time-consuming actions like API-calls that only need to be done once | Can be asynchronous.     |
+| mount      | plugins are [mounted](#plugin-mounting) onto `HandleRequest` (every request) | registering middleware-functions                                     | Can be asynchronous.     |
+| dismount   | after the RIDR-lifecycle (every request)                                     | cleanup                                                              | Can be asynchronous.     |
 
 For more details about signatures, take a look at the [here](../framework/src/Plugin.ts).
 
@@ -104,6 +105,17 @@ For more details about signatures and types, take a look at the [here](../framew
 
 Configuration can be passed to the constructor of the plugin which will be merged with the default configuration resulting from `getDefaultConfig()`, otherwise the default configuration will be used.
 
+### Plugin Mounting 
+
+On every request, the mounting takes place, which consists of the following steps:
+
+1. Every plugin and nested child-plugin in `App` is cloned
+2. The cloned plugins get referenced in the `config` and `plugins` of `HandleRequest` under same path as they were for `App`
+
+The `config` of the plugins is now the request-config. Changes to the request-config are just applied during this request and do not mutate the original config.
+
+Due to the request-config getting set during mounting, the `mount`-[lifecycle-hook](#plugin-lifecycle) should be used for registering middlewares.
+
 ## Jovo Extensible Structure
 
 Besides normal plugins, there are also plugins that extend `Extensible` which itself extends `Plugin`.
@@ -117,7 +129,7 @@ The main difference to normal plugins is, that these plugins have a `MiddlewareC
 
 Every class that extends `Platform`, as well as `App` extend `Extensible`.
 
-### Add a Plugin as a child 
+### Add a Plugin as a child
 
 Plugins can be added to the extensible on the following ways:
 
