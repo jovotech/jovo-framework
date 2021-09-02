@@ -80,7 +80,8 @@ export abstract class DbPlugin<
     for (const prop in persistableData) {
       if (
         persistableData.hasOwnProperty(prop) &&
-        (this.config.storedElements![prop] as StoredElement).enabled
+        (this.config.storedElements?.[prop] === true ||
+          (this.config.storedElements?.[prop] as StoredElement).enabled)
       ) {
         if (prop === 'history') {
           // different saving behavior for history elements
