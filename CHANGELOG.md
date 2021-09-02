@@ -2,6 +2,11 @@
 
 ### Latest Framework Version: 3.5.2<br><br>
 
+#### 2021-09-02
+
+##### `jovo-analytics-googleanalytics [3.5.9]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-googleanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-googleanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-googleanalytics)
+* [#1000](https://github.com/jovotech/jovo-framework/pull/1000) :bug: AlexaSkill Event Errors in GoogleAnalytics ([@freiSMS(https://github.com/freiSMS))
+* [#965](https://github.com/jovotech/jovo-framework/pull/965) :bug: Fix empty user ([@theBenForce(https://github.com/theBenForce))
 
 #### 2021-07-07 
 

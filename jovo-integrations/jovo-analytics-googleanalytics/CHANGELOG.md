@@ -4,6 +4,12 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+
+### 2021-09-02 [3.5.9]
+* [#1000](https://github.com/jovotech/jovo-framework/pull/1000) :bug: AlexaSkill Event Errors in GoogleAnalytics ([@freiSMS(https://github.com/freiSMS))
+* [#965](https://github.com/jovotech/jovo-framework/pull/965) :bug: Fix empty user ([@theBenForce(https://github.com/theBenForce))
+
+
 ### 2021-05-03 [3.5.6]
 * [#927](https://github.com/jovotech/jovo-framework/pull/927) :recycle: Google Analytics Allow overriding documentTitle/documentPath/documentHostName ([@kouz75(https://github.com/kouz75))
 
