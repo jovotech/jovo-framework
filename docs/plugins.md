@@ -3,17 +3,18 @@
 Learn how you can build your own plugins to customize and extend the Jovo Framework.
 
 - [Introduction](#introduction)
-- [Jovo Plugin Structure](#jovo-plugin-structure)
-  - [Plugin Lifecycle](#plugin-lifecycle)
+- [Get Started with Jovo Plugins](#get-started-with-jovo-plugins)
+  - [Basic Plugin Structure](#basic-plugin-structure)
   - [Plugin Configuration](#plugin-configuration)
+  - [Add a Plugin to the Jovo App](#add-a-plugin-to-the-jovo-app)
+- [Advanced Jovo Plugins](#advanced-jovo-plugins)
+  - [Plugin Lifecycle](#plugin-lifecycle)
   - [Plugin Mounting](#plugin-mounting)
-- [Jovo Extensible Structure](#jovo-extensible-structure)
-  - [Add a Plugin as a child](#add-a-plugin-as-a-child)
-- [Add a Plugin to the Jovo App](#add-a-plugin-to-the-jovo-app)
+  - [Jovo Extensible Structure](#jovo-extensible-structure)
 
 ## Introduction
 
-Jovo Plugins allow you to hook into the Jovo middleware architecture to extend or modify the framework without having to change its core code. Learn more about all middlewares in the [RIDR Lifecycle documentation](./ridr-lifecycle.md).
+Jovo plugins allow you to hook into the Jovo middleware architecture to extend or modify the framework without having to change its core code. Learn more about all middlewares in the [RIDR Lifecycle documentation](./ridr-lifecycle.md).
 
 Here are a few use cases where plugins can be helpful:
 
@@ -22,15 +23,18 @@ Here are a few use cases where plugins can be helpful:
 - Retrieve data: You could call an API, for example a content management system (CMS), and store the data in a property to use in [handlers](./handlers.md) or [output classes](./output-classes.md).
 - Our [database](./databases.md), [NLU](./nlu.md), and [platform integrations](./platforms.md) are also plugins.
 
-Learn more about the [structure of a Jovo plugin](#jovo-plugin-structure) below and how you can [add it to a Jovo app](#add-a-plugin-to-the-jovo-app).
+We recommend first taking a look at the [get started with Jovo plugins](#get-started-with-jovo-plugins) section before diving deeper into [advanced Jovo plugins](#advanced-jovo-plugins).
 
-## Jovo Plugin Structure
+## Get Started with Jovo Plugins
 
-As a bare minimum, a plugin is a class that correctly extends [`Plugin`](../framework/src/Plugin.ts).
+This section provides a first overview of Jovo plugins. First we're going to take a look at the [basic plugin structure](#basic-plugin-structure), then at potential [plugin configurations](#plugin-configuration). After that, we're going to [add the plugin to our Jovo app](#add-a-plugin-to-the-jovo-app).
+### Basic Plugin Structure
 
-Here is an example of a plugin `SomePlugin`:
+Here is an example of a basic plugin called `SomePlugin`:
 
 ```typescript
+// src/plugins/SomePlugin.ts
+
 import { Jovo, App, Plugin, Extensible, InvalidParentError } from '@jovotech/framework';
 
 export class SomePlugin extends Plugin {
@@ -53,29 +57,22 @@ export class SomePlugin extends Plugin {
 }
 ```
 
-We recommend putting each plugin into a separate file in a `plugins` folder. In this case, the `SomePlugin` above would be located at `plugins/SomePlugin`.
+The plugin above includes the following methods:
 
-### Plugin Lifecycle
+- `install`: Use the `middlewareCollection.use` method to hook into middlewares. You can add `before` and `after`, e.g. `before.platform.output`. Find all middlewares in the [RIDR docs](./ridr-lifecycle.md). Depending on the type of the plugin, it's also possible to use different (or additional) methods like `mount`. [Learn more about this and the plugin lifecycle below](#plugin-lifecycle).
+- Some method (in this example `someMethod`, but you can choose any name) that gets called when the middleware referenced in `install` gets executed. This is where your plugin gets to work. Through the `jovo` parameter, you have access to all [Jovo properties](./jovo-properties.md), e.g. `jovo.$output`.
+- `getDefaultConfig`: If your plugin uses configuration, you can return the default config here. This method has to be implemented by every plugin, even if it just returns an empty object as shown in the example above. Learn more in the [plugin configuration](#plugin-configuration) section below.
 
-Every plugin can have the following lifecycle-hooks by implementing the respective method:
-
-| name       | trigger                                                                      | use-case                                                             | notes                    |
-| ---------- | ---------------------------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------ |
-| install    | plugin is installed via `use` (once)                                         | installing other plugins as well as modifying `App`                  | Can only be synchronous. |
-| initialize | `App`.`initialize` is called (once)                                          | time-consuming actions like API-calls that only need to be done once | Can be asynchronous.     |
-| mount      | plugins are [mounted](#plugin-mounting) onto `HandleRequest` (every request) | registering middleware-functions                                     | Can be asynchronous.     |
-| dismount   | after the RIDR-lifecycle (every request)                                     | cleanup                                                              | Can be asynchronous.     |
-
-For more details about signatures, take a look at the [here](../framework/src/Plugin.ts).
+We recommend putting each plugin into a separate file in a `plugins` folder. In this case, the `SomePlugin` above would be located at `plugins/SomePlugin.ts`.
 
 ### Plugin Configuration
 
-Every plugin can have a configuration (for example API keys) by passing a generic type parameter that extends `PluginConfig` to `Plugin`.
+If your plugin needs configuration (for example API keys), you can pass a generic type parameter that extends `PluginConfig` to `Plugin` (see `Plugin<SomePluginConfig>` below).
 
 For `SomePlugin` it could look like this:
 
 ```typescript
-import { PluginConfig } from '@jovotech/framework';
+import { PluginConfig, /* ... */ } from '@jovotech/framework';
 
 // ...
 
@@ -87,6 +84,12 @@ export interface SomePluginConfig extends PluginConfig {
 export class SomePlugin extends Plugin<SomePluginConfig> {
   // ...
 
+  someMethod(jovo: Jovo) {
+    console.log(this.config.someConfig);
+
+    // ...
+  }
+
   getDefaultConfig(): SomePluginConfig {
     return {
       someConfig: 'someString',
@@ -97,82 +100,133 @@ export class SomePlugin extends Plugin<SomePluginConfig> {
 
 The following properties and methods are related to the configuration:
 
-- `config`: The actual configuration of the plugin
-- `initConfig`: The initial configuration that was passed in the constructor if there was any
+- `config`: The actual configuration of the plugin. Can be accessed from plugin methods using `this.config`.
+- `initConfig`: The initial configuration that was passed in the constructor if there was any. Can be accessed from plugin methods using `this.initConfig`.
 - `getDefaultConfig()`: Returns the default configuration of the plugin. Has to be implemented by every plugin.
 
-For more details about signatures and types, take a look at the [here](../framework/src/Plugin.ts).
+Configuration can be passed to the constructor of the plugin (see [add a plugin to the Jovo app](#add-a-plugin-to-the-jovo-app) below), which will be merged with the default configuration from `getDefaultConfig()`. If no configuration is passed, the default configuration will be used.
 
-Configuration can be passed to the constructor of the plugin which will be merged with the default configuration resulting from `getDefaultConfig()`, otherwise the default configuration will be used.
+### Add a Plugin to the Jovo App
+
+Import the plugin and add it to the [app configuration](./app-config.md) like this:
+
+```typescript
+import { SomePlugin } from './plugins/SomePlugin';
+// ...
+const app = new App({
+  plugins: [
+    new SomePlugin(),
+    // ...
+  ]
+  // ...
+});
+```
+
+You can also add it by calling `use`:
+
+```typescript
+app.use(new SomePlugin());
+```
+
+If your plugin uses [configuration](#plugin-configuration), you can add it to the constructor like this:
+
+```typescript
+new SomePlugin({
+  someConfig: 'someValue',
+})
+```
+
+## Advanced Jovo Plugins
+
+After getting an initial understanding of how to create and add a plugin from the [getting started section](#get-started-with-jovo-plugins), let's dive a bit deeper and take a look under the hood and at some advanced plugin structures.
+
+First, we're going to take a look at the [plugin lifecycle](#plugin-lifecycle) and how [plugin mounting](#plugin-mounting) works. We'll also learn more about parent and child plugins using the [Extensible structure](#jovo-extensible-structure).
+
+If you want to dive even deeper, take a look at the [`Plugin` class here](https://github.com/jovotech/jovo-framework/blob/v4dev/framework/src/Plugin.ts).
+### Plugin Lifecycle
+
+In the [basic plugin structure section](#basic-plugin-structure), we used the `install` method to define which middlewares should be used for this plugin:
+
+```typescript
+import { Jovo, App, Plugin, Extensible, InvalidParentError } from '@jovotech/framework';
+
+export class SomePlugin extends Plugin {
+  install(app: Extensible) {
+    if (!(app instanceof App)) {
+      throw new InvalidParentError(this.constructor.name, App);
+    }
+    app.middlewareCollection.use('<middleware>', (jovo) => {
+      return this.someMethod(jovo);
+    });
+  }
+
+  // ...
+}
+```
+
+It's also possible to use other methods for this, which we call plugin lifecycle hooks. Below is a table of all available methods:
+
+| Name       | Trigger                                                                      | Use Case                                                             | Notes                    |
+| ---------- | ---------------------------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------ |
+| `install`    | When the plugin is installed via `use` (once)                                         | Installing other plugins as well as modifying `App`                  | Can only be synchronous. |
+| `initialize` | When `App.initialize` is called (once)                                          | Time-consuming actions like API-calls that only need to be done once | Can be asynchronous.     |
+| `mount`      | When plugins are [mounted](#plugin-mounting) onto `HandleRequest` (every request) | Registering middleware-functions                                     | Can be asynchronous.     |
+| `dismount`   | After the [RIDR Lifecycle](./ridr-lifecycle.md) (every request)                                     | Cleanup                                                              | Can be asynchronous.     |
+
+For more details about signatures, take a look at the [`Plugin` class here](https://github.com/jovotech/jovo-framework/blob/v4dev/framework/src/Plugin.ts).
+
 
 ### Plugin Mounting 
 
 On every request, the mounting takes place, which consists of the following steps:
 
-1. Every plugin and nested child-plugin in `App` is cloned
-2. The cloned plugins get referenced in the `config` and `plugins` of `HandleRequest` under same path as they were for `App`
+1. Every plugin and nested child plugin in `App` is cloned.
+2. The cloned plugins get referenced in the `config` and `plugins` of `HandleRequest` under same path as they were for `App`.
 
-The `config` of the plugins is now the request-config. Changes to the request-config are just applied during this request and do not mutate the original config.
+The `config` of the plugins is now the request config. Changes to the request config are just applied during this request and do not mutate the original config.
 
-Due to the request-config getting set during mounting, the `mount`-[lifecycle-hook](#plugin-lifecycle) should be used for registering middlewares.
+Due to the request config getting set during mounting, the `mount`-[lifecycle-hook](#plugin-lifecycle) should be used for registering middlewares.
 
-## Jovo Extensible Structure
+### Jovo Extensible Structure
 
 Besides normal plugins, there are also plugins that extend `Extensible` which itself extends `Plugin`.
 
-The main difference to normal plugins is, that these plugins have a `MiddlewareCollection` and can have child-plugins.
+The main difference to normal plugins is that these plugins have a `MiddlewareCollection` and can have child plugins.
 
 `Extensible` has two optional generic type parameters:
 
 1. The type of the plugin's configuration that has to extend `ExtensibleConfig`
 2. The names of the middlewares in case type-hinting for the `MiddlewareCollection` should work
 
-Every class that extends `Platform`, as well as `App` extend `Extensible`.
+Every class that extends `Platform` as well as `App` extend `Extensible`.
 
-### Add a Plugin as a child
+#### Add a Plugin as a Child
 
-Plugins can be added to the extensible on the following ways:
+Similar to the [add plugin to your Jovo app section](#add-a-plugin-to-the-jovo-app), you can add the child plugin to the extensible plugin either by using the `plugins` array of the constructor or the `use` method.
 
-- `plugins` in constructor-configuration
-
-```typescript
-import { SomeExtensible } from './plugins/SomeExtensible';
-import { SomePlugin } from './plugins/SomePlugin';
-
-const extensible = new SomeExtensible({
-  plugins: [new SomePlugin()],
-});
-```
-
-- calling `use` of the extensible
+Here's how you can add it using the constructor:
 
 ```typescript
-import { SomeExtensible } from './plugins/SomeExtensible';
+import { SomeExtensiblePlugin } from './plugins/SomeExtensiblePlugin';
 import { SomePlugin } from './plugins/SomePlugin';
-
-const extensible = new SomeExtensible();
-extensible.use(new SomePlugin());
-```
-
-## Add a Plugin to the Jovo App
-
-Because `App` extends `Extensible` [adding plugins](#add-a-plugin-as-a-child) is the same procedure and can be done the following ways:
-
-- [app configuration](./app-config.md)
-
-```typescript
-import { SomePlugin } from './plugins/SomePlugin';
+// ...
 
 const app = new App({
-  plugins: [new SomePlugin()],
+  plugins: [
+    new SomeExtensiblePlugin({
+      plugins: [
+        new SomePlugin(),
+      ],
+    }),
+    // ...
+  ]
+  // ...
 });
 ```
 
-- calling `use` of the app
+And here's a version with `use`:
 
 ```typescript
-import { SomePlugin } from './plugins/SomePlugin';
-
-const app = new App();
-app.use(new SomePlugin());
+const extensiblePlugin = new SomeExtensiblePlugin();
+extensiblePlugin.use(new SomePlugin());
 ```
