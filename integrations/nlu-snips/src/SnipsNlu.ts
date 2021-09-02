@@ -95,7 +95,7 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
         !listen.entities ||
         listen.entities.mode === DynamicEntitiesMode.Clear
       ) {
-        return;
+        continue;
       }
 
       for (const [entityKey, entityData] of Object.entries(listen.entities.types || {})) {
@@ -178,7 +178,7 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
         }
 
         const config: AxiosRequestConfig = {
-          url: '/engine/train/dynamic-entities',
+          url: this.config.dynamicEntities.serverPath,
           params: {
             locale: locale.substring(0, 2),
             entity: entityKey,
