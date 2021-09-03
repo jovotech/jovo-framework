@@ -51,7 +51,7 @@ export class FacebookMessengerPlatform extends Platform<
     this.augmentAppHandle();
   }
 
-  mount(parent: HandleRequest) {
+  mount(parent: HandleRequest): Promise<void> | void {
     super.mount(parent);
 
     this.middlewareCollection.use('request.start', (jovo) => {
