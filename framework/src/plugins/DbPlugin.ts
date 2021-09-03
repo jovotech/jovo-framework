@@ -12,6 +12,8 @@ import { PersistableSessionData } from '../JovoSession';
 import { PersistableUserData } from '../JovoUser';
 import { Plugin, PluginConfig } from '../Plugin';
 
+export const DEFAULT_SESSION_EXPIRES_AFTER_SECONDS = 900;
+
 export interface DbItem extends AnyObject {
   id?: string;
 
@@ -58,6 +60,7 @@ export abstract class DbPlugin<
         },
         session: {
           enabled: false,
+          expiresAfterSeconds: DEFAULT_SESSION_EXPIRES_AFTER_SECONDS,
         },
         history: {
           size: 3,
@@ -72,7 +75,7 @@ export abstract class DbPlugin<
         createdAt: true,
         updatedAt: true,
       },
-    } as unknown as CONFIG;
+    } as DbPluginConfig as CONFIG;
   }
 
   mount(parent: HandleRequest): void {
