@@ -60,6 +60,9 @@ export class GoogleBusinessPlatform extends Platform<
     this.middlewareCollection.use('before.request.start', (jovo) => {
       return this.beforeRequestStart(jovo);
     });
+    this.middlewareCollection.use('request.start', (jovo) => {
+      return this.enableDatabaseSessionStorage(jovo);
+    });
   }
 
   isRequestRelated(request: AnyObject | GoogleBusinessRequest): boolean {

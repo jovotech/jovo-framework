@@ -3,6 +3,7 @@ import {
   App,
   Extensible,
   ExtensibleConfig,
+  HandleRequest,
   JovoError,
   Platform,
   Server,
@@ -13,11 +14,11 @@ import {
 } from '@jovotech/output-facebookmessenger';
 import _cloneDeep from 'lodash.clonedeep';
 import { DEFAULT_FACEBOOK_VERIFY_TOKEN, LATEST_FACEBOOK_API_VERSION } from './constants';
+import { FacebookMessenger } from './FacebookMessenger';
+import { FacebookMessengerDevice } from './FacebookMessengerDevice';
 import { FacebookMessengerRequest } from './FacebookMessengerRequest';
 import { FacebookMessengerUser } from './FacebookMessengerUser';
 import { MessengerBotEntry } from './interfaces';
-import { FacebookMessenger } from './FacebookMessenger';
-import { FacebookMessengerDevice } from './FacebookMessengerDevice';
 
 export interface FacebookMessengerConfig extends ExtensibleConfig {
   version: typeof LATEST_FACEBOOK_API_VERSION | string;
@@ -45,6 +46,14 @@ export class FacebookMessengerPlatform extends Platform<
       await super.initialize(parent);
     }
     this.augmentAppHandle();
+  }
+
+  mount(parent: HandleRequest) {
+    super.mount(parent);
+
+    this.middlewareCollection.use('request.start', (jovo) => {
+      return this.enableDatabaseSessionStorage(jovo);
+    });
   }
 
   getDefaultConfig(): FacebookMessengerConfig {
