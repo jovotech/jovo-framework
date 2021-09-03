@@ -8,7 +8,7 @@ import { Plugin, PluginConfig } from '../Plugin';
 
 declare module '../interfaces' {
   interface RequestData {
-    _BASIC_LOGGING_START: number;
+    _BASIC_LOGGING_START?: number;
   }
 }
 
@@ -133,7 +133,9 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
 
   async logResponse(jovo: Jovo): Promise<void> {
     const basicLoggingEnd = new Date().getTime();
-    const duration = basicLoggingEnd - jovo.$data._BASIC_LOGGING_START;
+    const duration = jovo.$data._BASIC_LOGGING_START
+      ? basicLoggingEnd - jovo.$data._BASIC_LOGGING_START
+      : 0;
 
     if (!this.config.response) {
       return;
