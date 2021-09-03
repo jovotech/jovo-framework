@@ -35,14 +35,14 @@ Here is an example of a basic plugin called `SomePlugin`:
 ```typescript
 // src/plugins/SomePlugin.ts
 
-import { Jovo, App, Plugin, Extensible, InvalidParentError } from '@jovotech/framework';
+import { Jovo, HandleRequest, Plugin, Extensible, InvalidParentError } from '@jovotech/framework';
 
 export class SomePlugin extends Plugin {
-  install(app: Extensible) {
-    if (!(app instanceof App)) {
-      throw new InvalidParentError(this.constructor.name, App);
+  mount(extensible: Extensible) {
+    if (!(extensible instanceof HandleRequest)) {
+      throw new InvalidParentError(this.constructor.name, HandleRequest);
     }
-    app.middlewareCollection.use('<middleware>', (jovo) => {
+    extensible.middlewareCollection.use('<middleware>', (jovo) => {
       return this.someMethod(jovo);
     });
   }
@@ -59,7 +59,7 @@ export class SomePlugin extends Plugin {
 
 The plugin above includes the following methods:
 
-- `install`: Use the `middlewareCollection.use` method to hook into middlewares. You can add `before` and `after`, e.g. `before.platform.output`. Find all middlewares in the [RIDR docs](./ridr-lifecycle.md). Depending on the type of the plugin, it's also possible to use different (or additional) methods like `mount`. [Learn more about this and the plugin lifecycle below](#plugin-lifecycle).
+- `mount`: Use the `middlewareCollection.use` method to hook into middlewares. You can add `before` and `after`, e.g. `before.platform.output`. Find all middlewares in the [RIDR docs](./ridr-lifecycle.md). Depending on the type of the plugin, it's also possible to use different (or additional) methods like `install`. [Learn more about this and the plugin lifecycle below](#plugin-lifecycle).
 - Some method (in this example `someMethod`, but you can choose any name) that gets called when the middleware referenced in `install` gets executed. This is where your plugin gets to work. Through the `jovo` parameter, you have access to all [Jovo properties](./jovo-properties.md), e.g. `jovo.$output`.
 - `getDefaultConfig`: If your plugin uses configuration, you can return the default config here. This method has to be implemented by every plugin, even if it just returns an empty object as shown in the example above. Learn more in the [plugin configuration](#plugin-configuration) section below.
 
@@ -145,17 +145,17 @@ First, we're going to take a look at the [plugin lifecycle](#plugin-lifecycle) a
 If you want to dive even deeper, take a look at the [`Plugin` class here](https://github.com/jovotech/jovo-framework/blob/v4dev/framework/src/Plugin.ts).
 ### Plugin Lifecycle
 
-In the [basic plugin structure section](#basic-plugin-structure), we used the `install` method to define which middlewares should be used for this plugin:
+In the [basic plugin structure section](#basic-plugin-structure), we used the `mount` method to define which middlewares should be used for this plugin:
 
 ```typescript
-import { Jovo, App, Plugin, Extensible, InvalidParentError } from '@jovotech/framework';
+import { Jovo, HandleRequest, Plugin, Extensible, InvalidParentError } from '@jovotech/framework';
 
 export class SomePlugin extends Plugin {
-  install(app: Extensible) {
-    if (!(app instanceof App)) {
-      throw new InvalidParentError(this.constructor.name, App);
+  mount(extensible: Extensible) {
+    if (!(extensible instanceof HandleRequest)) {
+      throw new InvalidParentError(this.constructor.name, HandleRequest);
     }
-    app.middlewareCollection.use('<middleware>', (jovo) => {
+    extensible.middlewareCollection.use('<middleware>', (jovo) => {
       return this.someMethod(jovo);
     });
   }
@@ -172,6 +172,27 @@ It's also possible to use other methods for this, which we call plugin lifecycle
 | `initialize` | When `App.initialize` is called (once)                                          | Time-consuming actions like API-calls that only need to be done once | Can be asynchronous.     |
 | `mount`      | When plugins are [mounted](#plugin-mounting) onto `HandleRequest` (every request) | Registering middleware-functions                                     | Can be asynchronous.     |
 | `dismount`   | After the [RIDR Lifecycle](./ridr-lifecycle.md) (every request)                                     | Cleanup                                                              | Can be asynchronous.     |
+
+It's important to note that the `install` and `initialize` plugin lifecycle hooks don't have access to `HandleRequest`, since they happen when the app gets started, before the request gets handled. Learn more in the [plugin mounting](#plugin-mounting) section below.
+
+Here is how `install` looks like with `App` instead of `HandleRequest`:
+
+```typescript
+import { Jovo, App, Plugin, Extensible, InvalidParentError } from '@jovotech/framework';
+
+export class SomePlugin extends Plugin {
+  install(extensible: Extensible) {
+    if (!(extensible instanceof App)) {
+      throw new InvalidParentError(this.constructor.name, App);
+    }
+    extensible.middlewareCollection.use('<middleware>', (jovo) => {
+      return this.someMethod(jovo);
+    });
+  }
+
+  // ...
+}
+```
 
 For more details about signatures, take a look at the [`Plugin` class here](https://github.com/jovotech/jovo-framework/blob/v4dev/framework/src/Plugin.ts).
 
