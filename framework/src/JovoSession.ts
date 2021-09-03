@@ -74,7 +74,7 @@ export class JovoSession {
     if (isExpired) {
       return this;
     }
-    // the loaded session can not be null because it was loaded from the database and is not expired
+    // the loaded session can not be new because it was loaded from the database and is not expired
     this.isNew = false;
 
     this.id = data?.id || this.id;
