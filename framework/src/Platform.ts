@@ -12,6 +12,7 @@ import {
   Jovo,
   JovoConstructor,
   JovoUser,
+  StoredElementSession,
 } from '.';
 import { Extensible, ExtensibleConfig } from './Extensible';
 import { JovoDevice, JovoDeviceConstructor } from './JovoDevice';
@@ -86,7 +87,10 @@ export abstract class Platform<
     return new this.deviceClass(jovo);
   }
 
-  protected enableDatabaseSessionStorage(jovo: Jovo): void {
+  protected enableDatabaseSessionStorage(
+    jovo: Jovo,
+    sessionConfig?: StoredElementSession & { enabled?: never },
+  ): void {
     const dbPlugins = Object.values(jovo.$handleRequest.plugins).filter(
       (plugin) => plugin instanceof DbPlugin,
     ) as DbPlugin[];
@@ -102,7 +106,12 @@ export abstract class Platform<
       }
       // eslint-disable-next-line no-console
       console.warn(`Session storage was enabled for database plugin ${dbPlugin.constructor.name}`);
-      dbPlugin.config.storedElements.session = true;
+
+      if (sessionConfig) {
+        dbPlugin.config.storedElements.session = { ...sessionConfig, enabled: true };
+      } else {
+        dbPlugin.config.storedElements.session = true;
+      }
     });
   }
 }

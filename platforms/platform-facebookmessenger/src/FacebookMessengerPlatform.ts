@@ -24,6 +24,8 @@ export interface FacebookMessengerConfig extends ExtensibleConfig {
   version: typeof LATEST_FACEBOOK_API_VERSION | string;
   verifyToken: string;
   pageAccessToken: string;
+
+  sessionExpiresAfterSeconds?: number;
 }
 
 export class FacebookMessengerPlatform extends Platform<
@@ -52,7 +54,12 @@ export class FacebookMessengerPlatform extends Platform<
     super.mount(parent);
 
     this.middlewareCollection.use('request.start', (jovo) => {
-      return this.enableDatabaseSessionStorage(jovo);
+      return this.enableDatabaseSessionStorage(
+        jovo,
+        this.config.sessionExpiresAfterSeconds
+          ? { expiresAfterSeconds: this.config.sessionExpiresAfterSeconds }
+          : undefined,
+      );
     });
   }
 
