@@ -1,3 +1,7 @@
+---
+title: 'Jovo Input'
+excerpt: 'Learn more about the Jovo Input property, which includes structured user input.'
+---
 # Input
 
 Learn more about the Jovo `$input` property, which includes structured user input.

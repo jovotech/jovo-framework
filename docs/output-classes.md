@@ -1,3 +1,7 @@
+---
+title: 'Jovo Output Classes'
+excerpt: 'Learn more about Jovo Output classes, which offer a way to return structured output templates.'
+---
 # Output Classes
 
 Output classes offer a way to return structured output templates.

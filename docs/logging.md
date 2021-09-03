@@ -1,3 +1,7 @@
+---
+title: 'Jovo Logging'
+excerpt: 'Learn more about the different types of logging you can do in your Jovo app.'
+---
 # Logging
 
 Learn more about the different types of logging you can do in your Jovo app.
