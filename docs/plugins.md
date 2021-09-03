@@ -1,4 +1,8 @@
-# Jovo Plugins
+---
+title: 'Jovo Plugins'
+excerpt: 'Learn how you can build your own plugins to customize and extend the Jovo Framework.'
+---
+# Plugins
 
 Learn how you can build your own plugins to customize and extend the Jovo Framework.
 
