@@ -1,3 +1,7 @@
+---
+title: 'Jovo Staging'
+excerpt: 'Learn how staging provides the ability to build, deploy, and run Jovo apps in different environments, including local development.'
+---
 # Staging
 
 Staging provides the ability to build, deploy, and run Jovo apps in different environments, including local development.

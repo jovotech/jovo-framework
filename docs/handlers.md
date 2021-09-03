@@ -1,3 +1,7 @@
+---
+title: 'Jovo Handlers'
+excerpt: 'Learn more about Jovo Handlers, which are methods inside a Jovo Component that are responsible for handling a request and returning output.'
+---
 # Handlers
 
 Handlers are methods inside a [Jovo component](./components.md) that are responsible for handling a request and returning output.

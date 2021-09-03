@@ -1,6 +1,10 @@
+---
+title: 'Entities'
+excerpt: 'Learn how to access entities and configure dynamic entities using Jovo'
+---
 # Entities
 
-Learn more about how to access entities using Jovo.
+Learn how to access entities and configure dynamic entities using Jovo.
 - [Introduction](#introduction)
 - [Access Entities](#access-entities)
 - [Dynamic Entities](#dynamic-entities)

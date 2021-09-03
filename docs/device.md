@@ -1,3 +1,7 @@
+---
+title: 'Jovo Device'
+excerpt: 'Lear more about the Jovo Device class that allows you to retrieve device-specific features and capabilities.'
+---
 # Device
 
 The Jovo `$device` class allows you to retrieve device-specific features and capabilities.

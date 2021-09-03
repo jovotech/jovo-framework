@@ -1,3 +1,7 @@
+---
+title: 'Jovo Properties'
+excerpt: 'Learn more about Jovo properties, which are reserved variables that part of the Jovo object.'
+---
 # Jovo Properties
 
 Jovo properties are reserved variables that part of the Jovo `this` object.
