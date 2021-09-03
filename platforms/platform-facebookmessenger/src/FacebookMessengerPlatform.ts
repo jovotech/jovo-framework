@@ -7,6 +7,7 @@ import {
   JovoError,
   Platform,
   Server,
+  StoredElementSession,
 } from '@jovotech/framework';
 import {
   FacebookMessengerOutputTemplateConverterStrategy,
@@ -25,7 +26,7 @@ export interface FacebookMessengerConfig extends ExtensibleConfig {
   verifyToken: string;
   pageAccessToken: string;
 
-  sessionExpiresAfterSeconds?: number;
+  session?: StoredElementSession & { enabled?: never };
 }
 
 export class FacebookMessengerPlatform extends Platform<
@@ -54,12 +55,7 @@ export class FacebookMessengerPlatform extends Platform<
     super.mount(parent);
 
     this.middlewareCollection.use('request.start', (jovo) => {
-      return this.enableDatabaseSessionStorage(
-        jovo,
-        this.config.sessionExpiresAfterSeconds
-          ? { expiresAfterSeconds: this.config.sessionExpiresAfterSeconds }
-          : undefined,
-      );
+      return this.enableDatabaseSessionStorage(jovo, this.config.session);
     });
   }
 

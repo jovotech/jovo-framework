@@ -5,6 +5,7 @@ import {
   ExtensibleInitConfig,
   Jovo,
   Platform,
+  StoredElementSession,
 } from '@jovotech/framework';
 import {
   GoogleBusinessOutputTemplateConverterStrategy,
@@ -20,7 +21,7 @@ import { GoogleBusinessDevice } from './GoogleBusinessDevice';
 export interface GoogleBusinessConfig extends ExtensibleConfig {
   serviceAccount: JWTInput;
 
-  sessionExpiresAfterSeconds?: number;
+  session?: StoredElementSession & { enabled?: never };
 }
 export type GoogleBusinessInitConfig = ExtensibleInitConfig<GoogleBusinessConfig> &
   Pick<GoogleBusinessConfig, 'serviceAccount'>;
@@ -63,12 +64,7 @@ export class GoogleBusinessPlatform extends Platform<
       return this.beforeRequestStart(jovo);
     });
     this.middlewareCollection.use('request.start', (jovo) => {
-      return this.enableDatabaseSessionStorage(
-        jovo,
-        this.config.sessionExpiresAfterSeconds
-          ? { expiresAfterSeconds: this.config.sessionExpiresAfterSeconds }
-          : undefined,
-      );
+      return this.enableDatabaseSessionStorage(jovo, this.config.session);
     });
   }
 
