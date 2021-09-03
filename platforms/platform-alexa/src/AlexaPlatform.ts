@@ -37,7 +37,10 @@ export class AlexaPlatform extends Platform<
   }
 
   mount(parent: HandleRequest): void {
-    parent.middlewareCollection.use('request.start', this.onRequestStart);
+    super.mount(parent);
+    parent.middlewareCollection.use('request.start', (jovo) => {
+      return this.onRequestStart(jovo);
+    });
   }
 
   isRequestRelated(request: AnyObject | AlexaRequest): boolean {
@@ -56,7 +59,7 @@ export class AlexaPlatform extends Platform<
     return response;
   }
 
-  private onRequestStart = (jovo: Jovo) => {
+  private onRequestStart(jovo: Jovo): void {
     if (!(jovo.$platform instanceof AlexaPlatform)) {
       return;
     }
@@ -80,5 +83,5 @@ export class AlexaPlatform extends Platform<
         }
       });
     }
-  };
+  }
 }

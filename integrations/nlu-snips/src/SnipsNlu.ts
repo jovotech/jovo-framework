@@ -17,10 +17,12 @@ import { v4 as uuidV4 } from 'uuid';
 import { SnipsNluConfig, SnipsNluResponse } from './interfaces';
 
 export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
-  install(parent: Extensible): Promise<void> | void {
-    super.install(parent);
+  mount(parent: Extensible): Promise<void> | void {
+    super.mount(parent);
 
-    parent.middlewareCollection.use('response.output', this.trainDynamicEntities.bind(this));
+    parent.middlewareCollection.use('response.output', (jovo) => {
+      return this.trainDynamicEntities(jovo);
+    });
   }
 
   getDefaultConfig(): SnipsNluConfig {
@@ -40,15 +42,22 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
   }
 
   async process(jovo: Jovo, text: string): Promise<NluData | undefined> {
+    if (!jovo.$session.id) {
+      throw new JovoError({
+        message: `Can not send request to Snips-NLU. Session-ID is missing.`,
+      });
+    }
+
     const config: AxiosRequestConfig = {
       url: this.config.serverPath,
       params: {
         locale: this.getLocale(jovo.$request).substring(0, 2),
         engine_id: this.config.engineId,
-        session_id: jovo.$session.id!,
+        session_id: jovo.$session.id,
       },
       data: { text },
     };
+
     const snipsNluResponse: SnipsNluResponse = await this.sendRequestToSnips(config);
     const nluData: NluData = {};
     if (snipsNluResponse.intent.intentName) {
@@ -86,7 +95,7 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
         !listen.entities ||
         listen.entities.mode === DynamicEntitiesMode.Clear
       ) {
-        return;
+        continue;
       }
 
       for (const [entityKey, entityData] of Object.entries(listen.entities.types || {})) {
@@ -169,7 +178,7 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
         }
 
         const config: AxiosRequestConfig = {
-          url: '/engine/train/dynamic-entities',
+          url: this.config.dynamicEntities.serverPath,
           params: {
             locale: locale.substring(0, 2),
             entity: entityKey,

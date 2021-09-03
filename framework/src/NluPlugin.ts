@@ -27,18 +27,20 @@ export abstract class NluPlugin<
     } as CONFIG;
   }
 
-  install(parent: Extensible): Promise<void> | void {
+  mount(parent: Extensible): Promise<void> | void {
     if (!(parent instanceof Platform)) {
       throw new InvalidParentError(this.constructor.name, 'Platform');
     }
-    parent.middlewareCollection.use('interpretation.nlu', this.nlu);
+    parent.middlewareCollection.use('interpretation.nlu', (jovo) => {
+      return this.nlu(jovo);
+    });
   }
 
   protected isInputTypeSupported(inputType: InputTypeLike): boolean {
     return this.config.input.supportedTypes.includes(inputType);
   }
 
-  protected nlu = async (jovo: Jovo): Promise<void> => {
+  protected async nlu(jovo: Jovo): Promise<void> {
     if (!jovo.$input.text || !this.isInputTypeSupported(jovo.$input.type)) {
       return;
     }
@@ -47,5 +49,5 @@ export abstract class NluPlugin<
       jovo.$input.nlu = nluProcessResult;
       jovo.$entities = nluProcessResult.entities || {};
     }
-  };
+  }
 }
