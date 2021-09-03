@@ -57,7 +57,7 @@ export class GoogleBusinessPlatform extends Platform<
 
   mount(parent: Extensible): Promise<void> | void {
     super.mount(parent);
-    parent.middlewareCollection.use('before.request.start', (jovo) => {
+    this.middlewareCollection.use('before.request.start', (jovo) => {
       return this.beforeRequestStart(jovo);
     });
   }
