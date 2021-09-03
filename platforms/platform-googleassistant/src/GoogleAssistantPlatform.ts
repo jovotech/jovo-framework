@@ -34,7 +34,7 @@ export class GoogleAssistantPlatform extends Platform<
 
   mount(parent: App): void {
     super.mount(parent);
-    parent.middlewareCollection.use('request.start', (jovo) => {
+    this.middlewareCollection.use('request.start', (jovo) => {
       return this.onRequestStart(jovo);
     });
   }

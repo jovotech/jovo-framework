@@ -21,8 +21,7 @@ export class AlexaPlatform extends Platform<
   AlexaPlatform,
   AlexaConfig
 > {
-  outputTemplateConverterStrategy: AlexaOutputTemplateConverterStrategy =
-    new AlexaOutputTemplateConverterStrategy();
+  outputTemplateConverterStrategy: AlexaOutputTemplateConverterStrategy = new AlexaOutputTemplateConverterStrategy();
   requestClass = AlexaRequest;
   jovoClass = Alexa;
   userClass = AlexaUser;
@@ -38,7 +37,7 @@ export class AlexaPlatform extends Platform<
 
   mount(parent: HandleRequest): void {
     super.mount(parent);
-    parent.middlewareCollection.use('request.start', (jovo) => {
+    this.middlewareCollection.use('request.start', (jovo) => {
       return this.onRequestStart(jovo);
     });
   }
@@ -60,9 +59,6 @@ export class AlexaPlatform extends Platform<
   }
 
   private onRequestStart(jovo: Jovo): void {
-    if (!(jovo.$platform instanceof AlexaPlatform)) {
-      return;
-    }
     // Generate generic output to APL if supported and set in config
     this.outputTemplateConverterStrategy.config.genericOutputToApl = !!(
       jovo.$alexa?.$request?.isAplSupported() && this.config.output?.genericOutputToApl
