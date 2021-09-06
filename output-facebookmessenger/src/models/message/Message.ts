@@ -10,6 +10,7 @@ import {
   ValidateNested,
 } from '@jovotech/output';
 import { MESSAGE_TEXT_MAX_LENGTH, PAYLOAD_MAX_LENGTH } from '../../constants';
+import { TransformQuickReply } from '../../decorators/transformation/TransformQuickReply';
 import { EmailQuickReply } from '../quick-reply/EmailQuickReply';
 import { PhoneNumberQuickReply } from '../quick-reply/PhoneNumberQuickReply';
 import { QuickReply, QuickReplyContentType } from '../quick-reply/QuickReply';
@@ -56,17 +57,7 @@ export class Message {
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => QuickReply, {
-    keepDiscriminatorProperty: true,
-    discriminator: {
-      property: 'type',
-      subTypes: [
-        { value: TextQuickReply, name: QuickReplyContentType.Text },
-        { value: EmailQuickReply, name: QuickReplyContentType.Email },
-        { value: PhoneNumberQuickReply, name: QuickReplyContentType.PhoneNumber },
-      ],
-    },
-  })
+  @TransformQuickReply()
   quick_replies?: QuickReply[];
 
   @IsOptional()

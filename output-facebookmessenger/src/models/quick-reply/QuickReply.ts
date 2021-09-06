@@ -1,4 +1,7 @@
-import { IsEnum, QuickReplyValue } from '@jovotech/output';
+import { EnumLike, IsEnum, QuickReplyValue } from '@jovotech/output';
+import { EmailQuickReply } from './EmailQuickReply';
+import { PhoneNumberQuickReply } from './PhoneNumberQuickReply';
+import { TextQuickReply } from './TextQuickReply';
 
 export enum QuickReplyContentType {
   Text = 'text',
@@ -6,35 +9,15 @@ export enum QuickReplyContentType {
   PhoneNumber = 'user_phone_number',
 }
 
-export class QuickReply<T extends QuickReplyContentType = QuickReplyContentType> {
+export type QuickReplyContentTypeLike = EnumLike<QuickReplyContentType>;
+
+export abstract class QuickReplyBase<T extends QuickReplyContentTypeLike = QuickReplyContentTypeLike> {
+  [key: string]: unknown;
+
   @IsEnum(QuickReplyContentType)
   content_type: T;
 
-  title?: T extends QuickReplyContentType.Email | QuickReplyContentType.PhoneNumber
-    ? never
-    : T extends QuickReplyContentType.Text
-    ? string
-    : string | undefined;
-
-  payload?: T extends QuickReplyContentType.Email | QuickReplyContentType.PhoneNumber
-    ? never
-    : T extends QuickReplyContentType.Text
-    ? string | number
-    : string | number | undefined;
-
-  image_url?: T extends QuickReplyContentType.Email | QuickReplyContentType.PhoneNumber
-    ? never
-    : string | undefined;
-
-  toQuickReply?(): QuickReplyValue | undefined {
-    if (this.content_type !== QuickReplyContentType.Text || !this.title) {
-      return undefined;
-    }
-    return this.payload
-      ? {
-          text: this.title,
-          value: this.payload.toString(),
-        }
-      : this.title;
-  }
+  abstract toQuickReply?(): QuickReplyValue | undefined;
 }
+
+export type QuickReply = EmailQuickReply | PhoneNumberQuickReply | TextQuickReply
