@@ -111,6 +111,15 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
       addMessageToResponses(carousel.toFacebookMessengerMessage());
     }
 
+    if (output.platforms?.facebookMessenger?.template) {
+      addMessageToResponses({
+        attachment: {
+          type: MessageAttachmentType.Template,
+          payload: output.platforms.facebookMessenger.template,
+        },
+      });
+    }
+
     if (output.platforms?.facebookMessenger?.nativeResponse) {
       // TODO determine what to do with nativeResponse
     }
