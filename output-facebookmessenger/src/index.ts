@@ -1,5 +1,6 @@
-import { registerOutputPlatform } from '@jovotech/output';
+import { QuickReplyValue, registerOutputPlatform } from '@jovotech/output';
 import {
+  Button,
   FacebookMessengerOutputTemplate,
   GenericTemplate,
   GenericTemplateElement,
@@ -10,6 +11,8 @@ import { augmentModelPrototypes } from './utilities';
 
 declare module '@jovotech/output/dist/types/models/Card' {
   interface Card {
+    buttons?: Button[];
+
     toFacebookMessengerGenericTemplate?(): GenericTemplate;
     toFacebookMessengerGenericTemplateElement?(): GenericTemplateElement;
     toFacebookMessengerMessage?(): FacebookMessengerMessage;
