@@ -1,14 +1,17 @@
 import { Type } from '@jovotech/output';
-import { Button, ButtonType } from '../../models/button/Button';
-import { CallButton } from '../../models/button/CallButton';
-import { GameButton } from '../../models/button/GameButton';
-import { LinkButton } from '../../models/button/LinkButton';
-import { LoginButton } from '../../models/button/LoginButton';
-import { LogoutButton } from '../../models/button/LogoutButton';
-import { PostbackButton } from '../../models/button/PostbackButton';
+import {
+  ButtonBase,
+  ButtonType,
+  CallButton,
+  GameButton,
+  LinkButton,
+  LoginButton,
+  LogoutButton,
+  PostbackButton,
+} from '../../models';
 
 export function TransformButton(): PropertyDecorator {
-  return Type(() => Button, {
+  return Type(() => ButtonBase, {
     keepDiscriminatorProperty: true,
     discriminator: {
       property: 'type',

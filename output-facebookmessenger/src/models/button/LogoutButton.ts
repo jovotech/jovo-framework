@@ -1,7 +1,7 @@
 import { Equals } from '@jovotech/output';
-import { Button, ButtonType } from './Button';
+import { ButtonBase, ButtonType } from './Button';
 
-export class LogoutButton extends Button<ButtonType.Logout> {
+export class LogoutButton extends ButtonBase<ButtonType.Logout | 'account_unlink'> {
   @Equals(ButtonType.Logout)
-  type: ButtonType.Logout;
+  type: ButtonType.Logout | 'account_unlink';
 }
