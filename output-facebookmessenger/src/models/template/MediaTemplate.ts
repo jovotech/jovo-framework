@@ -15,7 +15,7 @@ import {
 import { MEDIA_TEMPLATE_BUTTONS_MAX_SIZE, MEDIA_TEMPLATE_ELEMENTS_SIZE } from '../../constants';
 import { TransformButton } from '../../decorators/transformation/TransformButton';
 import { Button } from '../button/Button';
-import { Template, TemplateType } from './Template';
+import { TemplateBase, TemplateType } from './Template';
 
 export enum MediaTemplateElementType {
   Image = 'image',
@@ -57,9 +57,9 @@ export class MediaTemplateElement {
   buttons?: Button[];
 }
 
-export class MediaTemplate extends Template<TemplateType.Media> {
+export class MediaTemplate extends TemplateBase<TemplateType.Media | 'media'> {
   @Equals(TemplateType.Media)
-  template_type: TemplateType.Media;
+  template_type: TemplateType.Media | 'media';
 
   @IsOptional()
   @IsBoolean()

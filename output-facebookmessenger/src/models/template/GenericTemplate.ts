@@ -22,7 +22,7 @@ import {
 import { TransformButton } from '../../decorators/transformation/TransformButton';
 import { Button } from '../button/Button';
 import { WebViewHeightRatio } from '../button/LinkButton';
-import { Template, TemplateType } from './Template';
+import { TemplateBase, TemplateType } from './Template';
 
 export enum ImageAspectRatio {
   Horizontal = 'horizontal',
@@ -93,9 +93,9 @@ export class GenericTemplateElement {
   }
 }
 
-export class GenericTemplate extends Template<TemplateType.Generic> {
+export class GenericTemplate extends TemplateBase<TemplateType.Generic | 'generic'> {
   @Equals(TemplateType.Generic)
-  template_type: TemplateType.Generic;
+  template_type: TemplateType.Generic | 'generic';
 
   @IsOptional()
   @IsEnum(ImageAspectRatio)

@@ -15,11 +15,11 @@ import {
 } from '../../constants';
 import { TransformButton } from '../../decorators/transformation/TransformButton';
 import { Button } from '../button/Button';
-import { Template, TemplateType } from './Template';
+import { TemplateBase, TemplateType } from './Template';
 
-export class ButtonTemplate extends Template<TemplateType.Button> {
+export class ButtonTemplate extends TemplateBase<TemplateType.Button | 'button'> {
   @Equals(TemplateType.Button)
-  template_type: TemplateType.Button;
+  template_type: TemplateType.Button | 'button';
 
   @IsString()
   @IsNotEmpty()

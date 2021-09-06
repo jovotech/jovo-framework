@@ -3,7 +3,7 @@ import { ButtonTemplate } from '../template/ButtonTemplate';
 import { GenericTemplate } from '../template/GenericTemplate';
 import { MediaTemplate } from '../template/MediaTemplate';
 import { ReceiptTemplate } from '../template/ReceiptTemplate';
-import { Template, TemplateType } from '../template/Template';
+import { Template, TemplateBase, TemplateType } from '../template/Template';
 import { FileAttachment } from './FileAttachment';
 
 export enum MessageAttachmentType {
@@ -23,7 +23,7 @@ export class MessageAttachment {
   @Transform(({ value, obj }) => {
     let type:
       | typeof FileAttachment
-      | typeof Template
+      | typeof TemplateBase
       | typeof GenericTemplate
       | typeof ButtonTemplate
       | typeof MediaTemplate
@@ -43,7 +43,7 @@ export class MessageAttachment {
           type = ReceiptTemplate;
           break;
         default:
-          type = Template;
+          type = TemplateBase;
       }
     } else {
       type = FileAttachment;
