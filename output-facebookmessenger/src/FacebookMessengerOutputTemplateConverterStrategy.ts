@@ -125,18 +125,21 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
     }
 
     const quickReplies = output.quickReplies;
-    if (quickReplies?.length) {
+    const nativeQuickReplies = output.platforms?.facebookMessenger?.nativeQuickReplies;
+    if (quickReplies?.length || nativeQuickReplies?.length) {
       const lastResponseWithMessage = responses
         .slice()
         .reverse()
         .find((response) => !!response.message);
       if (lastResponseWithMessage?.message) {
-        lastResponseWithMessage.message.quick_replies = quickReplies.map(
-          this.convertQuickReplyToFacebookMessengerQuickReply,
-        );
-        const nativeQuickReplies = output.platforms?.facebookMessenger?.nativeQuickReplies;
+        lastResponseWithMessage.message.quick_replies = [];
         if (nativeQuickReplies?.length) {
-          lastResponseWithMessage.message.quick_replies.unshift(...nativeQuickReplies);
+          lastResponseWithMessage.message.quick_replies.push(...nativeQuickReplies);
+        }
+        if (quickReplies?.length) {
+          lastResponseWithMessage.message.quick_replies.push(
+            ...quickReplies.map(this.convertQuickReplyToFacebookMessengerQuickReply),
+          );
         }
       }
     }
