@@ -10,6 +10,8 @@ import { augmentModelPrototypes } from './utilities';
 
 declare module '@jovotech/output/dist/types/models/Card' {
   interface Card {
+    suggestions?: Suggestion[];
+
     toGoogleBusinessCard?(): StandaloneCard;
     toGoogleBusinessRichCard?(): RichCard;
   }

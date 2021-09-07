@@ -115,21 +115,41 @@ export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleRespo
       addResponse('richCard', carousel.toGoogleBusinessRichCard());
     }
 
+    const image = output.platforms?.googleBusiness?.image;
+    if (image) {
+      addResponse('image', image);
+    }
+
     if (output.platforms?.googleBusiness?.nativeResponse) {
       // TODO determine what to do with nativeResponse!
     }
 
     const quickReplies = output.quickReplies;
-    if (quickReplies?.length) {
+    const suggestions = output.platforms?.googleBusiness?.suggestions;
+    if (quickReplies?.length || suggestions?.length) {
       const lastResponseWithContent = responses
         .slice()
         .reverse()
         .find((response) => !!response.text || !!response.richCard);
       if (lastResponseWithContent) {
-        lastResponseWithContent.suggestions = quickReplies.map(
-          this.convertQuickReplyToGoogleBusinessSuggestion,
-        );
+        lastResponseWithContent.suggestions = [];
+        if (suggestions?.length) {
+          lastResponseWithContent.suggestions.push(...suggestions);
+        }
+        if (quickReplies?.length) {
+          lastResponseWithContent.suggestions.push(
+            ...quickReplies.map(this.convertQuickReplyToGoogleBusinessSuggestion),
+          );
+        }
       }
+    }
+
+    const fallback = output.platforms?.googleBusiness?.fallback;
+    // TODO fully determine whether this should be applied to all responses
+    if (fallback) {
+      responses.forEach((response) => {
+        response.fallback = fallback;
+      });
     }
 
     return responses.length === 1 ? responses[0] : responses;

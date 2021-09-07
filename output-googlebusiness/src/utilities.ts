@@ -21,6 +21,9 @@ export function augmentModelPrototypes(): void {
         },
       };
     }
+    if (this.suggestions) {
+      card.cardContent.suggestions = this.suggestions;
+    }
     return card;
   };
 
