@@ -1,6 +1,6 @@
 import {
   mergeInstances,
-  Message,
+  MessageValue,
   NullableOutputTemplateBase,
   OutputTemplate,
   OutputTemplateBase,
@@ -20,7 +20,7 @@ import { OutputTemplateConverterStrategy } from '../OutputTemplateConverterStrat
  */
 export abstract class SingleResponseOutputTemplateConverterStrategy<
   RESPONSE extends Record<string, unknown>,
-  CONFIG extends OutputTemplateConverterStrategyConfig,
+  CONFIG extends OutputTemplateConverterStrategyConfig
 > extends OutputTemplateConverterStrategy<RESPONSE, CONFIG> {
   prepareOutput(output: OutputTemplate | OutputTemplate[]): OutputTemplate {
     output = super.prepareOutput(output);
@@ -79,14 +79,12 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
   ): void {
     const message = mergeWith.message;
     if (message) {
-      const mergeText = typeof message === 'string' ? message : (message as Message).text;
-      target.message = target.message ? [target.message, mergeText].join(' ') : mergeText;
+      target.message = this.mergeMessages(target.message, message);
     }
 
     const reprompt = mergeWith.reprompt;
     if (reprompt) {
-      const mergeText = typeof reprompt === 'string' ? reprompt : (reprompt as Message).text;
-      target.reprompt = target.reprompt ? [target.reprompt, mergeText].join(' ') : mergeText;
+      target.reprompt = this.mergeMessages(target.reprompt, reprompt);
     }
 
     const quickReplies = mergeWith.quickReplies;
@@ -115,5 +113,40 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
     } else if (typeof target.listen !== 'object' && typeof listen !== 'undefined') {
       target.listen = listen;
     }
+  }
+
+  protected mergeMessages(
+    target: MessageValue | null | undefined,
+    mergeWith: MessageValue,
+  ): MessageValue {
+    if (!target) {
+      return mergeWith;
+    }
+    if (typeof target === 'string' && typeof mergeWith === 'string') {
+      return [target, mergeWith].join(' ');
+    }
+    const targetText = typeof target === 'string' ? target : target.text;
+    const targetDisplayText = typeof target === 'string' ? target : target.displayText;
+
+    const mergeWithText = typeof mergeWith === 'string' ? mergeWith : mergeWith.text;
+    const mergeWithDisplayText = typeof mergeWith === 'string' ? mergeWith : mergeWith.displayText;
+
+    const text = [targetText, mergeWithText].join(' ');
+
+    if (!targetDisplayText && !mergeWithDisplayText) {
+      return {
+        text,
+      };
+    }
+    const displayText = [targetDisplayText, mergeWithDisplayText].reduce((result, text) => {
+      if (text) {
+        result += `${result?.length ? ' ' : ''}${text}`;
+      }
+      return result;
+    });
+    return {
+      text,
+      displayText,
+    };
   }
 }

@@ -27,20 +27,60 @@ const strategy = new ExampleStrategy();
 
 describe('prepareOutput', () => {
   describe('OutputTemplate-array is merged into single object', () => {
-    test('messages are concatenated', () => {
-      const preparedOutput = strategy.prepareOutput([
-        {
-          message: 'Hello',
-          reprompt: 'Hello',
-        },
-        {
-          message: 'World!',
-          reprompt: 'World!',
-        },
-      ]);
-      expect(preparedOutput).toEqual({
-        message: 'Hello World!',
-        reprompt: 'Hello World!',
+    describe('messages are concatenated', () => {
+      test('string + string passed', () => {
+        const preparedOutput = strategy.prepareOutput([
+          {
+            message: 'Hello',
+            reprompt: 'Hello',
+          },
+          {
+            message: 'World!',
+            reprompt: 'World!',
+          },
+        ]);
+        expect(preparedOutput).toEqual({
+          message: 'Hello World!',
+          reprompt: 'Hello World!',
+        });
+      });
+      test('string + object passed', () => {
+        const preparedOutput = strategy.prepareOutput([
+          {
+            message: 'Hello',
+            reprompt: 'Hello',
+          },
+          {
+            message: { text: 'World!', displayText: 'World!' },
+            reprompt: { text: 'World!' },
+          },
+        ]);
+        expect(preparedOutput).toEqual({
+          message: {
+            text: 'Hello World!',
+            displayText: 'Hello World!',
+          },
+          reprompt: {
+            text: 'Hello World!',
+            displayText: 'Hello',
+          },
+        });
+      });
+      test('object + object passed', () => {
+        const preparedOutput = strategy.prepareOutput([
+          {
+            message: { text: 'Hello', displayText: 'Hello' },
+            reprompt: { text: 'Hello' },
+          },
+          {
+            message: { text: 'World!' },
+            reprompt: { text: 'World!' },
+          },
+        ]);
+        expect(preparedOutput).toEqual({
+          message: { text: 'Hello World!', displayText: 'Hello' },
+          reprompt: { text: 'Hello World!' },
+        });
       });
     });
 
