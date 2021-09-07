@@ -155,7 +155,7 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
         result += `${result?.length ? ' ' : ''}${removeSSMLSpeakTags(text)}`;
       }
       return result;
-    }, '');
+    });
     return isSSML(target) || isSSML(mergeWith) ? toSSML(mergedText) : mergedText;
   }
 
