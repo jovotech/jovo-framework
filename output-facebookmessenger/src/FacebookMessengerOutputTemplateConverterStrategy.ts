@@ -134,6 +134,10 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
         lastResponseWithMessage.message.quick_replies = quickReplies.map(
           this.convertQuickReplyToFacebookMessengerQuickReply,
         );
+        const nativeQuickReplies = output.platforms?.facebookMessenger?.nativeQuickReplies;
+        if (nativeQuickReplies?.length) {
+          lastResponseWithMessage.message.quick_replies.unshift(...nativeQuickReplies);
+        }
       }
     }
 
