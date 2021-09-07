@@ -1,12 +1,7 @@
 import { Type } from '@jovotech/output';
-import {
-  ButtonTemplate,
-  GenericTemplate,
-  MediaTemplate,
-  ReceiptTemplate,
-  TemplateBase,
-  TemplateType,
-} from '../../models';
+import { ButtonTemplate, GenericTemplate, MediaTemplate, ReceiptTemplate } from '../../models';
+// import should not be shortened or decorator has problems with finding the correct enum
+import { TemplateBase, TemplateType } from '../../models/template/Template';
 
 export function TransformTemplate(): PropertyDecorator {
   return Type(() => TemplateBase, {
