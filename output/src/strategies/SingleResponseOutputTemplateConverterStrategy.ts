@@ -1,4 +1,5 @@
 import {
+  isSSML,
   mergeInstances,
   MessageValue,
   NullableOutputTemplateBase,
@@ -7,6 +8,9 @@ import {
   OutputTemplateConverterStrategyConfig,
   plainToClass,
   PlatformOutputTemplate,
+  removeSSML,
+  removeSSMLSpeakTags,
+  toSSML,
 } from '..';
 import { OutputTemplateConverterStrategy } from '../OutputTemplateConverterStrategy';
 
@@ -123,7 +127,7 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
       return mergeWith;
     }
     if (typeof target === 'string' && typeof mergeWith === 'string') {
-      return [target, mergeWith].join(' ');
+      return this.mergeText(target, mergeWith);
     }
     const targetText = typeof target === 'string' ? target : target.text;
     const targetDisplayText = typeof target === 'string' ? target : target.displayText;
@@ -131,22 +135,51 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
     const mergeWithText = typeof mergeWith === 'string' ? mergeWith : mergeWith.text;
     const mergeWithDisplayText = typeof mergeWith === 'string' ? mergeWith : mergeWith.displayText;
 
-    const text = [targetText, mergeWithText].join(' ');
+    const text = this.mergeText(targetText, mergeWithText);
 
     if (!targetDisplayText && !mergeWithDisplayText) {
       return {
         text,
       };
     }
-    const displayText = [targetDisplayText, mergeWithDisplayText].reduce((result, text) => {
-      if (text) {
-        result += `${result?.length ? ' ' : ''}${text}`;
-      }
-      return result;
-    });
+    const displayText = this.mergeDisplayText(targetDisplayText, mergeWithDisplayText);
     return {
       text,
       displayText,
     };
+  }
+
+  protected mergeText(target: string, mergeWith: string): string {
+    const mergedText = [target, mergeWith].reduce((result, text) => {
+      if (text) {
+        result += `${result?.length ? ' ' : ''}${removeSSMLSpeakTags(text)}`;
+      }
+      return result;
+    }, '');
+    return isSSML(target) || isSSML(mergeWith) ? toSSML(mergedText) : mergedText;
+  }
+
+  protected mergeDisplayText(
+    target: string | undefined,
+    mergeWith: string | undefined,
+  ): string | undefined {
+    if (!target && !mergeWith) {
+      return;
+    }
+    if (!target && mergeWith) {
+      return removeSSML(mergeWith);
+    }
+    if (!mergeWith && target) {
+      return removeSSML(target);
+    }
+    return [target, mergeWith].reduce((result, text) => {
+      if (text) {
+        if (!result) {
+          result = '';
+        }
+        result += `${result?.length ? ' ' : ''}${removeSSML(text)}`;
+      }
+      return result;
+    }, undefined);
   }
 }

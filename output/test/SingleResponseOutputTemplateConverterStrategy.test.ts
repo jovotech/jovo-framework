@@ -82,6 +82,36 @@ describe('prepareOutput', () => {
           reprompt: { text: 'Hello World!' },
         });
       });
+
+      test('multiple speak tags result in a single speak tag', () => {
+        const preparedOutput = strategy.prepareOutput([
+          {
+            message: '<speak>Hello</speak>',
+          },
+          {
+            message: '<speak>World!</speak>',
+          },
+        ]);
+        expect(preparedOutput).toEqual({
+          message: '<speak>Hello World!</speak>',
+        });
+      });
+      test('SSML removed for displayText', () => {
+        const preparedOutput = strategy.prepareOutput([
+          {
+            message: '<speak>Hello</speak>',
+          },
+          {
+            message: { text: 'World!', displayText: 'World!' },
+          },
+        ]);
+        expect(preparedOutput).toEqual({
+          message: {
+            text: '<speak>Hello World!</speak>',
+            displayText: 'Hello World!',
+          },
+        });
+      });
     });
 
     test('quick-replies are concatenated', () => {
