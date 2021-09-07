@@ -20,7 +20,7 @@ import {
   GENERIC_TEMPLATE_MAX_SIZE,
 } from '../../constants';
 import { TransformButton } from '../../decorators/transformation/TransformButton';
-import { Button } from '../button/Button';
+import { Button, ButtonType } from '../button/Button';
 import { WebViewHeightRatio } from '../button/LinkButton';
 import { TemplateBase, TemplateType } from './Template';
 
@@ -30,6 +30,9 @@ export enum ImageAspectRatio {
 }
 
 export class GenericTemplateDefaultAction {
+  @Equals(ButtonType.Link)
+  type: ButtonType.Link | 'web_url';
+
   @IsUrl()
   url: string;
 

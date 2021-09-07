@@ -19,7 +19,10 @@ export function augmentModelPrototypes(): void {
     if (this.imageUrl) {
       element.image_url = this.imageUrl;
     }
-    if(this.buttons) {
+    if (this.defaultAction) {
+      element.default_action = this.defaultAction;
+    }
+    if (this.buttons) {
       element.buttons = this.buttons;
     }
     return element;
