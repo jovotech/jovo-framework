@@ -24,7 +24,7 @@ import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 import { JovoModelData, JovoModelDataV3, NativeFileInformation } from '@jovotech/model';
 import { JovoModelGoogle } from '@jovotech/model-google';
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'fs';
-import { copySync } from 'fs-extra';
+import { copySync, removeSync } from 'fs-extra';
 import _get from 'lodash.get';
 import _has from 'lodash.has';
 import _merge from 'lodash.merge';
@@ -420,6 +420,8 @@ export class BuildHook extends PluginHook<BuildEvents> {
           this.$plugin.$config.resourcesDirectory!,
         );
         const dest: string = joinPaths(this.$plugin.getPlatformPath(), resourcesDirectory);
+        // Delete existing resources folder before copying data
+        removeSync(dest);
         copySync(src, dest);
       },
     );
