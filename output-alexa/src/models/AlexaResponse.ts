@@ -21,8 +21,4 @@ export class AlexaResponse extends JovoResponse {
   @ValidateNested()
   @Type(() => Response)
   response: Response;
-
-  hasSessionEnded(): boolean {
-    return !!this.response.shouldEndSession;
-  }
 }

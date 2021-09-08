@@ -1,4 +1,12 @@
-import { IsArray, IsNotEmpty, IsOptional, IsString, Type, ValidateNested } from '..';
+import {
+  EntityMap,
+  IsNotEmpty,
+  IsObject,
+  IsOptional,
+  IsString,
+  TransformMap,
+  ValidateNested,
+} from '..';
 import { Entity } from './Entity';
 
 export type QuickReplyValue = string | QuickReply;
@@ -19,8 +27,8 @@ export class QuickReply {
   intent?: string;
 
   @IsOptional()
-  @IsArray()
+  @IsObject()
   @ValidateNested({ each: true })
-  @Type(() => Entity)
-  entities?: Entity[];
+  @TransformMap(() => Entity)
+  entities?: EntityMap;
 }

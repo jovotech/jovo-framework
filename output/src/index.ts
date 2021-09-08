@@ -18,6 +18,9 @@ export * from './decorators/validation/ConditionalMaxLength';
 
 export * from './models/Card';
 export * from './models/Carousel';
+export * from './models/CarouselItem';
+export * from './models/CarouselItemSelection';
+export * from './models/CarouselSelection';
 export * from './models/DynamicEntities';
 export * from './models/DynamicEntity';
 export * from './models/DynamicEntityValue';

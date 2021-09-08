@@ -1,4 +1,5 @@
 import { Equals, IsInt, IsNotEmpty, IsString, Min } from '@jovotech/output';
+import { APL_OPERATION_COUNT_MIN } from '../../constants';
 import { AplIndexListDirective } from './AplIndexListDirective';
 
 export class AplLoadIndexListDataDirective extends AplIndexListDirective<'Alexa.Presentation.APL.LoadIndexListData'> {
@@ -10,6 +11,6 @@ export class AplLoadIndexListDataDirective extends AplIndexListDirective<'Alexa.
   correlationToken: string;
 
   @IsInt()
-  @Min(1)
+  @Min(APL_OPERATION_COUNT_MIN)
   count: number;
 }

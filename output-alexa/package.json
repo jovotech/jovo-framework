@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/output-alexa",
-  "version": "4.0.0-alpha.10",
+  "version": "4.0.0-beta.2",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
   "es2015": "dist/esm2015/index.js",
@@ -19,13 +19,9 @@
     "rimraf": "rimraf ./dist",
     "test": "jest"
   },
-  "dependencies": {
-    "lodash.merge": "^4.6.2"
-  },
   "devDependencies": {
-    "@jovotech/output": "^4.0.0-alpha.10",
+    "@jovotech/output": "^4.0.0-beta.2",
     "@types/jest": "^26.0.20",
-    "@types/lodash.merge": "^4.6.6",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
     "barrelsby": "^2.2.0",
@@ -39,7 +35,7 @@
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
-    "@jovotech/output": ">=4.0.0-alpha.9 <4.0.0"
+    "@jovotech/output": ">=4.0.0-beta.0 <4.0.0"
   },
   "bugs": {
     "url": "https://github.com/jovotech/jovo-output/issues"

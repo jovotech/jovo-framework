@@ -1,12 +1,19 @@
 import {
-  Card,
   Carousel,
   MessageValue,
   MultipleResponsesOutputTemplateConverterStrategy,
   OutputTemplate,
+  OutputTemplateConverterStrategyConfig,
   QuickReply,
-  QuickReplyValue, removeSSML,
+  QuickReplyValue,
+  removeSSML,
 } from '@jovotech/output';
+import {
+  GENERIC_TEMPLATE_MAX_SIZE,
+  GENERIC_TEMPLATE_MIN_SIZE,
+  MESSAGE_TEXT_MAX_LENGTH,
+  QUICK_REPLY_TITLE_MAX_LENGTH,
+} from './constants';
 import {
   FacebookMessengerResponse,
   GenericTemplate,
@@ -18,72 +25,110 @@ import {
   TemplateType,
 } from './models';
 
-export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleResponsesOutputTemplateConverterStrategy<FacebookMessengerResponse> {
+export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleResponsesOutputTemplateConverterStrategy<
+  FacebookMessengerResponse,
+  OutputTemplateConverterStrategyConfig
+> {
   responseClass = FacebookMessengerResponse;
+  platformName = 'facebookMessenger' as const;
 
-  // TODO: improve code
-  convertTemplate(output: OutputTemplate): FacebookMessengerResponse | FacebookMessengerResponse[] {
-    const getResponseBase: () => FacebookMessengerResponse = () => ({
+  // maybe we need more context here, like index of template
+  protected sanitizeOutput(output: OutputTemplate, index?: number): OutputTemplate {
+    const pathPrefix = index ? `[${index}]` : '';
+    if (output.message) {
+      output.message = this.sanitizeMessage(output.message, `${pathPrefix}.message`);
+    }
+
+    if (output.carousel) {
+      output.carousel = this.sanitizeCarousel(output.carousel, `${pathPrefix}.carousel`);
+    }
+
+    if (output.quickReplies) {
+      output.quickReplies = this.sanitizeQuickReplies(
+        output.quickReplies,
+        `${pathPrefix}.quickReplies`,
+      );
+    }
+
+    return output;
+  }
+
+  protected sanitizeMessage(
+    message: MessageValue,
+    path: string,
+    maxLength = MESSAGE_TEXT_MAX_LENGTH,
+    offset?: number,
+  ): MessageValue {
+    return super.sanitizeMessage(message, path, maxLength, offset);
+  }
+
+  protected sanitizeCarousel(
+    carousel: Carousel,
+    path: string,
+    minSize = GENERIC_TEMPLATE_MIN_SIZE,
+    maxSize = GENERIC_TEMPLATE_MAX_SIZE,
+  ): Carousel {
+    return super.sanitizeCarousel(carousel, path, minSize, maxSize);
+  }
+
+  protected sanitizeQuickReplies(
+    quickReplies: QuickReplyValue[],
+    path: string,
+    maxSize = Infinity,
+    maxLength = QUICK_REPLY_TITLE_MAX_LENGTH,
+  ): QuickReplyValue[] {
+    return super.sanitizeQuickReplies(quickReplies, path, maxSize, maxLength);
+  }
+
+  convertOutput(output: OutputTemplate): FacebookMessengerResponse | FacebookMessengerResponse[] {
+    const makeResponse: (message: FacebookMessengerMessage) => FacebookMessengerResponse = (
+      message,
+    ) => ({
       messaging_type: MessagingType.Response,
       recipient: {
         id: '',
       },
+      message,
     });
-    let response: FacebookMessengerResponse | FacebookMessengerResponse[] = getResponseBase();
+    const responses: FacebookMessengerResponse[] = [];
 
-    const addToResponse = (message: FacebookMessengerMessage) => {
-      if (!Array.isArray(response) && response.message) {
-        response = [response];
-      }
-      if (Array.isArray(response)) {
-        const newResponse = getResponseBase();
-        newResponse.message = message;
-        response.push(newResponse);
-      } else {
-        response.message = message;
-      }
+    const addMessageToResponses = (message: FacebookMessengerMessage) => {
+      responses.push(makeResponse(message));
     };
 
-    const conversionMap: Partial<
-      Record<keyof OutputTemplate, (val: any) => FacebookMessengerMessage>
-    > = {
-      message: (message: MessageValue) => this.convertMessageToFacebookMessengerMessage(message),
-      card: (card: Card) => ({
-        attachment: {
-          type: MessageAttachmentType.Template,
-          payload: card.toFacebookMessengerGenericTemplate!(),
-        },
-      }),
-      carousel: (carousel: Carousel) => ({
-        attachment: {
-          type: MessageAttachmentType.Template,
-          payload: carousel.toFacebookMessengerGenericTemplate!(),
-        },
-      }),
-    };
-
-    const enumerateOutputTemplate = (outputTemplate: OutputTemplate) => {
-      for (const key in outputTemplate) {
-        if (outputTemplate.hasOwnProperty(key) && outputTemplate[key]) {
-          const conversionFn = conversionMap[key];
-          if (conversionFn) {
-            addToResponse(conversionFn(outputTemplate[key]));
-          }
-        }
-      }
-    };
-
-    enumerateOutputTemplate(output);
-    if (output.platforms?.FacebookMessenger) {
-      enumerateOutputTemplate(output.platforms.FacebookMessenger);
+    const message = output.message;
+    if (message) {
+      addMessageToResponses(this.convertMessageToFacebookMessengerMessage(message));
     }
 
-    // TODO determine what to do with nativeResponse!
-    // if (output.platforms?.FacebookMessenger?.nativeResponse) {
-    //   _merge(response, output.platforms.FacebookMessenger.nativeResponse);
-    // }
+    const card = output.card;
+    if (card?.toFacebookMessengerMessage) {
+      addMessageToResponses(card.toFacebookMessengerMessage());
+    }
 
-    return response;
+    const carousel = output.carousel;
+    if (carousel?.toFacebookMessengerMessage) {
+      addMessageToResponses(carousel.toFacebookMessengerMessage());
+    }
+
+    if (output.platforms?.facebookMessenger?.nativeResponse) {
+      // TODO determine what to do with nativeResponse
+    }
+
+    const quickReplies = output.quickReplies;
+    if (quickReplies?.length) {
+      const lastResponseWithMessage = responses
+        .slice()
+        .reverse()
+        .find((response) => !!response.message);
+      if (lastResponseWithMessage?.message) {
+        lastResponseWithMessage.message.quick_replies = quickReplies.map(
+          this.convertQuickReplyToFacebookMessengerQuickReply,
+        );
+      }
+    }
+
+    return responses.length === 1 ? responses[0] : responses;
   }
 
   convertResponse(response: FacebookMessengerResponse): OutputTemplate {
@@ -118,9 +163,7 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
       ? { text: removeSSML(message) }
       : message.toFacebookMessengerMessage?.() || {
           text: removeSSML(message.displayText || message.text),
-          quick_replies: message.quickReplies?.map((quickReply) =>
-            this.convertQuickReplyToFacebookMessengerQuickReply(quickReply),
-          ),
+          quick_replies: [],
         };
   }
 

@@ -1,12 +1,16 @@
 import {
+  DynamicEntities,
   DynamicEntitiesMode,
   DynamicEntity,
+  DynamicEntityMap,
+  mergeInstances,
   MessageValue,
   OutputTemplate,
+  OutputTemplateConverterStrategyConfig,
   QuickReplyValue,
   SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
-import _merge from 'lodash.merge';
+import { QUICK_REPLIES_MAX_SIZE, QUICK_REPLY_MAX_LENGTH, TEXT_MAX_LENGTH } from './constants';
 import {
   DialogflowResponse,
   EntityOverrideMode,
@@ -16,25 +20,62 @@ import {
 } from './models';
 
 // TODO CHECK: Theoretically, multiple messages are supported in the response, in the future this could be refactored for that.
-export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<DialogflowResponse> {
-  platformName = 'Dialogflow';
+export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<
+  DialogflowResponse,
+  OutputTemplateConverterStrategyConfig
+> {
+  platformName = 'dialogflow' as const;
   responseClass = DialogflowResponse;
 
-  buildResponse(output: OutputTemplate): DialogflowResponse {
+  protected sanitizeOutput(output: OutputTemplate): OutputTemplate {
+    if (output.message) {
+      output.message = this.sanitizeMessage(output.message, 'message');
+    }
+
+    if (output.quickReplies) {
+      output.quickReplies = this.sanitizeQuickReplies(output.quickReplies, 'quickReplies');
+    }
+
+    return output;
+  }
+
+  protected sanitizeMessage(
+    message: MessageValue,
+    path: string,
+    maxLength = TEXT_MAX_LENGTH,
+    offset?: number,
+  ): MessageValue {
+    return super.sanitizeMessage(message, path, maxLength, offset);
+  }
+
+  protected sanitizeQuickReplies(
+    quickReplies: QuickReplyValue[],
+    path: string,
+    maxSize = QUICK_REPLIES_MAX_SIZE,
+    maxLength = QUICK_REPLY_MAX_LENGTH,
+  ): QuickReplyValue[] {
+    return super.sanitizeQuickReplies(quickReplies, path, maxSize, maxLength);
+  }
+
+  toResponse(output: OutputTemplate): DialogflowResponse {
     const response: DialogflowResponse = {};
 
-    const listen = output.platforms?.Dialogflow?.listen ?? output.listen;
-    if (typeof listen === 'object' && listen.entities?.types?.length) {
+    const listen = output.listen;
+    if (typeof listen === 'object' && listen.entities?.types) {
       const entityOverrideMode: EntityOverrideMode =
         listen.entities.mode === DynamicEntitiesMode.Merge
           ? EntityOverrideMode.Supplement
           : EntityOverrideMode.Override;
-      response.session_entity_types = listen.entities.types.map((entity) =>
-        this.convertDynamicEntityToSessionEntityType(entity, entityOverrideMode),
+      response.session_entity_types = Object.keys(listen.entities.types).map((entityName) =>
+        this.convertDynamicEntityToSessionEntityType(
+          entityName,
+          ((listen.entities as DynamicEntities).types as DynamicEntityMap)[entityName],
+          entityOverrideMode,
+        ),
       );
     }
 
-    const message = output.platforms?.Dialogflow?.message || output.message;
+    const message = output.message;
     if (message) {
       if (!response.fulfillment_messages) {
         response.fulfillment_messages = [];
@@ -46,7 +87,7 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
       });
     }
 
-    const quickReplies = output.platforms?.Dialogflow?.quickReplies || output.quickReplies;
+    const quickReplies = output.quickReplies;
     if (quickReplies?.length) {
       if (!response.fulfillment_messages) {
         response.fulfillment_messages = [];
@@ -54,13 +95,15 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
       response.fulfillment_messages.push({
         message: {
           quick_replies: {
-            quick_replies: quickReplies.map(this.convertQuickReplyToDialogflowQuickReply),
+            quick_replies: quickReplies
+              .slice(0, QUICK_REPLIES_MAX_SIZE)
+              .map(this.convertQuickReplyToDialogflowQuickReply),
           },
         },
       });
     }
 
-    const card = output.platforms?.Dialogflow?.card || output.card;
+    const card = output.card;
     if (card) {
       if (!response.fulfillment_messages) {
         response.fulfillment_messages = [];
@@ -72,8 +115,8 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
       });
     }
 
-    if (output.platforms?.Dialogflow?.nativeResponse) {
-      _merge(response, output.platforms.Dialogflow.nativeResponse);
+    if (output.platforms?.dialogflow?.nativeResponse) {
+      mergeInstances(response, output.platforms.dialogflow.nativeResponse);
     }
 
     return response;
@@ -107,7 +150,14 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
       output.listen = {
         entities: {
           mode,
-          types: response.session_entity_types.map(this.convertSessionEntityTypeToDynamicEntity),
+          types: response.session_entity_types.reduce(
+            (map: DynamicEntityMap, sessionEntityType) => {
+              map[sessionEntityType.name] =
+                this.convertSessionEntityTypeToDynamicEntity(sessionEntityType);
+              return map;
+            },
+            {},
+          ),
         },
       };
     }
@@ -130,12 +180,13 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
   }
 
   private convertDynamicEntityToSessionEntityType(
+    entityName: string,
     entity: DynamicEntity,
     entityOverrideMode: EntityOverrideModeLike,
   ): SessionEntityType {
     // name usually is a whole path that even includes the session-id, we will have to figure something out for that, but it should not be too complicated.
     return {
-      name: entity.name,
+      name: entityName,
       entity_override_mode: entityOverrideMode,
       entities: (entity.values || []).map((entityValue) => ({
         value: entityValue.id || entityValue.value,
@@ -149,7 +200,6 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
     sessionEntityType: SessionEntityType,
   ): DynamicEntity {
     return {
-      name: sessionEntityType.name,
       values: sessionEntityType.entities.map((entity) => ({
         id: entity.value,
         value: entity.value,

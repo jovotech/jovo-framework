@@ -7,6 +7,7 @@ import {
   Type,
   ValidateNested,
 } from '@jovotech/output';
+import { CAROUSEL_MAX_SIZE, CAROUSEL_MIN_SIZE } from '../../constants';
 import { CardContent } from './CardContent';
 
 export enum CardWidth {
@@ -20,8 +21,8 @@ export class CarouselCard {
   cardWidth: CardWidth;
 
   @IsArray()
-  @ArrayMinSize(2)
-  @ArrayMaxSize(10)
+  @ArrayMinSize(CAROUSEL_MIN_SIZE)
+  @ArrayMaxSize(CAROUSEL_MAX_SIZE)
   @ValidateNested({ each: true })
   @Type(() => CardContent)
   cardContents: CardContent[];

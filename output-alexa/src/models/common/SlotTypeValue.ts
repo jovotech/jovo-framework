@@ -1,10 +1,11 @@
-import { IsNotEmpty, IsString, Type, ValidateNested } from '@jovotech/output';
+import { IsNotEmpty, IsOptional, IsString, Type, ValidateNested } from '@jovotech/output';
 import { SlotTypeValueName } from './SlotTypeValueName';
 
 export class SlotTypeValue {
+  @IsOptional()
   @IsString()
   @IsNotEmpty()
-  id: string;
+  id?: string;
 
   @ValidateNested()
   @Type(() => SlotTypeValueName)

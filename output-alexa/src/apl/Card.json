@@ -10,9 +10,7 @@
       }
     ],
     "mainTemplate": {
-      "parameters": [
-        "data"
-      ],
+      "parameters": ["data"],
       "items": [
         {
           "type": "Container",
@@ -93,7 +91,7 @@
               ]
             },
             {
-               "type": "Container",
+              "type": "Container",
               "width": "100%",
               "paddingRight": "70",
               "paddingLeft": "70",
@@ -116,9 +114,7 @@
                       "touchForward": "true",
                       "primaryAction": {
                         "type": "SendEvent",
-                        "arguments": [
-                          "${data}"
-                        ]
+                        "arguments": ["${data}"]
                       }
                     }
                   ]
@@ -146,4 +142,3 @@
   },
   "sources": {}
 }
-

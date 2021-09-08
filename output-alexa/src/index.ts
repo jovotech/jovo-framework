@@ -14,13 +14,6 @@ declare module '@jovotech/output/dist/types/models/Card' {
   interface Card {
     header?: AplHeader;
     backgroundImageUrl?: string;
-    selection?: {
-      intent: string;
-      entities?: {
-        name: string;
-        value: string;
-      }[];
-    };
 
     toAlexaCard?(): AlexaCard<CardType.Standard>;
     toApl?(): AplRenderDocumentDirective;
@@ -45,14 +38,14 @@ declare module '@jovotech/output/dist/types/models/Message' {
 // augment the prototypes of the generic models to have methods to convert to the Alexa-variant
 augmentModelPrototypes();
 
-// Make AlexaOutputTemplate available for the OutputTemplatePlatforms-object via the Alexa-key.
+// Make AlexaOutputTemplate available for the OutputTemplatePlatforms-object via the alexa-key.
 declare module '@jovotech/output/dist/types/models/OutputTemplatePlatforms' {
   interface OutputTemplatePlatforms {
-    Alexa?: AlexaOutputTemplate;
+    alexa?: AlexaOutputTemplate;
   }
 }
 // Additionally, make class-validator and class-transformer aware of the added property.
-registerOutputPlatform('Alexa', AlexaOutputTemplate);
+registerOutputPlatform('alexa', AlexaOutputTemplate);
 
 export * from './decorators/validation/IsValidCardImage';
 export * from './decorators/validation/IsValidCardImageUrl';
@@ -61,6 +54,7 @@ export * from './decorators/validation/IsValidAlexaString';
 export * from './decorators/validation/IsValidOutputSpeechString';
 
 export * from './models';
+export * from './constants';
 
 export * from './AlexaOutputTemplateConverterStrategy';
 

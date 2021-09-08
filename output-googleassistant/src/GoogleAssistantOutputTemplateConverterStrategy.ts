@@ -1,14 +1,26 @@
 import {
+  Carousel,
+  DynamicEntities,
   DynamicEntitiesMode,
   DynamicEntity,
+  DynamicEntityMap,
+  mergeInstances,
   MessageValue,
   OutputTemplate,
+  OutputTemplateConverterStrategyConfig,
   QuickReplyValue,
   SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
-import _merge from 'lodash.merge';
+import {
+  COLLECTION_MAX_SIZE,
+  COLLECTION_MIN_SIZE,
+  SUGGESTION_TITLE_MAX_LENGTH,
+  SUGGESTIONS_MAX_SIZE,
+  TEXT_MAX_LENGTH,
+} from './constants';
 import {
   GoogleAssistantResponse,
+  Session,
   Simple,
   Suggestion,
   TypeOverride,
@@ -16,14 +28,68 @@ import {
   TypeOverrideModeLike,
 } from './models';
 
-export class GoogleAssistantOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<GoogleAssistantResponse> {
-  platformName = 'GoogleAssistant';
+export class GoogleAssistantOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<
+  GoogleAssistantResponse,
+  OutputTemplateConverterStrategyConfig
+> {
+  platformName = 'googleAssistant' as const;
   responseClass = GoogleAssistantResponse;
 
-  buildResponse(output: OutputTemplate): GoogleAssistantResponse {
+  protected sanitizeOutput(output: OutputTemplate): OutputTemplate {
+    if (output.message) {
+      output.message = this.sanitizeMessage(output.message, 'message');
+    }
+
+    if (output.reprompt) {
+      output.reprompt = this.sanitizeMessage(output.reprompt, 'reprompt');
+    }
+
+    if (output.quickReplies) {
+      output.quickReplies = this.sanitizeQuickReplies(output.quickReplies, 'quickReplies');
+    }
+
+    if (output.carousel) {
+      output.carousel = this.sanitizeCarousel(output.carousel, 'carousel');
+    }
+
+    return output;
+  }
+
+  protected sanitizeMessage(
+    message: MessageValue,
+    path: string,
+    maxLength = TEXT_MAX_LENGTH,
+    offset?: number,
+  ): MessageValue {
+    return super.sanitizeMessage(message, path, maxLength, offset);
+  }
+
+  protected sanitizeQuickReplies(
+    quickReplies: QuickReplyValue[],
+    path: string,
+    maxSize = SUGGESTIONS_MAX_SIZE,
+    maxLength = SUGGESTION_TITLE_MAX_LENGTH,
+  ): QuickReplyValue[] {
+    return super.sanitizeQuickReplies(quickReplies, path, maxSize, maxLength);
+  }
+
+  protected sanitizeCarousel(
+    carousel: Carousel,
+    path: string,
+    minSize = COLLECTION_MIN_SIZE,
+    maxSize = COLLECTION_MAX_SIZE,
+  ): Carousel {
+    return super.sanitizeCarousel(carousel, path, minSize, maxSize);
+  }
+
+  toResponse(output: OutputTemplate): GoogleAssistantResponse {
     const response: GoogleAssistantResponse = {};
 
-    const listen = output.platforms?.GoogleAssistant?.listen ?? output.listen;
+    function getEmptySession(): Session {
+      return { id: '', params: {}, languageCode: '' };
+    }
+
+    const listen = output.listen;
     if (listen === false) {
       response.scene = {
         name: '',
@@ -32,20 +98,24 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
           name: 'actions.scene.END_CONVERSATION',
         },
       };
-    } else if (typeof listen === 'object' && listen.entities?.types?.length) {
+    } else if (typeof listen === 'object' && listen.entities?.types) {
       const typeOverrideMode: TypeOverrideMode =
         listen.entities.mode === DynamicEntitiesMode.Merge
           ? TypeOverrideMode.Merge
           : TypeOverrideMode.Replace;
       if (!response.session) {
-        response.session = { id: '', params: {}, languageCode: '' };
+        response.session = getEmptySession();
       }
-      response.session.typeOverrides = listen.entities.types.map((entity) =>
-        this.convertDynamicEntityToTypeOverride(entity, typeOverrideMode),
+      response.session.typeOverrides = Object.keys(listen.entities.types).map((entityName) =>
+        this.convertDynamicEntityToTypeOverride(
+          entityName,
+          ((listen.entities as DynamicEntities).types as DynamicEntityMap)[entityName],
+          typeOverrideMode,
+        ),
       );
     }
 
-    const message = output.platforms?.GoogleAssistant?.message || output.message;
+    const message = output.message;
     if (message) {
       if (!response.prompt) {
         response.prompt = {};
@@ -53,28 +123,30 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
       response.prompt.firstSimple = this.convertMessageToSimple(message);
     }
 
-    const reprompt = output.platforms?.GoogleAssistant?.reprompt || output.reprompt;
+    const reprompt = output.reprompt;
     if (reprompt) {
       if (!response.session) {
-        response.session = { id: '', params: {}, languageCode: '' };
+        response.session = getEmptySession();
       }
       const text = typeof reprompt === 'string' ? reprompt : reprompt.displayText || reprompt.text;
-      response.session.params._GA_REPROMPTS_ = {
+      response.session.params._GOOGLE_ASSISTANT_REPROMPTS_ = {
         NO_INPUT_1: text,
         NO_INPUT_2: text,
         NO_INPUT_FINAL: text,
       };
     }
 
-    const quickReplies = output.platforms?.GoogleAssistant?.quickReplies || output.quickReplies;
+    const quickReplies = output.quickReplies;
     if (quickReplies?.length) {
       if (!response.prompt) {
         response.prompt = {};
       }
-      response.prompt.suggestions = quickReplies.map(this.convertQuickReplyToSuggestion);
+      response.prompt.suggestions = quickReplies
+        .slice(0, 8)
+        .map(this.convertQuickReplyToSuggestion);
     }
 
-    const card = output.platforms?.GoogleAssistant?.card || output.card;
+    const card = output.card;
     if (card) {
       if (!response.prompt) {
         response.prompt = {};
@@ -85,14 +157,19 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
       response.prompt.content.card = card.toGoogleAssistantCard?.();
     }
 
-    const carousel = output.platforms?.GoogleAssistant?.carousel || output.carousel;
-    if (carousel) {
+    const carousel = output.carousel;
+    // if a carousel exists and selection.entityType is set for it (otherwise carousel can't be displayed)
+    if (carousel?.selection?.entityType && carousel?.selection?.intent) {
       const collectionData = carousel.toGoogleAssistantCollectionData?.();
       if (collectionData) {
         if (!response.session) {
-          response.session = { id: '', params: {}, languageCode: '' };
+          response.session = getEmptySession();
         }
-        response.session.typeOverrides = [collectionData.typeOverride];
+        if (!response.session.typeOverrides) {
+          response.session.typeOverrides = [];
+        }
+        response.session.typeOverrides.push(collectionData.typeOverride);
+        response.session.params._GOOGLE_ASSISTANT_SELECTION_INTENT_ = carousel.selection.intent;
 
         if (!response.prompt) {
           response.prompt = {};
@@ -104,8 +181,8 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
       }
     }
 
-    if (output.platforms?.GoogleAssistant?.nativeResponse) {
-      _merge(response, output.platforms.GoogleAssistant.nativeResponse);
+    if (output.platforms?.googleAssistant?.nativeResponse) {
+      mergeInstances(response, output.platforms.googleAssistant.nativeResponse);
     }
 
     return response;
@@ -118,7 +195,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
     if (simple?.toMessage) {
       output.message = simple.toMessage();
     }
-    const reprompts = response.session?.params?._GA_REPROMPTS_ as
+    const reprompts = response.session?.params?._GOOGLE_ASSISTANT_REPROMPTS_ as
       | Record<'NO_INPUT_1' | 'NO_INPUT_2' | 'NO_INPUT_FINAL', string>
       | undefined;
     const reprompt = reprompts?.NO_INPUT_1 || reprompts?.NO_INPUT_2 || reprompts?.NO_INPUT_FINAL;
@@ -133,14 +210,17 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
     if (response.session?.typeOverrides?.length) {
       // only the first should be sufficient
       const mode =
-        response.session.typeOverrides[0].mode === TypeOverrideMode.Merge
+        response.session.typeOverrides[0].typeOverrideMode === TypeOverrideMode.Merge
           ? DynamicEntitiesMode.Merge
           : DynamicEntitiesMode.Replace;
 
       output.listen = {
         entities: {
           mode,
-          types: response.session.typeOverrides.map(this.convertTypeOverrideToDynamicEntity),
+          types: response.session.typeOverrides.reduce((map: DynamicEntityMap, typeOverride) => {
+            map[typeOverride.name] = this.convertTypeOverrideToDynamicEntity(typeOverride);
+            return map;
+          }, {}),
         },
       };
     }
@@ -197,12 +277,13 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
   }
 
   private convertDynamicEntityToTypeOverride(
+    entityName: string,
     entity: DynamicEntity,
     mode: TypeOverrideModeLike = TypeOverrideMode.Replace,
   ): TypeOverride {
     return {
-      name: entity.name,
-      mode,
+      name: entityName,
+      typeOverrideMode: mode,
       synonym: {
         entries: (entity.values || []).map((entityValue) => ({
           name: entityValue.id || entityValue.value,
@@ -214,7 +295,6 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
 
   private convertTypeOverrideToDynamicEntity(typeOverride: TypeOverride): DynamicEntity {
     return {
-      name: typeOverride.name,
       values: (typeOverride.synonym?.entries || []).map((entry) => ({
         id: entry.name,
         value: entry.name,

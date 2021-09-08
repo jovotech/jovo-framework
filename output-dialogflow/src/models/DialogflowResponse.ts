@@ -15,7 +15,7 @@ import { Message } from './Message';
 import { SessionEntityType } from './SessionEntityType';
 
 export class DialogflowResponse<
-  P extends Record<string, unknown> = Record<string, unknown>
+  P extends Record<string, unknown> = Record<string, unknown>,
 > extends JovoResponse {
   @IsOptional()
   @IsString()

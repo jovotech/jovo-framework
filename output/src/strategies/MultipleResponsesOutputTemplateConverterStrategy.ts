@@ -1,25 +1,35 @@
 import { OutputTemplate } from '../models/OutputTemplate';
-import { OutputTemplateConverterStrategy } from '../OutputTemplateConverterStrategy';
+import {
+  OutputTemplateConverterStrategy,
+  OutputTemplateConverterStrategyConfig,
+} from '../OutputTemplateConverterStrategy';
 
+/**
+ * Strategy that can have multiple OutputTemplates and multiple Responses.
+ */
 export abstract class MultipleResponsesOutputTemplateConverterStrategy<
   RESPONSE extends Record<string, unknown>,
-> extends OutputTemplateConverterStrategy<RESPONSE> {
-  fromResponse(response: RESPONSE): OutputTemplate;
-  fromResponse(responses: RESPONSE[]): OutputTemplate[];
-  fromResponse(responseOrResponses: RESPONSE | RESPONSE[]): OutputTemplate | OutputTemplate[] {
-    return Array.isArray(responseOrResponses)
-      ? responseOrResponses.map((responseItem) => this.convertResponse(responseItem))
-      : this.convertResponse(responseOrResponses);
+  CONFIG extends OutputTemplateConverterStrategyConfig,
+> extends OutputTemplateConverterStrategy<RESPONSE, CONFIG> {
+  prepareOutput(output: OutputTemplate | OutputTemplate[]): OutputTemplate | OutputTemplate[] {
+    output = super.prepareOutput(output);
+    if (!this.shouldSanitize()) {
+      return output;
+    }
+    return Array.isArray(output)
+      ? output.map((outputItem, index) => this.sanitizeOutput(outputItem, index))
+      : this.sanitizeOutput(output);
   }
 
+  protected abstract sanitizeOutput(output: OutputTemplate, index?: number): OutputTemplate;
+
+  abstract convertOutput(output: OutputTemplate): RESPONSE | RESPONSE[];
   abstract convertResponse(response: RESPONSE): OutputTemplate;
 
-  toResponse(output: OutputTemplate): RESPONSE;
-  toResponse(outputs: OutputTemplate[]): RESPONSE[];
   toResponse(output: OutputTemplate | OutputTemplate[]): RESPONSE | RESPONSE[] {
     return Array.isArray(output)
       ? output
-          .map((outputItem) => this.convertTemplate(outputItem))
+          .map((outputItem) => this.convertOutput(outputItem))
           .reduce((accumulator: RESPONSE[], currentValue) => {
             if (Array.isArray(currentValue)) {
               accumulator.push(...currentValue);
@@ -28,8 +38,12 @@ export abstract class MultipleResponsesOutputTemplateConverterStrategy<
             }
             return accumulator;
           }, [])
-      : this.convertTemplate(output);
+      : this.convertOutput(output);
   }
 
-  abstract convertTemplate(output: OutputTemplate): RESPONSE | RESPONSE[];
+  fromResponse(responseOrResponses: RESPONSE | RESPONSE[]): OutputTemplate | OutputTemplate[] {
+    return Array.isArray(responseOrResponses)
+      ? responseOrResponses.map((responseItem) => this.convertResponse(responseItem))
+      : this.convertResponse(responseOrResponses);
+  }
 }

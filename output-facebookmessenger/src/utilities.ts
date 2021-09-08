@@ -1,7 +1,9 @@
 import { Card, Carousel, Message, QuickReply, removeSSML } from '@jovotech/output';
+import { GENERIC_TEMPLATE_MAX_SIZE } from './constants';
 import {
   GenericTemplateElement,
   Message as FacebookMessengerMessage,
+  MessageAttachmentType,
   QuickReplyContentType,
   TemplateType,
 } from './models';
@@ -27,10 +29,30 @@ export function augmentModelPrototypes(): void {
     };
   };
 
+  Card.prototype.toFacebookMessengerMessage = function () {
+    return {
+      attachment: {
+        type: MessageAttachmentType.Template,
+        payload: this.toFacebookMessengerGenericTemplate!(),
+      },
+    };
+  };
+
   Carousel.prototype.toFacebookMessengerGenericTemplate = function () {
     return {
       template_type: TemplateType.Generic,
-      elements: this.items.map((item) => item.toFacebookMessengerGenericTemplateElement!()),
+      elements: this.items
+        .slice(0, GENERIC_TEMPLATE_MAX_SIZE)
+        .map((item) => item.toFacebookMessengerGenericTemplateElement!()),
+    };
+  };
+
+  Carousel.prototype.toFacebookMessengerMessage = function () {
+    return {
+      attachment: {
+        type: MessageAttachmentType.Template,
+        payload: this.toFacebookMessengerGenericTemplate!(),
+      },
     };
   };
 
@@ -38,21 +60,6 @@ export function augmentModelPrototypes(): void {
     const message: FacebookMessengerMessage = {
       text: removeSSML(this.displayText || this.text),
     };
-    if (this.quickReplies) {
-      message.quick_replies = this.quickReplies.map((quickReply) => {
-        return typeof quickReply === 'string'
-          ? {
-              content_type: QuickReplyContentType.Text,
-              title: quickReply,
-              payload: quickReply,
-            }
-          : quickReply.toFacebookQuickReply?.() || {
-              content_type: QuickReplyContentType.Text,
-              title: quickReply.text,
-              payload: quickReply.value || quickReply.text,
-            };
-      });
-    }
     return message;
   };
 

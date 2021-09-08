@@ -1,22 +1,10 @@
-import {
-  DynamicEntityValue,
-  IsArray,
-  IsEnum,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  Type,
-  ValidateNested,
-} from '..';
+import { DynamicEntityValue, IsArray, Type, ValidateNested } from '..';
 
 export class DynamicEntity {
-  @IsString()
-  @IsNotEmpty()
-  name: string;
+  [key: string]: unknown;
 
-  @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => DynamicEntityValue)
-  values?: DynamicEntityValue[];
+  values: DynamicEntityValue[];
 }

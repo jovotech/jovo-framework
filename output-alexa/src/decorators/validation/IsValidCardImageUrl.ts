@@ -1,5 +1,6 @@
 import { IsEitherValid, isURL, ValidationOptions } from '@jovotech/output';
-import { CardImage } from '../../models/card/CardImage';
+import { CARD_IMAGE_URL_MAX_LENGTH } from '../../constants';
+import { CardImage } from '../../models';
 
 export function IsValidCardImageUrl(options?: ValidationOptions): PropertyDecorator {
   return IsEitherValid<CardImage>(
@@ -11,8 +12,8 @@ export function IsValidCardImageUrl(options?: ValidationOptions): PropertyDecora
           return '$property must be an URL address';
         }
 
-        if (value.length > 2000) {
-          return '$property can not exceed 2000 characters.';
+        if (value.length > CARD_IMAGE_URL_MAX_LENGTH) {
+          return `$property can not exceed ${CARD_IMAGE_URL_MAX_LENGTH} characters.`;
         }
 
         return;

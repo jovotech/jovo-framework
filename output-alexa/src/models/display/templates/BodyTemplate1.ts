@@ -8,9 +8,18 @@ import {
   Type,
   ValidateNested,
 } from '@jovotech/output';
+import {
+  BODY_TEMPLATE_MAIN_TEXT_MAX_LENGTH,
+  DISPLAY_TEMPLATE_TITLE_MAX_LENGTH,
+} from '../../../constants';
 import { MainTextMaxLength } from '../../../decorators/validation/MainTextMaxLength';
 import { Image } from '../../common/Image';
-import { BackButtonVisibility, BackButtonVisibilityLike, DisplayTemplate, DisplayTemplateType } from '../DisplayTemplate';
+import {
+  BackButtonVisibility,
+  BackButtonVisibilityLike,
+  DisplayTemplate,
+  DisplayTemplateType,
+} from '../DisplayTemplate';
 import { TextContent } from '../TextContent';
 
 export class BodyTemplate1 implements DisplayTemplate<DisplayTemplateType.Body1> {
@@ -32,10 +41,10 @@ export class BodyTemplate1 implements DisplayTemplate<DisplayTemplateType.Body1>
 
   @IsString()
   @IsNotEmpty()
-  @MaxLength(200)
+  @MaxLength(DISPLAY_TEMPLATE_TITLE_MAX_LENGTH)
   title: string;
 
-  @MainTextMaxLength(85)
+  @MainTextMaxLength(BODY_TEMPLATE_MAIN_TEXT_MAX_LENGTH)
   @ValidateNested()
   @Type(() => TextContent)
   textContent: TextContent;

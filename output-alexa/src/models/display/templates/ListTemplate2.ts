@@ -10,9 +10,14 @@ import {
   Type,
   ValidateNested,
 } from '@jovotech/output';
+import { LIST_TEMPLATE_MIN_SIZE, DISPLAY_TEMPLATE_TITLE_MAX_LENGTH } from '../../../constants';
 import { Image } from '../../common/Image';
-import { BackButtonVisibility, BackButtonVisibilityLike, DisplayTemplate, DisplayTemplateType } from '../DisplayTemplate';
-import { DisplayTemplateList1Item } from '../list-items/DisplayTemplateList1Item';
+import {
+  BackButtonVisibility,
+  BackButtonVisibilityLike,
+  DisplayTemplate,
+  DisplayTemplateType,
+} from '../DisplayTemplate';
 import { DisplayTemplateList2Item } from '../list-items/DisplayTemplateList2Item';
 
 export class ListTemplate2 implements DisplayTemplate<DisplayTemplateType.List2> {
@@ -29,7 +34,7 @@ export class ListTemplate2 implements DisplayTemplate<DisplayTemplateType.List2>
 
   @IsString()
   @IsNotEmpty()
-  @MaxLength(200)
+  @MaxLength(DISPLAY_TEMPLATE_TITLE_MAX_LENGTH)
   title: string;
 
   @IsOptional()
@@ -38,7 +43,7 @@ export class ListTemplate2 implements DisplayTemplate<DisplayTemplateType.List2>
   backgroundImage?: Image;
 
   @IsArray()
-  @ArrayMinSize(1)
+  @ArrayMinSize(LIST_TEMPLATE_MIN_SIZE)
   @ValidateNested({
     each: true,
   })

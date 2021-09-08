@@ -1,31 +1,47 @@
-import _merge from 'lodash.merge';
 import {
+  mergeInstances,
   Message,
+  NullableOutputTemplateBase,
   OutputTemplate,
-  OutputTemplatePlatforms,
+  OutputTemplateBase,
+  OutputTemplateConverterStrategyConfig,
   plainToClass,
   PlatformOutputTemplate,
 } from '..';
 import { OutputTemplateConverterStrategy } from '../OutputTemplateConverterStrategy';
 
+/**
+ * Strategy that merges multiple OutputTemplates into a single OutputTemplate and only converts the merged OutputTemplate to a response.
+ * - Strings get concatenated and separated by a whitespace.
+ * - Quick Replies get merged into a single array.
+ * - Card/Carousel the last in the array is used.
+ * - nativeResponses get merged.
+ * - Listen gets chosen by priority: objects > boolean
+ */
 export abstract class SingleResponseOutputTemplateConverterStrategy<
   RESPONSE extends Record<string, unknown>,
-> extends OutputTemplateConverterStrategy<RESPONSE> {
-  abstract platformName: keyof OutputTemplatePlatforms;
-
-  abstract fromResponse(response: RESPONSE): OutputTemplate;
-
-  toResponse(output: OutputTemplate | OutputTemplate[]): RESPONSE {
-    const mergedOutput = Array.isArray(output) ? this.mergeOutputTemplates(output) : output;
-    return this.buildResponse(mergedOutput);
+  CONFIG extends OutputTemplateConverterStrategyConfig,
+> extends OutputTemplateConverterStrategy<RESPONSE, CONFIG> {
+  prepareOutput(output: OutputTemplate | OutputTemplate[]): OutputTemplate {
+    output = super.prepareOutput(output);
+    if (Array.isArray(output)) {
+      output = this.mergeOutputTemplates(output);
+    }
+    return this.shouldSanitize() ? this.sanitizeOutput(output) : output;
   }
 
-  abstract buildResponse(output: OutputTemplate): RESPONSE;
+  protected abstract sanitizeOutput(output: OutputTemplate): OutputTemplate;
 
-  mergeOutputTemplates(output: OutputTemplate[]): OutputTemplate {
-    return output.reduce(
-      (accumulator, current) => this.mergeOutputTemplateWith(accumulator, current),
-      {},
+  abstract toResponse(output: OutputTemplate): RESPONSE;
+  abstract fromResponse(response: RESPONSE): OutputTemplate;
+
+  protected mergeOutputTemplates(output: OutputTemplate[]): OutputTemplate {
+    return plainToClass(
+      OutputTemplate,
+      output.reduce(
+        (accumulator, current) => this.mergeOutputTemplateWith(accumulator, current),
+        {},
+      ),
     );
   }
 
@@ -33,30 +49,10 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
     target: OutputTemplate,
     mergeWith: OutputTemplate,
   ): OutputTemplate {
-    this.mergeOutputTemplateMessageIfSet(target, mergeWith, 'message');
-    this.mergeOutputTemplateMessageIfSet(target, mergeWith, 'reprompt');
+    this.mergeOutputTemplateBaseWith(target, mergeWith);
 
-    if (mergeWith.quickReplies) {
-      if (!target.quickReplies) {
-        target.quickReplies = [];
-      }
-      target.quickReplies.push(...mergeWith.quickReplies);
-    }
-
-    if (mergeWith.card) {
-      target.card = { ...mergeWith.card };
-    }
-
-    if (mergeWith.carousel) {
-      target.carousel = { ...mergeWith.carousel };
-    }
-
-    if (typeof mergeWith.listen === 'boolean') {
-      target.listen = mergeWith.listen;
-    }
-
-    const mergeWithPlatformOutput = mergeWith.platforms?.[this.platformName];
-    if (mergeWithPlatformOutput) {
+    const platformOutput = mergeWith.platforms?.[this.platformName];
+    if (platformOutput) {
       if (!target.platforms) {
         target.platforms = {};
       }
@@ -65,30 +61,59 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
       }
       const targetPlatformOutput = target.platforms[this.platformName] as PlatformOutputTemplate;
 
-      if (mergeWithPlatformOutput.nativeResponse) {
+      if (platformOutput.nativeResponse) {
         if (!targetPlatformOutput.nativeResponse) {
           targetPlatformOutput.nativeResponse = {};
         }
-        // TODO determine whether merge is sufficient
-        _merge(targetPlatformOutput.nativeResponse, mergeWithPlatformOutput.nativeResponse);
+        mergeInstances(targetPlatformOutput.nativeResponse, platformOutput.nativeResponse);
       }
 
-      this.mergeOutputTemplateWith(targetPlatformOutput, mergeWithPlatformOutput);
+      this.mergeOutputTemplateBaseWith(targetPlatformOutput, platformOutput);
     }
-    return plainToClass(OutputTemplate, target);
+    return target;
   }
 
-  protected mergeOutputTemplateMessageIfSet(
-    target: OutputTemplate,
-    mergeWith: OutputTemplate,
-    key: 'message' | 'reprompt',
+  protected mergeOutputTemplateBaseWith(
+    target: OutputTemplateBase | NullableOutputTemplateBase,
+    mergeWith: OutputTemplateBase | NullableOutputTemplateBase,
   ): void {
-    if (mergeWith[key]) {
-      const mergeText =
-        typeof mergeWith[key] === 'string' ? mergeWith[key] : (mergeWith[key] as Message).text;
+    const message = mergeWith.message;
+    if (message) {
+      const mergeText = typeof message === 'string' ? message : (message as Message).text;
+      target.message = target.message ? [target.message, mergeText].join(' ') : mergeText;
+    }
 
-      // TODO Determine whether the space should be added here
-      target[key] = target[key] ? [target.message, mergeText].join(' ') : mergeText;
+    const reprompt = mergeWith.reprompt;
+    if (reprompt) {
+      const mergeText = typeof reprompt === 'string' ? reprompt : (reprompt as Message).text;
+      target.reprompt = target.reprompt ? [target.reprompt, mergeText].join(' ') : mergeText;
+    }
+
+    const quickReplies = mergeWith.quickReplies;
+    if (quickReplies) {
+      if (!target.quickReplies) {
+        target.quickReplies = [];
+      }
+      target.quickReplies.push(...quickReplies);
+    }
+
+    const card = mergeWith.card;
+    if (card) {
+      target.card = { ...card };
+    }
+
+    const carousel = mergeWith.carousel;
+    if (carousel) {
+      target.carousel = { ...carousel };
+    }
+
+    // if new listen is an object and not null
+    const listen = mergeWith.listen;
+    if (typeof listen === 'object' && listen) {
+      target.listen = { ...listen };
+      // if current listen is not an object and new listen is not undefined
+    } else if (typeof target.listen !== 'object' && typeof listen !== 'undefined') {
+      target.listen = listen;
     }
   }
 }

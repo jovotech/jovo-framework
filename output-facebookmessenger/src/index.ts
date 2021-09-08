@@ -11,14 +11,15 @@ import { augmentModelPrototypes } from './utilities';
 declare module '@jovotech/output/dist/types/models/Card' {
   interface Card {
     toFacebookMessengerGenericTemplate?(): GenericTemplate;
-
     toFacebookMessengerGenericTemplateElement?(): GenericTemplateElement;
+    toFacebookMessengerMessage?(): FacebookMessengerMessage;
   }
 }
 
 declare module '@jovotech/output/dist/types/models/Carousel' {
   interface Carousel {
     toFacebookMessengerGenericTemplate?(): GenericTemplate;
+    toFacebookMessengerMessage?(): FacebookMessengerMessage;
   }
 }
 
@@ -37,19 +38,20 @@ declare module '@jovotech/output/dist/types/models/QuickReply' {
 // augment the prototypes of the generic models to have methods to convert to the FacebookMessenger-variant
 augmentModelPrototypes();
 
-// Make FacebookMessengerOutputTemplate available for the OutputTemplatePlatforms-object via the FacebookMessenger-key.
+// Make FacebookMessengerOutputTemplate available for the OutputTemplatePlatforms-object via the facebookMessenger-key.
 declare module '@jovotech/output/dist/types/models/OutputTemplatePlatforms' {
   interface OutputTemplatePlatforms {
-    FacebookMessenger?: FacebookMessengerOutputTemplate;
+    facebookMessenger?: FacebookMessengerOutputTemplate;
   }
 }
 // Additionally, make class-validator and class-transformer aware of the added property.
-registerOutputPlatform('FacebookMessenger', FacebookMessengerOutputTemplate);
+registerOutputPlatform('facebookMessenger', FacebookMessengerOutputTemplate);
 
 export * from './decorators/transformation/TransformButton';
 export * from './decorators/validation/CastedMaxLength';
 export * from './decorators/validation/IsValidGameMetaDataString';
 
 export * from './models';
+export * from './constants';
 
 export * from './FacebookMessengerOutputTemplateConverterStrategy';

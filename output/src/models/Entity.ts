@@ -1,9 +1,9 @@
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
+export type EntityMap = Record<string, Entity>;
+
 export class Entity {
-  @IsString()
-  @IsNotEmpty()
-  name: string;
+  [key: string]: unknown;
 
   @IsString()
   @IsNotEmpty()

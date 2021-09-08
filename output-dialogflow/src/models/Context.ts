@@ -1,4 +1,5 @@
 import { IsInt, IsNotEmpty, IsObject, IsOptional, IsString, Min } from '@jovotech/output';
+import { CONTEXT_LIFESPAN_COUNT_MIN } from '../constants';
 
 export class Context {
   @IsString()
@@ -7,7 +8,7 @@ export class Context {
 
   @IsOptional()
   @IsInt()
-  @Min(0)
+  @Min(CONTEXT_LIFESPAN_COUNT_MIN)
   lifespan_count?: number;
 
   @IsOptional()

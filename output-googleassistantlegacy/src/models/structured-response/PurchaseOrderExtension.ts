@@ -9,6 +9,7 @@ import {
   Type,
   ValidateNested,
 } from '@jovotech/output';
+import { USER_STATUS_LABEL_MAX_LENGTH } from '../../constants';
 import { PurchaseError } from './PurchaseError';
 import { PurchaseFulfillmentInfo } from './PurchaseFulfillmentInfo';
 import { PurchaseReturnsInfo } from './PurchaseReturnsInfo';
@@ -48,7 +49,7 @@ export class PurchaseOrderExtension {
 
   @IsString()
   @IsNotEmpty()
-  @MaxLength(50)
+  @MaxLength(USER_STATUS_LABEL_MAX_LENGTH)
   userVisibleStatusLabel: string;
 
   @IsEnum(PurchaseType)

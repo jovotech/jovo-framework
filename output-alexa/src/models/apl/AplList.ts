@@ -1,14 +1,14 @@
 import {
   ArrayMinSize,
-  Card,
+  CarouselItem,
   IsArray,
-  IsInstance,
   IsOptional,
   IsString,
   Type,
   ValidateNested,
 } from '@jovotech/output';
 import AplListJson from '../../apl/List.json';
+import { APL_LIST_MIN_SIZE } from '../../constants';
 import { AplHeader } from './AplHeader';
 import { AplRenderDocumentDirective } from './AplRenderDocumentDirective';
 
@@ -27,15 +27,12 @@ export class AplList {
   header?: AplHeader;
 
   @IsArray()
-  @ArrayMinSize(2)
-  @IsInstance(Card, {
-    each: true,
-  })
+  @ArrayMinSize(APL_LIST_MIN_SIZE)
   @ValidateNested({
     each: true,
   })
-  @Type(() => Card)
-  items: Card[];
+  @Type(() => CarouselItem)
+  items: CarouselItem[];
 
   toApl?(): AplRenderDocumentDirective {
     if (this.title) {
@@ -50,7 +47,7 @@ export class AplList {
       AplListJson.datasources.data.backgroundImageUrl = this.backgroundImageUrl;
     }
 
-    (AplListJson.datasources.data.items as Card[]) = this.items.map((item: Card) => ({
+    (AplListJson.datasources.data.items as CarouselItem[]) = this.items.map((item) => ({
       ...item,
       selection: item.selection
         ? {

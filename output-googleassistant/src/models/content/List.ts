@@ -8,6 +8,7 @@ import {
   Type,
   ValidateNested,
 } from '@jovotech/output';
+import { COLLECTION_MIN_SIZE, LIST_MAX_SIZE } from '../../constants';
 
 export class List {
   @IsOptional()
@@ -21,8 +22,8 @@ export class List {
   subtitle?: string;
 
   @IsArray()
-  @ArrayMinSize(2)
-  @ArrayMaxSize(30)
+  @ArrayMinSize(COLLECTION_MIN_SIZE)
+  @ArrayMaxSize(LIST_MAX_SIZE)
   @ValidateNested({ each: true })
   @Type(() => ListItem)
   items: ListItem[];
