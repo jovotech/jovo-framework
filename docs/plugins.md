@@ -4,17 +4,7 @@ excerpt: 'Learn how you can build your own plugins to customize and extend the J
 ---
 # Plugins
 
-Learn how you can build your own plugins to customize and extend the Jovo Framework.
-
-- [Introduction](#introduction)
-- [Get Started with Jovo Plugins](#get-started-with-jovo-plugins)
-  - [Basic Plugin Structure](#basic-plugin-structure)
-  - [Plugin Configuration](#plugin-configuration)
-  - [Add a Plugin to the Jovo App](#add-a-plugin-to-the-jovo-app)
-- [Advanced Jovo Plugins](#advanced-jovo-plugins)
-  - [Plugin Lifecycle](#plugin-lifecycle)
-  - [Plugin Mounting](#plugin-mounting)
-  - [Jovo Extensible Structure](#jovo-extensible-structure)
+Learn how you can build your own plugins to customize and extend the Jovo Framework. For lightweight plugins, take a look at [hooks](./hooks.md).
 
 ## Introduction
 
