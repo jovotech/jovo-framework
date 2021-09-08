@@ -38,21 +38,19 @@ export abstract class Extensible<
     }
   }
 
-  // TODO determine whether abstract or a default implementation should exist (that would most likely return an empty MiddlewareCollection)
   abstract initializeMiddlewareCollection(): MiddlewareCollection<MIDDLEWARES>;
 
   use(...plugins: Plugin[]): this {
     plugins.forEach((plugin) => {
       const name = plugin.constructor.name;
       this.plugins[name] = plugin;
-      if (plugin.install) {
-        plugin.install?.(this);
-      }
+      plugin.install?.(this);
     });
     return this;
   }
 
   protected async initializePlugins(): Promise<void> {
+    // for every child-plugin of this extensible
     for (const key in this.plugins) {
       if (this.plugins.hasOwnProperty(key)) {
         const plugin = this.plugins[key];
@@ -65,19 +63,22 @@ export abstract class Extensible<
           ? _merge({}, this.config.plugin?.[key] || {}, plugin.config)
           : _merge({}, plugin.config, this.config.plugin?.[key] || {});
 
+        // overwrite config, this is just used, because the config-property is readonly
         Object.defineProperty(plugin, 'config', {
           enumerable: true,
           value: config,
         });
+        // if this extensible has no plugin-config for nested child-plugins, create it
         if (!this.config.plugin) {
           this.config.plugin = {};
         }
+        // make plugin-config of this extensible aware of the child-plugin's config
+        // this way the config-tree will be build with correct references
         this.config.plugin[key] = config;
 
-        if (plugin.initialize) {
-          await plugin.initialize(this);
-        }
+        await plugin.initialize?.(this);
 
+        // if the plugin extends Extensible and has installed child-plugins, initialize the plugin's child-plugins
         if (plugin instanceof Extensible && Object.keys(plugin.plugins).length) {
           await plugin.initializePlugins();
         }
@@ -86,6 +87,7 @@ export abstract class Extensible<
   }
 
   protected async mountPlugins(): Promise<void> {
+    // for every child-plugin of this extensible
     for (const key in this.plugins) {
       if (this.plugins.hasOwnProperty(key)) {
         const plugin = this.plugins[key];
@@ -93,19 +95,17 @@ export abstract class Extensible<
           continue;
         }
 
-        const config = plugin.config;
-
-        Object.defineProperty(plugin, 'config', {
-          enumerable: true,
-          value: config,
-        });
-        await plugin.mount?.(this);
-
+        // if this extensible has no plugin-config for nested child-plugins, create it
         if (!this.config.plugin) {
           this.config.plugin = {};
         }
-        this.config.plugin[key] = config;
+        // make plugin-config of this extensible aware of the child-plugin's config
+        // this way the config-tree will be rebuild with correct references
+        this.config.plugin[key] = plugin.config;
 
+        await plugin.mount?.(this);
+
+        // if the plugin extends Extensible and has installed child-plugins, mount the plugin's child-plugins
         if (plugin instanceof Extensible && (plugin as Extensible).plugins) {
           await plugin.mountPlugins();
         }

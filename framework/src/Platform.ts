@@ -42,6 +42,7 @@ export abstract class Platform<
   abstract isRequestRelated(request: REQUEST | AnyObject): boolean;
 
   abstract isResponseRelated(response: RESPONSE | AnyObject): boolean;
+
   abstract finalizeResponse(
     response: RESPONSE | RESPONSE[],
     jovo: JOVO,
@@ -51,11 +52,10 @@ export abstract class Platform<
     return new MiddlewareCollection<PlatformMiddlewares>(...APP_MIDDLEWARES);
   }
 
-  install(parent: Extensible): void {
-    if (!(parent instanceof App)) {
-      throw new InvalidParentError(this.constructor.name, App);
+  mount(parent: Extensible): void {
+    if (!(parent instanceof HandleRequest)) {
+      throw new InvalidParentError(this.constructor.name, HandleRequest);
     }
-
     // propagate runs of middlewares of parent to middlewares of this
     this.middlewareCollection.names.forEach((middlewareName) => {
       parent.middlewareCollection.use(middlewareName, async (jovo) => {
@@ -80,6 +80,7 @@ export abstract class Platform<
   createUserInstance(jovo: JOVO): USER {
     return new this.userClass(jovo);
   }
+
   createDeviceInstance(jovo: JOVO): DEVICE {
     return new this.deviceClass(jovo);
   }

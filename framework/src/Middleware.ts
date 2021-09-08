@@ -20,7 +20,7 @@ export class Middleware<NAME extends string = string> {
       return;
     }
     for (let i = 0, len = this.fns.length; i < len; i++) {
-      await this.fns[i].call(null, jovo);
+      await this.fns[i](jovo);
     }
   }
 
