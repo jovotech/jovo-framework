@@ -1,16 +1,10 @@
+---
+title: 'Alexa Reminders'
+excerpt: 'Learn how to use the Alexa Skill Reminders feature with Jovo.'
+---
 # Alexa Reminders
 
 Learn how to use the Alexa Skill Reminders feature with Jovo.
-
-- [Introduction](#introduction)
-- [Permissions](#permissions)
-  - [Add Reminder Permissions to the Skill Manifest](#add-reminder-permissions-to-the-skill-manifest)
-  - [Ask Users for Permission](#ask-users-for-permission)
-- [Add and Modify Reminders](#add-and-modify-reminders)
-  - [Set Reminders](#set-reminders)
-  - [Update Reminders](#update-reminders)
-  - [Get Reminders](#get-reminders)
-  - [Delete Reminders](#delete-reminders)
 
 ## Introduction
 
