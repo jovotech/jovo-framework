@@ -6,11 +6,13 @@ import {
   APP_MIDDLEWARES,
   AppMiddlewares,
   Constructor,
+  DbPlugin,
   HandleRequest,
   InvalidParentError,
   Jovo,
   JovoConstructor,
   JovoUser,
+  StoredElementSession,
 } from '.';
 import { Extensible, ExtensibleConfig } from './Extensible';
 import { JovoDevice, JovoDeviceConstructor } from './JovoDevice';
@@ -83,5 +85,33 @@ export abstract class Platform<
 
   createDeviceInstance(jovo: JOVO): DEVICE {
     return new this.deviceClass(jovo);
+  }
+
+  protected enableDatabaseSessionStorage(
+    jovo: Jovo,
+    sessionConfig?: StoredElementSession & { enabled?: never },
+  ): void {
+    const dbPlugins = Object.values(jovo.$handleRequest.plugins).filter(
+      (plugin) => plugin instanceof DbPlugin,
+    ) as DbPlugin[];
+
+    if (!dbPlugins.length) {
+      // eslint-disable-next-line no-console
+      console.warn('No database plugin is installed. Session storage can not be enabled.');
+    }
+
+    dbPlugins.forEach((dbPlugin) => {
+      if (!dbPlugin.config.storedElements) {
+        dbPlugin.config.storedElements = dbPlugin.getDefaultConfig().storedElements || {};
+      }
+      // eslint-disable-next-line no-console
+      console.warn(`Session storage was enabled for database plugin ${dbPlugin.constructor.name}`);
+
+      if (sessionConfig) {
+        dbPlugin.config.storedElements.session = { ...sessionConfig, enabled: true };
+      } else {
+        dbPlugin.config.storedElements.session = true;
+      }
+    });
   }
 }
