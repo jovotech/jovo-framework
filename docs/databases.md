@@ -69,8 +69,52 @@ new FileDb({
 ```
 
 * `user`: Persist user data across sessions using `this.$user.data`. Enabled by default.
-* `session`: Persist session data across interactions using `this.$session.data`. This is necessary for some platforms (like Facebook Messenger) that don't allow for session storage.
+* [`session`](#session): Persist session data across interactions using `this.$session.data`. This is necessary for some platforms (like Facebook Messenger) that don't allow for session storage.
 * `history`: Persist an interaction history and define which elements (e.g. `nlu` or `output`) data you want to store from previous requests and responses.
 * `createdAt` and `updatedAt`: These timestamps are enabled by default.
 
 [Learn more about the different data types here](./data.md).
+
+
+#### session
+
+Platforms like [Facebook Messenger](https://v4.jovo.tech/marketplace/platform-facebookmessenger) or [Google Business Messages](https://v4.jovo.tech/marketplace/platform-googlebusiness) don't support session storage. This is why all [session data](./data.md#session-data) needs to be persisted in a database.
+
+```typescript
+new FileDb({
+  // ...
+  storedElements: {
+    // ...
+    session: true,
+  }
+}),
+```
+
+For platforms that do not have the concept of sessions, we need to define after which time a request should be seen as the start of the new session. The default is *15 minutes* and can be modified with the `expiresAfterSeconds` option:
+
+```typescript
+new FileDb({
+  // ...
+  storedElements: {
+    // ...
+    session: {
+      expiresAfterSeconds: 900,
+    }
+  }
+}),
+```
+
+If the option is added, the `session` field is automatically enabled. However, you can also add `enabled` if you like:
+
+```typescript
+new FileDb({
+  // ...
+  storedElements: {
+    // ...
+    session: {
+      enabled: true,
+      expiresAfterSeconds: 900,
+    }
+  }
+}),
+```
