@@ -1,3 +1,8 @@
+---
+title: 'Google Business Messages Platform Integration'
+excerpt: 'The Google Business Messages platform integration allows you to build custom Google Business Bots using Jovo.'
+---
+
 # Google Business Messages Platform Integration
 
 The Google Business Messages [platform integration](https://v4.jovo.tech/docs/platforms) allows you to build custom Google Business bots using Jovo.

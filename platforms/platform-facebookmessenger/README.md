@@ -1,3 +1,8 @@
+---
+title: 'Facebook Messenger Platform Integration'
+excerpt: 'The Facebook Messenger platform integration allows you to build custom Messenger Bots using Jovo.'
+---
+
 # Facebook Messenger Platform Integration
 
 The Facebook Messenger [platform integration](https://v4.jovo.tech/docs/platforms) allows you to build custom Messenger bots using Jovo.
@@ -88,13 +93,13 @@ new FacebookMessengerPlatform({
 
 ## Platform-Specific Features
 
-You can access the Google Assistant specific object like this:
+You can access the Facebook Messenger specific object like this:
 
 ```typescript
 this.$facebookMessenger
 ```
 
-You can also use this object to see if the request is coming from Google Assistant (or a different platform):
+You can also use this object to see if the request is coming from Facebook Messenger (or a different platform):
 
 ```typescript
 if(this.$facebookMessenger) {
