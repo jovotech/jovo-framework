@@ -1,23 +1,16 @@
+---
+title: 'Google Assistant Output'
+excerpt: 'Learn more about Jovo output templates for Google Assistant Output.'
+---
 # Google Assistant Output
 
-Learn more about output templates for Google Assistant.
-- [Introduction](#introduction)
-- [Generic Output Elements](#generic-output-elements)
-  - [Message](#message)
-  - [Reprompt](#reprompt)
-  - [Listen](#listen)
-  - [Quick Replies (Suggestions)](#quick-replies-suggestions)
-  - [Card](#card)
-  - [Carousel (Collection)](#carousel-collection)
-- [Google Assistant-specific Output Elements](#google-assistant-specific-output-elements)
-  - [Native Response](#native-response)
-
+Learn more about output templates for [Google Assistant](https://v4.jovo.tech/marketplace/platform-googleassistant).
 
 ## Introduction
 
-Jovo offers the ability to [create structured output](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/routing.md) that is then translated into native platform responses.
+Jovo offers the ability to [create structured output](https://v4.jovo.tech/docs/output) that is then translated into native platform responses.
 
-This structured output is called [output template](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md). Its root properties are generic output elements that work across platforms. [Learn more about how generic output is translated into a Google Assistant response below](#generic-output-elements).
+This structured output is called [output template](https://v4.jovo.tech/docs/output-templates). Its root properties are generic output elements that work across platforms. [Learn more about how generic output is translated into a Google Assistant response below](#generic-output-elements).
 
 ```typescript
 {
@@ -43,7 +36,7 @@ You can also add platform-specific output to an output template. [Learn more abo
 
 ## Generic Output Elements
 
-Generic output elements are in the root of the output template and work across platforms. [Learn more in the Jovo Output docs](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md).
+Generic output elements are in the root of the output template and work across platforms. [Learn more in the Jovo Output docs](https://v4.jovo.tech/docs/output-templates).
 
 Below, you can find a list of generic output elements that work with Google Assistant.
 
@@ -196,7 +189,7 @@ It includes the following properties:
 
 ## Google Assistant-specific Output Elements
 
-It is possible to add platform-specific output elements to an output template. [Learn more in the Jovo output documentation](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md#platform-specific-output-elements).
+It is possible to add platform-specific output elements to an output template. [Learn more in the Jovo output documentation](https://v4.jovo.tech/docs/output-templates#platform-specific-output-elements).
 
 For Google Assistant, you can add output elements inside an `googleAssistant` object:
 
@@ -213,7 +206,7 @@ For Google Assistant, you can add output elements inside an `googleAssistant` ob
 
 ### Native Response
 
-The [`nativeResponse` property](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md#native-response) allows you to add native elements exactly how they would be added to the Google Assistant JSON response.
+The [`nativeResponse` property](https://v4.jovo.tech/docs/output-templates#native-response) allows you to add native elements exactly how they would be added to the Google Assistant JSON response.
 
 ```typescript
 {
