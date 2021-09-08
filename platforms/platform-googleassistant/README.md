@@ -4,7 +4,7 @@ excerpt: 'The Google Assistant platform integration allows you to build custom G
 ---
 # Google Assistant Platform Integration
 
-The Google Assistant [platform integration](../docs/platforms.md) allows you to build custom Google Conversational Actions using Jovo.
+The Google Assistant [platform integration](https://v4.jovo.tech/docs/platforms) allows you to build custom Google Conversational Actions using Jovo.
 
 ## Getting Started
 
@@ -14,7 +14,7 @@ You can install the plugin like this:
 $ npm install @jovotech/platform-googleassistant
 ```
 
-Add it as plugin to your [app configuration](../docs/app-config.md), e.g. `app.ts`:
+Add it as plugin to your [app configuration](https://v4.jovo.tech/docs/app-config), e.g. `app.ts`:
 
 ```typescript
 import { App } from '@jovotech/framework';
@@ -29,7 +29,7 @@ const app = new App({
 });
 ```
 
-You can also add the CLI plugin to your [project configuration](../docs/project-config.md) in `jovo.project.js`:
+You can also add the CLI plugin to your [project configuration](https://v4.jovo.tech/docs/project-config) in `jovo.project.js`:
 
 ```js
 const { ProjectConfig } = require('@jovotech/cli');
@@ -65,7 +65,7 @@ if(this.$googleAssistant) {
 
 Google Conversational Actions have a few concepts that are different compared to other platforms, for example:
 
-* [Scenes](./docs/scenes.md)
+* [Scenes](https://v4.jovo.tech/marketplace/platform-googleassistant/project-config/scenes)
 
 
 ### User
@@ -78,13 +78,13 @@ this.$googleAssistant.$user
 
 Learn more about user specific methods here:
 
-* [Account Linking](./docs/account-linking.md)
+* [Account Linking](https://v4.jovo.tech/marketplace/platform-googleassistant/account-linking)
 
 
 
 ### Output
 
-There are various Google Assistant specific elements that can be added to the [output](../../docs/output.md).
+There are various Google Assistant specific elements that can be added to the [output](https://v4.jovo.tech/docs/output).
 
 For output that is only used for Google Assistant, you can add the following to the output object:
 
@@ -119,7 +119,7 @@ You can add response objects that should show up exactly like this in the Google
 
 You can use the Jovo CLI plugin `GoogleAssistantCli` (learn how to set it up in the [getting started section](#getting-started)) to build and deploy the Google Assistant project to the Google Actions console.
 
-The `build` command uses the Jovo Model and [project configuration](../../docs/project-config.md) to generates all files needed for the deployment:
+The `build` command uses the Jovo Model and [project configuration](https://v4.jovo.tech/docs/project-config) to generates all files needed for the deployment:
 
 ```sh
 # Build files into build/platform.googleAssistant
@@ -135,4 +135,4 @@ $ jovo deploy:platform googleAssistant
 
 You can also learn more about Google Assistant specific features here:
 
-* [Model](./docs/model.md)
+* [Model](https://v4.jovo.tech/marketplace/platform-googleassistant/model)

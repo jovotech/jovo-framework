@@ -111,7 +111,7 @@ There are two types of properties that can be passed:
 
 ### Reserved Properties
 
-Reserved properties are output elements that can be passed as options. They are automatically added to the output object and allow the `$send` method to override [generic output properties](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md#generic-output-elements) in the output template.
+Reserved properties are output elements that can be passed as options. They are automatically added to the output object and allow the `$send` method to override [generic output properties](https://v4.jovo.tech/docs/output-templates#generic-output-elements) in the output template.
 
 For example, a `message` can be passed right from the handler:
 

@@ -65,7 +65,7 @@ new SnipsNlu({
 
 It is possible to set up Snips NLU to work with [dynamic entities](https://v4.jovo.tech/docs/entities#dynamic-entities).
 
-The Jovo Snips NLU integration automatically parses the entities that are added to the `listen` object of the [output template](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md), and sends them to the Snips NLU server along with the session ID.
+The Jovo Snips NLU integration automatically parses the entities that are added to the `listen` object of the [output template](https://v4.jovo.tech/docs/output-templates), and sends them to the Snips NLU server along with the session ID.
 
 The Snips NLU server then trains an updated model just for the intents that use the `entities` from `listen`.
 

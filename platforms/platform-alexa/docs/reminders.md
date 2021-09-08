@@ -16,7 +16,7 @@ Learn how to use the Alexa Skill Reminders feature with Jovo.
 
 Alexa supports the ability for users to set reminders. [Learn more in the official Alexa documentation](https://developer.amazon.com/docs/alexa/smapi/alexa-reminders-overview.html).
 
-Jovo offers methods to [add and modify reminders](#add-and-modify-reminders). For example, you can set a reminder like this in a [handler](../docs/handlers.md):
+Jovo offers methods to [add and modify reminders](#add-and-modify-reminders). For example, you can set a reminder like this in a [handler](https://v4.jovo.tech/docs/handlers):
 
 ```typescript
 async someHandler() {
@@ -82,7 +82,7 @@ You need to [add permissions to your skill manifest](#add-reminder-permissions-t
 
 To be able to use reminders in your Alexa Skill, you need to add the permission to the Skill project.
 
-While you can manually enable the permission in the Alexa developer console, we recommend to add it to the `skill.json` manifest directly using the [Jovo project config](../docs/project-config.md):
+While you can manually enable the permission in the Alexa developer console, we recommend to add it to the `skill.json` manifest directly using the [Jovo project config]([docs/](https://v4.jovo.tech/docs/)project-config):
 
 ```js
 const project = new ProjectConfig({

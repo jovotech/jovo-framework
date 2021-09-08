@@ -5,13 +5,13 @@ excerpt: 'The DynamoDB Jovo integration allows you to store user specific data i
 
 # DynamoDB Database Integration
 
-This [database integration](../../docs/databases.md) allows you to store user specific data in a DynamoDB table.
+This [database integration](https://v4.jovo.tech/docs/databases) allows you to store user specific data in a DynamoDB table.
 
 ## Introduction
 
 [DynamoDB](https://aws.amazon.com/dynamodb/) is the NoSQL database service by Amazon Web Services (AWS). Many Jovo apps that are hosted on AWS Lambda rely on DynamoDB to persist user data.
 
-If you use AWS for your deployment, we recommend [FileDb](../db-filedb/README.md) for local development and DynamoDB for deployed versions.
+If you use AWS for your deployment, we recommend [FileDb](https://v4.jovo.tech/marketplace/db-filedb) for local development and DynamoDB for deployed versions.
 
 ## Installation
 
@@ -98,7 +98,7 @@ new DynamoDb({
 
 * `table`: Configuration for the table that is going to be created by the plugin. [Learn more below](#table).
 * `libraryConfig`: Any configuration for the AWS DynamoDb SDK can be passed here. [Learn more below](#libraryconfig).
-* `storedElements`: What should be stored in the database. [Learn more in the database integration documentation](../../docs/databases.md).
+* `storedElements`: What should be stored in the database. [Learn more in the database integration documentation](https://v4.jovo.tech/docs/databases).
 
 
 

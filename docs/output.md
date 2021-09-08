@@ -66,7 +66,7 @@ yourHandler() {
   return this.$send({ /* output */ });
 }
 ```
-This object can contain all output template elements that are described in the [output template documentation](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md).
+This object can contain all output template elements that are described in the [output template documentation](https://v4.jovo.tech/docs/output-templates).
 
 Here is an example output that just contains a `message`:
 
@@ -163,7 +163,7 @@ Output templates offer a structured format to return output to a user. These tem
 }
 ```
 
-[Learn more about the structure of output templates here](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md).
+[Learn more about the structure of output templates here](https://v4.jovo.tech/docs/output-templates).
 
 ## Output Classes
 

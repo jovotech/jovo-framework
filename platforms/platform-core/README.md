@@ -149,7 +149,7 @@ The response contains all the information that is needed by the client to displa
 }
 ```
 
-The `output` is added in the same structure as [Jovo output templates](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md).
+The `output` is added in the same structure as [Jovo output templates](https://v4.jovo.tech/docs/output-templates).
 
 ## Platform-Specific Features
 

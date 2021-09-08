@@ -129,7 +129,7 @@ this.$googleAssistant.$user.isAccountLinked()
 this.$googleAssistant.$user.isVerified()
 ```
 
-To trigger account linking, you can instruct your Google Action to handle the next conversation step with the specified scene in the output ([see the docs for Google Assistant output](https://github.com/jovotech/jovo-output/blob/master/output-googleassistant/README.md)):
+To trigger account linking, you can instruct your Google Action to handle the next conversation step with the specified scene in the output ([see the docs for Google Assistant output](https://v4.jovo.tech/marketplace/platform-googleassistant/output)):
 
 ```typescript
 {
