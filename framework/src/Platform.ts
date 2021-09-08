@@ -70,7 +70,7 @@ export abstract class Platform<
   }
 
   createJovoInstance<APP extends App>(app: APP, handleRequest: HandleRequest): JOVO {
-    return new this.jovoClass(app, handleRequest, this as unknown as PLATFORM);
+    return new this.jovoClass(app, handleRequest, handleRequest.platform as unknown as PLATFORM);
   }
 
   createRequestInstance(request: REQUEST | AnyObject): REQUEST {
