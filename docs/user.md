@@ -1,3 +1,7 @@
+---
+title: 'Jovo User'
+excerpt: 'Learn more about the Jovo User property.'
+---
 # User
 
 Learn more about the Jovo `$user` property.

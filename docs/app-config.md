@@ -1,3 +1,7 @@
+---
+title: 'Jovo App Configuration'
+excerpt: 'Learn how to configure a Jovo app and how to add plugins, components, and staging.'
+---
 # App Configuration
 
 The app configuration in `app.ts` is the place where you can add plugins, components, and other configurations to your Jovo app. [For project related configuration, take a look here](./project-config.md).

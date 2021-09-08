@@ -1,3 +1,7 @@
+---
+title: 'Jovo Output'
+excerpt: 'Learn more about how to return structured output that works across platforms like Alexa, Google Assistant, Facebook Messenger, the web, and more.'
+---
 # Output
 
 Learn more about how to return output to the user.
