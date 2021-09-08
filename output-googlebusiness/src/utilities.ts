@@ -1,5 +1,5 @@
 import { Card, Carousel, Message, QuickReply } from '@jovotech/output';
-import { CardContent, CardWidth, MediaHeight, StandaloneCard } from './models';
+import { CardContent, CardWidth, MediaHeight } from './models';
 
 export function augmentModelPrototypes(): void {
   Card.prototype.toGoogleBusinessCardContent = function () {
