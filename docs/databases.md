@@ -4,6 +4,7 @@ Jovo offers a variety of integrations that allow you to store elements like user
 
 - [Integrations](#integrations)
 - [Configuration](#configuration)
+  - [storedElements](#storedelements)
 
 ## Integrations
 
@@ -47,6 +48,8 @@ It includes:
 * A user `id` to identify the current user. This is either taken from the platform (e.g. an Alexa Skill user ID) or created internally by Jovo.
 * A `user` object that stores [user data](./data.md#user-data).
 * Timestamps `createdAt` and `updatedAt` that help debug users in large datasets.
+
+### storedElements
 
 There are also additional elements that can be stored in the database. These can be configured with `storedElements`, which makes it possible to granularly define which types of data should be stored in the database.
 
