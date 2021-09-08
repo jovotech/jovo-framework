@@ -1,19 +1,17 @@
 import { Card, Carousel, Message, QuickReply } from '@jovotech/output';
-import { CardWidth, MediaHeight, StandaloneCard } from './models';
+import { CardContent, CardWidth, MediaHeight, StandaloneCard } from './models';
 
 export function augmentModelPrototypes(): void {
-  Card.prototype.toGoogleBusinessCard = function () {
-    const card: StandaloneCard = {
-      cardContent: {},
-    };
+  Card.prototype.toGoogleBusinessCardContent = function () {
+    const cardContent: CardContent = {};
     if (this.title) {
-      card.cardContent.title = this.title;
+      cardContent.title = this.title;
     }
     if (this.content || this.subtitle) {
-      card.cardContent.description = this.content || this.subtitle;
+      cardContent.description = this.content || this.subtitle;
     }
     if (this.imageUrl) {
-      card.cardContent.media = {
+      cardContent.media = {
         height: MediaHeight.Medium,
         contentInfo: {
           fileUrl: this.imageUrl,
@@ -22,9 +20,15 @@ export function augmentModelPrototypes(): void {
       };
     }
     if (this.suggestions) {
-      card.cardContent.suggestions = this.suggestions;
+      cardContent.suggestions = this.suggestions;
     }
-    return card;
+    return cardContent;
+  };
+
+  Card.prototype.toGoogleBusinessCard = function () {
+    return {
+      cardContent: this.toGoogleBusinessCardContent!(),
+    };
   };
 
   Card.prototype.toGoogleBusinessRichCard = function () {
@@ -36,7 +40,7 @@ export function augmentModelPrototypes(): void {
   Carousel.prototype.toGoogleBusinessCarousel = function () {
     return {
       cardWidth: CardWidth.Medium,
-      cardContents: this.items.map((card) => card.toGoogleBusinessCard?.() || {}),
+      cardContents: this.items.map((card) => card.toGoogleBusinessCardContent!()),
     };
   };
 
