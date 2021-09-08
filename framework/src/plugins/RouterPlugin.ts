@@ -1,7 +1,8 @@
 import { App } from '../App';
 import { DuplicateGlobalIntentsError } from '../errors/DuplicateGlobalIntentsError';
-import { HandleRequest } from '../HandleRequest';
+import { Intent, IntentMap } from '../interfaces';
 import { Jovo } from '../Jovo';
+import { JovoInput } from '../JovoInput';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
 import { MetadataStorage } from '../metadata/MetadataStorage';
 import { Plugin, PluginConfig } from '../Plugin';
@@ -26,31 +27,36 @@ export interface JovoRoute {
 }
 
 export class RouterPlugin extends Plugin<RouterPluginConfig> {
-  getDefaultConfig() {
+  getDefaultConfig(): PluginConfig {
     return {};
   }
 
-  install(app: App): Promise<void> | void {
-    app.middlewareCollection.use('before.dialog.logic', this.setRoute);
+  install(parent: App): Promise<void> | void {
+    parent.middlewareCollection.use('dialogue.router', this.setRoute);
   }
 
   initialize(parent: App): Promise<void> | void {
     return this.checkForDuplicateGlobalHandlers(parent);
   }
 
-  private setRoute = async (handleRequest: HandleRequest, jovo: Jovo) => {
-    // TODO determine order
-    const intentName =
-      jovo.$nlu.intent?.name ||
-      jovo.$request.getIntentName() ||
-      jovo.$request.getRequestType()?.type;
-    if (!intentName) {
-      // TODO determine what to do if no intent was passed (probably UNHANDLED)
-      // in the future other data can be passed and used by the handler, but for now just use the intent-name
-      return;
+  private setRoute = async (jovo: Jovo) => {
+    const mappedIntent = this.getMappedIntent(jovo.$input, jovo.$config.routing?.intentMap);
+    if (mappedIntent) {
+      jovo.$input.intent = mappedIntent;
     }
-    jovo.$route = await new RoutingExecutor(jovo).execute(intentName);
+    jovo.$route = await new RoutingExecutor(jovo).execute();
   };
+
+  private getMappedIntent(input: JovoInput, intentMap?: IntentMap): Intent | string | undefined {
+    const intent = input.intent || input.nlu?.intent;
+    if (!intent) return;
+    const intentName = typeof intent === 'string' ? intent : intent.name;
+    const mappedIntentName = intentMap?.[intentName];
+    if (!mappedIntentName) return;
+    return input.intent && typeof input.intent === 'object'
+      ? { ...input.intent, name: mappedIntentName }
+      : mappedIntentName;
+  }
 
   private checkForDuplicateGlobalHandlers(app: App): Promise<void> {
     return new Promise((resolve, reject) => {

@@ -1,5 +1,7 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function forEachDeep<T = any>(
   value: T,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handler: (val: T[keyof T] | any, path: string) => void,
   path = '',
 ): void {
@@ -10,13 +12,14 @@ export function forEachDeep<T = any>(
     value.forEach((val, index) => {
       forEachDeep(val, handler, `${path}[${index}]`);
     });
-  } else if (typeof value === 'object') {
+  } else if (value && typeof value === 'object') {
     Object.keys(value).forEach((key) => {
       forEachDeep(value[key as keyof T], handler, path ? `${path}.${key}` : key);
     });
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getMethodKeys<PROTOTYPE = any>(prototype: PROTOTYPE): Array<keyof PROTOTYPE> {
   return Object.getOwnPropertyNames(prototype).filter((key) => {
     if (key === 'constructor') {
@@ -28,9 +31,4 @@ export function getMethodKeys<PROTOTYPE = any>(prototype: PROTOTYPE): Array<keyo
       typeof descriptor?.value === 'function'
     );
   }) as Array<keyof PROTOTYPE>;
-}
-
-// Test if the currently running environment is node-based.
-export function isNode(): boolean {
-  return typeof process !== 'undefined' && process.versions && !!process.versions.node;
 }

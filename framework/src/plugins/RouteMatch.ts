@@ -1,4 +1,4 @@
-import { InternalIntent } from '../enums';
+import { BuiltInHandler } from '../enums';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
 
 export class RouteMatch {
@@ -39,12 +39,12 @@ export class RouteMatch {
   }
 
   get type(): string | undefined {
-    return this.metadata.intentNames.includes(InternalIntent.Unhandled)
-      ? InternalIntent.Unhandled
+    return this.metadata.intentNames.includes(BuiltInHandler.Unhandled)
+      ? BuiltInHandler.Unhandled
       : undefined;
   }
 
-  toJSON() {
+  toJSON(): Omit<RouteMatch, 'metadata' | 'path' | 'score' | 'toJSON'> {
     return {
       component: this.component,
       handler: this.handler,

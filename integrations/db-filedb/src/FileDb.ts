@@ -1,4 +1,4 @@
-import { App, DbItem, DbPlugin, DbPluginConfig, HandleRequest, Jovo } from '@jovotech/framework';
+import { App, DbItem, DbPlugin, DbPluginConfig, Jovo } from '@jovotech/framework';
 import fs from 'fs';
 import path from 'path';
 import process from 'process';
@@ -24,25 +24,28 @@ export class FileDb extends DbPlugin<FileDbConfig> {
     if (path.isAbsolute(this.config.pathToFile)) {
       return this.config.pathToFile;
     }
+    // Make sure the pathToFile is applied relative to the dist-dir
     return path.join(process.cwd(), 'dist', this.config.pathToFile);
   }
 
   async install(parent: App): Promise<void> {
+    parent.middlewareCollection.use('request.end', this.loadData);
+    parent.middlewareCollection.use('response.start', this.saveData);
+  }
+
+  async initialize(): Promise<void> {
     const pathToFileDir = path.dirname(this.pathToFile);
 
     const pathExists = async (pathToFile: string) =>
-      !!(await fs.promises.stat(pathToFile).catch((e) => false));
+      !!(await fs.promises.stat(pathToFile).catch(() => false));
 
     if (!(await pathExists(pathToFileDir))) {
-      await fs.promises.mkdir(path.dirname(this.config.pathToFile), { recursive: true });
+      await fs.promises.mkdir(pathToFileDir, { recursive: true });
     }
 
     if (!(await pathExists(this.pathToFile))) {
       await fs.promises.writeFile(this.pathToFile, '[]');
     }
-
-    parent.middlewareCollection.use('after.request', this.loadData);
-    parent.middlewareCollection.use('before.response', this.saveData);
   }
 
   getDbItem = async (primaryKey: string): Promise<DbItem> => {
@@ -54,15 +57,15 @@ export class FileDb extends DbPlugin<FileDbConfig> {
     });
   };
 
-  loadData = async (handleRequest: HandleRequest, jovo: Jovo): Promise<void> => {
+  loadData = async (jovo: Jovo): Promise<void> => {
     const dbItem = await this.getDbItem(jovo.$user.id);
     if (dbItem) {
       jovo.$user.isNew = false;
-      jovo.setPersistableData(dbItem);
+      jovo.setPersistableData(dbItem, this.config.storedElements);
     }
   };
 
-  saveData = async (handleRequest: HandleRequest, jovo: Jovo): Promise<void> => {
+  saveData = async (jovo: Jovo): Promise<void> => {
     const fileDataStr = await fs.promises.readFile(this.pathToFile, 'utf8');
     const users = fileDataStr.length > 0 ? JSON.parse(fileDataStr) : [];
     const id = jovo.$user.id;

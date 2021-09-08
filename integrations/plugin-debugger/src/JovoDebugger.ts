@@ -1,7 +1,9 @@
 import {
+  AnyObject,
   App,
   DeepPartial,
   Extensible,
+  ExtensibleInitConfig,
   HandleRequest,
   InvalidParentError,
   Jovo,
@@ -10,18 +12,19 @@ import {
   Platform,
   Plugin,
   PluginConfig,
+  UnknownObject,
 } from '@jovotech/framework';
 import { NlpjsNlu, NlpjsNluInitConfig } from '@jovotech/nlu-nlpjs';
 import { CorePlatform, CorePlatformConfig } from '@jovotech/platform-core';
 import { LangEn } from '@nlpjs/lang-en';
+import isEqual from 'fast-deep-equal/es6';
 import { promises } from 'fs';
 import { join } from 'path';
 import { cwd } from 'process';
 import { connect, Socket } from 'socket.io-client';
 import { Writable } from 'stream';
-import { MockServer } from './MockServer';
-import isEqual from 'fast-deep-equal/es6';
 import { v4 as uuidV4 } from 'uuid';
+import { MockServer } from './MockServer';
 
 export enum JovoDebuggerEvent {
   DebuggingAvailable = 'debugging.available',
@@ -52,9 +55,8 @@ export interface JovoUpdateData<KEY extends keyof Jovo | string = keyof Jovo | s
   path: KEY extends keyof Jovo ? KEY : string;
 }
 
-// TODO: implement config
 export interface JovoDebuggerConfig extends PluginConfig {
-  corePlatform: DeepPartial<CorePlatformConfig>;
+  corePlatform: ExtensibleInitConfig<CorePlatformConfig>;
   nlpjsNlu: NlpjsNluInitConfig;
   webhookUrl: string;
   languageModelEnabled: boolean;
@@ -94,7 +96,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     };
   }
 
-  install(parent: Extensible) {
+  install(parent: Extensible): void {
     if (!(parent instanceof App)) {
       // TODO: implement error
       throw new InvalidParentError(this.constructor.name, App);
@@ -105,10 +107,10 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   }
 
   private installDebuggerPlatform(app: App) {
-    const JovoDebuggerPlatform = CorePlatform.create('JovoDebuggerPlatform', 'jovo-debugger');
     app.use(
-      new JovoDebuggerPlatform({
+      new CorePlatform({
         ...this.config.corePlatform,
+        platform: 'jovo-debugger',
         plugins: [new NlpjsNlu(this.config.nlpjsNlu)],
       }),
     );
@@ -131,9 +133,8 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     );
     this.socket.on(JovoDebuggerEvent.DebuggerRequest, this.onDebuggerRequest.bind(this, app));
 
-    // TODO determine whether it should be called here
-    app.middlewareCollection.use('before.request', this.onRequest);
-    app.middlewareCollection.use('after.response', this.onResponse);
+    app.middlewareCollection.use('request.start', this.onRequest);
+    app.middlewareCollection.use('response.end', this.onResponse);
 
     this.patchHandleRequestToIncludeUniqueId();
     this.patchPlatformsToCreateJovoAsProxy(app.platforms);
@@ -187,8 +188,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private createProxyHandler<T extends Record<string, any>>(
+  private createProxyHandler<T extends AnyObject>(
     handleRequest: HandleRequest,
     path = '',
   ): ProxyHandler<T> {
@@ -211,8 +211,8 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       },
       set: (target, key: string, value: unknown): boolean => {
         // TODO determine whether empty values should be emitted, in the initial emit, they're omitted.
-        const previousValue = (target as Record<string, unknown>)[key];
-        (target as Record<string, unknown>)[key] = value;
+        const previousValue = (target as UnknownObject)[key];
+        (target as UnknownObject)[key] = value;
         // only emit changes
         if (!isEqual(previousValue, value)) {
           const payload: JovoDebuggerPayload<JovoUpdateData> = {
@@ -240,6 +240,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     // TODO: check if there is a better way and this is desired
     function propagateStreamAsLog(stream: Writable, socket: typeof Socket) {
       const originalWriteFn = stream.write;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       stream.write = function (chunk: Buffer, ...args: any[]) {
         socket.emit(JovoDebuggerEvent.AppConsoleLog, chunk.toString(), new Error().stack);
         return originalWriteFn.call(this, chunk, ...args);
@@ -260,6 +261,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       return;
     }
     if (!this.socket) {
+      // eslint-disable-next-line no-console
       console.warn('Can not emit language-model: Socket is not available.');
       return;
     }
@@ -268,13 +270,14 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       const languageModel = await this.getLanguageModel();
       this.socket.emit(JovoDebuggerEvent.AppLanguageModelResponse, languageModel);
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.warn('Can not emit language-model: Could not retrieve language-model.');
     }
     // TODO implement sending debuggerConfig if that is required
   };
 
-  private async getLanguageModel(): Promise<any> {
-    const languageModel: any = {};
+  private async getLanguageModel(): Promise<AnyObject> {
+    const languageModel: AnyObject = {};
     const absoluteModelsPath = join(cwd(), this.config.languageModelPath);
     let files: string[] = [];
     try {
@@ -296,6 +299,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
           const fileBuffer = await promises.readFile(absoluteFilePath);
           languageModel[locale] = JSON.parse(fileBuffer.toString());
         } catch (e) {
+          // eslint-disable-next-line no-console
           console.error(e);
         }
       } else {
@@ -305,29 +309,29 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     return languageModel;
   }
 
-  private onDebuggerRequest = async (app: App, request: any) => {
+  private onDebuggerRequest = async (app: App, request: AnyObject) => {
     await app.handle(new MockServer(request));
   };
 
-  private onRequest = (handleRequest: HandleRequest, jovo: Jovo) => {
+  private onRequest = (jovo: Jovo) => {
     if (!this.socket) {
       // TODO: implement error
       throw new Error();
     }
     const payload: JovoDebuggerPayload<JovoRequest> = {
-      requestId: handleRequest.debuggerRequestId,
+      requestId: jovo.$handleRequest.debuggerRequestId,
       data: jovo.$request,
     };
     this.socket.emit(JovoDebuggerEvent.AppRequest, payload);
   };
 
-  private onResponse = (handleRequest: HandleRequest, jovo: Jovo) => {
+  private onResponse = (jovo: Jovo) => {
     if (!this.socket) {
       // TODO: implement error
       throw new Error();
     }
-    const payload: JovoDebuggerPayload<any> = {
-      requestId: handleRequest.debuggerRequestId,
+    const payload: JovoDebuggerPayload = {
+      requestId: jovo.$handleRequest.debuggerRequestId,
       data: jovo.$response,
     };
     this.socket.emit(JovoDebuggerEvent.AppResponse, payload);
@@ -342,7 +346,9 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       },
     });
     this.socket.on('connect_error', (error: Error) => {
-      // TODO: handle error
+      // TODO: improve handling
+      // eslint-disable-next-line no-console
+      console.error(error);
     });
   }
 

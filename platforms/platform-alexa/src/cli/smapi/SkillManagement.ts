@@ -1,8 +1,12 @@
 import { execAsync, JovoCliError, wait } from '@jovotech/cli-core';
+import { AskSkillList, getAskError } from '../utilities';
 
-import { AskSkillList, getAskError } from '../utils';
-
-export async function getSkillInformation(skillId: string, stage: string, askProfile?: string) {
+export async function getSkillInformation(
+  skillId: string,
+  stage: string,
+  askProfile?: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Promise<any> {
   const cmd: string =
     'ask smapi get-skill-manifest ' +
     `-s ${skillId} ` +
@@ -48,7 +52,11 @@ export async function createSkill(skillJsonPath: string, askProfile?: string): P
   }
 }
 
-export async function updateSkill(skillId: string, skillJsonPath: string, askProfile?: string) {
+export async function updateSkill(
+  skillId: string,
+  skillJsonPath: string,
+  askProfile?: string,
+): Promise<void> {
   try {
     const cmd: string =
       'ask smapi update-skill-manifest ' +
@@ -64,7 +72,7 @@ export async function updateSkill(skillId: string, skillJsonPath: string, askPro
   }
 }
 
-export async function getSkillStatus(skillId: string, askProfile?: string) {
+export async function getSkillStatus(skillId: string, askProfile?: string): Promise<void> {
   const cmd = `ask smapi get-skill-status -s ${skillId} ${askProfile ? `-p ${askProfile}` : ''}`;
 
   try {
@@ -81,12 +89,11 @@ export async function getSkillStatus(skillId: string, askProfile?: string) {
     }
 
     if (response.interactionModel) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const values: any[] = Object.values(response.interactionModel);
       for (const model of values) {
         const status = model.lastUpdateRequest.status;
-        if (status === 'SUCCEEDED') {
-          continue;
-        } else if (status === 'IN_PROGRESS') {
+        if (status === 'IN_PROGRESS') {
           await wait(500);
           await getSkillStatus(skillId, askProfile);
         }

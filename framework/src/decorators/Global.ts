@@ -1,11 +1,11 @@
 import { ComponentConstructor } from '../BaseComponent';
+import { AnyObject } from '../index';
 import { createComponentOptionDecorator } from '../metadata/ComponentOptionMetadata';
 import { createHandlerOptionDecorator } from '../metadata/HandlerOptionMetadata';
 
 export function Global(isGlobal = true) {
   return function (
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    target: ComponentConstructor | Record<string, any>,
+    target: ComponentConstructor | AnyObject,
     propertyKey?: string | symbol,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     descriptor?: TypedPropertyDescriptor<any>,

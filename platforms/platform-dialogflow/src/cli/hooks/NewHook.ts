@@ -1,6 +1,6 @@
 import type { NewContext, NewEvents } from '@jovotech/cli-command-new';
-import { Log, PluginHook, printHighlight, printUserInput, prompt } from '@jovotech/cli-core';
-import { SupportedLocales, SupportedLocalesType } from '../utils';
+import { Log, PluginHook, promptSupportedLocales } from '@jovotech/cli-core';
+import { SupportedLocales, SupportedLocalesType } from '../utilities';
 
 export class NewHook extends PluginHook<NewEvents> {
   $context!: NewContext;
@@ -17,24 +17,10 @@ export class NewHook extends PluginHook<NewEvents> {
       if (!SupportedLocales.includes(locale as SupportedLocalesType)) {
         // Prompt user for alternative locale.
         Log.spacer();
-        const { locales } = await prompt(
-          {
-            name: 'locales',
-            type: 'autocompleteMultiselect',
-            message: `Locale ${printHighlight(
-              locale,
-            )} is not supported by Dialogflow.\nPlease provide an alternative locale (type to filter, select with space):`,
-            instructions: false,
-            choices: SupportedLocales.map((locale) => ({
-              title: printUserInput(locale),
-              value: locale,
-            })),
-          },
-          {
-            onCancel() {
-              process.exit();
-            },
-          },
+        const { locales } = await promptSupportedLocales(
+          locale,
+          'Dialogflow',
+          SupportedLocales as unknown as string[],
         );
 
         if (!locales.length) {

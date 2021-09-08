@@ -1,3 +1,4 @@
+import type { BuildContext, BuildEvents } from '@jovotech/cli-command-build';
 import {
   ANSWER_BACKUP,
   ANSWER_CANCEL,
@@ -15,19 +16,17 @@ import {
   Task,
   wait,
 } from '@jovotech/cli-core';
-import type { BuildContext, BuildEvents } from '@jovotech/cli-command-build';
+import { FileBuilder, FileObject, FileObjectEntry } from '@jovotech/filebuilder';
+import { JovoModelData, JovoModelDataV3, NativeFileInformation } from '@jovotech/model';
+import { JovoModelDialogflow } from '@jovotech/model-dialogflow';
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs';
 import _get from 'lodash.get';
 import _merge from 'lodash.merge';
 import _mergeWith from 'lodash.mergewith';
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs';
-import { FileBuilder, FileObject, FileObjectEntry } from '@jovotech/filebuilder';
-import { JovoModelData, NativeFileInformation } from 'jovo-model';
-import { JovoModelDialogflow } from 'jovo-model-dialogflow';
 import { join as joinPaths } from 'path';
-
-import { DialogflowAgent, SupportedLocales, SupportedLocalesType } from '../utils';
-import DefaultFiles from '../utils/DefaultFiles.json';
 import { DialogflowCli } from '..';
+import DefaultFiles from '../DefaultFiles.json';
+import { DialogflowAgent, SupportedLocales, SupportedLocalesType } from '../utilities';
 
 export interface DialogflowBuildContext extends BuildContext {
   dialogflow: {
@@ -94,20 +93,21 @@ export class BuildHook extends PluginHook<BuildEvents> {
         SupportedLocales.includes(genericLocale as SupportedLocalesType) &&
         !locales.includes(genericLocale as SupportedLocalesType)
       ) {
-        throw new JovoCliError(
-          `Locale ${printHighlight(locale)} requires a generic locale ${printHighlight(
+        throw new JovoCliError({
+          message: `Locale ${printHighlight(locale)} requires a generic locale ${printHighlight(
             genericLocale,
           )}.`,
-          this.$plugin.constructor.name,
-        );
+          module: this.$plugin.constructor.name,
+        });
       }
 
       if (!SupportedLocales.includes(locale)) {
-        throw new JovoCliError(
-          `Locale ${printHighlight(locale)} is not supported by Dialogflow.`,
-          this.$plugin.constructor.name,
-          'For more information on multiple language support: https://cloud.google.com/dialogflow/es/docs/reference/language',
-        );
+        throw new JovoCliError({
+          message: `Locale ${printHighlight(locale)} is not supported by Dialogflow.`,
+          module: this.$plugin.constructor.name,
+          learnMore:
+            'For more information on multiple language support: https://cloud.google.com/dialogflow/es/docs/reference/language',
+        });
       }
     }
   }
@@ -121,7 +121,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
 
     for (const locale of this.$context.locales) {
       const localeTask = new Task(locale, async () => {
-        this.$cli.$project!.validateModel(locale, JovoModelDialogflow.getValidator());
+        await this.$cli.$project!.validateModel(locale, JovoModelDialogflow.getValidator());
         await wait(500);
       });
 
@@ -237,7 +237,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
         resolvedLocalesOutput === locale ? '' : `(${resolvedLocalesOutput})`;
 
       const localeTask: Task = new Task(`${locale} ${taskDetails}`, async () => {
-        this.buildLanguageModel(locale, resolvedLocales);
+        await this.buildLanguageModel(locale, resolvedLocales);
         await wait(500);
       });
       localeTask.indent(4);
@@ -250,7 +250,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * @param modelLocale - Locale of the Jovo model.
    * @param resolvedLocales - Locales to which to resolve the modelLocale.
    */
-  buildLanguageModel(modelLocale: string, resolvedLocales: string[]): void {
+  async buildLanguageModel(modelLocale: string, resolvedLocales: string[]): Promise<void> {
     if (!existsSync(this.$plugin.getIntentsFolderPath())) {
       mkdirSync(this.$plugin.getIntentsFolderPath());
     }
@@ -261,17 +261,20 @@ export class BuildHook extends PluginHook<BuildEvents> {
 
     try {
       for (const resolvedLocale of resolvedLocales) {
-        const model: JovoModelData = this.getJovoModel(modelLocale);
-        const jovoModel: JovoModelDialogflow = new JovoModelDialogflow(model, resolvedLocale);
+        const model: JovoModelData | JovoModelDataV3 = await this.getJovoModel(modelLocale);
+        const jovoModel: JovoModelDialogflow = new JovoModelDialogflow(
+          model as JovoModelData,
+          resolvedLocale,
+        );
         const dialogflowModelFiles: NativeFileInformation[] =
           jovoModel.exportNative() as NativeFileInformation[];
 
         if (!dialogflowModelFiles || !dialogflowModelFiles.length) {
           // Should actually never happen but who knows
-          throw new JovoCliError(
-            `Could not build Dialogflow files for locale "${modelLocale}"!`,
-            this.$plugin.constructor.name,
-          );
+          throw new JovoCliError({
+            message: `Could not build Dialogflow files for locale "${modelLocale}"!`,
+            module: this.$plugin.constructor.name,
+          });
         }
 
         for (const file of dialogflowModelFiles) {
@@ -292,7 +295,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
       if (error instanceof JovoCliError) {
         throw error;
       }
-      throw new JovoCliError(error.message, this.$plugin.constructor.name);
+      throw new JovoCliError({ message: error.message, module: this.$plugin.constructor.name });
     }
   }
 
@@ -314,11 +317,11 @@ export class BuildHook extends PluginHook<BuildEvents> {
         if (platformLocales.includes(locale)) {
           selectedLocales.push(locale);
         } else {
-          throw new JovoCliError(
-            `Could not find platform models for locale: ${printHighlight(locale)}`,
-            this.$plugin.constructor.name,
-            `Available locales include: ${platformLocales.join(', ')}`,
-          );
+          throw new JovoCliError({
+            message: `Could not find platform models for locale: ${printHighlight(locale)}`,
+            module: this.$plugin.constructor.name,
+            hint: `Available locales include: ${platformLocales.join(', ')}`,
+          });
         }
       }
     }
@@ -378,10 +381,10 @@ export class BuildHook extends PluginHook<BuildEvents> {
         const nativeData: JovoModelData | undefined = jovoModel.exportJovoModel();
 
         if (!nativeData) {
-          throw new JovoCliError(
-            'Something went wrong while exporting your Jovo model.',
-            this.$plugin.constructor.name,
-          );
+          throw new JovoCliError({
+            message: 'Something went wrong while exporting your Jovo model.',
+            module: this.$plugin.constructor.name,
+          });
         }
         this.$cli.$project!.saveModel(nativeData, modelLocale);
         await wait(500);
@@ -443,8 +446,8 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * Loads a Jovo model specified by a locale and merges it with plugin-specific models.
    * @param locale - The locale that specifies which model to load.
    */
-  getJovoModel(locale: string): JovoModelData {
-    const model: JovoModelData = this.$cli.$project!.getModel(locale);
+  async getJovoModel(locale: string): Promise<JovoModelData | JovoModelDataV3> {
+    const model: JovoModelData | JovoModelDataV3 = await this.$cli.$project!.getModel(locale);
 
     // Merge model with configured language model in project.js.
     _mergeWith(

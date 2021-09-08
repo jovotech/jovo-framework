@@ -1,12 +1,13 @@
-import { existsSync } from 'fs';
 import { execAsync } from '@jovotech/cli-core';
-import { getAskError } from '../utils';
+import { existsSync } from 'fs';
+import { getAskError } from '../utilities';
 
 export async function getAccountLinkingInformation(
   skillId: string,
   stage: string,
   askProfile?: string,
-) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Promise<any> {
   const cmd =
     'ask smapi get-account-linking-info ' +
     `-s ${skillId} ` +
@@ -28,7 +29,7 @@ export async function updateAccountLinkingInformation(
   accountLinkingJsonPath: string,
   stage: string,
   askProfile?: string,
-) {
+): Promise<void> {
   try {
     if (!existsSync(accountLinkingJsonPath)) {
       return;

@@ -1,19 +1,19 @@
-import { PersistableUserData } from '../JovoUser';
-import { PersistableSessionData } from '../JovoSession';
+import { AnyObject } from '..';
+import { ExtensibleInitConfig } from '../Extensible';
 import {
   DbPluginConfig,
   JovoAnyFunction,
   StoredElement,
   StoredElementHistory,
 } from '../interfaces';
-import { Plugin, PluginConfig } from '../Plugin';
 import { Jovo, JovoPersistableData } from '../Jovo';
-import { ExtensibleInitConfig } from '../Extensible';
 import { JovoHistoryItem, PersistableHistoryData } from '../JovoHistory';
+import { PersistableSessionData } from '../JovoSession';
+import { PersistableUserData } from '../JovoUser';
+import { Plugin, PluginConfig } from '../Plugin';
 
-export interface DbItem {
+export interface DbItem extends AnyObject {
   id?: string;
-  [key: string]: any;
 
   user?: PersistableUserData;
   session?: PersistableSessionData;

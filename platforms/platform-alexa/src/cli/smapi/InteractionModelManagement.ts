@@ -1,12 +1,13 @@
 import { execAsync } from '@jovotech/cli-core';
-import { getAskError } from '../utils';
+import { getAskError } from '../utilities';
 
 export async function getInteractionModel(
   skillId: string,
   locale: string,
   stage: string,
   askProfile?: string,
-) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Promise<any> {
   try {
     const cmd =
       'ask smapi get-interaction-model ' +
@@ -29,7 +30,7 @@ export async function updateInteractionModel(
   interactionModelPath: string,
   stage: string,
   askProfile?: string,
-) {
+): Promise<void> {
   const cmd: string =
     'ask smapi set-interaction-model ' +
     `-s ${skillId} ` +

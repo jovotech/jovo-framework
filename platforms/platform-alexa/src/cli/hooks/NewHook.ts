@@ -1,7 +1,7 @@
-import { PluginHook, printHighlight, printUserInput, prompt, Log } from '@jovotech/cli-core';
 import type { NewContext, NewEvents } from '@jovotech/cli-command-new';
-
-import { SupportedLocales, SupportedLocalesType } from '../utils';
+import { Log, PluginHook, promptSupportedLocales } from '@jovotech/cli-core';
+import { SupportedLocales } from '../constants';
+import { SupportedLocalesType } from '../interfaces';
 
 export class NewHook extends PluginHook<NewEvents> {
   install(): void {
@@ -17,24 +17,10 @@ export class NewHook extends PluginHook<NewEvents> {
       if (!SupportedLocales.includes(locale as SupportedLocalesType)) {
         // Prompt user for alternative locale.
         Log.spacer();
-        const { locales } = await prompt(
-          {
-            name: 'locales',
-            type: 'autocompleteMultiselect',
-            message: `Locale ${printHighlight(
-              locale,
-            )} is not supported by Alexa.\nPlease provide an alternative locale (type to filter, select with space):`,
-            instructions: false,
-            choices: SupportedLocales.map((locale) => ({
-              title: printUserInput(locale),
-              value: locale,
-            })),
-          },
-          {
-            onCancel() {
-              process.exit();
-            },
-          },
+        const { locales } = await promptSupportedLocales(
+          locale,
+          'Alexa',
+          SupportedLocales as unknown as string[],
         );
 
         if (!locales.length) {

@@ -1,26 +1,25 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
-import _get from 'lodash.get';
-import _set from 'lodash.set';
+import type { BuildEvents } from '@jovotech/cli-command-build';
+import type { GetContext, GetEvents } from '@jovotech/cli-command-get';
 import {
   ANSWER_CANCEL,
+  DOWNLOAD,
   flags,
   InstallContext,
+  MAGNIFYING_GLASS,
   PluginHook,
   printAskProfile,
   promptListForProjectId,
   promptOverwrite,
   Task,
-  DOWNLOAD,
-  MAGNIFYING_GLASS
 } from '@jovotech/cli-core';
-import type { GetContext, GetEvents } from '@jovotech/cli-command-get';
-import type { BuildEvents } from '@jovotech/cli-command-build';
 import { FileBuilder, FileObject } from '@jovotech/filebuilder';
-
-import * as smapi from '../smapi';
-import { AskSkillList, checkForAskCli, AlexaContext, prepareSkillList } from '../utils';
-import defaultFiles from '../utils/DefaultFiles.json';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import _get from 'lodash.get';
+import _set from 'lodash.set';
 import { AlexaCli } from '..';
+import defaultFiles from '../DefaultFiles.json';
+import * as smapi from '../smapi';
+import { AlexaContext, AskSkillList, checkForAskCli, prepareSkillList } from '../utilities';
 
 export interface GetContextAlexa extends AlexaContext, GetContext {
   flags: GetContext['flags'] & { 'ask-profile'?: string; 'skill-id'?: string };
@@ -109,9 +108,12 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
     // If no skill id and thus no specified project can be found, try to prompt for one.
     if (!this.$context.alexa.skillId) {
       let skills: AskSkillList = { skills: [] };
-      const getSkillListTask: Task = new Task(`${MAGNIFYING_GLASS} Getting a list of all your skills`, async () => {
-        skills = await smapi.listSkills(this.$context.alexa.askProfile);
-      });
+      const getSkillListTask: Task = new Task(
+        `${MAGNIFYING_GLASS} Getting a list of all your skills`,
+        async () => {
+          skills = await smapi.listSkills(this.$context.alexa.askProfile);
+        },
+      );
 
       await getSkillListTask.run();
       const list = prepareSkillList(skills);

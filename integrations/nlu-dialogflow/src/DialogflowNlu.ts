@@ -1,17 +1,16 @@
 import {
   DeepPartial,
-  HandleRequest,
   Jovo,
   JovoError,
   NluData,
   NluPlugin,
-  PluginConfig,
+  NluPluginConfig,
 } from '@jovotech/framework';
 import { JWT, JWTInput } from 'google-auth-library';
 import { DIALOGFLOW_API_BASE_URL } from './constants';
 import { DetectIntentRequest, DetectIntentResponse, TextInput } from './interfaces';
 
-export interface DialogflowNluConfig extends PluginConfig {
+export interface DialogflowNluConfig extends NluPluginConfig {
   serviceAccount: JWTInput;
   defaultLocale: string;
 }
@@ -32,14 +31,13 @@ export class DialogflowNlu extends NluPlugin<DialogflowNluConfig> {
 
   getDefaultConfig(): DialogflowNluConfig {
     return {
+      ...super.getDefaultConfig(),
       serviceAccount: {},
       defaultLocale: 'en-US',
     };
   }
 
-  async process(handleRequest: HandleRequest, jovo: Jovo): Promise<NluData | undefined> {
-    const text = jovo.$request.getRawText();
-    if (!text) return;
+  async process(jovo: Jovo, text: string): Promise<NluData | undefined> {
     if (!jovo.$session.id) {
       throw new JovoError({
         message: `Can not send request to Dialogflow. Session-ID is missing.`,
@@ -58,6 +56,7 @@ export class DialogflowNlu extends NluPlugin<DialogflowNluConfig> {
         ? { intent: { name: dialogflowResponse.data.queryResult.intent.displayName } }
         : undefined;
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.error('Error while retrieving nlu-data from Dialogflow.', e);
       return;
     }

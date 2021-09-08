@@ -1,7 +1,24 @@
-import { Entity, EntityMap, JovoRequest, JovoRequestType, RequestType } from '@jovotech/framework';
-import { AlexaResponse, ResolutionPerAuthorityStatusCode } from '@jovotech/output-alexa';
+import {
+  Capability,
+  Entity,
+  EntityMap,
+  InputType,
+  InputTypeLike,
+  JovoInput,
+  JovoRequest,
+  UnknownObject,
+} from '@jovotech/framework';
+import { ResolutionPerAuthorityStatusCode } from '@jovotech/output-alexa';
+import { AlexaCapability, AlexaCapabilityType } from './AlexaDevice';
 import { DYNAMIC_ENTITY_MATCHES_PREFIX, STATIC_ENTITY_MATCHES_PREFIX } from './constants';
 import { AuthorityResolution, Context, Request, Session } from './interfaces';
+
+export const ALEXA_REQUEST_TYPE_TO_INPUT_TYPE_MAP: Record<string, InputTypeLike> = {
+  'LaunchRequest': InputType.Launch,
+  'IntentRequest': InputType.Intent,
+  'SessionEndedRequest': InputType.End,
+  'System.ExceptionEncountered': InputType.Error,
+};
 
 export class AlexaRequest extends JovoRequest {
   version?: string;
@@ -9,12 +26,19 @@ export class AlexaRequest extends JovoRequest {
   session?: Session;
   request?: Request;
 
+  getLocale(): string | undefined {
+    return this.request?.locale;
+  }
+
+  getIntent(): JovoInput['intent'] {
+    return this.request?.intent?.name;
+  }
+
   getEntities(): EntityMap | undefined {
     const slots = this.request?.intent?.slots;
     if (!slots) return;
     return Object.keys(slots).reduce((entityMap: EntityMap, slotKey: string) => {
       const entity: Entity = {
-        name: slotKey,
         alexaSkill: slots[slotKey],
       };
       if (slots[slotKey].value) {
@@ -58,12 +82,10 @@ export class AlexaRequest extends JovoRequest {
     );
   }
 
-  getIntentName(): string | undefined {
-    return this.request?.intent?.name;
-  }
-
-  getLocale(): string | undefined {
-    return this.request?.locale;
+  getInputType(): InputTypeLike | undefined {
+    return this.request?.type
+      ? ALEXA_REQUEST_TYPE_TO_INPUT_TYPE_MAP[this.request.type] || this.request.type
+      : undefined;
   }
 
   setLocale(locale: string): void {
@@ -75,21 +97,15 @@ export class AlexaRequest extends JovoRequest {
     this.request.locale = locale;
   }
 
-  getRawText(): string | undefined {
+  getInputText(): JovoInput['text'] {
     return;
   }
 
-  getRequestType(): JovoRequestType | undefined {
-    const requestTypeMap: Record<string, JovoRequestType> = {
-      'LaunchRequest': { type: RequestType.Launch },
-      'IntentRequest': { type: RequestType.Intent },
-      'SessionEndedRequest': { type: RequestType.End, subType: this.request?.reason },
-      'System.ExceptionEncountered': { type: RequestType.OnError },
-    };
-    return this.request?.type ? requestTypeMap[this.request?.type] : undefined;
+  getInputAudio(): JovoInput['audio'] {
+    return;
   }
 
-  getSessionData(): Record<string, unknown> | undefined {
+  getSessionData(): UnknownObject | undefined {
     return this.session?.attributes;
   }
 
@@ -100,11 +116,11 @@ export class AlexaRequest extends JovoRequest {
   getSessionId(): string | undefined {
     return this.session?.sessionId;
   }
-
   isNewSession(): boolean | undefined {
     return this.session?.new;
   }
 
+  // platform-specific
   isAplSupported(): boolean {
     return !!this.context?.System?.device?.supportedInterfaces?.['Alexa.Presentation.APL'];
   }
@@ -125,5 +141,28 @@ export class AlexaRequest extends JovoRequest {
     }
 
     this.session.user.userId = userId;
+  }
+
+  getApiEndpoint(): string {
+    return this.context!.System.apiEndpoint;
+  }
+
+  getApiAccessToken(): string {
+    return this.context!.System.apiAccessToken;
+  }
+
+  getDeviceCapabilities(): AlexaCapabilityType[] | undefined {
+    const supportedInterfaces = this.context?.System?.device?.supportedInterfaces;
+    if (!supportedInterfaces) {
+      return;
+    }
+    const capabilities: AlexaCapabilityType[] = [Capability.Audio];
+    if (supportedInterfaces.AudioPlayer) {
+      capabilities.push(Capability.LongformAudio);
+    }
+    if (supportedInterfaces['Alexa.Presentation.APL']) {
+      capabilities.push(Capability.Screen, AlexaCapability.Apl);
+    }
+    return capabilities;
   }
 }

@@ -1,5 +1,5 @@
 import { JovoCliPlugin, PluginType } from '@jovotech/cli-core';
-import { GoogleCliConfig } from '../../dist/cli/utils';
+import { GoogleCliConfig } from '../../src/cli/utils';
 
 export class Plugin extends JovoCliPlugin {
   readonly $id: string = 'testPlugin';

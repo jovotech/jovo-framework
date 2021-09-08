@@ -1,8 +1,0 @@
-import { app } from '../app';
-
-app.use();
-
-export const handler = async (event: any, context: any, callback: Function) => {
-  // await app.bootstrap();
-  await app.handle(event);
-};

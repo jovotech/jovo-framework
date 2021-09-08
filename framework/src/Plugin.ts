@@ -1,10 +1,8 @@
 import _merge from 'lodash.merge';
-import { DeepPartial } from '.';
+import { DeepPartial, UnknownObject } from '.';
 import { Extensible } from './Extensible';
 
-export interface PluginConfig {
-  [key: string]: unknown;
-
+export interface PluginConfig extends UnknownObject {
   enabled?: boolean;
   skipTests?: boolean;
 }

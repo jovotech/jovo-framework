@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/nlu-nlpjs",
-  "version": "4.0.0-alpha.16",
+  "version": "4.0.0-beta.2",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -22,12 +22,12 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@nlpjs/nlp": "^4.22.0",
-    "jovo-model": "^3.0.1",
-    "jovo-model-nlpjs": "^3.0.0"
+    "@jovotech/model": "^4.0.0-beta.2",
+    "@jovotech/model-nlpjs": "^4.0.0-beta.2",
+    "@nlpjs/nlp": "^4.22.0"
   },
   "devDependencies": {
-    "@jovotech/framework": "^4.0.0-alpha.16",
+    "@jovotech/framework": "^4.0.0-beta.2",
     "@types/jest": "^26.0.20",
     "@types/node": "^10.17.50",
     "@types/tv4": "^1.2.29",
@@ -43,7 +43,7 @@
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
-    "@jovotech/framework": ">=4.0.0-alpha.16 <4.0.0"
+    "@jovotech/framework": ">=4.0.0-beta.0 <4.0.0"
   },
   "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176",
   "prettier": "../../.prettierrc.js",

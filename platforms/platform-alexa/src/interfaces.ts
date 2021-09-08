@@ -61,7 +61,7 @@ export interface Speed {
   accuracyInMetersPerSecond?: number; // [0, MAX_INTEGER]
 }
 
-export type PermissionStatus = 'GRANTED' | 'DENIED';
+export type PermissionStatus = 'GRANTED' | 'DENIED' | 'ACCEPTED' | 'NOT_ANSWERED';
 
 export interface System {
   application: Application;
@@ -69,7 +69,7 @@ export interface System {
   person: Person;
   device: Device;
   apiEndpoint: string;
-  apiAccessToken?: string;
+  apiAccessToken: string;
 }
 
 export interface Viewport {
@@ -96,14 +96,35 @@ export interface Experience {
 export type TouchMethod = 'SINGLE';
 export type InputMechanism = 'DIRECTION';
 
+export interface AudioPlayerInterface {}
+export interface AlexaPresentationAplInterface {
+  runtime: {
+    maxVersion: string;
+  };
+}
+export interface AlexaPresentationAplTInterface extends AlexaPresentationAplInterface {}
+export interface AlexaPresentationHtmlInterface extends AlexaPresentationAplInterface {}
+
+export interface DisplayInterface {
+  templateVersion?: string;
+  markupVersion?: string;
+}
+
+export interface VideoAppInterface {}
+export interface GeolocationInterface {}
+export interface NavigationInterface {}
+
 export interface Device {
   deviceId: string;
   supportedInterfaces?: {
-    'Alexa.Presentation.APL'?: {
-      runtime: {
-        maxVersion: string;
-      };
-    };
+    'Alexa.Presentation.APL'?: AlexaPresentationAplInterface;
+    'AudioPlayer'?: AudioPlayerInterface;
+    'Alexa.Presentation.APLT'?: AlexaPresentationAplTInterface;
+    'Alexa.Presentation.HTML'?: AlexaPresentationHtmlInterface;
+    'Display'?: DisplayInterface;
+    'VideoApp'?: VideoAppInterface;
+    'Geolocation'?: GeolocationInterface;
+    'Navigation'?: NavigationInterface;
   };
 }
 
@@ -189,6 +210,9 @@ export interface Request {
     // Connections.Response
     purchaseResult?: string;
     productId?: string;
+    isCardThrown?: boolean;
+    permissionScope?: string;
+    status?: PermissionStatus;
   };
   error?: {
     // System.ExceptionEncountered

@@ -30,20 +30,27 @@ export type AppInitConfig = ExtensibleInitConfig<AppConfig> & {
 
 export type Usable = Plugin | ComponentConstructor | ComponentDeclaration;
 
-export const BASE_APP_MIDDLEWARES = <const>[
+export const APP_MIDDLEWARES = [
+  'request.start',
   'request',
+  'request.end',
+  'interpretation.start',
   'interpretation.asr',
   'interpretation.nlu',
-  'dialog.context',
-  'dialog.logic',
+  'interpretation.end',
+  'dialogue.start',
+  'dialogue.router',
+  'dialogue.logic',
+  'dialogue.end',
+  'response.start',
   'response.output',
   'response.tts',
-  'response',
-];
+  'response.end',
+] as const;
+export type AppMiddleware = ArrayElement<typeof APP_MIDDLEWARES>;
+export type AppMiddlewares = AppMiddleware[];
 
-export type AppBaseMiddleware = typeof BASE_APP_MIDDLEWARES[number];
-
-export class App extends Extensible<AppConfig, AppBaseMiddleware[]> {
+export class App extends Extensible<AppConfig, AppMiddlewares> {
   readonly componentTree: ComponentTree;
   readonly i18n: I18Next;
 
@@ -66,19 +73,19 @@ export class App extends Extensible<AppConfig, AppBaseMiddleware[]> {
     return Object.values(this.plugins).filter((plugin) => plugin instanceof Platform) as Platform[];
   }
 
-  configure(config: AppInitConfig) {
+  configure(config: AppInitConfig): void {
     _merge(this.config, { ...config, components: undefined, plugins: undefined });
     const usables: Usable[] = [...(config?.plugins || []), ...(config?.components || [])];
     this.use(...usables);
   }
 
-  initializeMiddlewareCollection(): MiddlewareCollection<AppBaseMiddleware[]> {
-    return new MiddlewareCollection(...BASE_APP_MIDDLEWARES);
+  initializeMiddlewareCollection(): MiddlewareCollection<AppMiddlewares> {
+    return new MiddlewareCollection(...APP_MIDDLEWARES);
   }
 
-  middleware(name: AppBaseMiddleware): Middleware | undefined;
+  middleware(name: AppMiddleware): Middleware | undefined;
   middleware(name: string): Middleware | undefined;
-  middleware(name: string | AppBaseMiddleware): Middleware | undefined {
+  middleware(name: string | AppMiddleware): Middleware | undefined {
     return this.middlewareCollection.get(name);
   }
 
@@ -129,20 +136,19 @@ export class App extends Extensible<AppConfig, AppBaseMiddleware[]> {
     if (!relatedPlatform) {
       throw new MatchingPlatformNotFoundError(server.getRequestObject());
     }
-    handleRequest.$platform = relatedPlatform;
+    handleRequest.platform = relatedPlatform;
     const jovo = relatedPlatform.createJovoInstance(this, handleRequest);
 
     // RIDR-pipeline
-    await handleRequest.middlewareCollection.run('request', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('interpretation.asr', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('interpretation.nlu', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('dialog.context', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('dialog.logic', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('response.output', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('response.tts', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('response', handleRequest, jovo);
+    await handleRequest.middlewareCollection.run(APP_MIDDLEWARES.slice(), jovo);
 
     await handleRequest.dismount();
+
+    // TODO determine what to do if there is not response
+    if (!jovo.$response) {
+      return;
+    }
+
     await server.setResponse(jovo.$response);
   }
 }

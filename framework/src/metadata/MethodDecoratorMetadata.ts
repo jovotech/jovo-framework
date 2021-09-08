@@ -1,12 +1,13 @@
+import { AnyObject, Constructor } from '../index';
 import { ClassDecoratorMetadata } from './ClassDecoratorMetadata';
 
 export abstract class MethodDecoratorMetadata<
-  TARGET extends any = any,
+  TARGET = AnyObject,
   KEY extends keyof TARGET = keyof TARGET,
-> extends ClassDecoratorMetadata {
+> extends ClassDecoratorMetadata<TARGET> {
   protected constructor(
     // eslint-disable-next-line @typescript-eslint/ban-types
-    readonly target: (new (...args: unknown[]) => TARGET) | Function,
+    readonly target: Constructor<TARGET> | Function,
     readonly propertyKey: KEY,
   ) {
     super(target);

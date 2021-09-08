@@ -1,4 +1,4 @@
-import { ArrayElement } from './index';
+import { ArrayElement, Jovo } from './index';
 import { Middleware, MiddlewareFunction } from './Middleware';
 
 export type PossibleMiddlewareName<MIDDLEWARES extends string[]> =
@@ -70,26 +70,32 @@ export class MiddlewareCollection<MIDDLEWARES extends string[] = string[]> {
     return this;
   }
 
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  async run<T extends any[]>(name: PossibleMiddlewareName<MIDDLEWARES>, ...args: T): Promise<void>;
-  async run<T extends any[]>(name: string, ...args: T): Promise<void>;
-  async run<T extends any[]>(
-    name: string | PossibleMiddlewareName<MIDDLEWARES>,
-    ...args: T
+  async run(name: PossibleMiddlewareName<MIDDLEWARES>, jovo: Jovo): Promise<void>;
+  async run(name: string, jovo: Jovo): Promise<void>;
+  async run(names: PossibleMiddlewareName<MIDDLEWARES>[], jovo: Jovo): Promise<void>;
+  async run(names: string[], jovo: Jovo): Promise<void>;
+  async run(
+    nameOrNames:
+      | string
+      | PossibleMiddlewareName<MIDDLEWARES>
+      | Array<string | PossibleMiddlewareName<MIDDLEWARES>>,
+    jovo: Jovo,
   ): Promise<void> {
-    /*  eslint-enable @typescript-eslint/no-explicit-any */
-    const middleware = this.get(name);
-    if (!middleware) return;
-    const beforeName = `before.${name}`;
-    if (this.has(beforeName)) {
-      await this.run(beforeName, ...args);
-    }
+    const names = typeof nameOrNames === 'string' ? [nameOrNames] : nameOrNames;
+    for (const name of names) {
+      const middleware = this.get(name);
+      if (!middleware) continue;
+      const beforeName = `before.${name}`;
+      if (this.has(beforeName)) {
+        await this.run(beforeName, jovo);
+      }
 
-    await middleware.run(...args);
+      await middleware.run(jovo);
 
-    const afterName = `after.${name}`;
-    if (this.has(afterName)) {
-      await this.run(afterName, ...args);
+      const afterName = `after.${name}`;
+      if (this.has(afterName)) {
+        await this.run(afterName, jovo);
+      }
     }
   }
 

@@ -9,13 +9,24 @@ require('source-map-support').install();
 export * from 'axios';
 export { axios };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type AnyObject = Record<string, any>;
+export type UnknownObject = Record<string, unknown>;
+
 // Return the type of the items in the array.
 export type ArrayElement<ARRAY_TYPE extends readonly unknown[]> = ARRAY_TYPE[number];
 export type DeepPartial<T> = PartialDeep<T>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type Constructor<T, ARGS extends any[] = any[]> = new (...args: ARGS) => T;
+export type Constructor<T = AnyObject, ARGS extends unknown[] = any[]> = new (...args: ARGS) => T;
 // Construct object from properties of T that extend U.
 export type PickWhere<T, U> = Pick<
+  T,
+  {
+    [K in keyof T]: T[K] extends U ? K : never;
+  }[keyof T]
+>;
+// Construct object from properties of T that do not extend U.
+export type OmitWhere<T, U> = Omit<
   T,
   {
     [K in keyof T]: T[K] extends U ? K : never;
@@ -29,20 +40,30 @@ export type OmitIndex<T, I extends string | number> = {
 };
 
 export {
+  Card,
+  Carousel,
+  CarouselItem,
+  CarouselItemSelection,
+  CarouselSelection,
+  DynamicEntity,
+  DynamicEntitiesModeLike,
+  DynamicEntities,
+  DynamicEntityValue,
+  DynamicEntitiesMode,
   JovoResponse,
+  Listen,
+  ListenValue,
+  Message,
+  MessageValue,
   OutputTemplateConverterStrategy,
   OutputTemplateConverter,
   OutputTemplate,
   OutputTemplateBase,
   OutputTemplatePlatforms,
-  Carousel,
-  Card,
+  OutputValidationError,
+  PlatformOutputTemplate,
   QuickReply,
   QuickReplyValue,
-  Message,
-  MessageValue,
-  PlatformOutputTemplate,
-  OutputValidationError,
 } from '@jovotech/output';
 
 export * from './App';
@@ -50,15 +71,20 @@ export * from './BaseComponent';
 export * from './BaseOutput';
 export * from './ComponentPlugin';
 export * from './ComponentTree';
+export * from './ComponentTreeNode';
 export * from './Extensible';
 export * from './HandleRequest';
 export * from './I18Next';
 export * from './Jovo';
 export * from './JovoError';
+export * from './JovoInput';
+export * from './JovoInputBuilder';
 export * from './JovoProxy';
 export * from './JovoRequest';
 export * from './JovoSession';
 export * from './JovoUser';
+export * from './JovoDevice';
+
 export * from './Middleware';
 export * from './MiddlewareCollection';
 export * from './NluPlugin';
@@ -77,6 +103,7 @@ export * from './decorators/Output';
 export * from './decorators/Platforms';
 export * from './decorators/PrioritizedOverUnhandled';
 export * from './decorators/SubState';
+export * from './decorators/Types';
 
 export * from './errors/ComponentNotFoundError';
 export * from './errors/DuplicateChildComponentsError';

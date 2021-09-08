@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/nlu-dialogflow",
-  "version": "4.0.0-alpha.16",
+  "version": "4.0.0-beta.2",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -25,8 +25,8 @@
     "google-auth-library": "^7.0.4"
   },
   "devDependencies": {
-    "@jovotech/framework": "^4.0.0-alpha.16",
-    "@jovotech/output-dialogflow": "^4.0.0-alpha.6",
+    "@jovotech/framework": "^4.0.0-beta.2",
+    "@jovotech/output-dialogflow": "^4.0.0-beta.1",
     "@types/jest": "^26.0.20",
     "@types/node": "^10.17.50",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
@@ -41,7 +41,7 @@
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
-    "@jovotech/framework": ">=4.0.0-alpha.16 <4.0.0"
+    "@jovotech/framework": ">=4.0.0-beta.0 <4.0.0"
   },
   "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176",
   "prettier": "../../.prettierrc.js",
