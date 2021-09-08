@@ -4,7 +4,7 @@ excerpt: 'The Amazon Alexa platform integration allows you to build custom Alexa
 ---
 # Amazon Alexa Platform Integration
 
-The Amazon Alexa [platform integration](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/platforms.md) allows you to build custom Alexa Skills using Jovo.
+The Amazon Alexa [platform integration](https://v4.jovo.tech/docs/platforms) allows you to build custom Alexa Skills using Jovo.
 
 ## Getting Started
 
@@ -14,7 +14,7 @@ You can install the plugin like this:
 $ npm install @jovotech/platform-alexa
 ```
 
-Add it as plugin to your [app configuration](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/platforms.md), e.g. `app.ts`:
+Add it as plugin to your [app configuration](https://v4.jovo.tech/docs/app-config), e.g. `app.ts`:
 
 ```typescript
 import { App } from '@jovotech/framework';
@@ -29,7 +29,7 @@ const app = new App({
 });
 ```
 
-You can also add the CLI plugin to your [project configuration](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/project-config.md) in `jovo.project.js`:
+You can also add the CLI plugin to your [project configuration](https://v4.jovo.tech/docs/project-config) in `jovo.project.js`:
 
 ```js
 const { ProjectConfig } = require('@jovotech/cli');
@@ -45,7 +45,7 @@ const project = new ProjectConfig({
 });
 ```
 
-[Learn more about the Alexa project configuration here](./docs/project-config.md).
+[Learn more about the Alexa project configuration here](https://v4.jovo.tech/marketplace/platform-alexa/project-config).
 
 ## Platform-Specific Features
 
@@ -65,7 +65,7 @@ if(this.$alexa) {
 
 ### User
 
-There are various Alexa specific features added to the [user class](../docs/user.md) that can be accessed like this:
+There are various Alexa specific features added to the [user class](https://v4.jovo.tech/docs/user) that can be accessed like this:
 
 ```typescript
 this.$alexa.$user
@@ -108,11 +108,11 @@ async getEmail() {
 },
 ```
 
-If the `getEmail` call returns an error with the code `NO_USER_PERMISSION`, an `AskForPermissionsConsent` card ([learn more in the official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-customer-contact-information-for-use-in-your-skill.html#sample-response-with-permissions-card)) is added to the Alexa-specific [output](../docs/output.md). Please note that the example adds the output to the `$send` method for simplicity. It could also be added using output classes.
+If the `getEmail` call returns an error with the code `NO_USER_PERMISSION`, an `AskForPermissionsConsent` card ([learn more in the official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-customer-contact-information-for-use-in-your-skill.html#sample-response-with-permissions-card)) is added to the Alexa-specific [output](https://v4.jovo.tech/docs/output). Please note that the example adds the output to the `$send` method for simplicity. It could also be added using output classes.
 
 
 ### Output
 
-There are various Alexa specific elements that can be added to the [output](../docs/output.md).
+There are various Alexa specific elements that can be added to the [output](https://v4.jovo.tech/docs/output).
 
-[Learn more in the Jovo Output documentation for Alexa](https://github.com/jovotech/jovo-output/blob/master/output-alexa/README.md).
+[Learn more in the Jovo Output documentation for Alexa](https://v4.jovo.tech/marketplace/platform-alexa/output).

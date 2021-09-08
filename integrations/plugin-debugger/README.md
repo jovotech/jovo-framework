@@ -16,7 +16,7 @@ The Debugger can be used in the browser, where messages can be sent to your Jovo
 
 ## Installation
 
-Most Jovo projects already have the Debugger plugin added to the development stage at `app.dev.ts`. [Learn more about staging here](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/staging.md).
+Most Jovo projects already have the Debugger plugin added to the development stage at `app.dev.ts`. [Learn more about staging here](https://v4.jovo.tech/docs/staging).
 
 If it is not already added to the project, you can install the Debugger plugin like this:
 
@@ -24,7 +24,7 @@ If it is not already added to the project, you can install the Debugger plugin l
 $ npm install @jovotech/plugin-debugger
 ```
 
-The Debugger can only be used for local development, so we recommend adding it to the `app.dev.ts` [app configuration](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/app-config.md):
+The Debugger can only be used for local development, so we recommend adding it to the `app.dev.ts` [app configuration](https://v4.jovo.tech/docs/app-config):
 
 ```typescript
 import { JovoDebugger } from '@jovotech/plugin-debugger';

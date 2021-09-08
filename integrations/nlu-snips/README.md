@@ -8,7 +8,7 @@ Turn raw text into structured meaning with the Jovo Framework integration for th
 
 ## Introduction
 
-[Snips NLU](https://github.com/snipsco/snips-nlu) is an open source [natural language understanding (NLU)](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/nlu.md) library.
+[Snips NLU](https://github.com/snipsco/snips-nlu) is an open source [natural language understanding (NLU)](https://v4.jovo.tech/docs/nlu) library.
 
 Since it is an open source service, you can host Snips NLU on your own servers without any external API calls. You can learn how to set up a server in the [official Snips NLU documentation](https://snips-nlu.readthedocs.io/en/latest/).
 
@@ -63,7 +63,7 @@ new SnipsNlu({
 
 ## Dynamic Entities
 
-It is possible to set up Snips NLU to work with [dynamic entities](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/entities.md#dynamic-entities).
+It is possible to set up Snips NLU to work with [dynamic entities](https://v4.jovo.tech/docs/entities#dynamic-entities).
 
 The Jovo Snips NLU integration automatically parses the entities that are added to the `listen` object of the [output template](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md), and sends them to the Snips NLU server along with the session ID.
 

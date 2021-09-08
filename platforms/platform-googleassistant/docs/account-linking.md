@@ -150,7 +150,7 @@ To trigger account linking, you can instruct your Google Action to handle the ne
 }
 ```
 
-After the user has gone through account linking, you receive a request of the type `ON_SIGN_IN` to notify you about the result. You can create a handler for this request by using the [`types` property](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/handlers.md#types):
+After the user has gone through account linking, you receive a request of the type `ON_SIGN_IN` to notify you about the result. You can create a handler for this request by using the [`types` property](https://v4.jovo.tech/docs/handlers#types):
 
 ```typescript
 @Types('ON_SIGN_IN')

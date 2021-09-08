@@ -1,6 +1,6 @@
 # Core Platform
 
-The Jovo Core Platform is a standalone [platform integration](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/platforms.md) that can be used to deploy a voice experiences to custom devices and hardware, including the web, mobile apps, and Raspberry Pi.
+The Jovo Core Platform is a standalone [platform integration](https://v4.jovo.tech/docs/platforms) that can be used to deploy a voice experiences to custom devices and hardware, including the web, mobile apps, and Raspberry Pi.
 - [Introduction](#introduction)
 - [Installation](#installation)
 - [Configuration](#configuration)
@@ -38,7 +38,7 @@ You can install the plugin like this:
 $ npm install @jovotech/platform-core
 ```
 
-Add it as plugin to your [app configuration](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/app-config.md), e.g. `app.ts`:
+Add it as plugin to your [app configuration](https://v4.jovo.tech/docs/app-config), e.g. `app.ts`:
 
 ```typescript
 import { App } from '@jovotech/framework';
@@ -65,11 +65,11 @@ new CorePlatform({
 ```
 
 * `platform`: The `platform` name that you can find in the [request documentation below](#request) can be overridden with this property.
-* `plugins`: You can add plugins to this array. For example, Core Platform requires an [NLU plugin](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/nlu.md) to turn raw text into structured meaning.
+* `plugins`: You can add plugins to this array. For example, Core Platform requires an [NLU plugin](https://v4.jovo.tech/docs/nlu) to turn raw text into structured meaning.
 
 ## Requests and Responses
 
-In a Jovo app, each interaction goes through the [RIDR Lifecycle](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/ridr-lifecycle.md) that starts with a [request](#requests) from the client and ends with a [response](#responses) back to the client.
+In a Jovo app, each interaction goes through the [RIDR Lifecycle](https://v4.jovo.tech/docs/ridr-lifecycle) that starts with a [request](#requests) from the client and ends with a [response](#responses) back to the client.
 
 ### Requests
 
@@ -114,9 +114,9 @@ The request usually contains data like an audio file or raw text ([find all samp
 }
 ```
 
-The `input` property follows the same structure as the [Jovo `$input` property](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/input.md).
+The `input` property follows the same structure as the [Jovo `$input` property](https://v4.jovo.tech/docs/input).
 
-The `device` property follows the same structure as the [Jovo `$device` property](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/device.md).
+The `device` property follows the same structure as the [Jovo `$device` property](https://v4.jovo.tech/docs/device).
 
 
 
