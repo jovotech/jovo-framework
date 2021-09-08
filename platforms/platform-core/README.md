@@ -1,14 +1,10 @@
+---
+title: 'Core Platform'
+excerpt: 'The Jovo Core Platform is a standalone platform integration that can be used to deploy a voice and chat experiences to custom devices and hardware, including the web, mobile apps, and Raspberry Pi.'
+---
 # Core Platform
 
-The Jovo Core Platform is a standalone [platform integration](https://v4.jovo.tech/docs/platforms) that can be used to deploy a voice experiences to custom devices and hardware, including the web, mobile apps, and Raspberry Pi.
-- [Introduction](#introduction)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Requests and Responses](#requests-and-responses)
-  - [Requests](#requests)
-  - [Responses](#responses)
-- [Platform-Specific Features](#platform-specific-features)
-
+The Jovo Core Platform is a standalone [platform integration](https://v4.jovo.tech/docs/platforms) that can be used to deploy a voice and chat experiences to custom devices and hardware, including the web, mobile apps, and Raspberry Pi.
 ## Introduction
 
 ![Jovo Client and Jovo Core Platform](https://github.com/jovotech/jovo-framework/raw/master/jovo-platforms/jovo-platform-core/img/jovo-client-platform-communication.png "How Jovo Core Platform communicates with clients like web apps")
