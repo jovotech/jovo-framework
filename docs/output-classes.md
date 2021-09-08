@@ -1,19 +1,10 @@
 ---
-title: 'Jovo Output Classes'
+title: 'Output Classes'
 excerpt: 'Learn more about Jovo Output classes, which offer a way to return structured output templates.'
 ---
 # Output Classes
 
 Output classes offer a way to return structured output templates.
-- [Introduction](#introduction)
-- [Build Method](#build-method)
-- [Output Options](#output-options)
-  - [Reserved Properties](#reserved-properties)
-  - [Custom Options](#custom-options)
-  - [Option Types](#option-types)
-  - [getDefaultOptions](#getdefaultoptions)
-- [Helper Methods](#helper-methods)
-- [Constructor](#constructor)
 
 ## Introduction
 

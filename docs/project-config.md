@@ -1,19 +1,10 @@
 ---
-title: 'Jovo Project Configuration - jovo.project.js'
+title: 'Project Configuration - jovo.project.js'
 excerpt: 'Learn more about the Jovo project config (jovo.project.js) that is used by the Jovo CLI to build and deploy your project to various platforms.'
 ---
 # Project Configuration
 
 The Jovo project config is used by the Jovo CLI to build and deploy your project to various platforms. [For app related configuration, take a look here](./app-config.md).
-
-- [Introduction](#introduction)
-- [Endpoint](#endpoint)
-- [Plugins](#plugins)
-  - [Installation](#installation)
-  - [Configuration](#configuration)
-  - [File Builder](#file-builder)
-- [Staging](#staging)
-- [Hooks](#hooks)
 
 ## Introduction
 

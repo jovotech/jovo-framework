@@ -1,13 +1,10 @@
+---
+title: 'Rasa NLU Integration'
+excerpt: 'Turn raw text into structured meaning with the Jovo Framework integration for the open source natural language understanding service Rasa NLU.'
+---
 # Rasa NLU Integration
 
 Turn raw text into structured meaning with the Jovo Framework integration for the open source natural language understanding service Rasa NLU.
-
-- [Introduction](#introduction)
-- [Installation](#installation)
-- [Configuration](#configuration)
-  - [Alternative Intents](#alternative-intents)
-- [Jovo Model](#jovo-model)
-
 
 ## Introduction
 

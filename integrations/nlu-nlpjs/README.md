@@ -1,11 +1,10 @@
+---
+title: 'NLP.js NLU Integration'
+excerpt: 'Turn raw text into structured meaning with the Jovo Framework integration for the open source natural language understanding service NLP.js.'
+---
 # NLP.js NLU Integration
 
 Turn raw text into structured meaning with the Jovo Framework integration for the open source natural language understanding service NLP.js.
-
-- [Introduction](#introduction)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Jovo Model](#jovo-model)
 
 ## Introduction
 

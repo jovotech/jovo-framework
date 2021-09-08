@@ -1,5 +1,5 @@
 ---
-title: 'Jovo Hooks'
+title: 'Hooks'
 excerpt: 'Learn how to extend Jovo apps using Hooks.'
 ---
 

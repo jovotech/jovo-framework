@@ -1,8 +1,10 @@
+---
+title: 'Jovo Debugger'
+excerpt: 'The Jovo Debugger allows you to test and debug your Jovo app by displaying the most important information about each interaction in one place.'
+---
 # Jovo Debugger
 
 Learn more about the Jovo debugging environment.
-- [Introduction](#introduction)
-- [Installation](#installation)
 
 ## Introduction
 

@@ -1,14 +1,11 @@
+---
+title: 'DynamoDB Database Integration'
+excerpt: 'The DynamoDB Jovo integration allows you to store user specific data in a DynamoDB table.'
+---
+
 # DynamoDB Database Integration
 
 This [database integration](../../docs/databases.md) allows you to store user specific data in a DynamoDB table.
-
-- [Introduction](#introduction)
-- [Installation](#installation)
-  - [For Apps Hosted on AWS](#for-apps-hosted-on-aws)
-  - [For Apps Hosted Outside AWS](#for-apps-hosted-outside-aws)
-- [Configuration](#configuration)
-  - [table](#table)
-  - [libraryConfig](#libraryconfig)
 
 ## Introduction
 

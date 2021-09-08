@@ -1,25 +1,10 @@
 ---
-title: 'Jovo Handlers'
+title: 'Handlers'
 excerpt: 'Learn more about Jovo Handlers, which are methods inside a Jovo Component that are responsible for handling a request and returning output.'
 ---
 # Handlers
 
 Handlers are methods inside a [Jovo component](./components.md) that are responsible for handling a request and returning output.
-
-- [Introduction](#introduction)
-- [Handler Routing and the Handle Decorator](#handler-routing-and-the-handle-decorator)
-  - [Routing Properties](#routing-properties)
-  - [Condition Properties](#condition-properties)
-  - [Handler Prioritization](#handler-prioritization)
-- [Handler Logic](#handler-logic)
-  - [Return Output](#return-output)
-  - [Redirect to Components](#redirect-to-components)
-  - [Delegate to Components](#delegate-to-components)
-  - [Resolve a Component](#resolve-a-component)
-- [Handler Types](#handler-types)
-  - [LAUNCH](#launch)
-  - [START](#start)
-  - [UNHANDLED](#unhandled)
 
 ## Introduction
 

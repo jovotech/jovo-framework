@@ -5,14 +5,6 @@ excerpt: 'Learn how to build your first project with Jovo v4, the framework that
 # Getting Started
 
 Learn how to build your first project with Jovo `v4`, the framework that lets you create powerful conversational apps that work across voice and chat platforms like Alexa, Google Assistant, Facebook Messenger, the web, and more.
-- [Introduction](#introduction)
-- [First Steps with Jovo](#first-steps-with-jovo)
-  - [Install the CLI](#install-the-cli)
-  - [Create a new Project](#create-a-new-project)
-  - [A Look at the Project Structure](#a-look-at-the-project-structure)
-  - [Run the Local Development Server](#run-the-local-development-server)
-- [Next Steps](#next-steps)
-
 
 ## Introduction
 

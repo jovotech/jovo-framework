@@ -1,12 +1,10 @@
 ---
-title: 'Jovo Models'
+title: 'Models'
 excerpt: 'Learn more about how to use Jovo Model files to maintain language models that work across platforms and NLU services.'
 ---
 # Models
 
 Learn more about how to use Jovo Model files to maintain language models that work across platforms and NLU services.
-- [Introduction](#introduction)
-- [Model Schema](#model-schema)
 
 ## Introduction
 

@@ -1,11 +1,10 @@
+---
+title: 'Snips NLU Integration'
+excerpt: 'Turn raw text into structured meaning with the Jovo Framework integration for the open source natural language understanding service Snips NLU.'
+---
 # Snips NLU Integration
 
 Turn raw text into structured meaning with the Jovo Framework integration for the open source natural language understanding service Snips NLU.
-
-- [Introduction](#introduction)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Dynamic Entities](#dynamic-entities)
 
 ## Introduction
 

@@ -1,10 +1,10 @@
+---
+title: 'FileDb Local JSON Database Integration'
+excerpt: 'This is the default database for prototyping with Jovo: A file based system that stores data in a JSON file.'
+---
 # FileDb Local JSON Database Integration
 
 This is the default database for prototyping with Jovo: A file based system that stores data in a JSON file.
-
-- [Introduction](#introduction)
-- [Installation](#installation)
-- [Configuration](#configuration)
 
 ## Introduction
 

@@ -1,14 +1,10 @@
 ---
-title: 'Jovo Database Integrations'
+title: 'Database Integrations'
 excerpt: 'Jovo offers a variety of integrations that allow you to store elements like user data, session data, and a user's interaction history in a database.'
 ---
 # Database Integrations
 
 Jovo offers a variety of integrations that allow you to store elements like user data, session data, and a user's interaction history in a database. [Learn more about the different data types here](./data.md).
-
-- [Integrations](#integrations)
-- [Configuration](#configuration)
-  - [storedElements](#storedelements)
 
 ## Integrations
 
