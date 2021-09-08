@@ -1,12 +1,10 @@
+---
+title: 'Google Assistant Account Linking'
+excerpt: 'Learn how to use account linking with Google Conversational Actions and Jovo.'
+---
 # Google Assistant Account Linking
 
 Learn how to use account linking with Google Conversational Actions and Jovo.
-- [Introduction](#introduction)
-- [Google Sign-In](#google-sign-in)
-  - [Configure Account Linking Scenes](#configure-account-linking-scenes)
-  - [Enable Account Linking in the Actions Console](#enable-account-linking-in-the-actions-console)
-  - [Trigger Account Linking Flow](#trigger-account-linking-flow)
-  - [Access the Google Account Profile](#access-the-google-account-profile)
 
 ## Introduction
 
@@ -28,7 +26,7 @@ To implement Google Sign-In, you need to [configure account linking scenes](#con
 
 You can use the Google Assistant concept of [scenes](./scenes.md) to implement an account linking flow. [The official Google documentation](https://developers.google.com/assistant/identity/google-sign-in) also includes a step by step guide to set up scenes for account linking.
 
-There are multiple ways of setting up these scenes. We recommend creating them inside your [model](./model.md) to deploy them directly to the Google Conversational Actions Console.
+There are multiple ways of setting up these scenes. We recommend creating them inside your [model](https://v4.jovo.tech/marketplace/platform-googleassistant/model) to deploy them directly to the Google Conversational Actions Console.
 
 Below are two example scenes called `SignIn` and `SignIn_AccountLinking`. It doesn't matter how you name the first one, but it's important that the latter one is name `<SceneName>_AccountLinking`.
 
@@ -106,7 +104,7 @@ Below are two example scenes called `SignIn` and `SignIn_AccountLinking`. It doe
 
 The `SignIn` scene transitions to the `SignIn_AccountLinking` scene if the user is verified (eligible to do account linking).
 
-After adding the scenes, you can use the `build` and `deploy` commands to update the Action in the developer console. [Learn more about how to use the Google Assistant CLI integration](./project-config.md).
+After adding the scenes, you can use the `build` and `deploy` commands to update the Action in the developer console. [Learn more about how to use the Google Assistant CLI integration](https://v4.jovo.tech/marketplace/platform-googleassistant/project-config).
 
 ### Enable Account Linking in the Actions Console
 

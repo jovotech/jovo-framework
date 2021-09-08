@@ -1,16 +1,10 @@
+---
+title: 'Google Assistant Project Configuration'
+excerpt: 'Learn how to build and deploy Google Assistant projects using the Jovo CLI.'
+---
 # Google Assistant Project Configuration
 
 Learn how to build and deploy Google Assistant projects using the Jovo CLI.
-
-- [Introduction](#introduction)
-- [Configuration](#configuration)
-  - [projectId](#projectid)
-  - [locales](#locales)
-  - [resourcesDirectory](#resourcesdirectory)
-  - [files](#files)
-- [build Command](#build-command)
-- [deploy Command](#deploy-command)
-- [get Command](#get-command)
 
 ## Introduction
 
