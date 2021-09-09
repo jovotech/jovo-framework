@@ -1,201 +1,36 @@
-import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFile, writeFileSync } from 'fs';
-import _merge from 'lodash.merge';
-import { join as joinPaths } from 'path';
 import {
   JovoResponse,
   OutputTemplate,
   SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
-import { App } from './App';
-import { JovoRequest } from './JovoRequest';
-import { HandleRequest } from './HandleRequest';
-import { Headers, QueryParams, Server } from './Server';
-import { Platform } from './Platform';
-import { Jovo, JovoConstructor, JovoRequestType } from './Jovo';
-import { RequestType } from './enums';
-import { JovoUser } from './JovoUser';
-import { Plugin, PluginConfig } from './Plugin';
-import { EntityMap } from './interfaces';
-import { JovoSession } from './JovoSession';
-import { JovoError } from './JovoError';
-import { Constructor, DeepPartial } from '.';
-import { Extensible, ExtensibleConfig, ExtensibleInitConfig } from './Extensible';
-import { RequestBuilder } from './RequestBuilder';
-
-export interface Input {
-  type: RequestType;
-  intent?: string | { name: string; confidence: number };
-  entities?: any;
-}
-
-export class TestServer extends Server {
-  constructor(private readonly request: JovoRequest) {
-    super();
-  }
-
-  hasWriteFileAccess(): boolean {
-    return true;
-  }
-
-  getRequestObject(): Record<string, any> {
-    return this.request;
-  }
-
-  getQueryParams(): QueryParams {
-    return {};
-  }
-
-  getRequestHeaders(): Headers {
-    return { 'jovo-test': 'TestServer' };
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setResponseHeaders(header: Record<string, string>): void {}
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  async setResponse(response: any): Promise<void> {}
-
-  fail(error: Error): void {
-    console.error('TestServer.fail:');
-    console.error(error);
-  }
-}
-
-export class TestRequest extends JovoRequest {
-  responseClass = TestResponse;
-
-  isTestRequest = true;
-  session!: JovoSession;
-  userId!: string;
-  locale!: string;
-
-  getEntities(): EntityMap | undefined {
-    return {};
-  }
-
-  getIntentName(): string | undefined {
-    return;
-  }
-
-  getLocale(): string | undefined {
-    return this.locale;
-  }
-
-  setLocale(locale: string | undefined): void {
-    if (locale) {
-      this.locale = locale;
-    }
-  }
-
-  getRawText(): string | undefined {
-    return;
-  }
-
-  getRequestType(): JovoRequestType | undefined {
-    return;
-  }
-
-  getSessionId(): string | undefined {
-    return;
-  }
-
-  getSessionData(): Record<string, unknown> | undefined {
-    return this.session;
-  }
-
-  setSessionData(data: Record<string, unknown>): void {
-    this.session = new JovoSession(data);
-  }
-
-  isNewSession(): boolean | undefined {
-    return this.session.isNew;
-  }
-
-  getUserId(): string {
-    return this.userId;
-  }
-
-  setUserId(userId: string): void {
-    this.userId = userId;
-  }
-}
-
-export class TestResponse extends JovoResponse {
-  isTestResponse!: boolean;
-  shouldEndSession?: boolean;
-
-  hasSessionEnded(): boolean {
-    return !!this.shouldEndSession;
-  }
-}
-
-export class TestJovo extends Jovo<TestRequest, TestResponse> {}
-
-export class TestOutputConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<TestResponse> {
-  readonly responseClass = TestResponse;
-
-  platformName = 'testPlatform';
-
-  buildResponse(output: OutputTemplate): TestResponse {
-    // TODO: new TestResponse()?
-    return {
-      isTestResponse: true,
-      shouldEndSession: !output.listen,
-      hasSessionEnded() {
-        return !!this.shouldEndSession;
-      },
-    };
-  }
-
-  fromResponse(response: TestResponse): OutputTemplate {
-    return {};
-  }
-}
-
-export class TestUser extends JovoUser<TestRequest, TestResponse, TestJovo> {
-  id = 'TestUser';
-}
-
-export class TestRequestBuilder extends RequestBuilder<TestPlatform> {
-  launch(json?: Record<string, unknown>): TestRequest {
-    return new TestRequest();
-  }
-
-  intent(name?: string): TestRequest;
-  intent(json?: Record<string, unknown>): TestRequest;
-  intent(json?: any): TestRequest {
-    return new TestRequest();
-  }
-}
-
-export class TestPlatform extends Platform<TestRequest, TestResponse, TestJovo, ExtensibleConfig> {
-  readonly jovoClass = TestJovo;
-  readonly requestClass = TestRequest;
-  readonly outputTemplateConverterStrategy = new TestOutputConverterStrategy();
-  readonly userClass = TestUser;
-  readonly requestBuilder = TestRequestBuilder;
-
-  isRequestRelated(request: TestRequest): boolean {
-    return request.isTestRequest;
-  }
-
-  finalizeResponse(response: TestResponse | TestResponse[]): TestResponse | TestResponse[] {
-    return response;
-  }
-
-  isResponseRelated(): boolean {
-    return true;
-  }
-
-  getDefaultConfig(): ExtensibleConfig {
-    return {};
-  }
-}
+import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
+import _merge from 'lodash.merge';
+import { join as joinPaths } from 'path';
+import {
+  App,
+  Constructor,
+  Jovo,
+  JovoError,
+  JovoRequest,
+  JovoSession,
+  Platform,
+  Plugin,
+  PluginConfig,
+  RequestBuilder,
+  JovoUser,
+} from '..';
+import { JovoInput } from '../JovoInput';
+import { TestPlatform } from './TestPlatform';
+import { TestServer } from './TestServer';
 
 export type PlatformResponse<PLATFORM extends Platform> = PLATFORM extends Platform<
   infer REQUEST,
   infer RESPONSE
 >
-  ? PLATFORM['outputTemplateConverterStrategy'] extends SingleResponseOutputTemplateConverterStrategy<RESPONSE>
+  ? PLATFORM['outputTemplateConverterStrategy'] extends SingleResponseOutputTemplateConverterStrategy<
+      RESPONSE,
+      any
+    >
     ? RESPONSE
     : RESPONSE | RESPONSE[]
   : never;
@@ -218,7 +53,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
   TestSuiteConfig<PLATFORM>
 > {
   private isRequest!: boolean;
-  private requestOrInput!: JovoRequest | Input;
+  private requestOrInput!: JovoRequest | JovoInput;
   private output!: OutputTemplate | OutputTemplate[];
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -256,7 +91,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     };
   }
 
-  async run(requestOrInput: JovoRequest | Input): Promise<TestSuiteResponse<PLATFORM>> {
+  async run(requestOrInput: JovoRequest | JovoInput): Promise<TestSuiteResponse<PLATFORM>> {
     this.requestOrInput = requestOrInput;
     this.saveUserData();
 
@@ -281,24 +116,16 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     app.middlewareCollection.use('before.request', this.setData.bind(this));
     if (!this.isRequest) {
       app.middlewareCollection.remove('request', 'interpretation.asr', 'interpretation.nlu');
-      app.middlewareCollection.use('before.dialog.context', this.injectInput.bind(this));
     }
     app.middlewareCollection.use('after.response', this.postProcess.bind(this));
   }
 
-  private setData(handleRequest: HandleRequest, jovo: Jovo): void {
+  private setData(jovo: Jovo): void {
     this.$session = jovo.$session;
     this.$user = jovo.$user;
   }
 
-  private injectInput(handleRequest: HandleRequest, jovo: Jovo): void {
-    jovo.$type = { type: this.requestOrInput.type as RequestType };
-    jovo.$nlu.intent = {
-      name: (this.requestOrInput.intent as string) || (this.requestOrInput.type as RequestType),
-    };
-  }
-
-  private postProcess(handleRequest: HandleRequest, jovo: Jovo): void {
+  private postProcess(jovo: Jovo): void {
     this.output = jovo.$output;
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore

@@ -4,12 +4,14 @@ import {
   AnyObject,
   App,
   AppMiddlewares,
+  APP_MIDDLEWARES,
   Constructor,
   HandleRequest,
   InvalidParentError,
   Jovo,
   JovoConstructor,
   JovoUser,
+  RequestBuilder,
 } from '.';
 import { Extensible, ExtensibleConfig } from './Extensible';
 import { JovoDevice, JovoDeviceConstructor } from './JovoDevice';
@@ -34,6 +36,7 @@ export abstract class Platform<
   abstract readonly jovoClass: JovoConstructor<REQUEST, RESPONSE, JOVO, USER, DEVICE, PLATFORM>;
   abstract readonly userClass: JovoUserConstructor<JOVO>;
   abstract readonly deviceClass: JovoDeviceConstructor<JOVO>;
+  abstract readonly requestBuilder: Constructor<RequestBuilder<PLATFORM>>;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   abstract outputTemplateConverterStrategy: OutputTemplateConverterStrategy<RESPONSE, any>;

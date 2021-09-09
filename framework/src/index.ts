@@ -91,7 +91,6 @@ export * from './NluPlugin';
 export * from './Platform';
 export * from './Plugin';
 export * from './Server';
-export * from './TestSuite';
 export * from './RequestBuilder';
 
 export * from './decorators/Component';
@@ -121,6 +120,16 @@ export * from './metadata/HandlerOptionMetadata';
 export * from './metadata/MetadataStorage';
 export * from './metadata/MethodDecoratorMetadata';
 export * from './metadata/OutputMetadata';
+
+export * from './testsuite/TestJovo';
+export * from './testsuite/TestUser';
+export * from './testsuite/TestSuite';
+export * from './testsuite/TestServer';
+export * from './testsuite/TestRequest';
+export * from './testsuite/TestRequestBuilder';
+export * from './testsuite/TestResponse';
+export * from './testsuite/TestOutputConverterStrategy';
+export * from './testsuite/TestPlatform';
 
 export * from './plugins/BasicLogging';
 export * from './plugins/DbPlugin';
