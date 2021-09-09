@@ -1,21 +1,10 @@
 ---
-title: 'Jovo Input'
+title: 'Input'
 excerpt: 'Learn more about the Jovo Input property, which includes structured user input.'
 ---
 # Input
 
 Learn more about the Jovo `$input` property, which includes structured user input.
-- [Introduction](#introduction)
-- [Handlers](#handlers)
-- [Default Input Types](#default-input-types)
-  - [LAUNCH](#launch)
-  - [INTENT](#intent)
-  - [TEXT](#text)
-  - [SPEECH](#speech)
-  - [TRANSCRIBED_SPEECH](#transcribed_speech)
-  - [ERROR](#error)
-  - [END](#end)
-- [Custom Input Types](#custom-input-types)
 
 ## Introduction
 

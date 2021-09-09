@@ -1,5 +1,5 @@
 ---
-title: 'Jovo Plugins'
+title: 'Plugins'
 excerpt: 'Learn how you can build your own plugins to customize and extend the Jovo Framework.'
 ---
 # Plugins

@@ -5,9 +5,6 @@ excerpt: 'Learn how to access entities and configure dynamic entities using Jovo
 # Entities
 
 Learn how to access entities and configure dynamic entities using Jovo.
-- [Introduction](#introduction)
-- [Access Entities](#access-entities)
-- [Dynamic Entities](#dynamic-entities)
 
 ## Introduction
 

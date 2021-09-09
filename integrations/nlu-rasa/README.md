@@ -1,13 +1,10 @@
+---
+title: 'Rasa NLU Integration'
+excerpt: 'Turn raw text into structured meaning with the Jovo Framework integration for the open source natural language understanding service Rasa NLU.'
+---
 # Rasa NLU Integration
 
 Turn raw text into structured meaning with the Jovo Framework integration for the open source natural language understanding service Rasa NLU.
-
-- [Introduction](#introduction)
-- [Installation](#installation)
-- [Configuration](#configuration)
-  - [Alternative Intents](#alternative-intents)
-- [Jovo Model](#jovo-model)
-
 
 ## Introduction
 
@@ -98,4 +95,4 @@ const alternativeIntents = (this.$input.nlu as RasaNluData | undefined)?.alterna
 
 ## Jovo Model
 
-You can use the [Jovo Model](https://www.jovo.tech/marketplace/jovo-model) to turn the language model files in your `models` folder into Rasa NLU training data. [Learn more about the Rasa Jovo Model integration here](https://www.jovo.tech/marketplace/jovo-model/rasa).
+You can use the [Jovo Model](https://www.jovo.tech/marketplace/jovo-model) to turn the language model files in your `models` folder into Rasa NLU training data. [Learn more about the Rasa Jovo Model integration here](https://v4.jovo.tech/marketplace/nlu-rasa/model).

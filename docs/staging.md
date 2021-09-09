@@ -1,13 +1,10 @@
 ---
-title: 'Jovo Staging'
+title: 'Staging'
 excerpt: 'Learn how staging provides the ability to build, deploy, and run Jovo apps in different environments, including local development.'
 ---
 # Staging
 
 Staging provides the ability to build, deploy, and run Jovo apps in different environments, including local development.
-- [Introduction](#introduction)
-- [App Staging](#app-staging)
-- [Project Staging](#project-staging)
 
 ## Introduction
 
@@ -20,9 +17,9 @@ For use cases like this, Jovo offers different staging features that make it eas
 The [app configuration](./app-config.md) is usually spread across multiple files:
 
 * `app.ts`: Default configurations
-* `app.<stage>.ts`: Stage-specifig configurations
+* `app.<stage>.ts`: Stage-specific configurations
 
-For example, new Jovo templates come with an `app.ts` for all default configurations that should work across stages (platform integrations, components, ...) and an `app.dev.ts` file that comes with specific configuration for local development ([FileDb](https://github.com/jovotech/jovo-framework/tree/v4dev/integrations/db-filedb/README.md) and the Jovo Debugger).
+For example, new Jovo templates come with an `app.ts` for all default configurations that should work across stages (platform integrations, components, ...) and an `app.dev.ts` file that comes with specific configuration for local development ([FileDb](https://v4.jovo.tech/marketplace/db-filedb) and the Jovo Debugger).
 
 Stage-specific configurations get merged into the default `app.ts` config.
 

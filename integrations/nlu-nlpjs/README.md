@@ -1,11 +1,10 @@
+---
+title: 'NLP.js NLU Integration'
+excerpt: 'Turn raw text into structured meaning with the Jovo Framework integration for the open source natural language understanding service NLP.js.'
+---
 # NLP.js NLU Integration
 
 Turn raw text into structured meaning with the Jovo Framework integration for the open source natural language understanding service NLP.js.
-
-- [Introduction](#introduction)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Jovo Model](#jovo-model)
 
 ## Introduction
 
@@ -67,4 +66,4 @@ If `setupModellCallback` does not exist and `useModel` is falsy, the integration
 
 ## Jovo Model
 
-You can use the [Jovo Model](https://www.jovo.tech/marketplace/jovo-model) to turn the language model files in your `models` folder into an NLP.js model. [Learn more about the NLP.js Jovo Model integration here](https://www.jovo.tech/marketplace/jovo-model/nlpjs).
+You can use the [Jovo Model](https://www.jovo.tech/marketplace/jovo-model) to turn the language model files in your `models` folder into an NLP.js model. [Learn more about the NLP.js Jovo Model integration here](https://v4.jovo.tech/marketplace/nlu-nlpjs/model).
