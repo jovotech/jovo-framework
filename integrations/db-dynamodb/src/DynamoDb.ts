@@ -1,14 +1,4 @@
 import {
-  App,
-  DbItem,
-  DbPlugin,
-  DbPluginConfig,
-  Jovo,
-  PersistableSessionData,
-  PersistableUserData,
-  UnknownObject,
-} from '@jovotech/framework';
-import {
   CreateTableCommand,
   DescribeTableCommand,
   DynamoDBClient,
@@ -17,6 +7,15 @@ import {
   PutItemCommand,
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
+import {
+  DbItem,
+  DbPlugin,
+  DbPluginConfig,
+  Jovo,
+  PersistableSessionData,
+  PersistableUserData,
+  UnknownObject,
+} from '@jovotech/framework';
 
 export interface DynamoDbConfig extends DbPluginConfig {
   table: {
@@ -81,12 +80,7 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
     }
   }
 
-  async install(parent: App): Promise<void> {
-    parent.middlewareCollection.use('request.end', this.loadData);
-    parent.middlewareCollection.use('response.start', this.saveData);
-  }
-
-  createTable = async (): Promise<void> => {
+  async createTable(): Promise<void> {
     const params = {
       AttributeDefinitions: [
         {
@@ -108,9 +102,9 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
     };
 
     await this.client.send(new CreateTableCommand(params));
-  };
+  }
 
-  getDbItem = async (primaryKey: string): Promise<DbItem> => {
+  async getDbItem(primaryKey: string): Promise<DbItem> {
     const params = {
       ConsistentRead: true,
       Key: {
@@ -120,9 +114,9 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
     };
     const data = await this.client.send(new GetItemCommand(params));
     return data.Item as DbItem;
-  };
+  }
 
-  loadData = async (jovo: Jovo): Promise<void> => {
+  async loadData(jovo: Jovo): Promise<void> {
     this.checkRequirements();
     const dbItem = await this.getDbItem(jovo.$user.id);
 
@@ -130,9 +124,9 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
       jovo.$user.isNew = false;
       jovo.setPersistableData(unmarshall(dbItem), this.config.storedElements);
     }
-  };
+  }
 
-  saveData = async (jovo: Jovo): Promise<void> => {
+  async saveData(jovo: Jovo): Promise<void> {
     this.checkRequirements();
 
     const params = {
@@ -153,14 +147,14 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
         Item: marshall(item, { removeUndefinedValues: true }),
       }),
     );
-  };
+  }
 
-  checkRequirements = (): void | Error => {
+  checkRequirements(): void | Error {
     if (!this.config.table.primaryKeyColumn) {
       throw new Error('this.config.table.primaryKeyColumn must not be undefined');
     }
     if (!this.config.table.name) {
       throw new Error('this.config.table.name must not be undefined');
     }
-  };
+  }
 }

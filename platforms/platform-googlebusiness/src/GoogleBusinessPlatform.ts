@@ -5,6 +5,7 @@ import {
   ExtensibleInitConfig,
   Jovo,
   Platform,
+  StoredElementSession,
 } from '@jovotech/framework';
 import {
   GoogleBusinessOutputTemplateConverterStrategy,
@@ -19,6 +20,8 @@ import { GoogleBusinessDevice } from './GoogleBusinessDevice';
 
 export interface GoogleBusinessConfig extends ExtensibleConfig {
   serviceAccount: JWTInput;
+
+  session?: StoredElementSession & { enabled?: never };
 }
 export type GoogleBusinessInitConfig = ExtensibleInitConfig<GoogleBusinessConfig> &
   Pick<GoogleBusinessConfig, 'serviceAccount'>;
@@ -55,9 +58,14 @@ export class GoogleBusinessPlatform extends Platform<
     };
   }
 
-  install(parent: Extensible): void {
-    super.install(parent);
-    parent.middlewareCollection.use('before.request.start', this.beforeRequestStart);
+  mount(parent: Extensible): Promise<void> | void {
+    super.mount(parent);
+    this.middlewareCollection.use('before.request.start', (jovo) => {
+      return this.beforeRequestStart(jovo);
+    });
+    this.middlewareCollection.use('request.start', (jovo) => {
+      return this.enableDatabaseSessionStorage(jovo, this.config.session);
+    });
   }
 
   isRequestRelated(request: AnyObject | GoogleBusinessRequest): boolean {
@@ -87,11 +95,11 @@ export class GoogleBusinessPlatform extends Platform<
     return response;
   }
 
-  private beforeRequestStart = (jovo: Jovo) => {
+  private beforeRequestStart(jovo: Jovo): void {
     // if the request is a typing-indicator-request or a receipt-request, just ignore it and send 200 to not get it sent multiple times
     if (jovo.$googleBusiness?.$request?.userStatus || jovo.$googleBusiness?.$request?.receipts) {
       jovo.$response = {} as GoogleBusinessResponse;
       jovo.$handleRequest.stopMiddlewareExecution();
     }
-  };
+  }
 }

@@ -1,15 +1,10 @@
 ---
-title: 'Jovo User'
+title: 'User'
 excerpt: 'Learn more about the Jovo User property.'
 ---
 # User
 
 Learn more about the Jovo `$user` property.
-- [Introduction](#introduction)
-- [User Data](#user-data)
-  - [Store Data](#store-data)
-  - [Read Data](#read-data)
-- [User Metadata](#user-metadata)
 
 ## Introduction
 

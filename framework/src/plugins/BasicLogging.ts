@@ -3,8 +3,14 @@ import colorize from 'json-colorizer';
 import _get from 'lodash.get';
 import _set from 'lodash.set';
 import _unset from 'lodash.unset';
-import { App, Jovo } from '../index';
+import { HandleRequest, Jovo } from '../index';
 import { Plugin, PluginConfig } from '../Plugin';
+
+declare module '../interfaces' {
+  interface RequestData {
+    _BASIC_LOGGING_START?: number;
+  }
+}
 
 declare module '../Extensible' {
   interface ExtensiblePluginConfig {
@@ -70,12 +76,16 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
     };
   }
 
-  install(parent: App): Promise<void> | void {
-    parent.middlewareCollection.use('request.start', this.logRequest);
-    parent.middlewareCollection.use('response.end', this.logResponse);
+  mount(parent: HandleRequest): Promise<void> | void {
+    parent.middlewareCollection.use('request.start', (jovo) => {
+      return this.logRequest(jovo);
+    });
+    parent.middlewareCollection.use('response.end', (jovo: Jovo) => {
+      return this.logResponse(jovo);
+    });
   }
 
-  logRequest = async (jovo: Jovo): Promise<void> => {
+  async logRequest(jovo: Jovo): Promise<void> {
     jovo.$data._BASIC_LOGGING_START = new Date().getTime();
 
     if (!this.config.request) {
@@ -119,10 +129,13 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
     }
 
     /* eslint-enable no-console */
-  };
-  logResponse = async (jovo: Jovo): Promise<void> => {
-    jovo.$data._BASIC_LOGGING_STOP = new Date().getTime();
-    const duration = jovo.$data._BASIC_LOGGING_STOP - jovo.$data._BASIC_LOGGING_START;
+  }
+
+  async logResponse(jovo: Jovo): Promise<void> {
+    const basicLoggingEnd = new Date().getTime();
+    const duration = jovo.$data._BASIC_LOGGING_START
+      ? basicLoggingEnd - jovo.$data._BASIC_LOGGING_START
+      : 0;
 
     if (!this.config.response) {
       return;
@@ -176,5 +189,5 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
       );
     }
     /* eslint-enable no-console */
-  };
+  }
 }

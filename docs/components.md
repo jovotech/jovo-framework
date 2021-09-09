@@ -1,25 +1,10 @@
 ---
-title: 'Jovo Components'
+title: 'Components'
 excerpt: 'Learn more about Jovo Components, which are self-contained and reusable elements in a Jovo app.'
 ---
 # Components
 
 Components are self-contained and reusable elements in a Jovo app. Similar to web frameworks like Vue and React, Jovo allows you to build complex applications composed of components of varying sizes.
-
-- [Introduction](#introduction)
-- [Component Registration](#component-registration)
-  - [Register Root Components](#register-root-components)
-  - [Register Subcomponents](#register-subcomponents)
-- [Component Class](#component-class)
-  - [Handlers](#handlers)
-  - [Routing and State Management](#routing-and-state-management)
-  - [Global Components](#global-components)
-  - [Component Data](#component-data)
-  - [Component Options](#component-options)
-- [Component Folder Structure](#component-folder-structure)
-  - [Output](#output)
-  - [Models](#models)
-  - [Services](#services)
 
 ## Introduction
 

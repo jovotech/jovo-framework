@@ -1,27 +1,10 @@
 ---
-title: 'Jovo Properties'
+title: 'Properties'
 excerpt: 'Learn more about Jovo properties, which are reserved variables that part of the Jovo object.'
 ---
 # Jovo Properties
 
 Jovo properties are reserved variables that part of the Jovo `this` object.
-
-- [Introduction](#introduction)
-- [RIDR Properties](#ridr-properties)
-  - [$request](#request)
-  - [$input](#input)
-  - [$output](#output)
-  - [$response](#response)
-- [Input Properties](#input-properties)
-  - [$entities](#entities)
-  - [$route](#route)
-- [Context Properties](#context-properties)
-  - [$data](#data)
-  - [$session](#session)
-  - [$state](#state)
-  - [$user](#user)
-  - [$device](#device)
-  - [$history](#history)
 
 ## Introduction
 

@@ -29,12 +29,6 @@ export abstract class JovoUser<JOVO extends Jovo = Jovo> {
     return this;
   }
 
-  getDefaultPersistableData(): PersistableUserData {
-    return {
-      data: {},
-    };
-  }
-
   toJSON(): JovoUser<JOVO> {
     return { ...this, jovo: undefined };
   }

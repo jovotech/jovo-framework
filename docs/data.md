@@ -1,21 +1,10 @@
 ---
-title: 'Jovo Data'
+title: 'Data'
 excerpt: 'Learn more about different types of data that can be used in a Jovo app. For example, some data might be only relevant for a specific interaction, a component, or session.'
 ---
 # Data
 
 There are different types of data that can be used in a Jovo app. For example, some data might be only relevant for a specific interaction, a component, or session. Other data might be needed across sessions and should be persisted using the [Jovo database integrations](./databases.md).
-
-- [Introduction](#introduction)
-- [Short-term Data Storage](#short-term-data-storage)
-  - [Request Data](#request-data)
-  - [Component Data](#component-data)
-  - [Session Data](#session-data)
-  - [App Data](#app-data)
-- [Long-term Data Storage](#long-term-data-storage)
-  - [User Data](#user-data)
-  - [History](#history)
-
 
 ## Introduction
 

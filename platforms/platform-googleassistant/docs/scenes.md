@@ -1,13 +1,10 @@
+---
+title: 'Google Assistant Scenes'
+excerpt: 'Learn how to use scenes when building Google Conversational Actions with Jovo.'
+---
 # Google Assistant Scenes
 
 Learn how to use scenes when building Google Conversational Actions with Jovo.
-
-- [Introduction](#introduction)
-- [Model Configuration](#model-configuration)
-- [Custom Scenes](#custom-scenes)
-  - [Activation](#activation)
-  - [Execution](#execution)
-  - [Transition](#transition)
 
 ## Introduction
 
@@ -15,13 +12,13 @@ Scenes are a concept of Google Conversational Actions that are similar to Jovo C
 
 You can configure scenes either in the [Actions Console](https://console.actions.google.com/) or in your Jovo Model. [Learn more about model configuration below](#model-configuration).
 
-Google provides a handful of preconfigured [system scenes](https://developers.google.com/assistant/conversational/scenes#system_scenes) you can use for tasks such as [account linking](./account-linking.md). For more specialized tasks, it is possible to define your own [custom scenes](#custom-scenes).
+Google provides a handful of pre-configured [system scenes](https://developers.google.com/assistant/conversational/scenes#system_scenes) you can use for tasks such as [account linking](https://v4.jovo.tech/marketplace/platform-googleassistant/account-linking). For more specialized tasks, it is possible to define your own [custom scenes](#custom-scenes).
 
 
 
 ## Model Configuration
 
-We recommend adding scenes to the [Jovo Model](https://www.jovo.tech/docs/model) files of your project. Here is an example scene `MyCustomScene` that is added to the `googleAssistant` specific element of the model:
+We recommend adding scenes to the [Jovo Model](https://v4.jovo.tech/marketplace/platform-googleassistant/model) files of your project. Here is an example scene `MyCustomScene` that is added to the `googleAssistant` specific element of the model:
 
 ```javascript
 "googleAssistant": {
@@ -106,7 +103,7 @@ Except for [`On Enter`](#on-enter), all stages run through an execution loop, me
 
 #### On Enter
 
-This stage is triggered once on scene activation, useful for preconfiguration.
+This stage is triggered once on scene activation, useful for pre-configuration.
 
 ```javascript
 "MyCustomScene": {

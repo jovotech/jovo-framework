@@ -1,21 +1,12 @@
 ---
-title: 'Jovo Output'
+title: 'Output'
 excerpt: 'Learn more about how to return structured output that works across platforms like Alexa, Google Assistant, Facebook Messenger, the web, and more.'
 ---
 # Output
 
 Learn more about how to return output to the user.
-- [Introduction](#introduction)
-- [Ways to Return Output](#ways-to-return-output)
-  - [Send an Output Template](#send-an-output-template)
-  - [Send an Output Class](#send-an-output-class)
-  - [Send Multiple Responses](#send-multiple-responses)
-- [Output Templates](#output-templates)
-- [Output Classes](#output-classes)
 
 ## Introduction
-
-![An output class builds a multimodal output template that includes elements like a message. The Jovo template engine then translates this into responses for platforms like Alexa, Google Assistant, and the web](img/output-class-template-engine.png)
 
 A big part of building a Jovo app is returning output to the user. This output could include all sorts of things, speech (for voice interfaces) or text (for visual interfaces) messages being the most prominent.
 
@@ -75,7 +66,7 @@ yourHandler() {
   return this.$send({ /* output */ });
 }
 ```
-This object can contain all output template elements that are described in the [output template documentation](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md).
+This object can contain all output template elements that are described in the [output template documentation](https://v4.jovo.tech/docs/output-templates).
 
 Here is an example output that just contains a `message`:
 
@@ -172,7 +163,7 @@ Output templates offer a structured format to return output to a user. These tem
 }
 ```
 
-[Learn more about the structure of output templates here](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md).
+[Learn more about the structure of output templates here](https://v4.jovo.tech/docs/output-templates).
 
 ## Output Classes
 

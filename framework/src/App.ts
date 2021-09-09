@@ -1,5 +1,14 @@
 import _merge from 'lodash.merge';
-import { ArrayElement, ComponentTree, I18NextOptions, IntentMap, Middleware, Plugin } from '.';
+import {
+  ArrayElement,
+  ComponentTree,
+  I18NextOptions,
+  IntentMap,
+  Middleware,
+  MiddlewareFunction,
+  Plugin,
+  PossibleMiddlewareName,
+} from '.';
 import { ComponentConstructor, ComponentDeclaration } from './BaseComponent';
 import { MatchingPlatformNotFoundError } from './errors/MatchingPlatformNotFoundError';
 import { Extensible, ExtensibleConfig, ExtensibleInitConfig } from './Extensible';
@@ -83,10 +92,16 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
     return new MiddlewareCollection(...APP_MIDDLEWARES);
   }
 
-  middleware(name: AppMiddleware): Middleware | undefined;
+  middleware(name: PossibleMiddlewareName<AppMiddleware>): Middleware | undefined;
   middleware(name: string): Middleware | undefined;
-  middleware(name: string | AppMiddleware): Middleware | undefined {
+  middleware(name: PossibleMiddlewareName<AppMiddleware> | string): Middleware | undefined {
     return this.middlewareCollection.get(name);
+  }
+
+  hook(name: PossibleMiddlewareName<AppMiddleware>, fn: MiddlewareFunction): void;
+  hook(name: string, fn: MiddlewareFunction): void;
+  hook(name: PossibleMiddlewareName<AppMiddleware> | string, fn: MiddlewareFunction): void {
+    this.middlewareCollection.use(name, fn);
   }
 
   getDefaultConfig(): AppConfig {
