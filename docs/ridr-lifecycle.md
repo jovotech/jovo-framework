@@ -6,14 +6,6 @@ excerpt: 'Learn more about one of the key concepts of Jovo: The RIDR (Request - 
 
 Learn more about one of the key concepts of Jovo: The RIDR (Request - Interpretation - Dialogue & Logic - Response) Lifecycle.
 
-- [Introduction](#introduction)
-- [Request](#request)
-- [Interpretation](#interpretation)
-- [Dialogue & Logic](#dialogue--logic)
-- [Response](#response)
-- [Middlewares](#middlewares)
-  - [Stopping the Middleware Execution](#stopping-the-middleware-execution)
-
 ## Introduction
 
 ![RIDR Lifecycle: Request - Interpretation - Dialogue & Logic - Response](https://ghost.jovo.tech/content/images/2021/05/ridr-lifecycle-1.png)
