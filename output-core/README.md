@@ -1,17 +1,16 @@
+---
+title: 'Core Platform Output'
+excerpt: 'Learn more about Jovo output templates for Jovo Core Platform.'
+---
 # Core Platform Output
 
-Learn more about output templates for [Jovo Core Platform](https://github.com/jovotech/jovo-framework/blob/v4dev/platforms/platform-core).
-- [Introduction](#introduction)
-- [Generic Output Elements](#generic-output-elements)
-- [Core-specific Output Elements](#core-specific-output-elements)
-  - [Native Response](#native-response)
-
+Learn more about output templates for [Jovo Core Platform](https://v4.jovo.tech/marketplace/platform-core).
 
 ## Introduction
 
-Jovo offers the ability to [create structured output](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/output.md) that is then translated into native platform responses.
+Jovo offers the ability to [create structured output](https://v4.jovo.tech/docs/output) that is then translated into native platform responses.
 
-This structured output is called [output template](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md). Its root properties are generic output elements that work across platforms. [Learn more about how generic output is translated into a Core response below](#generic-output-elements).
+This structured output is called [output template](https://v4.jovo.tech/docs/output-templates). Its root properties are generic output elements that work across platforms. [Learn more about how generic output is translated into a Core response below](#generic-output-elements).
 
 ```typescript
 {
@@ -37,13 +36,13 @@ You can also add platform-specific output to an output template. [Learn more abo
 
 ## Generic Output Elements
 
-Generic output elements are in the root of the output template and work across platforms. [Learn more in the Jovo Output docs](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md).
+Generic output elements are in the root of the output template and work across platforms. [Learn more in the Jovo Output docs](https://v4.jovo.tech/docs/output-templates).
 
 The Core Platform supports exactly the same output elements as they appear in the generic output.
 
 ## Core-specific Output Elements
 
-It is possible to add platform-specific output elements to an output template. [Learn more in the Jovo output documentation](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md#platform-specific-output-elements).
+It is possible to add platform-specific output elements to an output template. [Learn more in the Jovo output documentation](https://v4.jovo.tech/docs/output-templates#platform-specific-output-elements).
 
 For Core, you can add output elements inside an `core` object:
 
