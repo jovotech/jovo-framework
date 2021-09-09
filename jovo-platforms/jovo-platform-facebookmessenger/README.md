@@ -154,6 +154,58 @@ export = {
 };
 ```
 
+### Automatically set persistent menu
+
+To set the persistent menu payload on startup you have to set the following configuration:
+
+```javascript
+// @language=javascript
+
+// src/config.js
+
+module.exports = {
+	platform: {
+		FacebookMessenger: {
+			persistentMenu: {
+        		updateOnSetup: true,
+        		data: [{
+					locale:"default",
+					composer_input_disabled:false,
+					call_to_actions: [{
+						type:"postback",
+						title:"HelloWorld",
+						payload:"HelloWorldIntent"
+					}]
+				}]
+        	}
+		}
+	}
+};
+
+// @language=typescript
+
+// src/config.ts
+
+export = {
+	platform: {
+		FacebookMessenger: {
+			persistentMenu: {
+				updateOnSetup: true,
+            	data: [{
+					locale:"default",
+					composer_input_disabled:false,
+					call_to_actions: [{
+						type: PersistentMenuItemType.Postback,
+						title:"HelloWorld",
+						payload:"HelloWorldIntent"
+					}]
+				}]
+			}
+		}
+	}
+};
+```
+
 ### Disable synchronous response
 By default, `tell` and `ask` generate a message that will be sent shortly before responding to the initial request.
 As a consequence, this message will **always** be the **last** message sent.

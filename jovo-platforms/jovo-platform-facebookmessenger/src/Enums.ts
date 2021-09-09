@@ -34,6 +34,10 @@ export enum WebViewHeightRatio {
   Full = 'FULL',
 }
 
+export enum WebViewShareButton {
+  Hide = 'hide',
+}
+
 export enum MediaType {
   Image = 'image',
   Video = 'video',
@@ -49,4 +53,13 @@ export enum SenderActionType {
   MarkSeen = 'mark_seen',
   TypingOn = 'typing_on',
   TypingOff = 'typing_off',
+}
+
+export enum PersistentMenuItemType {
+  Link = 'web_url',
+  Postback = 'postback',
+}
+
+export enum DisabledSurfaces {
+  CustomerChatPlugin = 'customer_chat_plugin',
 }
