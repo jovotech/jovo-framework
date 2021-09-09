@@ -119,7 +119,7 @@ You can add response objects that should show up exactly like this in the Google
 
 You can use the Jovo CLI plugin `GoogleAssistantCli` (learn how to set it up in the [getting started section](#getting-started)) to build and deploy the Google Assistant project to the Google Actions console.
 
-The `build` command uses the Jovo Model and [project configuration](https://v4.jovo.tech/docs/project-config) to generates all files needed for the deployment:
+The `build` command uses the Jovo Model and [project configuration](https://v4.jovo.tech/docs/project-config) to generate all files needed for the deployment:
 
 ```sh
 # Build files into build/platform.googleAssistant
