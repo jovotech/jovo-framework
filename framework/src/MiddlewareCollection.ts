@@ -71,6 +71,11 @@ export class MiddlewareCollection<MIDDLEWARES extends string[] = string[]> {
     return this;
   }
 
+  clear(): this {
+    this.remove(...this.names);
+    return this;
+  }
+
   async run(name: PossibleMiddlewareNames<MIDDLEWARES>, jovo: Jovo): Promise<void>;
   async run(name: string, jovo: Jovo): Promise<void>;
   async run(names: PossibleMiddlewareNames<MIDDLEWARES>[], jovo: Jovo): Promise<void>;
@@ -84,14 +89,13 @@ export class MiddlewareCollection<MIDDLEWARES extends string[] = string[]> {
   ): Promise<void> {
     const names = typeof nameOrNames === 'string' ? [nameOrNames] : nameOrNames;
     for (const name of names) {
-      const middleware = this.get(name);
-      if (!middleware) continue;
       const beforeName = `before.${name}`;
       if (this.has(beforeName)) {
         await this.run(beforeName, jovo);
       }
 
-      await middleware.run(jovo);
+      const middleware = this.get(name);
+      await middleware?.run(jovo);
 
       const afterName = `after.${name}`;
       if (this.has(afterName)) {

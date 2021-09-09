@@ -92,3 +92,17 @@ Middleware | Description
 `response.output` | Turns `$output` into a raw JSN response
 `response.tts` | TTS integrations turn text into speech output
 `response.end` | Leaves the `response` middleware group with propagated `$response` object
+
+
+### Stopping the Middleware Execution
+
+Either a [hook](./hooks.md) or a [plugin](./plugins.md) can use `stopMiddlewareExecution` to remove all middlewares from the middleware collection of `HandleRequest` and its plugins. This way, all following middlewares won't be executed.
+
+Here is an example how this could look like for a plugin method (that was registered with a middleware inside `mount`):
+
+```typescript
+someMethod(jovo: Jovo): void {
+  // ...
+  jovo.$handleRequest.stopMiddlewareExecution();
+}
+```

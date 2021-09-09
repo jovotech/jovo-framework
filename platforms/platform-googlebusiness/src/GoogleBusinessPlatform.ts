@@ -60,7 +60,9 @@ export class GoogleBusinessPlatform extends Platform<
 
   mount(parent: Extensible): Promise<void> | void {
     super.mount(parent);
-    this.middlewareCollection.use('before.request.start', (jovo) => {
+
+    // hook into parent's middleware in order to be able to call this first and skip before other plugins are called.
+    parent.middlewareCollection.use('before.request.start', (jovo) => {
       return this.beforeRequestStart(jovo);
     });
     this.middlewareCollection.use('request.start', (jovo) => {
