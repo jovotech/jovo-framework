@@ -24,7 +24,7 @@ import { OutputTemplateConverterStrategy } from '../OutputTemplateConverterStrat
  */
 export abstract class SingleResponseOutputTemplateConverterStrategy<
   RESPONSE extends Record<string, unknown>,
-  CONFIG extends OutputTemplateConverterStrategyConfig
+  CONFIG extends OutputTemplateConverterStrategyConfig,
 > extends OutputTemplateConverterStrategy<RESPONSE, CONFIG> {
   prepareOutput(output: OutputTemplate | OutputTemplate[]): OutputTemplate {
     output = super.prepareOutput(output);
