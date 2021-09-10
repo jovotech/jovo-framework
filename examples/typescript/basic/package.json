@@ -1,7 +1,7 @@
 {
   "name": "@jovotech/examples-basic",
   "private": true,
-  "version": "4.0.0-beta.3",
+  "version": "4.0.0-beta.4",
   "description": "A sample TypeScript voice app that works with the Jovo Framework",
   "scripts": {
     "build": "tsc",
@@ -18,12 +18,12 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/db-filedb": "^4.0.0-beta.2",
-    "@jovotech/framework": "^4.0.0-beta.2",
-    "@jovotech/platform-alexa": "^4.0.0-beta.4",
-    "@jovotech/plugin-debugger": "^4.0.0-beta.2",
-    "@jovotech/server-express": "^4.0.0-beta.2",
-    "@jovotech/server-lambda": "^4.0.0-beta.2"
+    "@jovotech/db-filedb": "^4.0.0-beta.3",
+    "@jovotech/framework": "^4.0.0-beta.3",
+    "@jovotech/platform-alexa": "^4.0.0-beta.5",
+    "@jovotech/plugin-debugger": "^4.0.0-beta.3",
+    "@jovotech/server-express": "^4.0.0-beta.3",
+    "@jovotech/server-lambda": "^4.0.0-beta.3"
   },
   "devDependencies": {
     "@types/express": "^4.17.11",
