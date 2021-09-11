@@ -1,12 +1,16 @@
 import {
+  isSSML,
   mergeInstances,
-  Message,
+  MessageValue,
   NullableOutputTemplateBase,
   OutputTemplate,
   OutputTemplateBase,
   OutputTemplateConverterStrategyConfig,
   plainToClass,
   PlatformOutputTemplate,
+  removeSSML,
+  removeSSMLSpeakTags,
+  toSSML,
 } from '..';
 import { OutputTemplateConverterStrategy } from '../OutputTemplateConverterStrategy';
 
@@ -79,14 +83,12 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
   ): void {
     const message = mergeWith.message;
     if (message) {
-      const mergeText = typeof message === 'string' ? message : (message as Message).text;
-      target.message = target.message ? [target.message, mergeText].join(' ') : mergeText;
+      target.message = this.mergeMessages(target.message, message);
     }
 
     const reprompt = mergeWith.reprompt;
     if (reprompt) {
-      const mergeText = typeof reprompt === 'string' ? reprompt : (reprompt as Message).text;
-      target.reprompt = target.reprompt ? [target.reprompt, mergeText].join(' ') : mergeText;
+      target.reprompt = this.mergeMessages(target.reprompt, reprompt);
     }
 
     const quickReplies = mergeWith.quickReplies;
@@ -115,5 +117,69 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
     } else if (typeof target.listen !== 'object' && typeof listen !== 'undefined') {
       target.listen = listen;
     }
+  }
+
+  protected mergeMessages(
+    target: MessageValue | null | undefined,
+    mergeWith: MessageValue,
+  ): MessageValue {
+    if (!target) {
+      return mergeWith;
+    }
+    if (typeof target === 'string' && typeof mergeWith === 'string') {
+      return this.mergeText(target, mergeWith);
+    }
+    const targetText = typeof target === 'string' ? target : target.text;
+    const targetDisplayText = typeof target === 'string' ? target : target.displayText;
+
+    const mergeWithText = typeof mergeWith === 'string' ? mergeWith : mergeWith.text;
+    const mergeWithDisplayText = typeof mergeWith === 'string' ? mergeWith : mergeWith.displayText;
+
+    const text = this.mergeText(targetText, mergeWithText);
+
+    if (!targetDisplayText && !mergeWithDisplayText) {
+      return {
+        text,
+      };
+    }
+    const displayText = this.mergeDisplayText(targetDisplayText, mergeWithDisplayText);
+    return {
+      text,
+      displayText,
+    };
+  }
+
+  protected mergeText(target: string, mergeWith: string): string {
+    const mergedText = [target, mergeWith].reduce((result, text) => {
+      if (text) {
+        result += `${result?.length ? ' ' : ''}${removeSSMLSpeakTags(text)}`;
+      }
+      return result;
+    });
+    return isSSML(target) || isSSML(mergeWith) ? toSSML(mergedText) : mergedText;
+  }
+
+  protected mergeDisplayText(
+    target: string | undefined,
+    mergeWith: string | undefined,
+  ): string | undefined {
+    if (!target && !mergeWith) {
+      return;
+    }
+    if (!target && mergeWith) {
+      return removeSSML(mergeWith);
+    }
+    if (!mergeWith && target) {
+      return removeSSML(target);
+    }
+    return [target, mergeWith].reduce((result, text) => {
+      if (text) {
+        if (!result) {
+          result = '';
+        }
+        result += `${result?.length ? ' ' : ''}${removeSSML(text)}`;
+      }
+      return result;
+    }, undefined);
   }
 }
