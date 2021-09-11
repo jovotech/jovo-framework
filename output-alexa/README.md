@@ -1,24 +1,16 @@
+---
+title: 'Alexa Output'
+excerpt: 'Learn more about Jovo output templates for Alexa.'
+---
 # Alexa Output
 
-Learn more about output templates for Alexa.
-- [Introduction](#introduction)
-- [Generic Output Elements](#generic-output-elements)
-  - [Message](#message)
-  - [Reprompt](#reprompt)
-  - [Listen](#listen)
-  - [Quick Replies](#quick-replies)
-  - [Card](#card)
-  - [Carousel](#carousel)
-- [Alexa-specific Output Elements](#alexa-specific-output-elements)
-  - [Native Response](#native-response)
-- [Alexa Output Configuration](#alexa-output-configuration)
-
+Learn more about output templates for [Alexa](https://v4.jovo.tech/marketplace/platform-alexa).
 
 ## Introduction
 
-Jovo offers the ability to [create structured output](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/routing.md) that is then translated into native platform responses.
+Jovo offers the ability to [create structured output](https://v4.jovo.tech/docs/output) that is then translated into native platform responses.
 
-This structured output is called [output template](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md). Its root properties are generic output elements that work across platforms. [Learn more about how generic output is translated into an Alexa response below](#generic-output-elements).
+This structured output is called [output template](https://v4.jovo.tech/docs/output-templates). Its root properties are generic output elements that work across platforms. [Learn more about how generic output is translated into an Alexa response below](#generic-output-elements).
 
 ```typescript
 {
@@ -44,7 +36,7 @@ You can also add platform-specific output to an output template. [Learn more abo
 
 ## Generic Output Elements
 
-Generic output elements are in the root of the output template and work across platforms. [Learn more in the Jovo Output docs](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md).
+Generic output elements are in the root of the output template and work across platforms. [Learn more in the Jovo Output docs](https://v4.jovo.tech/docs/output-templates).
 
 Below, you can find a list of generic output elements that work with Alexa.
 ### Message
@@ -123,7 +115,7 @@ Alexa does not natively support quick replies. However, Jovo automatically turns
 }
 ```
 
-For these buttons, you need to pass a target `intent`. When the button is clicked, the [Jovo Router](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/routing.md) automatically maps this to the specified intent.
+For these buttons, you need to pass a target `intent`. When the button is clicked, the [Jovo Router](https://v4.jovo.tech/docs/routing) automatically maps this to the specified intent.
 
 It's also possible to add entities:
 
@@ -222,7 +214,7 @@ In the example above, a tap on an element triggers the `ElementIntent` and conta
 
 ## Alexa-specific Output Elements
 
-It is possible to add platform-specific output elements to an output template. [Learn more in the Jovo output documentation](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md#platform-specific-output-elements).
+It is possible to add platform-specific output elements to an output template. [Learn more in the Jovo output documentation](https://v4.jovo.tech/docs/output-templates#platform-specific-output-elements).
 
 For Alexa, you can add output elements inside an `alexa` object:
 
@@ -239,7 +231,7 @@ For Alexa, you can add output elements inside an `alexa` object:
 
 ### Native Response
 
-The [`nativeResponse` property](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md#native-response) allows you to add native elements exactly how they would be added to the Alexa JSON response.
+The [`nativeResponse` property](https://v4.jovo.tech/docs/output-templates#native-response) allows you to add native elements exactly how they would be added to the Alexa JSON response.
 
 ```typescript
 {
