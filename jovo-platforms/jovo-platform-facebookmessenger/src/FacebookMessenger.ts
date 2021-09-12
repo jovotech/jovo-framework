@@ -30,6 +30,10 @@ import {
   MessengerBotRequest,
   MessengerBotResponse,
   MessengerBotUser,
+  PersistentMenuItemType,
+  WebViewHeightRatio,
+  WebViewShareButton,
+  DisabledSurfaces,
 } from '.';
 
 export interface UpdateConfig<T> {
@@ -42,11 +46,30 @@ export interface GreetingElement {
   text: string;
 }
 
+export interface PersistentMenuItem {
+  type: PersistentMenuItemType;
+  title: string;
+  url?: string;
+  payload: string;
+  webview_height_ratio?: WebViewHeightRatio;
+  messenger_extensions?: Boolean;
+  fallback_url?: string;
+  webview_share_button?: WebViewShareButton;
+}
+
+export interface PersistentMenuElement {
+  locale: string;
+  composer_input_disabled?: boolean;
+  disabled_surfaces: Array<DisabledSurfaces>;
+  call_to_actions: Array<PersistentMenuItem>;
+}
+
 export interface Config extends ExtensibleConfig {
   shouldOverrideAppHandle?: boolean;
   shouldIgnoreSynchronousResponse?: boolean;
   greeting?: UpdateConfig<GreetingElement[]>;
   launch?: UpdateConfig<string>;
+  persistentMenu?: UpdateConfig<PersistentMenuElement[]>;
   pageAccessToken?: string;
   verifyToken?: string;
   locale?: string;
@@ -66,6 +89,9 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
       updateOnSetup: false,
     },
     launch: {
+      updateOnSetup: false,
+    },
+    persistentMenu: {
       updateOnSetup: false,
     },
     pageAccessToken: process.env.FB_PAGE_ACCESS_TOKEN || '',
@@ -161,6 +187,19 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
       }
 
       data.greeting = greetingElements;
+    }
+
+    if (this.config.persistentMenu && this.config.persistentMenu.updateOnSetup) {
+      const persistentMenuElements = this.config.persistentMenu.data;
+      if (!persistentMenuElements || persistentMenuElements.length < 1) {
+        throw new JovoError(
+          `Cannot set persistent menu elements to 'undefined' or an empty array.`,
+          ErrorCode.ERR_PLUGIN,
+          'FacebookMessenger',
+        );
+      }
+
+      data.persistent_menu = persistentMenuElements;
     }
 
     if (Object.keys(data).length === 0) {
