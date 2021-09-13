@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/platform-googleassistant",
-  "version": "4.0.0-beta.3",
+  "version": "4.0.0-beta.4",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -45,7 +45,7 @@
     "@jovotech/cli-command-new": "^4.0.0-beta.4",
     "@jovotech/cli-core": "^4.0.0-beta.4",
     "@jovotech/filebuilder": "^0.0.1",
-    "@jovotech/framework": "^4.0.0-beta.2",
+    "@jovotech/framework": "^4.0.0-beta.3",
     "@types/copyfiles": "^2.4.1",
     "@types/fs-extra": "8.1.0",
     "@types/jest": "^26.0.20",
