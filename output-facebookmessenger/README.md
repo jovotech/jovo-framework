@@ -273,7 +273,7 @@ import { QuickReplyContentType } from '@jovotech/output-facebookmessenger';
     facebookMessenger: {
       nativeQuickReplies: [
         {
-          content_type: QuickReplyContentType.PhoneNumber // or 'user_phone_number'
+          content_type: QuickReplyContentType.UserPhoneNumber // or 'user_phone_number'
         }
       ]
     }
@@ -286,8 +286,8 @@ The following quick reply types are supported:
 | Enum key | Enum value | Links | 
 |----------|------------|-------|
 | `QuickReplyContentType.Text` | `'text'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/quick-reply/TextQuickReply.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/quick-replies#text)   |
-| `QuickReplyContentType.PhoneNumber` | `'user_phone_number'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/quick-reply/PhoneNumberQuickReply.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/quick-replies#phone) |
-| `QuickReplyContentType.Email`  | `'user_email'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/quick-reply/EmailQuickReply.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/quick-replies#email) |
+| `QuickReplyContentType.UserPhoneNumber` | `'user_phone_number'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/quick-reply/UserPhoneNumberQuickReply.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/quick-replies#phone) |
+| `QuickReplyContentType.UserEmail`  | `'user_email'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/quick-reply/UserEmailQuickReply.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/quick-replies#email) |
 
 ### template
 
@@ -397,11 +397,11 @@ Here is a table of all supported button types:
 | Enum key | Enum value | Links | 
 |----------|------------|-------|
 | `ButtonType.Postback` | `'postback'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/button/PostbackButton.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/buttons#postback)   |
-| `ButtonType.Link` | `'web_url'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/button/LinkButton.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/buttons#url) |
+| `ButtonType.Url` | `'web_url'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/button/UrlButton.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/buttons#url) |
 | `ButtonType.Call`  | `'phone_number'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/button/CallButton.ts), [Official Docs](hhttps://developers.facebook.com/docs/messenger-platform/send-messages/buttons#call) |
-| `ButtonType.Login`  | `'account_link'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/button/LoginButton.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/buttons#login) |
-| `ButtonType.Logout`  | `'account_unlink'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/button/LogoutButton.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/buttons#logout) |
-| `ButtonType.Game`  | `'game_play'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/button/GameButton.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/buttons#game_play) |
+| `ButtonType.LogIn`  | `'account_link'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/button/LogInButton.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/buttons#login) |
+| `ButtonType.LogOut`  | `'account_unlink'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/button/LogOutButton.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/buttons#logout) |
+| `ButtonType.GamePlay`  | `'game_play'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/button/GamePlayButton.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/buttons#game_play) |
 
 
 [Learn more about all buttons types in the official Facebook Messenger docs](https://developers.facebook.com/docs/messenger-platform/send-messages/buttons)

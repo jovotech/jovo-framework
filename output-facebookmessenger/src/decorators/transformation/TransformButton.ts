@@ -1,10 +1,10 @@
 import { Type } from '@jovotech/output';
 import {
   CallButton,
-  GameButton,
-  LinkButton,
-  LoginButton,
-  LogoutButton,
+  GamePlayButton,
+  UrlButton,
+  LogInButton,
+  LogOutButton,
   PostbackButton,
 } from '../../models';
 // import should not be shortened or decorator has problems with finding the correct enum
@@ -17,10 +17,10 @@ export function TransformButton(): PropertyDecorator {
       property: 'type',
       subTypes: [
         { value: CallButton, name: ButtonType.Call },
-        { value: GameButton, name: ButtonType.Game },
-        { value: LinkButton, name: ButtonType.Link },
-        { value: LoginButton, name: ButtonType.Login },
-        { value: LogoutButton, name: ButtonType.Logout },
+        { value: GamePlayButton, name: ButtonType.GamePlay },
+        { value: UrlButton, name: ButtonType.Url },
+        { value: LogInButton, name: ButtonType.LogIn },
+        { value: LogOutButton, name: ButtonType.LogOut },
         { value: PostbackButton, name: ButtonType.Postback },
       ],
     },

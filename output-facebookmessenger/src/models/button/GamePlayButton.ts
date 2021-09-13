@@ -12,9 +12,9 @@ export class GameMetaData {
   context_id?: string;
 }
 
-export class GameButton extends ButtonBase<ButtonType.Game | 'game_play'> {
-  @Equals(ButtonType.Game)
-  type: ButtonType.Game;
+export class GamePlayButton extends ButtonBase<ButtonType.GamePlay | 'game_play'> {
+  @Equals(ButtonType.GamePlay)
+  type: ButtonType.GamePlay;
 
   @IsString()
   @IsNotEmpty()

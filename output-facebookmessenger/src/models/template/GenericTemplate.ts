@@ -21,7 +21,7 @@ import {
 } from '../../constants';
 import { TransformButton } from '../../decorators/transformation/TransformButton';
 import { Button, ButtonType } from '../button/Button';
-import { WebViewHeightRatio } from '../button/LinkButton';
+import { WebViewHeightRatio } from '../button/UrlButton';
 import { TemplateBase, TemplateType } from './Template';
 
 export enum ImageAspectRatio {
@@ -30,8 +30,8 @@ export enum ImageAspectRatio {
 }
 
 export class GenericTemplateDefaultAction {
-  @Equals(ButtonType.Link)
-  type: ButtonType.Link | 'web_url';
+  @Equals(ButtonType.Url)
+  type: ButtonType.Url | 'web_url';
 
   @IsUrl()
   url: string;

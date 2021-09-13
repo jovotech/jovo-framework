@@ -1,9 +1,9 @@
 import { Equals, IsUrl } from '@jovotech/output';
 import { ButtonBase, ButtonType } from './Button';
 
-export class LoginButton extends ButtonBase<ButtonType.Login | 'account_link'> {
-  @Equals(ButtonType.Login)
-  type: ButtonType.Login | 'account_link';
+export class LogInButton extends ButtonBase<ButtonType.LogIn | 'account_link'> {
+  @Equals(ButtonType.LogIn)
+  type: ButtonType.LogIn | 'account_link';
 
   @IsUrl({
     protocols: ['https'],
