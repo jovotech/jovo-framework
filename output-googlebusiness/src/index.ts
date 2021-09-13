@@ -1,5 +1,6 @@
 import { registerOutputPlatform } from '@jovotech/output';
 import {
+  CardContent,
   CarouselCard,
   GoogleBusinessOutputTemplate,
   RichCard,
@@ -10,6 +11,9 @@ import { augmentModelPrototypes } from './utilities';
 
 declare module '@jovotech/output/dist/types/models/Card' {
   interface Card {
+    suggestions?: Suggestion[];
+
+    toGoogleBusinessCardContent?(): CardContent;
     toGoogleBusinessCard?(): StandaloneCard;
     toGoogleBusinessRichCard?(): RichCard;
   }
