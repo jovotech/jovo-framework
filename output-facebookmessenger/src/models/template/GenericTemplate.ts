@@ -20,9 +20,9 @@ import {
   GENERIC_TEMPLATE_MAX_SIZE,
 } from '../../constants';
 import { TransformButton } from '../../decorators/transformation/TransformButton';
-import { Button } from '../button/Button';
-import { WebViewHeightRatio } from '../button/LinkButton';
-import { Template, TemplateType } from './Template';
+import { Button, ButtonType } from '../button/Button';
+import { WebViewHeightRatio } from '../button/UrlButton';
+import { TemplateBase, TemplateType } from './Template';
 
 export enum ImageAspectRatio {
   Horizontal = 'horizontal',
@@ -30,6 +30,9 @@ export enum ImageAspectRatio {
 }
 
 export class GenericTemplateDefaultAction {
+  @Equals(ButtonType.Url)
+  type: ButtonType.Url | 'web_url';
+
   @IsUrl()
   url: string;
 
@@ -93,9 +96,9 @@ export class GenericTemplateElement {
   }
 }
 
-export class GenericTemplate extends Template<TemplateType.Generic> {
+export class GenericTemplate extends TemplateBase<TemplateType.Generic | 'generic'> {
   @Equals(TemplateType.Generic)
-  template_type: TemplateType.Generic;
+  template_type: TemplateType.Generic | 'generic';
 
   @IsOptional()
   @IsEnum(ImageAspectRatio)

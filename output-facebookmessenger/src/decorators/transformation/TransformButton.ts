@@ -1,23 +1,26 @@
 import { Type } from '@jovotech/output';
-import { Button, ButtonType } from '../../models/button/Button';
-import { CallButton } from '../../models/button/CallButton';
-import { GameButton } from '../../models/button/GameButton';
-import { LinkButton } from '../../models/button/LinkButton';
-import { LoginButton } from '../../models/button/LoginButton';
-import { LogoutButton } from '../../models/button/LogoutButton';
-import { PostbackButton } from '../../models/button/PostbackButton';
+import {
+  CallButton,
+  GamePlayButton,
+  UrlButton,
+  LogInButton,
+  LogOutButton,
+  PostbackButton,
+} from '../../models';
+// import should not be shortened or decorator has problems with finding the correct enum
+import { ButtonBase, ButtonType } from '../../models/button/Button';
 
 export function TransformButton(): PropertyDecorator {
-  return Type(() => Button, {
+  return Type(() => ButtonBase, {
     keepDiscriminatorProperty: true,
     discriminator: {
       property: 'type',
       subTypes: [
         { value: CallButton, name: ButtonType.Call },
-        { value: GameButton, name: ButtonType.Game },
-        { value: LinkButton, name: ButtonType.Link },
-        { value: LoginButton, name: ButtonType.Login },
-        { value: LogoutButton, name: ButtonType.Logout },
+        { value: GamePlayButton, name: ButtonType.GamePlay },
+        { value: UrlButton, name: ButtonType.Url },
+        { value: LogInButton, name: ButtonType.LogIn },
+        { value: LogOutButton, name: ButtonType.LogOut },
         { value: PostbackButton, name: ButtonType.Postback },
       ],
     },

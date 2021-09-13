@@ -1,4 +1,8 @@
-import { IsEnum } from '@jovotech/output';
+import { EnumLike, IsEnum } from '@jovotech/output';
+import { ButtonTemplate } from './ButtonTemplate';
+import { GenericTemplate } from './GenericTemplate';
+import { MediaTemplate } from './MediaTemplate';
+import { ReceiptTemplate } from './ReceiptTemplate';
 
 export enum TemplateType {
   Generic = 'generic',
@@ -7,9 +11,13 @@ export enum TemplateType {
   Receipt = 'receipt',
 }
 
-export class Template<T extends TemplateType = TemplateType> {
+export type TemplateTypeLike = EnumLike<TemplateType>;
+
+export class TemplateBase<TYPE extends TemplateTypeLike = TemplateTypeLike> {
   [key: string]: unknown;
 
   @IsEnum(TemplateType)
-  template_type: T;
+  template_type: TYPE;
 }
+
+export type Template = ButtonTemplate | GenericTemplate | MediaTemplate | ReceiptTemplate;

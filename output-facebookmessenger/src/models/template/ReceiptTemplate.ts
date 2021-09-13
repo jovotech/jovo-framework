@@ -15,7 +15,7 @@ import {
   ValidateNested,
 } from '@jovotech/output';
 import { ADDRESS_COUNTRY_LENGTH, RECEIPT_TEMPLATE_ELEMENTS_MAX_SIZE } from '../../constants';
-import { Template, TemplateType } from './Template';
+import { TemplateBase, TemplateType } from './Template';
 
 export class ReceiptAddress {
   @IsString()
@@ -97,9 +97,9 @@ export class ReceiptTemplateElement {
   image_url?: string;
 }
 
-export class ReceiptTemplate extends Template<TemplateType.Receipt> {
+export class ReceiptTemplate extends TemplateBase<TemplateType.Receipt | 'receipt'> {
   @Equals(TemplateType.Receipt)
-  template_type: TemplateType.Receipt;
+  template_type: TemplateType.Receipt | 'receipt';
 
   @IsOptional()
   @IsBoolean()
