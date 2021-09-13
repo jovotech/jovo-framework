@@ -11,6 +11,7 @@ import {
   DbItem,
   DbPlugin,
   DbPluginConfig,
+  HandleRequest,
   Jovo,
   PersistableSessionData,
   PersistableUserData,
@@ -56,6 +57,13 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
 
   constructor(config: DynamoDbConfig) {
     super(config);
+    this.client = new DynamoDBClient(this.config.libraryConfig?.dynamoDbClient || {});
+  }
+
+  mount(parent: HandleRequest) {
+    super.mount(parent);
+
+    // initialize a new client for the mounted instance with the given request-config
     this.client = new DynamoDBClient(this.config.libraryConfig?.dynamoDbClient || {});
   }
 
