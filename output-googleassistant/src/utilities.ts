@@ -1,4 +1,4 @@
-import { Card, Carousel, Message, QuickReply } from '@jovotech/output';
+import { Card, Carousel, Message, QuickReply, toSSML } from '@jovotech/output';
 import {
   Card as GoogleAssistantCard,
   Collection,
@@ -59,7 +59,7 @@ export function augmentModelPrototypes(): void {
 
   Message.prototype.toGoogleAssistantSimple = function () {
     const simple: Simple = {
-      speech: this.text,
+      speech: toSSML(this.text),
     };
     if (this.displayText) {
       simple.text = this.displayText;

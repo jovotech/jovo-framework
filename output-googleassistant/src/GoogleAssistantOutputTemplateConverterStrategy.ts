@@ -10,6 +10,7 @@ import {
   OutputTemplateConverterStrategyConfig,
   QuickReplyValue,
   SingleResponseOutputTemplateConverterStrategy,
+  toSSML,
 } from '@jovotech/output';
 import {
   COLLECTION_MAX_SIZE,
@@ -261,9 +262,9 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
 
   convertMessageToSimple(message: MessageValue): Simple {
     return typeof message === 'string'
-      ? { speech: message }
+      ? { speech: toSSML(message) }
       : message.toGoogleAssistantSimple?.() || {
-          speech: message.text,
+          speech: toSSML(message.text),
           text: message.displayText,
         };
   }
