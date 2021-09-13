@@ -16,6 +16,10 @@ export abstract class JovoUser<JOVO extends Jovo = Jovo> {
 
   abstract id: string;
 
+  get accessToken(): string | undefined {
+    return;
+  }
+
   isNew = true;
 
   getPersistableData(): PersistableUserData {
