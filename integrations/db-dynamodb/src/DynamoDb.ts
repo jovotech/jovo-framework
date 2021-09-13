@@ -60,7 +60,7 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
     this.client = new DynamoDBClient(this.config.libraryConfig?.dynamoDbClient || {});
   }
 
-  mount(parent: HandleRequest) {
+  mount(parent: HandleRequest): Promise<void> | void {
     super.mount(parent);
 
     // initialize a new client for the mounted instance with the given request-config
