@@ -1,19 +1,10 @@
 ---
-title: 'Jovo Output Classes'
+title: 'Output Classes'
 excerpt: 'Learn more about Jovo Output classes, which offer a way to return structured output templates.'
 ---
 # Output Classes
 
 Output classes offer a way to return structured output templates.
-- [Introduction](#introduction)
-- [Build Method](#build-method)
-- [Output Options](#output-options)
-  - [Reserved Properties](#reserved-properties)
-  - [Custom Options](#custom-options)
-  - [Option Types](#option-types)
-  - [getDefaultOptions](#getdefaultoptions)
-- [Helper Methods](#helper-methods)
-- [Constructor](#constructor)
 
 ## Introduction
 
@@ -120,7 +111,7 @@ There are two types of properties that can be passed:
 
 ### Reserved Properties
 
-Reserved properties are output elements that can be passed as options. They are automatically added to the output object and allow the `$send` method to override [generic output properties](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md#generic-output-elements) in the output template.
+Reserved properties are output elements that can be passed as options. They are automatically added to the output object and allow the `$send` method to override [generic output properties](https://v4.jovo.tech/docs/output-templates#generic-output-elements) in the output template.
 
 For example, a `message` can be passed right from the handler:
 

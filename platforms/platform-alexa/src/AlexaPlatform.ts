@@ -37,7 +37,10 @@ export class AlexaPlatform extends Platform<
   }
 
   mount(parent: HandleRequest): void {
-    parent.middlewareCollection.use('request.start', this.onRequestStart);
+    super.mount(parent);
+    this.middlewareCollection.use('request.start', (jovo) => {
+      return this.onRequestStart(jovo);
+    });
   }
 
   isRequestRelated(request: AnyObject | AlexaRequest): boolean {
@@ -56,10 +59,7 @@ export class AlexaPlatform extends Platform<
     return response;
   }
 
-  private onRequestStart = (jovo: Jovo) => {
-    if (!(jovo.$platform instanceof AlexaPlatform)) {
-      return;
-    }
+  private onRequestStart(jovo: Jovo): void {
     // Generate generic output to APL if supported and set in config
     this.outputTemplateConverterStrategy.config.genericOutputToApl = !!(
       jovo.$alexa?.$request?.isAplSupported() && this.config.output?.genericOutputToApl
@@ -80,5 +80,5 @@ export class AlexaPlatform extends Platform<
         }
       });
     }
-  };
+  }
 }

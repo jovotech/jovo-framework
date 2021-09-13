@@ -6,11 +6,13 @@ import {
   APP_MIDDLEWARES,
   AppMiddlewares,
   Constructor,
+  DbPlugin,
   HandleRequest,
   InvalidParentError,
   Jovo,
   JovoConstructor,
   JovoUser,
+  StoredElementSession,
 } from '.';
 import { Extensible, ExtensibleConfig } from './Extensible';
 import { JovoDevice, JovoDeviceConstructor } from './JovoDevice';
@@ -42,6 +44,7 @@ export abstract class Platform<
   abstract isRequestRelated(request: REQUEST | AnyObject): boolean;
 
   abstract isResponseRelated(response: RESPONSE | AnyObject): boolean;
+
   abstract finalizeResponse(
     response: RESPONSE | RESPONSE[],
     jovo: JOVO,
@@ -51,11 +54,10 @@ export abstract class Platform<
     return new MiddlewareCollection<PlatformMiddlewares>(...APP_MIDDLEWARES);
   }
 
-  install(parent: Extensible): void {
-    if (!(parent instanceof App)) {
-      throw new InvalidParentError(this.constructor.name, App);
+  mount(parent: Extensible): void {
+    if (!(parent instanceof HandleRequest)) {
+      throw new InvalidParentError(this.constructor.name, HandleRequest);
     }
-
     // propagate runs of middlewares of parent to middlewares of this
     this.middlewareCollection.names.forEach((middlewareName) => {
       parent.middlewareCollection.use(middlewareName, async (jovo) => {
@@ -68,7 +70,7 @@ export abstract class Platform<
   }
 
   createJovoInstance<APP extends App>(app: APP, handleRequest: HandleRequest): JOVO {
-    return new this.jovoClass(app, handleRequest, this as unknown as PLATFORM);
+    return new this.jovoClass(app, handleRequest, handleRequest.platform as unknown as PLATFORM);
   }
 
   createRequestInstance(request: REQUEST | AnyObject): REQUEST {
@@ -80,7 +82,36 @@ export abstract class Platform<
   createUserInstance(jovo: JOVO): USER {
     return new this.userClass(jovo);
   }
+
   createDeviceInstance(jovo: JOVO): DEVICE {
     return new this.deviceClass(jovo);
+  }
+
+  protected enableDatabaseSessionStorage(
+    jovo: Jovo,
+    sessionConfig?: StoredElementSession & { enabled?: never },
+  ): void {
+    const dbPlugins = Object.values(jovo.$handleRequest.plugins).filter(
+      (plugin) => plugin instanceof DbPlugin,
+    ) as DbPlugin[];
+
+    if (!dbPlugins.length) {
+      // eslint-disable-next-line no-console
+      console.warn('No database plugin is installed. Session storage can not be enabled.');
+    }
+
+    dbPlugins.forEach((dbPlugin) => {
+      if (!dbPlugin.config.storedElements) {
+        dbPlugin.config.storedElements = dbPlugin.getDefaultConfig().storedElements || {};
+      }
+      // eslint-disable-next-line no-console
+      console.warn(`Session storage was enabled for database plugin ${dbPlugin.constructor.name}`);
+
+      if (sessionConfig) {
+        dbPlugin.config.storedElements.session = { ...sessionConfig, enabled: true };
+      } else {
+        dbPlugin.config.storedElements.session = true;
+      }
+    });
   }
 }

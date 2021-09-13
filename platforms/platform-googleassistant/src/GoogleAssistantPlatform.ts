@@ -1,11 +1,4 @@
-import {
-  AnyObject,
-  App,
-  ExtensibleConfig,
-  Jovo,
-  MiddlewareFunction,
-  Platform,
-} from '@jovotech/framework';
+import { AnyObject, App, ExtensibleConfig, Jovo, Platform } from '@jovotech/framework';
 import {
   GoogleAssistantOutputTemplateConverterStrategy,
   GoogleAssistantResponse,
@@ -39,9 +32,11 @@ export class GoogleAssistantPlatform extends Platform<
     return {};
   }
 
-  install(parent: App): void {
-    super.install(parent);
-    parent.middlewareCollection.use('request.start', this.onRequestStart);
+  mount(parent: App): void {
+    super.mount(parent);
+    this.middlewareCollection.use('request.start', (jovo) => {
+      return this.onRequestStart(jovo);
+    });
   }
 
   initialize(parent: App): void {
@@ -78,7 +73,7 @@ export class GoogleAssistantPlatform extends Platform<
     return response;
   }
 
-  onRequestStart: MiddlewareFunction = (jovo: Jovo) => {
+  onRequestStart(jovo: Jovo): void {
     const request = jovo.$googleAssistant?.$request;
     // if it is a selection-event
     if (
@@ -91,5 +86,5 @@ export class GoogleAssistantPlatform extends Platform<
     ) {
       jovo.$input.intent = request.session.params._GOOGLE_ASSISTANT_SELECTION_INTENT_;
     }
-  };
+  }
 }

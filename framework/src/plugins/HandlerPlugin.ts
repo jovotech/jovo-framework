@@ -1,4 +1,4 @@
-import { App, PluginConfig, StateStackItem } from '../index';
+import { HandleRequest, PluginConfig, StateStackItem } from '../index';
 import { Jovo } from '../Jovo';
 import { Plugin } from '../Plugin';
 
@@ -19,11 +19,13 @@ export class HandlerPlugin extends Plugin<HandlerPluginConfig> {
     return {};
   }
 
-  install(parent: App): Promise<void> | void {
-    parent.middlewareCollection.use('dialogue.logic', this.handle);
+  mount(parent: HandleRequest): Promise<void> | void {
+    parent.middlewareCollection.use('dialogue.logic', (jovo) => {
+      return this.handle(jovo);
+    });
   }
 
-  private handle = async (jovo: Jovo) => {
+  private async handle(jovo: Jovo): Promise<void> {
     if (!jovo.$route) {
       return;
     }
@@ -54,5 +56,5 @@ export class HandlerPlugin extends Plugin<HandlerPluginConfig> {
       jovo,
       handler: jovo.$route.resolved.handler,
     });
-  };
+  }
 }

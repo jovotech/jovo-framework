@@ -24,6 +24,10 @@ export class AlexaUser extends JovoUser<Alexa> {
     return this.jovo.$request.session?.user?.userId || 'AlexaUser';
   }
 
+  get accessToken(): string | undefined {
+    return this.jovo.$request.session?.user.accessToken;
+  }
+
   async getEmail(): Promise<string | undefined> {
     const request: AlexaRequest = this.jovo.$request;
     const email: string = await sendCustomerProfileApiRequest(

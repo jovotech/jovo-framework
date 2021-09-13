@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/plugin-debugger",
-  "version": "4.0.0-beta.2",
+  "version": "4.0.0-beta.3",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -22,8 +22,8 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/nlu-nlpjs": "^4.0.0-beta.2",
-    "@jovotech/platform-core": "^4.0.0-beta.2",
+    "@jovotech/nlu-nlpjs": "^4.0.0-beta.3",
+    "@jovotech/platform-core": "^4.0.0-beta.3",
     "@nlpjs/lang-en": "^4.22.0",
     "@types/socket.io-client": "^1.4.36",
     "fast-deep-equal": "^3.1.3",
@@ -31,7 +31,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@jovotech/framework": "^4.0.0-beta.2",
+    "@jovotech/framework": "^4.0.0-beta.3",
     "@types/jest": "^26.0.20",
     "@types/node": "^10.17.50",
     "@types/uuid": "^8.3.0",
