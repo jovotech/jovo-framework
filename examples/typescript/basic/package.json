@@ -1,7 +1,6 @@
 {
   "name": "@jovotech/examples-basic",
   "private": true,
-  "version": "4.0.0-beta.4",
   "description": "A sample TypeScript voice app that works with the Jovo Framework",
   "scripts": {
     "build": "tsc",
