@@ -23,8 +23,8 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/model": "^4.0.0-beta.2",
-    "@jovotech/model-alexa": "^4.0.0-beta.2",
+    "@jovotech/model": "^4.0.0-beta.3",
+    "@jovotech/model-alexa": "^4.0.0-beta.3",
     "@jovotech/output-alexa": "^4.0.0-beta.1",
     "chalk": "^4.1.0",
     "lodash.get": "^4.4.2",
@@ -34,11 +34,11 @@
     "lodash.set": "^4.3.2"
   },
   "devDependencies": {
-    "@jovotech/cli-command-build": "^4.0.0-beta.3",
-    "@jovotech/cli-command-deploy": "^4.0.0-beta.3",
-    "@jovotech/cli-command-get": "^4.0.0-beta.3",
-    "@jovotech/cli-command-new": "^4.0.0-beta.3",
-    "@jovotech/cli-core": "^4.0.0-beta.3",
+    "@jovotech/cli-command-build": "^4.0.0-beta.4",
+    "@jovotech/cli-command-deploy": "^4.0.0-beta.4",
+    "@jovotech/cli-command-get": "^4.0.0-beta.4",
+    "@jovotech/cli-command-new": "^4.0.0-beta.4",
+    "@jovotech/cli-core": "^4.0.0-beta.4",
     "@jovotech/filebuilder": "^0.0.1",
     "@jovotech/framework": "^4.0.0-beta.3",
     "@types/jest": "^26.0.20",
@@ -64,11 +64,11 @@
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
-    "@jovotech/cli-command-build": "^4.0.0-beta.3",
-    "@jovotech/cli-command-deploy": "^4.0.0-beta.3",
-    "@jovotech/cli-command-get": "^4.0.0-beta.3",
-    "@jovotech/cli-command-new": "^4.0.0-beta.3",
-    "@jovotech/cli-core": "^4.0.0-beta.3",
+    "@jovotech/cli-command-build": "^4.0.0-beta.4",
+    "@jovotech/cli-command-deploy": "^4.0.0-beta.4",
+    "@jovotech/cli-command-get": "^4.0.0-beta.4",
+    "@jovotech/cli-command-new": "^4.0.0-beta.4",
+    "@jovotech/cli-core": "^4.0.0-beta.4",
     "@jovotech/filebuilder": "^0.0.1",
     "@jovotech/framework": ">=4.0.0-beta.0 <4.0.0"
   },

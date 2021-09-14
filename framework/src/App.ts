@@ -62,6 +62,7 @@ export type AppMiddlewares = AppMiddleware[];
 export class App extends Extensible<AppConfig, AppMiddlewares> {
   readonly componentTree: ComponentTree;
   readonly i18n: I18Next;
+  private initialized = false;
 
   constructor(config?: AppInitConfig) {
     super(config ? { ...config, components: undefined } : config);
@@ -76,6 +77,10 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
 
     this.componentTree = new ComponentTree(...(config?.components || []));
     this.i18n = new I18Next(this.config.i18n || {});
+  }
+
+  get isInitialized(): boolean {
+    return this.initialized;
   }
 
   get platforms(): ReadonlyArray<Platform> {
@@ -111,8 +116,12 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
   }
 
   async initialize(): Promise<void> {
+    if (this.initialized) {
+      return;
+    }
     await this.i18n.initialize();
-    return this.initializePlugins();
+    await this.initializePlugins();
+    this.initialized = true;
   }
 
   use<T extends Usable[]>(...usables: T): this {

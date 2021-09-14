@@ -11,6 +11,11 @@ export class GoogleAssistantUser extends JovoUser<GoogleAssistant> {
     );
   }
 
+  get accessToken(): string | undefined {
+    const headers = this.jovo.$server.getRequestHeaders();
+    return headers.authorization as string;
+  }
+
   isAccountLinked(): boolean {
     return this.jovo.$request.user?.accountLinkingStatus === AccountLinkingStatus.Linked;
   }
