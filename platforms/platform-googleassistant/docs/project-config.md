@@ -126,7 +126,7 @@ new GoogleAssistantCli({
 
 Google Assistant offers the ability to maintain resources/assets in a local folder and reference them in your settings using a `$resources` variable. [Learn more in the official Google Assistant docs](https://developers.google.com/assistant/conversational/build/projects?hl=en&tool=sdk#add_resources).
 
-By default, the directory is called `resources` in the root of your Jovo project. You can also make changes to this setup using the `resourcesDirectory` option:
+To enable this feature, you need to set the `resourcesDirectory` option in the Google Assistant CLI config:
 
 ```js
 new GoogleAssistantCli({
@@ -134,7 +134,9 @@ new GoogleAssistantCli({
 })
 ```
 
-During the [`build` command](#build-command), these files are then copied over to the `build` folder.
+In the example above, the directory is called `resources` in the root of your Jovo project.
+
+During the [`build` command](#build-command), the files from the specified folder are then copied over to a `resources` folder in the `build/platform.googleAssistant` folder.
 
 ### files
 
