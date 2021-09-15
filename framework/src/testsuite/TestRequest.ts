@@ -5,7 +5,7 @@ import { AudioInput, InputType } from '../JovoInput';
 export class TestRequest extends JovoRequest {
   isTestRequest = true;
   locale!: string;
-  session: JovoSession = new JovoSession({ state: [] });
+  session: JovoSession = new JovoSession({ isNew: false, state: [] });
   userId!: string;
 
   getLocale(): string | undefined {
