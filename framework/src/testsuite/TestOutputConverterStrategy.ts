@@ -1,33 +1,35 @@
-import { SingleResponseOutputTemplateConverterStrategy } from '@jovotech/output';
-import { OutputTemplate } from '..';
+import {
+  OutputTemplateConverterStrategyConfig,
+  SingleResponseOutputTemplateConverterStrategy,
+} from '@jovotech/output';
+import { Constructor, OutputTemplate } from '..';
 import { TestResponse } from './TestResponse';
 
 export class TestOutputConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<
   TestResponse,
-  any
+  OutputTemplateConverterStrategyConfig
 > {
+  readonly responseClass: Constructor<TestResponse> = TestResponse;
+  readonly platformName: string = 'testPlatform';
+
   protected sanitizeOutput(output: OutputTemplate): OutputTemplate {
-    throw new Error('Method not implemented.');
+    return output;
   }
+
   toResponse(output: OutputTemplate): TestResponse {
-    throw new Error('Method not implemented.');
-  }
-  readonly responseClass = TestResponse;
-
-  platformName = 'testPlatform';
-
-  buildResponse(output: OutputTemplate): TestResponse {
-    // TODO: new TestResponse()?
-    return {
+    const response: TestResponse = this.prepareResponse({
       isTestResponse: true,
-      shouldEndSession: !output.listen,
-      hasSessionEnded() {
-        return !!this.shouldEndSession;
-      },
-    };
+    });
+
+    if (output.listen) {
+      // TODO: Test for object
+      response.shouldEndSession = !output.listen;
+    }
+
+    return response;
   }
 
-  fromResponse(response: TestResponse): OutputTemplate {
+  fromResponse(): OutputTemplate {
     return {};
   }
 }

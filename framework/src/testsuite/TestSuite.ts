@@ -1,10 +1,12 @@
 import {
   JovoResponse,
   OutputTemplate,
+  OutputTemplateConverterStrategyConfig,
   SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
 import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
 import _merge from 'lodash.merge';
+import _cloneDeep from 'lodash.clonedeep';
 import { join as joinPaths } from 'path';
 import {
   App,
@@ -17,89 +19,98 @@ import {
   Plugin,
   PluginConfig,
   RequestBuilder,
-  JovoUser,
+  TestRequest,
 } from '..';
+import { HandleRequest } from '../HandleRequest';
 import { JovoInput } from '../JovoInput';
+import { TestDb } from './TestDb';
 import { TestPlatform } from './TestPlatform';
 import { TestServer } from './TestServer';
 
-export type PlatformResponse<PLATFORM extends Platform> = PLATFORM extends Platform<
+export type PlatformTypes<PLATFORM extends Platform> = PLATFORM extends Platform<
   infer REQUEST,
-  infer RESPONSE
+  infer RESPONSE,
+  infer JOVO,
+  infer USER,
+  infer DEVICE
 >
-  ? PLATFORM['outputTemplateConverterStrategy'] extends SingleResponseOutputTemplateConverterStrategy<
-      RESPONSE,
-      any
-    >
-    ? RESPONSE
-    : RESPONSE | RESPONSE[]
+  ? { request: REQUEST; response: RESPONSE; jovo: JOVO; user: USER; device: DEVICE }
   : never;
+
+export type PlatformResponseType<PLATFORM extends Platform, RESPONSE extends JovoResponse> =
+  PLATFORM['outputTemplateConverterStrategy'] extends SingleResponseOutputTemplateConverterStrategy<
+    RESPONSE,
+    OutputTemplateConverterStrategyConfig
+  >
+    ? RESPONSE
+    : RESPONSE | RESPONSE[];
 
 export type TestSuiteResponse<PLATFORM extends Platform> = {
   output: OutputTemplate | OutputTemplate[];
-  response: PlatformResponse<PLATFORM>;
+  response: PlatformResponseType<PLATFORM, PlatformTypes<PLATFORM>['response']>;
 };
 
 export interface TestSuiteConfig<PLATFORM extends Platform> extends PluginConfig {
   userId: string;
   dbDirectory: string;
   platform: Constructor<PLATFORM>;
-  stage?: string;
+  // TODO
+  // platforms: Constructor<PLATFORM>[];
   locale?: string;
   deleteDbOnSessionEnded?: boolean;
 }
 
+export interface TestSuite<PLATFORM extends Platform>
+  extends Jovo,
+    Plugin<TestSuiteConfig<PLATFORM>> {}
 export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
   TestSuiteConfig<PLATFORM>
 > {
-  private isRequest!: boolean;
   private requestOrInput!: JovoRequest | JovoInput;
-  private output!: OutputTemplate | OutputTemplate[];
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  private response!: PlatformResponse;
   private app: App;
 
-  readonly config: TestSuiteConfig<PLATFORM>;
   readonly requestBuilder!: RequestBuilder<PLATFORM>;
 
-  $session: JovoSession = new JovoSession();
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  $user: JovoUser<JovoRequest, JovoResponse, Jovo> = new TestUser();
+  // Platform-specific typings for Jovo properties
+  $request!: PlatformTypes<PLATFORM>['request'];
+  $response!: TestSuiteResponse<PLATFORM>['response'];
+  $device!: PlatformTypes<PLATFORM>['device'];
+  $user!: PlatformTypes<PLATFORM>['user'];
+  $platform!: PLATFORM;
 
   constructor(
     config: Partial<TestSuiteConfig<PLATFORM>> = {
       platform: TestPlatform as unknown as Constructor<PLATFORM>,
     },
   ) {
-    super();
-    this.config = _merge(this.getDefaultConfig(), config);
+    super(config);
+
+    // Load app from configured stage and register testplugins
     this.app = this.loadApp();
+    this.app.use(this, new TestPlatform(), new TestDb({ dbDirectory: this.config.dbDirectory }));
 
     const platform = new this.config.platform();
     this.requestBuilder = new platform.requestBuilder();
+
+    const request = platform.createRequestInstance({});
+    const server: TestServer = new TestServer(request);
+    const handleRequest: HandleRequest = new HandleRequest(this.app, server);
+    Object.assign(this, platform.createJovoInstance(this.app, handleRequest));
   }
 
   getDefaultConfig(): TestSuiteConfig<PLATFORM> {
     return {
-      dbDirectory: './db/tests/',
+      dbDirectory: '../db/tests/',
       userId: this.generateRandomUserId(),
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      platform: TestPlatform,
+      platform: TestPlatform as unknown as Constructor<PLATFORM>,
+      stage: 'dev',
     };
   }
 
-  async run(requestOrInput: JovoRequest | JovoInput): Promise<TestSuiteResponse<PLATFORM>> {
+  async run(
+    requestOrInput: Exclude<JovoRequest, () => unknown> | Exclude<JovoInput, () => unknown>,
+  ): Promise<TestSuiteResponse<PLATFORM>> {
     this.requestOrInput = requestOrInput;
-    this.saveUserData();
-
-    this.app.use(this);
-
-    if (!this.isRequest) {
-      this.app.use(new TestPlatform());
-    }
 
     await this.app.initialize();
 
@@ -107,96 +118,30 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     await this.app.handle(new TestServer(request));
 
     return {
-      response: this.response as PlatformResponse<PLATFORM>,
-      output: this.output,
+      response: this.$response as PlatformResponseType<
+        PLATFORM,
+        PlatformTypes<PLATFORM>['response']
+      >,
+      output: this.$output,
     };
   }
 
   install(app: App): void {
-    app.middlewareCollection.use('before.request', this.setData.bind(this));
-    if (!this.isRequest) {
-      app.middlewareCollection.remove('request', 'interpretation.asr', 'interpretation.nlu');
-    }
-    app.middlewareCollection.use('after.response', this.postProcess.bind(this));
+    app.middlewareCollection.use(
+      'before.request.start',
+      this.saveUserData.bind(this),
+      (jovo: Jovo) => {
+        return this.setInput(jovo);
+      },
+    );
+    app.middlewareCollection.use('after.response.end', this.postProcess.bind(this));
   }
 
-  private setData(jovo: Jovo): void {
-    this.$session = jovo.$session;
-    this.$user = jovo.$user;
-  }
-
-  private postProcess(jovo: Jovo): void {
-    this.output = jovo.$output;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    this.response = jovo.$response! as PlatformResponse;
-
-    // Set session data
-    jovo.$session.isNew = false;
-
-    // Set user data
-    if (this.config.deleteDbOnSessionEnded) {
-      const responses: JovoResponse[] = Array.isArray(this.response)
-        ? this.response
-        : [this.response];
-
-      for (const response of responses) {
-        if (response.hasSessionEnded()) {
-          this.clearDb();
-          break;
-        }
-      }
-    }
-  }
-
-  private loadApp(): App {
-    const appDirectory: string[] = [process.cwd(), 'src'];
-    const { stage } = this.config;
-    const appFileNames: string[] = [`app.${stage}.ts`, `app.${stage}.js`, 'app.ts', 'app.js'];
-
-    for (const appFileName of appFileNames) {
-      const appFilePath: string = joinPaths(...appDirectory, appFileName);
-      if (existsSync(appFilePath)) {
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const { app } = require(appFilePath);
-        if (!app) {
-          continue;
-        }
-        return app as App;
-      }
-    }
-
-    throw new JovoError({ message: 'App not found.' });
-  }
-
-  private prepareRequest(): JovoRequest {
-    let request: JovoRequest;
-
-    if (this.requestOrInput instanceof JovoRequest) {
-      this.isRequest = true;
-      request = this.requestOrInput;
-    } else {
-      this.isRequest = false;
-      // TODO: Solve this in a more elegant way
-      request = this.requestBuilder.launch();
-    }
-
-    // Reset session data if a new session is incoming
-    // if (request.isNewSession()) {
-    //   this.$session = new JovoSession({});
-    // }
-
-    request.setSessionData(this.$session);
-    request.setUserId(this.config.userId);
-    if (this.config.locale) {
-      request.setLocale(this.config.locale);
-    }
-
-    return request;
-  }
-
+  /**
+   * Saves user data before running the RIDR lifecycle
+   */
   private saveUserData(): void {
-    if (Object.keys(this.$user.$data).length === 0) {
+    if (Object.keys(this.$user.data).length === 0) {
       return;
     }
 
@@ -214,6 +159,86 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     }
   }
 
+  private setInput(jovo: Jovo) {
+    if (!this.isRequest(this.requestOrInput)) {
+      jovo.$input = this.requestOrInput;
+    }
+
+    // Reset session data if a new session is incoming
+    if (jovo.$request.isNewSession() === undefined || jovo.$request.isNewSession()) {
+      this.$session = new JovoSession();
+    }
+
+    _merge(jovo.$user, this.$user);
+    _merge(jovo.$session, this.$session);
+
+    jovo.$request.setUserId(this.config.userId);
+
+    if (this.config.locale) {
+      jovo.$request.setLocale(this.config.locale);
+    }
+  }
+
+  private postProcess(jovo: Jovo): void {
+    // Set session data
+    jovo.$session.isNew = false;
+
+    Object.assign(this, jovo);
+
+    // Clear db if necessary
+    if (this.config.deleteDbOnSessionEnded) {
+      const responses: JovoResponse[] = Array.isArray(this.response)
+        ? this.response
+        : [this.response];
+
+      for (const response of responses) {
+        if (response.hasSessionEnded!()) {
+          this.clearDb();
+          break;
+        }
+      }
+    }
+  }
+
+  private loadApp(): App {
+    const appDirectory: string[] = [process.cwd(), 'src'];
+    const { stage } = this.config;
+    const appFileNames: string[] = [`app.${stage}.ts`, `app.${stage}.js`, 'app.ts', 'app.js'];
+
+    for (const appFileName of appFileNames) {
+      const appFilePath: string = joinPaths(...appDirectory, appFileName);
+      if (existsSync(appFilePath)) {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const app = require(appFilePath).app;
+
+        if (!app) {
+          continue;
+        }
+
+        return _cloneDeep(app) as App;
+      }
+    }
+
+    throw new JovoError({ message: 'App not found.' });
+  }
+
+  private prepareRequest(): JovoRequest {
+    let request: JovoRequest;
+
+    if (this.isRequest(this.requestOrInput)) {
+      request = this.requestOrInput;
+    } else {
+      // TODO: Solve this in a more elegant way
+      request = this.requestBuilder.launch();
+    }
+
+    return request;
+  }
+
+  private isRequest(requestOrInput: JovoRequest | JovoInput): requestOrInput is JovoRequest {
+    return requestOrInput instanceof JovoRequest;
+  }
+
   private clearDb(): void {
     const dbPath: string = this.getDbPath();
 
@@ -225,7 +250,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     unlinkSync(dbPath);
   }
 
-  private getDbPath(): string {
+  getDbPath(): string {
     return joinPaths(this.config.dbDirectory, `${this.config.userId}.json`);
   }
 

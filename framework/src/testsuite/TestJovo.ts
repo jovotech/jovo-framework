@@ -1,5 +1,5 @@
 import { Jovo } from '..';
-import { JovoDevice } from '../JovoDevice';
+import { TestDevice } from './TestDevice';
 import { TestPlatform } from './TestPlatform';
 import { TestRequest } from './TestRequest';
 import { TestResponse } from './TestResponse';
@@ -10,6 +10,6 @@ export class TestJovo extends Jovo<
   TestResponse,
   TestJovo,
   TestUser,
-  JovoDevice<TestJovo>,
+  TestDevice,
   TestPlatform
 > {}

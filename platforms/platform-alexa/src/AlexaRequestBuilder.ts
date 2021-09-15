@@ -1,10 +1,10 @@
 import { RequestBuilder } from '@jovotech/framework';
 import { readFileSync } from 'fs';
 import { join as joinPaths } from 'path';
-import { Alexa } from './Alexa';
+import { AlexaPlatform } from './AlexaPlatform';
 import { AlexaRequest } from './AlexaRequest';
 
-export class AlexaRequestBuilder extends RequestBuilder<Alexa> {
+export class AlexaRequestBuilder extends RequestBuilder<AlexaPlatform> {
   launch(json?: Record<string, unknown>): AlexaRequest {
     const launchJson = readFileSync(
       joinPaths(__dirname, '..', '..', 'sample-requests', 'LaunchRequest.json'),

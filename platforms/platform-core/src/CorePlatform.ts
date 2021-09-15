@@ -5,6 +5,7 @@ import { Core } from './Core';
 import { CoreDevice } from './CoreDevice';
 import { CoreRequest } from './CoreRequest';
 import { CoreUser } from './CoreUser';
+import { CoreRequestBuilder } from './CoreRequestBuilder';
 
 export interface CorePlatformConfig extends ExtensibleConfig {
   platform: 'core' | string;
@@ -24,6 +25,7 @@ export class CorePlatform extends Platform<
   jovoClass = Core;
   userClass = CoreUser;
   deviceClass = CoreDevice;
+  requestBuilder = CoreRequestBuilder;
 
   getDefaultConfig(): CorePlatformConfig {
     return {

@@ -136,6 +136,7 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
       ) {
         return false;
       }
+
       return true;
     }) as Plugin[];
     if (plugins.length) {

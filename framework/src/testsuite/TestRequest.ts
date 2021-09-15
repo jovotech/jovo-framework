@@ -1,54 +1,66 @@
-import { JovoRequest, TestResponse, JovoSession, EntityMap, UnknownObject } from '..';
+import { JovoRequest, JovoSession, EntityMap, UnknownObject } from '..';
 import { Intent } from '../interfaces';
-import { AudioInput } from '../JovoInput';
+import { AudioInput, InputType } from '../JovoInput';
 
 export class TestRequest extends JovoRequest {
-  getLocale(): string | undefined {
-    throw new Error('Method not implemented.');
-  }
-  setLocale(locale: string): void {
-    throw new Error('Method not implemented.');
-  }
-  getIntent(): string | Intent | undefined {
-    throw new Error('Method not implemented.');
-  }
-  getEntities(): EntityMap | undefined {
-    throw new Error('Method not implemented.');
-  }
-  getInputType(): string | undefined {
-    throw new Error('Method not implemented.');
-  }
-  getInputText(): string | undefined {
-    throw new Error('Method not implemented.');
-  }
-  getInputAudio(): AudioInput | undefined {
-    throw new Error('Method not implemented.');
-  }
-  setSessionData(data: Record<string, unknown>): void {
-    throw new Error('Method not implemented.');
-  }
-  getUserId(): string | undefined {
-    throw new Error('Method not implemented.');
-  }
-  setUserId(userId: string): void {
-    throw new Error('Method not implemented.');
-  }
-  getSessionData(): UnknownObject | undefined {
-    throw new Error('Method not implemented.');
-  }
-  getSessionId(): string | undefined {
-    throw new Error('Method not implemented.');
-  }
-  isNewSession(): boolean | undefined {
-    throw new Error('Method not implemented.');
-  }
-  getDeviceCapabilities(): string[] | undefined {
-    throw new Error('Method not implemented.');
-  }
-  responseClass = TestResponse;
-
   isTestRequest = true;
-  session!: JovoSession;
-  userId!: string;
   locale!: string;
+  session: JovoSession = new JovoSession({ state: [] });
+  userId!: string;
+
+  getLocale(): string | undefined {
+    return this.locale;
+  }
+
+  setLocale(locale: string): void {
+    this.locale = locale;
+  }
+
+  getIntent(): string | Intent | undefined {
+    return;
+  }
+
+  getEntities(): EntityMap | undefined {
+    return;
+  }
+
+  getInputType(): string | undefined {
+    return;
+  }
+
+  getInputText(): string | undefined {
+    return;
+  }
+
+  getInputAudio(): AudioInput | undefined {
+    return;
+  }
+
+  setSessionData(data: Record<string, unknown>): void {
+    this.session.data = data;
+  }
+
+  getUserId(): string | undefined {
+    return this.userId;
+  }
+
+  setUserId(userId: string): void {
+    this.userId = userId;
+  }
+
+  getSessionData(): UnknownObject | undefined {
+    return this.session.data;
+  }
+
+  getSessionId(): string | undefined {
+    return this.session.id;
+  }
+
+  isNewSession(): boolean | undefined {
+    return this.session.isNew;
+  }
+
+  getDeviceCapabilities(): string[] | undefined {
+    return;
+  }
 }

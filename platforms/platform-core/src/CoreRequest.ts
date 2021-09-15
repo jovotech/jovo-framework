@@ -54,4 +54,30 @@ export class CoreRequest extends JovoRequest {
   getDeviceCapabilities(): CoreCapabilityType[] | undefined {
     return this.context?.device?.capabilities;
   }
+
+  setLocale(locale: string): void {
+    this.locale = locale;
+  }
+
+  setSessionData(data: Record<string, unknown>): void {
+    if (!this.context?.session?.data) {
+      // TODO: What to do here?
+      return;
+    }
+
+    this.context.session.data.data = data;
+  }
+
+  getUserId(): string | undefined {
+    return this.context?.user.id;
+  }
+
+  setUserId(userId: string): void {
+    if (!this.context) {
+      // TODO: What to do here?
+      return;
+    }
+
+    this.context.user.id = userId;
+  }
 }

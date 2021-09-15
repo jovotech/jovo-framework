@@ -1,5 +1,5 @@
 import { Platform, ExtensibleConfig } from '..';
-import { JovoDeviceConstructor } from '../JovoDevice';
+import { TestDevice } from './TestDevice';
 import { TestJovo } from './TestJovo';
 import { TestOutputConverterStrategy } from './TestOutputConverterStrategy';
 import { TestRequest } from './TestRequest';
@@ -12,16 +12,16 @@ export class TestPlatform extends Platform<
   TestResponse,
   TestJovo,
   TestUser,
-  any,
+  TestDevice,
   TestPlatform,
   ExtensibleConfig
 > {
-  deviceClass!: JovoDeviceConstructor<TestJovo>;
   readonly jovoClass = TestJovo;
   readonly requestClass = TestRequest;
   readonly outputTemplateConverterStrategy = new TestOutputConverterStrategy();
   readonly userClass = TestUser;
   readonly requestBuilder = TestRequestBuilder;
+  readonly deviceClass = TestDevice;
 
   isRequestRelated(request: TestRequest): boolean {
     return request.isTestRequest;

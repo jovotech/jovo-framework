@@ -121,16 +121,6 @@ export * from './metadata/MetadataStorage';
 export * from './metadata/MethodDecoratorMetadata';
 export * from './metadata/OutputMetadata';
 
-export * from './testsuite/TestJovo';
-export * from './testsuite/TestUser';
-export * from './testsuite/TestSuite';
-export * from './testsuite/TestServer';
-export * from './testsuite/TestRequest';
-export * from './testsuite/TestRequestBuilder';
-export * from './testsuite/TestResponse';
-export * from './testsuite/TestOutputConverterStrategy';
-export * from './testsuite/TestPlatform';
-
 export * from './plugins/BasicLogging';
 export * from './plugins/DbPlugin';
 export * from './plugins/HandlerPlugin';
@@ -142,3 +132,13 @@ export * from './plugins/RoutingExecutor';
 export * from './interfaces';
 export * from './enums';
 export * from './utilities';
+
+export * from './testsuite/TestJovo';
+export * from './testsuite/TestUser';
+export * from './testsuite/TestSuite';
+export * from './testsuite/TestServer';
+export * from './testsuite/TestRequest';
+export * from './testsuite/TestRequestBuilder';
+export * from './testsuite/TestResponse';
+export * from './testsuite/TestOutputConverterStrategy';
+export * from './testsuite/TestPlatform';

@@ -6,6 +6,7 @@ import {
   InputTypeLike,
   JovoInput,
   JovoRequest,
+  JovoSession,
   UnknownObject,
 } from '@jovotech/framework';
 import { ResolutionPerAuthorityStatusCode } from '@jovotech/output-alexa';
@@ -109,13 +110,20 @@ export class AlexaRequest extends JovoRequest {
     return this.session?.attributes;
   }
 
-  setSessionData(data: Record<string, unknown>): void {
-    this.session = data as any as Session;
+  // TODO: Rename to setSession?
+  setSessionData(session: JovoSession): void {
+    if (!this.session) {
+      // TODO: What to do here?
+      return;
+    }
+
+    this.session.attributes = session;
   }
 
   getSessionId(): string | undefined {
     return this.session?.sessionId;
   }
+
   isNewSession(): boolean | undefined {
     return this.session?.new;
   }
@@ -126,7 +134,7 @@ export class AlexaRequest extends JovoRequest {
   }
 
   getUserId(): string | undefined {
-    return this.session?.user.userId;
+    return this.session?.user?.userId;
   }
 
   setUserId(userId: string): void {
@@ -136,7 +144,6 @@ export class AlexaRequest extends JovoRequest {
     }
 
     if (!this.session.user) {
-      // TODO: Is this right?
       this.session.user = { userId: userId, accessToken: '', permissions: { consentToken: '' } };
     }
 

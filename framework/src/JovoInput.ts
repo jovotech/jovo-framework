@@ -1,4 +1,5 @@
 import { EnumLike } from '@jovotech/output';
+import { OmitWhere } from '.';
 import { AsrData, EntityMap, Intent, NluData } from './interfaces';
 
 export enum InputType {
@@ -21,6 +22,7 @@ export interface AudioInput {
 }
 
 export class JovoInput {
+  type!: EnumLike<InputType> | string;
   asr?: AsrData;
   nlu?: NluData;
   intent?: NluData['intent'];
@@ -28,7 +30,13 @@ export class JovoInput {
   text?: string;
   audio?: AudioInput;
 
-  constructor(public type: InputTypeLike) {}
+  constructor(type: InputTypeLike) {
+    if (isObject(type)) {
+      Object.assign(this, type);
+    } else {
+      this.type = type;
+    }
+  }
 
   getIntentName(): string | undefined {
     function getIntentName(intent: Intent | string): string {
@@ -40,4 +48,10 @@ export class JovoInput {
       ? getIntentName(this.nlu.intent)
       : undefined;
   }
+}
+
+function isObject(
+  type: InputTypeLike | OmitWhere<JovoInput, Function>,
+): type is OmitWhere<JovoInput, Function> {
+  return typeof type === 'object';
 }
