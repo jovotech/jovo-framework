@@ -40,6 +40,11 @@ export class HandleRequest extends Extensible<AppConfig, AppMiddlewares> {
   }
 
   stopMiddlewareExecution(): void {
-    this.middlewareCollection.remove(...this.middlewareCollection.names);
+    this.middlewareCollection.clear();
+    Object.values(this.plugins).forEach((plugin) => {
+      if (plugin instanceof Extensible) {
+        plugin.middlewareCollection.clear();
+      }
+    });
   }
 }

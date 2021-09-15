@@ -440,14 +440,14 @@ export abstract class Jovo<
   setPersistableData(data: JovoPersistableData, config?: DbPluginStoredElementsConfig): void {
     const isStoredElementEnabled = (key: 'user' | 'session' | 'history') => {
       const value = config?.[key];
-      return !!(typeof value === 'object' ? value.enabled : value);
+      return typeof value === 'object' ? value.enabled !== false : !!value;
     };
 
     if (isStoredElementEnabled('user')) {
       this.$user.setPersistableData(data.user);
     }
     if (isStoredElementEnabled('session')) {
-      this.$session.setPersistableData(data.session);
+      this.$session.setPersistableData(data.session, config?.session);
     }
     if (isStoredElementEnabled('history')) {
       this.$history.setPersistableData(data.history);

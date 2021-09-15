@@ -1,5 +1,14 @@
 import _merge from 'lodash.merge';
-import { ArrayElement, ComponentTree, I18NextOptions, IntentMap, Middleware, Plugin } from '.';
+import {
+  ArrayElement,
+  ComponentTree,
+  I18NextOptions,
+  IntentMap,
+  Middleware,
+  MiddlewareFunction,
+  Plugin,
+  PossibleMiddlewareName,
+} from '.';
 import { ComponentConstructor, ComponentDeclaration } from './BaseComponent';
 import { MatchingPlatformNotFoundError } from './errors/MatchingPlatformNotFoundError';
 import { Extensible, ExtensibleConfig, ExtensibleInitConfig } from './Extensible';
@@ -53,6 +62,7 @@ export type AppMiddlewares = AppMiddleware[];
 export class App extends Extensible<AppConfig, AppMiddlewares> {
   readonly componentTree: ComponentTree;
   readonly i18n: I18Next;
+  private initialized = false;
 
   constructor(config?: AppInitConfig) {
     super(config ? { ...config, components: undefined } : config);
@@ -69,6 +79,10 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
     this.i18n = new I18Next(this.config.i18n || {});
   }
 
+  get isInitialized(): boolean {
+    return this.initialized;
+  }
+
   get platforms(): ReadonlyArray<Platform> {
     return Object.values(this.plugins).filter((plugin) => plugin instanceof Platform) as Platform[];
   }
@@ -83,10 +97,16 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
     return new MiddlewareCollection(...APP_MIDDLEWARES);
   }
 
-  middleware(name: AppMiddleware): Middleware | undefined;
+  middleware(name: PossibleMiddlewareName<AppMiddleware>): Middleware | undefined;
   middleware(name: string): Middleware | undefined;
-  middleware(name: string | AppMiddleware): Middleware | undefined {
+  middleware(name: PossibleMiddlewareName<AppMiddleware> | string): Middleware | undefined {
     return this.middlewareCollection.get(name);
+  }
+
+  hook(name: PossibleMiddlewareName<AppMiddleware>, fn: MiddlewareFunction): void;
+  hook(name: string, fn: MiddlewareFunction): void;
+  hook(name: PossibleMiddlewareName<AppMiddleware> | string, fn: MiddlewareFunction): void {
+    this.middlewareCollection.use(name, fn);
   }
 
   getDefaultConfig(): AppConfig {
@@ -96,8 +116,12 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
   }
 
   async initialize(): Promise<void> {
+    if (this.initialized) {
+      return;
+    }
     await this.i18n.initialize();
-    return this.initializePlugins();
+    await this.initializePlugins();
+    this.initialized = true;
   }
 
   use<T extends Usable[]>(...usables: T): this {

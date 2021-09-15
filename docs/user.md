@@ -1,15 +1,10 @@
 ---
-title: 'Jovo User'
+title: 'User'
 excerpt: 'Learn more about the Jovo User property.'
 ---
 # User
 
 Learn more about the Jovo `$user` property.
-- [Introduction](#introduction)
-- [User Data](#user-data)
-  - [Store Data](#store-data)
-  - [Read Data](#read-data)
-- [User Metadata](#user-metadata)
 
 ## Introduction
 
@@ -63,6 +58,7 @@ const score = this.$user.data.score;
 Additionally to the persisted data, you can also access the following information about the user:
 
 * `this.$user.id`: The user's ID is also the key to their database entry.
+* `this.$user.accessToken`: For platforms that offer account linking, the `accessToken` is a string for signed in users. The value is `undefined` if the user hasn't linked their account, or the platform does not support account linking.
 * `this.$user.createdAt`: When was this user's database entry created?
 * `this.$user.updatedAt`: When was this user's data last updated?
 * `this.$user.isNew`: A `boolean` that is `true` for first-time users.

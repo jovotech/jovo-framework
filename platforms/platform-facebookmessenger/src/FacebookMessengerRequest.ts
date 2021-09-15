@@ -38,7 +38,14 @@ export class FacebookMessengerRequest extends JovoRequest {
 
   getInputType(): InputTypeLike | undefined {
     const postbackPayload = this.messaging?.[0]?.postback?.payload;
-    return postbackPayload === FACEBOOK_LAUNCH_PAYLOAD ? InputType.Launch : InputType.Intent;
+
+    if (postbackPayload === FACEBOOK_LAUNCH_PAYLOAD) {
+      return InputType.Launch;
+    }
+    if (this.nlu?.intentName) {
+      return InputType.Intent;
+    }
+    return InputType.Text;
   }
   getInputText(): JovoInput['text'] {
     return this.messaging?.[0]?.message?.text || this.messaging?.[0]?.postback?.title;

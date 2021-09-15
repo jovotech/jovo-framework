@@ -16,6 +16,10 @@ export abstract class JovoUser<JOVO extends Jovo = Jovo> {
 
   abstract id: string;
 
+  get accessToken(): string | undefined {
+    return;
+  }
+
   isNew = true;
 
   getPersistableData(): PersistableUserData {
@@ -27,12 +31,6 @@ export abstract class JovoUser<JOVO extends Jovo = Jovo> {
   setPersistableData(data?: PersistableUserData): this {
     this.data = data?.data || {};
     return this;
-  }
-
-  getDefaultPersistableData(): PersistableUserData {
-    return {
-      data: {},
-    };
   }
 
   toJSON(): JovoUser<JOVO> {

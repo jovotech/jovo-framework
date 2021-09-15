@@ -1,20 +1,14 @@
+---
+title: 'Google Assistant Project Configuration'
+excerpt: 'Learn how to build and deploy Google Assistant projects using the Jovo CLI.'
+---
 # Google Assistant Project Configuration
 
 Learn how to build and deploy Google Assistant projects using the Jovo CLI.
 
-- [Introduction](#introduction)
-- [Configuration](#configuration)
-  - [projectId](#projectid)
-  - [locales](#locales)
-  - [resourcesDirectory](#resourcesdirectory)
-  - [files](#files)
-- [build Command](#build-command)
-- [deploy Command](#deploy-command)
-- [get Command](#get-command)
-
 ## Introduction
 
-You can add the Google Assistant plugin for the Jovo CLI to your [project configuration](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/project-config.md) in `jovo.project.js`:
+You can add the Google Assistant plugin for the Jovo CLI to your [project configuration](https://v4.jovo.tech/docs/project-config) in `jovo.project.js`:
 
 ```js
 const { ProjectConfig } = require('@jovotech/cli');
@@ -30,7 +24,7 @@ const project = new ProjectConfig({
 });
 ```
 
-The CLI plugin hooks into the [`build` command](#build-command) to generate Google Assistant project files, including a conversation model based on the Jovo Model in the [`models` folder](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/models.md) of your project.
+The CLI plugin hooks into the [`build` command](#build-command) to generate Google Assistant project files, including a conversation model based on the Jovo Model in the [`models` folder](https://v4.jovo.tech/docs/models) of your project.
 
 You can then use the [`deploy` command](#deploy-command) to update your Google Action project in the [Google Actions Console](https://console.actions.google.com/). You can also use the [`get` command](#get-command) to synchronize local files after making edits to the project in the console.
 
@@ -53,7 +47,7 @@ new GoogleAssistantCli({
 The following options are currently supported:
 
 * [`projectId`](#projectid) (required): The Google Action project ID that the project should be deployed to.
-* [`locales`](#locales): Defines how the locales in the [`models` folder](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/models.md) should be mapped to Google Assistant locales.
+* [`locales`](#locales): Defines how the locales in the [`models` folder](https://v4.jovo.tech/docs/models) should be mapped to Google Assistant locales.
 * [`resourcesDirectory`](#resourcesdirectory): The folder where resources are maintained.
 * [`files`](#files): This can be used to add or override files in your Google Assistant `build` folder.
 
@@ -76,7 +70,7 @@ new GoogleAssistantCli({
 
 This ensures that your project is always deployed to the right Google Action project.
 
-The `projectId` property can be especially helpful for [staging](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/staging.md), where different stages deploy to different Actions:
+The `projectId` property can be especially helpful for [staging](https://v4.jovo.tech/docs/staging), where different stages deploy to different Actions:
 
 ```js
 const project = new ProjectConfig({
@@ -111,7 +105,7 @@ const project = new ProjectConfig({
 
 ### locales
 
-During the [`build` command](#build-command), the Jovo Model files in the [`models` folder](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/models.md) get turned into Google Assistant conversation models in the `build` folder.
+During the [`build` command](#build-command), the Jovo Model files in the [`models` folder](https://v4.jovo.tech/docs/models) get turned into Google Assistant conversation models in the `build` folder.
 
 The `models` folder can include files for generic languages (like `en`) as well as localized ones (like `en-US`). Google Assistant requires you to use generic locales like `en`. Additionally, you can add localized ones like `en-US`. See the [official Google Assistant documentation for supported locales](https://developers.google.com/assistant/console/languages-locales?hl=en)).
 
@@ -132,7 +126,7 @@ new GoogleAssistantCli({
 
 Google Assistant offers the ability to maintain resources/assets in a local folder and reference them in your settings using a `$resources` variable. [Learn more in the official Google Assistant docs](https://developers.google.com/assistant/conversational/build/projects?hl=en&tool=sdk#add_resources).
 
-By default, the directory is called `resources` in the root of your Jovo project. You can also make changes to this setup using the `resourcesDirectory` option:
+To enable this feature, you need to set the `resourcesDirectory` option in the Google Assistant CLI config:
 
 ```js
 new GoogleAssistantCli({
@@ -140,11 +134,13 @@ new GoogleAssistantCli({
 })
 ```
 
-During the [`build` command](#build-command), these files are then copied over to the `build` folder.
+In the example above, the directory is called `resources` in the root of your Jovo project.
+
+During the [`build` command](#build-command), the files from the specified folder are then copied over to a `resources` folder in the `build/platform.googleAssistant` folder.
 
 ### files
 
-You can use the [Jovo CLI File Builder](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/project-config.md#file-builder) to add or override files in a path of the Google Assistant folder in the `build` directory.
+You can use the [Jovo CLI File Builder](https://v4.jovo.tech/docs/project-config#file-builder) to add or override files in a path of the Google Assistant folder in the `build` directory.
 
 For example, you can make changes to the `settings.yaml` file like this:
 
@@ -175,7 +171,7 @@ The `build` command creates a `platform.googleAssistant` folder inside the `buil
 $ jovov4 build
 ```
 
-It uses [configuration](#configuration) from the `jovo.project.js` and files in the [`models` folder](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/models.md) to create Google Assistant-specific project files that are ready for deployment.
+It uses [configuration](#configuration) from the `jovo.project.js` and files in the [`models` folder](https://v4.jovo.tech/docs/models) to create Google Assistant-specific project files that are ready for deployment.
 
 The folder then contains several files and folders, including `actions`, `custom`, `settings`, and `webhooks`.
 

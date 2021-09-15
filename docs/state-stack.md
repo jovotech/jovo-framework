@@ -1,14 +1,10 @@
 ---
-title: 'Jovo State Stack'
+title: 'State Stack'
 excerpt: 'The Jovo State Stack remembers components that are relevant for the current user session.'
 ---
 # State Stack
 
 The Jovo `$state` stack remembers components that are relevant for the current user session.
-
-- [Introduction](#introduction)
-- [Stacking Components](#stacking-components)
-- [State Properties](#state-properties)
 
 ## Introduction
 
