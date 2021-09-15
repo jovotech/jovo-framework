@@ -14,7 +14,10 @@ export enum InputType {
 
 export const DEFAULT_INPUT_TYPE = InputType.Intent;
 
-export type InputTypeLike = EnumLike<InputType> | string;
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type JovoInputObject = OmitWhere<JovoInput, Function>;
+
+export type InputTypeLike = EnumLike<InputType> | string | JovoInputObject;
 
 export interface AudioInput {
   base64: string;
@@ -50,8 +53,6 @@ export class JovoInput {
   }
 }
 
-function isObject(
-  type: InputTypeLike | OmitWhere<JovoInput, Function>,
-): type is OmitWhere<JovoInput, Function> {
-  return typeof type === 'object';
+function isObject(input: InputTypeLike | JovoInputObject): input is JovoInputObject {
+  return typeof input === 'object';
 }
