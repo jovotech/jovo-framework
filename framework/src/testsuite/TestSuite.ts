@@ -5,9 +5,10 @@ import {
   SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
 import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
-import _merge from 'lodash.merge';
 import _cloneDeep from 'lodash.clonedeep';
+import _merge from 'lodash.merge';
 import { join as joinPaths } from 'path';
+import { v4 as uuidv4 } from 'uuid';
 import {
   App,
   Constructor,
@@ -15,18 +16,21 @@ import {
   JovoError,
   JovoRequest,
   JovoSession,
+  OmitWhere,
   Platform,
   Plugin,
   PluginConfig,
   RequestBuilder,
-  TestRequest,
 } from '..';
 import { HandleRequest } from '../HandleRequest';
-import { JovoInput } from '../JovoInput';
+import { InputType, JovoInput, JovoInputObject } from '../JovoInput';
 import { TestDb } from './TestDb';
 import { TestPlatform } from './TestPlatform';
 import { TestServer } from './TestServer';
 
+/**
+ * Infers generic types of the provided platform
+ */
 export type PlatformTypes<PLATFORM extends Platform> = PLATFORM extends Platform<
   infer REQUEST,
   infer RESPONSE,
@@ -37,6 +41,9 @@ export type PlatformTypes<PLATFORM extends Platform> = PLATFORM extends Platform
   ? { request: REQUEST; response: RESPONSE; jovo: JOVO; user: USER; device: DEVICE }
   : never;
 
+/**
+ * Determines whether the provided response type is of type array or not
+ */
 export type PlatformResponseType<PLATFORM extends Platform, RESPONSE extends JovoResponse> =
   PLATFORM['outputTemplateConverterStrategy'] extends SingleResponseOutputTemplateConverterStrategy<
     RESPONSE,
@@ -45,14 +52,34 @@ export type PlatformResponseType<PLATFORM extends Platform, RESPONSE extends Jov
     ? RESPONSE
     : RESPONSE | RESPONSE[];
 
+/**
+ * Return type of TestSuite.prototype.run().
+ * Returns output, which can be of type array or object, and
+ * response, whose type is determined based upon the OutputTemplateConverterStrategy.
+ */
 export type TestSuiteResponse<PLATFORM extends Platform> = {
   output: OutputTemplate | OutputTemplate[];
   response: PlatformResponseType<PLATFORM, PlatformTypes<PLATFORM>['response']>;
 };
 
+export type RequestOrInput<PLATFORM extends Platform> =
+  | JovoInput
+  | PlatformTypes<PLATFORM>['request'];
+
+export type JovoRequestObject<PLATFORM extends Platform> =
+  | PlatformTypes<PLATFORM>['request']
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  | OmitWhere<PlatformTypes<PLATFORM>['request'], Function>;
+
+export type PartialRequestOrInput<PLATFORM extends Platform> =
+  | RequestOrInput<PLATFORM>
+  | JovoInputObject
+  | JovoRequestObject<PLATFORM>;
+
 export interface TestSuiteConfig<PLATFORM extends Platform> extends PluginConfig {
   userId: string;
   dbDirectory: string;
+  dbFileName: string;
   platform: Constructor<PLATFORM>;
   // TODO
   // platforms: Constructor<PLATFORM>[];
@@ -66,7 +93,7 @@ export interface TestSuite<PLATFORM extends Platform>
 export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
   TestSuiteConfig<PLATFORM>
 > {
-  private requestOrInput!: JovoRequest | JovoInput;
+  private requestOrInput!: RequestOrInput<PLATFORM>;
   private app: App;
 
   readonly requestBuilder!: RequestBuilder<PLATFORM>;
@@ -95,26 +122,50 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     const request = platform.createRequestInstance({});
     const server: TestServer = new TestServer(request);
     const handleRequest: HandleRequest = new HandleRequest(this.app, server);
-    Object.assign(this, platform.createJovoInstance(this.app, handleRequest));
+
+    Object.assign(this, new platform.jovoClass(this.app, handleRequest, platform));
   }
 
   getDefaultConfig(): TestSuiteConfig<PLATFORM> {
+    const userId: string = this.generateRandomUserId();
     return {
       dbDirectory: '../db/tests/',
-      userId: this.generateRandomUserId(),
+      userId,
+      dbFileName: `${userId}-${Date.now()}.json`,
       platform: TestPlatform as unknown as Constructor<PLATFORM>,
       stage: 'dev',
     };
   }
 
-  async run(
-    requestOrInput: Exclude<JovoRequest, () => unknown> | Exclude<JovoInput, () => unknown>,
-  ): Promise<TestSuiteResponse<PLATFORM>> {
-    this.requestOrInput = requestOrInput;
+  async run(input: JovoInputObject): Promise<TestSuiteResponse<PLATFORM>>;
+  async run(request: JovoRequestObject<PLATFORM>): Promise<TestSuiteResponse<PLATFORM>>;
+  async run(requestOrInput: PartialRequestOrInput<PLATFORM>): Promise<TestSuiteResponse<PLATFORM>> {
+    // If requestOrInput is not an instance, create one
+    const isInputObject = (input: PartialRequestOrInput<PLATFORM>): input is JovoInput =>
+      !(input instanceof JovoInput) && !!(input as JovoInput).type;
+
+    const isRequestObject = (request: PartialRequestOrInput<PLATFORM>): request is JovoRequest => {
+      return !(request instanceof JovoRequest) && !(request as JovoInput).type;
+    };
+
+    if (isInputObject(requestOrInput)) {
+      requestOrInput = new JovoInput(requestOrInput);
+    }
+
+    if (isRequestObject(requestOrInput)) {
+      requestOrInput = this.$platform.createRequestInstance(requestOrInput);
+    }
+
+    this.requestOrInput = requestOrInput as RequestOrInput<PLATFORM>;
 
     await this.app.initialize();
 
-    const request: JovoRequest = this.prepareRequest();
+    const request: PlatformTypes<PLATFORM>['request'] = this.isRequestInstance(
+      requestOrInput as RequestOrInput<PLATFORM>,
+    )
+      ? (requestOrInput as JovoRequest)
+      : this.requestBuilder.launch();
+
     await this.app.handle(new TestServer(request));
 
     return {
@@ -130,11 +181,13 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     app.middlewareCollection.use(
       'before.request.start',
       this.saveUserData.bind(this),
-      (jovo: Jovo) => {
-        return this.setInput(jovo);
-      },
+      this.setInput.bind(this),
     );
     app.middlewareCollection.use('after.response.end', this.postProcess.bind(this));
+  }
+
+  getDbPath(): string {
+    return joinPaths(this.config.dbDirectory, `${this.config.userId}.json`);
   }
 
   /**
@@ -160,7 +213,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
   }
 
   private setInput(jovo: Jovo) {
-    if (!this.isRequest(this.requestOrInput)) {
+    if (!this.isRequestInstance(this.requestOrInput)) {
       jovo.$input = this.requestOrInput;
     }
 
@@ -169,7 +222,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
       this.$session = new JovoSession();
     }
 
-    _merge(jovo.$user, this.$user);
+    _merge(jovo.$user.data, this.$user.data);
     _merge(jovo.$session, this.$session);
 
     jovo.$request.setUserId(this.config.userId);
@@ -215,6 +268,8 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
           continue;
         }
 
+        // TODO: Instead of cloning the entire app, it'd be sufficient to
+        // implement app.middlewareCollection.once() to run handlers once per lifecycle
         return _cloneDeep(app) as App;
       }
     }
@@ -222,36 +277,16 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     throw new JovoError({ message: 'App not found.' });
   }
 
-  private prepareRequest(): JovoRequest {
-    let request: JovoRequest;
-
-    if (this.isRequest(this.requestOrInput)) {
-      request = this.requestOrInput;
-    } else {
-      // TODO: Solve this in a more elegant way
-      request = this.requestBuilder.launch();
-    }
-
-    return request;
-  }
-
-  private isRequest(requestOrInput: JovoRequest | JovoInput): requestOrInput is JovoRequest {
-    return requestOrInput instanceof JovoRequest;
+  private isRequestInstance(request: RequestOrInput<PLATFORM>): request is JovoRequest {
+    return request instanceof JovoRequest;
   }
 
   private clearDb(): void {
     const dbPath: string = this.getDbPath();
 
     if (!existsSync(dbPath)) {
-      // TODO: Throw error?
-      return;
+      unlinkSync(dbPath);
     }
-
-    unlinkSync(dbPath);
-  }
-
-  getDbPath(): string {
-    return joinPaths(this.config.dbDirectory, `${this.config.userId}.json`);
   }
 
   private generateRandomUserId() {
