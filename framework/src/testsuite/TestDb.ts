@@ -45,7 +45,7 @@ export class TestDb extends DbPlugin<FileDbConfig> {
     return dbItems.find((dbItem: DbItem) => dbItem.id === primaryKey);
   }
 
-  loadData(jovo: Jovo): void {
+  async loadData(jovo: Jovo): Promise<void> {
     const dbItem: DbItem | undefined = this.getDbItem(jovo.$user.id);
     if (dbItem) {
       jovo.$user.isNew = false;
