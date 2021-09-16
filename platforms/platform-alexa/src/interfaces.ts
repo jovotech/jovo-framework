@@ -231,13 +231,3 @@ export interface Request {
   eventPublishingTime?: string; // AlexaSkillEvent.*
   dialogState?: string;
 }
-
-// export interface AlexaInput extends Input {
-//   alexaSkill: {
-//     name?: string;
-//     value?: string;
-//     confirmationStatus?: string;
-//     source?: string;
-//     resolutions?: Resolutions;
-//   };
-// }
