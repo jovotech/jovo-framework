@@ -160,23 +160,22 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
       return !(request instanceof JovoRequest) && !(request as JovoInput).type;
     };
 
-    if (isInputObject(requestOrInput)) {
-      requestOrInput = new JovoInput(requestOrInput);
-    }
-
-    if (isRequestObject(requestOrInput)) {
-      requestOrInput = this.$platform.createRequestInstance(requestOrInput);
-    }
-
-    this.requestOrInput = requestOrInput as RequestOrInput<PLATFORM>;
+    // If requestOrInput is a plain object, generate a corresponding
+    // instance from it
+    this.requestOrInput = isInputObject(requestOrInput)
+      ? new JovoInput(requestOrInput)
+      : isRequestObject(requestOrInput)
+      ? this.$platform.createRequestInstance(requestOrInput)
+      : (requestOrInput as RequestOrInput<PLATFORM>);
 
     await this.app.initialize();
 
-    const request: PlatformTypes<PLATFORM>['request'] = this.isRequest(
-      requestOrInput as RequestOrInput<PLATFORM>,
-    )
-      ? (requestOrInput as JovoRequest)
-      : this.requestBuilder.launch({ session: { isNew: false } });
+    const request: PlatformTypes<PLATFORM>['request'] = this.isRequest(this.requestOrInput)
+      ? this.requestOrInput
+      : this.requestOrInput.type === InputType.Launch
+      ? this.requestBuilder.launch()
+      : this.requestBuilder.intent();
+
     await this.app.handle(new TestServer(request));
 
     return {
