@@ -63,13 +63,14 @@ Under the hood, Jovo translates the `message` into a `firstSimple` response obje
 {
   "prompt": {
     "firstSimple": {
-      "speech": "<speak>Hello world!</speak>"
+      "speech": "<speak>Hello world!</speak>",
+      "text": "Hello world!"
     }
   }
 }
 ```
 
-The resulting `speech` property gets automatically wrapped into SSML tags.
+The resulting `speech` property gets automatically wrapped into SSML tags. For `text`, SSML is removed.
 
 It's also possible to add a `displayText` property:
 

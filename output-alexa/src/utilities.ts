@@ -1,4 +1,4 @@
-import { Card, Carousel, CarouselItem, Message } from '@jovotech/output';
+import { Card, Carousel, CarouselItem, Message, toSSML } from '@jovotech/output';
 import AplCardJson from './apl/Card.json';
 import AplCarouselJson from './apl/Carousel.json';
 import { ALEXA_STRING_MAX_LENGTH } from './constants';
@@ -101,7 +101,7 @@ export function augmentModelPrototypes(): void {
   Message.prototype.toAlexaOutputSpeech = function () {
     return {
       type: OutputSpeechType.Ssml,
-      ssml: this.text,
+      ssml: toSSML(this.text),
     };
   };
 }
