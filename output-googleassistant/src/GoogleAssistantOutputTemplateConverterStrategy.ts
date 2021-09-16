@@ -9,6 +9,7 @@ import {
   OutputTemplate,
   OutputTemplateConverterStrategyConfig,
   QuickReplyValue,
+  removeSSML,
   SingleResponseOutputTemplateConverterStrategy,
   toSSML,
 } from '@jovotech/output';
@@ -262,10 +263,10 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
 
   convertMessageToSimple(message: MessageValue): Simple {
     return typeof message === 'string'
-      ? { speech: toSSML(message) }
+      ? { speech: toSSML(message), text: removeSSML(message) }
       : message.toGoogleAssistantSimple?.() || {
           speech: toSSML(message.text),
-          text: message.displayText,
+          text: removeSSML(message.displayText || message.text),
         };
   }
 
