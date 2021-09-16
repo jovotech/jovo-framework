@@ -227,7 +227,7 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
         }
       : message.toAlexaOutputSpeech?.() || {
           type: OutputSpeechType.Ssml,
-          ssml: toSSML(message.text),
+          ssml: toSSML(message.speech),
         };
   }
 

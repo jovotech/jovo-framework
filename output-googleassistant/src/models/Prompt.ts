@@ -52,8 +52,8 @@ export class Simple {
     const speech = this.speech || '';
     return this.text
       ? {
-          displayText: this.text,
-          text: speech,
+          text: this.text,
+          speech,
         }
       : speech;
   }

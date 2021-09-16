@@ -178,7 +178,7 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
     return typeof message === 'string'
       ? { text: removeSSML(message) }
       : message.toFacebookMessengerMessage?.() || {
-          text: removeSSML(message.displayText || message.text),
+          text: removeSSML(message.text || message.speech),
           quick_replies: [],
         };
   }

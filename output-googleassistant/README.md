@@ -71,13 +71,13 @@ Under the hood, Jovo translates the `message` into a `firstSimple` response obje
 
 The resulting `speech` property gets automatically wrapped into SSML tags.
 
-It's also possible to add a `displayText` property:
+It's also possible to add a `text` property:
 
 ```typescript
 {
   message: {
-    text: 'Hello listener!',
-    displayText: 'Hello reader!'
+    speech: 'Hello listener!',
+    text: 'Hello reader!'
   },
 }
 ```

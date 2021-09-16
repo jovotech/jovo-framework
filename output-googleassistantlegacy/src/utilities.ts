@@ -1,4 +1,4 @@
-import { Card, Carousel, Message, QuickReply, toSSML } from '@jovotech/output';
+import { Card, Carousel, Message, QuickReply, removeSSML, toSSML } from '@jovotech/output';
 import { BasicCard, CollectionItem, SimpleResponse } from './models';
 
 export function augmentModelPrototypes(): void {
@@ -46,13 +46,10 @@ export function augmentModelPrototypes(): void {
   };
 
   Message.prototype.toGoogleAssistantSimpleResponse = function () {
-    const simpleResponse: SimpleResponse = {
-      ssml: toSSML(this.text),
+    return {
+      ssml: toSSML(this.speech),
+      displayText: removeSSML(this.text || this.speech),
     };
-    if (this.displayText) {
-      simpleResponse.displayText = this.displayText;
-    }
-    return simpleResponse;
   };
 
   QuickReply.prototype.toGoogleAssistantSuggestion = function () {

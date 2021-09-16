@@ -130,7 +130,8 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
       if (!response.session) {
         response.session = getEmptySession();
       }
-      const text = typeof reprompt === 'string' ? reprompt : reprompt.displayText || reprompt.text;
+      const text =
+        typeof reprompt === 'string' ? reprompt : reprompt.text || reprompt.speech;
       response.session.params._GOOGLE_ASSISTANT_REPROMPTS_ = {
         NO_INPUT_1: text,
         NO_INPUT_2: text,
@@ -265,8 +266,8 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
     return typeof message === 'string'
       ? { speech: toSSML(message), text: removeSSML(message) }
       : message.toGoogleAssistantSimple?.() || {
-          speech: toSSML(message.text),
-          text: removeSSML(message.displayText || message.text),
+          speech: toSSML(message.speech),
+          text: removeSSML(message.text || message.speech),
         };
   }
 

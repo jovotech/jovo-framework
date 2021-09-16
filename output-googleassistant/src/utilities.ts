@@ -59,8 +59,8 @@ export function augmentModelPrototypes(): void {
 
   Message.prototype.toGoogleAssistantSimple = function () {
     return {
-      speech: toSSML(this.text),
-      text: removeSSML(this.displayText || this.text),
+      speech: toSSML(this.speech),
+      text: removeSSML(this.text || this.speech),
     };
   };
 

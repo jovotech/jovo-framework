@@ -5,10 +5,10 @@ export type MessageValue = string | Message;
 export class Message {
   @IsString()
   @IsNotEmpty()
-  text: string;
+  speech: string;
 
   @IsOptional()
   @IsString()
   @IsNotEmpty()
-  displayText?: string;
+  text?: string;
 }

@@ -23,12 +23,12 @@ export class SimpleResponse {
   displayText?: string;
 
   toMessage?(): MessageValue {
-    const text = removeSSMLSpeakTags(this.ssml || this.textToSpeech || '');
+    const speech = this.ssml || this.textToSpeech || '';
     return this.displayText
       ? {
-          displayText: this.displayText,
-          text,
+          text: this.displayText,
+          speech,
         }
-      : text;
+      : speech;
   }
 }

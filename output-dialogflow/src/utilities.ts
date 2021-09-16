@@ -1,4 +1,4 @@
-import { Card, Message, QuickReply } from '@jovotech/output';
+import { Card, Message, QuickReply, removeSSML } from '@jovotech/output';
 import { Card as DialogflowCard } from './models';
 
 export function augmentModelPrototypes(): void {
@@ -17,7 +17,7 @@ export function augmentModelPrototypes(): void {
   };
 
   Message.prototype.toDialogflowText = function () {
-    return { text: [this.displayText || this.text] };
+    return { text: [removeSSML(this.text || this.speech)] };
   };
 
   QuickReply.prototype.toDialogflowQuickReply = function () {

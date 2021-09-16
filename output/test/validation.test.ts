@@ -90,9 +90,9 @@ describe('validation - QuickReply', () => {
 });
 
 describe('validation - Message', () => {
-  testStringProperty(Message, 'text');
-  testOptionalStringProperty(Message, 'displayText', {
-    text: 'foo',
+  testStringProperty(Message, 'speech');
+  testOptionalStringProperty(Message, 'text', {
+    speech: 'foo',
   });
 });
 
@@ -224,7 +224,7 @@ describe('validation - OutputTemplate', () => {
       OutputTemplate,
       {
         message: {
-          text: 'foo',
+          speech: 'foo',
         },
       },
       0,
@@ -237,7 +237,7 @@ describe('validation - OutputTemplate', () => {
       OutputTemplate,
       {
         reprompt: {
-          text: '',
+          speech: '',
         },
       },
       1,
@@ -248,7 +248,7 @@ describe('validation - OutputTemplate', () => {
       OutputTemplate,
       {
         reprompt: {
-          text: 'foo',
+          speech: 'foo',
         },
       },
       0,

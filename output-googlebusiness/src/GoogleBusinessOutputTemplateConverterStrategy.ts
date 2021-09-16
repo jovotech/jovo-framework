@@ -174,7 +174,9 @@ export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleRespo
 
   convertMessageToGoogleBusinessText(message: MessageValue): string {
     return removeSSML(
-      typeof message === 'string' ? message : message.toGoogleBusinessText?.() || message.text,
+      typeof message === 'string'
+        ? message
+        : message.toGoogleBusinessText?.() || message.text || message.speech,
     );
   }
 

@@ -101,7 +101,7 @@ export function augmentModelPrototypes(): void {
   Message.prototype.toAlexaOutputSpeech = function () {
     return {
       type: OutputSpeechType.Ssml,
-      ssml: toSSML(this.text),
+      ssml: toSSML(this.speech),
     };
   };
 }

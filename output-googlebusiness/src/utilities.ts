@@ -1,4 +1,4 @@
-import { Card, Carousel, Message, QuickReply } from '@jovotech/output';
+import { Card, Carousel, Message, QuickReply, removeSSML } from '@jovotech/output';
 import { CardContent, CardWidth, MediaHeight } from './models';
 
 export function augmentModelPrototypes(): void {
@@ -51,7 +51,7 @@ export function augmentModelPrototypes(): void {
   };
 
   Message.prototype.toGoogleBusinessText = function () {
-    return this.text;
+    return removeSSML(this.text || this.speech);
   };
 
   QuickReply.prototype.toGoogleBusinessSuggestion = function () {

@@ -115,12 +115,12 @@ export abstract class OutputTemplateConverterStrategy<
     offset = 0,
   ): MessageValue {
     const actualMaxLength = maxLength - offset;
-    const messageLength = typeof message === 'object' ? message.text.length : message.length;
+    const messageLength = typeof message === 'object' ? message.speech.length : message.length;
     if (!this.shouldSanitize('trimStrings') || messageLength <= actualMaxLength) {
       return message;
     }
     if (typeof message === 'object') {
-      message.text = message.text.slice(0, actualMaxLength);
+      message.speech = message.speech.slice(0, actualMaxLength);
     } else {
       message = message.slice(0, actualMaxLength);
     }

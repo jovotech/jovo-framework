@@ -8,6 +8,7 @@ import {
   OutputTemplate,
   OutputTemplateConverterStrategyConfig,
   QuickReplyValue,
+  removeSSML,
   SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
 import { QUICK_REPLIES_MAX_SIZE, QUICK_REPLY_MAX_LENGTH, TEXT_MAX_LENGTH } from './constants';
@@ -167,9 +168,9 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
 
   convertMessageToText(message: MessageValue): Text {
     return typeof message === 'string'
-      ? { text: [message] }
+      ? { text: [removeSSML(message)] }
       : message.toDialogflowText?.() || {
-          text: [message.displayText || message.text],
+          text: [removeSSML(message.text || message.speech)],
         };
   }
 

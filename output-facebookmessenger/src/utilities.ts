@@ -64,7 +64,7 @@ export function augmentModelPrototypes(): void {
 
   Message.prototype.toFacebookMessengerMessage = function () {
     const message: FacebookMessengerMessage = {
-      text: removeSSML(this.displayText || this.text),
+      text: removeSSML(this.text || this.speech),
     };
     return message;
   };

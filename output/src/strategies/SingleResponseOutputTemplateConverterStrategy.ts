@@ -127,29 +127,29 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
       return mergeWith;
     }
     if (typeof target === 'string' && typeof mergeWith === 'string') {
-      return this.mergeText(target, mergeWith);
+      return this.mergeSpeech(target, mergeWith);
     }
+    const targetSpeech = typeof target === 'string' ? target : target.speech;
     const targetText = typeof target === 'string' ? target : target.text;
-    const targetDisplayText = typeof target === 'string' ? target : target.displayText;
 
+    const mergeWithSpeech = typeof mergeWith === 'string' ? mergeWith : mergeWith.speech;
     const mergeWithText = typeof mergeWith === 'string' ? mergeWith : mergeWith.text;
-    const mergeWithDisplayText = typeof mergeWith === 'string' ? mergeWith : mergeWith.displayText;
 
-    const text = this.mergeText(targetText, mergeWithText);
+    const speech = this.mergeSpeech(targetSpeech, mergeWithSpeech);
 
-    if (!targetDisplayText && !mergeWithDisplayText) {
+    if (!targetText && !mergeWithText) {
       return {
-        text,
+        speech,
       };
     }
-    const displayText = this.mergeDisplayText(targetDisplayText, mergeWithDisplayText);
+    const text = this.mergeText(targetText, mergeWithText);
     return {
+      speech,
       text,
-      displayText,
     };
   }
 
-  protected mergeText(target: string, mergeWith: string): string {
+  protected mergeSpeech(target: string, mergeWith: string): string {
     const mergedText = [target, mergeWith].reduce((result, text) => {
       if (text) {
         result += `${result?.length ? ' ' : ''}${removeSSMLSpeakTags(text)}`;
@@ -159,7 +159,7 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
     return isSSML(target) || isSSML(mergeWith) ? toSSML(mergedText) : mergedText;
   }
 
-  protected mergeDisplayText(
+  protected mergeText(
     target: string | undefined,
     mergeWith: string | undefined,
   ): string | undefined {
