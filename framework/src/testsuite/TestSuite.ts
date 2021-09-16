@@ -84,6 +84,7 @@ export interface TestSuiteConfig<PLATFORM extends Platform> extends PluginConfig
   // platforms: Constructor<PLATFORM>[];
   locale: string;
   deleteDbOnSessionEnded?: boolean;
+  app?: App;
 }
 
 export interface TestSuite<PLATFORM extends Platform>
@@ -113,7 +114,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     super(config);
 
     // Load app from configured stage and register testplugins
-    this.app = this.loadApp();
+    this.app = this.config.app || this.loadApp();
     this.app.use(
       this,
       new TestPlatform(),
