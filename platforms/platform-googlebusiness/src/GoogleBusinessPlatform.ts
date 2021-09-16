@@ -126,6 +126,9 @@ export class GoogleBusinessPlatform extends Platform<
       (plugin) => plugin instanceof DbPlugin,
     ) as DbPlugin[];
 
+    // Immediately save the data into the database, so that other simultaneous or delayed requests can already check if the message is being handled or was handled already.
+    // If some time-consuming API calls were made during the handling, the saving of the processed message would only take place after those calls which could cause a delay.
+    // This delay could then cause the persisting to happen after other requests have already checked if the message was handled.
     return Promise.all(dbPlugins.map((dbPlugin) => dbPlugin.saveData(jovo)));
   }
 
