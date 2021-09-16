@@ -41,7 +41,7 @@ export class TestRequest extends JovoRequest {
     return;
   }
 
-  setSessionData(data: Record<string, unknown>): void {
+  setSessionData(data: UnknownObject): void {
     this.session.data = data;
   }
 

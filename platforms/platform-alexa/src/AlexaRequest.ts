@@ -121,7 +121,6 @@ export class AlexaRequest extends JovoRequest {
     return this.session?.attributes;
   }
 
-  // TODO: Rename to setSession?
   setSessionData(session: JovoSession): void {
     if (!this.session) {
       return;

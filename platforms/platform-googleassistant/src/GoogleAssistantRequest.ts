@@ -27,8 +27,24 @@ export class GoogleAssistantRequest extends JovoRequest {
     return this.user?.locale;
   }
 
+  setLocale(locale: string): void {
+    if (!this.user) {
+      return;
+    }
+
+    this.user.locale = locale;
+  }
+
   getIntent(): JovoInput['intent'] {
     return this.intent?.name;
+  }
+
+  setIntent(intent: string): void {
+    if (!this.intent) {
+      this.intent = { name: intent, params: {} };
+    }
+
+    this.intent.name = intent;
   }
 
   getEntities(): EntityMap | undefined {
@@ -71,6 +87,15 @@ export class GoogleAssistantRequest extends JovoRequest {
   getSessionData(): UnknownObject | undefined {
     return this.session?.params;
   }
+
+  setSessionData(data: UnknownObject): void {
+    if (!this.session) {
+      return;
+    }
+
+    this.session.params = data;
+  }
+
   getSessionId(): string | undefined {
     return this.session?.id;
   }
@@ -100,5 +125,17 @@ export class GoogleAssistantRequest extends JovoRequest {
       capabilities.push(GoogleAssistantCapability.InteractiveCanvas);
     }
     return capabilities;
+  }
+
+  getUserId(): string | undefined {
+    return this.user?.params?.userId as string;
+  }
+
+  setUserId(userId: string): void {
+    if (!this.user?.params) {
+      return;
+    }
+
+    this.user.params.userId = userId;
   }
 }

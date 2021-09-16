@@ -47,7 +47,7 @@
     "@jovotech/filebuilder": "^0.0.1",
     "@jovotech/framework": "^4.0.0-beta.4",
     "@types/copyfiles": "^2.4.1",
-    "@types/fs-extra": "8.1.0",
+    "@types/fs-extra": "^9.0.12",
     "@types/jest": "^26.0.20",
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.has": "^4.5.6",

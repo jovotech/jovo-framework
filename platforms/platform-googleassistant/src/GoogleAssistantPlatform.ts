@@ -10,6 +10,7 @@ import { GoogleAssistantDevice } from './GoogleAssistantDevice';
 import { GoogleAssistantRepromptComponent } from './GoogleAssistantRepromptComponent';
 import { GoogleAssistantRequest } from './GoogleAssistantRequest';
 import { GoogleAssistantUser } from './GoogleAssistantUser';
+import { GoogleAssistantRequestBuilder } from './GoogleAssistantRequestBuilder';
 
 export interface GoogleAssistantConfig extends ExtensibleConfig {}
 
@@ -27,6 +28,7 @@ export class GoogleAssistantPlatform extends Platform<
   jovoClass = GoogleAssistant;
   userClass = GoogleAssistantUser;
   deviceClass = GoogleAssistantDevice;
+  requestBuilder = GoogleAssistantRequestBuilder;
 
   getDefaultConfig(): GoogleAssistantConfig {
     return {};
