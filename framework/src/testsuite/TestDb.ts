@@ -1,10 +1,11 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
 import { resolve as resolvePaths, join as joinPaths } from 'path';
-import { App, DbItem, DbPlugin, DbPluginConfig, Jovo } from '..';
+import { DbItem, DbPlugin, DbPluginConfig, Jovo, JovoResponse } from '..';
 import { HandleRequest } from '../HandleRequest';
 
 export interface FileDbConfig extends DbPluginConfig {
   dbDirectory: string;
+  deleteDbOnSessionEnded?: boolean;
 }
 
 export class TestDb extends DbPlugin<FileDbConfig> {
@@ -22,6 +23,7 @@ export class TestDb extends DbPlugin<FileDbConfig> {
   async mount(handleRequest: HandleRequest): Promise<void> {
     handleRequest.middlewareCollection.use('request.end', this.loadData.bind(this));
     handleRequest.middlewareCollection.use('response.start', this.saveData.bind(this));
+    handleRequest.middlewareCollection.use('after.response.end', this.clearData.bind(this));
   }
 
   initialize(): void {
@@ -71,6 +73,27 @@ export class TestDb extends DbPlugin<FileDbConfig> {
     }
 
     writeFileSync(this.getDbFilePath(userId), JSON.stringify(dbItems, null, 2));
+  }
+
+  async clearData(jovo: Jovo): Promise<void> {
+    if (
+      !this.config.deleteDbOnSessionEnded ||
+      !existsSync(this.getDbFilePath(jovo.$user.id)) ||
+      !jovo.$response
+    ) {
+      return;
+    }
+
+    const responses: JovoResponse[] = Array.isArray(jovo.$response)
+      ? jovo.$response
+      : [jovo.$response];
+
+    for (const response of responses) {
+      if (response.hasSessionEnded()) {
+        unlinkSync(this.getDbFilePath(jovo.$user.id));
+        return;
+      }
+    }
   }
 
   private getDbFilePath(primaryKey: string): string {

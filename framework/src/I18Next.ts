@@ -86,7 +86,6 @@ export class I18Next {
       | Array<I18NextAutoPath<PATH, LANGUAGE, NAMESPACE> | PATH>,
     options?: I18NextTOptions<LANGUAGE, NAMESPACE>,
   ): string {
-    // "Type argument cannot be inferred from usage"-warning can be ignored, it will be inferred, at least in ts 4.2.4.
     return this.i18n.t(path, options);
   }
 }

@@ -23,7 +23,7 @@ import {
   RequestBuilder,
 } from '..';
 import { HandleRequest } from '../HandleRequest';
-import { InputType, JovoInput, JovoInputObject } from '../JovoInput';
+import { JovoInput, JovoInputObject } from '../JovoInput';
 import { TestDb } from './TestDb';
 import { TestPlatform } from './TestPlatform';
 import { TestServer } from './TestServer';
@@ -58,7 +58,7 @@ export type PlatformResponseType<PLATFORM extends Platform, RESPONSE extends Jov
  * response, whose type is determined based upon the OutputTemplateConverterStrategy.
  */
 export type TestSuiteResponse<PLATFORM extends Platform> = {
-  output: OutputTemplate | OutputTemplate[];
+  output: OutputTemplate[];
   response: PlatformResponseType<PLATFORM, PlatformTypes<PLATFORM>['response']>;
 };
 
@@ -79,11 +79,10 @@ export type PartialRequestOrInput<PLATFORM extends Platform> =
 export interface TestSuiteConfig<PLATFORM extends Platform> extends PluginConfig {
   userId: string;
   dbDirectory: string;
-  dbFileName: string;
   platform: Constructor<PLATFORM>;
   // TODO
   // platforms: Constructor<PLATFORM>[];
-  locale?: string;
+  locale: string;
   deleteDbOnSessionEnded?: boolean;
 }
 
@@ -104,6 +103,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
   $device!: PlatformTypes<PLATFORM>['device'];
   $user!: PlatformTypes<PLATFORM>['user'];
   $platform!: PLATFORM;
+  $output!: OutputTemplate[];
 
   constructor(
     config: Partial<TestSuiteConfig<PLATFORM>> = {
@@ -114,7 +114,14 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
 
     // Load app from configured stage and register testplugins
     this.app = this.loadApp();
-    this.app.use(this, new TestPlatform(), new TestDb({ dbDirectory: this.config.dbDirectory }));
+    this.app.use(
+      this,
+      new TestPlatform(),
+      new TestDb({
+        dbDirectory: this.config.dbDirectory,
+        deleteDbOnSessionEnded: this.config.deleteDbOnSessionEnded,
+      }),
+    );
 
     const platform = new this.config.platform();
     this.requestBuilder = new platform.requestBuilder();
@@ -127,14 +134,18 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
   }
 
   getDefaultConfig(): TestSuiteConfig<PLATFORM> {
-    const userId: string = this.generateRandomUserId();
     return {
       dbDirectory: '../db/tests/',
-      userId,
-      dbFileName: `${userId}-${Date.now()}.json`,
+      userId: uuidv4(),
       platform: TestPlatform as unknown as Constructor<PLATFORM>,
       stage: 'dev',
+      locale: 'en',
     };
+  }
+
+  install(app: App): void {
+    app.middlewareCollection.use('before.request.start', this.setInput.bind(this));
+    app.middlewareCollection.use('after.response.end', this.postProcess.bind(this));
   }
 
   async run(input: JovoInputObject): Promise<TestSuiteResponse<PLATFORM>>;
@@ -160,68 +171,28 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
 
     await this.app.initialize();
 
-    const request: PlatformTypes<PLATFORM>['request'] = this.isRequestInstance(
+    const request: PlatformTypes<PLATFORM>['request'] = this.isRequest(
       requestOrInput as RequestOrInput<PLATFORM>,
     )
       ? (requestOrInput as JovoRequest)
-      : this.requestBuilder.launch();
-
+      : this.requestBuilder.launch({ session: { isNew: false } });
     await this.app.handle(new TestServer(request));
 
     return {
-      response: this.$response as PlatformResponseType<
-        PLATFORM,
-        PlatformTypes<PLATFORM>['response']
-      >,
-      output: this.$output,
+      response: this.$response,
+      output: this.$output as OutputTemplate[],
     };
   }
 
-  install(app: App): void {
-    app.middlewareCollection.use(
-      'before.request.start',
-      this.saveUserData.bind(this),
-      this.setInput.bind(this),
-    );
-    app.middlewareCollection.use('after.response.end', this.postProcess.bind(this));
-  }
-
-  getDbPath(): string {
-    return joinPaths(this.config.dbDirectory, `${this.config.userId}.json`);
-  }
-
-  /**
-   * Saves user data before running the RIDR lifecycle
-   */
-  private saveUserData(): void {
-    if (Object.keys(this.$user.data).length === 0) {
-      return;
-    }
-
-    if (!existsSync(this.config.dbDirectory)) {
-      mkdirSync(this.config.dbDirectory, { recursive: true });
-    }
-
-    const dbPath: string = this.getDbPath();
-    if (existsSync(dbPath)) {
-      const existingUserData = JSON.parse(readFileSync(dbPath, 'utf-8'));
-      const joinedUserData = _merge(existingUserData, this.$user.toJSON());
-      writeFileSync(dbPath, JSON.stringify(joinedUserData, null, 2));
-    } else {
-      writeFileSync(dbPath, JSON.stringify(this.$user.toJSON(), null, 2));
-    }
-  }
-
   private setInput(jovo: Jovo) {
-    if (!this.isRequestInstance(this.requestOrInput)) {
-      jovo.$input = this.requestOrInput;
-    }
-
     // Reset session data if a new session is incoming
     if (jovo.$request.isNewSession() === undefined || jovo.$request.isNewSession()) {
       this.$session = new JovoSession();
     }
 
+    if (!this.isRequest(this.requestOrInput)) {
+      jovo.$input = this.requestOrInput;
+    }
     _merge(jovo.$user.data, this.$user.data);
     _merge(jovo.$session, this.$session);
 
@@ -237,20 +208,6 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     jovo.$session.isNew = false;
 
     Object.assign(this, jovo);
-
-    // Clear db if necessary
-    if (this.config.deleteDbOnSessionEnded) {
-      const responses: JovoResponse[] = Array.isArray(this.response)
-        ? this.response
-        : [this.response];
-
-      for (const response of responses) {
-        if (response.hasSessionEnded!()) {
-          this.clearDb();
-          break;
-        }
-      }
-    }
   }
 
   private loadApp(): App {
@@ -277,19 +234,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     throw new JovoError({ message: 'App not found.' });
   }
 
-  private isRequestInstance(request: RequestOrInput<PLATFORM>): request is JovoRequest {
+  private isRequest(request: RequestOrInput<PLATFORM>): request is JovoRequest {
     return request instanceof JovoRequest;
-  }
-
-  private clearDb(): void {
-    const dbPath: string = this.getDbPath();
-
-    if (!existsSync(dbPath)) {
-      unlinkSync(dbPath);
-    }
-  }
-
-  private generateRandomUserId() {
-    return Math.random().toString(36).substring(7);
   }
 }

@@ -1,11 +1,11 @@
 import { JovoRequest, JovoSession, EntityMap, UnknownObject } from '..';
 import { Intent } from '../interfaces';
-import { AudioInput, InputType } from '../JovoInput';
+import { AudioInput, InputType, InputTypeLike } from '../JovoInput';
 
 export class TestRequest extends JovoRequest {
   isTestRequest = true;
   locale!: string;
-  session: JovoSession = new JovoSession({ isNew: false, state: [] });
+  session: JovoSession = new JovoSession({ state: [] });
   userId!: string;
 
   getLocale(): string | undefined {
@@ -24,8 +24,8 @@ export class TestRequest extends JovoRequest {
     return;
   }
 
-  getInputType(): string | undefined {
-    return;
+  getInputType(): InputTypeLike | undefined {
+    return this.session.isNew ? InputType.Launch : InputType.Intent;
   }
 
   getInputText(): string | undefined {
