@@ -2,13 +2,10 @@ import {
   Card,
   Carousel,
   mergeInstances,
-  MessageValue,
   OutputTemplate,
   OutputTemplateConverterStrategyConfig,
   QuickReplyValue,
-  removeSSML,
   SingleResponseOutputTemplateConverterStrategy,
-  toSSML,
 } from '@jovotech/output';
 import {
   BASIC_CARD_TEXT_MAX_LENGTH,
@@ -16,11 +13,11 @@ import {
   CAROUSEL_MAX_SIZE,
   CAROUSEL_MIN_SIZE,
   GoogleAssistantResponse,
-  SimpleResponse,
   Suggestion,
   SUGGESTION_TITLE_MAX_LENGTH,
   SUGGESTIONS_MAX_SIZE,
 } from './index';
+import { convertMessageToGoogleAssistantSimpleResponse } from './utilities';
 
 // TODO: CHECK: Theoretically, this platform can have multiple messages but we have never used this feature so far.
 // In case we want to support that, the implementation of this strategy has to be adjusted.
@@ -92,13 +89,13 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
     const message = output.message;
     if (message) {
       response.richResponse.items.push({
-        simpleResponse: this.convertMessageToSimpleResponse(message),
+        simpleResponse: convertMessageToGoogleAssistantSimpleResponse(message),
       });
     }
 
     const reprompt = output.reprompt;
     if (reprompt) {
-      response.noInputPrompts = [this.convertMessageToSimpleResponse(reprompt)];
+      response.noInputPrompts = [convertMessageToGoogleAssistantSimpleResponse(reprompt)];
     }
 
     const quickReplies = output.quickReplies;
@@ -167,15 +164,6 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
     }
 
     return output;
-  }
-
-  convertMessageToSimpleResponse(message: MessageValue): SimpleResponse {
-    return typeof message === 'string'
-      ? { ssml: toSSML(message), displayText: removeSSML(message) }
-      : message.toGoogleAssistantSimpleResponse?.() || {
-          ssml: toSSML(message.speech),
-          displayText: removeSSML(message.text || message.speech),
-        };
   }
 
   convertQuickReplyToSuggestion(quickReply: QuickReplyValue): Suggestion {

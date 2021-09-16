@@ -1,4 +1,14 @@
-import { Card, Carousel, CarouselItem, Message, toSSML } from '@jovotech/output';
+import {
+  Card,
+  Carousel,
+  CarouselItem,
+  Message,
+  MessageValue,
+  removeSSML,
+  SpeechMessage,
+  TextMessage,
+  toSSML,
+} from '@jovotech/output';
 import AplCardJson from './apl/Card.json';
 import AplCarouselJson from './apl/Carousel.json';
 import { ALEXA_STRING_MAX_LENGTH } from './constants';
@@ -6,6 +16,7 @@ import {
   AplRenderDocumentDirective,
   Card as AlexaCard,
   CardType,
+  OutputSpeech,
   OutputSpeechType,
 } from './models';
 
@@ -20,6 +31,25 @@ export function validateAlexaString(value: unknown): string | undefined | null |
     return `$property can not exceed ${ALEXA_STRING_MAX_LENGTH} characters`;
   }
   return;
+}
+
+export function convertMessageToOutputSpeech(message: MessageValue): OutputSpeech {
+  if (typeof message === 'string') {
+    return {
+      type: OutputSpeechType.Ssml,
+      ssml: toSSML(message),
+    };
+  }
+  if (message.speech) {
+    return {
+      type: OutputSpeechType.Ssml,
+      ssml: toSSML(message.speech),
+    };
+  }
+  return {
+    type: OutputSpeechType.Plain,
+    text: removeSSML((message as TextMessage).text),
+  };
 }
 
 export function augmentModelPrototypes(): void {
@@ -99,9 +129,6 @@ export function augmentModelPrototypes(): void {
   };
 
   Message.prototype.toAlexaOutputSpeech = function () {
-    return {
-      type: OutputSpeechType.Ssml,
-      ssml: toSSML(this.speech),
-    };
+    return convertMessageToOutputSpeech(this as TextMessage | SpeechMessage);
   };
 }

@@ -9,7 +9,6 @@ import {
   OutputTemplateConverterStrategyConfig,
   QuickReplyValue,
   SingleResponseOutputTemplateConverterStrategy,
-  toSSML,
 } from '@jovotech/output';
 import { ALEXA_STRING_MAX_LENGTH, SLOT_TYPE_VALUES_MAX_SIZE, SSML_OFFSET } from './constants';
 import {
@@ -19,9 +18,9 @@ import {
   Directive,
   DynamicEntitiesUpdateBehavior,
   OutputSpeech,
-  OutputSpeechType,
   SlotType,
 } from './models';
+import { convertMessageToOutputSpeech } from './utilities';
 
 export interface AlexaOutputTemplateConverterStrategyConfig
   extends OutputTemplateConverterStrategyConfig {
@@ -115,13 +114,13 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
 
     const message = output.message;
     if (message) {
-      response.response.outputSpeech = this.convertMessageToOutputSpeech(message);
+      response.response.outputSpeech = convertMessageToOutputSpeech(message);
     }
 
     const reprompt = output.reprompt;
     if (reprompt) {
       response.response.reprompt = {
-        outputSpeech: this.convertMessageToOutputSpeech(reprompt),
+        outputSpeech: convertMessageToOutputSpeech(reprompt),
       };
     }
 
@@ -217,18 +216,6 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
     }
 
     return output;
-  }
-
-  convertMessageToOutputSpeech(message: MessageValue): OutputSpeech {
-    return typeof message === 'string'
-      ? {
-          type: OutputSpeechType.Ssml,
-          ssml: toSSML(message),
-        }
-      : message.toAlexaOutputSpeech?.() || {
-          type: OutputSpeechType.Ssml,
-          ssml: toSSML(message.speech),
-        };
   }
 
   private convertDynamicEntityToSlotType(name: string, entity: DynamicEntity): SlotType {

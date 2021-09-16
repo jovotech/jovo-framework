@@ -1,5 +1,30 @@
-import { Card, Carousel, Message, QuickReply, removeSSML, toSSML } from '@jovotech/output';
+import {
+  Card,
+  Carousel,
+  Message,
+  MessageValue,
+  QuickReply,
+  removeSSML,
+  SpeechMessage,
+  TextMessage,
+  toSSML,
+} from '@jovotech/output';
 import { BasicCard, CollectionItem, SimpleResponse } from './models';
+
+export function convertMessageToGoogleAssistantSimpleResponse(
+  message: MessageValue,
+): SimpleResponse {
+  if (typeof message === 'string') {
+    return {
+      ssml: toSSML(message),
+      displayText: removeSSML(message),
+    };
+  }
+  return {
+    ssml: toSSML(message.speech || (message.text as string)),
+    displayText: removeSSML(message.text || (message.speech as string)),
+  };
+}
 
 export function augmentModelPrototypes(): void {
   Card.prototype.toGoogleAssistantBasicCard = function () {
@@ -46,10 +71,7 @@ export function augmentModelPrototypes(): void {
   };
 
   Message.prototype.toGoogleAssistantSimpleResponse = function () {
-    return {
-      ssml: toSSML(this.speech),
-      displayText: removeSSML(this.text || this.speech),
-    };
+    return convertMessageToGoogleAssistantSimpleResponse(this as SpeechMessage | TextMessage);
   };
 
   QuickReply.prototype.toGoogleAssistantSuggestion = function () {

@@ -1,5 +1,20 @@
-import { Card, Carousel, Message, QuickReply, removeSSML } from '@jovotech/output';
+import {
+  Card,
+  Carousel,
+  Message,
+  MessageValue,
+  QuickReply,
+  removeSSML,
+  SpeechMessage,
+  TextMessage,
+} from '@jovotech/output';
 import { CardContent, CardWidth, MediaHeight } from './models';
+
+export function convertMessageToGoogleBusinessText(message: MessageValue): string {
+  return removeSSML(
+    typeof message === 'string' ? message : message.text || (message.speech as string),
+  );
+}
 
 export function augmentModelPrototypes(): void {
   Card.prototype.toGoogleBusinessCardContent = function () {
@@ -51,7 +66,7 @@ export function augmentModelPrototypes(): void {
   };
 
   Message.prototype.toGoogleBusinessText = function () {
-    return removeSSML(this.text || this.speech);
+    return convertMessageToGoogleBusinessText(this as SpeechMessage | TextMessage);
   };
 
   QuickReply.prototype.toGoogleBusinessSuggestion = function () {

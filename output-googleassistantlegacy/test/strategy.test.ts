@@ -696,7 +696,7 @@ describe('fromResponse', () => {
         },
       },
       {
-        message: toSSML('foo'),
+        message: { speech: toSSML('foo') },
         listen: true,
       },
     );
@@ -728,7 +728,7 @@ describe('fromResponse', () => {
         },
       },
       {
-        message: toSSML('foo'),
+        message: { speech: toSSML('foo') },
         carousel: {
           items: [
             { key: 'one', title: 'one' },
@@ -754,8 +754,8 @@ describe('fromResponse', () => {
         },
       },
       {
-        message: toSSML('foo'),
-        reprompt: toSSML('foo'),
+        message: { speech: toSSML('foo') },
+        reprompt: { speech: toSSML('foo') },
       },
     );
   });
@@ -775,7 +775,7 @@ describe('fromResponse', () => {
         },
       },
       {
-        message: toSSML('foo'),
+        message: { speech: toSSML('foo') },
         quickReplies: ['one', 'two'],
       },
     );

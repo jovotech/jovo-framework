@@ -6,7 +6,6 @@ import {
   OutputTemplateConverterStrategyConfig,
   QuickReply,
   QuickReplyValue,
-  removeSSML,
 } from '@jovotech/output';
 import {
   GENERIC_TEMPLATE_MAX_SIZE,
@@ -24,6 +23,7 @@ import {
   QuickReplyContentType,
   TemplateType,
 } from './models';
+import { convertMessageToFacebookMessengerMessage } from './utilities';
 
 export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleResponsesOutputTemplateConverterStrategy<
   FacebookMessengerResponse,
@@ -98,7 +98,7 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
 
     const message = output.message;
     if (message) {
-      addMessageToResponses(this.convertMessageToFacebookMessengerMessage(message));
+      addMessageToResponses(convertMessageToFacebookMessengerMessage(message));
     }
 
     const card = output.card;
@@ -172,15 +172,6 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
     }
 
     return output;
-  }
-
-  convertMessageToFacebookMessengerMessage(message: MessageValue): FacebookMessengerMessage {
-    return typeof message === 'string'
-      ? { text: removeSSML(message) }
-      : message.toFacebookMessengerMessage?.() || {
-          text: removeSSML(message.text || message.speech),
-          quick_replies: [],
-        };
   }
 
   convertQuickReplyToFacebookMessengerQuickReply(

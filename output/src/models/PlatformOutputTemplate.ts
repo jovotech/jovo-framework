@@ -8,6 +8,7 @@ import {
   Type,
   ValidateNested,
 } from '..';
+import { TransformMessage } from '../decorators/transformation/TransformMessage';
 import { IsBooleanOrInstance } from '../decorators/validation/IsBooleanOrInstance';
 import { IsStringOrInstance } from '../decorators/validation/IsStringOrInstance';
 import { Card } from './Card';
@@ -27,7 +28,7 @@ export class PlatformOutputTemplate<
 
   @IsOptional()
   @IsStringOrInstance(Message)
-  @Type(() => Message)
+  @TransformMessage()
   message?: MessageValue | null;
 
   @IsOptional()

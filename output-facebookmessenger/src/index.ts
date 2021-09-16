@@ -60,3 +60,4 @@ export * from './models';
 export * from './constants';
 
 export * from './FacebookMessengerOutputTemplateConverterStrategy';
+export { convertMessageToFacebookMessengerMessage } from './utilities';

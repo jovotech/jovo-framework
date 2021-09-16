@@ -42,3 +42,5 @@ export * from './DialogflowOutputTemplateConverterStrategy';
 
 export * from './models';
 export * from './constants';
+
+export { convertMessageToDialogflowText } from './utilities';

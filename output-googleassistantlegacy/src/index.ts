@@ -56,3 +56,4 @@ export * from './models';
 export * from './constants';
 
 export * from './GoogleAssistantOutputTemplateConverterStrategy';
+export { convertMessageToGoogleAssistantSimpleResponse } from './utilities';

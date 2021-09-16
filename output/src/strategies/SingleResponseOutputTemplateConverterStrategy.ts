@@ -10,6 +10,8 @@ import {
   PlatformOutputTemplate,
   removeSSML,
   removeSSMLSpeakTags,
+  SpeechMessage,
+  TextMessage,
   toSSML,
 } from '..';
 import { OutputTemplateConverterStrategy } from '../OutputTemplateConverterStrategy';
@@ -127,36 +129,48 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
       return mergeWith;
     }
     if (typeof target === 'string' && typeof mergeWith === 'string') {
-      return this.mergeSpeech(target, mergeWith);
+      return this.mergeSpeech(target, mergeWith) as string;
     }
     const targetSpeech = typeof target === 'string' ? target : target.speech;
-    const targetText = typeof target === 'string' ? target : target.text;
-
     const mergeWithSpeech = typeof mergeWith === 'string' ? mergeWith : mergeWith.speech;
+    const mergedSpeech = this.mergeSpeech(targetSpeech, mergeWithSpeech);
+
+    const targetText = typeof target === 'string' ? target : target.text;
     const mergeWithText = typeof mergeWith === 'string' ? mergeWith : mergeWith.text;
+    const mergedText = this.mergeText(targetText, mergeWithText);
 
-    const speech = this.mergeSpeech(targetSpeech, mergeWithSpeech);
-
-    if (!targetText && !mergeWithText) {
-      return {
-        speech,
-      };
+    const message = {} as SpeechMessage | TextMessage;
+    if (mergedSpeech) {
+      message.speech = mergedSpeech;
     }
-    const text = this.mergeText(targetText, mergeWithText);
-    return {
-      speech,
-      text,
-    };
+    if (mergedText) {
+      message.text = mergedText;
+    }
+    return message;
   }
 
-  protected mergeSpeech(target: string, mergeWith: string): string {
-    const mergedText = [target, mergeWith].reduce((result, text) => {
+  protected mergeSpeech(
+    target: string | undefined,
+    mergeWith: string | undefined,
+  ): string | undefined {
+    if (!target && !mergeWith) {
+      return;
+    }
+    if (!target && mergeWith) {
+      return toSSML(mergeWith);
+    }
+    if (!mergeWith && target) {
+      return toSSML(target);
+    }
+    const mergedText = [target as string, mergeWith as string].reduce((result, text) => {
       if (text) {
         result += `${result?.length ? ' ' : ''}${removeSSMLSpeakTags(text)}`;
       }
       return result;
     });
-    return isSSML(target) || isSSML(mergeWith) ? toSSML(mergedText) : mergedText;
+    return isSSML(target as string) || isSSML(mergeWith as string)
+      ? toSSML(mergedText)
+      : mergedText;
   }
 
   protected mergeText(

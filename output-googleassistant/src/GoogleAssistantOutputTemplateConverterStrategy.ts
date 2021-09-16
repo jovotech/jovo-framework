@@ -9,9 +9,7 @@ import {
   OutputTemplate,
   OutputTemplateConverterStrategyConfig,
   QuickReplyValue,
-  removeSSML,
   SingleResponseOutputTemplateConverterStrategy,
-  toSSML,
 } from '@jovotech/output';
 import {
   COLLECTION_MAX_SIZE,
@@ -122,7 +120,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
       if (!response.prompt) {
         response.prompt = {};
       }
-      response.prompt.firstSimple = this.convertMessageToSimple(message);
+      response.prompt.firstSimple = convertMessageToSimple(message);
     }
 
     const reprompt = output.reprompt;
@@ -130,8 +128,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
       if (!response.session) {
         response.session = getEmptySession();
       }
-      const text =
-        typeof reprompt === 'string' ? reprompt : reprompt.text || reprompt.speech;
+      const text = typeof reprompt === 'string' ? reprompt : reprompt.text || reprompt.speech;
       response.session.params._GOOGLE_ASSISTANT_REPROMPTS_ = {
         NO_INPUT_1: text,
         NO_INPUT_2: text,
@@ -262,15 +259,6 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
     return output;
   }
 
-  convertMessageToSimple(message: MessageValue): Simple {
-    return typeof message === 'string'
-      ? { speech: toSSML(message), text: removeSSML(message) }
-      : message.toGoogleAssistantSimple?.() || {
-          speech: toSSML(message.speech),
-          text: removeSSML(message.text || message.speech),
-        };
-  }
-
   convertQuickReplyToSuggestion(quickReply: QuickReplyValue): Suggestion {
     return typeof quickReply === 'string'
       ? { title: quickReply }
@@ -305,4 +293,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
       })),
     };
   }
+}
+function convertMessageToSimple(message: MessageValue): Simple | undefined {
+  throw new Error('Function not implemented.');
 }

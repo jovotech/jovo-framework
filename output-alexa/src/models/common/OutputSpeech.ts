@@ -39,9 +39,16 @@ export class OutputSpeech<TYPE extends OutputSpeechTypeLike = OutputSpeechTypeLi
   playBehavior?: PlayBehaviorLike;
 
   toMessage?(): MessageValue {
-    const value = (this.type === OutputSpeechType.Plain ? this.text : this.ssml) as
-      | MessageValue
-      | undefined;
-    return value || '';
+    if (this.type === OutputSpeechType.Ssml && this.ssml) {
+      return {
+        speech: this.ssml as string,
+      };
+    }
+    if (this.type === OutputSpeechType.Plain && this.text) {
+      return {
+        text: this.text as string,
+      };
+    }
+    return '';
   }
 }
