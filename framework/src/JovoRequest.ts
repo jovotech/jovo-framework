@@ -16,6 +16,7 @@ export abstract class JovoRequest {
   abstract setLocale(locale: string): void;
 
   abstract getIntent(): JovoInput['intent'];
+  abstract setIntent(intent: string): void;
   abstract getEntities(): JovoInput['entities'];
 
   abstract getInputType(): InputTypeLike | undefined;

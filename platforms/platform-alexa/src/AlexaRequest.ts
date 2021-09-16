@@ -35,6 +35,18 @@ export class AlexaRequest extends JovoRequest {
     return this.request?.intent?.name;
   }
 
+  setIntent(intent: string): void {
+    if (!this.request) {
+      return;
+    }
+
+    if (!this.request.intent) {
+      this.request.intent = { name: intent };
+    } else {
+      this.request.intent.name = intent;
+    }
+  }
+
   getEntities(): EntityMap | undefined {
     const slots = this.request?.intent?.slots;
     if (!slots) return;
@@ -91,7 +103,6 @@ export class AlexaRequest extends JovoRequest {
 
   setLocale(locale: string): void {
     if (!this.request) {
-      // TODO: What to do here?
       return;
     }
 
@@ -113,7 +124,6 @@ export class AlexaRequest extends JovoRequest {
   // TODO: Rename to setSession?
   setSessionData(session: JovoSession): void {
     if (!this.session) {
-      // TODO: What to do here?
       return;
     }
 

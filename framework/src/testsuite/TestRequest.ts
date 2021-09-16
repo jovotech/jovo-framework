@@ -4,6 +4,7 @@ import { AudioInput, InputType, InputTypeLike } from '../JovoInput';
 
 export class TestRequest extends JovoRequest {
   isTestRequest = true;
+  intent!: string;
   locale!: string;
   session: JovoSession = new JovoSession({ state: [] });
   userId!: string;
@@ -17,7 +18,11 @@ export class TestRequest extends JovoRequest {
   }
 
   getIntent(): string | Intent | undefined {
-    return;
+    return this.intent;
+  }
+
+  setIntent(intent: string): void {
+    this.intent = intent;
   }
 
   getEntities(): EntityMap | undefined {

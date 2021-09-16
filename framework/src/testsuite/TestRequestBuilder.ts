@@ -13,9 +13,16 @@ export class TestRequestBuilder extends RequestBuilder<TestPlatform> {
   intent(json?: Record<string, unknown>): TestRequest;
   intent(nameOrJson?: string | UnknownObject): TestRequest {
     const request: TestRequest = new TestRequest();
-    if (typeof nameOrJson === 'object') {
-      return _merge(request, nameOrJson);
+    request.session.isNew = false;
+
+    if (typeof nameOrJson !== 'undefined') {
+      if (typeof nameOrJson === 'object') {
+        return _merge(request, nameOrJson);
+      } else {
+        request.setIntent(nameOrJson);
+      }
     }
+
     return request;
   }
 }

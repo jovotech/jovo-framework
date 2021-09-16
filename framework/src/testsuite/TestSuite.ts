@@ -23,7 +23,7 @@ import {
   RequestBuilder,
 } from '..';
 import { HandleRequest } from '../HandleRequest';
-import { JovoInput, JovoInputObject } from '../JovoInput';
+import { InputType, JovoInput, JovoInputObject } from '../JovoInput';
 import { TestDb } from './TestDb';
 import { TestPlatform } from './TestPlatform';
 import { TestServer } from './TestServer';
@@ -144,7 +144,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
   }
 
   install(app: App): void {
-    app.middlewareCollection.use('before.request.start', this.setInput.bind(this));
+    app.middlewareCollection.use('before.request.start', this.prepareRequest.bind(this));
     app.middlewareCollection.use('after.response.end', this.postProcess.bind(this));
   }
 
@@ -184,7 +184,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     };
   }
 
-  private setInput(jovo: Jovo) {
+  private prepareRequest(jovo: Jovo) {
     // Reset session data if a new session is incoming
     if (jovo.$request.isNewSession() === undefined || jovo.$request.isNewSession()) {
       this.$session = new JovoSession();

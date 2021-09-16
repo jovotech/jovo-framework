@@ -18,7 +18,7 @@ export class AlexaRequestBuilder extends RequestBuilder<AlexaPlatform> {
 
   intent(name?: string): AlexaRequest;
   intent(json?: Record<string, unknown>): AlexaRequest;
-  intent(jsonOrName?: string | Record<string, unknown>): AlexaRequest {
+  intent(nameOrJson?: string | Record<string, unknown>): AlexaRequest {
     // TODO: Replace readFileSync() with require()
     const intentJson = readFileSync(
       joinPaths(__dirname, '..', '..', 'sample-requests', 'IntentRequest.json'),
@@ -28,12 +28,13 @@ export class AlexaRequestBuilder extends RequestBuilder<AlexaPlatform> {
     );
     const request: AlexaRequest = Object.create(AlexaRequest.prototype);
 
-    if (typeof jsonOrName === 'string') {
-      const intentRequest: AlexaRequest = Object.assign(request, JSON.parse(intentJson));
-      request.request!.intent!.name = jsonOrName;
-      return intentRequest;
+    if (typeof nameOrJson === 'string') {
+      Object.assign(request, JSON.parse(intentJson));
+      request.setIntent(nameOrJson);
     } else {
-      return Object.assign(request, jsonOrName || JSON.parse(intentJson));
+      Object.assign(request, nameOrJson || JSON.parse(intentJson));
     }
+
+    return request;
   }
 }

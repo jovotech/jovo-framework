@@ -21,8 +21,7 @@ export class TestOutputConverterStrategy extends SingleResponseOutputTemplateCon
       isTestResponse: true,
     });
 
-    if (output.listen) {
-      // TODO: Test for object
+    if (typeof output.listen == 'undefined') {
       response.shouldEndSession = !output.listen;
     }
 
