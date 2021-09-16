@@ -51,11 +51,8 @@ export class AlexaPlatform extends Platform<
     return response.version && response.response;
   }
 
-  finalizeResponse(
-    response: AlexaResponse,
-    alexaSkill: Alexa,
-  ): AlexaResponse | Promise<AlexaResponse> {
-    response.sessionAttributes = alexaSkill.$session;
+  finalizeResponse(response: AlexaResponse, alexa: Alexa): AlexaResponse | Promise<AlexaResponse> {
+    response.sessionAttributes = alexa.$session;
     return response;
   }
 
