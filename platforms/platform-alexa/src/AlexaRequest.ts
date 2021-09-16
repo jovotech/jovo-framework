@@ -39,7 +39,7 @@ export class AlexaRequest extends JovoRequest {
     if (!slots) return;
     return Object.keys(slots).reduce((entityMap: EntityMap, slotKey: string) => {
       const entity: Entity = {
-        alexaSkill: slots[slotKey],
+        alexa: slots[slotKey],
       };
       if (slots[slotKey].value) {
         entity.value = slots[slotKey].value;
