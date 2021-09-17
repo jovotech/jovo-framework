@@ -83,7 +83,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
   }
 
   toResponse(output: OutputTemplate): GoogleAssistantResponse {
-    const response: GoogleAssistantResponse = {};
+    const response: GoogleAssistantResponse = this.prepareResponse({});
 
     function getEmptySession(): Session {
       return { id: '', params: {}, languageCode: '' };
