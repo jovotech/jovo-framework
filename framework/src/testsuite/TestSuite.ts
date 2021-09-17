@@ -78,12 +78,13 @@ export type PartialRequestOrInput<PLATFORM extends Platform> =
 
 export interface TestSuiteConfig<PLATFORM extends Platform> extends PluginConfig {
   userId: string;
-  dbDirectory: string;
   platform: Constructor<PLATFORM>;
-  // TODO
-  // platforms: Constructor<PLATFORM>[];
   locale: string;
-  deleteDbOnSessionEnded?: boolean;
+  db: {
+    directory: string;
+    deleteOnSessionEnded?: boolean;
+  };
+  stage: string;
   app?: App;
 }
 
@@ -119,8 +120,8 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
       this,
       new TestPlatform(),
       new TestDb({
-        dbDirectory: this.config.dbDirectory,
-        deleteDbOnSessionEnded: this.config.deleteDbOnSessionEnded,
+        directory: this.config.db.directory,
+        deleteOnSessionEnded: this.config.db.deleteOnSessionEnded,
       }),
     );
 
@@ -136,7 +137,9 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
 
   getDefaultConfig(): TestSuiteConfig<PLATFORM> {
     return {
-      dbDirectory: '../db/tests/',
+      db: {
+        directory: '../db/tests/',
+      },
       userId: uuidv4(),
       platform: TestPlatform as unknown as Constructor<PLATFORM>,
       stage: 'dev',

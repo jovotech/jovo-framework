@@ -4,13 +4,13 @@ import { DbItem, DbPlugin, DbPluginConfig, Jovo, JovoResponse } from '..';
 import { HandleRequest } from '../HandleRequest';
 
 export interface FileDbConfig extends DbPluginConfig {
-  dbDirectory: string;
-  deleteDbOnSessionEnded?: boolean;
+  directory: string;
+  deleteOnSessionEnded?: boolean;
 }
 
 export class TestDb extends DbPlugin<FileDbConfig> {
   get dbDirectory(): string {
-    return resolvePaths(process.cwd(), 'dist', this.config.dbDirectory);
+    return resolvePaths(process.cwd(), 'dist', this.config.directory);
   }
 
   getDefaultConfig(): FileDbConfig {
@@ -77,7 +77,7 @@ export class TestDb extends DbPlugin<FileDbConfig> {
 
   async clearData(jovo: Jovo): Promise<void> {
     if (
-      !this.config.deleteDbOnSessionEnded ||
+      !this.config.deleteOnSessionEnded ||
       !existsSync(this.getDbFilePath(jovo.$user.id)) ||
       !jovo.$response
     ) {
