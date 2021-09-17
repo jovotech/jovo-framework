@@ -98,7 +98,7 @@ This is then turned into the following response:
 
 ### reprompt
 
-If Google Assistant asks a question and the user does not respond after a few seconds, it will state a `reprompt` to ask again:
+The [generic `reprompt` element](https://v4.jovo.tech/docs/output-templates#message) is used to ask again if the user does not respond to a prompt after a few seconds:
 
 ```typescript
 {
@@ -114,7 +114,7 @@ Under the hood, Jovo translates the `reprompt` into `NO_INPUT_1`, `NO_INPUT_2`, 
 
 ### listen
 
-The `listen` property needs to be added to tell Google Assistant that it should keep the microphone open and wait for a user's response.
+The [`listen` element](https://v4.jovo.tech/docs/output-templates#listen) needs to be added to tell Google Assistant that it should keep the microphone open and wait for a user's response.
 
 ```typescript
 {
@@ -123,6 +123,8 @@ The `listen` property needs to be added to tell Google Assistant that it should 
 ```
 
 If `listen` is not set to `true`, Jovo transitions to the `actions.scene.END_CONVERSATION` under the hood.
+
+The `listen` element can also be used to add dynamic entities, called type overrides in Google Assistant. [Learn more in the `$entities` documentation](https://v4.jovo.tech/docs/entities#dynamic-entities).
 
 ### quickReplies (Suggestions)
 

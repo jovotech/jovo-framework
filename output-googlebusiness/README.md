@@ -2,7 +2,7 @@
 title: 'Google Business Messages Output'
 excerpt: 'Learn more about Jovo output templates for Google Business Messages.'
 ---
-# Facebook Messenger Output
+# Google Business Messages Output
 
 Learn more about output templates for [Google Business Messages](https://v4.jovo.tech/marketplace/platform-googlebusiness).
 
@@ -24,7 +24,7 @@ You can also add platform-specific output to an output template. [Learn more abo
 {
   // ...
   platforms: {
-    facebookMessenger: {
+    googleBusiness: {
       // ...
     }
   }
