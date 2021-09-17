@@ -1,17 +1,33 @@
-import { IsEnum } from '@jovotech/output';
+import { EnumLike, IsEnum } from '@jovotech/output';
+import { CallButton } from './CallButton';
+import { GamePlayButton } from './GamePlayButton';
+import { UrlButton } from './UrlButton';
+import { LogInButton } from './LogInButton';
+import { LogOutButton } from './LogOutButton';
+import { PostbackButton } from './PostbackButton';
 
 export enum ButtonType {
-  Link = 'web_url',
+  Url = 'web_url',
   Postback = 'postback',
   Call = 'phone_number',
-  Login = 'account_link',
-  Logout = 'account_unlink',
-  Game = 'game_play',
+  LogIn = 'account_link',
+  LogOut = 'account_unlink',
+  GamePlay = 'game_play',
 }
 
-export class Button<T extends ButtonType = ButtonType> {
+export type ButtonTypeLike = EnumLike<ButtonType>;
+
+export class ButtonBase<TYPE extends ButtonTypeLike = ButtonTypeLike> {
   [key: string]: unknown;
 
   @IsEnum(ButtonType)
-  type: T;
+  type: TYPE;
 }
+
+export type Button =
+  | CallButton
+  | GamePlayButton
+  | UrlButton
+  | LogInButton
+  | LogOutButton
+  | PostbackButton;

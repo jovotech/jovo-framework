@@ -13,6 +13,10 @@ export function registerOutputPlatform<TYPE extends Record<string, unknown>>(
   Type(() => platformType)(OutputTemplatePlatforms.prototype, platformKey);
 }
 
+export function isSSML(text: string): boolean {
+  return /^<speak>.*<\/speak>$/.test(text);
+}
+
 export function toSSML(text: string): string {
   text = text.replace(/<[/]?speak>/g, '');
   return `<speak>${text}</speak>`;

@@ -1,5 +1,5 @@
 import { IsEitherValid, isString, ValidationOptions } from '@jovotech/output';
-import { GameMetaData } from '../../models/button/GameButton';
+import { GameMetaData } from '../../models/button/GamePlayButton';
 
 export function IsValidGameMetaDataString(
   validationOptions?: ValidationOptions,

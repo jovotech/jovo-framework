@@ -112,20 +112,36 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
       addMessageToResponses(carousel.toFacebookMessengerMessage());
     }
 
+    if (output.platforms?.facebookMessenger?.template) {
+      addMessageToResponses({
+        attachment: {
+          type: MessageAttachmentType.Template,
+          payload: output.platforms.facebookMessenger.template,
+        },
+      });
+    }
+
     if (output.platforms?.facebookMessenger?.nativeResponse) {
       // TODO determine what to do with nativeResponse
     }
 
     const quickReplies = output.quickReplies;
-    if (quickReplies?.length) {
+    const nativeQuickReplies = output.platforms?.facebookMessenger?.nativeQuickReplies;
+    if (quickReplies?.length || nativeQuickReplies?.length) {
       const lastResponseWithMessage = responses
         .slice()
         .reverse()
         .find((response) => !!response.message);
       if (lastResponseWithMessage?.message) {
-        lastResponseWithMessage.message.quick_replies = quickReplies.map(
-          this.convertQuickReplyToFacebookMessengerQuickReply,
-        );
+        lastResponseWithMessage.message.quick_replies = [];
+        if (nativeQuickReplies?.length) {
+          lastResponseWithMessage.message.quick_replies.push(...nativeQuickReplies);
+        }
+        if (quickReplies?.length) {
+          lastResponseWithMessage.message.quick_replies.push(
+            ...quickReplies.map(this.convertQuickReplyToFacebookMessengerQuickReply),
+          );
+        }
       }
     }
 

@@ -1,23 +1,16 @@
+---
+title: 'Google Assistant Output'
+excerpt: 'Learn more about Jovo output templates for Google Assistant Output.'
+---
 # Google Assistant Output
 
-Learn more about output templates for Google Assistant.
-- [Introduction](#introduction)
-- [Generic Output Elements](#generic-output-elements)
-  - [Message](#message)
-  - [Reprompt](#reprompt)
-  - [Listen](#listen)
-  - [Quick Replies (Suggestions)](#quick-replies-suggestions)
-  - [Card](#card)
-  - [Carousel (Collection)](#carousel-collection)
-- [Google Assistant-specific Output Elements](#google-assistant-specific-output-elements)
-  - [Native Response](#native-response)
-
+Learn more about output templates for [Google Assistant](https://v4.jovo.tech/marketplace/platform-googleassistant).
 
 ## Introduction
 
-Jovo offers the ability to [create structured output](https://github.com/jovotech/jovo-framework/blob/v4dev/docs/routing.md) that is then translated into native platform responses.
+Jovo offers the ability to [create structured output](https://v4.jovo.tech/docs/output) that is then translated into native platform responses.
 
-This structured output is called [output template](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md). Its root properties are generic output elements that work across platforms. [Learn more about how generic output is translated into a Google Assistant response below](#generic-output-elements).
+This structured output is called [output template](https://v4.jovo.tech/docs/output-templates). Its root properties are generic output elements that work across platforms. [Learn more about how generic output is translated into a Google Assistant response below](#generic-output-elements).
 
 ```typescript
 {
@@ -27,7 +20,7 @@ This structured output is called [output template](https://github.com/jovotech/j
 }
 ```
 
-You can also add platform-specific output to an output template. [Learn more about Google Assistant-specific output below](#google-assistant-specific-output-elements).
+You can also add platform-specific output to an output template. [Learn more about Google Assistant-specific output below](#google-assistant-output-elements).
 
 ```typescript
 {
@@ -43,13 +36,20 @@ You can also add platform-specific output to an output template. [Learn more abo
 
 ## Generic Output Elements
 
-Generic output elements are in the root of the output template and work across platforms. [Learn more in the Jovo Output docs](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md).
+Generic output elements are in the root of the output template and work across platforms. [Learn more in the Jovo output template docs](https://v4.jovo.tech/docs/output-templates).
 
-Below, you can find a list of generic output elements that work with Google Assistant.
+Below, you can find a list of generic output elements that work with Google Assistant:
 
-### Message
+- [`message`](#message)
+- [`reprompt`](#reprompt)
+- [`listen`](#listen)
+- [`quickReplies`](#quickreplies-suggestions) (called *suggestions* in Google Assistant)
+- [`card`](#card)
+- [`carousel`](#carousel) (called *collection* in Google Assistant)
 
-The `message` is what Google Assistant is saying (or displaying) to the user:
+### message
+
+The [generic `message` element](https://v4.jovo.tech/docs/output-templates#message) is what Google Assistant is saying (or displaying) to the user:
 
 ```typescript
 {
@@ -63,19 +63,22 @@ Under the hood, Jovo translates the `message` into a `firstSimple` response obje
 {
   "prompt": {
     "firstSimple": {
-      "speech": "Hello world!"
+      "speech": "<speak>Hello world!</speak>",
+      "text": "Hello world!"
     }
   }
 }
 ```
+
+The resulting `speech` property gets automatically wrapped into SSML tags. For `text`, SSML is removed.
 
 It's also possible to add a `displayText` property:
 
 ```typescript
 {
   message: {
-    text: 'Speech hello world!',
-    displayText: 'Display hello world!'
+    text: 'Hello listener!',
+    displayText: 'Hello reader!'
   },
 }
 ```
@@ -86,16 +89,16 @@ This is then turned into the following response:
 {
   "prompt": {
     "firstSimple": {
-      "speech": "Speech hello world!",
-      "text": "Display hello world!"
+      "speech": "<speak>Hello listener!</speak>",
+      "text": "Hello reader!"
     }
   }
 }
 ```
 
-### Reprompt
+### reprompt
 
-If Google Assistant asks a question and the user does not respond after a few seconds, it will state a `reprompt` to ask again:
+The [generic `reprompt` element](https://v4.jovo.tech/docs/output-templates#message) is used to ask again if the user does not respond to a prompt after a few seconds:
 
 ```typescript
 {
@@ -109,9 +112,9 @@ Under the hood, Jovo translates the `reprompt` into `NO_INPUT_1`, `NO_INPUT_2`, 
 
 **Note**: For Google Assistant to wait for a user to answer a question, the [listen property](#listen) needs to be added.
 
-### Listen
+### listen
 
-The `listen` property needs to be added to tell Google Assistant that it should keep the microphone open and wait for a user's response.
+The [`listen` element](https://v4.jovo.tech/docs/output-templates#listen) needs to be added to tell Google Assistant that it should keep the microphone open and wait for a user's response.
 
 ```typescript
 {
@@ -121,9 +124,11 @@ The `listen` property needs to be added to tell Google Assistant that it should 
 
 If `listen` is not set to `true`, Jovo transitions to the `actions.scene.END_CONVERSATION` under the hood.
 
-### Quick Replies (Suggestions)
+The `listen` element can also be used to add dynamic entities, called type overrides in Google Assistant. [Learn more in the `$entities` documentation](https://v4.jovo.tech/docs/entities#dynamic-entities).
 
-On Google Assistant, quick replies are called suggestions. [You can learn more in the official Google Assistant docs](https://developers.google.com/assistant/conversational/prompts?hl=en#suggestions).
+### quickReplies (Suggestions)
+
+The [generic `quickReplies` element](https://v4.jovo.tech/docs/output-templates#quick-replies) translates into a concept called suggestions on Google Assistant. [You can learn more in the official Google Assistant docs](https://developers.google.com/assistant/conversational/prompts?hl=en#suggestions).
 
 ```typescript
 {
@@ -132,23 +137,72 @@ On Google Assistant, quick replies are called suggestions. [You can learn more i
 }
 ```
 
-### Card
+Under the hood, Jovo translates `quickReplies` into the following:
 
-You can display a basic card ([see the official Google Assistant docs](https://developers.google.com/assistant/conversational/prompts-rich?hl=en)) by using the `card` property:
+```json
+{
+  "suggestions": [
+    {
+      "title": "Yes"
+    },
+    {
+      "title": "No"
+    }
+  ]
+}
+```
+
+If you define your `quickReplies` using objects instead of strings, the `text` property will be used for the resulting `title`:
+
+
+```typescript
+{
+  quickReplies: [
+    {
+      text: 'oh yeah', // this is used for 'title'
+      value: 'yes'
+    },
+    // ...
+  ]
+}
+```
+
+
+### card
+
+The [generic `card` element](https://v4.jovo.tech/docs/output-templates#card) can be used to display a basic card in Google Assistant. [Learn more about basic cards in the official Google Assistant docs](https://developers.google.com/assistant/conversational/prompts-rich?hl=en).
 
 ```typescript
 {
   // ...
   card: {
     title: 'Hello world!',
-    content: 'Welcome to this new app built with Jovo.'
+    subtitle: 'Some subtitle',
+    content: 'Welcome to this new app built with Jovo.',
+    imageUrl: 'https://...'
   },
 }
 ```
 
-### Carousel (Collection)
+Under the hood, this gets translated into the following object as part of the response to Google Assistant:
 
-You can display a collection ([see the official Google Assistant docs](https://developers.google.com/assistant/conversational/prompts-selection?hl=en#collection)) by using the `carousel` property:
+```json
+{
+  "card": {
+    "title": "Hello world!",
+    "subtitle": "Some subtitle",
+    "text": "Welcome to this new app built with Jovo.", // Taken from 'content'
+    "image": {
+      "alt": "Hello world!", // Taken from 'title'
+      "url": "https://...",
+    }
+  }
+}
+```
+
+### carousel (Collection)
+
+A [generic `carousel` element](https://v4.jovo.tech/docs/output-templates#carousel) is a horizontally scrollable set of [`card`](#card) items. In Google Assistant, this is called a *collection*. [Learn more in the official Google Assistant docs](https://developers.google.com/assistant/conversational/prompts-selection?hl=en#collection).
 
 ```typescript
 {
@@ -194,9 +248,9 @@ It includes the following properties:
 * `title` (optional): A string that gets displayed at the top.
 
 
-## Google Assistant-specific Output Elements
+## Google Assistant Output Elements
 
-It is possible to add platform-specific output elements to an output template. [Learn more in the Jovo output documentation](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md#platform-specific-output-elements).
+It is possible to add platform-specific output elements to an output template. [Learn more in the Jovo output template documentation](https://v4.jovo.tech/docs/output-templates#platform-specific-output-elements).
 
 For Google Assistant, you can add output elements inside an `googleAssistant` object:
 
@@ -211,9 +265,9 @@ For Google Assistant, you can add output elements inside an `googleAssistant` ob
 }
 ```
 
-### Native Response
+### nativeResponse
 
-The [`nativeResponse` property](https://github.com/jovotech/jovo-output/blob/master/docs/output-templates.md#native-response) allows you to add native elements exactly how they would be added to the Google Assistant JSON response.
+The [`nativeResponse` property](https://v4.jovo.tech/docs/output-templates#native-response) allows you to add native elements exactly how they would be added to the Google Assistant JSON response.
 
 ```typescript
 {
