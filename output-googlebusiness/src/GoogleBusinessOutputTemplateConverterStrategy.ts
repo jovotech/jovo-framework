@@ -83,12 +83,13 @@ export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleRespo
   }
 
   convertOutput(output: OutputTemplate): GoogleBusinessResponse | GoogleBusinessResponse[] {
-    const getResponseBase: () => GoogleBusinessResponse = () => ({
-      messageId: '',
-      representative: {
-        representativeType: RepresentativeType.Bot,
-      },
-    });
+    const getResponseBase: () => GoogleBusinessResponse = () =>
+      this.prepareResponse({
+        messageId: '',
+        representative: {
+          representativeType: RepresentativeType.Bot,
+        },
+      }) as GoogleBusinessResponse;
     const responses: GoogleBusinessResponse[] = [];
 
     const addResponse = <KEY extends 'text' | 'image' | 'richCard'>(
