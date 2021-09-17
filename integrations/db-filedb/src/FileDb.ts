@@ -52,34 +52,33 @@ export class FileDb extends DbPlugin<FileDbConfig> {
     });
   }
 
-  async loadData(jovo: Jovo): Promise<void> {
-    const dbItem = await this.getDbItem(jovo.$user.id);
+  async loadData(userId: string, jovo: Jovo): Promise<void> {
+    const dbItem = await this.getDbItem(userId);
     if (dbItem) {
       jovo.$user.isNew = false;
       jovo.setPersistableData(dbItem, this.config.storedElements);
     }
   }
 
-  async saveData(jovo: Jovo): Promise<void> {
+  async saveData(userId: string, jovo: Jovo): Promise<void> {
     const fileDataStr = await fs.promises.readFile(this.pathToFile, 'utf8');
     const users = fileDataStr.length > 0 ? JSON.parse(fileDataStr) : [];
-    const id = jovo.$user.id;
 
     const dbItem = users.find((userItem: DbItem) => {
-      return userItem.id === id;
+      return userItem.id === userId;
     });
 
     // // create new user
     if (!dbItem) {
       const item: DbItem = {
-        id,
+        id: userId,
       };
       await this.applyPersistableData(jovo, item);
       users.push(item);
     } else {
       // update existing user
       for (let i = 0; i < users.length; i++) {
-        if (users[i].id === id) {
+        if (users[i].id === userId) {
           await this.applyPersistableData(jovo, users[i]);
         }
       }
