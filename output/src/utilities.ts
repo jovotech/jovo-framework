@@ -87,6 +87,15 @@ export type OmitIndex<T, I extends string | number> = {
   [K in keyof T as FilterKey<K, I>]: T[K];
 };
 
+export type OmitWhere<OBJECT, TYPE> = Omit<
+  OBJECT,
+  {
+    [KEY in keyof OBJECT]: OBJECT[KEY] extends TYPE ? KEY : never;
+  }[keyof OBJECT]
+>;
+
+export type PlainObjectType<OBJECT> = OmitWhere<OBJECT, () => unknown>;
+
 export function isAnInstance(
   instance: unknown,
   ignoredConstructorNames = ['Object', 'Array'],
