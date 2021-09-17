@@ -1,9 +1,16 @@
-import { IsOptional, IsBoolean, Type, ValidateNested, IsArray } from '@jovotech/output';
+import {
+  IsOptional,
+  IsBoolean,
+  Type,
+  ValidateNested,
+  IsArray,
+  JovoResponse,
+} from '@jovotech/output';
 import { SystemIntent } from './common/SystemIntent';
 import { RichResponse } from './RichResponse';
 import { SimpleResponse } from './simple-response/SimpleResponse';
 
-export class GoogleAssistantResponse {
+export class GoogleAssistantResponse extends JovoResponse {
   [key: string]: unknown;
 
   @IsOptional()
@@ -26,4 +33,8 @@ export class GoogleAssistantResponse {
   })
   @Type(() => SimpleResponse)
   noInputPrompts?: SimpleResponse[];
+
+  hasSessionEnded(): boolean {
+    return !this.expectUserResponse;
+  }
 }
