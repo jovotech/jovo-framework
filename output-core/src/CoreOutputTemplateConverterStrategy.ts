@@ -1,9 +1,11 @@
 import {
   ListenValue,
   mergeInstances,
+  MultipleResponsesOutputTemplateConverterStrategy,
   OutputTemplate,
   OutputTemplateConverterStrategy,
   OutputTemplateConverterStrategyConfig,
+  SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
 import { CoreResponse } from './models';
 
@@ -16,7 +18,7 @@ export class CoreOutputTemplateConverterStrategy extends OutputTemplateConverter
 
   toResponse(output: OutputTemplate | OutputTemplate[]): CoreResponse {
     output = Array.isArray(output) ? output : [output];
-    const response: CoreResponse = {
+    const response: CoreResponse = this.prepareResponse({
       version: '4.0.0',
       platform: 'core',
       output,
@@ -30,7 +32,7 @@ export class CoreOutputTemplateConverterStrategy extends OutputTemplateConverter
           data: {},
         },
       },
-    };
+    }) as CoreResponse;
     let lastListen: ListenValue | undefined;
     output.forEach((outputItem) => {
       const listen = outputItem.platforms?.core?.listen ?? outputItem.listen;
