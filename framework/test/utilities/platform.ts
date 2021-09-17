@@ -88,7 +88,7 @@ export class ExamplePlatformOutputConverterStrategy extends OutputTemplateConver
 }
 
 export class ExamplePlatformUser extends JovoUser<ExamplePlatformJovo> {
-  get id(): string {
+  get id(): string | undefined {
     return 'ExamplePlatformUser';
   }
 }

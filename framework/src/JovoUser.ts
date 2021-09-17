@@ -14,7 +14,7 @@ export abstract class JovoUser<JOVO extends Jovo = Jovo> {
 
   constructor(readonly jovo: JOVO) {}
 
-  abstract id: string;
+  abstract get id(): string | undefined;
 
   get accessToken(): string | undefined {
     return;
