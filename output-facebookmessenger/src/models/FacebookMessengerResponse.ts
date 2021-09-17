@@ -4,6 +4,7 @@ import {
   isEnum,
   IsEnum,
   IsOptional,
+  JovoResponse,
   Type,
   validate,
   ValidateNested,
@@ -36,7 +37,7 @@ export enum MessageTag {
   HumanAgent = 'HUMAN_AGENT',
 }
 
-export class FacebookMessengerResponse {
+export class FacebookMessengerResponse extends JovoResponse {
   [key: string]: unknown;
 
   @IsEnum(MessagingType)
@@ -48,7 +49,7 @@ export class FacebookMessengerResponse {
 
   @IsEitherValid<FacebookMessengerResponse>({
     keys: ['message', 'sender_action'],
-    validate: async (value, args) => {
+    validate: async (value) => {
       if (!(value instanceof Message)) {
         return '$property must be an instance of Message';
       }
@@ -67,7 +68,7 @@ export class FacebookMessengerResponse {
 
   @IsEitherValid<FacebookMessengerResponse>({
     keys: ['message', 'sender_action'],
-    validate: (value, args) => {
+    validate: (value) => {
       if (!isEnum(value, SenderActionType)) {
         return '$property must be a valid enum value';
       }
@@ -82,4 +83,8 @@ export class FacebookMessengerResponse {
   @IsOptional()
   @IsEnum(MessageTag)
   tag?: MessageTag;
+
+  hasSessionEnded(): boolean {
+    return true;
+  }
 }
