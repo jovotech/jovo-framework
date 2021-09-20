@@ -85,6 +85,6 @@ export class FacebookMessengerResponse extends JovoResponse {
   tag?: MessageTag;
 
   hasSessionEnded(): boolean {
-    return true;
+    return false;
   }
 }
