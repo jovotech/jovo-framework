@@ -8,6 +8,7 @@ import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from '
 import _cloneDeep from 'lodash.clonedeep';
 import _merge from 'lodash.merge';
 import { join as joinPaths } from 'path';
+import { PartialDeep } from 'type-fest';
 import { v4 as uuidv4 } from 'uuid';
 import {
   App,
@@ -26,6 +27,7 @@ import { HandleRequest } from '../HandleRequest';
 import { InputType, JovoInput, JovoInputObject } from '../JovoInput';
 import { TestDb } from './TestDb';
 import { TestPlatform } from './TestPlatform';
+import { TestRequest } from './TestRequest';
 import { TestServer } from './TestServer';
 
 /**
@@ -66,15 +68,23 @@ export type RequestOrInput<PLATFORM extends Platform> =
   | JovoInput
   | PlatformTypes<PLATFORM>['request'];
 
-export type JovoRequestObject<PLATFORM extends Platform> =
-  | PlatformTypes<PLATFORM>['request']
+export type JovoRequestObject<PLATFORM extends Platform> = OmitWhere<
+  PlatformTypes<PLATFORM>['request'],
   // eslint-disable-next-line @typescript-eslint/ban-types
-  | OmitWhere<PlatformTypes<PLATFORM>['request'], Function>;
+  Function
+>;
 
-export type PartialRequestOrInput<PLATFORM extends Platform> =
-  | RequestOrInput<PLATFORM>
-  | JovoInputObject
-  | JovoRequestObject<PLATFORM>;
+export type JovoRequestLike<PLATFORM extends Platform> =
+  | PlatformTypes<PLATFORM>['request']
+  | PlatformTypes<PLATFORM>['request'][]
+  | JovoRequestObject<PLATFORM>
+  | JovoRequestObject<PLATFORM>[];
+
+export type JovoInputLike = JovoInput | JovoInput[] | JovoInputObject | JovoInputObject[];
+
+export type RequestOrInputLike<PLATFORM extends Platform> =
+  | JovoRequestLike<PLATFORM>
+  | JovoInputLike;
 
 export interface TestSuiteConfig<PLATFORM extends Platform> extends PluginConfig {
   userId: string;
@@ -87,6 +97,11 @@ export interface TestSuiteConfig<PLATFORM extends Platform> extends PluginConfig
   stage: string;
   app?: App;
 }
+
+export type PartialTestSuiteConfig<PLATFORM extends Platform> = PartialDeep<
+  TestSuiteConfig<PLATFORM>
+> &
+  Partial<Pick<TestSuiteConfig<PLATFORM>, 'platform'>>;
 
 export interface TestSuite<PLATFORM extends Platform>
   extends Jovo,
@@ -108,7 +123,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
   $output!: OutputTemplate[];
 
   constructor(
-    config: Partial<TestSuiteConfig<PLATFORM>> = {
+    config: PartialTestSuiteConfig<PLATFORM> = {
       platform: TestPlatform as unknown as Constructor<PLATFORM>,
     },
   ) {
@@ -152,34 +167,38 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     app.middlewareCollection.use('after.response.end', this.postProcess.bind(this));
   }
 
-  async run(input: JovoInputObject): Promise<TestSuiteResponse<PLATFORM>>;
-  async run(request: JovoRequestObject<PLATFORM>): Promise<TestSuiteResponse<PLATFORM>>;
-  async run(requestOrInput: PartialRequestOrInput<PLATFORM>): Promise<TestSuiteResponse<PLATFORM>> {
-    // If requestOrInput is not an instance, create one
-    const isInputObject = (input: PartialRequestOrInput<PLATFORM>): input is JovoInput =>
-      !(input instanceof JovoInput) && !!(input as JovoInput).type;
+  async run(input: JovoInputLike): Promise<TestSuiteResponse<PLATFORM>>;
+  async run(request: JovoRequestLike<PLATFORM>): Promise<TestSuiteResponse<PLATFORM>>;
+  async run(requestOrInput: RequestOrInputLike<PLATFORM>): Promise<TestSuiteResponse<PLATFORM>> {
+    const requests = Array.isArray(requestOrInput) ? requestOrInput : [requestOrInput];
 
-    const isRequestObject = (request: PartialRequestOrInput<PLATFORM>): request is JovoRequest => {
-      return !(request instanceof JovoRequest) && !(request as JovoInput).type;
-    };
+    for (const requestLike of requests) {
+      // If requestOrInput is not an instance, create one
+      const isInputObject = (input: RequestOrInputLike<PLATFORM>): input is JovoInput =>
+        !(input instanceof JovoInput) && !!(input as JovoInput).type;
 
-    // If requestOrInput is a plain object, generate a corresponding
-    // instance from it
-    this.requestOrInput = isInputObject(requestOrInput)
-      ? new JovoInput(requestOrInput)
-      : isRequestObject(requestOrInput)
-      ? this.$platform.createRequestInstance(requestOrInput)
-      : (requestOrInput as RequestOrInput<PLATFORM>);
+      const isRequestObject = (request: RequestOrInputLike<PLATFORM>): request is JovoRequest => {
+        return !(request instanceof JovoRequest) && !(request as JovoInput).type;
+      };
 
-    await this.app.initialize();
+      // If requestOrInput is a plain object, generate a corresponding
+      // instance from it
+      this.requestOrInput = isInputObject(requestLike)
+        ? new JovoInput(requestLike)
+        : isRequestObject(requestLike)
+        ? this.$platform.createRequestInstance(requestLike)
+        : (requestLike as RequestOrInput<PLATFORM>);
 
-    const request: PlatformTypes<PLATFORM>['request'] = this.isRequest(this.requestOrInput)
-      ? this.requestOrInput
-      : this.requestOrInput.type === InputType.Launch
-      ? this.requestBuilder.launch()
-      : this.requestBuilder.intent();
+      await this.app.initialize();
 
-    await this.app.handle(new TestServer(request));
+      const request: PlatformTypes<PLATFORM>['request'] = this.isRequest(this.requestOrInput)
+        ? this.requestOrInput
+        : this.requestOrInput.type === InputType.Launch
+        ? this.requestBuilder.launch()
+        : this.requestBuilder.intent();
+
+      await this.app.handle(new TestServer(request));
+    }
 
     return {
       response: this.$response,
