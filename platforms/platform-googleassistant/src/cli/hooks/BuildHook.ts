@@ -491,7 +491,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
         }
 
         // Register actions.
-        if (file.path.includes('intents')) {
+        if (file.path.includes('global')) {
           actions.custom[fileName.replace('.yaml', '')] = {};
         }
 
