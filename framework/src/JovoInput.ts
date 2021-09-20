@@ -14,7 +14,8 @@ export enum InputType {
 
 export const DEFAULT_INPUT_TYPE = InputType.Intent;
 
-export type JovoInputObject = OmitWhere<JovoInput, () => unknown>;
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type JovoInputObject = OmitWhere<JovoInput, Function>;
 
 export type InputTypeLike = EnumLike<InputType> | string | JovoInputObject;
 
@@ -52,6 +53,6 @@ export class JovoInput {
   }
 }
 
-function isObject(input: InputTypeLike | JovoInputObject): input is JovoInputObject {
+function isObject(input: InputTypeLike): input is JovoInputObject {
   return typeof input === 'object';
 }
