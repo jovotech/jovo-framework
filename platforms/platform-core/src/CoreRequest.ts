@@ -1,6 +1,7 @@
 import {
   InputTypeLike,
   JovoInput,
+  JovoInputObject,
   JovoRequest,
   OmitWhere,
   UnknownObject,
@@ -16,8 +17,7 @@ export class CoreRequest extends JovoRequest {
   timeZone?: string; // IANA time zone names e.g. Europe/Berlin
   locale?: string; // e.g. de-DE, en-US
   data?: UnknownObject; // this.$request
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  input?: OmitWhere<JovoInput, Function>;
+  input?: JovoInputObject;
   context?: Context;
 
   getLocale(): string | undefined {
