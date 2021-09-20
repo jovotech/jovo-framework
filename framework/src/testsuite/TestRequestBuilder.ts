@@ -10,7 +10,7 @@ export class TestRequestBuilder extends RequestBuilder<TestPlatform> {
   }
 
   intent(name?: string): TestRequest;
-  intent(json?: Record<string, unknown>): TestRequest;
+  intent(json?: UnknownObject): TestRequest;
   intent(nameOrJson?: string | UnknownObject): TestRequest {
     const request: TestRequest = new TestRequest();
     request.session.isNew = false;

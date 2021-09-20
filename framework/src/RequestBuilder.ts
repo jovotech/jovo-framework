@@ -1,3 +1,4 @@
+import { UnknownObject } from '.';
 import { Platform } from './Platform';
 
 export type RequestBuilderRequest<PLATFORM extends Platform> = PLATFORM extends Platform<
@@ -7,8 +8,8 @@ export type RequestBuilderRequest<PLATFORM extends Platform> = PLATFORM extends 
   : never;
 
 export abstract class RequestBuilder<PLATFORM extends Platform> {
-  abstract launch(json?: Record<string, unknown>): RequestBuilderRequest<PLATFORM>;
+  abstract launch(json?: UnknownObject): RequestBuilderRequest<PLATFORM>;
 
   abstract intent(name?: string): RequestBuilderRequest<PLATFORM>;
-  abstract intent(json?: Record<string, unknown>): RequestBuilderRequest<PLATFORM>;
+  abstract intent(json?: UnknownObject): RequestBuilderRequest<PLATFORM>;
 }

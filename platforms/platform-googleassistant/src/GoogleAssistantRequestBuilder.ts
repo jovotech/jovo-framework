@@ -1,31 +1,34 @@
-import { RequestBuilder } from '@jovotech/framework';
-import { readFileSync } from 'fs';
+import { RequestBuilder, UnknownObject } from '@jovotech/framework';
 import { join as joinPaths } from 'path';
 import { GoogleAssistantPlatform } from './GoogleAssistantPlatform';
 import { GoogleAssistantRequest } from './GoogleAssistantRequest';
 
 export class GoogleAssistantRequestBuilder extends RequestBuilder<GoogleAssistantPlatform> {
-  launch(json?: Record<string, unknown>): GoogleAssistantRequest {
-    const launchJson = readFileSync(
-      joinPaths(__dirname, '..', '..', 'sample-requests', 'LaunchRequest.json'),
-      {
-        encoding: 'utf-8',
-      },
-    );
+  launch(json?: UnknownObject): GoogleAssistantRequest {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const launchJson = require(joinPaths(
+      __dirname,
+      '..',
+      '..',
+      'sample-requests',
+      'LaunchRequest.json',
+    ));
     const request: GoogleAssistantRequest = Object.create(GoogleAssistantRequest.prototype);
     return Object.assign(request, json || JSON.parse(launchJson));
   }
 
   intent(name?: string): GoogleAssistantRequest;
-  intent(json?: Record<string, unknown>): GoogleAssistantRequest;
-  intent(nameOrJson?: string | Record<string, unknown>): GoogleAssistantRequest {
-    // TODO: Replace readFileSync() with require()
-    const intentJson = readFileSync(
-      joinPaths(__dirname, '..', '..', 'sample-requests', 'IntentRequest.json'),
-      {
-        encoding: 'utf-8',
-      },
-    );
+  intent(json?: UnknownObject): GoogleAssistantRequest;
+  intent(nameOrJson?: string | UnknownObject): GoogleAssistantRequest {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const intentJson = require(joinPaths(
+      __dirname,
+      '..',
+      '..',
+      'sample-requests',
+      'IntentRequest.json',
+    ));
+
     const request: GoogleAssistantRequest = Object.create(GoogleAssistantRequest.prototype);
 
     if (typeof nameOrJson === 'string') {
