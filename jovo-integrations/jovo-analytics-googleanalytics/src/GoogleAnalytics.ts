@@ -175,10 +175,8 @@ export class GoogleAnalytics implements Analytics {
     const sessionTag = this.getSessionTag(jovo);
     jovo.$googleAnalytics.visitor!.set('sessionControl', sessionTag);
 
-
     // Track intent data.
     const pageview = jovo.$googleAnalytics.visitor!.pageview(this.getPageParameters(jovo));
-
 
     if (this.config.enableAutomaticEvents) {
       // Detect and send FlowErrors
