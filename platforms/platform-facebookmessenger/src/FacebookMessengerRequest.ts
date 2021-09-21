@@ -18,32 +18,23 @@ export class FacebookMessengerRequest extends JovoRequest {
    * @link https://developers.facebook.com/docs/messenger-platform/reference/webhook-events#entry
    */
   messaging?: [MessagingData];
-  nlu?: {
-    intentName: string;
-  };
-  inputs?: EntityMap;
-  locale?: string;
 
   getLocale(): string | undefined {
-    return this.locale;
+    return;
   }
 
   getIntent(): JovoInput['intent'] {
-    return this.nlu?.intentName;
+    return;
   }
 
   getEntities(): EntityMap | undefined {
-    return this.inputs;
+    return;
   }
 
   getInputType(): InputTypeLike | undefined {
     const postbackPayload = this.messaging?.[0]?.postback?.payload;
-
     if (postbackPayload === FACEBOOK_LAUNCH_PAYLOAD) {
       return InputType.Launch;
-    }
-    if (this.nlu?.intentName) {
-      return InputType.Intent;
     }
     return InputType.Text;
   }
