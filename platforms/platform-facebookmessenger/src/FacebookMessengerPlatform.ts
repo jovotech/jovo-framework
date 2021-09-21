@@ -135,16 +135,18 @@ export class FacebookMessengerPlatform extends Platform<
           },
         });
       } else if (isFacebookMessengerRequest) {
+        const responses: FacebookMessengerResponse[] = [];
         const promises = request.entry.map((entry: MessengerBotEntry) => {
           const serverCopy = _cloneDeep(server);
           // eslint-disable-next-line @typescript-eslint/no-empty-function
-          serverCopy.setResponse = async () => {};
+          serverCopy.setResponse = async (response: FacebookMessengerResponse) => {
+            responses.push(response);
+          };
           serverCopy.getRequestObject = () => entry;
           return APP_HANDLE.call(this, serverCopy);
         });
         await Promise.all(promises);
-        // TODO determine response content
-        return server.setResponse({});
+        return server.setResponse(responses);
       } else {
         return APP_HANDLE.call(this, server);
       }
