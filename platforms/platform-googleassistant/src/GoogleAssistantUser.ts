@@ -9,7 +9,6 @@ export class GoogleAssistantUser extends JovoUser<GoogleAssistant> {
     return this.jovo.$request.user?.params?._GOOGLE_ASSISTANT_USER_ID_ as string | undefined;
   }
 
-
   get accessToken(): string | undefined {
     const headers = this.jovo.$server.getRequestHeaders();
     return headers.authorization as string;
@@ -24,7 +23,7 @@ export class GoogleAssistantUser extends JovoUser<GoogleAssistant> {
   }
 
   // TODO: determine whether a method or setter is better
-  setId(id: string | undefined) {
+  setId(id: string | undefined): void {
     _set(this.jovo.$request, 'user.params._GOOGLE_ASSISTANT_USER_ID_', id);
   }
 
