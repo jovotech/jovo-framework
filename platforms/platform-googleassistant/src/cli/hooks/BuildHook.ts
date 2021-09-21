@@ -21,9 +21,10 @@ import {
   wait,
 } from '@jovotech/cli-core';
 import { FileBuilder, FileObject } from '@jovotech/filebuilder';
-import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'fs';
 import { JovoModelData, JovoModelDataV3, NativeFileInformation } from '@jovotech/model';
 import { JovoModelGoogle } from '@jovotech/model-google';
+import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'fs';
+import { copySync, removeSync } from 'fs-extra';
 import _get from 'lodash.get';
 import _has from 'lodash.has';
 import _merge from 'lodash.merge';
@@ -31,7 +32,6 @@ import _mergeWith from 'lodash.mergewith';
 import _set from 'lodash.set';
 import { join as joinPaths } from 'path';
 import * as yaml from 'yaml';
-import copyfiles from 'copyfiles';
 import { GoogleAssistantCli } from '..';
 import DefaultFiles from '../DefaultFiles.json';
 import {
@@ -173,7 +173,13 @@ export class BuildHook extends PluginHook<BuildEvents> {
 
     for (const locale of this.$context.locales) {
       const localeTask = new Task(locale, async () => {
-        await this.$cli.$project!.validateModel(locale, JovoModelGoogle.getValidator());
+        const model: JovoModelData | JovoModelDataV3 = await this.$cli.$project!.getModel(locale);
+        await this.$cli.$project!.validateModel(
+          locale,
+          model,
+          JovoModelGoogle.getValidator(model),
+          this.$plugin.constructor.name,
+        );
         await wait(500);
       });
 
@@ -402,26 +408,31 @@ export class BuildHook extends PluginHook<BuildEvents> {
     }
 
     FileBuilder.buildDirectory(projectFiles, this.$plugin.getPlatformPath());
-    await this.copyResourcesToProjectFiles();
-  }
 
-  /**
-   * Copies across any resources so they can be used in the project settings manifest.
-   *
-   * Docs here:
-   * https://developers.google.com/assistant/conversational/build/projects?hl=en&tool=sdk#add_resources
-   */
-  copyResourcesToProjectFiles(): Promise<void> {
-    const input = `${this.$cli.$projectPath}/${this.$plugin.$config.resourcesDirectory}`;
-    const output = `${this.$plugin.getPlatformPath()}/resources`;
-    return new Promise((resolve, reject) =>
-      copyfiles([input, output], {}, (err: Error | undefined) => {
-        if (err) {
-          return reject(err);
-        }
-        return resolve();
-      }),
+    // Copies across any resources so they can be used in the project settings manifest.
+    // Docs:  https://developers.google.com/assistant/conversational/build/projects?hl=en&tool=sdk#add_resources
+    const copyResourcesTask: Task = new Task(
+      `Copying resources from ${this.$plugin.$config.resourcesDirectory!}`,
+      () => {
+        const resourcesDirectory = 'resources';
+        const src: string = joinPaths(
+          this.$cli.$projectPath,
+          this.$plugin.$config.resourcesDirectory!,
+        );
+        const dest: string = joinPaths(this.$plugin.getPlatformPath(), resourcesDirectory);
+        // Delete existing resources folder before copying data
+        removeSync(dest);
+        copySync(src, dest);
+      },
     );
+    copyResourcesTask.indent(2);
+
+    if (
+      this.$plugin.$config.resourcesDirectory &&
+      existsSync(this.$plugin.$config.resourcesDirectory)
+    ) {
+      await copyResourcesTask.run();
+    }
   }
 
   /**

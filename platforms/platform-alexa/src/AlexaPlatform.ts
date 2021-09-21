@@ -1,8 +1,17 @@
-import { AnyObject, ExtensibleConfig, HandleRequest, Jovo, Platform } from '@jovotech/framework';
+import {
+  AnyObject,
+  Constructor,
+  ExtensibleConfig,
+  HandleRequest,
+  Jovo,
+  Platform,
+  RequestBuilder,
+} from '@jovotech/framework';
 import { AlexaOutputTemplateConverterStrategy, AlexaResponse } from '@jovotech/output-alexa';
 import { Alexa } from './Alexa';
 import { AlexaDevice } from './AlexaDevice';
 import { AlexaRequest } from './AlexaRequest';
+import { AlexaRequestBuilder } from './AlexaRequestBuilder';
 import { AlexaUser } from './AlexaUser';
 import { SUPPORTED_APL_ARGUMENT_TYPES } from './constants';
 
@@ -27,6 +36,7 @@ export class AlexaPlatform extends Platform<
   jovoClass = Alexa;
   userClass = AlexaUser;
   deviceClass = AlexaDevice;
+  requestBuilder = AlexaRequestBuilder;
 
   getDefaultConfig(): AlexaConfig {
     return {
@@ -37,7 +47,10 @@ export class AlexaPlatform extends Platform<
   }
 
   mount(parent: HandleRequest): void {
-    parent.middlewareCollection.use('request.start', this.onRequestStart);
+    super.mount(parent);
+    this.middlewareCollection.use('request.start', (jovo) => {
+      return this.onRequestStart(jovo);
+    });
   }
 
   isRequestRelated(request: AnyObject | AlexaRequest): boolean {
@@ -56,10 +69,7 @@ export class AlexaPlatform extends Platform<
     return response;
   }
 
-  private onRequestStart = (jovo: Jovo) => {
-    if (!(jovo.$platform instanceof AlexaPlatform)) {
-      return;
-    }
+  private onRequestStart(jovo: Jovo): void {
     // Generate generic output to APL if supported and set in config
     this.outputTemplateConverterStrategy.config.genericOutputToApl = !!(
       jovo.$alexa?.$request?.isAplSupported() && this.config.output?.genericOutputToApl
@@ -80,5 +90,5 @@ export class AlexaPlatform extends Platform<
         }
       });
     }
-  };
+  }
 }

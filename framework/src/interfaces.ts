@@ -48,7 +48,11 @@ export interface StoredElement extends UnknownObject {
   enabled?: boolean;
 }
 
-export interface StoredElementHistory extends StoredElement, UnknownObject {
+export interface StoredElementSession extends StoredElement {
+  expiresAfterSeconds?: number;
+}
+
+export interface StoredElementHistory extends StoredElement {
   size?: number;
   asr?: StoredElement | boolean;
   state?: StoredElement | boolean;
@@ -64,7 +68,7 @@ export interface DbPluginConfig extends PluginConfig {
 
 export interface DbPluginStoredElementsConfig extends UnknownObject {
   user?: StoredElement | boolean;
-  session?: StoredElement | boolean;
+  session?: StoredElementSession | boolean;
   history?: StoredElementHistory | boolean;
   createdAt?: StoredElement | boolean;
   updateAt?: StoredElement | boolean;

@@ -1,25 +1,10 @@
 ---
-title: 'Jovo Handlers'
+title: 'Handlers'
 excerpt: 'Learn more about Jovo Handlers, which are methods inside a Jovo Component that are responsible for handling a request and returning output.'
 ---
 # Handlers
 
 Handlers are methods inside a [Jovo component](./components.md) that are responsible for handling a request and returning output.
-
-- [Introduction](#introduction)
-- [Handler Routing and the Handle Decorator](#handler-routing-and-the-handle-decorator)
-  - [Routing Properties](#routing-properties)
-  - [Condition Properties](#condition-properties)
-  - [Handler Prioritization](#handler-prioritization)
-- [Handler Logic](#handler-logic)
-  - [Return Output](#return-output)
-  - [Redirect to Components](#redirect-to-components)
-  - [Delegate to Components](#delegate-to-components)
-  - [Resolve a Component](#resolve-a-component)
-- [Handler Types](#handler-types)
-  - [LAUNCH](#launch)
-  - [START](#start)
-  - [UNHANDLED](#unhandled)
 
 ## Introduction
 
@@ -101,15 +86,16 @@ They include:
 * [`global`](#global-handlers)
 * [`subState`](#substate)
 * [`prioritizedOverUnhandled`](#prioritizedOverUnhandled)
+
 #### Intents
 
-The `intents` property specifies which incoming intents the handler should be able to fulfill. The property can be both a string or an array.
+The `intents` property specifies which incoming intents the handler should be able to fulfill.
 
 For example, this handler responds to only the `ShowMenuIntent`:
 
 ```typescript
 @Handle({
-  intents: 'ShowMenuIntent'
+  intents: ['ShowMenuIntent']
 })
 showMenu() {
   // ...
@@ -131,7 +117,7 @@ Sometimes, a handler should be [`global`](#global-handlers) for only some of the
 
 ```typescript
 @Handle({
-  intents: [ { name: 'ShowMenuIntent', global: true }, 'YesIntent' ]
+  intents: [{ name: 'ShowMenuIntent', global: true }, 'YesIntent']
 })
 showMenu() {
   // ...
@@ -162,11 +148,11 @@ showMenu() {
 
 #### Types
 
-The `types` property specifies which [input types](./input.md) the handler should be able to fulfill. The property can be both a string or an array of strings.
+The `types` property specifies which [input types](./input.md) the handler should be able to fulfill.
 
 ```typescript
 @Handle({
-  types: 'LAUNCH',
+  types: ['LAUNCH'],
 })
 welcomeNewUser() {
   // ...
@@ -180,7 +166,7 @@ import { Types } from '@jovotech/framework';
 
 // ...
 
-@Types('LAUNCH')
+@Types(['LAUNCH'])
 welcomeNewUser() {
   // ...
 }
@@ -254,7 +240,7 @@ Alternatively, you can make an intent an object and add `global` to it:
 
 ```typescript
 @Handle({
-  intents: [ { name: 'ShowMenuIntent', global: true }, 'YesIntent' ]
+  intents: [{ name: 'ShowMenuIntent', global: true }, 'YesIntent']
 })
 showMenu() {
   // ...
@@ -302,7 +288,7 @@ import { SubState, Intents } from '@jovotech/framework';
 // ...
 
 @SubState('YesOrNoState')
-@Intents(['Intents'])
+@Intents(['YesIntent'])
 showMenu() {
   // ...
 }
@@ -347,12 +333,12 @@ Currently, they include:
 * [`if`](#if)
 #### Platforms
 
-You can specify that a handler is only responsible for specific platforms. The `platforms` property can be both a string or an array of strings with the names of each platform in camel case:
+You can specify that a handler is only responsible for specific platforms. The `platforms` property is an array of strings with the names of each platform in camel case:
 
 ```typescript
 @Handle({
   // ...
-  platforms: [ 'alexa', 'googleAssistant' ]
+  platforms: ['alexa', 'googleAssistant']
 })
 yourHandler() {
   // ...
@@ -366,7 +352,7 @@ import { Platforms } from '@jovotech/framework';
 
 // ...
 
-@Platforms('alexa')
+@Platforms(['alexa'])
 yourHandler() {
   // ...
 }
@@ -413,15 +399,15 @@ It's possible that multiple handlers are able to fulfill a request, for example:
 
 ```typescript
 @Handle({
-  intents: [ 'ShowMenuIntent' ]
+  intents: ['ShowMenuIntent']
 })
 showMenu() {
   // ...
 }
 
 @Handle({
-  intents: [ 'ShowMenuIntent' ],
-  platforms: [ 'alexa' ]
+  intents: ['ShowMenuIntent'],
+  platforms: ['alexa']
 })
 showMenuOnAlexa() {
   // ...

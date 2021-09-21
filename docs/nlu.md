@@ -1,14 +1,10 @@
 ---
-title: 'Jovo NLU Integrations'
+title: 'NLU Integrations'
 excerpt: 'Learn more about natural language understanding (NLU) services that can be integrated with Jovo.'
 ---
 # NLU Integrations
 
 Learn more about natural language understanding (NLU) services that can be integrated with Jovo.
-
-- [Introduction](#introduction)
-- [Integrations](#integrations)
-- [Configuration](#configuration)
 
 ## Introduction
 
@@ -38,9 +34,9 @@ NLU integrations are helpful for platforms that deal with raw text. The integrat
 
 Currently, the following integrations are available with Jovo `v4`:
 
-* [Rasa NLU](https://github.com/jovotech/jovo-framework/tree/v4dev/integrations/nlu-rasa)
-* [Dialogflow NLU](https://github.com/jovotech/jovo-framework/tree/v4dev/integrations/nlu-dialogflow)
-* [NLP.js](https://github.com/jovotech/jovo-framework/tree/v4dev/integrations/nlu-nlpjs)
+* [Rasa NLU](https://v4.jovo.tech/marketplace/nlu-rasa)
+* [Snips NLU](https://v4.jovo.tech/marketplace/nlu-snips)
+* [NLP.js](https://v4.jovo.tech/marketplace/nlu-nlpjs)
 
 
 ## Configuration

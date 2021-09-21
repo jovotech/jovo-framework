@@ -15,7 +15,7 @@ export interface GoogleActionActions {
 export type SupportedLocalesType = typeof SupportedLocales[number];
 
 export interface GoogleCliConfig extends PluginConfig {
-  projectId?: string;
+  projectId: string;
   resourcesDirectory?: string;
   locales?: {
     [locale: string]: SupportedLocalesType[];

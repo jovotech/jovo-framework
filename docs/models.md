@@ -1,12 +1,10 @@
 ---
-title: 'Jovo Models'
+title: 'Models'
 excerpt: 'Learn more about how to use Jovo Model files to maintain language models that work across platforms and NLU services.'
 ---
 # Models
 
 Learn more about how to use Jovo Model files to maintain language models that work across platforms and NLU services.
-- [Introduction](#introduction)
-- [Model Schema](#model-schema)
 
 ## Introduction
 
@@ -21,7 +19,7 @@ The [router](./routing.md) then uses this information as part of the [`$input` o
 
 Depending on the setup, the natural language understanding is either done by a [platform](./platforms.md) (e.g. Alexa requests already contain intents etc.) or [NLU](./nlu.md) integration. These services train a language model based on a specific schema that contains sample phrases for each intent, and values for each entity type
 
-Maintaining language models across platforms and services can be a tedious task. For this, Jovo offers the [Jovo Model](https://github.com/jovotech/jovo-model), an open source schema that can be translated into models specifications that work for platforms like Alexa, Google Assistant, Rasa, LUIS, and more. [Learn more about the schema here](https://github.com/jovotech/jovo-model/tree/v4/release/docs/model-schema.md).
+Maintaining language models across platforms and services can be a tedious task. For this, Jovo offers the [Jovo Model](https://github.com/jovotech/jovo-model), an open source schema that can be translated into models specifications that work for platforms like Alexa, Google Assistant, Rasa, LUIS, and more. [Learn more about the schema here](https://v4.jovo.tech/docs/model-schema).
 
 You can find all model files in the `models` folder of your Jovo project. You can use the Jovo CLI `build` command to translate them into native model files for each platform or service.
 
@@ -54,4 +52,4 @@ Here is an example model file:
 }
 ```
 
-[Learn more about the model schema here](https://github.com/jovotech/jovo-model/tree/v4/release/docs/model-schema.md).
+[Learn more about the model schema here](https://v4.jovo.tech/docs/model-schema).

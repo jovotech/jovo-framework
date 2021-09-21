@@ -1,26 +1,22 @@
-import { Headers, QueryParams, Server } from '@jovotech/framework';
+import { AnyObject, Headers, QueryParams, Server, UnknownObject } from '@jovotech/framework';
 import type { APIGatewayEvent, Callback, Context } from 'aws-lambda';
 import type { APIGatewayProxyEventHeaders } from 'aws-lambda/trigger/api-gateway-proxy';
 
 export class Lambda extends Server {
-  event: APIGatewayEvent;
-  context: Context;
-  callback: Callback;
-
   isApiGateway = false;
   headers: APIGatewayProxyEventHeaders = {};
-  requestPayload: Record<string, string> | unknown;
+  requestPayload: AnyObject;
 
-  responseHeaders: Record<string, string> = {
+  responseHeaders: Headers = {
     'Content-Type': 'application/json; charset=utf-8',
   };
 
-  constructor(event: APIGatewayEvent, context: Context, callback: Callback) {
+  constructor(
+    readonly event: APIGatewayEvent,
+    readonly context: Context,
+    readonly callback: Callback,
+  ) {
     super();
-    this.event = event;
-    this.context = context;
-    this.callback = callback;
-
     if (typeof event.body !== 'undefined') {
       this.isApiGateway = true;
       this.headers = event.headers;
@@ -30,17 +26,36 @@ export class Lambda extends Server {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   fail(error: Error): void {
-    // TODO: implement me
+    const responseData: UnknownObject = {
+      code: 500,
+      msg: error.message,
+    };
+
+    if (process.env.NODE_ENV === 'production') {
+      responseData.stack = error.stack;
+    }
+
+    if (this.isApiGateway) {
+      this.callback(error, {
+        body: JSON.stringify(responseData),
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+        isBase64Encoded: false,
+        statusCode: 500,
+      });
+    } else {
+      this.callback(error, responseData);
+    }
   }
 
   getQueryParams(): QueryParams {
-    return {};
+    return this.event.queryStringParameters || {};
   }
 
-  getRequestObject(): Record<string, string> {
-    return this.requestPayload as Record<string, string>;
+  getRequestObject(): AnyObject {
+    return this.requestPayload;
   }
 
   getRequestHeaders(): Headers {

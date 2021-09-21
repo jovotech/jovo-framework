@@ -21,7 +21,11 @@ export class AlexaUser extends JovoUser<Alexa> {
   }
 
   get id(): string {
-    return this.jovo?.$request?.session?.user?.userId || 'AlexaUser';
+    return this.jovo?.$request.getUserId() || 'AlexaUser';
+  }
+
+  get accessToken(): string | undefined {
+    return this.jovo.$request.session?.user.accessToken;
   }
 
   async getEmail(): Promise<string | undefined> {

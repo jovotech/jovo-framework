@@ -1,17 +1,16 @@
+---
+title: 'Google Assistant Language Model'
+excerpt: 'Learn more about Jovo output templates for Alexa.'
+---
 # Google Assistant Language Model
 
-For a general understanding of the Jovo Language Model, check out the [platform-independent docs](https://www.jovo.tech/docs/model).
-
-- [Introduction](#introduction)
-- [googleAssistant Object](#googleassistant-object)
-  - [Global Intents](#global-intents)
-  - [Scenes](#scenes)
+Learn more about how to configure a Google Assistant language model using the [Jovo Model](https://v4.jovo.tech/docs/models).
 
 ## Introduction
 
 The Jovo model files get turned into Google Assistant specific files during the `build` process.
 
-The CLI turns all intents into global intents for Google Assistant and adds the `Jovo` webhook for fulfilment:
+The CLI turns all intents into global intents for Google Assistant and adds the `Jovo` webhook for fulfillment:
 
 ```json
 "actions.intent.MAIN": {
@@ -84,7 +83,7 @@ The Jovo CLI automatically creates an entry for the Jovo Webhook and registers i
 
 ### Scenes
 
-You can also add scenes to the Jovo model. [Learn more here](./scenes.md).
+You can also add scenes to the Jovo model. [Learn more here](https://v4.jovo.tech/marketplace/platform-googleassistant/model).
 
 ```json
 "googleAssistant": {

@@ -1,39 +1,42 @@
-import { RequestBuilder } from '@jovotech/framework';
-import { readFileSync } from 'fs';
+import { RequestBuilder, UnknownObject } from '@jovotech/framework';
 import { join as joinPaths } from 'path';
-import { Alexa } from './Alexa';
+import { AlexaPlatform } from './AlexaPlatform';
 import { AlexaRequest } from './AlexaRequest';
 
-export class AlexaRequestBuilder extends RequestBuilder<Alexa> {
-  launch(json?: Record<string, unknown>): AlexaRequest {
-    const launchJson = readFileSync(
-      joinPaths(__dirname, '..', '..', 'sample-requests', 'LaunchRequest.json'),
-      {
-        encoding: 'utf-8',
-      },
-    );
+export class AlexaRequestBuilder extends RequestBuilder<AlexaPlatform> {
+  launch(json?: UnknownObject): AlexaRequest {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const launchJson = require(joinPaths(
+      __dirname,
+      '..',
+      '..',
+      'sample-requests',
+      'LaunchRequest.json',
+    ));
     const request: AlexaRequest = Object.create(AlexaRequest.prototype);
     return Object.assign(request, json || JSON.parse(launchJson));
   }
 
   intent(name?: string): AlexaRequest;
-  intent(json?: Record<string, unknown>): AlexaRequest;
-  intent(jsonOrName?: string | Record<string, unknown>): AlexaRequest {
-    // TODO: Replace readFileSync() with require()
-    const intentJson = readFileSync(
-      joinPaths(__dirname, '..', '..', 'sample-requests', 'IntentRequest.json'),
-      {
-        encoding: 'utf-8',
-      },
-    );
+  intent(json?: UnknownObject): AlexaRequest;
+  intent(nameOrJson?: string | UnknownObject): AlexaRequest {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const intentJson = require(joinPaths(
+      __dirname,
+      '..',
+      '..',
+      'sample-requests',
+      'IntentRequest.json',
+    ));
     const request: AlexaRequest = Object.create(AlexaRequest.prototype);
 
-    if (typeof jsonOrName === 'string') {
-      const intentRequest: AlexaRequest = Object.assign(request, JSON.parse(intentJson));
-      request.request!.intent!.name = jsonOrName;
-      return intentRequest;
+    if (typeof nameOrJson === 'string') {
+      Object.assign(request, JSON.parse(intentJson));
+      request.setIntent(nameOrJson);
     } else {
-      return Object.assign(request, jsonOrName || JSON.parse(intentJson));
+      Object.assign(request, nameOrJson || JSON.parse(intentJson));
     }
+
+    return request;
   }
 }

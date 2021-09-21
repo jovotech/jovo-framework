@@ -23,7 +23,6 @@ export class GoogleAssistantCli extends JovoCliPlugin {
   getDefaultConfig(): GoogleCliConfig {
     return {
       projectId: '<YOUR-PROJECT-ID-HERE>',
-      resourcesDirectory: 'resources',
     };
   }
 
