@@ -14,13 +14,15 @@ export interface UserData extends Data {}
 
 export interface Entity extends UnknownObject {
   id?: string;
-  key?: string;
+  resolved?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   value?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  native?: any;
 }
 
-export interface EntityMap {
-  [key: string]: Entity | undefined;
+export interface EntityMap<ENTITY_TYPE extends Entity = Entity> {
+  [key: string]: ENTITY_TYPE | undefined;
 }
 
 export interface AsrData extends UnknownObject {
