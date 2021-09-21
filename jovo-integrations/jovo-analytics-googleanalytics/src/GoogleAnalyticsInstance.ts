@@ -160,7 +160,7 @@ export class GoogleAnalyticsInstance {
    * @param {string} eventName maps to category -> eventGroup
    * @param {string} eventElement maps to action -> instance of eventGroup
    */
-  enqueUserEvent(eventCategory: string, eventAction: string) {
+  sendUserEvent(eventCategory: string, eventAction: string) {
     const params: Event = {
       eventCategory,
       eventAction,
