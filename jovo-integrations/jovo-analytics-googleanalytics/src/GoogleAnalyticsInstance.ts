@@ -162,7 +162,7 @@ export class GoogleAnalyticsInstance {
    * @param {string} eventName maps to category -> eventGroup
    * @param {string} eventElement maps to action -> instance of eventGroup
    */
-  sendUserEvent(eventCategory: string, eventAction: string) {
+  enqueUserEvent(eventCategory: string, eventAction: string) {
     const params: Event = {
       eventCategory,
       eventAction,
@@ -170,6 +170,7 @@ export class GoogleAnalyticsInstance {
       documentPath: this.jovo.getRoute().path,
     };
 
-    return this.jovo.$googleAnalytics.sendEvent(params);
+    this.jovo.$googleAnalytics.visitor?.event(params);
+    return this.jovo.$googleAnalytics.visitor;
   }
 }

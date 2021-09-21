@@ -79,11 +79,11 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
     }
   }
 
-  protected async sendUnhandledEvents(jovo: Jovo) {
+  protected async enqueUnhandledEvents(jovo: Jovo) {
     if (jovo.$alexaSkill!.getEndReason() === 'EXCEEDED_MAX_REPROMPTS') {
-      await jovo.$googleAnalytics.sendUserEvent('FlowError', 'Exceeded_Max_Reprompts');
+      await jovo.$googleAnalytics.enqueUserEvent('FlowError', 'Exceeded_Max_Reprompts');
     }
-    return super.sendUnhandledEvents(jovo);
+    return super.enqueUnhandledEvents(jovo);
   }
 
   protected initVisitor(jovo: Jovo) {

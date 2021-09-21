@@ -175,13 +175,15 @@ export class GoogleAnalytics implements Analytics {
     const sessionTag = this.getSessionTag(jovo);
     jovo.$googleAnalytics.visitor!.set('sessionControl', sessionTag);
 
+
     // Track intent data.
     const pageview = jovo.$googleAnalytics.visitor!.pageview(this.getPageParameters(jovo));
 
+
     if (this.config.enableAutomaticEvents) {
       // Detect and send FlowErrors
-      await this.sendUnhandledEvents(jovo);
-      await this.sendIntentInputEvents(jovo);
+      this.enqueUnhandledEvents(jovo);
+      this.enqueIntentInputEvents(jovo);
     }
 
     return new Promise((resolve, reject) => {
@@ -294,26 +296,26 @@ export class GoogleAnalytics implements Analytics {
    * Detects and sends flow errors, ranging from nlu errors to bugs in the skill handler.
    * @param {object} jovo: Jovo object
    */
-  protected async sendUnhandledEvents(jovo: Jovo) {
+  protected async enqueUnhandledEvents(jovo: Jovo) {
     const intent = jovo.$request!.getIntentName();
     const { path } = jovo.getRoute();
 
     // Check if an error in the nlu model occurred.
     if (intent === 'AMAZON.FallbackIntent' || intent === 'Default Fallback Intent') {
-      return jovo.$googleAnalytics.sendUserEvent('UnhandledEvents', 'NLU_Unhandled');
+      return jovo.$googleAnalytics.enqueUserEvent('UnhandledEvents', 'NLU_Unhandled');
     }
 
     // If the current path is unhandled, an error in the skill handler occurred.
     if (path.endsWith('Unhandled')) {
-      return jovo.$googleAnalytics.sendUserEvent('UnhandledEvents', 'Skill_Unhandled');
+      return jovo.$googleAnalytics.enqueUserEvent('UnhandledEvents', 'Skill_Unhandled');
     }
   }
 
   /**
-   * Extract input from intent + send to googleAnalytics via events
+   * Extract input from intent + set event on visitor object - send later together with pageview
    * @param jovo Jovo object
    */
-  protected async sendIntentInputEvents(jovo: Jovo) {
+  protected enqueIntentInputEvents(jovo: Jovo) {
     if (jovo.$inputs) {
       for (const [key, value] of Object.entries(jovo.$inputs)) {
         if (!value.key) {
@@ -325,9 +327,10 @@ export class GoogleAnalytics implements Analytics {
           eventAction: value.key, // Input value
           eventLabel: key, // Input key
         };
-        return jovo.$googleAnalytics.sendEvent(params);
+        jovo.$googleAnalytics.visitor.event(params);
       }
     }
+    return jovo.$googleAnalytics.visitor;
   }
 
   /**
