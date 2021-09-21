@@ -52,7 +52,7 @@ export class GoogleBusiness extends Jovo<
     options?: DeepPartial<OUTPUT['options']>,
   ): Promise<void> {
     // get the length of the current output, if it's an object, assume the length is 1
-    const currentOutputLength = Array.isArray(this.$output) ? this.$output.length : 1;
+    const currentOutputLength = this.$output.length;
     if (typeof outputConstructorOrTemplate === 'function') {
       await super.$send(outputConstructorOrTemplate, options);
     } else {
@@ -63,9 +63,7 @@ export class GoogleBusiness extends Jovo<
     );
 
     // get only the newly added output
-    const newOutput = Array.isArray(this.$output)
-      ? this.$output.slice(currentOutputLength)
-      : this.$output;
+    const newOutput = this.$output.slice(currentOutputLength);
 
     let response = await outputConverter.toResponse(newOutput);
     response = await this.$platform.finalizeResponse(response, this);

@@ -84,10 +84,9 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
     if (!this.config.dynamicEntities?.enabled) {
       return;
     }
-    const outputs: OutputTemplate[] = Array.isArray(jovo.$output) ? jovo.$output : [jovo.$output];
     const locale: string = this.getLocale(jovo.$request);
 
-    for (const output of outputs) {
+    for (const output of jovo.$output) {
       const listen = output.platforms?.[jovo.$platform.constructor.name]?.listen ?? output.listen;
 
       if (
