@@ -84,7 +84,7 @@ export class GoogleAssistantPlatform extends Platform<
   onRequestStart(jovo: Jovo): void {
     const user = jovo.$googleAssistant?.$user;
     // if the user is linked and has no user id, generate one
-    if (user && user.isAccountLinked() && !user.id) {
+    if (user && user.isVerified() && !user.id) {
       user.setId(uuidV4());
     }
 
