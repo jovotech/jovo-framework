@@ -120,7 +120,6 @@ export class GoogleAnalyticsInstance {
   }
 
   async sendEvent(params: Event) {
-    console.log(`sending in handleAlexaSkillEvents`);
     return new Promise((resolve, reject) => {
       return this.visitor!.event(params).send((error, response: any) => {
         if (error) {
@@ -130,7 +129,6 @@ export class GoogleAnalyticsInstance {
         }
       });
     });
-    console.log(`finished sending in handleAlexaSkillEvents`);
   }
 
   sendTransaction(params: Transaction) {
