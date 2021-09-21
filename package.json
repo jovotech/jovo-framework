@@ -13,6 +13,7 @@
     "eslint": "lerna exec npm run eslint --ignore @jovotech/examples-* --ignore @jovotech/e2e",
     "rimraf": "lerna exec npm run rimraf --ignore @jovotech/examples-*",
     "test": "lerna exec npm run test --ignore @jovotech/examples-*",
+    "postversion": "node scripts/update-peer-dependencies.js",
     "preparePublish": "npm run bootstrap && npm run rimraf && npm run prettier && npm run eslint && npm run build && npm run test",
     "publish": "lerna publish --no-push"
   },
