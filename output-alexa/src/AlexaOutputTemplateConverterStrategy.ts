@@ -92,25 +92,22 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
       response.response.directives.push(...directives);
     };
 
-    const listen = output.listen;
-    if (typeof listen !== 'undefined') {
-      response.response.shouldEndSession = !listen;
-
-      if (typeof listen === 'object' && listen.entities) {
-        const directive = new DialogUpdateDynamicEntitiesDirective();
-        if (listen.entities.mode === DynamicEntitiesMode.Clear) {
-          directive.updateBehavior = DynamicEntitiesUpdateBehavior.Clear;
-        } else if (listen.entities.types) {
-          directive.updateBehavior = DynamicEntitiesUpdateBehavior.Replace;
-          directive.types = Object.keys(listen.entities.types).map((entityName) =>
-            this.convertDynamicEntityToSlotType(
-              entityName,
-              ((listen.entities as DynamicEntities).types as DynamicEntityMap)[entityName],
-            ),
-          );
-        }
-        addToDirectives(directive);
+    const listen = output.listen ?? true;
+    response.response.shouldEndSession = !listen;
+    if (typeof listen === 'object' && listen.entities) {
+      const directive = new DialogUpdateDynamicEntitiesDirective();
+      if (listen.entities.mode === DynamicEntitiesMode.Clear) {
+        directive.updateBehavior = DynamicEntitiesUpdateBehavior.Clear;
+      } else if (listen.entities.types) {
+        directive.updateBehavior = DynamicEntitiesUpdateBehavior.Replace;
+        directive.types = Object.keys(listen.entities.types).map((entityName) =>
+          this.convertDynamicEntityToSlotType(
+            entityName,
+            ((listen.entities as DynamicEntities).types as DynamicEntityMap)[entityName],
+          ),
+        );
       }
+      addToDirectives(directive);
     }
 
     const message = output.message;
