@@ -275,10 +275,19 @@ export class GoogleAnalytics implements Analytics {
 
     // Stop the current tracking session.
     jovo.$googleAnalytics.visitor!.set('sessionControl', 'end');
-    await jovo.$googleAnalytics
-      .visitor!
-      .exception(handleRequest.error!.name)
-      .send();
+
+    return new Promise((resolve, reject) => {
+      jovo.$googleAnalytics.visitor
+        ?.pageview(this.getPageParameters(jovo))
+        .exception(handleRequest.error!.name)
+        .send((error, response: any) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(response);
+          }
+        });
+    });
   }
 
   /**

@@ -131,7 +131,6 @@ export class GoogleAnalyticsInstance {
       });
     });
     console.log(`finished sending in handleAlexaSkillEvents`);
-
   }
 
   sendTransaction(params: Transaction) {
