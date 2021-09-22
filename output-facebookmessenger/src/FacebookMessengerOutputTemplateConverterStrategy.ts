@@ -83,13 +83,14 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
   convertOutput(output: OutputTemplate): FacebookMessengerResponse | FacebookMessengerResponse[] {
     const makeResponse: (message: FacebookMessengerMessage) => FacebookMessengerResponse = (
       message,
-    ) => ({
-      messaging_type: MessagingType.Response,
-      recipient: {
-        id: '',
-      },
-      message,
-    });
+    ) =>
+      this.prepareResponse({
+        messaging_type: MessagingType.Response,
+        recipient: {
+          id: '',
+        },
+        message,
+      }) as FacebookMessengerResponse;
     const responses: FacebookMessengerResponse[] = [];
 
     const addMessageToResponses = (message: FacebookMessengerMessage) => {

@@ -8,6 +8,7 @@ import {
   OutputTemplateConverterStrategyConfig,
   plainToClass,
   PlatformOutputTemplate,
+  PlainObjectType,
   removeSSML,
   removeSSMLSpeakTags,
   toSSML,
@@ -32,6 +33,10 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
       output = this.mergeOutputTemplates(output);
     }
     return this.shouldSanitize() ? this.sanitizeOutput(output) : output;
+  }
+
+  prepareResponse(rawResponse: PlainObjectType<RESPONSE>): RESPONSE {
+    return super.prepareResponse(rawResponse) as RESPONSE;
   }
 
   protected abstract sanitizeOutput(output: OutputTemplate): OutputTemplate;

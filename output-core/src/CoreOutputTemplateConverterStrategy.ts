@@ -16,7 +16,7 @@ export class CoreOutputTemplateConverterStrategy extends OutputTemplateConverter
 
   toResponse(output: OutputTemplate | OutputTemplate[]): CoreResponse {
     output = Array.isArray(output) ? output : [output];
-    const response: CoreResponse = {
+    const response: CoreResponse = this.prepareResponse({
       version: '4.0.0',
       platform: 'core',
       output,
@@ -30,7 +30,7 @@ export class CoreOutputTemplateConverterStrategy extends OutputTemplateConverter
           data: {},
         },
       },
-    };
+    }) as CoreResponse;
     let mergedListen: ListenValue | undefined;
     output.forEach((outputItem) => {
       const listen = outputItem.listen ?? true;
