@@ -120,26 +120,38 @@ export class GoogleAnalyticsInstance {
   }
 
   async sendEvent(params: Event) {
-    await this.visitor!.event(params, (err: any) => {
-      if (err) {
-        throw new JovoError(err.message, ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics');
-      }
-    }).send();
+    return new Promise((resolve, reject) => {
+      return this.visitor!.event(params).send((error, response: any) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(response);
+        }
+      });
+    });
   }
 
   sendTransaction(params: Transaction) {
-    this.visitor!.transaction(params, (err: any) => {
-      if (err) {
-        throw new JovoError(err.message, ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics');
-      }
-    }).send();
+    return new Promise((resolve, reject) => {
+      return this.visitor!.transaction(params).send((error, response: any) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(response);
+        }
+      });
+    });
   }
   sendItem(params: TransactionItem) {
-    this.visitor!.transaction(params, (err: any) => {
-      if (err) {
-        throw new JovoError(err.message, ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics');
-      }
-    }).send();
+    return new Promise((resolve, reject) => {
+      return this.visitor!.transaction(params).send((error, response: any) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(response);
+        }
+      });
+    });
   }
 
   /**
@@ -156,6 +168,7 @@ export class GoogleAnalyticsInstance {
       documentPath: this.jovo.getRoute().path,
     };
 
-    this.jovo.$googleAnalytics.visitor!.event(params);
+    this.jovo.$googleAnalytics.visitor?.event(params);
+    return this.jovo.$googleAnalytics.visitor;
   }
 }

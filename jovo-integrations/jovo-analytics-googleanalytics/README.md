@@ -272,8 +272,8 @@ Events are user interactions with data describing such events. Events can be com
 
 // app.js
 
-LAUNCH() {
-    this.$googleAnalytics.sendEvent({
+async LAUNCH() {
+    await this.$googleAnalytics.sendEvent({
         eventCategory: 'ItemPrice',
         eventAction: 'Teddy Bear',
         eventLabel: this.$user.getId(),
@@ -286,8 +286,8 @@ LAUNCH() {
 
 // app.js
 
-LAUNCH() {
-    this.$googleAnalytics.sendEvent({
+async LAUNCH() {
+    await this.$googleAnalytics.sendEvent({
         eventCategory: 'ItemPrice',
         eventAction: 'Teddy Bear',
         eventLabel: this.$user.getId(),
@@ -314,8 +314,8 @@ Furthermore, you can attach your own properties to the object.
 
 // app.js
 
-LAUNCH() {
-    this.$googleAnalytics.sendTransaction({
+async LAUNCH() {
+    await this.$googleAnalytics.sendTransaction({
         transactionId: '1234',
         transactionRevenue: 100,
         transactionShipping: 10,
@@ -329,8 +329,8 @@ LAUNCH() {
 
 // app.js
 
-LAUNCH() {
-    this.$googleAnalytics.sendTransaction({
+async LAUNCH() {
+    await this.$googleAnalytics.sendTransaction({
         transactionId: '1234',
         transactionRevenue: 100,
         transactionShipping: 10,
@@ -359,8 +359,8 @@ Furthermore, you can attach your own properties to the object.
 
 // app.js
 
-LAUNCH() {
-    this.$googleAnalytics.sendItem({
+async LAUNCH() {
+    await this.$googleAnalytics.sendItem({
         transactionId: '1234',
         itemName: 'Premium Subscription',
         itemPrice: 30,
@@ -375,8 +375,8 @@ LAUNCH() {
 
 // app.js
 
-LAUNCH() {
-    this.$googleAnalytics.sendItem({
+async LAUNCH() {
+    await this.$googleAnalytics.sendItem({
         transactionId: '1234',
         itemName: 'Premium Subscription',
         itemPrice: 30,
@@ -390,7 +390,8 @@ LAUNCH() {
 
 #### sendUserEvent()
 
-`sendUserEvent()` works almost the same as `sendEvent()` except that the only parameters that you have to provide are `eventCategory` and `eventAction`. The plugin sets the values for `eventLabel` and `documentPath` automatically to your users id and the current session path.
+`sendUserEvent()` works almost the same as `sendEvent()` except that the only parameters that you have to provide are `eventCategory` and `eventAction`. An additional difference is that the enqueued event is not sent immediately but with the next "send" method call. If send is not called manually all events and pageview are sent together before the response middleware.
+The plugin sets the values for `eventLabel` and `documentPath` automatically to your users id and the current session path.
 
 ```javascript
 // @language=javascript

@@ -180,8 +180,8 @@ export class GoogleAnalytics implements Analytics {
 
     if (this.config.enableAutomaticEvents) {
       // Detect and send FlowErrors
-      this.sendUnhandledEvents(jovo);
-      this.sendIntentInputEvents(jovo);
+      this.enqueueUnhandledEvents(jovo);
+      this.enqueueIntentInputEvents(jovo);
     }
 
     return new Promise((resolve, reject) => {
@@ -266,7 +266,7 @@ export class GoogleAnalytics implements Analytics {
    * Tracks uncaught user exceptions.
    * @param {object} handleRequest: HandleRequest to act upon
    */
-  protected sendError(handleRequest: HandleRequest) {
+  protected async sendError(handleRequest: HandleRequest) {
     const jovo: Jovo = handleRequest.jovo!;
     if (!jovo) {
       // don't send anything
@@ -275,21 +275,26 @@ export class GoogleAnalytics implements Analytics {
 
     // Stop the current tracking session.
     jovo.$googleAnalytics.visitor!.set('sessionControl', 'end');
-    jovo.$googleAnalytics
-      .visitor!.pageview(this.getPageParameters(jovo), (err: any) => {
-        if (err) {
-          throw new JovoError(err.message, ErrorCode.ERR_PLUGIN, 'jovo-analytics-googleanalytics');
-        }
-      })
-      .exception(handleRequest.error!.name)
-      .send();
+
+    return new Promise((resolve, reject) => {
+      jovo.$googleAnalytics.visitor
+        ?.pageview(this.getPageParameters(jovo))
+        .exception(handleRequest.error!.name)
+        .send((error, response: any) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(response);
+          }
+        });
+    });
   }
 
   /**
    * Detects and sends flow errors, ranging from nlu errors to bugs in the skill handler.
    * @param {object} jovo: Jovo object
    */
-  protected sendUnhandledEvents(jovo: Jovo) {
+  protected async enqueueUnhandledEvents(jovo: Jovo) {
     const intent = jovo.$request!.getIntentName();
     const { path } = jovo.getRoute();
 
@@ -305,10 +310,10 @@ export class GoogleAnalytics implements Analytics {
   }
 
   /**
-   * Extract input from intent + send to googleAnalytics via events
+   * Extract input from intent + set event on visitor object - send later together with pageview
    * @param jovo Jovo object
    */
-  protected sendIntentInputEvents(jovo: Jovo) {
+  protected enqueueIntentInputEvents(jovo: Jovo) {
     if (jovo.$inputs) {
       for (const [key, value] of Object.entries(jovo.$inputs)) {
         if (!value.key) {
@@ -320,9 +325,10 @@ export class GoogleAnalytics implements Analytics {
           eventAction: value.key, // Input value
           eventLabel: key, // Input key
         };
-        jovo.$googleAnalytics.visitor!.event(params);
+        jovo.$googleAnalytics.visitor.event(params);
       }
     }
+    return jovo.$googleAnalytics.visitor;
   }
 
   /**

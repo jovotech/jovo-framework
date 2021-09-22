@@ -38,7 +38,8 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
     if (!eventName) {
       return;
     }
-    await jovo.$googleAnalytics.sendEvent({
+
+    return jovo.$googleAnalytics.sendEvent({
       eventCategory: 'AlexaSkillEvent',
       eventAction: eventName,
       eventLabel: this.getUserId(jovo),
@@ -78,12 +79,11 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
     }
   }
 
-  protected sendUnhandledEvents(jovo: Jovo) {
-    super.sendUnhandledEvents(jovo);
-
+  protected async enqueUnhandledEvents(jovo: Jovo) {
     if (jovo.$alexaSkill!.getEndReason() === 'EXCEEDED_MAX_REPROMPTS') {
-      jovo.$googleAnalytics.sendUserEvent('FlowError', 'Exceeded_Max_Reprompts');
+      await jovo.$googleAnalytics.sendUserEvent('FlowError', 'Exceeded_Max_Reprompts');
     }
+    return super.enqueueUnhandledEvents(jovo);
   }
 
   protected initVisitor(jovo: Jovo) {
