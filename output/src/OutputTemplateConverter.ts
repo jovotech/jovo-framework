@@ -85,9 +85,8 @@ export class OutputTemplateConverter<
     objOrArray: T | T[],
     targetClass: new (...args: unknown[]) => T,
   ): Promise<ValidationError[]> {
-    const getInstance = (item: T) =>
-      // eslint-disable-next-line @typescript-eslint/ban-types
-      (item instanceof targetClass ? item : plainToClass(targetClass, item)) as unknown as object;
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    const getInstance = (item: T) => plainToClass(targetClass, item) as unknown as object;
     if (Array.isArray(objOrArray)) {
       const errorMatrix = await Promise.all(objOrArray.map((item) => validate(getInstance(item))));
       // TODO: maybe modify key or something to indicate better which item was invalid
