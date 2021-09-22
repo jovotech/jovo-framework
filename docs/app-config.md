@@ -126,6 +126,19 @@ import { AlexaPlatform } from '@jovotech/platform-alexa';
 
 Each plugin has its own configuration options which you can find in the respective plugin's documentation.
 
+Additionally, each plugin config includes a `skipTests` option that makes sure that [unit tests](https://v4.jovo.tech/docs/unit-testing) don't use that plugin:
+
+```typescript
+{
+  plugins: [
+    new SomePlugin({
+      // ...
+      skipTests: true,
+    })
+  ],
+}
+```
+
 
 ### Logging
 
