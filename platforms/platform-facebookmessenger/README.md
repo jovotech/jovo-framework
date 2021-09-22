@@ -137,4 +137,4 @@ For output that is only used for Facebook Messenger, you can add the following t
 
 It is possible that a user can send multiple messages before the app gets a chance to respond. In this case, each request goes through the [RIDR lifecycle](https://v4.jovo.tech/docs/ridr-lifecycle) on its own and receives a response.
 
-In the case a request contains multiple events, the response is an array that is returned back to the platform at the end of the lifecycle.
+In the case a request contains multiple events ([see the official request format docs](https://developers.facebook.com/docs/messenger-platform/webhook#format)), RIDR gets executed for each one and the response is an array that is returned back to the platform at the end of the lifecycle.
