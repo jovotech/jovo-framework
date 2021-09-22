@@ -114,15 +114,18 @@ Under the hood, Jovo translates the `reprompt` into `NO_INPUT_1`, `NO_INPUT_2`, 
 
 ### listen
 
-The [`listen` element](https://v4.jovo.tech/docs/output-templates#listen) needs to be added to tell Google Assistant that it should keep the microphone open and wait for a user's response.
+The [`listen` element](https://v4.jovo.tech/docs/output-templates#listen)  determines if Google Assistant should keep the microphone open and wait for a user's response.
+
+By default (if you don't specify it otherwise in the template), `listen` is set to `true`. If you want to close a session after a response, you need to set it to `false`:
 
 ```typescript
 {
-  listen: true,
+  message: `Goodbye!`,
+  listen: false,
 }
 ```
 
-If `listen` is not set to `true`, Jovo transitions to the `actions.scene.END_CONVERSATION` under the hood.
+If `listen` is set to `false`, Jovo sets the `expectUserResponse` in the Google Assistant response to `false`.
 
 The `listen` element can also be used to add dynamic entities, called type overrides in Google Assistant. [Learn more in the `$entities` documentation](https://v4.jovo.tech/docs/entities#dynamic-entities).
 

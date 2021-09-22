@@ -76,7 +76,6 @@ The [generic `reprompt` element](https://v4.jovo.tech/docs/output-templates#mess
 {
   message: `Hello world! What's your name?`,
   reprompt: 'Could you tell me your name?',
-  listen: true,
 }
 ```
 
@@ -93,19 +92,20 @@ Under the hood, Jovo translates the `reprompt` into an `outputSpeech` object ([s
 }
 ```
 
-**Note**: For Alexa to wait for a user to answer a question, the [listen property](#listen) needs to be added.
-
 ### listen
 
-The [`listen` element](https://v4.jovo.tech/docs/output-templates#listen)  needs to be added to tell Alexa that it should keep the microphone open and wait for a user's response.
+The [`listen` element](https://v4.jovo.tech/docs/output-templates#listen)  determines if Alexa should keep the microphone open and wait for a user's response.
+
+By default (if you don't specify it otherwise in the template), `listen` is set to `true`. If you want to close a session after a response, you need to set it to `false`:
 
 ```typescript
 {
-  listen: true,
+  message: `Goodbye!`,
+  listen: false,
 }
 ```
 
-Under the hood, Jovo translates `listen: true` to `"shouldEndSession": false` in the JSON response.
+Under the hood, Jovo translates `listen: false` to `"shouldEndSession": true` in the JSON response.
 
 The `listen` element can also be used to add dynamic entities for Alexa. [Learn more in the `$entities` documentation](https://v4.jovo.tech/docs/entities#dynamic-entities).
 
