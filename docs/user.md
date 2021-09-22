@@ -57,7 +57,7 @@ const score = this.$user.data.score;
 
 Additionally to the persisted data, you can also access the following information about the user:
 
-* `this.$user.id`: The user's ID is also the key to their database entry.
+* `this.$user.id`: The user's ID is also the key to their database entry. This is either a string or `undefined` (if the platform does not support user IDs).
 * `this.$user.accessToken`: For platforms that offer account linking, the `accessToken` is a string for signed in users. The value is `undefined` if the user hasn't linked their account, or the platform does not support account linking.
 * `this.$user.createdAt`: When was this user's database entry created?
 * `this.$user.updatedAt`: When was this user's data last updated?
