@@ -116,3 +116,19 @@ If the `getEmail` call returns an error with the code `NO_USER_PERMISSION`, an `
 There are various Alexa specific elements that can be added to the [output](https://v4.jovo.tech/docs/output).
 
 [Learn more in the Jovo Output documentation for Alexa](https://v4.jovo.tech/marketplace/platform-alexa/output).
+
+
+### Entities (Slots)
+
+Alexa *slots* are called *entities* in Jovo. You can learn more in the [Jovo Model](https://v4.jovo.tech/docs/models) and the [`$entities` documentation](https://v4.jovo.tech/docs/entities).
+
+You can access the Alexa-specific `$entities` property like this, which allows you to get typed access to the `native` API result for each slot:
+
+```typescript
+this.$alexa.$entities
+
+// Example: Get native API result object for slot "name"
+this.$alexa.$entities.name.native
+```
+
+Learn more about the structure of the API result in the [official Alexa documentation on entity resolution](https://developer.amazon.com/en-US/docs/alexa/custom-skills/entity-resolution.html).
