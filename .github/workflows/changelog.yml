@@ -1,33 +1,29 @@
-name: changelog generation 
+name: changelog generation
 
 # Only trigger on pull request closed events
 on:
-  workflow_dispatch:
   pull_request:
     types: [closed]
-  create:
-    tags:
-      - '*'
 jobs:
-  debug: 
+  debug:
     runs-on: ubuntu-latest
     steps:
       - uses: hmarr/debug-action@v2
   changelog:
     # This job will only run if a PR has been merged or a tag has been created
-    if: ${{ github.event.ref_type == 'tag' || (github.event.pull_request && github.event.pull_request.merged == true) }}
+    if: ${{ github.base_ref == 'v4/release' && github.event.pull_request && github.event.pull_request.merged == true }}
     runs-on: ubuntu-latest
     steps:
       - name: Checking out repository
         uses: actions/checkout@v2
-        with: 
+        with:
           fetch-depth: '0'
       - name: Generating changelog
         env:
-          REF: ${{ github.event.ref }}
+          BASE_REF: ${{ github.base_ref }}
         run: |
           # Get the originating branch
-          BRANCH=$(git branch -r --contains $REF | sed "s/^\s*origin\///")
+          BRANCH=$(git branch -r --contains $BASE_REF | sed "s/^\s*origin\///")
           git checkout $BRANCH
           npm i
           node bin/changelog
