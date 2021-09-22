@@ -58,7 +58,7 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
   }
 
   toResponse(output: OutputTemplate): DialogflowResponse {
-    const response: DialogflowResponse = {};
+    const response: DialogflowResponse = this.prepareResponse({});
 
     const listen = output.listen;
     if (typeof listen === 'object' && listen.entities?.types) {

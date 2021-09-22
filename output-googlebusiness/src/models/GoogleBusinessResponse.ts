@@ -7,6 +7,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  JovoResponse,
   Type,
   validate,
   ValidateNested,
@@ -17,7 +18,7 @@ import { Representative } from './Representative';
 import { RichCard } from './RichCard';
 import { Suggestion } from './Suggestion';
 
-export class GoogleBusinessResponse {
+export class GoogleBusinessResponse extends JovoResponse {
   [key: string]: unknown;
 
   @IsString()
@@ -94,4 +95,8 @@ export class GoogleBusinessResponse {
   })
   @Type(() => RichCard)
   richCard?: RichCard;
+
+  hasSessionEnded(): boolean {
+    return false;
+  }
 }

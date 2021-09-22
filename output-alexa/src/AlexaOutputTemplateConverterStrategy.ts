@@ -80,10 +80,7 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
   }
 
   toResponse(output: OutputTemplate): AlexaResponse {
-    const response: AlexaResponse = {
-      version: '1.0',
-      response: {},
-    };
+    const response: AlexaResponse = this.prepareResponse({ version: '1.0', response: {} });
 
     const addToDirectives = <DIRECTIVES extends Directive[]>(...directives: DIRECTIVES) => {
       if (!response.response.directives) {

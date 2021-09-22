@@ -57,4 +57,8 @@ export class DialogflowResponse<
   @ValidateNested({ each: true })
   @Type(() => SessionEntityType)
   session_entity_types?: SessionEntityType[];
+
+  hasSessionEnded(): boolean {
+    return !!this.end_interaction;
+  }
 }
