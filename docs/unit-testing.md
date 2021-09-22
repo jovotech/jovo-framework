@@ -545,7 +545,7 @@ test('should respond in a positive way if user likes pizza', async () => {
   const testSuite = new TestSuite();
 
   // First interaction
-  const { output as launchOutput } = await testSuite.run({
+  const { output: launchOutput } = await testSuite.run({
     type: InputType.Launch
   });
   expect(launchOutput).toEqual([{
@@ -553,7 +553,7 @@ test('should respond in a positive way if user likes pizza', async () => {
   }]);
 
   // Second interaction
-  const { output as yesOutput } = await testSuite.run({
+  const { output: yesOutput } = await testSuite.run({
     intent: 'YesIntent'
   });
   expect(yesOutput).toEqual([{
