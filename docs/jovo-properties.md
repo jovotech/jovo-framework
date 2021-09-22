@@ -47,13 +47,13 @@ this.$input
 
 ### $output
 
-The `$output` property contains structured output that is later turned into a native platform response. It is the result of executing a [handler](./handlers.md) and the third step of the [RIDR lifecycle](./ridr-lifecycle.md).
+The `$output` array contains one or more structured output templates that are later turned into one or more native platform responses. It is the result of executing a [handler](./handlers.md) and the third step of the [RIDR lifecycle](./ridr-lifecycle.md).
 
 ```typescript
 this.$output
 ```
 
-[Learn more about the `$output` property here](./output.md).
+[Learn more about the `$output` array here](./output.md).
 
 
 ### $response

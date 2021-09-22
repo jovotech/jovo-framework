@@ -62,12 +62,12 @@ Here are some of the things that happen in this step:
 * Services: Utility classes that keep business logic separated dialogue (handlers)
 * [Output](./output.md): The result of a handler is to return an appropriate output
 
-The Dialogue & Logic step usually ends with a populated [Jovo `$output` object](./output.md).
+The Dialogue & Logic step usually ends with a populated [Jovo `$output` array](./output.md).
 
 
 ## Response
 
-In the final Response step, the `$output` object from the previous step is translated into a native platform `$response`.
+In the final Response step, the `$output` array from the previous step is translated into a native platform `$response`.
 
 This response is then returned back to the platform.
 
@@ -87,7 +87,7 @@ Middleware | Description
 `dialogue.start` | Enters the `dialogue` middleware group
 `dialogue.router` | Uses information from the `interpretation` steps to find the right component and handler
 `dialogue.logic` | Executes the component and handler logic
-`dialogue.end` | Leaves the `dialogue` middleware group with propagated `$output` object
+`dialogue.end` | Leaves the `dialogue` middleware group with propagated `$output` array
 `response.start` | Enters the `response` middleware group
 `response.output` | Turns `$output` into a raw JSN response
 `response.tts` | TTS integrations turn text into speech output
