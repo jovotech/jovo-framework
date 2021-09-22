@@ -1,5 +1,4 @@
 import {
-  InputType,
   InputTypeLike,
   JovoInput,
   JovoInputObject,
@@ -30,7 +29,7 @@ export class CoreRequest extends JovoRequest {
 
   setIntent(intent: string): void {
     if (!this.input) {
-      this.input = { type: InputType.Intent };
+      this.input = {};
     }
     this.input.intent = intent;
   }
@@ -52,9 +51,11 @@ export class CoreRequest extends JovoRequest {
   getSessionData(): UnknownObject | undefined {
     return this.context?.session?.data;
   }
+
   getSessionId(): string | undefined {
     return this.context?.session?.id;
   }
+
   isNewSession(): boolean | undefined {
     return this.context?.session?.new;
   }
@@ -69,7 +70,6 @@ export class CoreRequest extends JovoRequest {
 
   setSessionData(data: Record<string, unknown>): void {
     if (!this.context?.session?.data) {
-      // TODO: What to do here?
       return;
     }
 

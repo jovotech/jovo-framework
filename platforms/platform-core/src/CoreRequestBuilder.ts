@@ -32,10 +32,10 @@ export class CoreRequestBuilder extends RequestBuilder<CorePlatform> {
     const request: CoreRequest = Object.create(CoreRequest.prototype);
 
     if (typeof nameOrJson === 'string') {
-      Object.assign(request, JSON.parse(intentJson));
+      Object.assign(request, intentJson);
       request.setIntent(nameOrJson);
     } else {
-      Object.assign(request, nameOrJson || JSON.parse(intentJson));
+      Object.assign(request, nameOrJson || intentJson);
     }
 
     return request;

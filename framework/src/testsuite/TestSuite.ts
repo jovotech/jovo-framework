@@ -110,8 +110,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
 > {
   private requestOrInput!: RequestOrInput<PLATFORM>;
   private app: App;
-
-  readonly requestBuilder!: RequestBuilder<PLATFORM>;
+  private requestBuilder: RequestBuilder<PLATFORM>;
 
   // Platform-specific typings for Jovo properties
   $request!: PlatformTypes<PLATFORM>['request'];
@@ -243,16 +242,20 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     for (const appFileName of appFileNames) {
       const appFilePath: string = joinPaths(...appDirectory, appFileName);
       if (existsSync(appFilePath)) {
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const { app } = require(appFilePath);
+        try {
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
+          const { app } = require(appFilePath);
 
-        if (!app) {
-          continue;
+          if (!app) {
+            continue;
+          }
+
+          // TODO: Instead of cloning the entire app, it'd be sufficient to
+          // implement app.middlewareCollection.once() to run handlers once per lifecycle
+          return _cloneDeep(app) as App;
+        } catch (error) {
+          throw new JovoError({ message: 'Failed to load app', details: error.message });
         }
-
-        // TODO: Instead of cloning the entire app, it'd be sufficient to
-        // implement app.middlewareCollection.once() to run handlers once per lifecycle
-        return _cloneDeep(app) as App;
       }
     }
 

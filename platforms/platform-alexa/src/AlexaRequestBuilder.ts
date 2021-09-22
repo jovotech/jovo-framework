@@ -14,7 +14,7 @@ export class AlexaRequestBuilder extends RequestBuilder<AlexaPlatform> {
       'LaunchRequest.json',
     ));
     const request: AlexaRequest = Object.create(AlexaRequest.prototype);
-    return Object.assign(request, json || JSON.parse(launchJson));
+    return Object.assign(request, json || launchJson);
   }
 
   intent(name?: string): AlexaRequest;
@@ -31,10 +31,10 @@ export class AlexaRequestBuilder extends RequestBuilder<AlexaPlatform> {
     const request: AlexaRequest = Object.create(AlexaRequest.prototype);
 
     if (typeof nameOrJson === 'string') {
-      Object.assign(request, JSON.parse(intentJson));
+      Object.assign(request, intentJson);
       request.setIntent(nameOrJson);
     } else {
-      Object.assign(request, nameOrJson || JSON.parse(intentJson));
+      Object.assign(request, nameOrJson || intentJson);
     }
 
     return request;
