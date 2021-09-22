@@ -35,7 +35,7 @@ The code snippet from above consists of the following elements:
 - `<middleware>`: This is the middleware this hook should use, for example `platform.output`. Find all middlewares in the [RIDR docs](./ridr-lifecycle.md#middlewares). You can also add `before` and `after`, e.g. `before.platform.output`. 
 - Callback function with `jovo`: This is where you add the code that should get executed when the middleware triggers the hook.
 
-Here is an example that logs the [`$output` object](./output.md) before it is turned into a native platform response:
+Here is an example that logs the [`$output` array](./output.md) before it is turned into a native platform response:
 
 ```typescript
 // src/app.ts

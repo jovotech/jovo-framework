@@ -102,7 +102,7 @@ export abstract class Jovo<
 > {
   $request: REQUEST;
   $input: JovoInput;
-  $output: OutputTemplate | OutputTemplate[];
+  $output: OutputTemplate[];
   $response?: RESPONSE | RESPONSE[];
 
   $data: RequestData;
@@ -264,11 +264,6 @@ export abstract class Jovo<
       newOutput = output;
     } else {
       newOutput = outputConstructorOrTemplate;
-    }
-
-    // make $output an array if it is none
-    if (!Array.isArray(this.$output)) {
-      this.$output = [this.$output];
     }
 
     // push the new OutputTemplate(s) to $output
