@@ -21,8 +21,7 @@ export class TestDb extends DbPlugin<FileDbConfig> {
   }
 
   async mount(handleRequest: HandleRequest): Promise<void> {
-    handleRequest.middlewareCollection.use('request.end', this.loadData.bind(this));
-    handleRequest.middlewareCollection.use('response.start', this.saveData.bind(this));
+    super.mount(handleRequest);
     handleRequest.middlewareCollection.use('after.response.end', this.clearData.bind(this));
   }
 
@@ -47,16 +46,15 @@ export class TestDb extends DbPlugin<FileDbConfig> {
     return dbItems.find((dbItem: DbItem) => dbItem.id === primaryKey);
   }
 
-  async loadData(jovo: Jovo): Promise<void> {
-    const dbItem: DbItem | undefined = this.getDbItem(jovo.$user.id);
+  async loadData(userId: string, jovo: Jovo): Promise<void> {
+    const dbItem: DbItem | undefined = this.getDbItem(userId);
     if (dbItem) {
       jovo.$user.isNew = false;
       jovo.setPersistableData(dbItem, this.config.storedElements);
     }
   }
 
-  async saveData(jovo: Jovo): Promise<void> {
-    const userId: string = jovo.$user.id;
+  async saveData(userId: string, jovo: Jovo): Promise<void> {
     const dbItems: DbItem[] = this.getDbItems(userId);
     const dbItem: DbItem | undefined = dbItems.find((dbItem: DbItem) => dbItem.id === userId);
 
@@ -76,6 +74,10 @@ export class TestDb extends DbPlugin<FileDbConfig> {
   }
 
   async clearData(jovo: Jovo): Promise<void> {
+    if (!jovo.$user.id) {
+      return;
+    }
+
     if (
       !this.config.deleteOnSessionEnded ||
       !existsSync(this.getDbFilePath(jovo.$user.id)) ||

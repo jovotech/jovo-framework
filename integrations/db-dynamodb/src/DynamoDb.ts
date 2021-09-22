@@ -124,28 +124,28 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
     return data.Item as DbItem;
   }
 
-  async loadData(jovo: Jovo): Promise<void> {
+  async loadData(userId: string, jovo: Jovo): Promise<void> {
     this.checkRequirements();
-    const dbItem = await this.getDbItem(jovo.$user.id);
 
+    const dbItem = await this.getDbItem(userId);
     if (dbItem) {
       jovo.$user.isNew = false;
       jovo.setPersistableData(unmarshall(dbItem), this.config.storedElements);
     }
   }
 
-  async saveData(jovo: Jovo): Promise<void> {
+  async saveData(userId: string, jovo: Jovo): Promise<void> {
     this.checkRequirements();
 
     const params = {
       Item: {
-        [this.config.table.primaryKeyColumn!]: jovo.$user.id as string,
+        [this.config.table.primaryKeyColumn!]: userId,
       } as UnknownObject,
       TableName: this.config.table.name!,
     };
 
     const item: DbItem = {
-      [this.config.table.primaryKeyColumn!]: jovo.$user.id,
+      [this.config.table.primaryKeyColumn!]: userId,
     };
     await this.applyPersistableData(jovo, item);
 

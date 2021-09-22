@@ -10,7 +10,7 @@ export interface JovoHistoryItem extends UnknownObject {
   state?: JovoSession['$state'];
   entities?: EntityMap;
 
-  output?: OutputTemplate | OutputTemplate[];
+  output?: OutputTemplate[];
   response?: JovoResponse | JovoResponse[];
 }
 

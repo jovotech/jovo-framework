@@ -1,5 +1,6 @@
 import {
   AnyObject,
+  DbPlugin,
   Extensible,
   ExtensibleConfig,
   ExtensibleInitConfig,
@@ -14,10 +15,10 @@ import {
 import { JWT, JWTInput } from 'google-auth-library';
 import { v4 as uuidV4 } from 'uuid';
 import { GoogleBusiness } from './GoogleBusiness';
-import { GoogleBusinessRequest } from './GoogleBusinessRequest';
-import { GoogleBusinessUser } from './GoogleBusinessUser';
 import { GoogleBusinessDevice } from './GoogleBusinessDevice';
+import { GoogleBusinessRequest } from './GoogleBusinessRequest';
 import { GoogleBusinessRequestBuilder } from './GoogleBusinessRequestBuilder';
+import { GoogleBusinessUser } from './GoogleBusinessUser';
 
 export interface GoogleBusinessConfig extends ExtensibleConfig {
   serviceAccount: JWTInput;
@@ -63,12 +64,17 @@ export class GoogleBusinessPlatform extends Platform<
   mount(parent: Extensible): Promise<void> | void {
     super.mount(parent);
 
-    // hook into parent's middleware in order to be able to call this first and skip before other plugins are called.
+    // Hook into parent's middleware in order to be able to call this first and skip before other plugins are called.
     parent.middlewareCollection.use('before.request.start', (jovo) => {
       return this.beforeRequestStart(jovo);
     });
     this.middlewareCollection.use('request.start', (jovo) => {
       return this.enableDatabaseSessionStorage(jovo, this.config.session);
+    });
+
+    // Hook into parent's middleware after loading the session data from the database.
+    parent.middlewareCollection.use('after.request.end', (jovo) => {
+      return this.handlePotentialDuplicateMessage(jovo);
     });
   }
 
@@ -97,6 +103,43 @@ export class GoogleBusinessPlatform extends Platform<
       response.messageId = uuidV4();
     }
     return response;
+  }
+
+  private async handlePotentialDuplicateMessage(jovo: Jovo) {
+    if (!jovo.$googleBusiness) {
+      return;
+    }
+    const messageId =
+      jovo.$googleBusiness.$request.message?.messageId ||
+      jovo.$googleBusiness.$request.suggestionResponse?.message?.match?.(/messages[/](.*)/)?.[1];
+    if (!messageId) {
+      return;
+    }
+    const processedMessages = jovo.$session.data._GOOGLE_BUSINESS_PROCESSED_MESSAGES_ || [];
+    // message was handled already
+    if (processedMessages.includes(messageId)) {
+      jovo.$handleRequest.stopMiddlewareExecution();
+      return jovo.$handleRequest.server.setResponse({});
+    }
+    processedMessages.push(messageId);
+    jovo.$session.data._GOOGLE_BUSINESS_PROCESSED_MESSAGES_ = processedMessages;
+
+    if (!jovo.$user.id) {
+      return;
+    }
+
+    const dbPlugins = Object.values(jovo.$handleRequest.plugins).filter(
+      (plugin) => plugin instanceof DbPlugin,
+    ) as DbPlugin[];
+
+    // Immediately save the data into the database, so that other simultaneous or delayed requests can already check if the message is being handled or was handled already.
+    // If some time-consuming API calls were made during the handling, the saving of the processed message would only take place after those calls which could cause a delay.
+    // This delay could then cause the persisting to happen after other requests have already checked if the message was handled.
+    return Promise.all(
+      dbPlugins.map((dbPlugin) => {
+        return dbPlugin.saveData(jovo.$user.id as string, jovo);
+      }),
+    );
   }
 
   private beforeRequestStart(jovo: Jovo): void {

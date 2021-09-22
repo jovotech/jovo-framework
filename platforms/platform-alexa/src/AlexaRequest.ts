@@ -1,6 +1,5 @@
 import {
   Capability,
-  Entity,
   EntityMap,
   InputType,
   InputTypeLike,
@@ -12,7 +11,7 @@ import {
 import { ResolutionPerAuthorityStatusCode } from '@jovotech/output-alexa';
 import { AlexaCapability, AlexaCapabilityType } from './AlexaDevice';
 import { DYNAMIC_ENTITY_MATCHES_PREFIX, STATIC_ENTITY_MATCHES_PREFIX } from './constants';
-import { AuthorityResolution, Context, Request, Session } from './interfaces';
+import { AlexaEntity, AuthorityResolution, Context, Request, Session } from './interfaces';
 
 export const ALEXA_REQUEST_TYPE_TO_INPUT_TYPE_MAP: Record<string, InputTypeLike> = {
   'LaunchRequest': InputType.Launch,
@@ -47,22 +46,23 @@ export class AlexaRequest extends JovoRequest {
     }
   }
 
-  getEntities(): EntityMap | undefined {
+  getEntities(): EntityMap<AlexaEntity> | undefined {
     const slots = this.request?.intent?.slots;
     if (!slots) return;
-    return Object.keys(slots).reduce((entityMap: EntityMap, slotKey: string) => {
-      const entity: Entity = {
-        alexaSkill: slots[slotKey],
+    return Object.keys(slots).reduce((entityMap: EntityMap<AlexaEntity>, slotKey: string) => {
+      const entity: AlexaEntity = {
+        native: slots[slotKey],
       };
       if (slots[slotKey].value) {
         entity.value = slots[slotKey].value;
-        entity.key = slots[slotKey].value;
+        entity.resolved = slots[slotKey].value;
       }
 
       const modifyEntityByAuthorityResolutions = (authorityResolutions: AuthorityResolution[]) => {
         authorityResolutions.forEach((authorityResolution) => {
-          entity.key = authorityResolution.values[0].value.name;
-          entity.id = authorityResolution.values[0].value.id;
+          const { name, id } = authorityResolution.values[0].value;
+          entity.resolved = name;
+          entity.id = id || name;
         });
       };
 

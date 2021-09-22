@@ -6,7 +6,7 @@ export class CoreUser extends JovoUser<Core> {
     super(jovo);
   }
 
-  get id(): string {
-    return 'coreplatformuser';
+  get id(): string | undefined {
+    return this.jovo.$request.context?.user?.id;
   }
 }

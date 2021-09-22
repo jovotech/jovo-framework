@@ -20,8 +20,8 @@ export class AlexaUser extends JovoUser<Alexa> {
     super(jovo);
   }
 
-  get id(): string {
-    return this.jovo?.$request.getUserId() || 'AlexaUser';
+  get id(): string | undefined {
+    return this.jovo.$request.getUserId();
   }
 
   get accessToken(): string | undefined {

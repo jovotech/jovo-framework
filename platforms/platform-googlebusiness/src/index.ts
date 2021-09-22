@@ -12,6 +12,12 @@ declare module '@jovotech/framework/dist/types/Extensible' {
   }
 }
 
+declare module '@jovotech/framework/dist/types/interfaces' {
+  interface SessionData {
+    _GOOGLE_BUSINESS_PROCESSED_MESSAGES_?: string[];
+  }
+}
+
 declare module '@jovotech/framework/dist/types/Jovo' {
   interface Jovo {
     $googleBusiness?: GoogleBusiness;
