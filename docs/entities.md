@@ -49,13 +49,15 @@ Each entity is an object that contains the following information:
 ```typescript
 {
   value: 'entityValue',
+  resolved: 'mappedEntityValue',
   id: 'entityValueId',
-  key: 'mappedEntityValue',
+  native: { /* ... */ }
 }
 ```
-* `value`: The value retrieved from the user input.
-* `key`: If the entity value was a synonym, the "main" value of the language model will be provided here.
-* `id`: Some platforms and NLUs provide the possibility to add IDs to their entity values. If there is no ID available, the `id` will be the same as the `value`.
+* `value`: The (raw) value retrieved from the user input.
+* `resolved`: If the entity value was a synonym, the "main" value of the language model will be provided here. If there is no resolved value, this will default to `value`.
+* `id`: Some platforms and NLUs provide the possibility to add IDs to their entity values. If there is no ID available, the `id` will be the same as `resolved`.
+* `native`: For platforms that support additional entity features, the raw entity data of the API response will be stored here.
 
 
 ## Dynamic Entities
