@@ -18,6 +18,7 @@ import { DEFAULT_FACEBOOK_VERIFY_TOKEN, LATEST_FACEBOOK_API_VERSION } from './co
 import { FacebookMessenger } from './FacebookMessenger';
 import { FacebookMessengerDevice } from './FacebookMessengerDevice';
 import { FacebookMessengerRequest } from './FacebookMessengerRequest';
+import { FacebookMessengerRequestBuilder } from './FacebookMessengerRequestBuilder';
 import { FacebookMessengerUser } from './FacebookMessengerUser';
 import { MessengerBotEntry } from './interfaces';
 
@@ -43,6 +44,7 @@ export class FacebookMessengerPlatform extends Platform<
   jovoClass = FacebookMessenger;
   userClass = FacebookMessengerUser;
   deviceClass = FacebookMessengerDevice;
+  requestBuilder = FacebookMessengerRequestBuilder;
 
   async initialize(parent: Extensible): Promise<void> {
     if (super.initialize) {
