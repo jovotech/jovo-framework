@@ -76,6 +76,16 @@ There are various Google Assistant specific features added to the user class tha
 this.$googleAssistant.$user
 ```
 
+Google Assistant has the concept of *verified* users. Only if a user is verified (for example logged into their Google account on their mobile phone), data about the user can be stored. Learn more about the [expiration of user storage data in the official Google Assistant docs](https://developers.google.com/assistant/conversational/storage-user#expiration_of_user_storage_data).
+
+You can check is a user is verified like this:
+
+```typescript
+this.$googleAssistant.$user.isVerified()
+```
+
+If a verified user interacts with the Google Action the first time, Jovo generates a user ID and store it into the `user.params._GOOGLE_ASSISTANT_USER_ID_` [user storage](https://developers.google.com/assistant/conversational/storage-user?hl=en) property. This ID will then be used to write and retrieve data using one of the [Jovo database integrations](https://v4.jovo.tech/docs/databases).
+
 Learn more about user specific methods here:
 
 * [Account Linking](https://v4.jovo.tech/marketplace/platform-googleassistant/account-linking)
