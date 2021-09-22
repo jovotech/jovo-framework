@@ -12,7 +12,7 @@ export enum QuickReplyContentType {
 export type QuickReplyContentTypeLike = EnumLike<QuickReplyContentType>;
 
 export abstract class QuickReplyBase<
-  T extends QuickReplyContentTypeLike = QuickReplyContentTypeLike
+  T extends QuickReplyContentTypeLike = QuickReplyContentTypeLike,
 > {
   [key: string]: unknown;
 

@@ -31,5 +31,6 @@ export class RichResponse {
 
   @IsOptional()
   @ValidateNested()
+  @Type(() => LinkOutSuggestion)
   linkOutSuggestion?: LinkOutSuggestion;
 }

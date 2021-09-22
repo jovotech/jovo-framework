@@ -9,9 +9,7 @@ import { GoogleBusinessOutputTemplateResponse } from './GoogleBusinessOutputTemp
 import { Image } from './Image';
 import { Suggestion } from './Suggestion';
 
-export class GoogleBusinessOutputTemplate extends PlatformOutputTemplate<
-  GoogleBusinessOutputTemplateResponse
-> {
+export class GoogleBusinessOutputTemplate extends PlatformOutputTemplate<GoogleBusinessOutputTemplateResponse> {
   @Type(() => GoogleBusinessOutputTemplateResponse)
   nativeResponse?: GoogleBusinessOutputTemplateResponse;
 

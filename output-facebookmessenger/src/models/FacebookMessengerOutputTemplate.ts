@@ -12,9 +12,7 @@ import { FacebookMessengerOutputTemplateResponse } from './FacebookMessengerOutp
 import { QuickReply } from './quick-reply/QuickReply';
 import { Template } from './template/Template';
 
-export class FacebookMessengerOutputTemplate extends PlatformOutputTemplate<
-  FacebookMessengerOutputTemplateResponse
-> {
+export class FacebookMessengerOutputTemplate extends PlatformOutputTemplate<FacebookMessengerOutputTemplateResponse> {
   @Type(() => FacebookMessengerOutputTemplateResponse)
   nativeResponse?: FacebookMessengerOutputTemplateResponse;
 
