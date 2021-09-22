@@ -58,3 +58,4 @@ export * from './models';
 export * from './constants';
 
 export * from './GoogleBusinessOutputTemplateConverterStrategy';
+export { convertMessageToGoogleBusinessText } from './utilities';

@@ -11,10 +11,7 @@ import {
 } from '@jovotech/output';
 import { MESSAGE_TEXT_MAX_LENGTH, PAYLOAD_MAX_LENGTH } from '../../constants';
 import { TransformQuickReply } from '../../decorators/transformation/TransformQuickReply';
-import { UserEmailQuickReply } from '../quick-reply/UserEmailQuickReply';
-import { UserPhoneNumberQuickReply } from '../quick-reply/UserPhoneNumberQuickReply';
-import { QuickReply, QuickReplyContentType } from '../quick-reply/QuickReply';
-import { TextQuickReply } from '../quick-reply/TextQuickReply';
+import { QuickReply } from '../quick-reply/QuickReply';
 import { MessageAttachment } from './MessageAttachment';
 
 export class Message {

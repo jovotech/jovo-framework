@@ -9,6 +9,8 @@ import {
   IsUrl,
   MaxLength,
   MessageValue,
+  SpeechMessage,
+  TextMessage,
   Type,
   ValidateNested,
 } from '@jovotech/output';
@@ -49,13 +51,14 @@ export class Simple {
   text?: string;
 
   toMessage?(): MessageValue {
-    const speech = this.speech || '';
-    return this.text
-      ? {
-          displayText: this.text,
-          text: speech,
-        }
-      : speech;
+    const message = {} as SpeechMessage | TextMessage;
+    if (this.text) {
+      message.text = this.text;
+    }
+    if (this.speech) {
+      message.speech = this.speech;
+    }
+    return message;
   }
 }
 

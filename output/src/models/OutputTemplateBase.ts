@@ -8,6 +8,7 @@ import {
   ListenValue,
   ValidateNested,
 } from '..';
+import { TransformMessage } from '../decorators/transformation/TransformMessage';
 import { IsStringOrInstance } from '../decorators/validation/IsStringOrInstance';
 import { Card } from './Card';
 import { Carousel } from './Carousel';
@@ -25,7 +26,7 @@ export class OutputTemplateBase {
 
   @IsOptional()
   @IsStringOrInstance(Message)
-  @Type(() => Message)
+  @TransformMessage()
   message?: MessageValue;
 
   @IsOptional()

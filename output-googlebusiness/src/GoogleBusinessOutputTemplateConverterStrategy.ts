@@ -1,12 +1,10 @@
 import {
   Card,
   Carousel,
-  MessageValue,
   MultipleResponsesOutputTemplateConverterStrategy,
   OutputTemplate,
   OutputTemplateConverterStrategyConfig,
   QuickReplyValue,
-  removeSSML,
 } from '@jovotech/output';
 import {
   CARD_CONTENT_DESCRIPTION_MAX_LENGTH,
@@ -17,6 +15,7 @@ import {
   SUGGESTIONS_MAX_SIZE,
 } from './constants';
 import { GoogleBusinessResponse, RepresentativeType, Suggestion } from './models';
+import { convertMessageToGoogleBusinessText } from './utilities';
 
 export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleResponsesOutputTemplateConverterStrategy<
   GoogleBusinessResponse,
@@ -103,7 +102,7 @@ export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleRespo
 
     const message = output.message;
     if (message) {
-      addResponse('text', this.convertMessageToGoogleBusinessText(message));
+      addResponse('text', convertMessageToGoogleBusinessText(message));
     }
 
     const card = output.card;
@@ -171,12 +170,6 @@ export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleRespo
       output.quickReplies = response.suggestions.map((suggestion) => suggestion.toQuickReply!());
     }
     return output;
-  }
-
-  convertMessageToGoogleBusinessText(message: MessageValue): string {
-    return removeSSML(
-      typeof message === 'string' ? message : message.toGoogleBusinessText?.() || message.text,
-    );
   }
 
   convertQuickReplyToGoogleBusinessSuggestion(quickReply: QuickReplyValue): Suggestion {

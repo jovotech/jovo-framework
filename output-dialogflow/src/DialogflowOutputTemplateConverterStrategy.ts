@@ -82,7 +82,7 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
       }
       response.fulfillment_messages.push({
         message: {
-          text: this.convertMessageToText(message),
+          text: convertMessageToText(message),
         },
       });
     }
@@ -165,14 +165,6 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
     return output;
   }
 
-  convertMessageToText(message: MessageValue): Text {
-    return typeof message === 'string'
-      ? { text: [message] }
-      : message.toDialogflowText?.() || {
-          text: [message.displayText || message.text],
-        };
-  }
-
   convertQuickReplyToDialogflowQuickReply(quickReply: QuickReplyValue): string {
     return typeof quickReply === 'string'
       ? quickReply
@@ -207,4 +199,7 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
       })),
     };
   }
+}
+function convertMessageToText(message: MessageValue): Text | undefined {
+  throw new Error('Function not implemented.');
 }

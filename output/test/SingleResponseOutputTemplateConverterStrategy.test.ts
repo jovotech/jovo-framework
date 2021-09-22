@@ -51,35 +51,35 @@ describe('prepareOutput', () => {
             reprompt: 'Hello',
           },
           {
-            message: { text: 'World!', displayText: 'World!' },
-            reprompt: { text: 'World!' },
+            message: { speech: 'World!', text: 'World!' },
+            reprompt: { speech: 'World!' },
           },
         ]);
         expect(preparedOutput).toEqual({
           message: {
+            speech: 'Hello World!',
             text: 'Hello World!',
-            displayText: 'Hello World!',
           },
           reprompt: {
-            text: 'Hello World!',
-            displayText: 'Hello',
+            speech: 'Hello World!',
+            text: 'Hello',
           },
         });
       });
       test('object + object passed', () => {
         const preparedOutput = strategy.prepareOutput([
           {
-            message: { text: 'Hello', displayText: 'Hello' },
-            reprompt: { text: 'Hello' },
+            message: { speech: 'Hello', text: 'Hello' },
+            reprompt: { speech: 'Hello' },
           },
           {
-            message: { text: 'World!' },
-            reprompt: { text: 'World!' },
+            message: { speech: 'World!' },
+            reprompt: { speech: 'World!' },
           },
         ]);
         expect(preparedOutput).toEqual({
-          message: { text: 'Hello World!', displayText: 'Hello' },
-          reprompt: { text: 'Hello World!' },
+          message: { speech: 'Hello World!', text: 'Hello' },
+          reprompt: { speech: 'Hello World!' },
         });
       });
 
@@ -96,19 +96,19 @@ describe('prepareOutput', () => {
           message: '<speak>Hello World!</speak>',
         });
       });
-      test('SSML removed for displayText', () => {
+      test('SSML removed for text', () => {
         const preparedOutput = strategy.prepareOutput([
           {
             message: '<speak>Hello</speak>',
           },
           {
-            message: { text: 'World!', displayText: 'World!' },
+            message: { speech: 'World!', text: 'World!' },
           },
         ]);
         expect(preparedOutput).toEqual({
           message: {
-            text: '<speak>Hello World!</speak>',
-            displayText: 'Hello World!',
+            speech: '<speak>Hello World!</speak>',
+            text: 'Hello World!',
           },
         });
       });

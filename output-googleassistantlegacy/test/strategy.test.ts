@@ -45,6 +45,7 @@ describe('toResponse', () => {
               {
                 simpleResponse: {
                   ssml: toSSML('foo'),
+                  displayText: 'foo',
                 },
               },
             ],
@@ -56,8 +57,8 @@ describe('toResponse', () => {
       return convertToResponseAndExpectToEqual(
         {
           message: {
-            text: 'foo',
-            displayText: 'bar',
+            speech: 'foo',
+            text: 'bar',
           },
         },
         {
@@ -86,7 +87,7 @@ describe('toResponse', () => {
         },
         {
           richResponse: {
-            items: [{ simpleResponse: { ssml: toSSML('bar') } }],
+            items: [{ simpleResponse: { ssml: toSSML('bar'), displayText: 'bar' } }],
           },
         },
       );
@@ -109,9 +110,9 @@ describe('toResponse', () => {
         },
         {
           richResponse: {
-            items: [{ simpleResponse: { ssml: toSSML('foo') } }],
+            items: [{ simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } }],
           },
-          noInputPrompts: [{ ssml: toSSML('bar') }],
+          noInputPrompts: [{ ssml: toSSML('bar'), displayText: 'bar' }],
         },
       );
     });
@@ -120,13 +121,13 @@ describe('toResponse', () => {
         {
           message: 'foo',
           reprompt: {
-            text: 'bar',
-            displayText: 'test',
+            speech: 'bar',
+            text: 'test',
           },
         },
         {
           richResponse: {
-            items: [{ simpleResponse: { ssml: toSSML('foo') } }],
+            items: [{ simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } }],
           },
           noInputPrompts: [{ ssml: toSSML('bar'), displayText: 'test' }],
         },
@@ -145,9 +146,9 @@ describe('toResponse', () => {
         },
         {
           richResponse: {
-            items: [{ simpleResponse: { ssml: toSSML('foo') } }],
+            items: [{ simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } }],
           },
-          noInputPrompts: [{ ssml: toSSML('foo') }],
+          noInputPrompts: [{ ssml: toSSML('foo'), displayText: 'foo' }],
         },
       );
     });
@@ -170,7 +171,7 @@ describe('toResponse', () => {
         {
           expectUserResponse: false,
           richResponse: {
-            items: [{ simpleResponse: { ssml: toSSML('foo') } }],
+            items: [{ simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } }],
           },
         },
       );
@@ -184,7 +185,7 @@ describe('toResponse', () => {
         {
           expectUserResponse: true,
           richResponse: {
-            items: [{ simpleResponse: { ssml: toSSML('foo') } }],
+            items: [{ simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } }],
           },
         },
       );
@@ -203,7 +204,7 @@ describe('toResponse', () => {
         {
           expectUserResponse: false,
           richResponse: {
-            items: [{ simpleResponse: { ssml: toSSML('foo') } }],
+            items: [{ simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } }],
           },
         },
       );
@@ -227,7 +228,7 @@ describe('toResponse', () => {
         }),
       ).toEqual({
         richResponse: {
-          items: [{ simpleResponse: { ssml: toSSML('foo') } }],
+          items: [{ simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } }],
           suggestions: quickReplies.slice(0, SUGGESTIONS_MAX_SIZE).map((title) => ({ title })),
         },
       });
@@ -241,7 +242,7 @@ describe('toResponse', () => {
         {
           richResponse: {
             suggestions: [{ title: 'hello' }, { title: 'world' }],
-            items: [{ simpleResponse: { ssml: toSSML('foo') } }],
+            items: [{ simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } }],
           },
         },
       );
@@ -260,7 +261,7 @@ describe('toResponse', () => {
         {
           richResponse: {
             suggestions: [{ title: 'world' }],
-            items: [{ simpleResponse: { ssml: toSSML('foo') } }],
+            items: [{ simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } }],
           },
         },
       );
@@ -300,7 +301,7 @@ describe('toResponse', () => {
         {
           richResponse: {
             items: [
-              { simpleResponse: { ssml: toSSML('foo') } },
+              { simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } },
               { basicCard: { title: 'foo', formattedText: 'bar' } },
             ],
           },
@@ -319,7 +320,7 @@ describe('toResponse', () => {
         {
           richResponse: {
             items: [
-              { simpleResponse: { ssml: toSSML('foo') } },
+              { simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } },
               {
                 basicCard: {
                   title: 'foo',
@@ -344,7 +345,7 @@ describe('toResponse', () => {
         {
           richResponse: {
             items: [
-              { simpleResponse: { ssml: toSSML('foo') } },
+              { simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } },
               {
                 basicCard: {
                   title: 'foo',
@@ -377,7 +378,7 @@ describe('toResponse', () => {
         {
           richResponse: {
             items: [
-              { simpleResponse: { ssml: toSSML('foo') } },
+              { simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } },
               {
                 basicCard: {
                   title: 'overwritten',
@@ -461,7 +462,7 @@ describe('toResponse', () => {
             },
           },
           richResponse: {
-            items: [{ simpleResponse: { ssml: toSSML('foo') } }],
+            items: [{ simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } }],
           },
         },
       );
@@ -527,7 +528,7 @@ describe('toResponse', () => {
             },
           },
           richResponse: {
-            items: [{ simpleResponse: { ssml: toSSML('foo') } }],
+            items: [{ simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } }],
           },
         },
       );
@@ -552,7 +553,7 @@ describe('toResponse', () => {
         {
           expectUserResponse: true,
           richResponse: {
-            items: [{ simpleResponse: { ssml: toSSML('foo') } }],
+            items: [{ simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } }],
           },
         },
       );
@@ -611,7 +612,7 @@ describe('toResponse', () => {
         {
           systemIntent,
           richResponse: {
-            items: [{ simpleResponse: { ssml: toSSML('foo') } }],
+            items: [{ simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } }],
           },
         },
       );
@@ -635,7 +636,7 @@ describe('toResponse', () => {
         {
           noInputPrompts,
           richResponse: {
-            items: [{ simpleResponse: { ssml: toSSML('foo') } }],
+            items: [{ simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } }],
           },
         },
       );
@@ -695,7 +696,7 @@ describe('fromResponse', () => {
         },
       },
       {
-        message: 'foo',
+        message: { speech: toSSML('foo') },
         listen: true,
       },
     );
@@ -727,7 +728,7 @@ describe('fromResponse', () => {
         },
       },
       {
-        message: 'foo',
+        message: { speech: toSSML('foo') },
         carousel: {
           items: [
             { key: 'one', title: 'one' },
@@ -753,8 +754,8 @@ describe('fromResponse', () => {
         },
       },
       {
-        message: 'foo',
-        reprompt: 'foo',
+        message: { speech: toSSML('foo') },
+        reprompt: { speech: toSSML('foo') },
       },
     );
   });
@@ -774,7 +775,7 @@ describe('fromResponse', () => {
         },
       },
       {
-        message: 'foo',
+        message: { speech: toSSML('foo') },
         quickReplies: ['one', 'two'],
       },
     );

@@ -31,7 +31,7 @@ declare module '@jovotech/output/dist/types/models/Carousel' {
 
 declare module '@jovotech/output/dist/types/models/Message' {
   interface Message {
-    toAlexaOutputSpeech?(): OutputSpeech<OutputSpeechType.Ssml>;
+    toAlexaOutputSpeech?(): OutputSpeech;
   }
 }
 
@@ -58,4 +58,4 @@ export * from './constants';
 
 export * from './AlexaOutputTemplateConverterStrategy';
 
-export { validateAlexaString } from './utilities';
+export { validateAlexaString, convertMessageToOutputSpeech } from './utilities';

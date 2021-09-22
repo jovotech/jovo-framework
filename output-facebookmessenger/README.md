@@ -53,13 +53,13 @@ The [generic `message` element](https://v4.jovo.tech/docs/output-templates#messa
 }
 ```
 
-It is also possible to use `message` as an object which contains both a `text` (the *spoken* text on platforms like Alexa) and a `displayText` (*written* text to be displayed in chat bubbles) field. In this case, Facebook Messenger uses the `displayText` element.
+It is also possible to use `message` as an object which contains both a `speech` (the *spoken* text on platforms like Alexa) and a `text` (*written* text to be displayed in chat bubbles) field. In this case, Facebook Messenger uses the `text` element.
 
 ```typescript
 {
   message: {
-    text: 'Hello listener!',
-    displayText: 'Hello reader!'
+    speech: 'Hello listener!',
+    text: 'Hello reader!'
   }
 }
 ```

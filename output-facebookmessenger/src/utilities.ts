@@ -1,4 +1,13 @@
-import { Card, Carousel, Message, QuickReply, removeSSML } from '@jovotech/output';
+import {
+  Card,
+  Carousel,
+  Message,
+  MessageValue,
+  QuickReply,
+  removeSSML,
+  SpeechMessage,
+  TextMessage,
+} from '@jovotech/output';
 import { GENERIC_TEMPLATE_MAX_SIZE } from './constants';
 import {
   GenericTemplateElement,
@@ -7,6 +16,16 @@ import {
   QuickReplyContentType,
   TemplateType,
 } from './models';
+
+export function convertMessageToFacebookMessengerMessage(
+  message: MessageValue,
+): FacebookMessengerMessage {
+  return {
+    text: removeSSML(
+      typeof message === 'string' ? message : message.text || (message.speech as string),
+    ),
+  };
+}
 
 export function augmentModelPrototypes(): void {
   Card.prototype.toFacebookMessengerGenericTemplateElement = function () {
@@ -63,10 +82,7 @@ export function augmentModelPrototypes(): void {
   };
 
   Message.prototype.toFacebookMessengerMessage = function () {
-    const message: FacebookMessengerMessage = {
-      text: removeSSML(this.displayText || this.text),
-    };
-    return message;
+    return convertMessageToFacebookMessengerMessage(this as SpeechMessage | TextMessage);
   };
 
   QuickReply.prototype.toFacebookQuickReply = function () {

@@ -62,13 +62,13 @@ Under the hood, Jovo translates the `message` into a text message ([see the offi
 }
 ```
 
-It is also possible to use `message` as an object which contains both a `text` (the *spoken* text on platforms like Alexa) and a `displayText` (*written* text to be displayed in chat bubbles). In this case, Google Business Messages uses the `displayText` element.
+It is also possible to use `message` as an object which contains both a `speech` (the *spoken* text on platforms like Alexa) and a `text` (*written* text to be displayed in chat bubbles). In this case, Google Business Messages uses the `text` element.
 
 ```typescript
 {
   message: {
-    text: 'Hello listener!',
-    displayText: 'Hello reader!'
+    speech: 'Hello listener!',
+    text: 'Hello reader!'
   }
 }
 ```

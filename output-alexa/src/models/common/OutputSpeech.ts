@@ -39,8 +39,16 @@ export class OutputSpeech<TYPE extends OutputSpeechTypeLike = OutputSpeechTypeLi
   playBehavior?: PlayBehaviorLike;
 
   toMessage?(): MessageValue {
-    return this.type === OutputSpeechType.Plain
-      ? ((this.text || '') as string)
-      : removeSSMLSpeakTags((this.ssml || '') as string);
+    if (this.type === OutputSpeechType.Ssml && this.ssml) {
+      return {
+        speech: this.ssml as string,
+      };
+    }
+    if (this.type === OutputSpeechType.Plain && this.text) {
+      return {
+        text: this.text as string,
+      };
+    }
+    return '';
   }
 }

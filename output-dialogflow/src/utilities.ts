@@ -1,5 +1,23 @@
-import { Card, Message, QuickReply } from '@jovotech/output';
-import { Card as DialogflowCard } from './models';
+import {
+  Card,
+  Message,
+  MessageValue,
+  QuickReply,
+  removeSSML,
+  SpeechMessage,
+  TextMessage,
+} from '@jovotech/output';
+import { Card as DialogflowCard, Text } from './models';
+
+export function convertMessageToDialogflowText(message: MessageValue): Text {
+  return {
+    text: [
+      removeSSML(
+        typeof message === 'string' ? message : message.text || (message.speech as string),
+      ),
+    ],
+  };
+}
 
 export function augmentModelPrototypes(): void {
   Card.prototype.toDialogflowCard = function () {
@@ -17,7 +35,7 @@ export function augmentModelPrototypes(): void {
   };
 
   Message.prototype.toDialogflowText = function () {
-    return { text: [this.displayText || this.text] };
+    return convertMessageToDialogflowText(this as TextMessage | SpeechMessage);
   };
 
   QuickReply.prototype.toDialogflowQuickReply = function () {

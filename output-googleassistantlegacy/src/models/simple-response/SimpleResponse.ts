@@ -5,6 +5,8 @@ import {
   MaxLength,
   MessageValue,
   removeSSMLSpeakTags,
+  SpeechMessage,
+  TextMessage,
 } from '@jovotech/output';
 import { SIMPLE_RESPONSE_DISPLAY_TEXT_MAX_LENGTH } from '../../constants';
 import { IsValidSimpleResponseString } from '../../decorators/validation/IsValidSimpleResponseString';
@@ -23,12 +25,13 @@ export class SimpleResponse {
   displayText?: string;
 
   toMessage?(): MessageValue {
-    const text = removeSSMLSpeakTags(this.ssml || this.textToSpeech || '');
-    return this.displayText
-      ? {
-          displayText: this.displayText,
-          text,
-        }
-      : text;
+    const message = {} as SpeechMessage | TextMessage;
+    if (this.displayText) {
+      message.text = this.displayText;
+    }
+    if (this.ssml || this.textToSpeech) {
+      message.speech = this.ssml || this.textToSpeech;
+    }
+    return message;
   }
 }
