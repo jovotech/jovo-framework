@@ -491,7 +491,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
         }
 
         // Register actions.
-        if (file.path.includes('intents')) {
+        if (file.path.includes('global')) {
           actions.custom[fileName.replace('.yaml', '')] = {};
         }
 
@@ -599,7 +599,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
 
     if (typeof invocation === 'object') {
       // ToDo: Test!
-      const platformInvocation: string = invocation[this.$plugin.constructor.name];
+      const platformInvocation: string = invocation[this.$plugin.$id];
 
       if (!platformInvocation) {
         throw new JovoCliError({
