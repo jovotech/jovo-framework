@@ -14,7 +14,7 @@ export class GoogleAssistantRequestBuilder extends RequestBuilder<GoogleAssistan
       'LaunchRequest.json',
     ));
     const request: GoogleAssistantRequest = Object.create(GoogleAssistantRequest.prototype);
-    return Object.assign(request, json || JSON.parse(launchJson));
+    return Object.assign(request, json || launchJson);
   }
 
   intent(name?: string): GoogleAssistantRequest;
@@ -32,10 +32,10 @@ export class GoogleAssistantRequestBuilder extends RequestBuilder<GoogleAssistan
     const request: GoogleAssistantRequest = Object.create(GoogleAssistantRequest.prototype);
 
     if (typeof nameOrJson === 'string') {
-      Object.assign(request, JSON.parse(intentJson));
+      Object.assign(request, intentJson);
       request.setIntent(nameOrJson);
     } else {
-      Object.assign(request, nameOrJson || JSON.parse(intentJson));
+      Object.assign(request, nameOrJson || intentJson);
     }
 
     return request;
