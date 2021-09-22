@@ -389,42 +389,7 @@ We recommend using [input](#input) and [output](#output) for most flows that don
 
 You can use JSON requests to test the flow in the same way as if a platform sends a request to your app. For most use cases, we recommend [input testing](#input).
 
-Below, you can find an example that that uses an Alexa `LaunchRequest`:
-
-```typescript
-import { TestSuite } from '@jovotech/framework';
-import { AlexaPlatform } from '@jovotech/platform-alexa';
-
-// ...
-
-test('should accept an Alexa request, should return an Alexa response', async () => {
-  const testSuite = new TestSuite({ platform: AlexaPlatform });
-
-  const request = testSuite.requestBuilder.launch();
-  const { output, response } = await testSuite.run(request);
-
-  // ...
-});
-```
-
-You can use the `requestBuilder` to create request JSONs for each platform. In addition to the `launch` example above, you can also create intent requests like this:
-
-```typescript
-// Create request based on an intent name
-testSuite.requestBuilder.intent('YesIntent');
-
-// Create request with entities
-testSuite.requestBuilder.intent({
-  intent: 'MyNameIsIntent',
-  entities: {
-    name: {
-      value: 'Max'
-    }
-  }
-});
-```
-
-It's also possible to import a request JSON file like this:
+Below, you can find an example that imports a request JSON file and passes it to the [`run` method](#run):
 
 ```typescript
 import CustomRequest from './requests/CustomRequest';
