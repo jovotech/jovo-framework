@@ -3,6 +3,7 @@ import {
   OutputTemplate,
   OutputTemplateConverter,
   OutputValidationError,
+  PlainObjectType,
   toSSML,
 } from '@jovotech/output';
 import {
@@ -10,8 +11,8 @@ import {
   GoogleAssistantResponse,
   RichResponse,
   SimpleResponse,
-  SystemIntent,
   SUGGESTIONS_MAX_SIZE,
+  SystemIntent,
 } from '../src';
 
 const outputConverter = new OutputTemplateConverter(
@@ -20,16 +21,18 @@ const outputConverter = new OutputTemplateConverter(
 
 async function convertToResponseAndExpectToEqual(
   output: OutputTemplate,
-  expectedResponse: GoogleAssistantResponse,
+  expectedResponse: PlainObjectType<GoogleAssistantResponse>,
 ) {
   expect(await outputConverter.toResponse(output)).toEqual(expectedResponse);
 }
 
 async function convertToOutputAndExpectToEqual(
-  response: GoogleAssistantResponse,
+  response: PlainObjectType<GoogleAssistantResponse>,
   expectedOutput: OutputTemplate,
 ) {
-  expect(await outputConverter.fromResponse(response)).toEqual(expectedOutput);
+  expect(await outputConverter.fromResponse(response as GoogleAssistantResponse)).toEqual(
+    expectedOutput,
+  );
 }
 
 describe('toResponse', () => {
@@ -40,6 +43,7 @@ describe('toResponse', () => {
           message: 'foo',
         },
         {
+          expectUserResponse: true,
           richResponse: {
             items: [
               {
@@ -62,6 +66,7 @@ describe('toResponse', () => {
           },
         },
         {
+          expectUserResponse: true,
           richResponse: {
             items: [
               {
@@ -86,6 +91,7 @@ describe('toResponse', () => {
           },
         },
         {
+          expectUserResponse: true,
           richResponse: {
             items: [{ simpleResponse: { ssml: toSSML('bar'), displayText: 'bar' } }],
           },
@@ -109,6 +115,7 @@ describe('toResponse', () => {
           reprompt: 'bar',
         },
         {
+          expectUserResponse: true,
           richResponse: {
             items: [{ simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } }],
           },
@@ -126,6 +133,7 @@ describe('toResponse', () => {
           },
         },
         {
+          expectUserResponse: true,
           richResponse: {
             items: [{ simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } }],
           },
@@ -145,6 +153,7 @@ describe('toResponse', () => {
           },
         },
         {
+          expectUserResponse: true,
           richResponse: {
             items: [{ simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } }],
           },
@@ -227,6 +236,7 @@ describe('toResponse', () => {
           quickReplies,
         }),
       ).toEqual({
+        expectUserResponse: true,
         richResponse: {
           items: [{ simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } }],
           suggestions: quickReplies.slice(0, SUGGESTIONS_MAX_SIZE).map((title) => ({ title })),
@@ -240,6 +250,7 @@ describe('toResponse', () => {
           quickReplies: ['hello', { text: 'world' }],
         },
         {
+          expectUserResponse: true,
           richResponse: {
             suggestions: [{ title: 'hello' }, { title: 'world' }],
             items: [{ simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } }],
@@ -259,6 +270,7 @@ describe('toResponse', () => {
           },
         },
         {
+          expectUserResponse: true,
           richResponse: {
             suggestions: [{ title: 'world' }],
             items: [{ simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } }],
@@ -299,6 +311,7 @@ describe('toResponse', () => {
           },
         },
         {
+          expectUserResponse: true,
           richResponse: {
             items: [
               { simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } },
@@ -318,6 +331,7 @@ describe('toResponse', () => {
           },
         },
         {
+          expectUserResponse: true,
           richResponse: {
             items: [
               { simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } },
@@ -343,6 +357,7 @@ describe('toResponse', () => {
           },
         },
         {
+          expectUserResponse: true,
           richResponse: {
             items: [
               { simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } },
@@ -376,6 +391,7 @@ describe('toResponse', () => {
           },
         },
         {
+          expectUserResponse: true,
           richResponse: {
             items: [
               { simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } },
@@ -435,6 +451,7 @@ describe('toResponse', () => {
           },
         },
         {
+          expectUserResponse: true,
           systemIntent: {
             intent: 'actions.intent.OPTION',
             data: {
@@ -501,6 +518,7 @@ describe('toResponse', () => {
           },
         },
         {
+          expectUserResponse: true,
           systemIntent: {
             intent: 'actions.intent.OPTION',
             data: {
@@ -551,7 +569,7 @@ describe('toResponse', () => {
           },
         },
         {
-          expectUserResponse: true,
+          expectUserResponse: false,
           richResponse: {
             items: [{ simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } }],
           },
@@ -611,6 +629,7 @@ describe('toResponse', () => {
         },
         {
           systemIntent,
+          expectUserResponse: true,
           richResponse: {
             items: [{ simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } }],
           },
@@ -635,6 +654,7 @@ describe('toResponse', () => {
         },
         {
           noInputPrompts,
+          expectUserResponse: true,
           richResponse: {
             items: [{ simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } }],
           },
@@ -662,6 +682,7 @@ describe('toResponse', () => {
           },
         },
         {
+          expectUserResponse: true,
           richResponse: {
             ...richResponse,
             items: [
