@@ -1,11 +1,9 @@
 import {
   ListenValue,
   mergeInstances,
-  MultipleResponsesOutputTemplateConverterStrategy,
   OutputTemplate,
   OutputTemplateConverterStrategy,
   OutputTemplateConverterStrategyConfig,
-  SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
 import { CoreResponse } from './models';
 
@@ -33,17 +31,23 @@ export class CoreOutputTemplateConverterStrategy extends OutputTemplateConverter
         },
       },
     }) as CoreResponse;
-    let lastListen: ListenValue | undefined;
+    let mergedListen: ListenValue | undefined;
     output.forEach((outputItem) => {
-      const listen = outputItem.platforms?.core?.listen ?? outputItem.listen;
-      if (typeof listen === 'boolean' || typeof listen === 'object') {
-        lastListen = listen;
+      const listen = outputItem.listen ?? true;
+
+      // if listen is an object and not null
+      if (typeof listen === 'object' && listen) {
+        mergedListen = { ...listen };
+        // if merged listen is not an object
+      } else if (typeof mergedListen !== 'object') {
+        mergedListen = listen;
       }
+
       if (outputItem.platforms?.core?.nativeResponse) {
         mergeInstances(response, outputItem.platforms.core.nativeResponse);
       }
     });
-    response.context.session.end = !lastListen;
+    response.context.session.end = !mergedListen;
     return response;
   }
 
