@@ -84,15 +84,21 @@ export abstract class DbPlugin<
     }
 
     parent.middlewareCollection.use('request.end', (jovo) => {
-      return this.loadData(jovo);
+      if (!jovo.$user.id) {
+        return;
+      }
+      return this.loadData(jovo.$user.id, jovo);
     });
     parent.middlewareCollection.use('response.start', (jovo) => {
-      return this.saveData(jovo);
+      if (!jovo.$user.id) {
+        return;
+      }
+      return this.saveData(jovo.$user.id, jovo);
     });
   }
 
-  abstract loadData(jovo: Jovo): Promise<void>;
-  abstract saveData(jovo: Jovo): Promise<void>;
+  abstract loadData(userId: string, jovo: Jovo): Promise<void>;
+  abstract saveData(userId: string, jovo: Jovo): Promise<void>;
 
   async applyPersistableData(jovo: Jovo, item: DbItem): Promise<void> {
     const persistableData = jovo.getPersistableData();

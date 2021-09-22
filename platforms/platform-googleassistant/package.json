@@ -36,6 +36,7 @@
     "lodash.mergewith": "^4.6.2",
     "lodash.set": "^4.3.2",
     "lodash.uniq": "^4.5.0",
+    "uuid": "^8.3.2",
     "yaml": "^1.10.2"
   },
   "devDependencies": {

@@ -122,6 +122,10 @@ export class GoogleBusinessPlatform extends Platform<
     processedMessages.push(messageId);
     jovo.$session.data._GOOGLE_BUSINESS_PROCESSED_MESSAGES_ = processedMessages;
 
+    if (!jovo.$user.id) {
+      return;
+    }
+
     const dbPlugins = Object.values(jovo.$handleRequest.plugins).filter(
       (plugin) => plugin instanceof DbPlugin,
     ) as DbPlugin[];
@@ -129,7 +133,11 @@ export class GoogleBusinessPlatform extends Platform<
     // Immediately save the data into the database, so that other simultaneous or delayed requests can already check if the message is being handled or was handled already.
     // If some time-consuming API calls were made during the handling, the saving of the processed message would only take place after those calls which could cause a delay.
     // This delay could then cause the persisting to happen after other requests have already checked if the message was handled.
-    return Promise.all(dbPlugins.map((dbPlugin) => dbPlugin.saveData(jovo)));
+    return Promise.all(
+      dbPlugins.map((dbPlugin) => {
+        return dbPlugin.saveData(jovo.$user.id as string, jovo);
+      }),
+    );
   }
 
   private beforeRequestStart(jovo: Jovo): void {
