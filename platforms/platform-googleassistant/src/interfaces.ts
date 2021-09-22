@@ -1,4 +1,4 @@
-import { AnyObject } from '@jovotech/framework';
+import { AnyObject, Entity } from '@jovotech/framework';
 
 export interface Handler {
   name?: string;
@@ -41,4 +41,8 @@ export interface GoogleAccountProfile {
   picture: string;
   given_name: string;
   family_name: string;
+}
+
+export interface GoogleAssistantEntity extends Entity {
+  native: IntentParameterValue;
 }

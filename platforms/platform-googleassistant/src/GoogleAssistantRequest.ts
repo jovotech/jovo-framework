@@ -11,7 +11,7 @@ import type { Device, Home, Scene, Session, User } from '@jovotech/output-google
 import { Capability as NativeCapability } from '@jovotech/output-googleassistant';
 import { GoogleAssistantSystemInputType, GoogleAssistantSystemIntent } from './enums';
 import { GoogleAssistantCapability, GoogleAssistantCapabilityType } from './GoogleAssistantDevice';
-import { Context, Handler, Intent } from './interfaces';
+import { Context, GoogleAssistantEntity, Handler, Intent } from './interfaces';
 
 export class GoogleAssistantRequest extends JovoRequest {
   handler?: Handler;
@@ -31,15 +31,15 @@ export class GoogleAssistantRequest extends JovoRequest {
     return this.intent?.name;
   }
 
-  getEntities(): EntityMap | undefined {
-    const entities: EntityMap = {};
-
+  getEntities(): EntityMap<GoogleAssistantEntity> | undefined {
+    const entities: EntityMap<GoogleAssistantEntity> = {};
     for (const param in this.intent?.params) {
       if (this.intent?.params.hasOwnProperty(param)) {
         entities[param] = {
-          id: this.intent?.params[param].resolved as string,
-          value: this.intent?.params[param].original,
-          key: this.intent?.params[param].resolved as string,
+          native: this.intent.params[param],
+          id: this.intent.params[param].resolved as string,
+          value: this.intent.params[param].original,
+          resolved: this.intent.params[param].resolved as string,
         };
       }
     }
