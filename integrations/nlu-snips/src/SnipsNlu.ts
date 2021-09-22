@@ -9,7 +9,6 @@ import {
   JovoRequest,
   NluData,
   NluPlugin,
-  OutputTemplate,
 } from '@jovotech/framework';
 import { EntityType, IntentEntityType, JovoModelData } from '@jovotech/model';
 import { join as joinPaths, resolve } from 'path';
