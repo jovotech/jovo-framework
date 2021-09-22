@@ -29,6 +29,7 @@ export type { AlexaResponse } from '@jovotech/output-alexa';
 export * from './Alexa';
 export * from './AlexaPlatform';
 export * from './AlexaRequest';
+export * from './AlexaRequestBuilder';
 export * from './AlexaUser';
 export * from './api';
 export * from './api/ReminderApi';

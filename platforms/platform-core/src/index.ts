@@ -19,9 +19,9 @@ declare module '@jovotech/framework/dist/types/Jovo' {
 }
 registerPlatformSpecificJovoReference('$core', Core);
 
+export type { CoreResponse } from '@jovotech/output-core';
 export * from './Core';
 export * from './CorePlatform';
 export * from './CoreRequest';
 export * from './CoreUser';
-export type { CoreResponse } from '@jovotech/output-core';
 export * from './interfaces';

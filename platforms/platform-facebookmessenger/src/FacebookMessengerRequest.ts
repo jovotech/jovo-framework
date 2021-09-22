@@ -23,8 +23,16 @@ export class FacebookMessengerRequest extends JovoRequest {
     return;
   }
 
+  setLocale(locale: string): void {
+    this.locale = locale;
+  }
+
   getIntent(): JovoInput['intent'] {
     return;
+  }
+
+  setIntent(intent: string): void {
+    this.nlu = { intentName: intent };
   }
 
   getEntities(): EntityMap | undefined {
@@ -38,9 +46,11 @@ export class FacebookMessengerRequest extends JovoRequest {
     }
     return InputType.Text;
   }
+
   getInputText(): JovoInput['text'] {
     return this.messaging?.[0]?.message?.text || this.messaging?.[0]?.postback?.title;
   }
+
   getInputAudio(): JovoInput['audio'] {
     return;
   }
@@ -48,14 +58,28 @@ export class FacebookMessengerRequest extends JovoRequest {
   getSessionData(): UnknownObject | undefined {
     return undefined;
   }
+
+  setSessionData(): void {
+    return;
+  }
+
   getSessionId(): string | undefined {
     return undefined;
   }
+
   isNewSession(): boolean | undefined {
     return undefined;
   }
 
   getDeviceCapabilities(): FacebookMessengerCapabilityType[] | undefined {
+    return;
+  }
+
+  getUserId(): string | undefined {
+    return undefined;
+  }
+
+  setUserId(): void {
     return;
   }
 }

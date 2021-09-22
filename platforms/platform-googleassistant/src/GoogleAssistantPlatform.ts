@@ -5,12 +5,13 @@ import {
   SlotFillingStatus,
 } from '@jovotech/output-googleassistant';
 import _mergeWith from 'lodash.mergewith';
+import { v4 as uuidV4 } from 'uuid';
 import { GoogleAssistant } from './GoogleAssistant';
 import { GoogleAssistantDevice } from './GoogleAssistantDevice';
 import { GoogleAssistantRepromptComponent } from './GoogleAssistantRepromptComponent';
 import { GoogleAssistantRequest } from './GoogleAssistantRequest';
+import { GoogleAssistantRequestBuilder } from './GoogleAssistantRequestBuilder';
 import { GoogleAssistantUser } from './GoogleAssistantUser';
-import { v4 as uuidV4 } from 'uuid';
 
 export interface GoogleAssistantConfig extends ExtensibleConfig {}
 
@@ -28,6 +29,7 @@ export class GoogleAssistantPlatform extends Platform<
   jovoClass = GoogleAssistant;
   userClass = GoogleAssistantUser;
   deviceClass = GoogleAssistantDevice;
+  requestBuilder = GoogleAssistantRequestBuilder;
 
   getDefaultConfig(): GoogleAssistantConfig {
     return {};

@@ -91,6 +91,7 @@ export * from './NluPlugin';
 export * from './Platform';
 export * from './Plugin';
 export * from './Server';
+export * from './RequestBuilder';
 
 export * from './decorators/Component';
 export * from './decorators/Global';
@@ -131,3 +132,13 @@ export * from './plugins/RoutingExecutor';
 export * from './interfaces';
 export * from './enums';
 export * from './utilities';
+
+export * from './testsuite/TestJovo';
+export * from './testsuite/TestUser';
+export * from './testsuite/TestSuite';
+export * from './testsuite/TestServer';
+export * from './testsuite/TestRequest';
+export * from './testsuite/TestRequestBuilder';
+export * from './testsuite/TestResponse';
+export * from './testsuite/TestOutputConverterStrategy';
+export * from './testsuite/TestPlatform';

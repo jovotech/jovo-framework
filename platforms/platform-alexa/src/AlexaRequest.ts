@@ -5,6 +5,7 @@ import {
   InputTypeLike,
   JovoInput,
   JovoRequest,
+  JovoSession,
   UnknownObject,
 } from '@jovotech/framework';
 import { ResolutionPerAuthorityStatusCode } from '@jovotech/output-alexa';
@@ -31,6 +32,18 @@ export class AlexaRequest extends JovoRequest {
 
   getIntent(): JovoInput['intent'] {
     return this.request?.intent?.name;
+  }
+
+  setIntent(intent: string): void {
+    if (!this.request) {
+      return;
+    }
+
+    if (!this.request.intent) {
+      this.request.intent = { name: intent };
+    } else {
+      this.request.intent.name = intent;
+    }
   }
 
   getEntities(): EntityMap<AlexaEntity> | undefined {
@@ -87,9 +100,19 @@ export class AlexaRequest extends JovoRequest {
       ? ALEXA_REQUEST_TYPE_TO_INPUT_TYPE_MAP[this.request.type] || this.request.type
       : undefined;
   }
+
+  setLocale(locale: string): void {
+    if (!this.request) {
+      return;
+    }
+
+    this.request.locale = locale;
+  }
+
   getInputText(): JovoInput['text'] {
     return;
   }
+
   getInputAudio(): JovoInput['audio'] {
     return;
   }
@@ -97,9 +120,19 @@ export class AlexaRequest extends JovoRequest {
   getSessionData(): UnknownObject | undefined {
     return this.session?.attributes;
   }
+
+  setSessionData(session: JovoSession): void {
+    if (!this.session) {
+      return;
+    }
+
+    this.session.attributes = session;
+  }
+
   getSessionId(): string | undefined {
     return this.session?.sessionId;
   }
+
   isNewSession(): boolean | undefined {
     return this.session?.new;
   }
@@ -107,6 +140,23 @@ export class AlexaRequest extends JovoRequest {
   // platform-specific
   isAplSupported(): boolean {
     return !!this.context?.System?.device?.supportedInterfaces?.['Alexa.Presentation.APL'];
+  }
+
+  getUserId(): string | undefined {
+    return this.session?.user?.userId;
+  }
+
+  setUserId(userId: string): void {
+    if (!this.session) {
+      // TODO: What to do here?
+      return;
+    }
+
+    if (!this.session.user) {
+      this.session.user = { userId: userId, accessToken: '', permissions: { consentToken: '' } };
+    }
+
+    this.session.user.userId = userId;
   }
 
   getApiEndpoint(): string {

@@ -4,6 +4,7 @@ import { Extensible } from './Extensible';
 
 export interface PluginConfig extends UnknownObject {
   enabled?: boolean;
+  skipTests?: boolean;
 }
 
 export abstract class Plugin<CONFIG extends PluginConfig = PluginConfig> {

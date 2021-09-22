@@ -125,7 +125,20 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
   }
 
   use<T extends Usable[]>(...usables: T): this {
-    const plugins = usables.filter((usable) => usable instanceof Plugin) as Plugin[];
+    const plugins = usables.filter((usable) => {
+      if (!(usable instanceof Plugin)) {
+        return false;
+      }
+
+      if (
+        (process.env.NODE_ENV === 'test' || process.env.JEST_WORKER_ID) &&
+        (usable as Plugin).config.skipTests
+      ) {
+        return false;
+      }
+
+      return true;
+    }) as Plugin[];
     if (plugins.length) {
       super.use(...plugins);
     }

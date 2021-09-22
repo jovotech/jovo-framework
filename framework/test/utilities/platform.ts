@@ -17,16 +17,33 @@ import {
   JovoUser,
   MiddlewareCollection,
   Platform,
+  RequestBuilder,
   UnknownObject,
 } from '../../src';
 
 export class ExamplePlatformRequest extends JovoRequest {
+  getUserId(): string | undefined {
+    return;
+  }
+
+  setUserId(): void {
+    return;
+  }
+
   getLocale(): string | undefined {
     return undefined;
   }
 
+  setLocale(): void {
+    return;
+  }
+
   getIntent(): JovoInput['intent'] {
     return undefined;
+  }
+
+  setIntent(): void {
+    return;
   }
 
   getEntities(): EntityMap | undefined {
@@ -36,9 +53,11 @@ export class ExamplePlatformRequest extends JovoRequest {
   getInputType(): InputTypeLike | undefined {
     return undefined;
   }
+
   getInputText(): JovoInput['text'] {
     return undefined;
   }
+
   getInputAudio(): JovoInput['audio'] {
     return undefined;
   }
@@ -46,9 +65,15 @@ export class ExamplePlatformRequest extends JovoRequest {
   getSessionData(): UnknownObject | undefined {
     return undefined;
   }
+
+  setSessionData(): void {
+    return;
+  }
+
   getSessionId(): string | undefined {
     return undefined;
   }
+
   isNewSession(): boolean | undefined {
     return undefined;
   }
@@ -58,7 +83,23 @@ export class ExamplePlatformRequest extends JovoRequest {
   }
 }
 
-export class ExamplePlatformResponse extends JovoResponse {}
+export class ExamplePlatformRequestBuilder extends RequestBuilder<ExamplePlatform> {
+  launch(): ExamplePlatformRequest {
+    return new ExamplePlatformRequest();
+  }
+
+  intent(name?: string): ExamplePlatformRequest;
+  intent(json?: UnknownObject): ExamplePlatformRequest;
+  intent(): ExamplePlatformRequest {
+    return new ExamplePlatformRequest();
+  }
+}
+
+export class ExamplePlatformResponse extends JovoResponse {
+  hasSessionEnded(): boolean {
+    return false;
+  }
+}
 
 export class ExamplePlatformJovo extends Jovo<
   ExamplePlatformRequest,
@@ -83,7 +124,7 @@ export class ExamplePlatformOutputConverterStrategy extends OutputTemplateConver
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   toResponse(output: OutputTemplate): ExamplePlatformResponse {
-    return {};
+    return this.prepareResponse({}) as ExamplePlatformResponse;
   }
 }
 
@@ -108,6 +149,7 @@ export class ExamplePlatform extends Platform<
   jovoClass = ExamplePlatformJovo;
   userClass = ExamplePlatformUser;
   deviceClass = ExamplePlatformDevice;
+  requestBuilder = ExamplePlatformRequestBuilder;
 
   getDefaultConfig(): ExtensibleConfig {
     return {};

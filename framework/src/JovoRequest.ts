@@ -13,7 +13,10 @@ export abstract class JovoRequest {
 
   abstract getLocale(): string | undefined;
 
+  abstract setLocale(locale: string): void;
+
   abstract getIntent(): JovoInput['intent'];
+  abstract setIntent(intent: string): void;
   abstract getEntities(): JovoInput['entities'];
 
   abstract getInputType(): InputTypeLike | undefined;
@@ -28,6 +31,12 @@ export abstract class JovoRequest {
       .set('audio', this.getInputAudio())
       .build();
   }
+
+  abstract setSessionData(data: Record<string, unknown>): void;
+
+  abstract getUserId(): string | undefined;
+
+  abstract setUserId(userId: string): void;
 
   abstract getSessionData(): UnknownObject | undefined;
   abstract getSessionId(): string | undefined;

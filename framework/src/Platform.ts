@@ -3,8 +3,8 @@ import _merge from 'lodash.merge';
 import {
   AnyObject,
   App,
-  APP_MIDDLEWARES,
   AppMiddlewares,
+  APP_MIDDLEWARES,
   Constructor,
   DbPlugin,
   HandleRequest,
@@ -12,6 +12,7 @@ import {
   Jovo,
   JovoConstructor,
   JovoUser,
+  RequestBuilder,
   StoredElementSession,
 } from '.';
 import { Extensible, ExtensibleConfig } from './Extensible';
@@ -37,6 +38,7 @@ export abstract class Platform<
   abstract readonly jovoClass: JovoConstructor<REQUEST, RESPONSE, JOVO, USER, DEVICE, PLATFORM>;
   abstract readonly userClass: JovoUserConstructor<JOVO>;
   abstract readonly deviceClass: JovoDeviceConstructor<JOVO>;
+  abstract readonly requestBuilder: Constructor<RequestBuilder<PLATFORM>>;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   abstract outputTemplateConverterStrategy: OutputTemplateConverterStrategy<RESPONSE, any>;

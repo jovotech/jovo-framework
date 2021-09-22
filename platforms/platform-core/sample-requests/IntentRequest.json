@@ -8,12 +8,7 @@
   "data": {},
   "input": {
     "type": "INTENT",
-    "intent": "MyNameIsIntent",
-    "entities": {
-      "name": {
-        "value": "max"
-      }
-    }
+    "intent": "HelpIntent"
   },
   "context": {
     "device": {
@@ -25,7 +20,7 @@
     "session": {
       "id": "1e4076b8-539a-48d5-8b14-1ec3cf651b7b",
       "data": {},
-      "new": true,
+      "new": false,
       "lastUpdatedAt": "2020-11-23T12:35:21.345Z"
     },
     "user": {
