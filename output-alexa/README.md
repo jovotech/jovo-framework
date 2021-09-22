@@ -60,6 +60,17 @@ Under the hood, Jovo translates the `message` into an `outputSpeech` object ([se
 }
 ```
 
+If the `message` is an object that contains `speech` and `text`, the `speech` property will be used for Alexa:
+
+```typescript
+{
+  message: {
+    speech: 'Hello world!', // Used by Alexa
+    text: 'Hello screen!', // Used by chat platforms or other voice platforms that support display text
+  }
+}
+```
+
 ### Reprompt
 
 If Alexa asks a question and the user does not respond after a few seconds, it will state a `reprompt` to ask again:
