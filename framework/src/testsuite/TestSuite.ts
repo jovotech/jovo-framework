@@ -4,7 +4,7 @@ import {
   OutputTemplateConverterStrategyConfig,
   SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
-import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
+import { existsSync } from 'fs';
 import _cloneDeep from 'lodash.clonedeep';
 import _merge from 'lodash.merge';
 import { join as joinPaths } from 'path';
@@ -27,7 +27,6 @@ import { HandleRequest } from '../HandleRequest';
 import { InputType, JovoInput, JovoInputObject } from '../JovoInput';
 import { TestDb } from './TestDb';
 import { TestPlatform } from './TestPlatform';
-import { TestRequest } from './TestRequest';
 import { TestServer } from './TestServer';
 
 /**
@@ -173,12 +172,19 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     const requests = Array.isArray(requestOrInput) ? requestOrInput : [requestOrInput];
 
     for (const requestLike of requests) {
-      // If requestOrInput is not an instance, create one
+      const isInputInstance = (input: RequestOrInputLike<PLATFORM>): input is JovoInput =>
+        input instanceof JovoInput;
+
       const isInputObject = (input: RequestOrInputLike<PLATFORM>): input is JovoInput =>
-        !(input instanceof JovoInput) && !!(input as JovoInput).type;
+        !isInputInstance(input) &&
+        Object.keys(input).some((key) =>
+          ['type', 'asr', 'nlu', 'intent', 'entities', 'text', 'audio'].includes(key),
+        );
 
       const isRequestObject = (request: RequestOrInputLike<PLATFORM>): request is JovoRequest => {
-        return !(request instanceof JovoRequest) && !(request as JovoInput).type;
+        return (
+          !(request instanceof JovoRequest) && !isInputInstance(request) && !isInputObject(request)
+        );
       };
 
       // If requestOrInput is a plain object, generate a corresponding
@@ -208,7 +214,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
 
   private prepareRequest(jovo: Jovo) {
     // Reset session data if a new session is incoming
-    if (jovo.$request.isNewSession() === undefined || jovo.$request.isNewSession()) {
+    if (jovo.$request.isNewSession() || jovo.$input.type === InputType.Launch) {
       this.$session = new JovoSession();
     }
 
@@ -219,10 +225,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     _merge(jovo.$session, this.$session);
 
     jovo.$request.setUserId(this.config.userId);
-
-    if (this.config.locale) {
-      jovo.$request.setLocale(this.config.locale);
-    }
+    jovo.$request.setLocale(this.config.locale);
   }
 
   private postProcess(jovo: Jovo): void {
@@ -241,7 +244,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
       const appFilePath: string = joinPaths(...appDirectory, appFileName);
       if (existsSync(appFilePath)) {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const app = require(appFilePath).app;
+        const { app } = require(appFilePath);
 
         if (!app) {
           continue;
