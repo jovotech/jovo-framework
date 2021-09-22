@@ -67,7 +67,7 @@ The Dialogue & Logic step usually ends with a populated [Jovo `$output` array](.
 
 ## Response
 
-In the final Response step, the `$output` array from the previous step is translated into a native platform `$response`.
+In the final Response step, the `$output` array from the previous step is translated into a native platform `$response`. [Learn more about the Jovo `$response` object here](https://v4.jovo.tech/docs/response).
 
 This response is then returned back to the platform.
 
@@ -89,7 +89,7 @@ Middleware | Description
 `dialogue.logic` | Executes the component and handler logic
 `dialogue.end` | Leaves the `dialogue` middleware group with propagated `$output` array
 `response.start` | Enters the `response` middleware group
-`response.output` | Turns `$output` into a raw JSN response
+`response.output` | Turns `$output` into a raw JSON response
 `response.tts` | TTS integrations turn text into speech output
 `response.end` | Leaves the `response` middleware group with propagated `$response` object
 
