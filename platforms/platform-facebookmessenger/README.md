@@ -130,19 +130,9 @@ For output that is only used for Facebook Messenger, you can add the following t
 }
 ```
 
-You can add response objects that should show up exactly like this in the Facebook Messenger response object using the `nativeResponse` object:
+[Learn more about Facebook Messenger output here](https://v4.jovo.tech/marketplace/platform-facebookmessenger/output).
 
-```typescript
-{
-  // ...
-  platforms: {
-    facebookMessenger: {
-      nativeResponse: {
-        // ...
-      }
-      // ...
-    }
-  }
-}
-```
 
+### Multiple Requests
+
+It is possible that a user can send multiple messages before the app gets a chance to respond. In this case, each request goes through the [RIDR lifecycle](https://v4.jovo.tech/docs/ridr-lifecycle) on its own and receives a response. If multiple requests from a user are handled at the same time, the response is an array that is returned back to the platform at the end of the lifecycle.
