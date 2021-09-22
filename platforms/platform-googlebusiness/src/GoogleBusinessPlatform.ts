@@ -17,6 +17,7 @@ import { GoogleBusiness } from './GoogleBusiness';
 import { GoogleBusinessRequest } from './GoogleBusinessRequest';
 import { GoogleBusinessUser } from './GoogleBusinessUser';
 import { GoogleBusinessDevice } from './GoogleBusinessDevice';
+import { GoogleBusinessRequestBuilder } from './GoogleBusinessRequestBuilder';
 
 export interface GoogleBusinessConfig extends ExtensibleConfig {
   serviceAccount: JWTInput;
@@ -40,6 +41,7 @@ export class GoogleBusinessPlatform extends Platform<
   jovoClass = GoogleBusiness;
   userClass = GoogleBusinessUser;
   deviceClass = GoogleBusinessDevice;
+  requestBuilder = GoogleBusinessRequestBuilder;
 
   readonly jwtClient: JWT;
 
