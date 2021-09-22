@@ -1,9 +1,9 @@
 import {
+  InputType,
   InputTypeLike,
   JovoInput,
   JovoInputObject,
   JovoRequest,
-  OmitWhere,
   UnknownObject,
 } from '@jovotech/framework';
 import { CoreCapabilityType } from './CoreDevice';
@@ -27,6 +27,14 @@ export class CoreRequest extends JovoRequest {
   getIntent(): JovoInput['intent'] {
     return this.input?.intent;
   }
+
+  setIntent(intent: string): void {
+    if (!this.input) {
+      this.input = { type: InputType.Intent };
+    }
+    this.input.intent = intent;
+  }
+
   getEntities(): JovoInput['entities'] {
     return this.input?.entities;
   }

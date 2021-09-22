@@ -33,7 +33,7 @@ export class JovoInput {
   text?: string;
   audio?: AudioInput;
 
-  constructor(type: InputTypeLike) {
+  constructor(type: InputTypeLike = InputType.Intent) {
     if (isObject(type)) {
       Object.assign(this, type);
     } else {
