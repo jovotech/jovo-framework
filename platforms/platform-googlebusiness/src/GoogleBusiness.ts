@@ -51,7 +51,6 @@ export class GoogleBusiness extends Jovo<
       | OutputTemplate[],
     options?: DeepPartial<OUTPUT['options']>,
   ): Promise<void> {
-    // get the length of the current output, if it's an object, assume the length is 1
     const currentOutputLength = this.$output.length;
     if (typeof outputConstructorOrTemplate === 'function') {
       await super.$send(outputConstructorOrTemplate, options);
