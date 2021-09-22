@@ -74,17 +74,14 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
   }
 
   toResponse(output: OutputTemplate): GoogleAssistantResponse {
-    const response: GoogleAssistantResponse = {
+    const response: GoogleAssistantResponse = this.prepareResponse({
       richResponse: {
         items: [],
       },
-    };
+    });
 
-    // TODO: fully determine when to set listen
-    const listen = output.listen;
-    if (typeof listen !== 'undefined') {
-      response.expectUserResponse = !!listen;
-    }
+    const listen = output.listen ?? true;
+    response.expectUserResponse = !!listen;
 
     const message = output.message;
     if (message) {

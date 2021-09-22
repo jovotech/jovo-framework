@@ -8,6 +8,7 @@ import {
   OutputTemplate,
   OutputTemplateBase,
   OutputTemplatePlatforms,
+  PlainObjectType,
   plainToClass,
   QuickReplyValue,
 } from '.';
@@ -64,7 +65,9 @@ export abstract class OutputTemplateConverterStrategy<
 
   abstract toResponse(output: OutputTemplate | OutputTemplate[]): RESPONSE | RESPONSE[];
 
-  prepareResponse(response: RESPONSE | RESPONSE[]): RESPONSE | RESPONSE[] {
+  prepareResponse(
+    response: PlainObjectType<RESPONSE> | PlainObjectType<RESPONSE>[],
+  ): RESPONSE | RESPONSE[] {
     return plainToClass(this.responseClass, response);
   }
 

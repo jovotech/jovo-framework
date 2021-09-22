@@ -20,7 +20,7 @@ This structured output is called [output template](https://v4.jovo.tech/docs/out
 }
 ```
 
-You can also add platform-specific output to an output template. [Learn more about Alexa-specific output below](#alexa-specific-output-elements).
+You can also add platform-specific output to an output template. [Learn more about Alexa output below](#alexa-output-elements).
 
 ```typescript
 {
@@ -38,10 +38,18 @@ You can also add platform-specific output to an output template. [Learn more abo
 
 Generic output elements are in the root of the output template and work across platforms. [Learn more in the Jovo Output docs](https://v4.jovo.tech/docs/output-templates).
 
-Below, you can find a list of generic output elements that work with Alexa.
-### Message
+Below, you can find a list of generic output elements that work with Alexa:
 
-The `message` is what Alexa is saying to the user:
+- [`message`](#message)
+- [`reprompt`](#reprompt)
+- [`listen`](#listen)
+- [`quickReplies`](#quickreplies)
+- [`card`](#card)
+- [`carousel`](#carousel)
+
+### message
+
+The [generic `message` element](https://v4.jovo.tech/docs/output-templates#message) is what Alexa is saying to the user:
 
 ```typescript
 {
@@ -60,26 +68,14 @@ Under the hood, Jovo translates the `message` into an `outputSpeech` object ([se
 }
 ```
 
-If the `message` is an object that contains `speech` and `text`, the `speech` property will be used for Alexa:
+### reprompt
 
-```typescript
-{
-  message: {
-    speech: 'Hello world!', // Used by Alexa
-    text: 'Hello screen!', // Used by chat platforms or other voice platforms that support display text
-  }
-}
-```
-
-### Reprompt
-
-If Alexa asks a question and the user does not respond after a few seconds, it will state a `reprompt` to ask again:
+The [generic `reprompt` element](https://v4.jovo.tech/docs/output-templates#message) is used to ask again if the user does not respond to a prompt after a few seconds:
 
 ```typescript
 {
   message: `Hello world! What's your name?`,
   reprompt: 'Could you tell me your name?',
-  listen: true,
 }
 ```
 
@@ -96,23 +92,26 @@ Under the hood, Jovo translates the `reprompt` into an `outputSpeech` object ([s
 }
 ```
 
-**Note**: For Alexa to wait for a user to answer a question, the [listen property](#listen) needs to be added.
+### listen
 
-### Listen
+The [`listen` element](https://v4.jovo.tech/docs/output-templates#listen)  determines if Alexa should keep the microphone open and wait for a user's response.
 
-The `listen` property needs to be added to tell Alexa that it should keep the microphone open and wait for a user's response.
+By default (if you don't specify it otherwise in the template), `listen` is set to `true`. If you want to close a session after a response, you need to set it to `false`:
 
 ```typescript
 {
-  listen: true,
+  message: `Goodbye!`,
+  listen: false,
 }
 ```
 
-Under the hood, Jovo translates `listen: true` to `"shouldEndSession": false` in the JSON response.
+Under the hood, Jovo translates `listen: false` to `"shouldEndSession": true` in the JSON response.
 
-### Quick Replies
+The `listen` element can also be used to add dynamic entities for Alexa. [Learn more in the `$entities` documentation](https://v4.jovo.tech/docs/entities#dynamic-entities).
 
-Alexa does not natively support quick replies. However, Jovo automatically turns the `quickReplies` object into buttons for APL:
+### quickReplies
+
+Alexa does not natively support quick replies. However, Jovo automatically turns the [generic `quickReplies` element](https://v4.jovo.tech/docs/output-templates#quickreplies) into buttons for APL:
 
 ```typescript
 {
@@ -125,6 +124,8 @@ Alexa does not natively support quick replies. However, Jovo automatically turns
   ]
 }
 ```
+
+For this to work, `genericOutputToApl` needs to be enabled in the [Alexa output configuration](#alexa-output-configuration).
 
 For these buttons, you need to pass a target `intent`. When the button is clicked, the [Jovo Router](https://v4.jovo.tech/docs/routing) automatically maps this to the specified intent.
 
@@ -147,9 +148,9 @@ It's also possible to add entities:
 }
 ```
 
-### Card
+### card
 
-Jovo automatically turns the `card` object into a detail screen for APL:
+Jovo automatically turns the [generic `card` element](https://v4.jovo.tech/docs/output-templates#card) into a detail screen for APL:
 
 ```typescript
 {
@@ -161,11 +162,13 @@ Jovo automatically turns the `card` object into a detail screen for APL:
 }
 ```
 
+For this to work, `genericOutputToApl` needs to be enabled in the [Alexa output configuration](#alexa-output-configuration). 
+
 **Note**: If you want to send a home card to the Alexa mobile app instead, we recommend using the [`nativeResponse` property](#native-response).
 
-### Carousel
+### carousel
 
-Alexa does not natively support carousels. However, Jovo automatically turns the `carousel` object into a card slider for APL:
+Alexa does not natively support carousels. However, Jovo automatically turns the [generic `carousel` element](https://v4.jovo.tech/docs/output-templates#carousel) into a card slider for APL:
 
 ```typescript
 {
@@ -184,6 +187,8 @@ Alexa does not natively support carousels. However, Jovo automatically turns the
   },
 }
 ```
+
+For this to work, `genericOutputToApl` needs to be enabled in the [Alexa output configuration](#alexa-output-configuration).
 
 You can make it clickable by adding a `selection` object. Once an element is selected by the user, the Jovo Router will automatically map the request to the provided `intent` (and potentially `entities`):
 
@@ -223,7 +228,7 @@ You can make it clickable by adding a `selection` object. Once an element is sel
 
 In the example above, a tap on an element triggers the `ElementIntent` and contains an entity of the name `element`.
 
-## Alexa-specific Output Elements
+## Alexa Output Elements
 
 It is possible to add platform-specific output elements to an output template. [Learn more in the Jovo output documentation](https://v4.jovo.tech/docs/output-templates#platform-specific-output-elements).
 
@@ -303,4 +308,4 @@ const app = new App({
 
 It includes the following properties:
 
-* `genericOutputToApl`: Determines if generic output like `quickReplies`, `card`, and `carousel` should automatically be converted into an APL directive.
+* `genericOutputToApl`: Determines if generic output like [`quickReplies`](#quickreplies), [`card`](#card), and [`carousel`](#carousel) should automatically be converted into an APL directive.

@@ -26,4 +26,8 @@ export class CoreResponse extends JovoResponse {
   @ValidateNested()
   @Type(() => Context)
   context: Context;
+
+  hasSessionEnded(): boolean {
+    return this.context.session.end;
+  }
 }
