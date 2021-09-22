@@ -1,6 +1,5 @@
 import {
   Capability,
-  Entity,
   EntityMap,
   InputType,
   InputTypeLike,
