@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
 import _merge from 'lodash.merge';
 import type { A, O } from 'ts-toolbelt';
-import { IsOptional, ValidateNested, ValidationError } from '.';
+import { IsOptional, Listen, ListenValue, ValidateNested, ValidationError } from '.';
 import { OutputTemplatePlatforms } from './models/OutputTemplatePlatforms';
 
 export function registerOutputPlatform<TYPE extends Record<string, unknown>>(
@@ -132,4 +132,26 @@ export function mergeInstances<D extends object, S extends any[]>(
     instanceToObject(destination),
     ...sources.map((source) => instanceToObject(source)),
   );
+}
+
+/**
+ * Merges listen by priority: false > object > rest
+ */
+export function mergeListen(
+  target: ListenValue | null | undefined,
+  mergeWith: ListenValue | null | undefined,
+): ListenValue | null | undefined {
+  const canSetListenObject = target !== false && typeof mergeWith === 'object' && mergeWith;
+  const canSetListenRest =
+    target !== false && !(typeof target === 'object' && target) && typeof mergeWith !== 'undefined';
+  if (mergeWith === false) {
+    return false;
+  }
+  if (canSetListenObject) {
+    return { ...(mergeWith as Listen) };
+  }
+  if (canSetListenRest) {
+    return mergeWith;
+  }
+  return target;
 }

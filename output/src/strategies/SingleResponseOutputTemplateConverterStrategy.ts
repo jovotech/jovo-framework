@@ -2,6 +2,7 @@ import {
   isSSML,
   Listen,
   mergeInstances,
+  mergeListen,
   MessageValue,
   NullableOutputTemplateBase,
   OutputTemplate,
@@ -28,7 +29,7 @@ import { OutputTemplateConverterStrategy } from '../OutputTemplateConverterStrat
  */
 export abstract class SingleResponseOutputTemplateConverterStrategy<
   RESPONSE extends Record<string, unknown>,
-  CONFIG extends OutputTemplateConverterStrategyConfig
+  CONFIG extends OutputTemplateConverterStrategyConfig,
 > extends OutputTemplateConverterStrategy<RESPONSE, CONFIG> {
   prepareOutput(output: OutputTemplate | OutputTemplate[]): OutputTemplate {
     output = super.prepareOutput(output);
@@ -117,21 +118,7 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
       target.carousel = { ...carousel };
     }
 
-    const listen = mergeWith.listen;
-
-    const canSetListenObject = target.listen !== false && typeof listen === 'object' && listen;
-    const canSetListenRest =
-      target.listen !== false &&
-      !(typeof target.listen === 'object' && target.listen) &&
-      typeof listen !== 'undefined';
-
-    if (listen === false) {
-      target.listen = false;
-    } else if (canSetListenObject) {
-      target.listen = { ...(listen as Listen) };
-    } else if (canSetListenRest) {
-      target.listen = listen;
-    }
+    target.listen = mergeListen(target.listen, mergeWith.listen);
   }
 
   protected mergeMessages(

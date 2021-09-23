@@ -1,7 +1,7 @@
 import {
-  Listen,
   ListenValue,
   mergeInstances,
+  mergeListen,
   OutputTemplate,
   OutputTemplateConverterStrategy,
   OutputTemplateConverterStrategyConfig,
@@ -33,29 +33,14 @@ export class CoreOutputTemplateConverterStrategy extends OutputTemplateConverter
       },
     }) as CoreResponse;
 
-    let mergedListen: ListenValue = true;
-
+    let mergedListen: ListenValue | undefined | null;
     output.forEach((outputItem) => {
-      const canSetListenObject =
-        outputItem.listen !== false && typeof outputItem === 'object' && outputItem;
-      const canSetListenRest =
-        outputItem.listen !== false &&
-        !(typeof outputItem.listen === 'object' && outputItem.listen) &&
-        typeof outputItem !== 'undefined';
-
-      if (outputItem.listen === false) {
-        mergedListen = false;
-      } else if (canSetListenObject) {
-        mergedListen = { ...(outputItem.listen as Listen) };
-      } else if (canSetListenRest) {
-        mergedListen = outputItem.listen as boolean;
-      }
-
+      mergedListen = mergeListen(mergedListen, outputItem.listen);
       if (outputItem.platforms?.core?.nativeResponse) {
         mergeInstances(response, outputItem.platforms.core.nativeResponse);
       }
     });
-    response.context.session.end = !mergedListen;
+    response.context.session.end = !(mergedListen ?? true);
     return response;
   }
 
