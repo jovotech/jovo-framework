@@ -42,7 +42,7 @@ export class MessengerBotResponse implements JovoResponse {
     return this.getSpeechPlain();
   }
 
-  getSpeechPlain(): string | undefined {
+  getSpeechPlain(separator?: string): string | undefined {
     return this.messages
       .map((m) => {
         if (m instanceof TextMessage) {
@@ -51,7 +51,7 @@ export class MessengerBotResponse implements JovoResponse {
         return;
       })
       .filter((m) => !!m)
-      .join(' ');
+      .join(separator || ' ');
   }
 
   hasSessionAttribute(name: string, value?: any): boolean {
