@@ -117,11 +117,16 @@ export abstract class OutputTemplateConverterStrategy<
     maxLength: number,
     offset = 0,
   ): MessageValue {
-    if (!this.shouldSanitize('trimStrings')) {
+    const actualMaxLength = maxLength - offset;
+
+    const speechLength = typeof message === 'string' ? message.length : message.speech?.length || 0;
+    const textLength = typeof message === 'string' ? message.length : message.text?.length || 0;
+    const isExceeding = speechLength > actualMaxLength || textLength > actualMaxLength;
+
+    if (!this.shouldSanitize('trimStrings') || !isExceeding) {
       return message;
     }
 
-    const actualMaxLength = maxLength - offset;
     if (typeof message === 'object') {
       if (message.speech) {
         message.speech = message.speech.slice(0, actualMaxLength);
