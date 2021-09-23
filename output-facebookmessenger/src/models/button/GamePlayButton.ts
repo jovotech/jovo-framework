@@ -14,7 +14,7 @@ export class GameMetaData {
 
 export class GamePlayButton extends ButtonBase<ButtonType.GamePlay | 'game_play'> {
   @Equals(ButtonType.GamePlay)
-  type: ButtonType.GamePlay;
+  type: ButtonType.GamePlay | 'game_play';
 
   @IsString()
   @IsNotEmpty()

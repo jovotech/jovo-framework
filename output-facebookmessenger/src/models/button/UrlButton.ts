@@ -19,7 +19,7 @@ export enum WebViewHeightRatio {
 
 export class UrlButton extends ButtonBase<ButtonType.Url | 'web_url'> {
   @Equals(ButtonType.Url)
-  type: ButtonType.Url;
+  type: ButtonType.Url | 'web_url';
 
   @IsString()
   @IsNotEmpty()
