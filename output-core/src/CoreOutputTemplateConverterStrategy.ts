@@ -1,4 +1,5 @@
 import {
+  Listen,
   ListenValue,
   mergeInstances,
   OutputTemplate,
@@ -31,16 +32,23 @@ export class CoreOutputTemplateConverterStrategy extends OutputTemplateConverter
         },
       },
     }) as CoreResponse;
-    let mergedListen: ListenValue | undefined;
-    output.forEach((outputItem) => {
-      const listen = outputItem.listen ?? true;
 
-      // if listen is an object and not null
-      if (typeof listen === 'object' && listen) {
-        mergedListen = { ...listen };
-        // if merged listen is not an object
-      } else if (typeof mergedListen !== 'object') {
-        mergedListen = listen;
+    let mergedListen: ListenValue = true;
+
+    output.forEach((outputItem) => {
+      const canSetListenObject =
+        outputItem.listen !== false && typeof outputItem === 'object' && outputItem;
+      const canSetListenRest =
+        outputItem.listen !== false &&
+        !(typeof outputItem.listen === 'object' && outputItem.listen) &&
+        typeof outputItem !== 'undefined';
+
+      if (outputItem.listen === false) {
+        mergedListen = false;
+      } else if (canSetListenObject) {
+        mergedListen = { ...(outputItem.listen as Listen) };
+      } else if (canSetListenRest) {
+        mergedListen = outputItem.listen as boolean;
       }
 
       if (outputItem.platforms?.core?.nativeResponse) {
