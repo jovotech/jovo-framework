@@ -1,6 +1,6 @@
 {
 	"name": "jovo-analytics-googleanalytics",
-	"version": "3.5.9",
+	"version": "3.5.10",
 	"description": "Jovo Plugin for GoogleAnalytics",
 	"main": "dist/src/index",
 	"types": "dist/src/index.d.ts",
