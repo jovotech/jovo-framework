@@ -127,5 +127,5 @@ export function mergeInstances<D extends object, S extends any[]>(
   destination: D,
   ...sources: S
 ): O.MergeAll<D, S, 'deep'> {
-  return _merge(destination, ...sources);
+  return _merge(destination, ...sources.map((source) => instanceToObject(source)));
 }
