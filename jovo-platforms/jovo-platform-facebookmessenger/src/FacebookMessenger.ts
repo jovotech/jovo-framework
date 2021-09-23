@@ -366,12 +366,12 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
         request.entry.length > 0;
       if (isMessengerRequest) {
         const promises: Array<Promise<any>> = [];
-        const responseObj: { message: MessengerBotResponse[] } = { message: [] };
+        const responses: MessengerBotResponse[] = [];
         request.entry.forEach((entry: MessengerBotEntry) => {
           const hostCopy: Host = Object.create(host.constructor.prototype);
           // tslint:disable-next-line
           hostCopy.setResponse = async function (obj: any) {
-            responseObj.message.push(obj.message);
+            responses.push(obj);
           };
           for (const key in host) {
             if (host.hasOwnProperty(key)) {
@@ -390,7 +390,7 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
         });
 
         await Promise.all(promises);
-        return host.setResponse(responseObj);
+        return host.setResponse(responses);
       }
       return PROTOTYPE_BACKUP.call(this, host);
     };

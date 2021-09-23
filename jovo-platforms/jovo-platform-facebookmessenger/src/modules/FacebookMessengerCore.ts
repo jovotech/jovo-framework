@@ -75,7 +75,7 @@ export class FacebookMessengerCore implements Plugin {
 
     const response = messengerBot.$response as MessengerBotResponse;
 
-    response.message = [];
+    response.messages = [];
 
     if (Object.keys(output).length === 0) {
       return;
@@ -87,7 +87,7 @@ export class FacebookMessengerCore implements Plugin {
     const tell = _get(output, 'tell');
     if (tell) {
       const text = setText || tell.speech.toString();
-      response.message.push(
+      response.messages.push(
         new TextMessage(
           { id: messengerBot.$user.getId()! },
           { text, quickReplies: overWriteQuickReplies },
@@ -98,7 +98,7 @@ export class FacebookMessengerCore implements Plugin {
     const ask = _get(output, 'ask');
     if (ask) {
       const text = setText || ask.speech.toString();
-      response.message.push(
+      response.messages.push(
         new TextMessage(
           { id: messengerBot.$user.getId()! },
           { text, quickReplies: overWriteQuickReplies },
@@ -108,7 +108,7 @@ export class FacebookMessengerCore implements Plugin {
 
     const responses = _get(output, 'FacebookMessenger.responses');
     if (responses && responses.length) {
-      response.message = [...response.message, ...responses];
+      response.messages = [...response.messages, ...responses];
     }
   }
 }

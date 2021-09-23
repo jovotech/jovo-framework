@@ -20,9 +20,7 @@ export class MessengerBotResponse implements JovoResponse {
     return Object.assign(response, json);
   }
 
-  // Make message an array to handle cases where the bot is able to send
-  // multiple responses in one invocation.
-  message?: Message[];
+  messages: Message[] = [];
 
   getReprompt(): string | undefined {
     return undefined;
@@ -45,7 +43,15 @@ export class MessengerBotResponse implements JovoResponse {
   }
 
   getSpeechPlain(): string | undefined {
-    return this.message instanceof TextMessage ? this.message.message.text : undefined;
+    return this.messages
+      .map((m) => {
+        if (m instanceof TextMessage) {
+          return m.message.text;
+        }
+        return;
+      })
+      .filter((m) => !!m)
+      .join(' ');
   }
 
   hasSessionAttribute(name: string, value?: any): boolean {
@@ -69,19 +75,21 @@ export class MessengerBotResponse implements JovoResponse {
   }
 
   isTell(speechText?: string | string[]): boolean {
-    if (!speechText || !this.message) {
+    if (!speechText || !this.messages.length) {
       return false;
     }
 
+    const textMessages = this.messages
+      .map((m) => (m as TextMessage)?.message?.text)
+      .filter((m) => !!m);
+
     if (typeof speechText === 'string') {
-      return (
-        SpeechBuilder.removeSSML(speechText) === (this.message?.[0] as TextMessage)?.message?.text
-      );
+      return textMessages.includes(SpeechBuilder.removeSSML(speechText));
     }
 
     if (Array.isArray(speechText)) {
       return speechText.some((text) => {
-        return SpeechBuilder.removeSSML(text) === (this.message?.[0] as TextMessage)?.message?.text;
+        return textMessages.includes(SpeechBuilder.removeSSML(text));
       });
     }
 

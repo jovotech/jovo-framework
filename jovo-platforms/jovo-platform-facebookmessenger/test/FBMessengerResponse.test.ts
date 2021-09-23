@@ -34,7 +34,7 @@ describe('response', () => {
     app.setHandler({
       LAUNCH_TEST() {
         // Single fb api call
-        this.$messengerBot?.tell('hello');
+        this.$messengerBot?.tell('hello world');
       },
     });
     const req = await t.requestBuilder.launch();
@@ -43,7 +43,7 @@ describe('response', () => {
     app.on('response', (handleRequest: HandleRequest) => {
       const messengerResponse = handleRequest.jovo!.$response;
       expect(messengerResponse).toMatchObject({
-        message: [
+        messages: [
           {
             message: { quick_replies: undefined, text: 'hello world' },
             message_type: 'RESPONSE',
@@ -74,7 +74,7 @@ describe('response', () => {
     app.on('response', (handleRequest: HandleRequest) => {
       const messengerResponses = handleRequest.jovo!.$response;
       expect(messengerResponses).toMatchObject({
-        message: [
+        messages: [
           {
             message: { quick_replies: undefined, text: 'hello world 1' },
             message_type: 'RESPONSE',
@@ -118,7 +118,7 @@ describe('response', () => {
 
       if (intentName === 'INTENT_1') {
         expect(response).toMatchObject({
-          message: [
+          messages: [
             {
               message: { quick_replies: undefined, text: 'hello world 1' },
               message_type: 'RESPONSE',
@@ -128,7 +128,7 @@ describe('response', () => {
         });
       } else if (intentName === 'INTENT_2') {
         expect(response).toMatchObject({
-          message: [
+          messages: [
             {
               message: { quick_replies: undefined, text: 'hello world 2' },
               message_type: 'RESPONSE',
