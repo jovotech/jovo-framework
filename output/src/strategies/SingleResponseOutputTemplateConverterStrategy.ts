@@ -1,6 +1,5 @@
 import {
   isSSML,
-  Listen,
   mergeInstances,
   mergeListen,
   MessageValue,
@@ -24,8 +23,8 @@ import { OutputTemplateConverterStrategy } from '../OutputTemplateConverterStrat
  * - Strings get concatenated and separated by a whitespace.
  * - Quick Replies get merged into a single array.
  * - Card/Carousel the last in the array is used.
- * - nativeResponses get merged.
- * - Listen gets chosen by priority: false > object > true
+ * - NativeResponses get merged.
+ * - Listen gets merged.
  */
 export abstract class SingleResponseOutputTemplateConverterStrategy<
   RESPONSE extends Record<string, unknown>,

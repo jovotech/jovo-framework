@@ -134,24 +134,19 @@ export function mergeInstances<D extends object, S extends any[]>(
   );
 }
 
-/**
- * Merges listen by priority: false > object > rest
- */
 export function mergeListen(
   target: ListenValue | null | undefined,
   mergeWith: ListenValue | null | undefined,
 ): ListenValue | null | undefined {
-  const canSetListenObject = target !== false && typeof mergeWith === 'object' && mergeWith;
-  const canSetListenRest =
-    target !== false && !(typeof target === 'object' && target) && typeof mergeWith !== 'undefined';
-  if (mergeWith === false) {
-    return false;
+  // if target is an object and not null and mergeWith is true, target should not be overwritten
+  if (typeof target === 'object' && target && mergeWith === true) {
+    return target;
   }
-  if (canSetListenObject) {
-    return { ...(mergeWith as Listen) };
+  // if mergeWith is not undefined, target should become mergeWith
+  if (typeof mergeWith !== 'undefined') {
+    // if mergeWith is an object and not null, just return a copy of mergeWith, otherwise return mergeWith
+    return typeof mergeWith === 'object' && mergeWith ? { ...mergeWith } : mergeWith;
   }
-  if (canSetListenRest) {
-    return mergeWith;
-  }
+  // if mergeWith is undefined, just return target
   return target;
 }
