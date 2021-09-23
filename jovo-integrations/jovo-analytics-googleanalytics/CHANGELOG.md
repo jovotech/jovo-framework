@@ -4,6 +4,9 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+### 2021-09-23 [3.5.10]
+* [#1036](https://github.com/jovotech/jovo-framework/pull/1036) :bug: Google analytics skill events + error tracking fixed  ([@freiSMS(https://github.com/freiSMS))
+
 
 ### 2021-09-02 [3.5.9]
 * [#1000](https://github.com/jovotech/jovo-framework/pull/1000) :bug: AlexaSkill Event Errors in GoogleAnalytics ([@freiSMS(https://github.com/freiSMS))

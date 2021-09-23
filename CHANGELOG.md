@@ -2,6 +2,13 @@
 
 ### Latest Framework Version: 3.5.2<br><br>
 
+
+#### 2021-09-23
+
+##### `jovo-analytics-googleanalytics [3.5.10]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-googleanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-googleanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-googleanalytics)
+* [#1036](https://github.com/jovotech/jovo-framework/pull/1036) :bug: Google analytics skill events + error tracking fixed  ([@freiSMS(https://github.com/freiSMS))
+
+
 #### 2021-09-02
 
 ##### `jovo-analytics-googleanalytics [3.5.9]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-googleanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-googleanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-googleanalytics)
