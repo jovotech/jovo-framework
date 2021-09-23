@@ -16,8 +16,8 @@ import {
   EntityOverrideMode,
   EntityOverrideModeLike,
   SessionEntityType,
-  Text,
 } from './models';
+import { convertMessageToDialogflowText } from './utilities';
 
 // TODO CHECK: Theoretically, multiple messages are supported in the response, in the future this could be refactored for that.
 export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<
@@ -82,7 +82,7 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
       }
       response.fulfillment_messages.push({
         message: {
-          text: convertMessageToText(message),
+          text: convertMessageToDialogflowText(message),
         },
       });
     }
@@ -199,7 +199,4 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
       })),
     };
   }
-}
-function convertMessageToText(message: MessageValue): Text | undefined {
-  throw new Error('Function not implemented.');
 }
