@@ -1,11 +1,12 @@
+import { afterAll, afterEach } from '@jest/globals';
 import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
-import { resolve as resolvePaths, join as joinPaths } from 'path';
-import { DbItem, DbPlugin, DbPluginConfig, Jovo, JovoResponse } from '..';
-import { HandleRequest } from '../HandleRequest';
+import { join as joinPaths, resolve as resolvePaths } from 'path';
+import { DbItem, DbPlugin, DbPluginConfig, Jovo } from '..';
 
 export interface FileDbConfig extends DbPluginConfig {
   directory: string;
-  deleteOnSessionEnded?: boolean;
+  deleteAfterEach: boolean;
+  deleteAfterAll: boolean;
 }
 
 export class TestDb extends DbPlugin<FileDbConfig> {
@@ -13,16 +14,26 @@ export class TestDb extends DbPlugin<FileDbConfig> {
     return resolvePaths(process.cwd(), 'dist', this.config.directory);
   }
 
+  get dbPath(): string {
+    return joinPaths(this.dbDirectory, 'db.json');
+  }
+
   getDefaultConfig(): FileDbConfig {
     return {
       ...super.getDefaultConfig(),
-      dbDirectory: '../db/tests',
+      deleteAfterEach: true,
+      deleteAfterAll: true,
     };
   }
 
-  async mount(handleRequest: HandleRequest): Promise<void> {
-    super.mount(handleRequest);
-    handleRequest.middlewareCollection.use('after.response.end', this.clearData.bind(this));
+  install(): void {
+    if (this.config.deleteAfterEach) {
+      afterEach(this.clearData.bind(this));
+    }
+
+    if (this.config.deleteAfterAll) {
+      afterAll(this.clearData.bind(this));
+    }
   }
 
   initialize(): void {
@@ -31,18 +42,18 @@ export class TestDb extends DbPlugin<FileDbConfig> {
     }
   }
 
-  getDbItems(primaryKey: string): DbItem[] {
-    if (!existsSync(this.getDbFilePath(primaryKey))) {
+  getDbItems(): DbItem[] {
+    if (!existsSync(this.dbPath)) {
       return [];
     }
 
-    const rawDbData: string = readFileSync(this.getDbFilePath(primaryKey), 'utf-8');
+    const rawDbData: string = readFileSync(this.dbPath, 'utf-8');
     const dbItems: DbItem[] = rawDbData.length ? JSON.parse(rawDbData) : [];
     return dbItems;
   }
 
   getDbItem(primaryKey: string): DbItem | undefined {
-    const dbItems: DbItem[] = this.getDbItems(primaryKey);
+    const dbItems: DbItem[] = this.getDbItems();
     return dbItems.find((dbItem: DbItem) => dbItem.id === primaryKey);
   }
 
@@ -55,7 +66,7 @@ export class TestDb extends DbPlugin<FileDbConfig> {
   }
 
   async saveData(userId: string, jovo: Jovo): Promise<void> {
-    const dbItems: DbItem[] = this.getDbItems(userId);
+    const dbItems: DbItem[] = this.getDbItems();
     const dbItem: DbItem | undefined = dbItems.find((dbItem: DbItem) => dbItem.id === userId);
 
     // Create new user
@@ -70,35 +81,14 @@ export class TestDb extends DbPlugin<FileDbConfig> {
       await this.applyPersistableData(jovo, dbItem);
     }
 
-    writeFileSync(this.getDbFilePath(userId), JSON.stringify(dbItems, null, 2));
+    writeFileSync(this.dbPath, JSON.stringify(dbItems, null, 2));
   }
 
-  async clearData(jovo: Jovo): Promise<void> {
-    if (!jovo.$user.id) {
+  clearData(): void {
+    if (!existsSync(this.dbPath)) {
       return;
     }
 
-    if (
-      !this.config.deleteOnSessionEnded ||
-      !existsSync(this.getDbFilePath(jovo.$user.id)) ||
-      !jovo.$response
-    ) {
-      return;
-    }
-
-    const responses: JovoResponse[] = Array.isArray(jovo.$response)
-      ? jovo.$response
-      : [jovo.$response];
-
-    for (const response of responses) {
-      if (response.hasSessionEnded()) {
-        unlinkSync(this.getDbFilePath(jovo.$user.id));
-        return;
-      }
-    }
-  }
-
-  private getDbFilePath(primaryKey: string): string {
-    return joinPaths(this.dbDirectory, `${primaryKey}.json`);
+    unlinkSync(this.dbPath);
   }
 }
