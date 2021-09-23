@@ -126,10 +126,6 @@ export function instanceToObject<T>(instance: T): T {
 export function mergeInstances<D extends object, S extends any[]>(
   destination: D,
   ...sources: S
-): O.MergeAll<OmitIndex<D, string>, S, 'deep'> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return _merge(
-    instanceToObject(destination),
-    ...sources.map((source) => instanceToObject(source)),
-  );
+): O.MergeAll<D, S, 'deep'> {
+  return _merge(destination, ...sources);
 }
