@@ -21,12 +21,12 @@ import {
 import {
   GoogleAssistantResponse,
   Session,
-  Simple,
   Suggestion,
   TypeOverride,
   TypeOverrideMode,
   TypeOverrideModeLike,
 } from './models';
+import { convertMessageToGoogleAssistantSimple } from './utilities';
 
 export class GoogleAssistantOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<
   GoogleAssistantResponse,
@@ -120,7 +120,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
       if (!response.prompt) {
         response.prompt = {};
       }
-      response.prompt.firstSimple = convertMessageToSimple(message);
+      response.prompt.firstSimple = convertMessageToGoogleAssistantSimple(message);
     }
 
     const reprompt = output.reprompt;
@@ -293,7 +293,4 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
       })),
     };
   }
-}
-function convertMessageToSimple(message: MessageValue): Simple | undefined {
-  throw new Error('Function not implemented.');
 }
