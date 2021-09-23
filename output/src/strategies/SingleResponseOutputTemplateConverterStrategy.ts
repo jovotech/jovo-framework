@@ -1,14 +1,15 @@
 import {
   isSSML,
+  Listen,
   mergeInstances,
   MessageValue,
   NullableOutputTemplateBase,
   OutputTemplate,
   OutputTemplateBase,
   OutputTemplateConverterStrategyConfig,
+  PlainObjectType,
   plainToClass,
   PlatformOutputTemplate,
-  PlainObjectType,
   removeSSML,
   removeSSMLSpeakTags,
   SpeechMessage,
@@ -23,11 +24,11 @@ import { OutputTemplateConverterStrategy } from '../OutputTemplateConverterStrat
  * - Quick Replies get merged into a single array.
  * - Card/Carousel the last in the array is used.
  * - nativeResponses get merged.
- * - Listen gets chosen by priority: objects > boolean
+ * - Listen gets chosen by priority: false > object > true
  */
 export abstract class SingleResponseOutputTemplateConverterStrategy<
   RESPONSE extends Record<string, unknown>,
-  CONFIG extends OutputTemplateConverterStrategyConfig,
+  CONFIG extends OutputTemplateConverterStrategyConfig
 > extends OutputTemplateConverterStrategy<RESPONSE, CONFIG> {
   prepareOutput(output: OutputTemplate | OutputTemplate[]): OutputTemplate {
     output = super.prepareOutput(output);
@@ -116,12 +117,19 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
       target.carousel = { ...carousel };
     }
 
-    // if new listen is an object and not null
     const listen = mergeWith.listen;
-    if (typeof listen === 'object' && listen) {
-      target.listen = { ...listen };
-      // if current listen is not an object and new listen is not undefined
-    } else if (typeof target.listen !== 'object' && typeof listen !== 'undefined') {
+
+    const canSetListenObject = target.listen !== false && typeof listen === 'object' && listen;
+    const canSetListenRest =
+      target.listen !== false &&
+      !(typeof target.listen === 'object' && target.listen) &&
+      typeof listen !== 'undefined';
+
+    if (listen === false) {
+      target.listen = false;
+    } else if (canSetListenObject) {
+      target.listen = { ...(listen as Listen) };
+    } else if (canSetListenRest) {
       target.listen = listen;
     }
   }
