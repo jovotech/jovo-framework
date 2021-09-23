@@ -369,10 +369,6 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
         const responses: MessengerBotResponse[] = [];
         request.entry.forEach((entry: MessengerBotEntry) => {
           const hostCopy: Host = Object.create(host.constructor.prototype);
-          // tslint:disable-next-line
-          hostCopy.setResponse = async function (obj: any) {
-            responses.push(obj);
-          };
           for (const key in host) {
             if (host.hasOwnProperty(key)) {
               const value = (host as any)[key];
@@ -386,6 +382,10 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
               }
             }
           }
+          // tslint:disable-next-line
+          hostCopy.setResponse = async function (obj: any) {
+            responses.push(obj);
+          };
           promises.push(PROTOTYPE_BACKUP.call(this, hostCopy));
         });
 

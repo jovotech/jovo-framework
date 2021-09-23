@@ -107,17 +107,10 @@ describe('response', () => {
 
     // Request will call INTENT_1 and INTENT_2 in one call
     const request: JovoRequest = await t.requestBuilder.launch(multipleEventRequest);
-    app.handle(ExpressJS.dummyRequest(request));
-
-    // This hook should be called twice since there are two events are called
-    app.on('response', (handleRequest: HandleRequest) => {
-      const response = handleRequest.jovo!.$response;
-      const request: any = handleRequest.jovo?.$request;
-
-      const intentName = request.messaging[0].postback.payload;
-
-      if (intentName === 'INTENT_1') {
-        expect(response).toMatchObject({
+    const host = ExpressJS.dummyRequest(request);
+    host.setResponse = async function (response: any) {
+      expect(response).toEqual([
+        {
           messages: [
             {
               message: { quick_replies: undefined, text: 'hello world 1' },
@@ -125,9 +118,8 @@ describe('response', () => {
               recipient: { id: '2321893584590078' },
             },
           ],
-        });
-      } else if (intentName === 'INTENT_2') {
-        expect(response).toMatchObject({
+        },
+        {
           messages: [
             {
               message: { quick_replies: undefined, text: 'hello world 2' },
@@ -135,10 +127,10 @@ describe('response', () => {
               recipient: { id: '2321893584590078' },
             },
           ],
-        });
-      }
-
+        },
+      ]);
       done();
-    });
+    };
+    await app.handle(host);
   });
 });
