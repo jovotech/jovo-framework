@@ -2,6 +2,9 @@ import { Message, plainToClass, SpeechMessage, TextMessage, Transform } from '..
 
 export function TransformMessage(): PropertyDecorator {
   return Transform(({ value }: { value: Message }) => {
+    if (!value) {
+      return;
+    }
     if (value?.speech) {
       return plainToClass(SpeechMessage, value);
     }
