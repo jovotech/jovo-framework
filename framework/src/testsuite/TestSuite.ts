@@ -91,7 +91,8 @@ export interface TestSuiteConfig<PLATFORM extends Platform> extends PluginConfig
   locale: string;
   db: {
     directory: string;
-    deleteOnSessionEnded?: boolean;
+    deleteAfterEach?: boolean;
+    deleteAfterAll?: boolean;
   };
   stage: string;
   app?: App;
@@ -120,23 +121,12 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
   $platform!: PLATFORM;
   $output!: OutputTemplate[];
 
-  constructor(
-    config: PartialTestSuiteConfig<PLATFORM> = {
-      platform: TestPlatform as unknown as Constructor<PLATFORM>,
-    },
-  ) {
+  constructor(config?: PartialTestSuiteConfig<PLATFORM>) {
     super(config);
 
     // Load app from configured stage and register testplugins
     this.app = this.config.app || this.loadApp();
-    this.app.use(
-      this,
-      new TestPlatform(),
-      new TestDb({
-        directory: this.config.db.directory,
-        deleteOnSessionEnded: this.config.db.deleteOnSessionEnded,
-      }),
-    );
+    this.app.use(this, new TestPlatform(), new TestDb({ ...this.config.db }));
 
     const platform = new this.config.platform();
     this.requestBuilder = new platform.requestBuilder();
