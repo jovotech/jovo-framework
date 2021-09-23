@@ -118,14 +118,14 @@ describe('prepareOutput', () => {
       });
     });
 
-    describe('listen is chosen by priority', () => {
-      test('false > object', () => {
+    describe('listen is merged', () => {
+      test('true + false = false', () => {
         const preparedOutput = strategy.prepareOutput([
           {
-            listen: false,
+            listen: true,
           },
           {
-            listen: { entities: {} },
+            listen: false,
           },
         ]);
         expect(preparedOutput).toEqual({
@@ -133,10 +133,38 @@ describe('prepareOutput', () => {
         });
       });
 
-      test('object > true', () => {
+      test('false + true = true', () => {
         const preparedOutput = strategy.prepareOutput([
           {
+            listen: false,
+          },
+          {
             listen: true,
+          },
+        ]);
+        expect(preparedOutput).toEqual({
+          listen: true,
+        });
+      });
+
+      test('object + false = false', () => {
+        const preparedOutput = strategy.prepareOutput([
+          {
+            listen: { entities: {} },
+          },
+          {
+            listen: false,
+          },
+        ]);
+        expect(preparedOutput).toEqual({
+          listen: false,
+        });
+      });
+
+      test('false + object = object', () => {
+        const preparedOutput = strategy.prepareOutput([
+          {
+            listen: false,
           },
           {
             listen: { entities: {} },
@@ -147,21 +175,36 @@ describe('prepareOutput', () => {
         });
       });
 
-      test('true > undefined', () => {
+      test('true + object = object', () => {
         const preparedOutput = strategy.prepareOutput([
           {
             listen: true,
           },
-          {},
+          {
+            listen: { entities: {} },
+          },
         ]);
         expect(preparedOutput).toEqual({
-          listen: true,
+          listen: {
+            entities: {},
+          },
         });
       });
 
-      test('stays undefined', () => {
-        const preparedOutput = strategy.prepareOutput([{}, {}]);
-        expect(preparedOutput).toEqual({});
+      test('special case - object + true = object', () => {
+        const preparedOutput = strategy.prepareOutput([
+          {
+            listen: { entities: {} },
+          },
+          {
+            listen: true,
+          },
+        ]);
+        expect(preparedOutput).toEqual({
+          listen: {
+            entities: {},
+          },
+        });
       });
     });
 
