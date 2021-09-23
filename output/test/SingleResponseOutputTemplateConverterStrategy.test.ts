@@ -4,14 +4,18 @@ import {
   SingleResponseOutputTemplateConverterStrategy,
 } from '../src';
 
-class ExampleResponse extends JovoResponse {}
+class ExampleResponse extends JovoResponse {
+  hasSessionEnded(): boolean {
+    return false;
+  }
+}
 
 class ExampleStrategy extends SingleResponseOutputTemplateConverterStrategy<ExampleResponse, any> {
   readonly platformName = 'example' as const;
   readonly responseClass: { new (): ExampleResponse };
 
   toResponse(output: OutputTemplate): ExampleResponse {
-    return output;
+    return output as ExampleResponse;
   }
 
   fromResponse(response: ExampleResponse): OutputTemplate {
@@ -111,6 +115,53 @@ describe('prepareOutput', () => {
             text: 'Hello World!',
           },
         });
+      });
+    });
+
+    describe('listen is chosen by priority', () => {
+      test('false > object', () => {
+        const preparedOutput = strategy.prepareOutput([
+          {
+            listen: false,
+          },
+          {
+            listen: { entities: {} },
+          },
+        ]);
+        expect(preparedOutput).toEqual({
+          listen: false,
+        });
+      });
+
+      test('object > true', () => {
+        const preparedOutput = strategy.prepareOutput([
+          {
+            listen: true,
+          },
+          {
+            listen: { entities: {} },
+          },
+        ]);
+        expect(preparedOutput).toEqual({
+          listen: { entities: {} },
+        });
+      });
+
+      test('true > undefined', () => {
+        const preparedOutput = strategy.prepareOutput([
+          {
+            listen: true,
+          },
+          {},
+        ]);
+        expect(preparedOutput).toEqual({
+          listen: true,
+        });
+      });
+
+      test('stays undefined', () => {
+        const preparedOutput = strategy.prepareOutput([{}, {}]);
+        expect(preparedOutput).toEqual({});
       });
     });
 
