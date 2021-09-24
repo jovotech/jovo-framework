@@ -21,44 +21,48 @@ export class AlexaCli extends JovoCliPlugin {
     return [BuildHook, GetHook, DeployHook, NewHook];
   }
 
+  get name(): string {
+    return this.constructor.name;
+  }
+
   /**
-   * Returns base path to platform's build folder.
+   * The base path to platform's build folder
    */
-  getPlatformPath(): string {
+  get platformPath(): string {
     return joinPaths(this.$cli.$project!.getBuildPath(), this.platformDirectory);
   }
 
   /**
-   * Returns path to Alexa skill package folder.
+   * The path to Alexa skill package folder
    */
-  getSkillPackagePath(): string {
-    return joinPaths(this.getPlatformPath(), 'skill-package');
+  get skillPackagePath(): string {
+    return joinPaths(this.platformPath, 'skill-package');
   }
 
   /**
-   * Returns path to skill.json.
+   * The path to the skill.json file
    */
-  getSkillJsonPath(): string {
-    return joinPaths(this.getSkillPackagePath(), 'skill.json');
+  get skillJsonPath(): string {
+    return joinPaths(this.skillPackagePath, 'skill.json');
   }
 
-  getModelsPath(): string {
-    return joinPaths(this.getSkillPackagePath(), 'interactionModels', 'custom');
+  get modelsPath(): string {
+    return joinPaths(this.skillPackagePath, 'interactionModels', 'custom');
+  }
+
+  get accountLinkingPath(): string {
+    return joinPaths(this.skillPackagePath, 'accountLinking.json');
+  }
+
+  get askConfigFolderPath(): string {
+    return joinPaths(this.platformPath, '.ask');
+  }
+
+  get askConfigPath(): string {
+    return joinPaths(this.askConfigFolderPath, 'ask-states.json');
   }
 
   getModelPath(locale: string): string {
-    return joinPaths(this.getModelsPath(), `${locale}.json`);
-  }
-
-  getAccountLinkingPath(): string {
-    return joinPaths(this.getSkillPackagePath(), 'accountLinking.json');
-  }
-
-  getAskConfigFolderPath(): string {
-    return joinPaths(this.getPlatformPath(), '.ask');
-  }
-
-  getAskConfigPath(): string {
-    return joinPaths(this.getAskConfigFolderPath(), 'ask-states.json');
+    return joinPaths(this.modelsPath, `${locale}.json`);
   }
 }

@@ -89,7 +89,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
    * Checks if platform-specific files already exist and prompts for overwriting them.
    */
   async checkForExistingPlatformFiles(): Promise<void> {
-    if (!this.$context.flags.overwrite && existsSync(this.$plugin.getPlatformPath())) {
+    if (!this.$context.flags.overwrite && existsSync(this.$plugin.platformPath)) {
       const answer = await promptOverwrite('Found existing Alexa project files. How to proceed?');
       if (answer.overwrite === ANSWER_CANCEL) {
         this.uninstall();
@@ -128,7 +128,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
     }
 
     const getSkillInformationTask: Task = new Task('Getting skill information', async () => {
-      const skillPackagePath: string = this.$plugin.getSkillPackagePath();
+      const skillPackagePath: string = this.$plugin.skillPackagePath;
       if (!existsSync(skillPackagePath)) {
         mkdirSync(skillPackagePath, { recursive: true });
       }
@@ -138,8 +138,8 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
         'development',
         this.$context.alexa.askProfile,
       );
-      writeFileSync(this.$plugin.getSkillJsonPath(), JSON.stringify(skillInformation, null, 2));
-      this.setAlexaSkillId(this.$context.alexa.skillId!);
+      writeFileSync(this.$plugin.skillJsonPath, JSON.stringify(skillInformation, null, 2));
+      this.setSkillId(this.$context.alexa.skillId!);
 
       // Try to get account linking information.
       try {
@@ -151,10 +151,10 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
 
         if (accountLinkingJson) {
           writeFileSync(
-            this.$plugin.getAccountLinkingPath(),
+            this.$plugin.accountLinkingPath,
             JSON.stringify({ accountLinkingRequest: accountLinkingJson }, null, 2),
           );
-          return `Account Linking Information saved to ${this.$plugin.getAccountLinkingPath()}`;
+          return `Account Linking Information saved to ${this.$plugin.accountLinkingPath}`;
         }
       } catch (error) {
         // If account linking information is not available, do nothing.
@@ -165,7 +165,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
     });
 
     const getModelsTask: Task = new Task('Getting Alexa Skill model files', async () => {
-      const alexaModelPath: string = this.$plugin.getModelsPath();
+      const alexaModelPath: string = this.$plugin.modelsPath;
       if (!existsSync(alexaModelPath)) {
         mkdirSync(alexaModelPath, { recursive: true });
       }
@@ -176,7 +176,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
         modelLocales.push(...this.$context.flags.locale);
       } else {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const skillJson = require(this.$plugin.getSkillJsonPath());
+        const skillJson = require(this.$plugin.skillJsonPath);
         const skillJsonLocales = _get(skillJson, 'manifest.publishingInformation.locales');
         modelLocales.push(...Object.keys(skillJsonLocales));
       }

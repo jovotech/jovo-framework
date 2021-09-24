@@ -84,7 +84,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
    * Checks if the platform folder for the current plugin exists.
    */
   checkForPlatformsFolder(): void {
-    if (!existsSync(this.$plugin.getPlatformPath())) {
+    if (!existsSync(this.$plugin.platformPath)) {
       throw new JovoCliError({
         message: `Couldn't find the platform folder "${this.$plugin.platformDirectory}/".`,
         module: this.$plugin.constructor.name,
@@ -107,7 +107,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
         `Creating Alexa Skill project ${printAskProfile(this.$context.alexa.askProfile)}`,
         async () => {
           const skillId: string = await smapi.createSkill(
-            this.$plugin.getSkillJsonPath(),
+            this.$plugin.skillJsonPath,
             this.$context.alexa.askProfile,
           );
           this.$context.alexa.skillId = skillId;
@@ -117,7 +117,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
 
           await smapi.updateAccountLinkingInformation(
             skillId,
-            this.$plugin.getAccountLinkingPath(),
+            this.$plugin.accountLinkingPath,
             'development',
             this.$context.alexa.askProfile,
           );
@@ -136,12 +136,12 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
         async () => {
           await smapi.updateSkill(
             this.$context.alexa.skillId!,
-            this.$plugin.getSkillJsonPath(),
+            this.$plugin.skillJsonPath,
             this.$context.alexa.askProfile,
           );
           await smapi.updateAccountLinkingInformation(
             this.$context.alexa.skillId!,
-            this.$plugin.getAccountLinkingPath(),
+            this.$plugin.accountLinkingPath,
             'development',
             this.$context.alexa.askProfile,
           );
@@ -205,7 +205,8 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
   getSkillId(): string | undefined {
     try {
       const askConfig = this.getAskConfig();
-      const skillId: string = _get(askConfig, 'profiles.default.skillId');
+      const askProfile: string = this.$context.alexa.askProfile || 'default';
+      const skillId: string = _get(askConfig, `profiles.${askProfile}.skillId`);
       if (skillId && skillId.length > 0) {
         return skillId;
       }
@@ -269,7 +270,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
   getSkillInformation(): { name: string; skillId?: string } {
     try {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const skillJson = require(this.$plugin.getSkillJsonPath());
+      const skillJson = require(this.$plugin.skillJsonPath);
       const info = {
         name: '',
         skillId: this.getSkillId(),

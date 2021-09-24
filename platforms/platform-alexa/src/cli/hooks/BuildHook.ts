@@ -18,9 +18,9 @@ import {
   wait,
 } from '@jovotech/cli-core';
 import { FileBuilder, FileObject } from '@jovotech/filebuilder';
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs';
 import { JovoModelData, JovoModelDataV3, NativeFileInformation } from '@jovotech/model';
 import { JovoModelAlexa } from '@jovotech/model-alexa';
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs';
 import _get from 'lodash.get';
 import _has from 'lodash.has';
 import _merge from 'lodash.merge';
@@ -130,7 +130,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
   checkForCleanBuild(): void {
     // If --clean has been set, delete the respective platform folders before building.
     if (this.$context.flags.clean) {
-      deleteFolderRecursive(this.$plugin.getPlatformPath());
+      deleteFolderRecursive(this.$plugin.platformPath);
     }
   }
 
@@ -341,7 +341,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
       }
     }
 
-    FileBuilder.buildDirectory(projectFiles, this.$plugin.getPlatformPath());
+    FileBuilder.buildDirectory(projectFiles, this.$plugin.platformPath);
   }
 
   /**
@@ -390,7 +390,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
           });
         }
 
-        const modelsPath: string = this.$plugin.getModelsPath();
+        const modelsPath: string = this.$plugin.modelsPath;
         if (!existsSync(modelsPath)) {
           mkdirSync(modelsPath, { recursive: true });
         }
@@ -431,7 +431,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * Returns all locales for the current platform.
    */
   getPlatformLocales(): string[] {
-    const files: string[] = readdirSync(this.$plugin.getModelsPath());
+    const files: string[] = readdirSync(this.$plugin.modelsPath);
     // Map each file to it's identifier, without file extension.
     return files.map((file: string) => {
       const localeRegex = /(.*)\.(?:[^.]+)$/;
