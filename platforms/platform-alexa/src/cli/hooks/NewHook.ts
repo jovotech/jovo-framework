@@ -1,15 +1,16 @@
 import type { NewContext, NewEvents } from '@jovotech/cli-command-new';
-import { Log, PluginHook, promptSupportedLocales } from '@jovotech/cli-core';
+import { Log, promptSupportedLocales } from '@jovotech/cli-core';
 import { SupportedLocales } from '../constants';
-import { SupportedLocalesType } from '../interfaces';
+import { AlexaContext, SupportedLocalesType } from '../interfaces';
+import { AlexaHook } from './AlexaHook';
 
-export class NewHook extends PluginHook<NewEvents> {
+export class NewHook extends AlexaHook<NewEvents> {
   install(): void {
     this.middlewareCollection = {
       new: [this.setDefaultConfig.bind(this)],
     };
   }
-  $context!: NewContext;
+  $context!: NewContext & AlexaContext;
 
   async setDefaultConfig(): Promise<void> {
     // Check for invalid locales and provide a default locale map.
@@ -31,7 +32,7 @@ export class NewHook extends PluginHook<NewEvents> {
           this.$plugin.$config.locales = {};
         }
 
-        this.$plugin.$config.locales[locale] = locales;
+        this.$plugin.$config.locales[locale] = locales as SupportedLocalesType[];
       }
     }
   }

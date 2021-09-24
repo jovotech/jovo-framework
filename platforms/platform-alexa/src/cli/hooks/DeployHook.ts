@@ -4,19 +4,16 @@ import {
   getResolvedLocales,
   InstallContext,
   JovoCliError,
-  PluginHook,
   printAskProfile,
   printStage,
   ROCKET,
   Task,
 } from '@jovotech/cli-core';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync } from 'fs';
 import _get from 'lodash.get';
-import _set from 'lodash.set';
-import { AlexaCli } from '..';
-import DefaultFiles from '../DefaultFiles.json';
 import * as smapi from '../smapi';
 import { AlexaContext, checkForAskCli, SupportedLocales } from '../utilities';
+import { AlexaHook } from './AlexaHook';
 
 export interface DeployPlatformContextAlexa extends AlexaContext, DeployPlatformContext {
   flags: DeployPlatformContext['flags'] & { 'ask-profile'?: string; 'skill-id'?: string };
@@ -25,8 +22,7 @@ export interface DeployPlatformContextAlexa extends AlexaContext, DeployPlatform
   };
 }
 
-export class DeployHook extends PluginHook<DeployPlatformEvents> {
-  $plugin!: AlexaCli;
+export class DeployHook extends AlexaHook<DeployPlatformEvents> {
   $context!: DeployPlatformContextAlexa;
 
   install(): void {
@@ -70,13 +66,16 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
   /**
    * Updates the current plugin context with platform-specific values.
    */
-  updatePluginContext(): void {
+  async updatePluginContext(): Promise<void> {
     if (!this.$context.alexa) {
       this.$context.alexa = {};
     }
 
     this.$context.alexa.askProfile =
-      this.$context.flags['ask-profile'] || this.$plugin.$config.askProfile;
+      this.$context.flags['ask-profile'] ||
+      this.$plugin.$config.askProfile ||
+      (await this.getAskProfile());
+
     this.$context.alexa.skillId = this.$context.flags['skill-id'] || this.getSkillId();
   }
 
@@ -216,52 +215,6 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
       }
       throw new JovoCliError({ message: err.message, module: this.$plugin.constructor.name });
     }
-  }
-
-  /**
-   * Saves Alexa Skill ID to .ask/config.
-   * @param skillId
-   */
-  setSkillId(skillId: string): void {
-    const askConfigFolderPath = this.$plugin.getAskConfigFolderPath();
-
-    if (!existsSync(askConfigFolderPath)) {
-      mkdirSync(askConfigFolderPath);
-    }
-
-    // Check if ask-states.json exists, if not, create it.
-    if (!existsSync(this.$plugin.getAskConfigPath())) {
-      this.createEmptyAskConfig();
-    }
-
-    const askConfig = JSON.parse(readFileSync(this.$plugin.getAskConfigPath(), 'utf-8'));
-
-    _set(askConfig, 'profiles.default.skillId', skillId);
-
-    writeFileSync(this.$plugin.getAskConfigPath(), JSON.stringify(askConfig, null, 2));
-  }
-
-  /**
-   * Returns Alexa Config from .ask/config.
-   * ToDo: Typing!
-   */
-  getAskConfig(): void {
-    try {
-      return JSON.parse(readFileSync(this.$plugin.getAskConfigPath(), 'utf8'));
-    } catch (err) {
-      throw new JovoCliError({
-        message: 'Could not read ask configuration file.',
-        module: this.$plugin.constructor.name,
-      });
-    }
-  }
-
-  /**
-   * Creates an empty ask config file.
-   */
-  createEmptyAskConfig(): void {
-    const config = _get(DefaultFiles, '[".ask"]["ask-states.json"]');
-    writeFileSync(this.$plugin.getAskConfigPath(), config);
   }
 
   /**

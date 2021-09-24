@@ -6,6 +6,12 @@ import { GetHook } from './hooks/GetHook';
 import { NewHook } from './hooks/NewHook';
 import { AlexaCliConfig } from './interfaces';
 
+declare module '@jovotech/cli-core/dist/PluginHook' {
+  export interface PluginHook {
+    $plugin: AlexaCli;
+  }
+}
+
 export class AlexaCli extends JovoCliPlugin {
   readonly $id: string = 'alexa';
   readonly $type: PluginType = 'platform';

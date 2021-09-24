@@ -7,7 +7,6 @@ import {
   JovoCliError,
   mergeArrayCustomizer,
   OK_HAND,
-  PluginHook,
   printHighlight,
   printStage,
   printSubHeadline,
@@ -30,10 +29,11 @@ import { AlexaCli } from '..';
 import { SupportedLocales } from '../constants';
 import DefaultFiles from '../DefaultFiles.json';
 import { AlexaContext, SupportedLocalesType } from '../interfaces';
+import { AlexaHook } from './AlexaHook';
 
 export interface AlexaBuildContext extends AlexaContext, BuildContext {}
 
-export class BuildHook extends PluginHook<BuildEvents> {
+export class BuildHook extends AlexaHook<BuildEvents> {
   $plugin!: AlexaCli;
   $context!: AlexaBuildContext;
 

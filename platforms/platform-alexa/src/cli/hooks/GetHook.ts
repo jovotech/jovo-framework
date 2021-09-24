@@ -6,27 +6,22 @@ import {
   flags,
   InstallContext,
   MAGNIFYING_GLASS,
-  PluginHook,
   printAskProfile,
   promptListForProjectId,
   promptOverwrite,
   Task,
 } from '@jovotech/cli-core';
-import { FileBuilder, FileObject } from '@jovotech/filebuilder';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import _get from 'lodash.get';
-import _set from 'lodash.set';
-import { AlexaCli } from '..';
-import defaultFiles from '../DefaultFiles.json';
 import * as smapi from '../smapi';
 import { AlexaContext, AskSkillList, checkForAskCli, prepareSkillList } from '../utilities';
+import { AlexaHook } from './AlexaHook';
 
 export interface GetContextAlexa extends AlexaContext, GetContext {
   flags: GetContext['flags'] & { 'ask-profile'?: string; 'skill-id'?: string };
 }
 
-export class GetHook extends PluginHook<GetEvents | BuildEvents> {
-  $plugin!: AlexaCli;
+export class GetHook extends AlexaHook<GetEvents | BuildEvents> {
   $context!: GetContextAlexa;
 
   install(): void {
@@ -71,13 +66,15 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
   /**
    * Updates the current plugin context with platform-specific values.
    */
-  updatePluginContext(): void {
+  async updatePluginContext(): Promise<void> {
     if (!this.$context.alexa) {
       this.$context.alexa = {};
     }
 
     this.$context.alexa.askProfile =
-      this.$context.flags['ask-profile'] || this.$plugin.$config.askProfile;
+      this.$context.flags['ask-profile'] ||
+      this.$plugin.$config.askProfile ||
+      (await this.getAskProfile());
 
     this.$context.alexa.skillId =
       this.$context.flags['skill-id'] ||
@@ -195,29 +192,5 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
     getTask.add(getSkillInformationTask, getModelsTask);
 
     await getTask.run();
-  }
-
-  /**
-   * Saves skillId to .ask/config.
-   * @param skillId - Skill ID.
-   */
-  setAlexaSkillId(skillId: string): void {
-    const askConfigFolderPath: string = this.$plugin.getAskConfigFolderPath();
-    if (!existsSync(askConfigFolderPath)) {
-      mkdirSync(askConfigFolderPath);
-    }
-
-    // Check if .ask/ask-states.json exists, if not, build default config.
-    const askConfigPath: string = this.$plugin.getAskConfigPath();
-    if (!existsSync(askConfigPath)) {
-      const defaultConfig: FileObject = _get(defaultFiles, '[".ask/"]');
-      FileBuilder.buildDirectory(defaultConfig, askConfigFolderPath);
-    }
-
-    const askConfigContent: string = readFileSync(askConfigPath, 'utf-8');
-    const askConfig = JSON.parse(askConfigContent);
-    _set(askConfig, 'profiles.default.skillId', skillId);
-
-    writeFileSync(askConfigPath, JSON.stringify(askConfig, null, 2));
   }
 }
