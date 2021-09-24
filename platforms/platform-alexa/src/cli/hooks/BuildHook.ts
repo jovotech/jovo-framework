@@ -40,6 +40,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
   install(): void {
     this.middlewareCollection = {
       'before.build': [
+        this.updatePluginContext.bind(this),
         this.checkForPlatform.bind(this),
         this.checkForCleanBuild.bind(this),
         this.validateLocales.bind(this),
@@ -47,6 +48,17 @@ export class BuildHook extends PluginHook<BuildEvents> {
       'build': [this.validateModels.bind(this), this.build.bind(this)],
       'reverse.build': [this.buildReverse.bind(this)],
     };
+  }
+
+  /**
+   * Updates the current plugin context with platform-specific values.
+   */
+  async updatePluginContext(): Promise<void> {
+    if (!this.$context.alexa) {
+      this.$context.alexa = {};
+    }
+
+    this.$context.alexa.askProfile = this.$plugin.$config.askProfile || 'default';
   }
 
   /**
@@ -285,8 +297,14 @@ export class BuildHook extends PluginHook<BuildEvents> {
       });
     }
 
-    const skillId: string | undefined = _get(this.$plugin.$config, 'skillId');
-    const skillIdPath = '[".ask/"]["ask-states.json"].profiles.default.skillId';
+    // Create ask profile entry
+    const askProfilePath = `[".ask/"]["ask-states.json"].profiles.${this.$context.alexa.askProfile}`;
+    if (!_has(projectFiles, askProfilePath)) {
+      _set(projectFiles, askProfilePath, {});
+    }
+
+    const skillId: string | undefined = this.$plugin.$config.skillId;
+    const skillIdPath = `${askProfilePath}.skillId`;
     // Check whether skill id has already been set.
     if (skillId && !_has(projectFiles, skillIdPath)) {
       _set(projectFiles, skillIdPath, skillId);
