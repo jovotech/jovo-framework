@@ -569,7 +569,7 @@ describe('toResponse', () => {
           },
         },
         {
-          expectUserResponse: false,
+          expectUserResponse: true,
           richResponse: {
             items: [{ simpleResponse: { ssml: toSSML('foo'), displayText: 'foo' } }],
           },

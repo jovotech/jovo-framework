@@ -209,7 +209,38 @@ describe('validation - Carousel', () => {
 });
 
 describe('validation - OutputTemplate', () => {
-  testOptionalStringProperty(OutputTemplate, 'message');
+  test(`message - optional`, async () => {
+    await validateAndExpectLength(OutputTemplate, { message: undefined }, 0);
+  });
+
+  test(`message - valid: empty`, async () => {
+    await validateAndExpectLength(
+      OutputTemplate,
+      {
+        message: '',
+      },
+      0,
+    );
+  });
+  test(`message - invalid: wrong type`, async () => {
+    await validateAndExpectLength(
+      OutputTemplate,
+      {
+        message: 2 as any,
+      },
+      1,
+    );
+  });
+  test(`message - valid: string`, async () => {
+    await validateAndExpectLength(
+      OutputTemplate,
+      {
+        message: 'foo',
+      },
+      0,
+    );
+  });
+
   test('message - invalid: invalid object', async () => {
     await validateAndExpectLength(
       OutputTemplate,
