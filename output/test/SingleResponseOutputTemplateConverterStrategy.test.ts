@@ -4,14 +4,18 @@ import {
   SingleResponseOutputTemplateConverterStrategy,
 } from '../src';
 
-class ExampleResponse extends JovoResponse {}
+class ExampleResponse extends JovoResponse {
+  hasSessionEnded(): boolean {
+    return false;
+  }
+}
 
 class ExampleStrategy extends SingleResponseOutputTemplateConverterStrategy<ExampleResponse, any> {
   readonly platformName = 'example' as const;
   readonly responseClass: { new (): ExampleResponse };
 
   toResponse(output: OutputTemplate): ExampleResponse {
-    return output;
+    return output as ExampleResponse;
   }
 
   fromResponse(response: ExampleResponse): OutputTemplate {
@@ -109,6 +113,96 @@ describe('prepareOutput', () => {
           message: {
             speech: '<speak>Hello World!</speak>',
             text: 'Hello World!',
+          },
+        });
+      });
+    });
+
+    describe('listen is merged', () => {
+      test('true + false = false', () => {
+        const preparedOutput = strategy.prepareOutput([
+          {
+            listen: true,
+          },
+          {
+            listen: false,
+          },
+        ]);
+        expect(preparedOutput).toEqual({
+          listen: false,
+        });
+      });
+
+      test('false + true = true', () => {
+        const preparedOutput = strategy.prepareOutput([
+          {
+            listen: false,
+          },
+          {
+            listen: true,
+          },
+        ]);
+        expect(preparedOutput).toEqual({
+          listen: true,
+        });
+      });
+
+      test('object + false = false', () => {
+        const preparedOutput = strategy.prepareOutput([
+          {
+            listen: { entities: {} },
+          },
+          {
+            listen: false,
+          },
+        ]);
+        expect(preparedOutput).toEqual({
+          listen: false,
+        });
+      });
+
+      test('false + object = object', () => {
+        const preparedOutput = strategy.prepareOutput([
+          {
+            listen: false,
+          },
+          {
+            listen: { entities: {} },
+          },
+        ]);
+        expect(preparedOutput).toEqual({
+          listen: { entities: {} },
+        });
+      });
+
+      test('true + object = object', () => {
+        const preparedOutput = strategy.prepareOutput([
+          {
+            listen: true,
+          },
+          {
+            listen: { entities: {} },
+          },
+        ]);
+        expect(preparedOutput).toEqual({
+          listen: {
+            entities: {},
+          },
+        });
+      });
+
+      test('special case - object + true = object', () => {
+        const preparedOutput = strategy.prepareOutput([
+          {
+            listen: { entities: {} },
+          },
+          {
+            listen: true,
+          },
+        ]);
+        expect(preparedOutput).toEqual({
+          listen: {
+            entities: {},
           },
         });
       });

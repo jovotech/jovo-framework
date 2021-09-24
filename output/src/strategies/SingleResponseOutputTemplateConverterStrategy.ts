@@ -1,14 +1,15 @@
 import {
   isSSML,
   mergeInstances,
+  mergeListen,
   MessageValue,
   NullableOutputTemplateBase,
   OutputTemplate,
   OutputTemplateBase,
   OutputTemplateConverterStrategyConfig,
+  PlainObjectType,
   plainToClass,
   PlatformOutputTemplate,
-  PlainObjectType,
   removeSSML,
   removeSSMLSpeakTags,
   SpeechMessage,
@@ -22,8 +23,8 @@ import { OutputTemplateConverterStrategy } from '../OutputTemplateConverterStrat
  * - Strings get concatenated and separated by a whitespace.
  * - Quick Replies get merged into a single array.
  * - Card/Carousel the last in the array is used.
- * - nativeResponses get merged.
- * - Listen gets chosen by priority: objects > boolean
+ * - NativeResponses get merged.
+ * - Listen gets merged.
  */
 export abstract class SingleResponseOutputTemplateConverterStrategy<
   RESPONSE extends Record<string, unknown>,
@@ -116,14 +117,7 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
       target.carousel = { ...carousel };
     }
 
-    // if new listen is an object and not null
-    const listen = mergeWith.listen;
-    if (typeof listen === 'object' && listen) {
-      target.listen = { ...listen };
-      // if current listen is not an object and new listen is not undefined
-    } else if (typeof target.listen !== 'object' && typeof listen !== 'undefined') {
-      target.listen = listen;
-    }
+    target.listen = mergeListen(target.listen, mergeWith.listen);
   }
 
   protected mergeMessages(
