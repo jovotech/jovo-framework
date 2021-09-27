@@ -413,6 +413,15 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * Returns all locales for the current platform.
    */
   getPlatformLocales(): string[] {
+    const modelsPath: string = this.$plugin.getModelsPath();
+
+    if (!existsSync(modelsPath)) {
+      throw new JovoCliError({
+        message: 'Could not find Alexa language models',
+        details: `"${modelsPath}" does not exist`,
+        hint: 'Please validate that you configured the "buildDirectory" or "stage" correctly',
+      });
+    }
     const files: string[] = readdirSync(this.$plugin.getModelsPath());
     // Map each file to it's identifier, without file extension.
     return files.map((file: string) => {
