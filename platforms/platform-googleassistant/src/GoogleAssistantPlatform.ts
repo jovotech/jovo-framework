@@ -95,8 +95,7 @@ export class GoogleAssistantPlatform extends Platform<
     if (
       request?.intent &&
       !request?.intent?.name &&
-      (request.scene?.slotFillingStatus === SlotFillingStatus.Final ||
-        request.scene?.slotFillingStatus === SlotFillingStatus.Unspecified) &&
+      !!request.scene?.slotFillingStatus &&
       Object.keys(request.intent?.params || {}).length &&
       request.session?.params?._GOOGLE_ASSISTANT_SELECTION_INTENT_
     ) {
