@@ -25,7 +25,6 @@ import {
 } from '..';
 import { HandleRequest } from '../HandleRequest';
 import { InputType, JovoInput, JovoInputObject } from '../JovoInput';
-import { TestDb } from './TestDb';
 import { TestPlatform } from './TestPlatform';
 import { TestServer } from './TestServer';
 
@@ -126,7 +125,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
 
     // Load app from configured stage and register testplugins
     this.app = this.config.app || this.loadApp();
-    this.app.use(this, new TestPlatform(), new TestDb({ ...this.config.db }));
+    this.app.use(this, new TestPlatform());
 
     const platform = new this.config.platform();
     this.requestBuilder = new platform.requestBuilder();
