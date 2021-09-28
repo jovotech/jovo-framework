@@ -272,6 +272,7 @@ export class GoogleAnalytics implements Analytics {
       // don't send anything
       return;
     }
+    this.setEndReason(jovo, 'ERROR');
 
     return new Promise((resolve, reject) => {
       jovo.$googleAnalytics.visitor

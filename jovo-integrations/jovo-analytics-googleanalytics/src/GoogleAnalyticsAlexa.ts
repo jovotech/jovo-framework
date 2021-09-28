@@ -81,9 +81,10 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
       return;
     }
     const endReason = jovo.$alexaSkill?.getEndReason();
+
     const responseWillEndSessionWithTell =
       _get(jovo.$output, 'Alexa.tell') || _get(jovo.$output, 'tell'); // aus AlexaCore.ts Zeile 95
-    if (this.config.trackEndReasons && endReason) {
+    if (this.config.trackEndReasons && endReason && endReason !== 'ERROR') {
       // set End Reason (eg. ERROR, EXCEEDED_MAX_REPROMPTS, PLAYTIME_LIMIT_REACHED, USER_INITIATED, ...)
       this.setEndReason(jovo, endReason);
     } else if (responseWillEndSessionWithTell) {
