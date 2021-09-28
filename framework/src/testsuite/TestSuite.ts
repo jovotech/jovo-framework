@@ -263,7 +263,10 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
       }
     }
 
-    throw new JovoError({ message: 'App not found.' });
+    throw new JovoError({
+      message: 'App not found.',
+      hint: 'Try running your tests in the root directory of your project',
+    });
   }
 
   private isRequest(request: RequestOrInput<PLATFORM>): request is JovoRequest {
