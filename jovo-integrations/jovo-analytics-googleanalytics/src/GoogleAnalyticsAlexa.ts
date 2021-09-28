@@ -30,6 +30,8 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
       return;
     }
 
+
+
     await super.track(handleRequest);
   }
 
@@ -45,6 +47,16 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
       eventLabel: this.getUserId(jovo),
     });
   }
+
+  protected async sendError(handleRequest: HandleRequest) {
+    const jovo: Jovo = handleRequest.jovo!;
+    if (jovo?.constructor.name !== 'AlexaSkill') {
+      // don't send anything
+      return;
+    }
+    await super.sendError(handleRequest);
+  }
+
 
   protected setGoogleAnalyticsObject(handleRequest: HandleRequest) {
     const jovo: Jovo = handleRequest.jovo!;

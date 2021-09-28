@@ -273,9 +273,6 @@ export class GoogleAnalytics implements Analytics {
       return;
     }
 
-    // Stop the current tracking session.
-    jovo.$googleAnalytics.visitor!.set('sessionControl', 'end');
-
     return new Promise((resolve, reject) => {
       jovo.$googleAnalytics.visitor
         ?.pageview(this.getPageParameters(jovo))
