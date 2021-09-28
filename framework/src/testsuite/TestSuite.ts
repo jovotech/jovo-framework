@@ -88,10 +88,9 @@ export interface TestSuiteConfig<PLATFORM extends Platform> extends PluginConfig
   userId: string;
   platform: Constructor<PLATFORM>;
   locale: string;
-  db: {
-    directory: string;
-    deleteAfterEach?: boolean;
-    deleteAfterAll?: boolean;
+  data: {
+    deleteAfterAll: boolean;
+    deleteAfterEach: boolean;
   };
   stage: string;
   app?: App;
@@ -135,12 +134,23 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     const handleRequest: HandleRequest = new HandleRequest(this.app, server);
 
     Object.assign(this, new platform.jovoClass(this.app, handleRequest, platform));
+
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { afterEach, afterAll } = require('@jest/globals');
+    if (this.config.data.deleteAfterEach) {
+      afterEach(this.clearData.bind(this));
+    }
+
+    if (this.config.data.deleteAfterAll) {
+      afterAll(this.clearData.bind(this));
+    }
   }
 
   getDefaultConfig(): TestSuiteConfig<PLATFORM> {
     return {
-      db: {
-        directory: '../db/tests/',
+      data: {
+        deleteAfterEach: true,
+        deleteAfterAll: true,
       },
       userId: uuidv4(),
       platform: TestPlatform as unknown as Constructor<PLATFORM>,
@@ -198,6 +208,11 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
       response: this.$response,
       output: this.$output as OutputTemplate[],
     };
+  }
+
+  clearData(): void {
+    this.$user = this.$platform.createUserInstance(this);
+    this.$session = new JovoSession();
   }
 
   private prepareRequest(jovo: Jovo) {
