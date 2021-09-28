@@ -100,6 +100,7 @@ export class GoogleAssistantPlatform extends Platform<
       request.session?.params?._GOOGLE_ASSISTANT_SELECTION_INTENT_
     ) {
       jovo.$input.intent = request.session.params._GOOGLE_ASSISTANT_SELECTION_INTENT_;
+      delete request.session.params._GOOGLE_ASSISTANT_SELECTION_INTENT_;
     }
   }
 }
