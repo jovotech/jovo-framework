@@ -103,16 +103,7 @@ export class GoogleAnalyticsGoogleAssistant extends GoogleAnalytics {
     );
   }
 
-  protected async sendError(handleRequest: HandleRequest) {
-    const jovo: Jovo = handleRequest.jovo!;
-    if (jovo?.constructor.name !== 'GoogleAction') {
-      // don't send anything
-      return;
-    }
-    // Stop the current tracking session for google actions because they won't receive session ended requests
-    jovo.$googleAnalytics.visitor!.set('sessionControl', 'end');
-    await super.sendError(handleRequest);
-  }
+
 
   setGoogleAnalyticsObject(handleRequest: HandleRequest) {
     const jovo: Jovo = handleRequest.jovo!;
@@ -129,5 +120,16 @@ export class GoogleAnalyticsGoogleAssistant extends GoogleAnalytics {
     }
 
     super.setGoogleAnalyticsObject(handleRequest);
+  }
+
+  protected async sendError(handleRequest: HandleRequest) {
+    const jovo: Jovo = handleRequest.jovo!;
+    if (jovo?.constructor.name !== 'GoogleAction') {
+      // don't send anything
+      return;
+    }
+    // Stop the current tracking session for google actions because they won't receive session ended requests
+    jovo.$googleAnalytics.visitor!.set('sessionControl', 'end');
+    await super.sendError(handleRequest);
   }
 }

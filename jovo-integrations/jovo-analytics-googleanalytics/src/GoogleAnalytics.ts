@@ -133,7 +133,8 @@ export class GoogleAnalytics implements Analytics {
   setEndReason(jovo: Jovo, endReason: validEndReasons): void {
     jovo.$session.$data.endReason = endReason;
     const gaMetricNumber = this.customMetricsIndicesMap.get(endReason);
-    if(jovo.$alexaSkill?.getEndReason() === 'ERROR') { // Error is increased in intent before alexa sends the session ended request
+    if (jovo.$alexaSkill?.getEndReason() === 'ERROR') {
+      // Error is increased in intent before alexa sends the session ended request
       return;
     }
     if (gaMetricNumber) {

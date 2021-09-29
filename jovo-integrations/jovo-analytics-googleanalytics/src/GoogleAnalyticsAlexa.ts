@@ -30,8 +30,6 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
       return;
     }
 
-
-
     await super.track(handleRequest);
   }
 
@@ -56,7 +54,6 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
     }
     await super.sendError(handleRequest);
   }
-
 
   protected setGoogleAnalyticsObject(handleRequest: HandleRequest) {
     const jovo: Jovo = handleRequest.jovo!;
