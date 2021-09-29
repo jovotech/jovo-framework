@@ -18,17 +18,19 @@ Each Jovo project comes with a `test` folder and at least a `sample.test.ts` fil
 
 ```typescript
 import { TestSuite, InputType } from '@jovotech/framework';
-// ...
+
+const testSuite = new TestSuite();
 
 test('should ask the user if they like pizza', async () => {
-  const testSuite = new TestSuite();
-
+  
   const { output } = await testSuite.run({
     type: InputType.Launch // or 'LAUNCH'
   });
 
   expect(output).toEqual([{
-    message: 'Hello World! Do you like pizza?'
+    message: 'Do you like Pizza?',
+    quickReplies: ['yes', 'no'],
+    listen: true,
   }]);
 });
 ```
@@ -43,37 +45,68 @@ In the following sections, we're going to dive deeper into writing unit tests fo
 
 The TestSuite is based on the [RIDR lifecycle](./ridr-lifecycle.md) and allows you to either test native platform request and response objects as well as the abstracted Jovo `$input` and `$output` properties. Learn more in the [different ways of testing](#different-ways-of-testing) section.
 
+For more advanced testing, we will then take a look at [sequences](#text-sequences) and [context](#text-context).
 
 ## Structure of a Unit Test
 
-Unit tests are usually located in a `test` folder of your Jovo project and are called `<name>.test.ts`.
+Unit test files are usually located in a `test` folder of your Jovo project and are called `<name>.test.ts`.
 
-Here is a full example of a unit test:
+Here is a full example of a test file with one unit test:
 
 ```typescript
 import { TestSuite, InputType } from '@jovotech/framework';
-// ...
+
+const testSuite = new TestSuite();
 
 test('should ask the user if they like pizza', async () => {
-  const testSuite = new TestSuite();
 
   const { output } = await testSuite.run({
     type: InputType.Launch // or 'LAUNCH'
   });
 
   expect(output).toEqual([{
-    message: 'Hello World! Do you like pizza?'
+    message: 'Do you like Pizza?',
+    quickReplies: ['yes', 'no'],
+    listen: true,
   }]);
 });
 ```
 
-A test consists of the following elements:
+A test file consists of the following elements:
 
-- [`test`](#test): Each unit test is added as a callback function inside this method.
 - [`TestSuite` initialization](#testsuite-initialization): The TestSuite gets configured here.
+- [`test`](#test): Each unit test is added as a callback function inside this method.
 - [`run`](#run): This method takes either an input object or a native request object and returns output and a native response.
 - [`expect`](#expect): This and other Jest methods are used to test if the result from `run` looks as expected.
 
+
+### TestSuite Initialization
+
+The `TestSuite` is used to simulate a conversational request-response lifecycle that can then be tested using the Jest [`expect` method](#expect).
+
+In most cases, the suite is initialized globally before all tests:
+
+```typescript
+import { TestSuite } from '@jovotech/framework';
+// ...
+
+const testSuite = new TestSuite({ /* options */ });
+```
+
+It is also possible to initialize the `TestSuite` inside a `describe` block. This way, you can have differing configurations for different groups of tests. Learn more about [`describe` in the official Jest docs](https://jestjs.io/docs/api#describename-fn).
+
+```typescript
+describe(`...` , async () => {
+
+  const testSuite = new TestSuite({ /* options */ });
+
+  test('first ...', async () => { /* ... */ });
+  test('second ...', async () => { /* ... */ });
+  // ...
+}
+```
+
+There are various options like `platform` that can be added to the constructor. Learn more in the [TestSuite configuration section](#testsuite-configuration).
 
 ### test
 
@@ -87,7 +120,7 @@ test('should ...', async () => {
 });
 ```
 
-If you want to group tests, you can also use `describe`. Learn more about [`describe` in the official Jest docs](https://jestjs.io/docs/api#describename-fn).
+If you want to group tests, you can also use [`describe`](#describe). Learn more about [`describe` in the official Jest docs](https://jestjs.io/docs/api#describename-fn).
 
 ```typescript
 describe(`...` , async () => {
@@ -97,42 +130,6 @@ describe(`...` , async () => {
   // ...
 }
 ```
-
-
-### TestSuite Initialization
-
-The `TestSuite` is used to simulate a conversational request-response lifecycle that can then be tested against using the Jest [`expect` method](#expect).
-
-In most cases, the suite is initialized at the beginning of the test logic:
-
-```typescript
-import { TestSuite } from '@jovotech/framework';
-// ...
-
-test('should ...', async () => {
-
-  const testSuite = new TestSuite({ /* options */ });
-  // ...
-
-});
-```
-
-There are various options like `platform` that can be added to the constructor. Learn more in the [TestSuite configuration section](#testsuite-configuration).
-
-It is also possible to initialize the `TestSuite` outside `test`. This means that the same configuration is used across tests.
-
-```typescript
-import { TestSuite } from '@jovotech/framework';
-// ...
-
-const testSuite = new TestSuite({ /* options */ });
-
-test('should ...', async () => { /* ... */ });
-test('should ...', async () => { /* ... */ });
-```
-
-> Since `TestSuite` can be used to [test sequences](#sequence-testing), be careful about initializing it outside `test`. It could lead to unexpected side effects.
-
 
 ### run
 
@@ -164,15 +161,16 @@ It is also possible to [test sequences](#sequence-testing) by either using the `
 import { TestSuite, InputType } from '@jovotech/framework';
 // ...
 
+const testSuite = new TestSuite();
+
 test('should respond in a positive way if user likes pizza', async () => {
-  const testSuite = new TestSuite();
 
   const { output } = await testSuite.run([
     {
       type: InputType.Launch
     },
     {
-    intent: 'YesIntent'
+      intent: 'YesIntent'
     }
   ]);
 
@@ -218,18 +216,13 @@ test('should accept an input object, should return an output object', async () =
 
 ## TestSuite Configuration
 
-When the `TestSuite` gets initialized, you can add configuration options to the constructor:
+When the [`TestSuite` gets initialized](#testsuite-initialization), you can add configuration options to the constructor:
 
 ```typescript
 import { TestSuite } from '@jovotech/framework';
 // ...
 
-test('should ...', async () => {
-
-  const testSuite = new TestSuite({ /* options */ });
-  // ...
-
-});
+const testSuite = new TestSuite({ /* options */ });
 ```
 
 The following options are available:
@@ -237,7 +230,7 @@ The following options are available:
 - [`platform`](#platform): The platform (e.g. Alexa) the TestSuite should simulate.
 - [`userId`](#userid): The user ID that should be used. Default: Random user ID.
 - [`locale`](#locale): The language that should be used. Default: `en`.
-- [`db`](#db): Configurations for the file-based database that simulates data persistence.
+- [`data`](#data): Configurations for data persistence. Default: Delete data after each test.
 - [`stage`](#stage): Which app stage should be used. Default: `dev`.
 - [`app`](#app): If you want to build your own `app` instance and pass it to the TestSuite, you can do it here.
 
@@ -267,12 +260,10 @@ import { GoogleAssistantPlatform } from '@jovotech/platform-googleassistant';
 
 for (const Platform of [AlexaPlatform, GoogleAssistantPlatform]) {
 
-  test('should...', async () => {
-    const testSuite = new TestSuite({ platform: Platform });
-    
-    // ...
+  const testSuite = new TestSuite({ platform: Platform });
 
-  });
+  test('should...', async () => { /* ... */ });
+  test('should...', async () => { /* ... */ });
 
 }
 ```
@@ -299,44 +290,27 @@ const testSuite = new TestSuite({ locale: 'en' });
 
 The default value is `en`.
 
-It's also possible to test multiple locales using a `for` loop:
+### data
 
-```typescript
-import { TestSuite } from '@jovotech/framework';
+The TestSuite instance stores [different types of data](./data.md) like session data and user data in-memory, so there is no database integration needed to test data persistence.
 
-// ...
+By default, Jovo deletes the data after each test to make sure that there are no side effects between tests.
 
-for (const locale of ['en', 'de']) {
-
-  test('should...', async () => {
-    const testSuite = new TestSuite({ locale });
-    
-    // ...
-
-  });
-
-}
-```
-
-
-### db
-
-The TestSuite uses a modified version of the [Jovo FileDb](https://v4.jovo.tech/marketplace/db-filedb) to persist data in local JSON files.
-
-The `db` property contains the following options:
+You can also modify this behavior in the `data` property:
 
 ```typescript
 const testSuite = new TestSuite({
-  db: {
-    directory: './db/tests/',
-    deleteOnSessionEnded: true,
+  data: {
+    deleteAfterEach: true;
+    deleteAfterAll: true;
   }
 });
 ```
 
-- `directory`: Where the data should be stored.
-- `deleteOnSessionEnded`: Defines if the database should be deleted after a session ends.
+The properties follow the [Jest setup and teardown](https://jestjs.io/docs/setup-teardown) conventions:
 
+- `deleteAfterEach`: Data should be deleted after each test.
+- `deleteAfterAll`: Data should be deleted after all tests in this scope, which means either after all tests in this `describe` group or after all global tests.
 
 
 ### stage
@@ -496,9 +470,10 @@ For conversations that include multiple interactions, you can use the [`run` met
 import { TestSuite, InputType } from '@jovotech/framework';
 // ...
 
-test('should respond in a positive way if user likes pizza', async () => {
-  const testSuite = new TestSuite();
+const testSuite = new TestSuite();
 
+test('should respond in a positive way if user likes pizza', async () => {
+  
   // First interaction
   await testSuite.run({
     type: InputType.Launch
@@ -519,8 +494,9 @@ You can also pass an array to the `run` method:
 import { TestSuite, InputType } from '@jovotech/framework';
 // ...
 
+const testSuite = new TestSuite();
+
 test('should respond in a positive way if user likes pizza', async () => {
-  const testSuite = new TestSuite();
 
   const { output } = await testSuite.run([
     {
@@ -541,8 +517,9 @@ If you want to test the steps along the way, you can also do something like this
 import { TestSuite, InputType } from '@jovotech/framework';
 // ...
 
+const testSuite = new TestSuite();
+
 test('should respond in a positive way if user likes pizza', async () => {
-  const testSuite = new TestSuite();
 
   // First interaction
   const { output: launchOutput } = await testSuite.run({
@@ -574,8 +551,9 @@ This is especially relevant for [different types of data](./data.md), for exampl
 import { TestSuite, InputType } from '@jovotech/framework';
 // ...
 
+const testSuite = new TestSuite();
+
 test('...', async () => {
-  const testSuite = new TestSuite();
 
   testSuite.$user.data = { /* ... */ };
 
