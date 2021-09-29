@@ -453,7 +453,7 @@ test('should accept an Alexa request, should return an Alexa response', async ()
   
   const { response } = await testSuite.run(/* request or input */);
 
-  expect(response.hasSessionEnded!()).toBeFalsy();
+  expect(response.hasSessionEnded()).toBeFalsy();
   expect(response.response.outputSpeech).toBeDefined();
   expect(response.response.outputSpeech!.ssml).toMatch(
     '<speak>Hello World! Do you like pizza?</speak>'
