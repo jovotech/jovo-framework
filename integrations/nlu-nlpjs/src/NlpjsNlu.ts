@@ -99,8 +99,9 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
       (entityMap: EntityMap, entity: NlpJsEntity) => {
         entityMap[entity.entity] = {
           id: entity.option,
-          key: entity.option,
+          resolved: entity.option,
           value: entity.utteranceText,
+          native: entity,
         };
         return entityMap;
       },
