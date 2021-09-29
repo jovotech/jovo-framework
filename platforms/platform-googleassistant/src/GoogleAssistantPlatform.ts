@@ -2,7 +2,6 @@ import { AnyObject, App, ExtensibleConfig, Jovo, Platform } from '@jovotech/fram
 import {
   GoogleAssistantOutputTemplateConverterStrategy,
   GoogleAssistantResponse,
-  SlotFillingStatus,
 } from '@jovotech/output-googleassistant';
 import _mergeWith from 'lodash.mergewith';
 import { v4 as uuidV4 } from 'uuid';
