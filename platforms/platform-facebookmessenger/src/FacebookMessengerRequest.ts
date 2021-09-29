@@ -48,7 +48,12 @@ export class FacebookMessengerRequest extends JovoRequest {
   }
 
   getInputText(): JovoInput['text'] {
-    return this.messaging?.[0]?.message?.text || this.messaging?.[0]?.postback?.title;
+    const messagingData = this.messaging?.[0];
+    return (
+      messagingData?.message?.text ||
+      messagingData?.postback?.payload ||
+      messagingData?.postback?.title
+    );
   }
 
   getInputAudio(): JovoInput['audio'] {
