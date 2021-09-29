@@ -338,7 +338,7 @@ import app from '../src/myApp';
 const testSuite = new TestSuite({ app });
 ```
 
-By default, the Jovo `app.ts` and the stage defined in (`stage`)(#stage) will be used.
+By default, the Jovo `app.ts` and the stage defined in [`stage`](#stage) will be used.
 
 
 ## Different Ways of Testing
