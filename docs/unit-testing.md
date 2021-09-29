@@ -503,7 +503,7 @@ test('should respond in a positive way if user likes pizza', async () => {
       type: InputType.Launch
     },
     {
-    intent: 'YesIntent'
+      intent: 'YesIntent'
     }
   ]);
 
