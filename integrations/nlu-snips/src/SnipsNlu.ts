@@ -69,9 +69,9 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
       }
 
       nluData.entities[slot.slotName] = {
-        id: slot.rawValue,
-        resolved: slot.rawValue,
-        value: slot.value.value,
+        id: slot.value.value,
+        resolved: slot.value.value,
+        value: slot.rawValue,
         native: slot,
       };
     }
