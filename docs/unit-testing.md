@@ -461,6 +461,7 @@ test('should accept an Alexa request, should return an Alexa response', async ()
 });
 ```
 
+The TestSuite automatically infers the types depending on the platform. In the example above, `response` is of type `AlexaResponse`.
 
 ## Test Sequences
 
