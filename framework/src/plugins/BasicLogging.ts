@@ -53,6 +53,7 @@ export interface BasicLoggingConfig extends PluginConfig {
 export class BasicLogging extends Plugin<BasicLoggingConfig> {
   getDefaultConfig(): BasicLoggingConfig {
     return {
+      skipTests: true,
       enabled: true,
       request: false,
       maskValue: '[ Hidden ]',
