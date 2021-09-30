@@ -70,7 +70,7 @@ $ jovov4 deploy:platform alexa
 
 After successful deployment, you can open the [Alexa Developer Console](https://developer.amazon.com/alexa/console/ask#/) and see the changes there.
 
-The Alexa CLI plugin adds the following flags to the `deploy:platform` command:
+The Alexa CLI plugin adds the following flags to the [`deploy:platform` command](https://v4.jovo.tech/docs/deploy-command#deploy:platform):
 
 | Flag | Description | Examples |
 |---|---|---|
@@ -88,7 +88,7 @@ $ jovov4 get:platform alexa
 
 This is helpful if you've made any updates to the Skill's configuration (for example updating interfaces) that you now want to add to the `jovo.project.js` file using the [`files` configuration](/.project-config.md#files).
 
-The Alexa CLI plugin adds the following flags to the `get:platform` command:
+The Alexa CLI plugin adds the following flags to the [`get:platform` command](https://v4.jovo.tech/docs/get-command#get:platform):
 
 | Flag | Description | Examples |
 |---|---|---|
