@@ -86,7 +86,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
    * Checks if platform-specific files already exist and prompts for overwriting them.
    */
   async checkForExistingPlatformFiles(): Promise<void> {
-    if (!this.$context.flags.overwrite && existsSync(this.$plugin.getPlatformPath())) {
+    if (!this.$context.flags.overwrite && existsSync(this.$plugin.platformPath)) {
       const answer = await promptOverwrite('Found existing project files. How to proceed?');
       if (answer.overwrite === ANSWER_CANCEL) {
         this.uninstall();
@@ -103,7 +103,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
         `(${this.$context.googleAssistant.projectId})`,
       )}`,
       async () => {
-        const platformPath: string = this.$plugin.getPlatformPath();
+        const platformPath: string = this.$plugin.platformPath;
         if (!existsSync(platformPath)) {
           mkdirSync(platformPath);
         }

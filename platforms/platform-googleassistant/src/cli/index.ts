@@ -27,9 +27,9 @@ export class GoogleAssistantCli extends JovoCliPlugin {
   }
 
   /**
-   * Returns base path to platform's build folder.
+   * Returns base path to platform's build folder
    */
-  getPlatformPath(): string {
+  get platformPath(): string {
     return joinPaths(this.$cli.$project!.getBuildPath(), this.platformDirectory);
   }
 }

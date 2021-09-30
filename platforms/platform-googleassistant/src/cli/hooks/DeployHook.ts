@@ -45,9 +45,9 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
    * Checks if the platform folder for the current plugin exists.
    */
   checkForPlatformsFolder(): void {
-    if (!existsSync(this.$plugin.getPlatformPath())) {
+    if (!existsSync(this.$plugin.platformPath)) {
       throw new JovoCliError({
-        message: `Couldn't find the platform folder ${this.$plugin.getPlatformPath()}.`,
+        message: `Couldn't find the platform folder ${this.$plugin.platformPath}.`,
         module: this.$plugin.constructor.name,
         hint: `Please use "jovo build" to create platform-specific files.`,
       });
@@ -65,7 +65,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     const pushProjectFilesTask: Task = new Task('Pushing project files', async () => {
       try {
         const { stdout, stderr } = await execAsync(`gactions push --consumer jovo-cli`, {
-          cwd: this.$plugin.getPlatformPath(),
+          cwd: this.$plugin.platformPath,
         });
 
         if (stderr) {

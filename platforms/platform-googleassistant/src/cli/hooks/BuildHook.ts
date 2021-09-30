@@ -120,7 +120,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
   checkForCleanBuild(): void {
     // If --clean has been set, delete the respective platform folders before building.
     if (this.$context.flags.clean) {
-      deleteFolderRecursive(this.$plugin.getPlatformPath());
+      deleteFolderRecursive(this.$plugin.platformPath);
     }
   }
 
@@ -407,7 +407,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
       }
     }
 
-    FileBuilder.buildDirectory(projectFiles, this.$plugin.getPlatformPath());
+    FileBuilder.buildDirectory(projectFiles, this.$plugin.platformPath);
 
     // Copies across any resources so they can be used in the project settings manifest.
     // Docs:  https://developers.google.com/assistant/conversational/build/projects?hl=en&tool=sdk#add_resources
@@ -419,7 +419,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
           this.$cli.$projectPath,
           this.$plugin.$config.resourcesDirectory!,
         );
-        const dest: string = joinPaths(this.$plugin.getPlatformPath(), resourcesDirectory);
+        const dest: string = joinPaths(this.$plugin.platformPath, resourcesDirectory);
         // Delete existing resources folder before copying data
         removeSync(dest);
         copySync(src, dest);
@@ -483,7 +483,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
 
       for (const file of modelFiles) {
         const fileName = file.path.pop()!;
-        const modelPath = joinPaths(this.$plugin.getPlatformPath(), ...file.path);
+        const modelPath = joinPaths(this.$plugin.platformPath, ...file.path);
 
         // Check if the path for the current model type (e.g. intent, types, ...) exists.
         if (!existsSync(modelPath)) {
@@ -501,7 +501,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
       // Merge existing actions file with configuration in project.js.
       _merge(actions, this.getProjectActions());
 
-      const actionsPath: string = joinPaths(this.$plugin.getPlatformPath(), 'actions');
+      const actionsPath: string = joinPaths(this.$plugin.platformPath, 'actions');
       if (!existsSync(actionsPath)) {
         mkdirSync(actionsPath, { recursive: true });
       }
@@ -534,14 +534,10 @@ export class BuildHook extends PluginHook<BuildEvents> {
       _get(this.$plugin.$config, 'defaultLocale');
 
     // Try to get default locale from platform-specific settings.
-    const settingsPath: string = joinPaths(
-      this.$plugin.getPlatformPath(),
-      'settings',
-      'settings.yaml',
-    );
+    const settingsPath: string = joinPaths(this.$plugin.platformPath, 'settings', 'settings.yaml');
     if (existsSync(settingsPath)) {
       const settingsFile: string = readFileSync(
-        joinPaths(this.$plugin.getPlatformPath(), 'settings', 'settings.yaml'),
+        joinPaths(this.$plugin.platformPath, 'settings', 'settings.yaml'),
         'utf-8',
       );
       const settings = yaml.parse(settingsFile);
@@ -621,7 +617,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
   getPlatformModels(locale: string): NativeFileInformation[] {
     const platformModels: NativeFileInformation[] = [];
 
-    const modelPath: string = joinPaths(this.$plugin.getPlatformPath(), 'custom');
+    const modelPath: string = joinPaths(this.$plugin.platformPath, 'custom');
     // Go through a predefined set of folders to extract intent and type information.
     const foldersToInclude: string[] = ['intents', 'types', 'scenes', 'global'];
 
@@ -664,7 +660,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * @param locale - Locale for which to parse the invocation name.
    */
   getPlatformInvocationName(locale: string): string {
-    const path: string[] = [this.$plugin.getPlatformPath(), 'settings'];
+    const path: string[] = [this.$plugin.platformPath, 'settings'];
 
     if (locale !== this.$context.googleAssistant.defaultLocale) {
       path.push(locale);
@@ -682,7 +678,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
    */
   getPlatformLocales(): string[] {
     const locales: string[] = [];
-    const settingsPath: string = joinPaths(this.$plugin.getPlatformPath(), 'settings');
+    const settingsPath: string = joinPaths(this.$plugin.platformPath, 'settings');
     const files: string[] = readdirSync(settingsPath);
 
     for (const file of files) {
