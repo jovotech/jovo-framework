@@ -76,7 +76,6 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     super(config);
   }
 
-  // TODO check default config
   getDefaultConfig(): JovoDebuggerConfig {
     return {
       skipTests: true,
@@ -99,11 +98,8 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
 
   install(parent: Extensible): void {
     if (!(parent instanceof App)) {
-      // TODO: implement error
       throw new InvalidParentError(this.constructor.name, App);
     }
-
-    // TODO: determine handling of edge-cases
     this.installDebuggerPlatform(parent);
   }
 
@@ -118,7 +114,6 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   }
 
   async initialize(app: App): Promise<void> {
-    // TODO make request if launch options passed
     if (this.config.enabled === false) return;
 
     await this.connectToWebhook();
@@ -151,9 +146,17 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     });
   }
 
-  // TODO: maybe find a better solution although this might work well because it is independent of the RIDR-pipeline
-  // -> future changes are less likely to cause breaking changes here
+  emitUpdate(requestId: string | number, data: JovoUpdateData) {
+    const payload: JovoDebuggerPayload<JovoUpdateData> = {
+      requestId,
+      data,
+    };
+    this.socket?.emit(JovoDebuggerEvent.AppJovoUpdate, payload);
+  }
+
   private patchHandleRequestToIncludeUniqueId() {
+    // this cannot be done in a middleware-hook because the debuggerRequestId is required when initializing the jovo instance
+    // and that happens before the middlewares are executed
     const mount = HandleRequest.prototype.mount;
     HandleRequest.prototype.mount = function () {
       this.debuggerRequestId = uuidV4();
@@ -164,35 +167,29 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   private patchPlatformsToCreateJovoAsProxy(platforms: ReadonlyArray<Platform>) {
     platforms.forEach((platform) => {
       const createJovoFn = platform.createJovoInstance;
+      // overwrite createJovoInstance to create a proxy and propagate all initial changes
       platform.createJovoInstance = (app, handleRequest) => {
         const jovo = createJovoFn.call(platform, app, handleRequest);
         // propagate initial values, might not be required, TBD
         for (const key in jovo) {
+          const value = jovo[key as keyof Jovo];
           const isEmptyObject =
-            typeof jovo[key as keyof Jovo] === 'object' &&
-            !Array.isArray(jovo[key as keyof Jovo]) &&
-            !Object.keys(jovo[key as keyof Jovo] || {}).length;
-          const isEmptyArray =
-            Array.isArray(jovo[key as keyof Jovo]) &&
-            !((jovo[key as keyof Jovo] as unknown[]) || []).length;
+            typeof value === 'object' && !Array.isArray(value) && !Object.keys(value || {}).length;
+          const isEmptyArray = Array.isArray(value) && !((value as unknown[]) || []).length;
           if (
             !jovo.hasOwnProperty(key) ||
             this.config.ignoredProperties.includes(key) ||
-            !jovo[key as keyof Jovo] ||
+            !value ||
             isEmptyObject ||
             isEmptyArray
           ) {
             continue;
           }
-          const payload: JovoDebuggerPayload<JovoUpdateData> = {
-            requestId: handleRequest.debuggerRequestId,
-            data: {
-              key,
-              value: jovo[key as keyof Jovo],
-              path: key,
-            },
-          };
-          this.socket?.emit(JovoDebuggerEvent.AppJovoUpdate, payload);
+          this.emitUpdate(handleRequest.debuggerRequestId, {
+            key,
+            value,
+            path: key,
+          });
         }
         return new Proxy(jovo, this.createProxyHandler(handleRequest));
       };
@@ -205,36 +202,46 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   ): ProxyHandler<T> {
     return {
       get: (target, key: string) => {
+        // make __isProxy return true for all proxies with this handler
+        if (key === '__isProxy') {
+          return true;
+        }
+        // if the value is an object that is not null, not a Date nor a Jovo instance nor included in the ignored properties and no proxy
         if (
           typeof target[key] === 'object' &&
           target[key] !== null &&
           !(target[key] instanceof Date) &&
-          // TODO: determine if this has side-effects
-          !this.config.ignoredProperties.includes(key)
+          !(target[key] instanceof Jovo) &&
+          !this.config.ignoredProperties.includes(key) &&
+          !target[key].__isProxy
         ) {
-          return new Proxy(
+          // create the proxy for the value
+          const proxy = new Proxy(
             target[key],
             this.createProxyHandler(handleRequest, path ? [path, key].join('.') : key),
           );
-        } else {
-          return target[key];
+
+          // check if the property is writable, if it's not, return the proxy
+          const propertyDescriptor = Object.getOwnPropertyDescriptor(target, key);
+          if (!propertyDescriptor?.writable) {
+            return proxy;
+          }
+
+          // otherwise overwrite the property and set it to the proxy
+          (target as UnknownObject)[key] = proxy;
         }
+        return target[key];
       },
       set: (target, key: string, value: unknown): boolean => {
-        // TODO determine whether empty values should be emitted, in the initial emit, they're omitted.
         const previousValue = (target as UnknownObject)[key];
         (target as UnknownObject)[key] = value;
         // only emit changes
         if (!isEqual(previousValue, value)) {
-          const payload: JovoDebuggerPayload<JovoUpdateData> = {
-            requestId: handleRequest.debuggerRequestId,
-            data: {
-              key,
-              value,
-              path: path ? [path, key].join('.') : key,
-            },
-          };
-          this.socket?.emit(JovoDebuggerEvent.AppJovoUpdate, payload);
+          this.emitUpdate(handleRequest.debuggerRequestId, {
+            key,
+            value,
+            path: path ? [path, key].join('.') : key,
+          });
         }
 
         return true;
