@@ -3,6 +3,7 @@ import { Log, PluginHook, promptSupportedLocales } from '@jovotech/cli-core';
 import { JovoModelData } from '@jovotech/model';
 import { readdirSync, readFileSync, writeFileSync } from 'fs';
 import { join as joinPaths } from 'path';
+import AlexaModel from '../../../boilerplate/AlexaModel.json';
 import { SupportedLocales } from '../constants';
 import { SupportedLocalesType } from '../interfaces';
 
@@ -47,27 +48,9 @@ export class NewHook extends PluginHook<NewEvents> {
       const modelPath: string = joinPaths(modelsPath, modelFile);
       const rawModelData: string = readFileSync(modelPath, 'utf-8');
       const model: JovoModelData = JSON.parse(rawModelData);
-      model.alexa = {
-        interactionModel: {
-          languageModel: {
-            intents: [
-              {
-                name: 'AMAZON.CancelIntent',
-                samples: [],
-              },
-              {
-                name: 'AMAZON.HelpIntent',
-                samples: [],
-              },
-              {
-                name: 'AMAZON.StopIntent',
-                samples: [],
-              },
-            ],
-          },
-        },
-      };
-      writeFileSync(modelPath, JSON.stringify(model, null, 2));
+      const updatedModel: JovoModelData = { ...model, ...AlexaModel };
+
+      writeFileSync(modelPath, JSON.stringify(updatedModel, null, 2));
     }
   }
 }
