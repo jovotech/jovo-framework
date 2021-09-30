@@ -70,7 +70,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
   checkForCleanBuild(): void {
     // If --clean has been set, delete the respective platform folders before building.
     if (this.$context.flags.clean) {
-      deleteFolderRecursive(this.$plugin.getPlatformPath());
+      deleteFolderRecursive(this.$plugin.platformPath);
     }
   }
 
@@ -224,7 +224,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
     });
     projectFiles['agent.json'] = agentJson;
 
-    FileBuilder.buildDirectory(projectFiles, this.$plugin.getPlatformPath());
+    FileBuilder.buildDirectory(projectFiles, this.$plugin.platformPath);
   }
 
   /**
@@ -257,12 +257,12 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * @param resolvedLocales - Locales to which to resolve the modelLocale.
    */
   async buildLanguageModel(modelLocale: string, resolvedLocales: string[]): Promise<void> {
-    if (!existsSync(this.$plugin.getIntentsFolderPath())) {
-      mkdirSync(this.$plugin.getIntentsFolderPath());
+    if (!existsSync(this.$plugin.intentsFolderPath)) {
+      mkdirSync(this.$plugin.intentsFolderPath);
     }
 
-    if (!existsSync(this.$plugin.getEntitiesFolderPath())) {
-      mkdirSync(this.$plugin.getEntitiesFolderPath());
+    if (!existsSync(this.$plugin.entitiesFolderPath)) {
+      mkdirSync(this.$plugin.entitiesFolderPath);
     }
 
     try {
@@ -284,7 +284,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
         }
 
         for (const file of dialogflowModelFiles) {
-          const filePath: string = joinPaths(this.$plugin.getPlatformPath(), ...file.path);
+          const filePath: string = joinPaths(this.$plugin.platformPath, ...file.path);
           // Persist id, if file already exists.
           if (existsSync(filePath)) {
             const existingFile = JSON.parse(readFileSync(filePath, 'utf-8'));
@@ -292,7 +292,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
           }
 
           writeFileSync(
-            joinPaths(this.$plugin.getPlatformPath(), ...file.path),
+            joinPaths(this.$plugin.platformPath, ...file.path),
             JSON.stringify(file.content, null, 2),
           );
         }
@@ -405,7 +405,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
     const folders: string[] = ['entities', 'intents'];
 
     for (const folder of folders) {
-      const folderPath: string = joinPaths(this.$plugin.getPlatformPath(), folder);
+      const folderPath: string = joinPaths(this.$plugin.platformPath, folder);
 
       if (!existsSync(folderPath)) {
         continue;
@@ -432,7 +432,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
    */
   getPlatformLocales(): string[] {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const dialogflowAgent: DialogflowAgent = require(this.$plugin.getAgentJsonPath());
+    const dialogflowAgent: DialogflowAgent = require(this.$plugin.agentJsonPath);
     const locales: string[] = [dialogflowAgent.language];
 
     if (dialogflowAgent.supportedLanguages) {

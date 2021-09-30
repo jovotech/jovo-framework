@@ -103,7 +103,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
    * Checks if the platform folder for the current plugin exists.
    */
   checkForPlatformsFolder(): void {
-    if (!existsSync(this.$plugin.getPlatformPath())) {
+    if (!existsSync(this.$plugin.platformPath)) {
       throw new JovoCliError({
         message: `Couldn't find the platform folder "${this.$plugin.platformDirectory}/".`,
         module: this.$plugin.constructor.name,
@@ -196,14 +196,14 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
   async zipDialogflowFiles(): Promise<void> {
     // Remove existing zip file.
     this.$context.dialogflow.pathToZip = joinPaths(
-      this.$plugin.getPlatformPath(),
+      this.$plugin.platformPath,
       'dialogflow_agent.zip',
     );
     if (existsSync(this.$context.dialogflow.pathToZip)) {
       unlinkSync(this.$context.dialogflow.pathToZip);
     }
     const zip: AdmZip = new AdmZip();
-    zip.addLocalFolder(this.$plugin.getPlatformPath());
+    zip.addLocalFolder(this.$plugin.platformPath);
     zip.writeZip(this.$context.dialogflow.pathToZip);
   }
 }

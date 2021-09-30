@@ -101,7 +101,7 @@ export class GetHook extends PluginHook<GetEvents> {
    * Checks if platform-specific files already exist and prompts for overwriting them.
    */
   async checkForExistingPlatformFiles(): Promise<void> {
-    if (!this.$context.flags.overwrite && existsSync(this.$plugin.getPlatformPath())) {
+    if (!this.$context.flags.overwrite && existsSync(this.$plugin.platformPath)) {
       const answer = await promptOverwrite(
         'Found existing Dialogflow project files. How to proceed?',
       );
@@ -115,7 +115,7 @@ export class GetHook extends PluginHook<GetEvents> {
    * Fetches platform-specific models from the Dialogflow Console.
    */
   async get(): Promise<void> {
-    const platformPath: string = this.$plugin.getPlatformPath();
+    const platformPath: string = this.$plugin.platformPath;
     if (!existsSync(platformPath)) {
       mkdirSync(platformPath);
     }
