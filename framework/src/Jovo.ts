@@ -81,11 +81,7 @@ export function registerPlatformSpecificJovoReference<
 >(key: KEY, jovoClass: JovoConstructor<REQUEST, RESPONSE, JOVO, USER, DEVICE, PLATFORM>): void {
   Object.defineProperty(Jovo.prototype, key, {
     get(): Jovo[KEY] | undefined {
-      return this instanceof jovoClass
-        ? this
-        : this.jovo instanceof jovoClass
-        ? this.jovo
-        : undefined;
+      return this instanceof jovoClass ? this : undefined;
     },
   });
 }
