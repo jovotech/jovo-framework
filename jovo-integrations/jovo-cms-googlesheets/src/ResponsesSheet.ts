@@ -149,7 +149,7 @@ export class ResponsesSheet extends DefaultSheet {
               platform,
               resource[platform],
               true,
-              true,
+              false,
             );
           }
         }
@@ -159,7 +159,7 @@ export class ResponsesSheet extends DefaultSheet {
           'translation',
           resource.translation,
           true,
-          true,
+          false,
         );
       });
     }
