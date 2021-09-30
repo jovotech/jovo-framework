@@ -3,7 +3,7 @@ import { Log, PluginHook, promptSupportedLocales } from '@jovotech/cli-core';
 import { JovoModelData } from '@jovotech/model';
 import { readdirSync, readFileSync, writeFileSync } from 'fs';
 import { join as joinPaths } from 'path';
-import AlexaModel from '../../../boilerplate/AlexaModel.json';
+import AlexaModel from '../boilerplate/AlexaModel.json';
 import { SupportedLocales } from '../constants';
 import { SupportedLocalesType } from '../interfaces';
 
