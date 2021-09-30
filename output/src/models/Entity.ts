@@ -5,10 +5,6 @@ export type EntityMap = Record<string, Entity>;
 export class Entity {
   [key: string]: unknown;
 
-  @IsString()
-  @IsNotEmpty()
-  value: string;
-
   @IsOptional()
   @IsString()
   @IsNotEmpty()
@@ -17,5 +13,13 @@ export class Entity {
   @IsOptional()
   @IsString()
   @IsNotEmpty()
-  key?: string;
+  resolved?: string;
+
+  @IsOptional()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  value?: any;
+
+  @IsOptional()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  native?: any;
 }
