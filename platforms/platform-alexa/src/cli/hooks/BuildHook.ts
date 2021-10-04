@@ -1,9 +1,11 @@
-import type { BuildContext, BuildEvents } from '@jovotech/cli-command-build';
+import type { BuildPlatformContext, BuildPlatformEvents } from '@jovotech/cli-command-build';
 import {
   ANSWER_BACKUP,
   ANSWER_CANCEL,
   deleteFolderRecursive,
+  flags,
   getResolvedLocales,
+  InstallContext,
   JovoCliError,
   mergeArrayCustomizer,
   OK_HAND,
@@ -31,7 +33,9 @@ import DefaultFiles from '../DefaultFiles.json';
 import { AlexaContext, SupportedLocalesType } from '../interfaces';
 import { AlexaHook } from './AlexaHook';
 
-export interface AlexaBuildContext extends AlexaContext, BuildContext {}
+export interface AlexaBuildPlatformContext extends AlexaContext, BuildPlatformContext {
+  flags: BuildPlatformContext['flags'] & { 'ask-profile'?: string };
+}
 
 export class BuildHook extends AlexaHook<BuildEvents> {
   $plugin!: AlexaCli;
@@ -51,6 +55,20 @@ export class BuildHook extends AlexaHook<BuildEvents> {
   }
 
   /**
+   * Add platform-specific CLI options, including flags and args.
+   * @param context - Context providing an access point to command flags and args.
+   */
+  addCliOptions(context: InstallContext): void {
+    if (context.command !== 'build:platform') {
+      return;
+    }
+
+    context.flags['ask-profile'] = flags.string({
+      description: 'Name of used ASK profile',
+    });
+  }
+
+  /**
    * Updates the current plugin context with platform-specific values.
    */
   async updatePluginContext(): Promise<void> {
@@ -58,7 +76,7 @@ export class BuildHook extends AlexaHook<BuildEvents> {
       this.$context.alexa = {};
     }
 
-    this.$context.alexa.askProfile = this.$plugin.$config.askProfile || 'default';
+    this.$context.alexa.askProfile = this.$plugin.config.askProfile || 'default';
   }
 
   /**
