@@ -58,7 +58,7 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
    */
   checkForPlatform(): void {
     // Check if this plugin should be used or not.
-    if (!this.$context.platforms.includes(this.$plugin.$id)) {
+    if (!this.$context.platforms.includes(this.$plugin.id)) {
       this.uninstall();
     }
   }
@@ -73,7 +73,7 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
 
     this.$context.alexa.askProfile =
       this.$context.flags['ask-profile'] ||
-      this.$plugin.$config.askProfile ||
+      this.$plugin.config.askProfile ||
       (await this.getAskProfile());
 
     this.$context.alexa.skillId = this.$context.flags['skill-id'] || this.getSkillId();
@@ -97,7 +97,7 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
    */
   async deploy(): Promise<void> {
     const deployTask: Task = new Task(
-      `${ROCKET} Deploying Alexa Skill ${printStage(this.$cli.$project!.$stage)}`,
+      `${ROCKET} Deploying Alexa Skill ${printStage(this.$cli.project!.stage)}`,
     );
 
     if (!this.$context.alexa.skillId) {
@@ -156,7 +156,7 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
 
     const resolvedLocales: string[] = this.$context.locales.reduce(
       (locales: string[], locale: string) => {
-        locales.push(...getResolvedLocales(locale, SupportedLocales, this.$plugin.$config.locales));
+        locales.push(...getResolvedLocales(locale, SupportedLocales, this.$plugin.config.locales));
         return locales;
       },
       [],

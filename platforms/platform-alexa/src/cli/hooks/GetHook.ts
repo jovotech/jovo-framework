@@ -1,5 +1,5 @@
-import type { BuildEvents } from '@jovotech/cli-command-build';
-import type { GetContext, GetEvents } from '@jovotech/cli-command-get';
+import type { BuildPlatformEvents } from '@jovotech/cli-command-build';
+import type { GetPlatformContext, GetPlatformEvents } from '@jovotech/cli-command-get';
 import {
   ANSWER_CANCEL,
   DOWNLOAD,
@@ -17,23 +17,23 @@ import * as smapi from '../smapi';
 import { AlexaContext, AskSkillList, checkForAskCli, prepareSkillList } from '../utilities';
 import { AlexaHook } from './AlexaHook';
 
-export interface GetContextAlexa extends AlexaContext, GetContext {
-  flags: GetContext['flags'] & { 'ask-profile'?: string; 'skill-id'?: string };
+export interface GetContextAlexa extends AlexaContext, GetPlatformContext {
+  flags: GetPlatformContext['flags'] & { 'ask-profile'?: string; 'skill-id'?: string };
 }
 
-export class GetHook extends AlexaHook<GetEvents | BuildEvents> {
+export class GetHook extends AlexaHook<BuildPlatformEvents | GetPlatformEvents> {
   $context!: GetContextAlexa;
 
   install(): void {
     this.middlewareCollection = {
       'install': [this.addCliOptions.bind(this)],
-      'before.get': [
+      'before.get:platform': [
         this.checkForPlatform.bind(this),
         checkForAskCli,
         this.updatePluginContext.bind(this),
         this.checkForExistingPlatformFiles.bind(this),
       ],
-      'get': [this.get.bind(this)],
+      'get:platform': [this.get.bind(this)],
     };
   }
 
@@ -58,7 +58,7 @@ export class GetHook extends AlexaHook<GetEvents | BuildEvents> {
    */
   checkForPlatform(): void {
     // Check if this plugin should be used or not.
-    if (this.$context.platform && this.$context.platform !== this.$plugin.$id) {
+    if (!this.$context.platforms.includes(this.$plugin.id)) {
       this.uninstall();
     }
   }
@@ -73,20 +73,20 @@ export class GetHook extends AlexaHook<GetEvents | BuildEvents> {
 
     this.$context.alexa.askProfile =
       this.$context.flags['ask-profile'] ||
-      this.$plugin.$config.askProfile ||
+      this.$plugin.config.askProfile ||
       (await this.getAskProfile());
 
     this.$context.alexa.skillId =
       this.$context.flags['skill-id'] ||
-      _get(this.$plugin.$config, '[".ask/"]["ask-states.json"].profiles.default.skillId') ||
-      _get(this.$plugin.$config, 'options.skillId');
+      _get(this.$plugin.config, '[".ask/"]["ask-states.json"].profiles.default.skillId') ||
+      _get(this.$plugin.config, 'options.skillId');
   }
 
   /**
    * Checks if platform-specific files already exist and prompts for overwriting them.
    */
   async checkForExistingPlatformFiles(): Promise<void> {
-    if (!this.$context.flags.overwrite && existsSync(this.$plugin.platformPath)) {
+    if (!this.$context.flags.clean && existsSync(this.$plugin.platformPath)) {
       const answer = await promptOverwrite('Found existing Alexa project files. How to proceed?');
       if (answer.overwrite === ANSWER_CANCEL) {
         this.uninstall();

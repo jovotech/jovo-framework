@@ -6,11 +6,11 @@ import {
   printUserInput,
   prompt,
 } from '@jovotech/cli-core';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import _get from 'lodash.merge';
 import _set from 'lodash.set';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
-import { AlexaContext, AskConfig } from '../interfaces';
 import DefaultFiles from '../DefaultFiles.json';
+import { AlexaContext, AskConfig } from '../interfaces';
 
 export abstract class AlexaHook<EVENTS extends Events = DefaultEvents> extends PluginHook<EVENTS> {
   $context!: AlexaContext;

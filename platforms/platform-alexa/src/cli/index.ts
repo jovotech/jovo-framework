@@ -13,9 +13,9 @@ declare module '@jovotech/cli-core/dist/PluginHook' {
 }
 
 export class AlexaCli extends JovoCliPlugin {
-  readonly $id: string = 'alexa';
-  readonly $type: PluginType = 'platform';
-  readonly $config!: AlexaCliConfig;
+  readonly id: string = 'alexa';
+  readonly type: PluginType = 'platform';
+  readonly config!: AlexaCliConfig;
   readonly platformDirectory: string = 'platform.alexa';
 
   constructor(config: AlexaCliConfig) {
@@ -35,7 +35,7 @@ export class AlexaCli extends JovoCliPlugin {
    * The base path to platform's build folder
    */
   get platformPath(): string {
-    return joinPaths(this.$cli.$project!.getBuildPath(), this.platformDirectory);
+    return joinPaths(this.$cli.project!.getBuildPath(), this.platformDirectory);
   }
 
   /**
