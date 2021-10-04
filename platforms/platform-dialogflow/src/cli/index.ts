@@ -6,10 +6,16 @@ import { DeployHook } from './hooks/DeployHook';
 import { GetHook } from './hooks/GetHook';
 import { DialogflowConfig } from './utilities';
 
+declare module '@jovotech/cli-core/dist/PluginHook' {
+  export interface PluginHook {
+    $plugin: DialogflowCli;
+  }
+}
+
 export class DialogflowCli extends JovoCliPlugin {
-  readonly $id: string = 'dialogflow';
-  readonly $type: PluginType = 'platform';
-  readonly $config!: DialogflowConfig;
+  readonly id: string = 'dialogflow';
+  readonly type: PluginType = 'platform';
+  readonly config!: DialogflowConfig;
   readonly platformDirectory: string = 'platform.dialogflow';
 
   constructor(config?: DialogflowConfig) {
@@ -21,7 +27,7 @@ export class DialogflowCli extends JovoCliPlugin {
   }
 
   get platformPath(): string {
-    return joinPaths(this.$cli.$project!.getBuildPath(), this.platformDirectory);
+    return joinPaths(this.$cli.project!.getBuildPath(), this.platformDirectory);
   }
 
   get agentJsonPath(): string {

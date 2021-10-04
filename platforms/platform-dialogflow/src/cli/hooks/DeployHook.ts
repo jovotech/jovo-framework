@@ -13,7 +13,6 @@ import AdmZip from 'adm-zip';
 import axios, { AxiosError } from 'axios';
 import { existsSync, readFileSync, unlinkSync } from 'fs';
 import { join as joinPaths } from 'path';
-import { DialogflowCli } from '..';
 import { activateServiceAccount, getGcloudAccessToken } from '../utilities';
 
 export interface DialogflowDeployPlatformContext extends DeployPlatformContext {
@@ -25,7 +24,6 @@ export interface DialogflowDeployPlatformContext extends DeployPlatformContext {
 }
 
 export class DeployHook extends PluginHook<DeployPlatformEvents> {
-  $plugin!: DialogflowCli;
   $context!: DialogflowDeployPlatformContext;
 
   install(): void {
@@ -61,7 +59,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
    */
   checkForPlatform(): void {
     // Check if this plugin should be used or not.
-    if (!this.$context.platforms.includes(this.$plugin.$id)) {
+    if (!this.$context.platforms.includes(this.$plugin.id)) {
       this.uninstall();
     }
   }
@@ -88,7 +86,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     }
 
     this.$context.dialogflow.projectId =
-      this.$context.flags['project-id'] || this.$plugin.$config.projectId;
+      this.$context.flags['project-id'] || this.$plugin.config.projectId;
 
     if (!this.$context.dialogflow.projectId) {
       throw new JovoCliError({
@@ -126,9 +124,9 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     const uploadTask: Task = new Task(
       `Uploading your agent for project ${printHighlight(this.$context.dialogflow.projectId!)}`,
       async () => {
-        const keyFilePath: string | undefined = this.$plugin.$config.keyFile;
+        const keyFilePath: string | undefined = this.$plugin.config.keyFile;
         if (keyFilePath) {
-          if (!existsSync(joinPaths(this.$cli.$projectPath, keyFilePath))) {
+          if (!existsSync(joinPaths(this.$cli.projectPath, keyFilePath))) {
             throw new JovoCliError({
               message: `Keyfile at ${keyFilePath} does not exist.`,
               module: this.$plugin.constructor.name,
