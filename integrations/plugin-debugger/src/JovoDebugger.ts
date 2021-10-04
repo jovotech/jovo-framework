@@ -120,15 +120,14 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   async initialize(app: App): Promise<void> {
     if (this.config.enabled === false) return;
 
-    const socket = await this.connectToWebhook();
-
-    socket.on(JovoDebuggerEvent.DebuggingAvailable, () => {
+    this.socket = await this.connectToWebhook();
+    this.socket.on(JovoDebuggerEvent.DebuggingAvailable, () => {
       return this.onDebuggingAvailable();
     });
-    socket.on(JovoDebuggerEvent.DebuggerLanguageModelRequest, () => {
+    this.socket.on(JovoDebuggerEvent.DebuggerLanguageModelRequest, () => {
       return this.onDebuggerLanguageModelRequest();
     });
-    socket.on(JovoDebuggerEvent.DebuggerRequest, (request: AnyObject) => {
+    this.socket.on(JovoDebuggerEvent.DebuggerRequest, (request: AnyObject) => {
       return this.onDebuggerRequest(app, request);
     });
 
@@ -354,16 +353,16 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
 
   private async connectToWebhook(): Promise<typeof Socket> {
     const webhookId = await this.retrieveLocalWebhookId();
-    this.socket = connect(this.config.webhookUrl, {
+    const socket = connect(this.config.webhookUrl, {
       query: {
         id: webhookId,
         type: 'app',
       },
     });
-    this.socket.on('connect_error', (error: Error) => {
+    socket.on('connect_error', (error: Error) => {
       throw new SocketConnectionFailedError(this.config.webhookUrl, error);
     });
-    return this.socket;
+    return socket;
   }
 
   private async retrieveLocalWebhookId(): Promise<string> {
