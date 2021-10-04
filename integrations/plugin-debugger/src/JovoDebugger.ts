@@ -372,7 +372,6 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       const homeConfigBuffer = await promises.readFile(homeConfigPath);
       const homeConfigData = JSON.parse(homeConfigBuffer.toString());
       if (homeConfigData?.webhook?.uuid) {
-        console.log(homeConfigData);
         return homeConfigData.webhook.uuid;
       }
       throw new Error();
