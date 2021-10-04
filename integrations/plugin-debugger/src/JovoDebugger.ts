@@ -7,7 +7,6 @@ import {
   HandleRequest,
   InvalidParentError,
   Jovo,
-  JovoError,
   JovoRequest,
   Platform,
   Plugin,
@@ -19,11 +18,16 @@ import { CorePlatform, CorePlatformConfig } from '@jovotech/platform-core';
 import { LangEn } from '@nlpjs/lang-en';
 import isEqual from 'fast-deep-equal/es6';
 import { promises } from 'fs';
+import { homedir } from 'os';
 import { join } from 'path';
 import { cwd } from 'process';
 import { connect, Socket } from 'socket.io-client';
 import { Writable } from 'stream';
 import { v4 as uuidV4 } from 'uuid';
+import { LanguageModelDirectoryNotFoundError } from './errors/LanguageModelDirectoryNotFoundError';
+import { SocketConnectionFailedError } from './errors/SocketConnectionFailedError';
+import { SocketNotConnectedError } from './errors/SocketNotConnectedError';
+import { WebhookIdNotFoundError } from './errors/WebhookIdNotFoundError';
 import { MockServer } from './MockServer';
 
 export enum JovoDebuggerEvent {
@@ -116,19 +120,15 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   async initialize(app: App): Promise<void> {
     if (this.config.enabled === false) return;
 
-    await this.connectToWebhook();
-    if (!this.socket) {
-      // TODO: implement error
-      throw new Error();
-    }
+    const socket = await this.connectToWebhook();
 
-    this.socket.on(JovoDebuggerEvent.DebuggingAvailable, () => {
+    socket.on(JovoDebuggerEvent.DebuggingAvailable, () => {
       return this.onDebuggingAvailable();
     });
-    this.socket.on(JovoDebuggerEvent.DebuggerLanguageModelRequest, () => {
+    socket.on(JovoDebuggerEvent.DebuggerLanguageModelRequest, () => {
       return this.onDebuggerLanguageModelRequest();
     });
-    this.socket.on(JovoDebuggerEvent.DebuggerRequest, (request: AnyObject) => {
+    socket.on(JovoDebuggerEvent.DebuggerRequest, (request: AnyObject) => {
       return this.onDebuggerRequest(app, request);
     });
 
@@ -206,6 +206,9 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
         if (key === '__isProxy') {
           return true;
         }
+        if (key === '__target') {
+          return target;
+        }
         // if the value is an object that is not null, not a Date nor a Jovo instance nor included in the ignored properties and no proxy
         if (
           typeof target[key] === 'object' &&
@@ -251,11 +254,9 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
 
   private onDebuggingAvailable(): void {
     if (!this.socket) {
-      // TODO: implement error
-      throw new Error();
+      throw new SocketNotConnectedError(this.config.webhookUrl);
     }
 
-    // TODO: check if there is a better way and this is desired
     function propagateStreamAsLog(stream: Writable, socket: typeof Socket) {
       const originalWriteFn = stream.write;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -275,7 +276,6 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   private async onDebuggerLanguageModelRequest(): Promise<void> {
     if (!this.config.languageModelEnabled) return;
     if (!this.config.languageModelPath || !this.config.debuggerJsonPath) {
-      // TODO: determine what to do (warning or error or nothing)
       return;
     }
     if (!this.socket) {
@@ -301,8 +301,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     try {
       files = await promises.readdir(absoluteModelsPath);
     } catch (e) {
-      // TODO implement error handling
-      throw new JovoError({ message: `Couldn't find models-directory at ${absoluteModelsPath}` });
+      throw new LanguageModelDirectoryNotFoundError(absoluteModelsPath);
     }
     const isValidFileRegex = /^.*([.]js(?:on)?)$/;
     for (let i = 0, len = files.length; i < len; i++) {
@@ -333,8 +332,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
 
   private onRequest(jovo: Jovo) {
     if (!this.socket) {
-      // TODO: implement error
-      throw new Error();
+      throw new SocketNotConnectedError(this.config.webhookUrl);
     }
     const payload: JovoDebuggerPayload<JovoRequest> = {
       requestId: jovo.$handleRequest.debuggerRequestId,
@@ -345,8 +343,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
 
   private onResponse(jovo: Jovo) {
     if (!this.socket) {
-      // TODO: implement error
-      throw new Error();
+      throw new SocketNotConnectedError(this.config.webhookUrl);
     }
     const payload: JovoDebuggerPayload = {
       requestId: jovo.$handleRequest.debuggerRequestId,
@@ -355,7 +352,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     this.socket.emit(JovoDebuggerEvent.AppResponse, payload);
   }
 
-  private async connectToWebhook() {
+  private async connectToWebhook(): Promise<typeof Socket> {
     const webhookId = await this.retrieveLocalWebhookId();
     this.socket = connect(this.config.webhookUrl, {
       query: {
@@ -364,34 +361,23 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       },
     });
     this.socket.on('connect_error', (error: Error) => {
-      // TODO: improve handling
-      // eslint-disable-next-line no-console
-      console.error(error);
+      throw new SocketConnectionFailedError(this.config.webhookUrl, error);
     });
+    return this.socket;
   }
 
   private async retrieveLocalWebhookId(): Promise<string> {
+    const homeConfigPath = join(homedir(), '.jovo/configv4');
     try {
-      const homeConfigPath = join(this.getUserHomePath(), '.jovo/configv4');
       const homeConfigBuffer = await promises.readFile(homeConfigPath);
       const homeConfigData = JSON.parse(homeConfigBuffer.toString());
       if (homeConfigData?.webhook?.uuid) {
+        console.log(homeConfigData);
         return homeConfigData.webhook.uuid;
       }
-      // TODO implement error
-      throw new Error('Could not find webhook-id');
-    } catch (e) {
-      // TODO implement error
-      throw new Error('Could not find webhook-id');
-    }
-  }
-
-  private getUserHomePath(): string {
-    const path = process.env[process.platform === 'win32' ? 'USERPROFILE' : 'HOME'];
-    if (!path) {
-      // TODO implement error
       throw new Error();
+    } catch (e) {
+      throw new WebhookIdNotFoundError(homeConfigPath);
     }
-    return path;
   }
 }
