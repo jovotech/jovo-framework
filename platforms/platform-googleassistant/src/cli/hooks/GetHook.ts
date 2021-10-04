@@ -1,5 +1,5 @@
-import type { BuildEvents } from '@jovotech/cli-command-build';
-import type { GetContext, GetEvents } from '@jovotech/cli-command-get';
+import type { BuildPlatformEvents } from '@jovotech/cli-command-build';
+import type { GetPlatformContext, GetPlatformEvents } from '@jovotech/cli-command-get';
 import {
   ANSWER_CANCEL,
   execAsync,
@@ -13,27 +13,25 @@ import {
 } from '@jovotech/cli-core';
 import { existsSync, mkdirSync } from 'fs';
 import _get from 'lodash.get';
-import { GoogleAssistantCli } from '..';
 import { checkForGactionsCli, getGactionsError, GoogleContext } from '../utilities';
 
-export interface GoogleGetContext extends GetContext, GoogleContext {
-  flags: GetContext['flags'] & { 'project-id'?: string };
+export interface GoogleGetContext extends GetPlatformContext, GoogleContext {
+  flags: GetPlatformContext['flags'] & { 'project-id'?: string };
 }
 
-export class GetHook extends PluginHook<GetEvents | BuildEvents> {
-  $plugin!: GoogleAssistantCli;
+export class GetHook extends PluginHook<GetPlatformEvents | BuildPlatformEvents> {
   $context!: GoogleGetContext;
 
   install(): void {
     this.middlewareCollection = {
       'install': [this.addCliOptions.bind(this)],
-      'before.get': [
+      'before.get:platform': [
         this.checkForPlatform.bind(this),
         checkForGactionsCli,
         this.updatePluginContext.bind(this),
         this.checkForExistingPlatformFiles.bind(this),
       ],
-      'get': [this.get.bind(this)],
+      'get:platform': [this.get.bind(this)],
     };
   }
 
@@ -57,7 +55,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
    */
   checkForPlatform(): void {
     // Check if this plugin should be used or not.
-    if (this.$context.platform && this.$context.platform !== this.$plugin.$id) {
+    if (!this.$context.platforms.includes(this.$plugin.id)) {
       this.uninstall();
     }
   }
@@ -71,7 +69,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
     }
 
     this.$context.googleAssistant.projectId =
-      this.$context.flags['project-id'] || _get(this.$plugin.$config, 'projectId');
+      this.$context.flags['project-id'] || _get(this.$plugin.config, 'projectId');
 
     if (!this.$context.googleAssistant.projectId) {
       throw new JovoCliError({
