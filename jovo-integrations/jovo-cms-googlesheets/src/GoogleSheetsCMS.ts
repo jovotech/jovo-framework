@@ -30,7 +30,7 @@ export interface Config extends ExtensibleConfig {
   credentialsFile?: string;
   spreadsheetId?: string;
   sheets?: GoogleSheetsSheet[];
-  access?: string;
+  access?: string; // @deprecated
   caching?: boolean;
 }
 
