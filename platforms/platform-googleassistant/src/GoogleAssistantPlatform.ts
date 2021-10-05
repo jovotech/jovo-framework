@@ -2,7 +2,6 @@ import { AnyObject, App, ExtensibleConfig, Jovo, Platform } from '@jovotech/fram
 import {
   GoogleAssistantOutputTemplateConverterStrategy,
   GoogleAssistantResponse,
-  SlotFillingStatus,
 } from '@jovotech/output-googleassistant';
 import _mergeWith from 'lodash.mergewith';
 import { v4 as uuidV4 } from 'uuid';
@@ -95,12 +94,12 @@ export class GoogleAssistantPlatform extends Platform<
     if (
       request?.intent &&
       !request?.intent?.name &&
-      (request.scene?.slotFillingStatus === SlotFillingStatus.Final ||
-        request.scene?.slotFillingStatus === SlotFillingStatus.Unspecified) &&
+      !!request.scene?.slotFillingStatus &&
       Object.keys(request.intent?.params || {}).length &&
       request.session?.params?._GOOGLE_ASSISTANT_SELECTION_INTENT_
     ) {
       jovo.$input.intent = request.session.params._GOOGLE_ASSISTANT_SELECTION_INTENT_;
+      delete request.session.params._GOOGLE_ASSISTANT_SELECTION_INTENT_;
     }
   }
 }
