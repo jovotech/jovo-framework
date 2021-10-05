@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/server-lambda",
-  "version": "4.0.0-beta.5",
+  "version": "4.0.0-beta.6",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -24,7 +24,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@aws-sdk/client-lambda": "^3.8.1",
-    "@jovotech/framework": "^4.0.0-beta.5",
+    "@jovotech/framework": "^4.0.0-beta.6",
     "@types/aws-lambda": "^8.10.73",
     "@types/jest": "^26.0.20",
     "@types/node": "^10.17.50",
@@ -40,7 +40,7 @@
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
-    "@jovotech/framework": "4.0.0-beta.5"
+    "@jovotech/framework": "4.0.0-beta.6"
   },
   "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176",
   "prettier": "../../.prettierrc.js",

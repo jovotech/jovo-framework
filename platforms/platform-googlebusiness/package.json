@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/platform-googlebusiness",
-  "version": "4.0.0-beta.5",
+  "version": "4.0.0-beta.6",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -28,7 +28,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@jovotech/framework": "^4.0.0-beta.5",
+    "@jovotech/framework": "^4.0.0-beta.6",
     "@types/jest": "^26.0.20",
     "@types/node": "^10.17.50",
     "@types/uuid": "^8.3.0",
@@ -44,7 +44,7 @@
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
-    "@jovotech/framework": "4.0.0-beta.5"
+    "@jovotech/framework": "4.0.0-beta.6"
   },
   "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176",
   "prettier": "../../.prettierrc.js",

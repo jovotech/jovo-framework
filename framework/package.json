@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/framework",
-  "version": "4.0.0-beta.5",
+  "version": "4.0.0-beta.6",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -33,10 +33,10 @@
     "lodash.merge": "^4.6.2",
     "lodash.set": "^4.3.2",
     "lodash.unset": "^4.5.2",
-    "uuid": "^8.3.2",
     "ts-mixer": "^6.0.0",
     "ts-toolbelt": "9.5.13",
-    "type-fest": "^1.2.0"
+    "type-fest": "^1.2.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
