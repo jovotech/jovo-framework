@@ -40,7 +40,7 @@ export class GetHook extends PluginHook<GetPlatformEvents | BuildPlatformEvents>
    * @param context - Context providing an access point to command flags and args.
    */
   addCliOptions(context: InstallContext): void {
-    if (context.command !== 'get') {
+    if (context.command !== 'get:platform') {
       return;
     }
 
@@ -85,7 +85,9 @@ export class GetHook extends PluginHook<GetPlatformEvents | BuildPlatformEvents>
    */
   async checkForExistingPlatformFiles(): Promise<void> {
     if (!this.$context.flags.clean && existsSync(this.$plugin.platformPath)) {
-      const answer = await promptOverwrite('Found existing project files. How to proceed?');
+      const answer = await promptOverwrite(
+        'Found existing GoogleAssistant project files. How to proceed?',
+      );
       if (answer.overwrite === ANSWER_CANCEL) {
         this.uninstall();
       }

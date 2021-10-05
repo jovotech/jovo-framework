@@ -44,7 +44,7 @@ export class GetHook extends PluginHook<GetPlatformEvents> {
   }
 
   addCliOptions(context: InstallContext): void {
-    if (context.command !== 'get') {
+    if (context.command !== 'get:platform') {
       return;
     }
 

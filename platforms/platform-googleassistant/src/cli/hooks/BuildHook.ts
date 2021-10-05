@@ -69,7 +69,7 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
    * @param context - Context providing an access point to command flags and args.
    */
   addCliOptions(context: InstallContext): void {
-    if (context.command !== 'build') {
+    if (context.command !== 'build:platform') {
       return;
     }
 

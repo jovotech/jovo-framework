@@ -42,7 +42,7 @@ export class GetHook extends AlexaHook<BuildPlatformEvents | GetPlatformEvents> 
    * @param context - Context providing an access point to command flags and args.
    */
   addCliOptions(context: InstallContext): void {
-    if (context.command !== 'get') {
+    if (context.command !== 'get:platform') {
       return;
     }
 
