@@ -311,7 +311,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       const languageModel = await this.loadLanguageModel();
       this.socket.emit(JovoDebuggerEvent.AppLanguageModelResponse, languageModel);
     } catch (e) {
-      // TODO Determine what to do
+      return;
     }
   }
 
@@ -359,7 +359,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       const debuggerConfig = await this.loadDebuggerConfig();
       this.socket.emit(JovoDebuggerEvent.AppDebuggerConfigResponse, debuggerConfig);
     } catch (e) {
-      // TODO Determine what to do
+      return;
     }
   }
 
@@ -369,7 +369,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       const absoluteDebuggerConfigPath = resolve(cwd(), this.config.debuggerConfigPath);
       return require(absoluteDebuggerConfigPath);
     } catch (e) {
-      console.warn('Error occurred while loading debugger-config, using default config.')
+      console.warn('Error occurred while loading debugger-config, using default config.');
       console.warn(e.message);
       return new DebuggerConfig();
     }
