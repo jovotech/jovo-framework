@@ -19,4 +19,6 @@ declare module '@jovotech/framework/dist/types/HandleRequest' {
 
 HandleRequest.prototype.debuggerRequestId = 0;
 
+export * from './DebuggerButton';
+export * from './DebuggerConfig';
 export * from './JovoDebugger';

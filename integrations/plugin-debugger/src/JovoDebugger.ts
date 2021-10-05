@@ -19,11 +19,12 @@ import { LangEn } from '@nlpjs/lang-en';
 import isEqual from 'fast-deep-equal/es6';
 import { promises } from 'fs';
 import { homedir } from 'os';
-import { join } from 'path';
+import { join, resolve } from 'path';
 import { cwd } from 'process';
 import { connect, Socket } from 'socket.io-client';
 import { Writable } from 'stream';
 import { v4 as uuidV4 } from 'uuid';
+import { DebuggerConfig } from './DebuggerConfig';
 import { LanguageModelDirectoryNotFoundError } from './errors/LanguageModelDirectoryNotFoundError';
 import { SocketConnectionFailedError } from './errors/SocketConnectionFailedError';
 import { SocketNotConnectedError } from './errors/SocketNotConnectedError';
@@ -35,7 +36,6 @@ export enum JovoDebuggerEvent {
   DebuggingUnavailable = 'debugging.unavailable',
 
   DebuggerRequest = 'debugger.request',
-  DebuggerLanguageModelRequest = 'debugger.language-model-request',
 
   AppLanguageModelResponse = 'app.language-model-response',
   AppDebuggerConfigResponse = 'app.debugger-config-response',
@@ -65,7 +65,7 @@ export interface JovoDebuggerConfig extends PluginConfig {
   webhookUrl: string;
   languageModelEnabled: boolean;
   languageModelPath: string;
-  debuggerJsonPath: string;
+  debuggerConfigPath: string;
   ignoredProperties: Array<keyof Jovo | string>;
 }
 
@@ -95,7 +95,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
         !process.argv.includes('--disable-jovo-debugger'),
       languageModelEnabled: true,
       languageModelPath: './models',
-      debuggerJsonPath: './debugger.json',
+      debuggerConfigPath: './jovo.debugger.js',
       ignoredProperties: ['$app', '$handleRequest', '$platform'],
     };
   }
@@ -124,9 +124,6 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     this.socket.on(JovoDebuggerEvent.DebuggingAvailable, () => {
       return this.onDebuggingAvailable();
     });
-    this.socket.on(JovoDebuggerEvent.DebuggerLanguageModelRequest, () => {
-      return this.onDebuggerLanguageModelRequest();
-    });
     this.socket.on(JovoDebuggerEvent.DebuggerRequest, (request: AnyObject) => {
       return this.onDebuggerRequest(app, request);
     });
@@ -145,7 +142,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     });
   }
 
-  emitUpdate(requestId: string | number, data: JovoUpdateData) {
+  emitUpdate(requestId: string | number, data: JovoUpdateData): void {
     const payload: JovoDebuggerPayload<JovoUpdateData> = {
       requestId,
       data,
@@ -175,6 +172,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
           const isEmptyObject =
             typeof value === 'object' && !Array.isArray(value) && !Object.keys(value || {}).length;
           const isEmptyArray = Array.isArray(value) && !((value as unknown[]) || []).length;
+
           if (
             !jovo.hasOwnProperty(key) ||
             this.config.ignoredProperties.includes(key) ||
@@ -205,6 +203,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
         if (key === '__isProxy') {
           return true;
         }
+        // provide a reference to the original target of the proxy
         if (key === '__target') {
           return target;
         }
@@ -251,10 +250,13 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     };
   }
 
-  private onDebuggingAvailable(): void {
+  private async onDebuggingAvailable(): Promise<void> {
     if (!this.socket) {
       throw new SocketNotConnectedError(this.config.webhookUrl);
     }
+
+    await this.emitDebuggerConfig();
+    await this.emitLanguageModelIfEnabled();
 
     function propagateStreamAsLog(stream: Writable, socket: typeof Socket) {
       const originalWriteFn = stream.write;
@@ -272,30 +274,51 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     }
   }
 
-  private async onDebuggerLanguageModelRequest(): Promise<void> {
-    if (!this.config.languageModelEnabled) return;
-    if (!this.config.languageModelPath || !this.config.debuggerJsonPath) {
+  private async onDebuggerRequest(app: App, request: AnyObject): Promise<void> {
+    await app.handle(new MockServer(request));
+  }
+
+  private onRequest(jovo: Jovo): void {
+    if (!this.socket) {
+      throw new SocketNotConnectedError(this.config.webhookUrl);
+    }
+    const payload: JovoDebuggerPayload<JovoRequest> = {
+      requestId: jovo.$handleRequest.debuggerRequestId,
+      data: jovo.$request,
+    };
+    this.socket.emit(JovoDebuggerEvent.AppRequest, payload);
+  }
+
+  private onResponse(jovo: Jovo): void {
+    if (!this.socket) {
+      throw new SocketNotConnectedError(this.config.webhookUrl);
+    }
+    const payload: JovoDebuggerPayload = {
+      requestId: jovo.$handleRequest.debuggerRequestId,
+      data: jovo.$response,
+    };
+    this.socket.emit(JovoDebuggerEvent.AppResponse, payload);
+  }
+
+  private async emitLanguageModelIfEnabled(): Promise<void> {
+    if (!this.config.languageModelEnabled || !this.config.languageModelPath) {
       return;
     }
     if (!this.socket) {
-      // eslint-disable-next-line no-console
-      console.warn('Can not emit language-model: Socket is not available.');
-      return;
+      throw new SocketNotConnectedError(this.config.webhookUrl);
     }
-    // look for language-models
     try {
-      const languageModel = await this.getLanguageModel();
+      const languageModel = await this.loadLanguageModel();
       this.socket.emit(JovoDebuggerEvent.AppLanguageModelResponse, languageModel);
     } catch (e) {
-      // eslint-disable-next-line no-console
-      console.warn('Can not emit language-model: Could not retrieve language-model.');
+      // TODO Determine what to do
     }
-    // TODO implement sending debuggerConfig if that is required
   }
 
-  private async getLanguageModel(): Promise<AnyObject> {
+  // Return the language models found at the configured location
+  private async loadLanguageModel(): Promise<AnyObject> {
     const languageModel: AnyObject = {};
-    const absoluteModelsPath = join(cwd(), this.config.languageModelPath);
+    const absoluteModelsPath = resolve(cwd(), this.config.languageModelPath);
     let files: string[] = [];
     try {
       files = await promises.readdir(absoluteModelsPath);
@@ -325,30 +348,31 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     return languageModel;
   }
 
-  private async onDebuggerRequest(app: App, request: AnyObject): Promise<void> {
-    await app.handle(new MockServer(request));
-  }
-
-  private onRequest(jovo: Jovo) {
+  private async emitDebuggerConfig(): Promise<void> {
+    if (!this.config.debuggerConfigPath) {
+      return;
+    }
     if (!this.socket) {
       throw new SocketNotConnectedError(this.config.webhookUrl);
     }
-    const payload: JovoDebuggerPayload<JovoRequest> = {
-      requestId: jovo.$handleRequest.debuggerRequestId,
-      data: jovo.$request,
-    };
-    this.socket.emit(JovoDebuggerEvent.AppRequest, payload);
+    try {
+      const debuggerConfig = await this.loadDebuggerConfig();
+      this.socket.emit(JovoDebuggerEvent.AppDebuggerConfigResponse, debuggerConfig);
+    } catch (e) {
+      // TODO Determine what to do
+    }
   }
 
-  private onResponse(jovo: Jovo) {
-    if (!this.socket) {
-      throw new SocketNotConnectedError(this.config.webhookUrl);
+  // Return the debugger config at the configured location or return a default config.
+  private async loadDebuggerConfig(): Promise<DebuggerConfig> {
+    try {
+      const absoluteDebuggerConfigPath = resolve(cwd(), this.config.debuggerConfigPath);
+      return require(absoluteDebuggerConfigPath);
+    } catch (e) {
+      console.warn('Error occurred while loading debugger-config, using default config.')
+      console.warn(e.message);
+      return new DebuggerConfig();
     }
-    const payload: JovoDebuggerPayload = {
-      requestId: jovo.$handleRequest.debuggerRequestId,
-      data: jovo.$response,
-    };
-    this.socket.emit(JovoDebuggerEvent.AppResponse, payload);
   }
 
   private async connectToWebhook(): Promise<typeof Socket> {
@@ -366,7 +390,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   }
 
   private async retrieveLocalWebhookId(): Promise<string> {
-    const homeConfigPath = join(homedir(), '.jovo/configv4');
+    const homeConfigPath = resolve(homedir(), '.jovo/configv4');
     try {
       const homeConfigBuffer = await promises.readFile(homeConfigPath);
       const homeConfigData = JSON.parse(homeConfigBuffer.toString());
