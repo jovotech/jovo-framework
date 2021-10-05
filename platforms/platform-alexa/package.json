@@ -8,8 +8,13 @@
   "types": "dist/types/index.d.ts",
   "sideEffects": false,
   "files": [
+<<<<<<< HEAD
     "dist",
     "sample-requests"
+=======
+    "boilerplate",
+    "dist"
+>>>>>>> 14e702a2c1b79905337a0c3bf7b83acdf404dae8
   ],
   "scripts": {
     "prebuild": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json --clean",

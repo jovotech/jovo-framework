@@ -23,7 +23,6 @@ export class AlexaCli extends JovoCliPlugin {
   }
 
   getHooks(): typeof PluginHook[] {
-    // console.log(this.$id);
     return [BuildHook, GetHook, DeployHook, NewHook];
   }
 
