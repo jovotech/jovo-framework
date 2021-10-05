@@ -41,10 +41,6 @@ The Alexa CLI plugin hooks into the following commands:
 The Alexa CLI plugin hooks into the `build` command and creates a `platform.alexa` folder inside the `build` directory in the root of your Jovo project. [Learn more about the `build` command here](https://v4.jovo.tech/docs/build-command).
 
 ```sh
-# Build all platforms
-$ jovov4 build
-
-# Build Alexa platform
 $ jovov4 build:platform alexa
 ```
 

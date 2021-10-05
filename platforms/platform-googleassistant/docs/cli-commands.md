@@ -41,10 +41,6 @@ The Google Assistant CLI plugin hooks into the `build` command and creates a `pl
 
 
 ```sh
-# Build all platforms
-$ jovov4 build
-
-# Build Google Assistant platform
 $ jovov4 build:platform googleAssistant
 ```
 
