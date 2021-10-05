@@ -46,7 +46,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     if (!existsSync(this.$plugin.platformPath)) {
       throw new JovoCliError({
         message: `Couldn't find the platform folder ${this.$plugin.platformPath}.`,
-        module: this.$plugin.constructor.name,
+        module: this.$plugin.name,
         hint: `Please use "jovo build" to create platform-specific files.`,
       });
     }

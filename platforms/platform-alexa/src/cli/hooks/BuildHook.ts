@@ -104,7 +104,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
         if (!SupportedLocales.includes(resolvedLocale as SupportedLocalesType)) {
           throw new JovoCliError({
             message: `Locale ${printHighlight(resolvedLocale)} is not supported by Amazon Alexa.`,
-            module: this.$plugin.constructor.name,
+            module: this.$plugin.name,
             hint:
               resolvedLocale.length === 2
                 ? 'Alexa does not support generic locales, please specify locales in your project configuration.'
@@ -131,7 +131,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
           locale,
           model,
           JovoModelAlexa.getValidator(model),
-          this.$plugin.constructor.name,
+          this.$plugin.name,
         );
         await wait(500);
       });
@@ -211,7 +211,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
         } else {
           throw new JovoCliError({
             message: `Could not find platform models for locale: ${printHighlight(locale)}`,
-            module: this.$plugin.constructor.name,
+            module: this.$plugin.name,
             hint: `Available locales include: ${platformLocales.join(', ')}`,
           });
         }
@@ -274,7 +274,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
         if (!nativeData) {
           throw new JovoCliError({
             message: 'Something went wrong while exporting your Jovo model.',
-            module: this.$plugin.constructor.name,
+            module: this.$plugin.name,
           });
         }
         this.$cli.project!.saveModel(nativeData, modelLocale);
@@ -401,7 +401,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
           // Should actually never happen but who knows
           throw new JovoCliError({
             message: `Could not build Alexa files for locale "${locale}"!`,
-            module: this.$plugin.constructor.name,
+            module: this.$plugin.name,
           });
         }
 
@@ -419,7 +419,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       if (error instanceof JovoCliError) {
         throw error;
       }
-      throw new JovoCliError({ message: error.message, module: this.$plugin.constructor.name });
+      throw new JovoCliError({ message: error.message, module: this.$plugin.name });
     }
   }
 

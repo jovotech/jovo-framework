@@ -32,6 +32,10 @@ export class GoogleAssistantCli extends JovoCliPlugin {
     };
   }
 
+  get name(): string {
+    return this.constructor.name;
+  }
+
   /**
    * Returns base path to platform's build folder
    */

@@ -86,7 +86,7 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
     if (!existsSync(this.$plugin.platformPath)) {
       throw new JovoCliError({
         message: `Couldn't find the platform folder "${this.$plugin.platformDirectory}/".`,
-        module: this.$plugin.constructor.name,
+        module: this.$plugin.name,
         hint: `Please use "jovo build" to create platform-specific files.`,
       });
     }
@@ -213,7 +213,7 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
       if (err instanceof JovoCliError) {
         throw err;
       }
-      throw new JovoCliError({ message: err.message, module: this.$plugin.constructor.name });
+      throw new JovoCliError({ message: err.message, module: this.$plugin.name });
     }
   }
 
@@ -237,7 +237,7 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
 
       return info;
     } catch (err) {
-      throw new JovoCliError({ message: err.message, module: this.$plugin.constructor.name });
+      throw new JovoCliError({ message: err.message, module: this.$plugin.name });
     }
   }
 

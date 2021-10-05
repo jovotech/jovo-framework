@@ -40,7 +40,7 @@ import {
   SupportedLocalesType,
 } from '../utilities';
 
-export interface BuildContextGoogle extends BuildPlatformContext, GoogleContext {
+export interface BuildPlatformContextGoogle extends BuildPlatformContext, GoogleContext {
   flags: BuildPlatformContext['flags'] & { 'project-id'?: string };
   googleAssistant: GoogleContext['googleAssistant'] & {
     defaultLocale?: string;
@@ -48,7 +48,7 @@ export interface BuildContextGoogle extends BuildPlatformContext, GoogleContext 
 }
 
 export class BuildHook extends PluginHook<BuildPlatformEvents> {
-  $context!: BuildContextGoogle;
+  $context!: BuildPlatformContextGoogle;
 
   install(): void {
     this.middlewareCollection = {
@@ -103,7 +103,7 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
     if (!this.$context.googleAssistant.projectId) {
       throw new JovoCliError({
         message: 'Could not find project ID.',
-        module: this.$plugin.constructor.name,
+        module: this.$plugin.name,
         hint: 'Please provide a project ID by using the flag "--project-id" or in your project configuration.',
       });
     }
@@ -145,7 +145,7 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
           message: `Locale ${printHighlight(locale)} requires a generic locale ${printHighlight(
             genericLocale,
           )}.`,
-          module: this.$plugin.constructor.name,
+          module: this.$plugin.name,
         });
       }
 
@@ -154,7 +154,7 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
           message: `Locale ${printHighlight(
             locale,
           )} is not supported by Google Conversational Actions.`,
-          module: this.$plugin.constructor.name,
+          module: this.$plugin.name,
           learnMore:
             'For more information on multiple language support: https://developers.google.com/assistant/console/languages-locales',
         });
@@ -176,7 +176,7 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
           locale,
           model,
           JovoModelGoogle.getValidator(model),
-          this.$plugin.constructor.name,
+          this.$plugin.name,
         );
         await wait(500);
       });
@@ -212,7 +212,7 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
         } else {
           throw new JovoCliError({
             message: `Could not find platform models for locale: ${printHighlight(locale)}`,
-            module: this.$plugin.constructor.name,
+            module: this.$plugin.name,
             hint: `Available locales include: ${platformLocales.join(', ')}`,
           });
         }
@@ -273,7 +273,7 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
         if (!nativeData) {
           throw new JovoCliError({
             message: 'Something went wrong while exporting your Jovo model.',
-            module: this.$plugin.constructor.name,
+            module: this.$plugin.name,
           });
         }
 
@@ -558,7 +558,7 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
     if (!defaultLocale) {
       throw new JovoCliError({
         message: 'Could not find a default locale.',
-        module: this.$plugin.constructor.name,
+        module: this.$plugin.name,
         hint: 'Try adding the property "defaultLocale" to your project.js.',
       });
     }
@@ -598,7 +598,7 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
       if (!platformInvocation) {
         throw new JovoCliError({
           message: `Can\'t find invocation name for locale ${locale}.`,
-          module: this.$plugin.constructor.name,
+          module: this.$plugin.name,
         });
       }
 
