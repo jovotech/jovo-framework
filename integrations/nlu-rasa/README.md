@@ -93,6 +93,23 @@ Since the `alternativeIntents` is specific to the `RasaNluData` type, you can do
 const alternativeIntents = (this.$input.nlu as RasaNluData | undefined)?.alternativeIntents;
 ```
 
+## Entities
+
+You can access Rasa entities by using the `$entities` property. You can learn more in the [Jovo Model](https://v4.jovo.tech/docs/models) and the [`$entities` documentation](https://v4.jovo.tech/docs/entities).
+
+The Rasa entity values are translated into the following Jovo entity properties:
+
+```typescript
+{
+  value: value, // what the user said
+  resolved: entity, // the resolved value
+  id: entity, // same as resolved, since Rasa doesn't support IDs
+  native: { /* raw API response for this entity */ }
+}
+```
+
+Learn more about Rasa entities in the [official Rasa docs](https://rasa.com/docs/rasa/training-data-format#entities).
+
 ## Jovo Model
 
 You can use the [Jovo Model](https://www.jovo.tech/marketplace/jovo-model) to turn the language model files in your `models` folder into Rasa NLU training data. [Learn more about the Rasa Jovo Model integration here](https://v4.jovo.tech/marketplace/nlu-rasa/model).

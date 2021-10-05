@@ -61,6 +61,23 @@ new SnipsNlu({
 - `dynamicEntities`: [See more information about dynamic entities below](#dynamic-entities).
 
 
+## Entities
+
+You can access Snips slots by using the `$entities` property. You can learn more in the [Jovo Model](https://v4.jovo.tech/docs/models) and the [`$entities` documentation](https://v4.jovo.tech/docs/entities).
+
+The Snips slot values are translated into the following Jovo entity properties:
+
+```typescript
+{
+  value: rawValue, // what the user said
+  resolved: value.value, // the resolved value
+  id: value.value, // same as resolved, since Snips doesn't support IDs
+  native: { /* raw API response for this slot */ }
+}
+```
+
+You can learn more about the Snips slot format in the [official Snips documentation](https://snips-nlu.readthedocs.io/en/latest/data_model.html#slot).
+
 ## Dynamic Entities
 
 It is possible to set up Snips NLU to work with [dynamic entities](https://v4.jovo.tech/docs/entities#dynamic-entities).

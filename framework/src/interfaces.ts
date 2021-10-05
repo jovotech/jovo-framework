@@ -1,3 +1,4 @@
+import { Entity } from '@jovotech/output';
 import { AnyObject, UnknownObject } from './index';
 import { Jovo } from './Jovo';
 import { PluginConfig } from './Plugin';
@@ -11,15 +12,6 @@ export interface ComponentData extends Data {}
 export interface SessionData extends Data {}
 
 export interface UserData extends Data {}
-
-export interface Entity extends UnknownObject {
-  id?: string;
-  resolved?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  value?: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  native?: any;
-}
 
 export interface EntityMap<ENTITY_TYPE extends Entity = Entity> {
   [key: string]: ENTITY_TYPE | undefined;
