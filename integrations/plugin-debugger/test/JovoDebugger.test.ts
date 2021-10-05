@@ -46,10 +46,10 @@ const coreRequest: OmitWhere<CoreRequest, () => any> = {
 };
 
 const mockSocket = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/no-empty-function
-  emit: (eventName: string, ...eventArgs: any[]) => {},
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/no-empty-function
-  on: (eventName: string, handler: () => any) => {},
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/no-empty-function,@typescript-eslint/no-unused-vars
+  emit: () => {},
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/no-empty-function,@typescript-eslint/no-unused-vars
+  on: () => {},
 };
 
 let jovoDebugger: JovoDebugger, app: App;
@@ -64,6 +64,7 @@ beforeEach(() => {
       languageMap: {
         en,
       },
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       setupModelCallback: () => {},
     },
   });
