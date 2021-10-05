@@ -19,7 +19,8 @@ export class MessengerBotResponse implements JovoResponse {
     const response = Object.create(MessengerBotResponse.prototype);
     return Object.assign(response, json);
   }
-  message?: Message;
+
+  messages: Message[] = [];
 
   getReprompt(): string | undefined {
     return undefined;
@@ -41,8 +42,16 @@ export class MessengerBotResponse implements JovoResponse {
     return this.getSpeechPlain();
   }
 
-  getSpeechPlain(): string | undefined {
-    return this.message instanceof TextMessage ? this.message.message.text : undefined;
+  getSpeechPlain(separator?: string): string | undefined {
+    return this.messages
+      .map((m) => {
+        if (m instanceof TextMessage) {
+          return m.message.text;
+        }
+        return;
+      })
+      .filter((m) => !!m)
+      .join(separator || ' ');
   }
 
   hasSessionAttribute(name: string, value?: any): boolean {
@@ -66,16 +75,25 @@ export class MessengerBotResponse implements JovoResponse {
   }
 
   isTell(speechText?: string | string[]): boolean {
-    if (speechText && this.message) {
-      return this.message instanceof TextMessage
-        ? typeof speechText === 'string'
-          ? SpeechBuilder.removeSSML(speechText) === this.message.message.text
-          : speechText.some((text) => {
-              return SpeechBuilder.removeSSML(text) === (this.message as TextMessage).message.text;
-            })
-        : false;
+    if (!speechText || !this.messages.length) {
+      return false;
     }
-    return this.message instanceof TextMessage;
+
+    const textMessages = this.messages
+      .map((m) => (m as TextMessage)?.message?.text)
+      .filter((m) => !!m);
+
+    if (typeof speechText === 'string') {
+      return textMessages.includes(SpeechBuilder.removeSSML(speechText));
+    }
+
+    if (Array.isArray(speechText)) {
+      return speechText.some((text) => {
+        return textMessages.includes(SpeechBuilder.removeSSML(text));
+      });
+    }
+
+    return false;
   }
 
   setSessionAttributes(sessionAttributes: SessionData): this {

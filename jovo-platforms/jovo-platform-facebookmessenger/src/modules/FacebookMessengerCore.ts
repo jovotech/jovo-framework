@@ -49,10 +49,9 @@ export class FacebookMessengerCore implements Plugin {
   }
 
   async type(messengerBot: MessengerBot) {
-    let type: EnumRequestType = EnumRequestType.INTENT;
-
-    const payload = _get(messengerBot, '$request.messaging[0].postback.payload');
-    if (!!payload && !!this.launchPayload && payload === this.launchPayload) {
+    let type =
+      _get(messengerBot, '$request.messaging[0].postback.payload') ?? EnumRequestType.INTENT;
+    if (!!type && !!this.launchPayload && type === this.launchPayload) {
       type = EnumRequestType.LAUNCH;
     }
 
@@ -76,6 +75,8 @@ export class FacebookMessengerCore implements Plugin {
 
     const response = messengerBot.$response as MessengerBotResponse;
 
+    response.messages = [];
+
     if (Object.keys(output).length === 0) {
       return;
     }
@@ -86,19 +87,28 @@ export class FacebookMessengerCore implements Plugin {
     const tell = _get(output, 'tell');
     if (tell) {
       const text = setText || tell.speech.toString();
-      response.message = new TextMessage(
-        { id: messengerBot.$user.getId()! },
-        { text, quickReplies: overWriteQuickReplies },
+      response.messages.push(
+        new TextMessage(
+          { id: messengerBot.$user.getId()! },
+          { text, quickReplies: overWriteQuickReplies },
+        ),
       );
     }
 
     const ask = _get(output, 'ask');
     if (ask) {
       const text = setText || ask.speech.toString();
-      response.message = new TextMessage(
-        { id: messengerBot.$user.getId()! },
-        { text, quickReplies: overWriteQuickReplies },
+      response.messages.push(
+        new TextMessage(
+          { id: messengerBot.$user.getId()! },
+          { text, quickReplies: overWriteQuickReplies },
+        ),
       );
+    }
+
+    const responses = _get(output, 'FacebookMessenger.responses');
+    if (responses && responses.length) {
+      response.messages = [...response.messages, ...responses];
     }
   }
 }

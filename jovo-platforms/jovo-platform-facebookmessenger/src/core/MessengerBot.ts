@@ -116,8 +116,14 @@ export class MessengerBot extends Jovo {
 
   // Output methods
   setText(text: string): this {
-    _set(this.$output.FacebookMessenger, 'Overwrite.Text', text);
+    _set(this.$output, 'FacebookMessenger.Overwrite.Text', text);
     return this;
+  }
+
+  private setResponses(message: any): void {
+    const currentResponses = _get(this.$output, 'FacebookMessenger.responses') ?? [];
+    const responses = [...currentResponses, message];
+    _set(this.$output, 'FacebookMessenger.responses', responses);
   }
 
   showQuickReplies(quickReplies: Array<QuickReply | GenericQuickReply | string>): this {
@@ -130,23 +136,24 @@ export class MessengerBot extends Jovo {
         ? new TextQuickReply(quickReply.label || quickReply.value, quickReply.value)
         : quickReply;
     });
-    _set(this.$output.FacebookMessenger, 'Overwrite.QuickReplies', facebookQuickReplies);
+    _set(this.$output, 'FacebookMessenger.Overwrite.QuickReplies', facebookQuickReplies);
     return this;
   }
 
   addQuickReply(quickReply: QuickReply | GenericQuickReply | string): this {
-    const quickReplies = _get(this.$output.FacebookMessenger, 'Overwrite.QuickReplies');
+    const quickReplies = _get(this.$output, 'FacebookMessenger.Overwrite.QuickReplies');
     quickReplies.push(
       typeof quickReply === 'object' && 'value' in quickReply
         ? new TextQuickReply(quickReply.label || quickReply.value, quickReply.value)
         : quickReply,
     );
-    _set(this.$output.FacebookMessenger, 'Overwrite.QuickReplies', quickReplies);
+    _set(this.$output, 'FacebookMessenger.Overwrite.QuickReplies', quickReplies);
     return this;
   }
 
   async showText(options: TextMessageOptions): Promise<AxiosResponse<SendMessageResponse>> {
     const message = new TextMessage({ id: this.$user.getId()! }, { ...options });
+    this.setResponses(message);
     return message.send(this.pageAccessToken, this.version);
   }
 
@@ -154,6 +161,7 @@ export class MessengerBot extends Jovo {
     options: AttachmentMessageOptions,
   ): Promise<AxiosResponse<SendMessageResponse>> {
     const message = new AttachmentMessage({ id: this.$user.getId()! }, options);
+    this.setResponses(message);
     return message.send(this.pageAccessToken, this.version);
   }
 
@@ -165,6 +173,7 @@ export class MessengerBot extends Jovo {
       template_type: TemplateType.Airline,
     };
     const message = new AirlineTemplate({ id: this.$user.getId()! }, payload);
+    this.setResponses(message);
     return message.send(this.pageAccessToken, this.version);
   }
 
@@ -176,6 +185,7 @@ export class MessengerBot extends Jovo {
       template_type: TemplateType.Button,
     };
     const message = new ButtonTemplate({ id: this.$user.getId()! }, payload);
+    this.setResponses(message);
     return message.send(this.pageAccessToken, this.version);
   }
 
@@ -187,6 +197,7 @@ export class MessengerBot extends Jovo {
       template_type: TemplateType.Generic,
     };
     const message = new GenericTemplate({ id: this.$user.getId()! }, payload);
+    this.setResponses(message);
     return message.send(this.pageAccessToken, this.version);
   }
 
@@ -198,6 +209,7 @@ export class MessengerBot extends Jovo {
       template_type: TemplateType.Media,
     };
     const message = new MediaTemplate({ id: this.$user.getId()! }, payload);
+    this.setResponses(message);
     return message.send(this.pageAccessToken, this.version);
   }
 
@@ -209,12 +221,48 @@ export class MessengerBot extends Jovo {
       template_type: TemplateType.Receipt,
     };
     const message = new ReceiptTemplate({ id: this.$user.getId()! }, payload);
+    this.setResponses(message);
     return message.send(this.pageAccessToken, this.version);
   }
 
   async showAction(action: SenderActionType): Promise<AxiosResponse<SendMessageResponse>> {
     const message = new SenderAction({ id: this.$user.getId()! }, action);
     return message.send(this.pageAccessToken, this.version);
+  }
+
+  async showTyping(delayInMs: number): Promise<void> {
+    const typingOnRequest = await new SenderAction(
+      { id: this.$user.getId()! },
+      SenderActionType.TypingOn,
+    );
+    const typingOnResponse = typingOnRequest.send(this.pageAccessToken, this.version);
+
+    const typingOffRequest = new SenderAction(
+      { id: this.$user.getId()! },
+      SenderActionType.TypingOff,
+    );
+
+    const typingOffResponse = typingOffRequest.send(this.pageAccessToken, this.version);
+
+    this.setResponses({
+      typingOn: typingOnRequest,
+      typingOff: typingOffRequest,
+      delayInMs: delayInMs,
+    });
+
+    const promises: Array<Promise<SendMessageResponse | unknown>> = [typingOnResponse];
+
+    // Remove delay when this method is being used in testing
+    if (this.$host.headers['jovo-test'] !== 'true') {
+      const delay = new Promise((resolve) => setTimeout(resolve, delayInMs));
+      promises.push(delay);
+    }
+
+    promises.push(typingOffResponse);
+
+    for (let i = 0; i < promises.length; i++) {
+      await promises[i];
+    }
   }
 
   get version(): string {
