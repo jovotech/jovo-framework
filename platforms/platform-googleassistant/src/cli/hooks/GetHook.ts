@@ -84,7 +84,7 @@ export class GetHook extends PluginHook<GetPlatformEvents | BuildPlatformEvents>
    * Checks if platform-specific files already exist and prompts for overwriting them.
    */
   async checkForExistingPlatformFiles(): Promise<void> {
-    if (!this.$context.flags.overwrite && existsSync(this.$plugin.platformPath)) {
+    if (!this.$context.flags.clean && existsSync(this.$plugin.platformPath)) {
       const answer = await promptOverwrite('Found existing project files. How to proceed?');
       if (answer.overwrite === ANSWER_CANCEL) {
         this.uninstall();
