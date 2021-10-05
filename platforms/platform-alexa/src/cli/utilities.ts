@@ -1,4 +1,4 @@
-import { execAsync, JovoCliError } from '@jovotech/cli-core';
+import { execAsync, getRawString, JovoCliError } from '@jovotech/cli-core';
 import chalk from 'chalk';
 import _get from 'lodash.get';
 import { AskSkillList } from './interfaces';
@@ -69,7 +69,7 @@ export function getAskError(method: string, stderr: string): JovoCliError {
 
   const errorIndex: number = stderr.indexOf(splitter);
   if (errorIndex > -1) {
-    const errorString: string = stderr.substring(errorIndex + splitter.length);
+    const errorString: string = getRawString(stderr.substring(errorIndex + splitter.length));
     const parsedError = JSON.parse(errorString);
     const payload = _get(parsedError, 'detail.response', parsedError);
     const message: string = payload.message;

@@ -9,7 +9,7 @@ export class TestServer extends Server {
     return true;
   }
 
-  getRequestObject(): Record<string, any> {
+  getRequestObject(): JovoRequest {
     return this.request;
   }
 
@@ -27,7 +27,9 @@ export class TestServer extends Server {
   async setResponse(): Promise<void> {}
 
   fail(error: Error): void {
+    // eslint-disable-next-line no-console
     console.error('TestServer.fail:');
+    // eslint-disable-next-line no-console
     console.error(error);
   }
 }
