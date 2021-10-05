@@ -1,19 +1,20 @@
 import type { NewContext, NewEvents } from '@jovotech/cli-command-new';
-import { Log, PluginHook, promptSupportedLocales } from '@jovotech/cli-core';
+import { Log, promptSupportedLocales } from '@jovotech/cli-core';
 import { JovoModelData } from '@jovotech/model';
 import { readdirSync, readFileSync, writeFileSync } from 'fs';
 import { join as joinPaths } from 'path';
 import AlexaModel from '../boilerplate/AlexaModel.json';
 import { SupportedLocales } from '../constants';
-import { SupportedLocalesType } from '../interfaces';
+import { AlexaContext, SupportedLocalesType } from '../interfaces';
+import { AlexaHook } from './AlexaHook';
 
-export class NewHook extends PluginHook<NewEvents> {
+export class NewHook extends AlexaHook<NewEvents> {
   install(): void {
     this.middlewareCollection = {
       new: [this.setDefaultConfig.bind(this), this.addSystemIntents.bind(this)],
     };
   }
-  $context!: NewContext;
+  $context!: NewContext & AlexaContext;
 
   async setDefaultConfig(): Promise<void> {
     // Check for invalid locales and provide a default locale map.
@@ -31,17 +32,17 @@ export class NewHook extends PluginHook<NewEvents> {
           continue;
         }
 
-        if (!this.$plugin.$config.locales) {
-          this.$plugin.$config.locales = {};
+        if (!this.$plugin.config.locales) {
+          this.$plugin.config.locales = {};
         }
 
-        this.$plugin.$config.locales[locale] = locales;
+        this.$plugin.config.locales[locale] = locales as SupportedLocalesType[];
       }
     }
   }
 
   addSystemIntents(): void {
-    const modelsPath: string = joinPaths(this.$cli.$projectPath, 'models');
+    const modelsPath: string = joinPaths(this.$cli.projectPath, 'models');
     const modelFiles: string[] = readdirSync(modelsPath);
 
     for (const modelFile of modelFiles) {

@@ -1,44 +1,39 @@
-import type { BuildEvents } from '@jovotech/cli-command-build';
-import type { GetContext, GetEvents } from '@jovotech/cli-command-get';
+import type { BuildPlatformEvents } from '@jovotech/cli-command-build';
+import type { GetPlatformContext, GetPlatformEvents } from '@jovotech/cli-command-get';
 import {
   ANSWER_CANCEL,
   DOWNLOAD,
   flags,
   InstallContext,
   MAGNIFYING_GLASS,
-  PluginHook,
   printAskProfile,
   promptListForProjectId,
   promptOverwrite,
   Task,
 } from '@jovotech/cli-core';
-import { FileBuilder, FileObject } from '@jovotech/filebuilder';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import _get from 'lodash.get';
-import _set from 'lodash.set';
-import { AlexaCli } from '..';
-import defaultFiles from '../DefaultFiles.json';
 import * as smapi from '../smapi';
 import { AlexaContext, AskSkillList, checkForAskCli, prepareSkillList } from '../utilities';
+import { AlexaHook } from './AlexaHook';
 
-export interface GetContextAlexa extends AlexaContext, GetContext {
-  flags: GetContext['flags'] & { 'ask-profile'?: string; 'skill-id'?: string };
+export interface GetContextAlexa extends AlexaContext, GetPlatformContext {
+  flags: GetPlatformContext['flags'] & { 'ask-profile'?: string; 'skill-id'?: string };
 }
 
-export class GetHook extends PluginHook<GetEvents | BuildEvents> {
-  $plugin!: AlexaCli;
+export class GetHook extends AlexaHook<BuildPlatformEvents | GetPlatformEvents> {
   $context!: GetContextAlexa;
 
   install(): void {
     this.middlewareCollection = {
       'install': [this.addCliOptions.bind(this)],
-      'before.get': [
+      'before.get:platform': [
         this.checkForPlatform.bind(this),
         checkForAskCli,
         this.updatePluginContext.bind(this),
         this.checkForExistingPlatformFiles.bind(this),
       ],
-      'get': [this.get.bind(this)],
+      'get:platform': [this.get.bind(this)],
     };
   }
 
@@ -47,7 +42,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
    * @param context - Context providing an access point to command flags and args.
    */
   addCliOptions(context: InstallContext): void {
-    if (context.command !== 'get') {
+    if (context.command !== 'get:platform') {
       return;
     }
 
@@ -63,7 +58,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
    */
   checkForPlatform(): void {
     // Check if this plugin should be used or not.
-    if (this.$context.platform && this.$context.platform !== this.$plugin.$id) {
+    if (!this.$context.platforms.includes(this.$plugin.id)) {
       this.uninstall();
     }
   }
@@ -71,25 +66,27 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
   /**
    * Updates the current plugin context with platform-specific values.
    */
-  updatePluginContext(): void {
+  async updatePluginContext(): Promise<void> {
     if (!this.$context.alexa) {
       this.$context.alexa = {};
     }
 
     this.$context.alexa.askProfile =
-      this.$context.flags['ask-profile'] || this.$plugin.$config.askProfile;
+      this.$context.flags['ask-profile'] ||
+      this.$plugin.config.askProfile ||
+      (await this.getAskProfile());
 
     this.$context.alexa.skillId =
       this.$context.flags['skill-id'] ||
-      _get(this.$plugin.$config, '[".ask/"]["ask-states.json"].profiles.default.skillId') ||
-      _get(this.$plugin.$config, 'options.skillId');
+      _get(this.$plugin.config, '[".ask/"]["ask-states.json"].profiles.default.skillId') ||
+      _get(this.$plugin.config, 'options.skillId');
   }
 
   /**
    * Checks if platform-specific files already exist and prompts for overwriting them.
    */
   async checkForExistingPlatformFiles(): Promise<void> {
-    if (!this.$context.flags.overwrite && existsSync(this.$plugin.getPlatformPath())) {
+    if (!this.$context.flags.clean && existsSync(this.$plugin.platformPath)) {
       const answer = await promptOverwrite('Found existing Alexa project files. How to proceed?');
       if (answer.overwrite === ANSWER_CANCEL) {
         this.uninstall();
@@ -128,7 +125,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
     }
 
     const getSkillInformationTask: Task = new Task('Getting skill information', async () => {
-      const skillPackagePath: string = this.$plugin.getSkillPackagePath();
+      const skillPackagePath: string = this.$plugin.skillPackagePath;
       if (!existsSync(skillPackagePath)) {
         mkdirSync(skillPackagePath, { recursive: true });
       }
@@ -138,8 +135,8 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
         'development',
         this.$context.alexa.askProfile,
       );
-      writeFileSync(this.$plugin.getSkillJsonPath(), JSON.stringify(skillInformation, null, 2));
-      this.setAlexaSkillId(this.$context.alexa.skillId!);
+      writeFileSync(this.$plugin.skillJsonPath, JSON.stringify(skillInformation, null, 2));
+      this.setSkillId(this.$context.alexa.skillId!);
 
       // Try to get account linking information.
       try {
@@ -151,10 +148,10 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
 
         if (accountLinkingJson) {
           writeFileSync(
-            this.$plugin.getAccountLinkingPath(),
+            this.$plugin.accountLinkingPath,
             JSON.stringify({ accountLinkingRequest: accountLinkingJson }, null, 2),
           );
-          return `Account Linking Information saved to ${this.$plugin.getAccountLinkingPath()}`;
+          return `Account Linking Information saved to ${this.$plugin.accountLinkingPath}`;
         }
       } catch (error) {
         // If account linking information is not available, do nothing.
@@ -165,7 +162,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
     });
 
     const getModelsTask: Task = new Task('Getting Alexa Skill model files', async () => {
-      const alexaModelPath: string = this.$plugin.getModelsPath();
+      const alexaModelPath: string = this.$plugin.modelsPath;
       if (!existsSync(alexaModelPath)) {
         mkdirSync(alexaModelPath, { recursive: true });
       }
@@ -176,7 +173,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
         modelLocales.push(...this.$context.flags.locale);
       } else {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const skillJson = require(this.$plugin.getSkillJsonPath());
+        const skillJson = require(this.$plugin.skillJsonPath);
         const skillJsonLocales = _get(skillJson, 'manifest.publishingInformation.locales');
         modelLocales.push(...Object.keys(skillJsonLocales));
       }
@@ -195,29 +192,5 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
     getTask.add(getSkillInformationTask, getModelsTask);
 
     await getTask.run();
-  }
-
-  /**
-   * Saves skillId to .ask/config.
-   * @param skillId - Skill ID.
-   */
-  setAlexaSkillId(skillId: string): void {
-    const askConfigFolderPath: string = this.$plugin.getAskConfigFolderPath();
-    if (!existsSync(askConfigFolderPath)) {
-      mkdirSync(askConfigFolderPath);
-    }
-
-    // Check if .ask/ask-states.json exists, if not, build default config.
-    const askConfigPath: string = this.$plugin.getAskConfigPath();
-    if (!existsSync(askConfigPath)) {
-      const defaultConfig: FileObject = _get(defaultFiles, '[".ask/"]');
-      FileBuilder.buildDirectory(defaultConfig, askConfigFolderPath);
-    }
-
-    const askConfigContent: string = readFileSync(askConfigPath, 'utf-8');
-    const askConfig = JSON.parse(askConfigContent);
-    _set(askConfig, 'profiles.default.skillId', skillId);
-
-    writeFileSync(askConfigPath, JSON.stringify(askConfig, null, 2));
   }
 }

@@ -1,4 +1,5 @@
 import { PluginConfig, PluginContext } from '@jovotech/cli-core';
+import { UnknownObject } from '@jovotech/framework';
 import { SupportedLocales } from './constants';
 
 export interface AskSkillList {
@@ -27,4 +28,15 @@ export interface AlexaContext extends PluginContext {
     skillId?: string;
     askProfile?: string;
   };
+}
+
+export interface AskProfile {
+  skillId: string;
+  skillMetadata: { lastDeployHash: string };
+  code: UnknownObject;
+}
+
+export interface AskConfig {
+  askcliStatesVersion: string;
+  profiles: Record<string, AskProfile>;
 }

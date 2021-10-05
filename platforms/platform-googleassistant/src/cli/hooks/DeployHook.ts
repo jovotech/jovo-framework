@@ -11,13 +11,11 @@ import {
 } from '@jovotech/cli-core';
 import { existsSync } from 'fs';
 import indent from 'indent-string';
-import { GoogleAssistantCli } from '..';
 import { checkForGactionsCli, getGactionsError, GoogleContext } from '../utilities';
 
 export interface GoogleDeployContext extends DeployPlatformContext, GoogleContext {}
 
 export class DeployHook extends PluginHook<DeployPlatformEvents> {
-  $plugin!: GoogleAssistantCli;
   $context!: GoogleDeployContext;
 
   install(): void {
@@ -36,7 +34,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
    */
   checkForPlatform(): void {
     // Check if this plugin should be used or not.
-    if (!this.$context.platforms.includes(this.$plugin.$id)) {
+    if (!this.$context.platforms.includes(this.$plugin.id)) {
       this.uninstall();
     }
   }
@@ -45,10 +43,10 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
    * Checks if the platform folder for the current plugin exists.
    */
   checkForPlatformsFolder(): void {
-    if (!existsSync(this.$plugin.getPlatformPath())) {
+    if (!existsSync(this.$plugin.platformPath)) {
       throw new JovoCliError({
-        message: `Couldn't find the platform folder ${this.$plugin.getPlatformPath()}.`,
-        module: this.$plugin.constructor.name,
+        message: `Couldn't find the platform folder ${this.$plugin.platformPath}.`,
+        module: this.$plugin.name,
         hint: `Please use "jovo build" to create platform-specific files.`,
       });
     }
@@ -59,13 +57,13 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
    */
   async deploy(): Promise<void> {
     const deployTask: Task = new Task(
-      `${ROCKET} Deploying Conversational Action ${printStage(this.$cli.$project!.$stage)}`,
+      `${ROCKET} Deploying Conversational Action ${printStage(this.$cli.project!.stage)}`,
     );
 
     const pushProjectFilesTask: Task = new Task('Pushing project files', async () => {
       try {
         const { stdout, stderr } = await execAsync(`gactions push --consumer jovo-cli`, {
-          cwd: this.$plugin.getPlatformPath(),
+          cwd: this.$plugin.platformPath,
         });
 
         if (stderr) {

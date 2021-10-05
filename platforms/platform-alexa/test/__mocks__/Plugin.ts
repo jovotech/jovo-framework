@@ -1,45 +1,53 @@
 import { JovoCliPlugin, PluginType } from '@jovotech/cli-core';
-import { AlexaCliConfig } from '../../src/cli/utils';
+import { AlexaCliConfig } from '../../src/cli/utilities';
 
 export class Plugin extends JovoCliPlugin {
-  readonly $id: string = 'testPlugin';
-  readonly $type: PluginType = 'platform';
-  readonly $config!: AlexaCliConfig;
+  readonly id: string = 'testPlugin';
+  readonly type: PluginType = 'platform';
+  readonly config!: AlexaCliConfig;
   readonly platformDirectory: string = 'test';
 
-  getPlatformPath(): string {
+  get name(): string {
     return '';
   }
 
-  getDefaultConfig(): AlexaCliConfig {
+  get platformPath(): string {
+    return '';
+  }
+
+  get defaultConfig(): AlexaCliConfig {
     return {};
   }
 
-  getSkillPackagePath(): string {
+  get skillPackagePath(): string {
     return '';
   }
 
-  getSkillJsonPath(): string {
+  get skillJsonPath(): string {
     return '';
   }
 
-  getModelsPath(): string {
+  get modelsPath(): string {
+    return '';
+  }
+
+  get modelPath(): string {
+    return '';
+  }
+
+  get accountLinkingPath(): string {
+    return '';
+  }
+
+  get askConfigFolderPath(): string {
+    return '';
+  }
+
+  get askConfigPath(): string {
     return '';
   }
 
   getModelPath(): string {
-    return '';
-  }
-
-  getAccountLinkingPath(): string {
-    return '';
-  }
-
-  getAskConfigFolderPath(): string {
-    return '';
-  }
-
-  getAskConfigPath(): string {
     return '';
   }
 }

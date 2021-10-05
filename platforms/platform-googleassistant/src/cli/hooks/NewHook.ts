@@ -28,11 +28,11 @@ export class NewHook extends PluginHook<NewEvents> {
           continue;
         }
 
-        if (!this.$plugin.$config.locales) {
-          this.$plugin.$config.locales = {};
+        if (!this.$plugin.config.locales) {
+          this.$plugin.config.locales = {};
         }
 
-        this.$plugin.$config.locales[locale] = locales;
+        this.$plugin.config.locales[locale] = locales as SupportedLocalesType[];
       }
     }
   }
