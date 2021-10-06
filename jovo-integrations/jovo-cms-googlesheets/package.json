@@ -1,6 +1,6 @@
 {
   "name": "jovo-cms-googlesheets",
-  "version": "3.5.1",
+  "version": "3.5.2",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
