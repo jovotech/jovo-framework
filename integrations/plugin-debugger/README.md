@@ -38,3 +38,32 @@ app.configure({
   ],
 });
 ```
+
+## Configuration
+
+You can configure the Debugger using the `jovo.debugger.js` file in the root of your Jovo project. [Learn more about the Debugger configuration here](https://v4.jovo.tech/docs/debugger-config).
+
+```js
+const { DebuggerConfig } = require('@jovotech/plugin-debugger');
+
+// ...
+
+const debugger = new DebuggerConfig({
+  locales: [ 'en' ],
+  buttons: [
+		{
+			label: 'LAUNCH',
+			input: {
+				type: 'LAUNCH'
+			}
+		},
+		{
+			label: 'yes',
+			input: {
+				intent: 'YesIntent'
+			}
+		},
+    // ...
+  ]
+});
+```
