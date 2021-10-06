@@ -3,19 +3,23 @@ import {
   App,
   DeepPartial,
   Extensible,
-  ExtensibleInitConfig,
   HandleRequest,
   InvalidParentError,
   Jovo,
   JovoRequest,
+  NluPlugin,
   Platform,
   Plugin,
   PluginConfig,
   UnknownObject,
 } from '@jovotech/framework';
-import { NlpjsNlu, NlpjsNluInitConfig } from '@jovotech/nlu-nlpjs';
-import { CorePlatform, CorePlatformConfig } from '@jovotech/platform-core';
+import { NlpjsNlu } from '@jovotech/nlu-nlpjs';
+import { CorePlatform } from '@jovotech/platform-core';
+import { LangDe } from '@nlpjs/lang-de';
 import { LangEn } from '@nlpjs/lang-en';
+import { LangEs } from '@nlpjs/lang-es';
+import { LangFr } from '@nlpjs/lang-fr';
+import { LangIt } from '@nlpjs/lang-it';
 import isEqual from 'fast-deep-equal/es6';
 import { promises } from 'fs';
 import { homedir } from 'os';
@@ -60,17 +64,25 @@ export interface JovoUpdateData<KEY extends keyof Jovo | string = keyof Jovo | s
 }
 
 export interface JovoDebuggerConfig extends PluginConfig {
-  corePlatform: ExtensibleInitConfig<CorePlatformConfig>;
-  nlpjsNlu: NlpjsNluInitConfig;
+  nlu: NluPlugin;
   webhookUrl: string;
-  languageModelEnabled: boolean;
-  languageModelPath: string;
   debuggerConfigPath: string;
+  modelsPath: string;
   ignoredProperties: Array<keyof Jovo | string>;
 }
 
 export type JovoDebuggerInitConfig = DeepPartial<JovoDebuggerConfig> &
   Partial<Pick<JovoDebuggerConfig, 'nlpjsNlu'>>;
+
+export function getDefaultLanguageMap(): UnknownObject {
+  return {
+    de: LangDe,
+    en: LangEn,
+    es: LangEs,
+    fr: LangFr,
+    it: LangIt,
+  };
+}
 
 export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   socket?: typeof Socket;
@@ -83,19 +95,15 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   getDefaultConfig(): JovoDebuggerConfig {
     return {
       skipTests: true,
-      corePlatform: {},
-      nlpjsNlu: {
-        languageMap: {
-          en: LangEn,
-        },
-      },
+      nlu: new NlpjsNlu({
+        languageMap: getDefaultLanguageMap(),
+      }),
       webhookUrl: 'https://webhookv4.jovo.cloud',
       enabled:
         (process.argv.includes('--jovo-webhook') || process.argv.includes('--webhook')) &&
         !process.argv.includes('--disable-jovo-debugger'),
-      languageModelEnabled: true,
-      languageModelPath: './models',
       debuggerConfigPath: './jovo.debugger.js',
+      modelsPath: './models',
       ignoredProperties: ['$app', '$handleRequest', '$platform'],
     };
   }
@@ -110,9 +118,8 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   private installDebuggerPlatform(app: App) {
     app.use(
       new CorePlatform({
-        ...this.config.corePlatform,
         platform: 'jovo-debugger',
-        plugins: [new NlpjsNlu(this.config.nlpjsNlu)],
+        plugins: [this.config.nlu],
       }),
     );
   }
@@ -301,7 +308,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   }
 
   private async emitLanguageModelIfEnabled(): Promise<void> {
-    if (!this.config.languageModelEnabled || !this.config.languageModelPath) {
+    if (!this.config.modelsPath) {
       return;
     }
     if (!this.socket) {
@@ -318,7 +325,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   // Return the language models found at the configured location
   private async loadLanguageModel(): Promise<AnyObject> {
     const languageModel: AnyObject = {};
-    const absoluteModelsPath = resolve(cwd(), this.config.languageModelPath);
+    const absoluteModelsPath = resolve(cwd(), this.config.modelsPath);
     let files: string[] = [];
     try {
       files = await promises.readdir(absoluteModelsPath);
