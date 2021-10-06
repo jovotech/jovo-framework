@@ -9,12 +9,13 @@ import { AlexaContext, SupportedLocalesType } from '../interfaces';
 import { AlexaHook } from './AlexaHook';
 
 export class NewHook extends AlexaHook<NewEvents> {
+  $context!: NewContext & AlexaContext;
+
   install(): void {
     this.middlewareCollection = {
       new: [this.setDefaultConfig.bind(this), this.addSystemIntents.bind(this)],
     };
   }
-  $context!: NewContext & AlexaContext;
 
   async setDefaultConfig(): Promise<void> {
     // Check for invalid locales and provide a default locale map.
@@ -42,7 +43,11 @@ export class NewHook extends AlexaHook<NewEvents> {
   }
 
   addSystemIntents(): void {
-    const modelsPath: string = joinPaths(this.$cli.projectPath, 'models');
+    const modelsPath: string = joinPaths(
+      this.$cli.projectPath,
+      this.$context.projectName,
+      'models',
+    );
     const modelFiles: string[] = readdirSync(modelsPath);
 
     for (const modelFile of modelFiles) {
