@@ -1,6 +1,6 @@
 import { AsyncJovo, JovoError } from '@jovotech/framework';
 import { GoogleBusinessResponse } from '@jovotech/output-googlebusiness';
-import { GaxiosResponse } from 'gaxios';
+import type { GaxiosResponse } from 'gaxios';
 import { JWTInput } from 'google-auth-library';
 import { GOOGLE_BUSINESS_API_BASE_URL, LATEST_GOOGLE_BUSINESS_API_VERSION } from './constants';
 import { GoogleBusinessDevice } from './GoogleBusinessDevice';
