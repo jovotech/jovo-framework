@@ -1,6 +1,6 @@
 import { JovoResponse, OutputTemplate, OutputTemplateConverter } from '@jovotech/output';
 import { BaseOutput, OutputConstructor } from './BaseOutput';
-import { AnyObject, DeepPartial } from './index';
+import { DeepPartial } from './index';
 import { Jovo } from './Jovo';
 import { JovoDevice } from './JovoDevice';
 import { JovoRequest } from './JovoRequest';
