@@ -342,7 +342,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
           console.error(e);
         }
       } else {
-        languageModel[locale] = require(absoluteModelsPath);
+        languageModel[locale] = this.requireUncached(absoluteModelsPath);
       }
     }
     return languageModel;
@@ -367,7 +367,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   private async loadDebuggerConfig(): Promise<DebuggerConfig> {
     try {
       const absoluteDebuggerConfigPath = resolve(cwd(), this.config.debuggerConfigPath);
-      return require(absoluteDebuggerConfigPath);
+      return this.requireUncached(absoluteDebuggerConfigPath);
     } catch (e) {
       console.warn('Error occurred while loading debugger-config, using default config.');
       console.warn(e.message);
@@ -401,5 +401,12 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     } catch (e) {
       throw new WebhookIdNotFoundError(homeConfigPath);
     }
+  }
+
+  // Require the module and clear cache if there is any
+  // This is useful for being able to use changed js-files
+  private requireUncached(module: string) {
+    delete require.cache[require.resolve(module)];
+    return require(module);
   }
 }
