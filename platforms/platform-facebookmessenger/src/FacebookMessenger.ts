@@ -1,18 +1,5 @@
-import {
-  axios,
-  AxiosResponse,
-  BaseOutput,
-  DeepPartial,
-  Jovo,
-  JovoError,
-  OutputConstructor,
-  OutputTemplate,
-  OutputTemplateConverter,
-} from '@jovotech/framework';
-import {
-  FacebookMessengerOutputTemplateConverterStrategy,
-  FacebookMessengerResponse,
-} from '@jovotech/output-facebookmessenger';
+import { axios, AxiosResponse, Jovo, JovoError, OutputTemplate } from '@jovotech/framework';
+import { FacebookMessengerResponse } from '@jovotech/output-facebookmessenger';
 import { FACEBOOK_API_BASE_URL, LATEST_FACEBOOK_API_VERSION } from './constants';
 import { FacebookMessengerDevice } from './FacebookMessengerDevice';
 import { FacebookMessengerPlatform } from './FacebookMessengerPlatform';
@@ -39,50 +26,7 @@ export class FacebookMessenger extends Jovo<
     return this.$handleRequest.config.plugin?.FacebookMessengerPlatform?.pageAccessToken;
   }
 
-  async $send(outputTemplateOrMessage: OutputTemplate | OutputTemplate[] | string): Promise<void>;
-  async $send<OUTPUT extends BaseOutput>(
-    outputConstructor: OutputConstructor<
-      OUTPUT,
-      FacebookMessengerRequest,
-      FacebookMessengerResponse,
-      this
-    >,
-    options?: DeepPartial<OUTPUT['options']>,
-  ): Promise<void>;
-  async $send<OUTPUT extends BaseOutput>(
-    outputConstructorOrTemplateOrMessage:
-      | string
-      | OutputConstructor<OUTPUT, FacebookMessengerRequest, FacebookMessengerResponse, this>
-      | OutputTemplate
-      | OutputTemplate[],
-    options?: DeepPartial<OUTPUT['options']>,
-  ): Promise<void> {
-    const currentOutputLength = this.$output.length;
-    if (typeof outputConstructorOrTemplateOrMessage === 'function') {
-      await super.$send(outputConstructorOrTemplateOrMessage, options);
-    } else {
-      await super.$send(outputConstructorOrTemplateOrMessage);
-    }
-    const outputConverter = new OutputTemplateConverter(
-      new FacebookMessengerOutputTemplateConverterStrategy(),
-    );
-
-    // get only the newly added output
-    const newOutput = this.$output.slice(currentOutputLength);
-
-    let response = await outputConverter.toResponse(newOutput);
-    response = await this.$platform.finalizeResponse(response, this);
-
-    if (Array.isArray(response)) {
-      for (const responseItem of response) {
-        await this.sendResponse(responseItem);
-      }
-    } else if (response) {
-      await this.sendResponse(response);
-    }
-  }
-
-  private sendResponse(
+  protected sendResponse(
     response: FacebookMessengerResponse,
   ): Promise<AxiosResponse<SendMessageResult>> {
     if (!this.pageAccessToken) {
