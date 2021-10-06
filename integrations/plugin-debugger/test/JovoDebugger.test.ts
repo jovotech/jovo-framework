@@ -1,7 +1,6 @@
 import { App, Jovo, OmitWhere, Plugin, PluginConfig, TestServer } from '@jovotech/framework';
 import { HandleRequest } from '@jovotech/framework/dist/types';
 import { CoreRequest } from '@jovotech/platform-core';
-import en from '@nlpjs/lang-en';
 import { JovoDebugger } from '../src';
 
 class DebuggerTestServer extends TestServer {
@@ -58,15 +57,8 @@ beforeEach(() => {
   jovoDebugger = new JovoDebugger({
     skipTests: false,
     enabled: true,
-    languageModelEnabled: false,
+    modelsPath: '',
     webhookUrl: '',
-    nlpjsNlu: {
-      languageMap: {
-        en,
-      },
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      setupModelCallback: () => {},
-    },
   });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (jovoDebugger as any).connectToWebhook = function () {
