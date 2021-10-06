@@ -121,22 +121,6 @@ describe('DefaultSheet.parse()', () => {
   });
 });
 
-describe('DefaultSheet.parsePublicToPrivate()', () => {
-  test('should throw Jovo Error with empty feed', () => {
-    const defaultSheet = new DefaultSheet();
-    // tslint:disable-next-line:no-string-literal
-    expect(() => defaultSheet['parsePublicToPrivate']({ feed: {} })).toThrow(
-      'No spreadsheet values found.',
-    );
-  });
-
-  test('with valid values', () => {
-    const defaultSheet = new DefaultSheet();
-    // tslint:disable-next-line:no-string-literal
-    expect(defaultSheet['parsePublicToPrivate'](feed)).toStrictEqual(sheetValues);
-  });
-});
-
 describe('DefaultSheet.retrieve()', () => {
   test('should reject Promise if no parent is set', async () => {
     const defaultSheet = new DefaultSheet();
@@ -163,22 +147,5 @@ describe('DefaultSheet.retrieve()', () => {
     await expect(defaultSheet.retrieve(handleRequest)).rejects.toStrictEqual(
       new JovoError('sheet name has to be set.', ErrorCode.ERR_PLUGIN),
     );
-  });
-
-  test('should set retrieved values with parsePublicToPrivate() from mocked function loadPublicSpreadsheetData()', async () => {
-    const googleSheetsCMS = new GoogleSheetsCMS();
-    googleSheetsCMS.loadPublicSpreadsheetData = (spreadsheetId: string, sheetPosition = 1) =>
-      new Promise((res, rej) => res(feed));
-
-    const defaultSheet = new DefaultSheet({
-      access: 'public',
-      name: 'test',
-      range: 'A:B',
-      spreadsheetId: '123',
-    });
-    defaultSheet.install(googleSheetsCMS);
-
-    await defaultSheet.retrieve(handleRequest);
-    expect(handleRequest.app.$cms.test).toStrictEqual(sheetValues);
   });
 });

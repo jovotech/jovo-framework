@@ -92,28 +92,16 @@ export class DefaultSheet implements Plugin {
     let values: any[] = []; // tslint:disable-line
 
     const access = this.config.access || this.cms.config.access || 'private';
-    if (access === 'private') {
-      Log.verbose('Retrieving private spreadsheet');
-      Log.verbose('Spreadsheet ID: ' + spreadsheetId);
-      Log.verbose('Sheet name: ' + this.config.name);
-      Log.verbose('Sheet range: ' + this.config.range);
+    Log.verbose('Retrieving spreadsheet');
+    Log.verbose('Spreadsheet ID: ' + spreadsheetId);
+    Log.verbose('Sheet name: ' + this.config.name);
+    Log.verbose('Sheet range: ' + this.config.range);
 
-      values = await this.cms.loadPrivateSpreadsheetData(
-        spreadsheetId,
-        this.config.name,
-        this.config.range,
-      ); // tslint:disable-line
-    } else if (access === 'public') {
-      Log.verbose('Retrieving public spreadsheet');
-      Log.verbose('Spreadsheet ID: ' + spreadsheetId);
-      Log.verbose('Sheet position: ' + this.config.position);
-
-      const publicValues = await this.cms.loadPublicSpreadsheetData(
-        spreadsheetId,
-        this.config.position,
-      ); // tslint:disable-line
-      values = this.parsePublicToPrivate(publicValues);
-    }
+    values = await this.cms.loadPrivateSpreadsheetData(
+      spreadsheetId,
+      this.config.name,
+      this.config.range,
+    );
     if (values) {
       this.parse(handleRequest, values);
     }
@@ -136,6 +124,7 @@ export class DefaultSheet implements Plugin {
 
   /**
    * Parses public spreadsheet json to a private spreadsheet format
+   * @deprecated Google API v3 is deprecated
    * @param values
    * @returns {any[]}
    */

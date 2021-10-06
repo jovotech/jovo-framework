@@ -6,8 +6,6 @@ Learn how to use Google Sheets as CMS for your Alexa Skills and Google Actions.
 
 * [Introduction](#introduction)
 * [Configuration](#configuration)
-  * [Public Spreadsheets](#public-spreadsheets)
-  * [Private Spreadsheets](#private-spreadsheets)
 * [Default Sheet Types](#default-sheet-types)
   * [Default](#default)
   * [Responses](#responses)
@@ -69,7 +67,7 @@ module.exports = {
     cms: {
         GoogleSheetsCMS: {
             spreadsheetId: '<YourSpreadsheetId>',
-            access: '<public|private>',
+            credentialsFile: './path/to/credentials.json',
             sheets: [
                 {
                     name: '<sheetName>',
@@ -92,7 +90,7 @@ const config = {
     cms: {
         GoogleSheetsCMS: {
             spreadsheetId: '<YourSpreadsheetId>',
-            access: '<public|private>',
+            credentialsFile: './path/to/credentials.json',
             sheets: [
                 {
                     name: '<sheetName>',
@@ -109,133 +107,9 @@ const config = {
 
 Each sheet can be added as an object that includes both a `name` and a `type`. [Learn more about Sheet Types below](#default-sheet-types).
 
+To make spreadsheets work, you need to create a service account and security credentials. These can be downloaded as a JSON file and then referenced in the `credentialsFile` element (default is `./credentials.json`).
 
-Additional configuration might differ depending if you want to use a publicly accessible or private spreadsheet:
-
-* [Public Spreadsheets](#public-spreadsheets)
-* [Private Spreadsheets](#private-spreadsheets)
-
-### Public Spreadsheets
-
-> [Tutorial: Use Google Sheets as CMS for your Voice App](https://www.jovo.tech/tutorials/google-sheets-cms)
-
-Public spreadsheets allow you to get started quickly whithout having to care about credentials. We recommend setting up a public spreadsheet first and then turning to [private spreadsheets](#private-spreadsheets) later.
-
-For public spreadsheets, you need to add the following to your `config.js` file:
-
-```javascript
-// @language=javascript
-
-// src/config.js
-
-module.exports = {
-    
-    cms: {
-        GoogleSheetsCMS: {
-            spreadsheetId: '<YourSpreadsheetId>',
-            access: 'public',
-            sheets: [
-                {
-                    name: '<sheetName>',
-                    type: '<SheetType>',
-                    position: 1,
-                },
-            ]
-        }
-    },
-
-    // ...
-
-};
-
-// @language=typescript
-
-// src/config.ts
-
-const config = {
-    
-    cms: {
-        GoogleSheetsCMS: {
-            spreadsheetId: '<YourSpreadsheetId>',
-            access: 'public',
-            sheets: [
-                {
-                    name: '<sheetName>',
-                    type: '<SheetType>',
-                    position: 1,
-                },
-            ]
-        }
-    },
-
-    // ...
-
-};
-```
-
-The additional information you need to add for public spreadsheets is the `position` of the sheet. It is the position of the tab the sheet is located in.
-
-
-### Private Spreadsheets
-
-> [Tutorial: Use Private Google Spreadsheets as a CMS](https://www.jovo.tech/tutorials/google-spreadsheet-private-cms)
-
-With private spreadsheets, you can control who has access to your content. This comes with the price of a few more extra steps to set it up.
-
-For private spreadsheets, you need to add the following to your `config.js` file:
-
-```javascript
-// @language=javascript
-
-// src/config.js
-
-module.exports = {
-    
-    cms: {
-        GoogleSheetsCMS: {
-            spreadsheetId: '<YourSpreadsheetId>',
-            access: 'private',
-            credentialsFile: './path/to/credentials.json',
-            sheets: [
-                {
-                    name: 'responses',
-                    type: 'Responses',
-                },
-            ]
-        }
-    },
-
-    // ...
-
-};
-
-// @language=typescript
-
-// src/config.ts
-
-const config = {
-    
-    cms: {
-        GoogleSheetsCMS: {
-            spreadsheetId: '<YourSpreadsheetId>',
-            access: 'private',
-            credentialsFile: './path/to/credentials.json',
-            sheets: [
-                {
-                    name: 'responses',
-                    type: 'Responses',
-                },
-            ]
-        }
-    },
-
-    // ...
-
-};
-```
-
-To make private spreadsheets work, you need to create a service account and security credentials. These can be downloaded as a JSON file and then referenced in the `credentialsFile` element (default is `./credentials.json`).
-
+> [Tutorial: Use Google Spreadsheets as a CMS](https://www.jovo.tech/tutorials/google-spreadsheet-private-cms)
 
 ## Default Sheet Types
 
@@ -514,7 +388,6 @@ module.exports = {
     cms: {
         GoogleSheetsCMS: {
             spreadsheetId: '<YourSpreadsheetId>',
-            access: '<public|private>',
             sheets: [
                 {
                     name: '<sheetName>',
@@ -537,7 +410,6 @@ const config = {
     cms: {
         GoogleSheetsCMS: {
             spreadsheetId: '<YourSpreadsheetId>',
-            access: '<public|private>',
             sheets: [
                 {
                     name: '<sheetName>',
@@ -573,7 +445,6 @@ module.exports = {
     cms: {
         GoogleSheetsCMS: {
             spreadsheetId: '<YourSpreadsheetId>',
-            access: '<public|private>',
             sheets: [
                 {
                     name: '<sheetName>',
@@ -598,7 +469,6 @@ const config = {
     cms: {
         GoogleSheetsCMS: {
             spreadsheetId: '<YourSpreadsheetId>',
-            access: '<public|private>',
             sheets: [
                 {
                     name: '<sheetName>',
