@@ -96,6 +96,8 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     return {
       skipTests: true,
       nlu: new NlpjsNlu({
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        setupModelCallback: () => {},
         languageMap: getDefaultLanguageMap(),
       }),
       webhookUrl: 'https://webhookv4.jovo.cloud',
