@@ -231,8 +231,7 @@ export abstract class Jovo<
     return this.$app.i18n.t<PATH, LANGUAGE, NAMESPACE>(path, options);
   }
 
-  async $send(message: string): Promise<void>;
-  async $send(outputTemplate: OutputTemplate | OutputTemplate[]): Promise<void>;
+  async $send(outputTemplateOrMessage: OutputTemplate | OutputTemplate[] | string): Promise<void>;
   async $send<OUTPUT extends BaseOutput>(
     outputConstructor: OutputConstructor<OUTPUT, REQUEST, RESPONSE, this>,
     options?: DeepPartial<OUTPUT['options']>,

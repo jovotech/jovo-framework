@@ -34,7 +34,7 @@ export class GoogleBusiness extends Jovo<
     return this.$handleRequest.plugins?.GoogleBusinessPlatform?.config?.serviceAccount;
   }
 
-  async $send(outputTemplate: OutputTemplate | OutputTemplate[]): Promise<void>;
+  async $send(outputTemplateOrMessage: OutputTemplate | OutputTemplate[] | string): Promise<void>;
   async $send<OUTPUT extends BaseOutput>(
     outputConstructor: OutputConstructor<
       OUTPUT,
@@ -45,17 +45,18 @@ export class GoogleBusiness extends Jovo<
     options?: DeepPartial<OUTPUT['options']>,
   ): Promise<void>;
   async $send<OUTPUT extends BaseOutput>(
-    outputConstructorOrTemplate:
+    outputConstructorOrTemplateOrMessage:
+      | string
       | OutputConstructor<OUTPUT, GoogleBusinessRequest, GoogleBusinessResponse, this>
       | OutputTemplate
       | OutputTemplate[],
     options?: DeepPartial<OUTPUT['options']>,
   ): Promise<void> {
     const currentOutputLength = this.$output.length;
-    if (typeof outputConstructorOrTemplate === 'function') {
-      await super.$send(outputConstructorOrTemplate, options);
+    if (typeof outputConstructorOrTemplateOrMessage === 'function') {
+      await super.$send(outputConstructorOrTemplateOrMessage, options);
     } else {
-      await super.$send(outputConstructorOrTemplate);
+      await super.$send(outputConstructorOrTemplateOrMessage);
     }
     const outputConverter = new OutputTemplateConverter(
       new GoogleBusinessOutputTemplateConverterStrategy(),

@@ -39,7 +39,7 @@ export class FacebookMessenger extends Jovo<
     return this.$handleRequest.config.plugin?.FacebookMessengerPlatform?.pageAccessToken;
   }
 
-  async $send(outputTemplate: OutputTemplate | OutputTemplate[]): Promise<void>;
+  async $send(outputTemplateOrMessage: OutputTemplate | OutputTemplate[] | string): Promise<void>;
   async $send<OUTPUT extends BaseOutput>(
     outputConstructor: OutputConstructor<
       OUTPUT,
@@ -50,17 +50,18 @@ export class FacebookMessenger extends Jovo<
     options?: DeepPartial<OUTPUT['options']>,
   ): Promise<void>;
   async $send<OUTPUT extends BaseOutput>(
-    outputConstructorOrTemplate:
+    outputConstructorOrTemplateOrMessage:
+      | string
       | OutputConstructor<OUTPUT, FacebookMessengerRequest, FacebookMessengerResponse, this>
       | OutputTemplate
       | OutputTemplate[],
     options?: DeepPartial<OUTPUT['options']>,
   ): Promise<void> {
     const currentOutputLength = this.$output.length;
-    if (typeof outputConstructorOrTemplate === 'function') {
-      await super.$send(outputConstructorOrTemplate, options);
+    if (typeof outputConstructorOrTemplateOrMessage === 'function') {
+      await super.$send(outputConstructorOrTemplateOrMessage, options);
     } else {
-      await super.$send(outputConstructorOrTemplate);
+      await super.$send(outputConstructorOrTemplateOrMessage);
     }
     const outputConverter = new OutputTemplateConverter(
       new FacebookMessengerOutputTemplateConverterStrategy(),
