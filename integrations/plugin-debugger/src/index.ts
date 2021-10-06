@@ -1,5 +1,6 @@
 import { HandleRequest } from '@jovotech/framework';
 import { JovoDebugger, JovoDebuggerConfig } from './JovoDebugger';
+import './nlp';
 
 declare module '@jovotech/framework/dist/types/Extensible' {
   interface ExtensiblePluginConfig {
