@@ -305,7 +305,7 @@ export abstract class Jovo<
     this.$handleRequest.activeComponentNode = componentNode;
     // execute the component's handler
     await componentNode.executeHandler({
-      jovo: this.jovoReference,
+      jovo: this.getJovoReference(),
       handler,
     });
   }
@@ -376,7 +376,7 @@ export abstract class Jovo<
     this.$handleRequest.activeComponentNode = componentNode;
     // execute the component's handler
     await componentNode.executeHandler({
-      jovo: this.jovoReference,
+      jovo: this.getJovoReference(),
     });
   }
 
@@ -408,7 +408,7 @@ export abstract class Jovo<
     this.$handleRequest.activeComponentNode = previousComponentNode;
     // execute the component's handler
     await previousComponentNode.executeHandler({
-      jovo: this.jovoReference,
+      jovo: this.getJovoReference(),
       handler: resolvedHandler,
       callArgs: eventArgs,
     });
@@ -465,7 +465,7 @@ export abstract class Jovo<
     };
   }
 
-  private get jovoReference(): Jovo {
+  protected getJovoReference(): Jovo {
     return (this as { jovo?: Jovo })?.jovo || (this as unknown as Jovo);
   }
 }

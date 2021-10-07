@@ -1,4 +1,13 @@
-import { App, Jovo, OmitWhere, Plugin, PluginConfig, TestServer } from '@jovotech/framework';
+import {
+  App,
+  Jovo,
+  NluData,
+  NluPlugin,
+  OmitWhere,
+  Plugin,
+  PluginConfig,
+  TestServer,
+} from '@jovotech/framework';
 import { HandleRequest } from '@jovotech/framework/dist/types';
 import { CoreRequest } from '@jovotech/platform-core';
 import { JovoDebugger } from '../src';
@@ -12,6 +21,13 @@ class DebuggerTestServer extends TestServer {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async setResponse(response?: any): Promise<void> {
     return this.onResponse?.(response);
+  }
+}
+
+class DebuggerTestNluPlugin extends NluPlugin {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async process(jovo: Jovo, text: string): Promise<NluData | undefined> {
+    return;
   }
 }
 
@@ -56,14 +72,15 @@ let jovoDebugger: JovoDebugger, app: App;
 beforeEach(() => {
   jovoDebugger = new JovoDebugger({
     skipTests: false,
+    nlu: new DebuggerTestNluPlugin(),
     enabled: true,
     modelsPath: '',
     webhookUrl: '',
   });
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (jovoDebugger as any).connectToWebhook = function () {
-    return mockSocket;
-  };
+  jest
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .spyOn(jovoDebugger as any, 'connectToWebhook')
+    .mockImplementation(() => Promise.resolve(mockSocket));
 
   app = new App({
     plugins: [jovoDebugger],
