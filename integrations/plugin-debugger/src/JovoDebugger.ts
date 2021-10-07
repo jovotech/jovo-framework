@@ -206,7 +206,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     path = '',
   ): ProxyHandler<T> {
     return {
-      get: (target, key: string | number | symbol) => {
+      get: (target, key: keyof T) => {
         const stringKey = key.toString();
 
         // make __isProxy return true for all proxies with this handler
@@ -221,8 +221,8 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
         if (
           typeof target[key] === 'object' &&
           target[key] !== null &&
-          !(target[key] instanceof Date) &&
-          !(target[key] instanceof Jovo) &&
+          !((target[key] as AnyObject) instanceof Date) &&
+          !((target[key] as AnyObject) instanceof Jovo) &&
           !this.config.ignoredProperties.includes(stringKey) &&
           !target[key].__isProxy
         ) {
@@ -244,7 +244,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
         }
         return target[key];
       },
-      set: (target, key: string | number | symbol, value: T[keyof T]): boolean => {
+      set: (target, key: keyof T, value: T[keyof T]): boolean => {
         const previousValue = target[key];
         target[key as keyof T] = value;
         // only emit changes
