@@ -96,8 +96,6 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     return {
       skipTests: true,
       nlu: new NlpjsNlu({
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        setupModelCallback: () => {},
         languageMap: getDefaultLanguageMap(),
       }),
       webhookUrl: 'https://webhookv4.jovo.cloud',
@@ -202,18 +200,21 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     });
   }
 
-  private createProxyHandler<T extends AnyObject>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private createProxyHandler<T extends Record<string | number | symbol, any>>(
     handleRequest: HandleRequest,
     path = '',
   ): ProxyHandler<T> {
     return {
-      get: (target, key: string) => {
+      get: (target, key: string | number | symbol) => {
+        const stringKey = key.toString();
+
         // make __isProxy return true for all proxies with this handler
-        if (key === '__isProxy') {
+        if (stringKey === '__isProxy') {
           return true;
         }
         // provide a reference to the original target of the proxy
-        if (key === '__target') {
+        if (stringKey === '__target') {
           return target;
         }
         // if the value is an object that is not null, not a Date nor a Jovo instance nor included in the ignored properties and no proxy
@@ -222,13 +223,13 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
           target[key] !== null &&
           !(target[key] instanceof Date) &&
           !(target[key] instanceof Jovo) &&
-          !this.config.ignoredProperties.includes(key) &&
+          !this.config.ignoredProperties.includes(stringKey) &&
           !target[key].__isProxy
         ) {
           // create the proxy for the value
           const proxy = new Proxy(
             target[key],
-            this.createProxyHandler(handleRequest, path ? [path, key].join('.') : key),
+            this.createProxyHandler(handleRequest, path ? [path, stringKey].join('.') : stringKey),
           );
 
           // check if the property is writable, if it's not, return the proxy
@@ -238,19 +239,21 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
           }
 
           // otherwise overwrite the property and set it to the proxy
-          (target as UnknownObject)[key] = proxy;
+          target[key as keyof T] = proxy;
+        } else if (typeof target[key] === 'function') {
         }
         return target[key];
       },
-      set: (target, key: string, value: unknown): boolean => {
-        const previousValue = (target as UnknownObject)[key];
-        (target as UnknownObject)[key] = value;
+      set: (target, key: string | number | symbol, value: T[keyof T]): boolean => {
+        const previousValue = target[key];
+        target[key as keyof T] = value;
         // only emit changes
         if (!isEqual(previousValue, value)) {
+          const stringKey = key.toString();
           this.emitUpdate(handleRequest.debuggerRequestId, {
-            key,
+            key: stringKey,
             value,
-            path: path ? [path, key].join('.') : key,
+            path: path ? [path, stringKey].join('.') : stringKey,
           });
         }
 
