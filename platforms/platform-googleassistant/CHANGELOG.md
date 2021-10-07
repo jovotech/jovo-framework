@@ -1,5 +1,18 @@
 # Changelog
 
+## [@jovotech/platform-googleassistant@4.0.0-beta.7](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-googleassistant@4.0.0-beta.4...@jovotech/platform-googleassistant@4.0.0-beta.7)
+
+> 5 October 2021
+
+- :recycle: Refactor CLI Plugins [`#1046`](https://github.com/jovotech/jovo-framework/pull/1046)
+- :sparkles: Add system intents to model [`#1056`](https://github.com/jovotech/jovo-framework/pull/1056)
+- :ambulance: Apply TestSuite hotfixes [`#1052`](https://github.com/jovotech/jovo-framework/pull/1052)
+- ✨ Introduce TestSuite [`#1033`](https://github.com/jovotech/jovo-framework/pull/1033)
+- 🐛 Add global intents to actions.yml [`#1032`](https://github.com/jovotech/jovo-framework/pull/1032)
+- 🐛 Fix copying resources [`#1021`](https://github.com/jovotech/jovo-framework/pull/1021)
+- ✨ Improve model validation [`#1020`](https://github.com/jovotech/jovo-framework/pull/1020)
+- ✨ Add accessToken property to JovoUser [`#1027`](https://github.com/jovotech/jovo-framework/pull/1027)
+
 ## [@jovotech/platform-googleassistant@4.0.0-beta.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-googleassistant@4.0.0-beta.3...@jovotech/platform-googleassistant@4.0.0-beta.4)
 
 > 10 September 2021

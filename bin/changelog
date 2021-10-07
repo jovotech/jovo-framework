@@ -8,7 +8,7 @@ const project = new Project();
 
 (async () => {
 	// Generate root changelog
-  execSync(`npx auto-changelog --tag-pattern '.'`);
+  execSync(`npx auto-changelog --tag-pattern '@jovotech'`);
 
   const packages = await project.getPackages();
   for (const pkg of packages) {
