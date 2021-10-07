@@ -20,6 +20,8 @@ declare module '@jovotech/framework/dist/types/HandleRequest' {
 
 HandleRequest.prototype.debuggerRequestId = 0;
 
+export * from './interfaces';
+
 export * from './errors/LanguageModelDirectoryNotFoundError';
 export * from './errors/SocketConnectionFailedError';
 export * from './errors/SocketNotConnectedError';

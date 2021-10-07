@@ -33,6 +33,7 @@ import { LanguageModelDirectoryNotFoundError } from './errors/LanguageModelDirec
 import { SocketConnectionFailedError } from './errors/SocketConnectionFailedError';
 import { SocketNotConnectedError } from './errors/SocketNotConnectedError';
 import { WebhookIdNotFoundError } from './errors/WebhookIdNotFoundError';
+import { JovoDebuggerPayload, JovoUpdateData, StateMutatingJovoMethodKey } from './interfaces';
 import { MockServer } from './MockServer';
 
 export enum JovoDebuggerEvent {
@@ -48,19 +49,6 @@ export enum JovoDebuggerEvent {
   AppResponse = 'app.response',
 
   AppJovoUpdate = 'app.jovo-update',
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export interface JovoDebuggerPayload<DATA extends any = any> {
-  requestId: number | string;
-  data: DATA;
-}
-
-export interface JovoUpdateData<KEY extends keyof Jovo | string = keyof Jovo | string> {
-  key: KEY;
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  value: KEY extends keyof Jovo ? Jovo[KEY] : any;
-  path: KEY extends keyof Jovo ? KEY : string;
 }
 
 export interface JovoDebuggerConfig extends PluginConfig {
@@ -83,6 +71,8 @@ export function getDefaultLanguageMap(): UnknownObject {
     it: LangIt,
   };
 }
+
+export const STATE_MUTATING_METHOD_KEYS = ['$redirect', '$delegate', '$resolve'] as const;
 
 export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   socket?: typeof Socket;
@@ -195,20 +185,23 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
             path: key,
           });
         }
-        return new Proxy(jovo, this.createProxyHandler(handleRequest));
+        return new Proxy(jovo, this.createObjectProxyHandler(handleRequest));
       };
     });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private createProxyHandler<T extends Record<string | number | symbol, any>>(
+  private createObjectProxyHandler<T extends Record<string | number | symbol, any>>(
     handleRequest: HandleRequest,
-    path = '',
+    currentPath = '',
   ): ProxyHandler<T> {
+    function getCompletePropertyPath(key: string, path?: string): string {
+      return path ? [path, key].join('.') : key;
+    }
+
     return {
       get: (target, key: keyof T) => {
         const stringKey = key.toString();
-
         // make __isProxy return true for all proxies with this handler
         if (stringKey === '__isProxy') {
           return true;
@@ -217,19 +210,39 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
         if (stringKey === '__target') {
           return target;
         }
-        // if the value is an object that is not null, not a Date nor a Jovo instance nor included in the ignored properties and no proxy
+
+        const value = target[key];
+        const completePropertyPath = getCompletePropertyPath(stringKey, currentPath);
+
+        // if the value is a function and a state mutating method
         if (
-          typeof target[key] === 'object' &&
-          target[key] !== null &&
-          !((target[key] as AnyObject) instanceof Date) &&
-          !((target[key] as AnyObject) instanceof Jovo) &&
-          !this.config.ignoredProperties.includes(stringKey) &&
-          !target[key].__isProxy
+          typeof value === 'function' &&
+          Array.from<string>(STATE_MUTATING_METHOD_KEYS).includes(stringKey)
         ) {
+          return new Proxy(
+            target[key],
+            this.createStateMutationProxyHandler(
+              handleRequest,
+              stringKey as StateMutatingJovoMethodKey,
+            ),
+          );
+        }
+
+        const isSupportedObject =
+          value &&
+          typeof value === 'object' &&
+          !((value as AnyObject) instanceof Date) &&
+          !((value as AnyObject) instanceof Jovo);
+
+        const shouldCreateProxy =
+          value && !value.__isProxy && !this.config.ignoredProperties.includes(stringKey);
+
+        // if the value is a supported object and not ignored, nor a proxy already
+        if (isSupportedObject && shouldCreateProxy) {
           // create the proxy for the value
           const proxy = new Proxy(
-            target[key],
-            this.createProxyHandler(handleRequest, path ? [path, stringKey].join('.') : stringKey),
+            value,
+            this.createObjectProxyHandler(handleRequest, completePropertyPath),
           );
 
           // check if the property is writable, if it's not, return the proxy
@@ -240,8 +253,8 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
 
           // otherwise overwrite the property and set it to the proxy
           target[key as keyof T] = proxy;
-        } else if (typeof target[key] === 'function') {
         }
+
         return target[key];
       },
       set: (target, key: keyof T, value: T[keyof T]): boolean => {
@@ -253,11 +266,23 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
           this.emitUpdate(handleRequest.debuggerRequestId, {
             key: stringKey,
             value,
-            path: path ? [path, stringKey].join('.') : stringKey,
+            path: getCompletePropertyPath(stringKey, currentPath),
           });
         }
 
         return true;
+      },
+    };
+  }
+
+  private createStateMutationProxyHandler<KEY extends StateMutatingJovoMethodKey>(
+    handleRequest: HandleRequest,
+    key: KEY,
+  ): ProxyHandler<Jovo[KEY]> {
+    return {
+      apply(target: any, thisArg: Jovo, argArray: any[]): any {
+        // TODO implement setting and sending of data
+        return target.apply(thisArg, argArray);
       },
     };
   }
