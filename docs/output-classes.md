@@ -21,12 +21,12 @@ Each output class contains:
 Here is an example of a `HelloWorldOutput` class:
 
 ```typescript
-import { Output, BaseOutput } from '@jovotech/framework';
+import { BaseOutput, Output, OutputTemplate } from '@jovotech/framework';
 
 @Output()
 export class HelloWorldOutput extends BaseOutput {
 
-  build() {
+  build(): OutputTemplate | OutputTemplate[] {
     return {
       message: 'Hello World!',
     };
@@ -55,7 +55,7 @@ yourHandler() {
 The most important part of an output class is an [output template](#output-template) that is returned by a [`build` method](#build-method). This object is then translated into the appropriate platform response.
 
 ```typescript
-build() {
+build(): OutputTemplate | OutputTemplate[] {
   return {
     message: 'Hello World!',
   };
@@ -67,7 +67,7 @@ Usually, you don't do more inside `build` than modifying the output object direc
 There are several ways how you could add further modifications. For example, you can add [helper methods](#helper-methods) like this:
 
 ```typescript
-build() {
+build(): OutputTemplate | OutputTemplate[] {
   return {
     message: 'Hello World!',
     carousel: this.getCarousel(),
@@ -82,7 +82,7 @@ getCarousel() {
 There's also the possibility that there is completely distinct output depending on a few factors. For example, output could differ for voice and text based interfaces. You could modify `build` in a way that it returns different output objects:
 
 ```typescript
-build() {
+build(): OutputTemplate | OutputTemplate[] {
   if(/* some condition */) {
     return {
       message: 'Output A',
@@ -146,7 +146,7 @@ return this.$send(YourOutput, { name: 'Sam' });
 We can then greet them by their name using `this.options.name`:
 
 ```typescript
-build() {
+build(): OutputTemplate | OutputTemplate[] {
   return {
     message: `Hey ${this.options.name}!`,
   };
@@ -186,7 +186,7 @@ getDefaultOptions() {
 Using TypeScript, you can also add the types:
 
 ```typescript
-import { BaseOutput, OutputOptions } from '@jovotech/framework';
+import { BaseOutput, Output, OutputOptions, OutputTemplate } from '@jovotech/framework';
 
 // ...
 
@@ -194,9 +194,10 @@ export interface YourOutputOptions extends OutputOptions {
   name: string;
 }
 
+@Output()
 export class YourOutput extends BaseOutput<YourOutputOptions> {
 
-  build() {
+  build(): OutputTemplate | OutputTemplate[] {
     return {
       message: `Hey ${this.options.name}!`,
     };
@@ -218,7 +219,7 @@ If the `$send` method doesn't pass a proper `name` to the output class in the ab
 You can add helper methods to the output class and reference them with `this.helperMethodName()`.
 
 ```typescript
-build() {
+build(): OutputTemplate | OutputTemplate[] {
   return {
     message: `Here are our categories: ${this.listCategories(this.options.categories)}`,
   };
@@ -232,7 +233,7 @@ listCategories(categories) {
 You can also use `get` properties:
 
 ```typescript
-build() {
+build(): OutputTemplate | OutputTemplate[] {
   return {
     message: `Here are our categories: ${this.listCategories}`,
   };

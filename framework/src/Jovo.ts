@@ -331,14 +331,16 @@ export abstract class Jovo<
       this.$handleRequest.activeComponentNode?.path,
     );
 
-    // make sure the state-stack exists and is not empty, even if it is a global component
-    // in order to do that we need to add the path of the currently active component
-    if (!this.$session.state?.length) {
-      this.$session.state = [
-        {
-          component: (this.$handleRequest.activeComponentNode?.path || []).join('.'),
-        },
-      ];
+    // if the component that is currently being executed is global
+    if (this.$handleRequest.activeComponentNode?.metadata?.isGlobal) {
+      // make sure there is a stack
+      if (!this.$session.state) {
+        this.$session.state = [];
+      }
+      // add the current component
+      this.$session.state.push({
+        component: this.$handleRequest.activeComponentNode.path.join('.'),
+      });
     }
 
     // serialize all values in 'resolve'
@@ -366,6 +368,9 @@ export abstract class Jovo<
       });
     }
     // push the delegating component to the state-stack
+    if (!this.$session.state) {
+      this.$session.state = [];
+    }
     this.$session.state.push({
       resolve: serializableResolve,
       config: serializableConfig,

@@ -64,6 +64,22 @@ Depending on the configuration, NlpjsNlu will try to use the `setupModelCallback
 Otherwise, the integration will check if `useModel` is set to `true`, if that's the case, the model is getting loaded from `preTrainedModelFilePath`.
 If `setupModellCallback` does not exist and `useModel` is falsy, the integration will attempt to build a model based on the local models and train it.
 
+## Entities
+
+You can access NLP.js entities by using the `$entities` property. You can learn more in the [Jovo Model](https://v4.jovo.tech/docs/models) and the [`$entities` documentation](https://v4.jovo.tech/docs/entities).
+
+The NLP.js entity values are translated into the following Jovo entity properties:
+
+```typescript
+{
+  value: utteranceText, // what the user said
+  resolved: option, // the resolved value
+  id: option, // same as resolved, since NLP.js doesn't support IDs
+  native: { /* raw API response for this entity */ }
+}
+```
+
+
 ## Jovo Model
 
 You can use the [Jovo Model](https://www.jovo.tech/marketplace/jovo-model) to turn the language model files in your `models` folder into an NLP.js model. [Learn more about the NLP.js Jovo Model integration here](https://v4.jovo.tech/marketplace/nlu-nlpjs/model).

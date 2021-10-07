@@ -2,15 +2,7 @@
   ".ask/": {
     "ask-states.json": {
       "askcliStatesVersion": "2020-03-31",
-      "profiles": {
-        "default": {
-          "skillId": "",
-          "skillMetadata": {
-            "lastDeployHash": ""
-          },
-          "code": {}
-        }
-      }
+      "profiles": {}
     }
   },
   "skill-package/": {

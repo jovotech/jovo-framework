@@ -50,6 +50,7 @@ export {
   DynamicEntities,
   DynamicEntityValue,
   DynamicEntitiesMode,
+  Entity,
   JovoResponse,
   Listen,
   ListenValue,

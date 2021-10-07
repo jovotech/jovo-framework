@@ -174,12 +174,12 @@ For better separation between logic and output, Jovo has a concept called output
 Here is an example of a `HelloWorldOutput` class:
 
 ```typescript
-import { Output, BaseOutput } from '@jovotech/framework';
+import { Output, BaseOutput, OutputTemplate } from '@jovotech/framework';
 
 @Output()
 export class HelloWorldOutput extends BaseOutput {
 
-  build() {
+  build(): OutputTemplate | OutputTemplate[] {
     return {
       message: 'Hello World!',
     };

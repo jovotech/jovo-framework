@@ -79,6 +79,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   // TODO check default config
   getDefaultConfig(): JovoDebuggerConfig {
     return {
+      skipTests: true,
       corePlatform: {},
       nlpjsNlu: {
         languageMap: {

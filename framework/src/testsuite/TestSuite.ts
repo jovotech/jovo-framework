@@ -25,7 +25,6 @@ import {
 } from '..';
 import { HandleRequest } from '../HandleRequest';
 import { InputType, JovoInput, JovoInputObject } from '../JovoInput';
-import { TestDb } from './TestDb';
 import { TestPlatform } from './TestPlatform';
 import { TestServer } from './TestServer';
 
@@ -89,9 +88,9 @@ export interface TestSuiteConfig<PLATFORM extends Platform> extends PluginConfig
   userId: string;
   platform: Constructor<PLATFORM>;
   locale: string;
-  db: {
-    directory: string;
-    deleteOnSessionEnded?: boolean;
+  data: {
+    deleteAfterAll: boolean;
+    deleteAfterEach: boolean;
   };
   stage: string;
   app?: App;
@@ -120,38 +119,38 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
   $platform!: PLATFORM;
   $output!: OutputTemplate[];
 
-  constructor(
-    config: PartialTestSuiteConfig<PLATFORM> = {
-      platform: TestPlatform as unknown as Constructor<PLATFORM>,
-    },
-  ) {
+  constructor(config?: PartialTestSuiteConfig<PLATFORM>) {
     super(config);
 
     // Load app from configured stage and register testplugins
     this.app = this.config.app || this.loadApp();
-    this.app.use(
-      this,
-      new TestPlatform(),
-      new TestDb({
-        directory: this.config.db.directory,
-        deleteOnSessionEnded: this.config.db.deleteOnSessionEnded,
-      }),
-    );
+    this.app.use(this, new TestPlatform());
 
     const platform = new this.config.platform();
     this.requestBuilder = new platform.requestBuilder();
 
-    const request = platform.createRequestInstance({});
+    const request = platform.createRequestInstance(this.requestBuilder.launch());
     const server: TestServer = new TestServer(request);
     const handleRequest: HandleRequest = new HandleRequest(this.app, server);
 
     Object.assign(this, new platform.jovoClass(this.app, handleRequest, platform));
+
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { afterEach, afterAll } = require('@jest/globals');
+    if (this.config.data.deleteAfterEach) {
+      afterEach(this.clearData.bind(this));
+    }
+
+    if (this.config.data.deleteAfterAll) {
+      afterAll(this.clearData.bind(this));
+    }
   }
 
   getDefaultConfig(): TestSuiteConfig<PLATFORM> {
     return {
-      db: {
-        directory: '../db/tests/',
+      data: {
+        deleteAfterEach: true,
+        deleteAfterAll: true,
       },
       userId: uuidv4(),
       platform: TestPlatform as unknown as Constructor<PLATFORM>,
@@ -211,6 +210,11 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     };
   }
 
+  clearData(): void {
+    this.$user = this.$platform.createUserInstance(this);
+    this.$session = new JovoSession();
+  }
+
   private prepareRequest(jovo: Jovo) {
     // Reset session data if a new session is incoming
     if (jovo.$request.isNewSession() || jovo.$input.type === InputType.Launch) {
@@ -259,7 +263,10 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
       }
     }
 
-    throw new JovoError({ message: 'App not found.' });
+    throw new JovoError({
+      message: 'App not found.',
+      hint: 'Try running your tests in the root directory of your project',
+    });
   }
 
   private isRequest(request: RequestOrInput<PLATFORM>): request is JovoRequest {

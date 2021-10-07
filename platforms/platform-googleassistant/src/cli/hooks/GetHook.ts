@@ -1,5 +1,5 @@
-import type { BuildEvents } from '@jovotech/cli-command-build';
-import type { GetContext, GetEvents } from '@jovotech/cli-command-get';
+import type { BuildPlatformEvents } from '@jovotech/cli-command-build';
+import type { GetPlatformContext, GetPlatformEvents } from '@jovotech/cli-command-get';
 import {
   ANSWER_CANCEL,
   execAsync,
@@ -13,27 +13,25 @@ import {
 } from '@jovotech/cli-core';
 import { existsSync, mkdirSync } from 'fs';
 import _get from 'lodash.get';
-import { GoogleAssistantCli } from '..';
 import { checkForGactionsCli, getGactionsError, GoogleContext } from '../utilities';
 
-export interface GoogleGetContext extends GetContext, GoogleContext {
-  flags: GetContext['flags'] & { 'project-id'?: string };
+export interface GoogleGetContext extends GetPlatformContext, GoogleContext {
+  flags: GetPlatformContext['flags'] & { 'project-id'?: string };
 }
 
-export class GetHook extends PluginHook<GetEvents | BuildEvents> {
-  $plugin!: GoogleAssistantCli;
+export class GetHook extends PluginHook<GetPlatformEvents | BuildPlatformEvents> {
   $context!: GoogleGetContext;
 
   install(): void {
     this.middlewareCollection = {
       'install': [this.addCliOptions.bind(this)],
-      'before.get': [
+      'before.get:platform': [
         this.checkForPlatform.bind(this),
         checkForGactionsCli,
         this.updatePluginContext.bind(this),
         this.checkForExistingPlatformFiles.bind(this),
       ],
-      'get': [this.get.bind(this)],
+      'get:platform': [this.get.bind(this)],
     };
   }
 
@@ -42,7 +40,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
    * @param context - Context providing an access point to command flags and args.
    */
   addCliOptions(context: InstallContext): void {
-    if (context.command !== 'get') {
+    if (context.command !== 'get:platform') {
       return;
     }
 
@@ -57,7 +55,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
    */
   checkForPlatform(): void {
     // Check if this plugin should be used or not.
-    if (this.$context.platform && this.$context.platform !== this.$plugin.$id) {
+    if (!this.$context.platforms.includes(this.$plugin.id)) {
       this.uninstall();
     }
   }
@@ -71,7 +69,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
     }
 
     this.$context.googleAssistant.projectId =
-      this.$context.flags['project-id'] || _get(this.$plugin.$config, 'projectId');
+      this.$context.flags['project-id'] || _get(this.$plugin.config, 'projectId');
 
     if (!this.$context.googleAssistant.projectId) {
       throw new JovoCliError({
@@ -86,8 +84,10 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
    * Checks if platform-specific files already exist and prompts for overwriting them.
    */
   async checkForExistingPlatformFiles(): Promise<void> {
-    if (!this.$context.flags.overwrite && existsSync(this.$plugin.getPlatformPath())) {
-      const answer = await promptOverwrite('Found existing project files. How to proceed?');
+    if (!this.$context.flags.clean && existsSync(this.$plugin.platformPath)) {
+      const answer = await promptOverwrite(
+        'Found existing GoogleAssistant project files. How to proceed?',
+      );
       if (answer.overwrite === ANSWER_CANCEL) {
         this.uninstall();
       }
@@ -103,7 +103,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
         `(${this.$context.googleAssistant.projectId})`,
       )}`,
       async () => {
-        const platformPath: string = this.$plugin.getPlatformPath();
+        const platformPath: string = this.$plugin.platformPath;
         if (!existsSync(platformPath)) {
           mkdirSync(platformPath);
         }
