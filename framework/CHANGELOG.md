@@ -1,20 +1,20 @@
 # Changelog
 
-## [@jovotech/platform-core@4.0.0-beta.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-core@4.0.0-beta.2...@jovotech/platform-core@4.0.0-beta.3)
+## [@jovotech/framework@4.0.0-beta.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/framework@4.0.0-beta.2...@jovotech/framework@4.0.0-beta.3)
 
 > 10 September 2021
 
-## [@jovotech/platform-core@4.0.0-beta.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-core@4.0.0-beta.1...@jovotech/platform-core@4.0.0-beta.2)
+## [@jovotech/framework@4.0.0-beta.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/framework@4.0.0-beta.1...@jovotech/framework@4.0.0-beta.2)
 
 > 31 August 2021
 
 - Async Model [`#996`](https://github.com/jovotech/jovo-framework/pull/996)
 
-## [@jovotech/platform-core@4.0.0-beta.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-core@4.0.0-beta.0...@jovotech/platform-core@4.0.0-beta.1)
+## [@jovotech/framework@4.0.0-beta.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/framework@4.0.0-beta.0...@jovotech/framework@4.0.0-beta.1)
 
 > 24 August 2021
 
-## [@jovotech/platform-core@4.0.0-beta.0](https://github.com/jovotech/jovo-framework/compare/v3.5...@jovotech/platform-core@4.0.0-beta.0)
+## [@jovotech/framework@4.0.0-beta.0](https://github.com/jovotech/jovo-framework/compare/v3.5...@jovotech/framework@4.0.0-beta.0)
 
 > 19 August 2021
 
