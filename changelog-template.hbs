@@ -11,18 +11,14 @@
 {{/if}}
 
 {{#if merges}}
-### Merged
-
 {{#each merges}}
-- {{#if commit.breaking}}:boom: **Breaking change:** {{/if}}{{message}} {{#if href}}[`#{{id}}`]({{href}}){{/if}}
+- {{#if commit.breaking}}**Breaking change:** {{/if}}{{message}} {{#if href}}[`#{{id}}`]({{href}}){{/if}}
 {{/each}}
 {{/if}}
 
 {{#if fixes}}
-### Fixed
-
 {{#each fixes}}
-- {{#if commit.breaking}}:boom: **Breaking change:** {{/if}}{{commit.subject}}{{#each fixes}} {{#if href}}[`#{{id}}`]({{href}}){{/if}}{{/each}}
+- {{#if commit.breaking}}**Breaking change:** {{/if}}{{commit.subject}}{{#each fixes}} {{#if href}}[`#{{id}}`]({{href}}){{/if}}{{/each}}
 {{/each}}
 {{/if}}
 
