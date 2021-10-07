@@ -10,7 +10,6 @@ import {
 } from '@jovotech/framework';
 import { HandleRequest } from '@jovotech/framework/dist/types';
 import { CoreRequest } from '@jovotech/platform-core';
-import { Debugger } from 'inspector';
 import { JovoDebugger } from '../src';
 
 class DebuggerTestServer extends TestServer {
@@ -26,6 +25,7 @@ class DebuggerTestServer extends TestServer {
 }
 
 class DebuggerTestNluPlugin extends NluPlugin {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async process(jovo: Jovo, text: string): Promise<NluData | undefined> {
     return;
   }
@@ -77,10 +77,10 @@ beforeEach(() => {
     modelsPath: '',
     webhookUrl: '',
   });
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (jovoDebugger as any).connectToWebhook = function () {
-    return mockSocket;
-  };
+  jest
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .spyOn(jovoDebugger as any, 'connectToWebhook')
+    .mockImplementation(() => Promise.resolve(mockSocket));
 
   app = new App({
     plugins: [jovoDebugger],
