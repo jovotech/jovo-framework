@@ -39,6 +39,12 @@ export class GoogleAssistantPlatform extends Platform<
     this.middlewareCollection.use('request.start', (jovo) => {
       return this.onRequestStart(jovo);
     });
+    this.middlewareCollection.use('after.request.end', (jovo) => {
+      if (jovo.$googleAssistant?.$request.intent?.name === 'actions.intent.HEALTH_CHECK') {
+        jovo.$handleRequest.stopMiddlewareExecution();
+        return jovo.$handleRequest.server.setResponse({});
+      }
+    });
   }
 
   initialize(parent: App): void {
