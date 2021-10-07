@@ -9,7 +9,9 @@ Learn how you can customize the Jovo Debugger using the `jovo.debugger.js` confi
 
 ## Introduction
 
-The debugger configuration can be found in a file called `jovo.debugger.js`.
+The Jovo Debugger is a tool that lets you test and review your Jovo app in the browser. Learn more about how you can [connect your Jovo app to the Jovo Debugger here](https://v4.jovo.tech/docs/debugger).
+
+The Debugger configuration can be found in a file called `jovo.debugger.js`. It makes it possible to customize things such as languages and buttons and is passed to the Debugger when the [`run` command](https://v4.jovo.tech/docs/run-command) is executed.
 
 Here is an example:
 
@@ -55,6 +57,7 @@ const debugger = new DebuggerConfig({
 });
 ```
 
+This configuration only specifies which locales can be selected in the Debugger frontend. It might be possible that you need to update your app configuration to handle additional languages. Take a look at the [Debugger plugin docs](https://v4.jovo.tech/docs/debugger#nlu) to learn more.
 
 ## buttons
 
