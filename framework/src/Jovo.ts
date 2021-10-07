@@ -274,7 +274,10 @@ export abstract class Jovo<
       keyof BaseComponent
     >,
   >(constructor: ComponentConstructor<COMPONENT>, handler?: HANDLER): Promise<void>;
-  async $redirect(componentName: string, handler?: string): Promise<void>;
+  async $redirect(
+    constructorOrName: ComponentConstructor | string,
+    handler?: string,
+  ): Promise<void>;
   async $redirect(
     constructorOrName: ComponentConstructor | string,
     handler?: string,
@@ -314,7 +317,10 @@ export abstract class Jovo<
     constructor: ComponentConstructor<COMPONENT>,
     options: DelegateOptions<ComponentConfig<COMPONENT>>,
   ): Promise<void>;
-  async $delegate(componentName: string, options: DelegateOptions): Promise<void>;
+  async $delegate(
+    constructorOrName: ComponentConstructor | string,
+    options: DelegateOptions,
+  ): Promise<void>;
   async $delegate(
     constructorOrName: ComponentConstructor | string,
     options: DelegateOptions,
