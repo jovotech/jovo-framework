@@ -66,31 +66,28 @@ If `setupModelCallback` does not exist and `useModel` is falsy, the integration 
 
 ### Language Configuration
 
-By default, the Jovo NLP.js integration comes with the [NLP.js language package for `en` (English)](https://github.com/axa-group/nlp.js/tree/master/packages/lang-en).
-
-To make it work with other languages, you need to download the respective language package. Here is an example for `de` (German):
+For each language you want to use with NLP.js, you need to download the respective language package. Here is an example for [`en` (English)](https://github.com/axa-group/nlp.js/tree/master/packages/lang-en):
 
 ```sh
-$ npm install @nlpjs/lang-de
+$ npm install @nlpjs/lang-en
 ```
 
 You can then add this to your `languageMap`:
 
 ```typescript
 import { LangEn } from '@nlpjs/lang-en';
-import { LangDe } from '@nlpjs/lang-de';
 // ...
 
 new NlpjsNlu({
   languageMap: {
     en: LangEn,
-    de: LangDe
+    // ...
   },
   // ...
 }),
 ```
 
-Each key (in the above case `en` and `de`) represents a locale that can be found in your [Jovo Model](#jovo-model).
+Each key (in the above case `en`) represents a locale that can be found in your [Jovo Model](#jovo-model).
 
 You can find more information about [supported languages](https://github.com/axa-group/nlp.js/blob/master/docs/v4/language-support.md) and [available packages](https://github.com/axa-group/nlp.js/tree/master/packages) in the official NLP.js docs.
 
