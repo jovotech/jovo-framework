@@ -40,3 +40,8 @@ export interface AskConfig {
   askcliStatesVersion: string;
   profiles: Record<string, AskProfile>;
 }
+
+export interface AskResources {
+  askcliResourcesVersion: string;
+  profiles: Record<string, AskProfile>;
+}

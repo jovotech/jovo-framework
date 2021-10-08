@@ -1,9 +1,11 @@
 import type { NewContext, NewEvents } from '@jovotech/cli-command-new';
 import { Log, PluginHook, promptSupportedLocales } from '@jovotech/cli-core';
+import { GoogleAssistantCli } from '..';
 import { SupportedLocalesType } from '../interfaces';
 import { SupportedLocales } from '../utilities';
 
 export class NewHook extends PluginHook<NewEvents> {
+  $plugin!: GoogleAssistantCli;
   $context!: NewContext;
 
   install(): void {
