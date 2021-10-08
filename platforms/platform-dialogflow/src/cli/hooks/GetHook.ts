@@ -70,7 +70,7 @@ export class GetHook extends PluginHook<GetPlatformEvents> {
     } catch (error) {
       throw new JovoCliError({
         message: 'Jovo CLI requires gcloud CLI for deployment to Dialogflow.',
-        module: this.$plugin.constructor.name,
+        module: this.$plugin.name,
         learnMore:
           'To install the gcloud CLI, follow this guide: https://cloud.google.com/sdk/docs/install',
       });
@@ -91,7 +91,7 @@ export class GetHook extends PluginHook<GetPlatformEvents> {
     if (!this.$context.dialogflow.projectId) {
       throw new JovoCliError({
         message: 'Could not find project ID.',
-        module: this.$plugin.constructor.name,
+        module: this.$plugin.name,
         hint: 'Please provide a project ID by using the flag "--project-id" or in your project configuration.',
       });
     }
@@ -131,7 +131,7 @@ export class GetHook extends PluginHook<GetPlatformEvents> {
       if (!keyFilePath) {
         throw new JovoCliError({
           message: "Couldn't find keyfile.",
-          module: this.$plugin.constructor.name,
+          module: this.$plugin.name,
 
           hint: 'Please provide a key file for authorization.',
         });
@@ -139,7 +139,7 @@ export class GetHook extends PluginHook<GetPlatformEvents> {
       if (!existsSync(joinPaths(this.$cli.projectPath, keyFilePath))) {
         throw new JovoCliError({
           message: `Keyfile at ${keyFilePath} does not exist.`,
-          module: this.$plugin.constructor.name,
+          module: this.$plugin.name,
         });
       }
 
@@ -162,11 +162,11 @@ export class GetHook extends PluginHook<GetPlatformEvents> {
         if ((error as AxiosError).isAxiosError) {
           throw new JovoCliError({
             message: error.message,
-            module: this.$plugin.constructor.name,
+            module: this.$plugin.name,
             details: error.response.data.error.message,
           });
         }
-        throw new JovoCliError({ message: error.message, module: this.$plugin.constructor.name });
+        throw new JovoCliError({ message: error.message, module: this.$plugin.name });
       }
     });
     const extractTask: Task = new Task(`Extracting files to ${platformPath}`, async () => {

@@ -7,7 +7,7 @@ import {
   prompt,
 } from '@jovotech/cli-core';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
-import _get from 'lodash.merge';
+import _get from 'lodash.get';
 import _set from 'lodash.set';
 import { AlexaCli } from '..';
 import DefaultFiles from '../DefaultFiles.json';
