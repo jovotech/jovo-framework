@@ -11,6 +11,7 @@ import {
 } from '@jovotech/cli-core';
 import { existsSync } from 'fs';
 import _get from 'lodash.get';
+import { AlexaCli } from '..';
 import * as smapi from '../smapi';
 import { AlexaContext, checkForAskCli, SupportedLocales } from '../utilities';
 import { AlexaHook } from './AlexaHook';
@@ -23,6 +24,7 @@ export interface DeployPlatformContextAlexa extends AlexaContext, DeployPlatform
 }
 
 export class DeployHook extends AlexaHook<DeployPlatformEvents> {
+  $plugin!: AlexaCli;
   $context!: DeployPlatformContextAlexa;
 
   install(): void {

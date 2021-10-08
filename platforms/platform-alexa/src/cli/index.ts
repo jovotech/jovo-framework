@@ -6,12 +6,6 @@ import { GetHook } from './hooks/GetHook';
 import { NewHook } from './hooks/NewHook';
 import { AlexaCliConfig } from './interfaces';
 
-declare module '@jovotech/cli-core/dist/PluginHook' {
-  export interface PluginHook {
-    $plugin: AlexaCli;
-  }
-}
-
 export class AlexaCli extends JovoCliPlugin {
   readonly id: string = 'alexa';
   readonly type: PluginType = 'platform';
@@ -65,6 +59,10 @@ export class AlexaCli extends JovoCliPlugin {
 
   get askConfigPath(): string {
     return joinPaths(this.askConfigFolderPath, 'ask-states.json');
+  }
+
+  get askResourcesPath(): string {
+    return joinPaths(this.platformPath, 'ask-resources.json');
   }
 
   getModelPath(locale: string): string {

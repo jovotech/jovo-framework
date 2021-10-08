@@ -13,6 +13,7 @@ import AdmZip from 'adm-zip';
 import axios, { AxiosError } from 'axios';
 import { existsSync, readFileSync, unlinkSync } from 'fs';
 import { join as joinPaths } from 'path';
+import { DialogflowCli } from '..';
 import { activateServiceAccount, getGcloudAccessToken } from '../utilities';
 
 export interface DialogflowDeployPlatformContext extends DeployPlatformContext {
@@ -24,6 +25,7 @@ export interface DialogflowDeployPlatformContext extends DeployPlatformContext {
 }
 
 export class DeployHook extends PluginHook<DeployPlatformEvents> {
+  $plugin!: DialogflowCli;
   $context!: DialogflowDeployPlatformContext;
 
   install(): void {
@@ -70,7 +72,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     } catch (error) {
       throw new JovoCliError({
         message: 'Jovo CLI requires gcloud CLI for deployment to Dialogflow.',
-        module: this.$plugin.constructor.name,
+        module: this.$plugin.name,
         learnMore:
           'To install the gcloud CLI, follow this guide: https://cloud.google.com/sdk/docs/install',
       });
@@ -91,7 +93,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     if (!this.$context.dialogflow.projectId) {
       throw new JovoCliError({
         message: 'Could not find project ID.',
-        module: this.$plugin.constructor.name,
+        module: this.$plugin.name,
         hint: 'Please provide a project ID by using the flag "--project-id" or in your project configuration.',
       });
     }
@@ -104,7 +106,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     if (!existsSync(this.$plugin.platformPath)) {
       throw new JovoCliError({
         message: `Couldn't find the platform folder "${this.$plugin.platformDirectory}/".`,
-        module: this.$plugin.constructor.name,
+        module: this.$plugin.name,
         hint: `Please use "jovo build" to create platform-specific files.`,
       });
     }
@@ -129,7 +131,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
           if (!existsSync(joinPaths(this.$cli.projectPath, keyFilePath))) {
             throw new JovoCliError({
               message: `Keyfile at ${keyFilePath} does not exist.`,
-              module: this.$plugin.constructor.name,
+              module: this.$plugin.name,
             });
           }
 
@@ -152,7 +154,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
           } catch (error) {
             throw new JovoCliError({
               message: (error as AxiosError).message,
-              module: this.$plugin.constructor.name,
+              module: this.$plugin.name,
               details: error.response.data.error.message,
             });
           }
@@ -175,7 +177,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
       } catch (error) {
         throw new JovoCliError({
           message: (error as AxiosError).message,
-          module: this.$plugin.constructor.name,
+          module: this.$plugin.name,
           details: error.response.data.error.message,
         });
       }
