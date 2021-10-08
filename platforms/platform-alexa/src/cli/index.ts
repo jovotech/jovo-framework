@@ -61,6 +61,10 @@ export class AlexaCli extends JovoCliPlugin {
     return joinPaths(this.askConfigFolderPath, 'ask-states.json');
   }
 
+  get askResourcesPath(): string {
+    return joinPaths(this.platformPath, 'ask-resources.json');
+  }
+
   getModelPath(locale: string): string {
     return joinPaths(this.modelsPath, `${locale}.json`);
   }

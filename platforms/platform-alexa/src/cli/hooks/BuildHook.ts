@@ -43,6 +43,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
 
   install(): void {
     this.middlewareCollection = {
+      'install': [this.addCliOptions.bind(this)],
       'before.build:platform': [
         this.updatePluginContext.bind(this),
         this.checkForPlatform.bind(this),
@@ -76,7 +77,8 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       this.$context.alexa = {};
     }
 
-    this.$context.alexa.askProfile = this.$plugin.config.askProfile || 'default';
+    this.$context.alexa.askProfile =
+      this.$context.flags['ask-profile'] || this.$plugin.config.askProfile || 'default';
   }
 
   /**
@@ -313,7 +315,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
     }
 
     // Create ask profile entry
-    const askProfilePath = `[".ask/"]["ask-states.json"].profiles.${this.$context.alexa.askProfile}`;
+    const askProfilePath = `["ask-resources.json"].profiles.${this.$context.alexa.askProfile}`;
     if (!_has(projectFiles, askProfilePath)) {
       _set(projectFiles, askProfilePath, {});
     }

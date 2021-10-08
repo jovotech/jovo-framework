@@ -78,7 +78,12 @@ export class GetHook extends AlexaHook<BuildPlatformEvents | GetPlatformEvents> 
 
     this.$context.alexa.skillId =
       this.$context.flags['skill-id'] ||
-      _get(this.$plugin.config, '[".ask/"]["ask-states.json"].profiles.default.skillId') ||
+      _get(
+        this.$plugin.config,
+        `[".ask/"]["ask-states.json"].profiles.${
+          this.$context.alexa.askProfile || 'default'
+        }.skillId`,
+      ) ||
       _get(this.$plugin.config, 'options.skillId');
   }
 

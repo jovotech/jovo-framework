@@ -32,12 +32,6 @@
   },
   "ask-resources.json": {
     "askcliResourcesVersion": "2020-03-31",
-    "profiles": {
-      "default": {
-        "skillMetadata": {
-          "src": "./skill-package"
-        }
-      }
-    }
+    "profiles": {}
   }
 }

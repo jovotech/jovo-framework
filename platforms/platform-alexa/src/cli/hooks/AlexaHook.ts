@@ -11,7 +11,7 @@ import _get from 'lodash.merge';
 import _set from 'lodash.set';
 import { AlexaCli } from '..';
 import DefaultFiles from '../DefaultFiles.json';
-import { AlexaContext, AskConfig } from '../interfaces';
+import { AlexaContext, AskConfig, AskResources } from '../interfaces';
 
 export abstract class AlexaHook<EVENTS extends Events = DefaultEvents> extends PluginHook<EVENTS> {
   readonly $plugin!: AlexaCli;
@@ -45,16 +45,16 @@ export abstract class AlexaHook<EVENTS extends Events = DefaultEvents> extends P
    * Creates an empty ask config file.
    */
   createEmptyAskConfig(): void {
-    const config = _get(DefaultFiles, '[".ask"]["ask-states.json"]');
-    writeFileSync(this.$plugin.askConfigPath, config);
+    const config: AskConfig = _get(DefaultFiles, '[".ask/"]["ask-states.json"]');
+    writeFileSync(this.$plugin.askConfigPath, JSON.stringify(config, null, 2));
   }
 
   /**
-   * Tries to get the ask profile from the ask config file
+   * Tries to get the ask profile from the "ask-resources.json" file
    */
   async getAskProfile(): Promise<string | undefined> {
-    const askConfig = this.getAskConfig();
-    const profiles: string[] = Object.keys(askConfig.profiles);
+    const askResources: AskResources = this.getAskResources();
+    const profiles: string[] = Object.keys(askResources.profiles);
 
     if (!profiles.length) {
       return;
@@ -67,7 +67,7 @@ export abstract class AlexaHook<EVENTS extends Events = DefaultEvents> extends P
         {
           name: 'askProfile',
           type: 'select',
-          message: `Found multiple ASK profiles in .ask/ask-states.json. Which one do you want to use?`,
+          message: `Found multiple ASK profiles in ask-resources.json. Which one do you want to use?`,
           choices: profiles.map((profile) => ({ title: printUserInput(profile), value: profile })),
         },
         {
@@ -81,16 +81,32 @@ export abstract class AlexaHook<EVENTS extends Events = DefaultEvents> extends P
   }
 
   /**
-   * Returns Alexa Config
+   * Returns Alexa resources file
    */
-  getAskConfig(): AskConfig {
+  getAskResources(): AskResources {
     try {
-      return JSON.parse(readFileSync(this.$plugin.askConfigPath, 'utf8'));
+      return JSON.parse(readFileSync(this.$plugin.askResourcesPath, 'utf-8'));
     } catch (err) {
       throw new JovoCliError({
-        message: 'Could not read ask configuration file.',
-        module: this.$plugin.constructor.name,
+        message: 'Could not read ask resources file.',
+        module: this.$plugin.name,
       });
+    }
+  }
+
+  /**
+   * Returns Alexa Config
+   */
+  getAskConfig(): AskConfig | undefined {
+    if (existsSync(this.$plugin.askConfigPath)) {
+      try {
+        return JSON.parse(readFileSync(this.$plugin.askConfigPath, 'utf-8'));
+      } catch (err) {
+        throw new JovoCliError({
+          message: 'Could not read ask configuration file.',
+          module: this.$plugin.name,
+        });
+      }
     }
   }
 }
