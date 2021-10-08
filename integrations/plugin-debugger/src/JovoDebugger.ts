@@ -59,8 +59,7 @@ export interface JovoDebuggerConfig extends PluginConfig {
   ignoredProperties: Array<keyof Jovo | string>;
 }
 
-export type JovoDebuggerInitConfig = DeepPartial<JovoDebuggerConfig> &
-  Partial<Pick<JovoDebuggerConfig, 'nlpjsNlu'>>;
+export type JovoDebuggerInitConfig = DeepPartial<JovoDebuggerConfig>;
 
 export function getDefaultLanguageMap(): UnknownObject {
   return {
