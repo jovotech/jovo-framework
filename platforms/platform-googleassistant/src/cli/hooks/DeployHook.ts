@@ -17,8 +17,8 @@ import { checkForGactionsCli, getGactionsError, GoogleContext } from '../utiliti
 export interface GoogleDeployContext extends DeployPlatformContext, GoogleContext {}
 
 export class DeployHook extends PluginHook<DeployPlatformEvents> {
-  readonly $plugin!: GoogleAssistantCli;
-  readonly $context!: GoogleDeployContext;
+  $plugin!: GoogleAssistantCli;
+  $context!: GoogleDeployContext;
 
   install(): void {
     this.middlewareCollection = {

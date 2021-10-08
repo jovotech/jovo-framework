@@ -4,8 +4,8 @@ import { DialogflowCli } from '..';
 import { SupportedLocales, SupportedLocalesType } from '../utilities';
 
 export class NewHook extends PluginHook<NewEvents> {
-  readonly $plugin!: DialogflowCli;
-  readonly $context!: NewContext;
+  $plugin!: DialogflowCli;
+  $context!: NewContext;
 
   install(): void {
     this.middlewareCollection = {

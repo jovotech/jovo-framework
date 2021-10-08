@@ -21,8 +21,8 @@ export interface GoogleGetContext extends GetPlatformContext, GoogleContext {
 }
 
 export class GetHook extends PluginHook<GetPlatformEvents | BuildPlatformEvents> {
-  readonly $plugin!: GoogleAssistantCli;
-  readonly $context!: GoogleGetContext;
+  $plugin!: GoogleAssistantCli;
+  $context!: GoogleGetContext;
 
   install(): void {
     this.middlewareCollection = {

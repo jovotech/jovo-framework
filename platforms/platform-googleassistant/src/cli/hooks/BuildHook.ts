@@ -49,8 +49,8 @@ export interface BuildPlatformContextGoogle extends BuildPlatformContext, Google
 }
 
 export class BuildHook extends PluginHook<BuildPlatformEvents> {
-  readonly $plugin!: GoogleAssistantCli;
-  readonly $context!: BuildPlatformContextGoogle;
+  $plugin!: GoogleAssistantCli;
+  $context!: BuildPlatformContextGoogle;
 
   install(): void {
     this.middlewareCollection = {

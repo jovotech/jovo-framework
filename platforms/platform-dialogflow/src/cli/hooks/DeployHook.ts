@@ -25,8 +25,8 @@ export interface DialogflowDeployPlatformContext extends DeployPlatformContext {
 }
 
 export class DeployHook extends PluginHook<DeployPlatformEvents> {
-  readonly $plugin!: DialogflowCli;
-  readonly $context!: DialogflowDeployPlatformContext;
+  $plugin!: DialogflowCli;
+  $context!: DialogflowDeployPlatformContext;
 
   install(): void {
     this.middlewareCollection = {

@@ -36,8 +36,8 @@ export interface DialogflowBuildContext extends BuildPlatformContext {
 }
 
 export class BuildHook extends PluginHook<BuildPlatformEvents> {
-  readonly $plugin!: DialogflowCli;
-  readonly $context!: DialogflowBuildContext;
+  $plugin!: DialogflowCli;
+  $context!: DialogflowBuildContext;
 
   install(): void {
     this.middlewareCollection = {

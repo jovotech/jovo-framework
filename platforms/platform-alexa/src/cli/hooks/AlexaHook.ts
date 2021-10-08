@@ -14,8 +14,8 @@ import DefaultFiles from '../DefaultFiles.json';
 import { AlexaContext, AskConfig, AskResources } from '../interfaces';
 
 export abstract class AlexaHook<EVENTS extends Events = DefaultEvents> extends PluginHook<EVENTS> {
-  readonly $plugin!: AlexaCli;
-  readonly $context!: AlexaContext;
+  $plugin!: AlexaCli;
+  $context!: AlexaContext;
 
   /**
    * Saves Alexa Skill ID to .ask/config.

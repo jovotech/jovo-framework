@@ -5,8 +5,8 @@ import { SupportedLocalesType } from '../interfaces';
 import { SupportedLocales } from '../utilities';
 
 export class NewHook extends PluginHook<NewEvents> {
-  readonly $plugin!: GoogleAssistantCli;
-  readonly $context!: NewContext;
+  $plugin!: GoogleAssistantCli;
+  $context!: NewContext;
 
   install(): void {
     this.middlewareCollection = {
