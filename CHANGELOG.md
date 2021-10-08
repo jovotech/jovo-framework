@@ -1,18 +1,5 @@
 # Changelog
 
-## [@jovotech/server-lambda@4.0.0-beta.6](https://github.com/jovotech/jovo-framework/compare/@jovotech/server-lambda@4.0.0-beta.3...@jovotech/server-lambda@4.0.0-beta.6)
-
-> 5 October 2021
-
-- :recycle: Refactor CLI Plugins [`#1046`](https://github.com/jovotech/jovo-framework/pull/1046)
-- :sparkles: Add system intents to model [`#1056`](https://github.com/jovotech/jovo-framework/pull/1056)
-- :ambulance: Apply TestSuite hotfixes [`#1052`](https://github.com/jovotech/jovo-framework/pull/1052)
-- ✨ Introduce TestSuite [`#1033`](https://github.com/jovotech/jovo-framework/pull/1033)
-- 🐛 Add global intents to actions.yml [`#1032`](https://github.com/jovotech/jovo-framework/pull/1032)
-- 🐛 Fix copying resources [`#1021`](https://github.com/jovotech/jovo-framework/pull/1021)
-- ✨ Improve model validation [`#1020`](https://github.com/jovotech/jovo-framework/pull/1020)
-- ✨ Add accessToken property to JovoUser [`#1027`](https://github.com/jovotech/jovo-framework/pull/1027)
-
 ## [@jovotech/server-lambda@4.0.0-beta.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/server-lambda@4.0.0-beta.2...@jovotech/server-lambda@4.0.0-beta.3)
 
 > 10 September 2021
@@ -26,19 +13,6 @@
 ## [@jovotech/server-lambda@4.0.0-beta.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/server-lambda@4.0.0-beta.0...@jovotech/server-lambda@4.0.0-beta.1)
 
 > 24 August 2021
-
-## [@jovotech/server-express@4.0.0-beta.6](https://github.com/jovotech/jovo-framework/compare/@jovotech/server-express@4.0.0-beta.3...@jovotech/server-express@4.0.0-beta.6)
-
-> 5 October 2021
-
-- :recycle: Refactor CLI Plugins [`#1046`](https://github.com/jovotech/jovo-framework/pull/1046)
-- :sparkles: Add system intents to model [`#1056`](https://github.com/jovotech/jovo-framework/pull/1056)
-- :ambulance: Apply TestSuite hotfixes [`#1052`](https://github.com/jovotech/jovo-framework/pull/1052)
-- ✨ Introduce TestSuite [`#1033`](https://github.com/jovotech/jovo-framework/pull/1033)
-- 🐛 Add global intents to actions.yml [`#1032`](https://github.com/jovotech/jovo-framework/pull/1032)
-- 🐛 Fix copying resources [`#1021`](https://github.com/jovotech/jovo-framework/pull/1021)
-- ✨ Improve model validation [`#1020`](https://github.com/jovotech/jovo-framework/pull/1020)
-- ✨ Add accessToken property to JovoUser [`#1027`](https://github.com/jovotech/jovo-framework/pull/1027)
 
 ## [@jovotech/server-express@4.0.0-beta.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/server-express@4.0.0-beta.2...@jovotech/server-express@4.0.0-beta.3)
 
@@ -54,19 +28,6 @@
 
 > 24 August 2021
 
-## [@jovotech/plugin-debugger@4.0.0-beta.6](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-debugger@4.0.0-beta.2...@jovotech/plugin-debugger@4.0.0-beta.6)
-
-> 5 October 2021
-
-- :recycle: Refactor CLI Plugins [`#1046`](https://github.com/jovotech/jovo-framework/pull/1046)
-- :sparkles: Add system intents to model [`#1056`](https://github.com/jovotech/jovo-framework/pull/1056)
-- :ambulance: Apply TestSuite hotfixes [`#1052`](https://github.com/jovotech/jovo-framework/pull/1052)
-- ✨ Introduce TestSuite [`#1033`](https://github.com/jovotech/jovo-framework/pull/1033)
-- 🐛 Add global intents to actions.yml [`#1032`](https://github.com/jovotech/jovo-framework/pull/1032)
-- 🐛 Fix copying resources [`#1021`](https://github.com/jovotech/jovo-framework/pull/1021)
-- ✨ Improve model validation [`#1020`](https://github.com/jovotech/jovo-framework/pull/1020)
-- ✨ Add accessToken property to JovoUser [`#1027`](https://github.com/jovotech/jovo-framework/pull/1027)
-
 ## [@jovotech/plugin-debugger@4.0.0-beta.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-debugger@4.0.0-beta.1...@jovotech/plugin-debugger@4.0.0-beta.2)
 
 > 31 August 2021
@@ -76,19 +37,6 @@
 ## [@jovotech/plugin-debugger@4.0.0-beta.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-debugger@4.0.0-beta.0...@jovotech/plugin-debugger@4.0.0-beta.1)
 
 > 24 August 2021
-
-## [@jovotech/platform-googlebusiness@4.0.0-beta.6](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-googlebusiness@4.0.0-beta.3...@jovotech/platform-googlebusiness@4.0.0-beta.6)
-
-> 5 October 2021
-
-- :recycle: Refactor CLI Plugins [`#1046`](https://github.com/jovotech/jovo-framework/pull/1046)
-- :sparkles: Add system intents to model [`#1056`](https://github.com/jovotech/jovo-framework/pull/1056)
-- :ambulance: Apply TestSuite hotfixes [`#1052`](https://github.com/jovotech/jovo-framework/pull/1052)
-- ✨ Introduce TestSuite [`#1033`](https://github.com/jovotech/jovo-framework/pull/1033)
-- 🐛 Add global intents to actions.yml [`#1032`](https://github.com/jovotech/jovo-framework/pull/1032)
-- 🐛 Fix copying resources [`#1021`](https://github.com/jovotech/jovo-framework/pull/1021)
-- ✨ Improve model validation [`#1020`](https://github.com/jovotech/jovo-framework/pull/1020)
-- ✨ Add accessToken property to JovoUser [`#1027`](https://github.com/jovotech/jovo-framework/pull/1027)
 
 ## [@jovotech/platform-googlebusiness@4.0.0-beta.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-googlebusiness@4.0.0-beta.2...@jovotech/platform-googlebusiness@4.0.0-beta.3)
 
@@ -103,19 +51,6 @@
 ## [@jovotech/platform-googlebusiness@4.0.0-beta.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-googlebusiness@4.0.0-beta.0...@jovotech/platform-googlebusiness@4.0.0-beta.1)
 
 > 24 August 2021
-
-## [@jovotech/platform-googleassistant@4.0.0-beta.7](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-googleassistant@4.0.0-beta.4...@jovotech/platform-googleassistant@4.0.0-beta.7)
-
-> 5 October 2021
-
-- :recycle: Refactor CLI Plugins [`#1046`](https://github.com/jovotech/jovo-framework/pull/1046)
-- :sparkles: Add system intents to model [`#1056`](https://github.com/jovotech/jovo-framework/pull/1056)
-- :ambulance: Apply TestSuite hotfixes [`#1052`](https://github.com/jovotech/jovo-framework/pull/1052)
-- ✨ Introduce TestSuite [`#1033`](https://github.com/jovotech/jovo-framework/pull/1033)
-- 🐛 Add global intents to actions.yml [`#1032`](https://github.com/jovotech/jovo-framework/pull/1032)
-- 🐛 Fix copying resources [`#1021`](https://github.com/jovotech/jovo-framework/pull/1021)
-- ✨ Improve model validation [`#1020`](https://github.com/jovotech/jovo-framework/pull/1020)
-- ✨ Add accessToken property to JovoUser [`#1027`](https://github.com/jovotech/jovo-framework/pull/1027)
 
 ## [@jovotech/platform-googleassistant@4.0.0-beta.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-googleassistant@4.0.0-beta.3...@jovotech/platform-googleassistant@4.0.0-beta.4)
 
@@ -135,19 +70,6 @@
 
 > 24 August 2021
 
-## [@jovotech/platform-facebookmessenger@4.0.0-beta.6](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-facebookmessenger@4.0.0-beta.3...@jovotech/platform-facebookmessenger@4.0.0-beta.6)
-
-> 5 October 2021
-
-- :recycle: Refactor CLI Plugins [`#1046`](https://github.com/jovotech/jovo-framework/pull/1046)
-- :sparkles: Add system intents to model [`#1056`](https://github.com/jovotech/jovo-framework/pull/1056)
-- :ambulance: Apply TestSuite hotfixes [`#1052`](https://github.com/jovotech/jovo-framework/pull/1052)
-- ✨ Introduce TestSuite [`#1033`](https://github.com/jovotech/jovo-framework/pull/1033)
-- 🐛 Add global intents to actions.yml [`#1032`](https://github.com/jovotech/jovo-framework/pull/1032)
-- 🐛 Fix copying resources [`#1021`](https://github.com/jovotech/jovo-framework/pull/1021)
-- ✨ Improve model validation [`#1020`](https://github.com/jovotech/jovo-framework/pull/1020)
-- ✨ Add accessToken property to JovoUser [`#1027`](https://github.com/jovotech/jovo-framework/pull/1027)
-
 ## [@jovotech/platform-facebookmessenger@4.0.0-beta.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-facebookmessenger@4.0.0-beta.2...@jovotech/platform-facebookmessenger@4.0.0-beta.3)
 
 > 10 September 2021
@@ -161,19 +83,6 @@
 ## [@jovotech/platform-facebookmessenger@4.0.0-beta.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-facebookmessenger@4.0.0-beta.0...@jovotech/platform-facebookmessenger@4.0.0-beta.1)
 
 > 24 August 2021
-
-## [@jovotech/platform-dialogflow@4.0.0-beta.7](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-dialogflow@4.0.0-beta.3...@jovotech/platform-dialogflow@4.0.0-beta.7)
-
-> 5 October 2021
-
-- :recycle: Refactor CLI Plugins [`#1046`](https://github.com/jovotech/jovo-framework/pull/1046)
-- :sparkles: Add system intents to model [`#1056`](https://github.com/jovotech/jovo-framework/pull/1056)
-- :ambulance: Apply TestSuite hotfixes [`#1052`](https://github.com/jovotech/jovo-framework/pull/1052)
-- ✨ Introduce TestSuite [`#1033`](https://github.com/jovotech/jovo-framework/pull/1033)
-- 🐛 Add global intents to actions.yml [`#1032`](https://github.com/jovotech/jovo-framework/pull/1032)
-- 🐛 Fix copying resources [`#1021`](https://github.com/jovotech/jovo-framework/pull/1021)
-- ✨ Improve model validation [`#1020`](https://github.com/jovotech/jovo-framework/pull/1020)
-- ✨ Add accessToken property to JovoUser [`#1027`](https://github.com/jovotech/jovo-framework/pull/1027)
 
 ## [@jovotech/platform-dialogflow@4.0.0-beta.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-dialogflow@4.0.0-beta.2...@jovotech/platform-dialogflow@4.0.0-beta.3)
 
@@ -189,19 +98,6 @@
 
 > 24 August 2021
 
-## [@jovotech/platform-core@4.0.0-beta.6](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-core@4.0.0-beta.3...@jovotech/platform-core@4.0.0-beta.6)
-
-> 5 October 2021
-
-- :recycle: Refactor CLI Plugins [`#1046`](https://github.com/jovotech/jovo-framework/pull/1046)
-- :sparkles: Add system intents to model [`#1056`](https://github.com/jovotech/jovo-framework/pull/1056)
-- :ambulance: Apply TestSuite hotfixes [`#1052`](https://github.com/jovotech/jovo-framework/pull/1052)
-- ✨ Introduce TestSuite [`#1033`](https://github.com/jovotech/jovo-framework/pull/1033)
-- 🐛 Add global intents to actions.yml [`#1032`](https://github.com/jovotech/jovo-framework/pull/1032)
-- 🐛 Fix copying resources [`#1021`](https://github.com/jovotech/jovo-framework/pull/1021)
-- ✨ Improve model validation [`#1020`](https://github.com/jovotech/jovo-framework/pull/1020)
-- ✨ Add accessToken property to JovoUser [`#1027`](https://github.com/jovotech/jovo-framework/pull/1027)
-
 ## [@jovotech/platform-core@4.0.0-beta.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-core@4.0.0-beta.2...@jovotech/platform-core@4.0.0-beta.3)
 
 > 10 September 2021
@@ -215,19 +111,6 @@
 ## [@jovotech/platform-core@4.0.0-beta.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-core@4.0.0-beta.0...@jovotech/platform-core@4.0.0-beta.1)
 
 > 24 August 2021
-
-## [@jovotech/platform-alexa@4.0.0-beta.8](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-alexa@4.0.0-beta.5...@jovotech/platform-alexa@4.0.0-beta.8)
-
-> 5 October 2021
-
-- :recycle: Refactor CLI Plugins [`#1046`](https://github.com/jovotech/jovo-framework/pull/1046)
-- :sparkles: Add system intents to model [`#1056`](https://github.com/jovotech/jovo-framework/pull/1056)
-- :ambulance: Apply TestSuite hotfixes [`#1052`](https://github.com/jovotech/jovo-framework/pull/1052)
-- ✨ Introduce TestSuite [`#1033`](https://github.com/jovotech/jovo-framework/pull/1033)
-- 🐛 Add global intents to actions.yml [`#1032`](https://github.com/jovotech/jovo-framework/pull/1032)
-- 🐛 Fix copying resources [`#1021`](https://github.com/jovotech/jovo-framework/pull/1021)
-- ✨ Improve model validation [`#1020`](https://github.com/jovotech/jovo-framework/pull/1020)
-- ✨ Add accessToken property to JovoUser [`#1027`](https://github.com/jovotech/jovo-framework/pull/1027)
 
 ## [@jovotech/platform-alexa@4.0.0-beta.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-alexa@4.0.0-beta.4...@jovotech/platform-alexa@4.0.0-beta.5)
 
@@ -251,35 +134,9 @@
 
 > 24 August 2021
 
-## [@jovotech/nlu-snips@4.0.0-beta.6](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-snips@4.0.0-beta.3...@jovotech/nlu-snips@4.0.0-beta.6)
-
-> 5 October 2021
-
-- :recycle: Refactor CLI Plugins [`#1046`](https://github.com/jovotech/jovo-framework/pull/1046)
-- :sparkles: Add system intents to model [`#1056`](https://github.com/jovotech/jovo-framework/pull/1056)
-- :ambulance: Apply TestSuite hotfixes [`#1052`](https://github.com/jovotech/jovo-framework/pull/1052)
-- ✨ Introduce TestSuite [`#1033`](https://github.com/jovotech/jovo-framework/pull/1033)
-- 🐛 Add global intents to actions.yml [`#1032`](https://github.com/jovotech/jovo-framework/pull/1032)
-- 🐛 Fix copying resources [`#1021`](https://github.com/jovotech/jovo-framework/pull/1021)
-- ✨ Improve model validation [`#1020`](https://github.com/jovotech/jovo-framework/pull/1020)
-- ✨ Add accessToken property to JovoUser [`#1027`](https://github.com/jovotech/jovo-framework/pull/1027)
-
 ## [@jovotech/nlu-snips@4.0.0-beta.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-snips@4.0.0-beta.2...@jovotech/nlu-snips@4.0.0-beta.3)
 
 > 10 September 2021
-
-## [@jovotech/nlu-rasa@4.0.0-beta.7](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-rasa@4.0.0-beta.4...@jovotech/nlu-rasa@4.0.0-beta.7)
-
-> 5 October 2021
-
-- :recycle: Refactor CLI Plugins [`#1046`](https://github.com/jovotech/jovo-framework/pull/1046)
-- :sparkles: Add system intents to model [`#1056`](https://github.com/jovotech/jovo-framework/pull/1056)
-- :ambulance: Apply TestSuite hotfixes [`#1052`](https://github.com/jovotech/jovo-framework/pull/1052)
-- ✨ Introduce TestSuite [`#1033`](https://github.com/jovotech/jovo-framework/pull/1033)
-- 🐛 Add global intents to actions.yml [`#1032`](https://github.com/jovotech/jovo-framework/pull/1032)
-- 🐛 Fix copying resources [`#1021`](https://github.com/jovotech/jovo-framework/pull/1021)
-- ✨ Improve model validation [`#1020`](https://github.com/jovotech/jovo-framework/pull/1020)
-- ✨ Add accessToken property to JovoUser [`#1027`](https://github.com/jovotech/jovo-framework/pull/1027)
 
 ## [@jovotech/nlu-rasa@4.0.0-beta.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-rasa@4.0.0-beta.3...@jovotech/nlu-rasa@4.0.0-beta.4)
 
@@ -299,19 +156,6 @@
 
 > 24 August 2021
 
-## [@jovotech/nlu-nlpjs@4.0.0-beta.6](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-nlpjs@4.0.0-beta.3...@jovotech/nlu-nlpjs@4.0.0-beta.6)
-
-> 5 October 2021
-
-- :recycle: Refactor CLI Plugins [`#1046`](https://github.com/jovotech/jovo-framework/pull/1046)
-- :sparkles: Add system intents to model [`#1056`](https://github.com/jovotech/jovo-framework/pull/1056)
-- :ambulance: Apply TestSuite hotfixes [`#1052`](https://github.com/jovotech/jovo-framework/pull/1052)
-- ✨ Introduce TestSuite [`#1033`](https://github.com/jovotech/jovo-framework/pull/1033)
-- 🐛 Add global intents to actions.yml [`#1032`](https://github.com/jovotech/jovo-framework/pull/1032)
-- 🐛 Fix copying resources [`#1021`](https://github.com/jovotech/jovo-framework/pull/1021)
-- ✨ Improve model validation [`#1020`](https://github.com/jovotech/jovo-framework/pull/1020)
-- ✨ Add accessToken property to JovoUser [`#1027`](https://github.com/jovotech/jovo-framework/pull/1027)
-
 ## [@jovotech/nlu-nlpjs@4.0.0-beta.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-nlpjs@4.0.0-beta.2...@jovotech/nlu-nlpjs@4.0.0-beta.3)
 
 > 10 September 2021
@@ -325,19 +169,6 @@
 ## [@jovotech/nlu-nlpjs@4.0.0-beta.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-nlpjs@4.0.0-beta.0...@jovotech/nlu-nlpjs@4.0.0-beta.1)
 
 > 24 August 2021
-
-## [@jovotech/nlu-dialogflow@4.0.0-beta.6](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-dialogflow@4.0.0-beta.3...@jovotech/nlu-dialogflow@4.0.0-beta.6)
-
-> 5 October 2021
-
-- :recycle: Refactor CLI Plugins [`#1046`](https://github.com/jovotech/jovo-framework/pull/1046)
-- :sparkles: Add system intents to model [`#1056`](https://github.com/jovotech/jovo-framework/pull/1056)
-- :ambulance: Apply TestSuite hotfixes [`#1052`](https://github.com/jovotech/jovo-framework/pull/1052)
-- ✨ Introduce TestSuite [`#1033`](https://github.com/jovotech/jovo-framework/pull/1033)
-- 🐛 Add global intents to actions.yml [`#1032`](https://github.com/jovotech/jovo-framework/pull/1032)
-- 🐛 Fix copying resources [`#1021`](https://github.com/jovotech/jovo-framework/pull/1021)
-- ✨ Improve model validation [`#1020`](https://github.com/jovotech/jovo-framework/pull/1020)
-- ✨ Add accessToken property to JovoUser [`#1027`](https://github.com/jovotech/jovo-framework/pull/1027)
 
 ## [@jovotech/nlu-dialogflow@4.0.0-beta.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-dialogflow@4.0.0-beta.2...@jovotech/nlu-dialogflow@4.0.0-beta.3)
 
@@ -353,19 +184,6 @@
 
 > 24 August 2021
 
-## [@jovotech/framework@4.0.0-beta.6](https://github.com/jovotech/jovo-framework/compare/@jovotech/framework@4.0.0-beta.3...@jovotech/framework@4.0.0-beta.6)
-
-> 5 October 2021
-
-- :recycle: Refactor CLI Plugins [`#1046`](https://github.com/jovotech/jovo-framework/pull/1046)
-- :sparkles: Add system intents to model [`#1056`](https://github.com/jovotech/jovo-framework/pull/1056)
-- :ambulance: Apply TestSuite hotfixes [`#1052`](https://github.com/jovotech/jovo-framework/pull/1052)
-- ✨ Introduce TestSuite [`#1033`](https://github.com/jovotech/jovo-framework/pull/1033)
-- 🐛 Add global intents to actions.yml [`#1032`](https://github.com/jovotech/jovo-framework/pull/1032)
-- 🐛 Fix copying resources [`#1021`](https://github.com/jovotech/jovo-framework/pull/1021)
-- ✨ Improve model validation [`#1020`](https://github.com/jovotech/jovo-framework/pull/1020)
-- ✨ Add accessToken property to JovoUser [`#1027`](https://github.com/jovotech/jovo-framework/pull/1027)
-
 ## [@jovotech/framework@4.0.0-beta.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/framework@4.0.0-beta.2...@jovotech/framework@4.0.0-beta.3)
 
 > 10 September 2021
@@ -380,19 +198,6 @@
 
 > 24 August 2021
 
-## [@jovotech/db-filedb@4.0.0-beta.6](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-filedb@4.0.0-beta.3...@jovotech/db-filedb@4.0.0-beta.6)
-
-> 5 October 2021
-
-- :recycle: Refactor CLI Plugins [`#1046`](https://github.com/jovotech/jovo-framework/pull/1046)
-- :sparkles: Add system intents to model [`#1056`](https://github.com/jovotech/jovo-framework/pull/1056)
-- :ambulance: Apply TestSuite hotfixes [`#1052`](https://github.com/jovotech/jovo-framework/pull/1052)
-- ✨ Introduce TestSuite [`#1033`](https://github.com/jovotech/jovo-framework/pull/1033)
-- 🐛 Add global intents to actions.yml [`#1032`](https://github.com/jovotech/jovo-framework/pull/1032)
-- 🐛 Fix copying resources [`#1021`](https://github.com/jovotech/jovo-framework/pull/1021)
-- ✨ Improve model validation [`#1020`](https://github.com/jovotech/jovo-framework/pull/1020)
-- ✨ Add accessToken property to JovoUser [`#1027`](https://github.com/jovotech/jovo-framework/pull/1027)
-
 ## [@jovotech/db-filedb@4.0.0-beta.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-filedb@4.0.0-beta.2...@jovotech/db-filedb@4.0.0-beta.3)
 
 > 10 September 2021
@@ -406,19 +211,6 @@
 ## [@jovotech/db-filedb@4.0.0-beta.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-filedb@4.0.0-beta.0...@jovotech/db-filedb@4.0.0-beta.1)
 
 > 24 August 2021
-
-## [@jovotech/db-dynamodb@4.0.0-beta.6](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-dynamodb@4.0.0-beta.3...@jovotech/db-dynamodb@4.0.0-beta.6)
-
-> 5 October 2021
-
-- :recycle: Refactor CLI Plugins [`#1046`](https://github.com/jovotech/jovo-framework/pull/1046)
-- :sparkles: Add system intents to model [`#1056`](https://github.com/jovotech/jovo-framework/pull/1056)
-- :ambulance: Apply TestSuite hotfixes [`#1052`](https://github.com/jovotech/jovo-framework/pull/1052)
-- ✨ Introduce TestSuite [`#1033`](https://github.com/jovotech/jovo-framework/pull/1033)
-- 🐛 Add global intents to actions.yml [`#1032`](https://github.com/jovotech/jovo-framework/pull/1032)
-- 🐛 Fix copying resources [`#1021`](https://github.com/jovotech/jovo-framework/pull/1021)
-- ✨ Improve model validation [`#1020`](https://github.com/jovotech/jovo-framework/pull/1020)
-- ✨ Add accessToken property to JovoUser [`#1027`](https://github.com/jovotech/jovo-framework/pull/1027)
 
 ## [@jovotech/db-dynamodb@4.0.0-beta.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-dynamodb@4.0.0-beta.2...@jovotech/db-dynamodb@4.0.0-beta.3)
 
