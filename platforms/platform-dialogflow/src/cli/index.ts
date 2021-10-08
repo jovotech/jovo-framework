@@ -6,12 +6,6 @@ import { DeployHook } from './hooks/DeployHook';
 import { GetHook } from './hooks/GetHook';
 import { DialogflowConfig } from './utilities';
 
-declare module '@jovotech/cli-core/dist/PluginHook' {
-  export interface PluginHook {
-    $plugin: DialogflowCli;
-  }
-}
-
 export class DialogflowCli extends JovoCliPlugin {
   readonly id: string = 'dialogflow';
   readonly type: PluginType = 'platform';

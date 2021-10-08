@@ -13,6 +13,7 @@ import {
 } from '@jovotech/cli-core';
 import { existsSync, mkdirSync } from 'fs';
 import _get from 'lodash.get';
+import { GoogleAssistantCli } from '..';
 import { checkForGactionsCli, getGactionsError, GoogleContext } from '../utilities';
 
 export interface GoogleGetContext extends GetPlatformContext, GoogleContext {
@@ -20,7 +21,8 @@ export interface GoogleGetContext extends GetPlatformContext, GoogleContext {
 }
 
 export class GetHook extends PluginHook<GetPlatformEvents | BuildPlatformEvents> {
-  $context!: GoogleGetContext;
+  readonly $plugin!: GoogleAssistantCli;
+  readonly $context!: GoogleGetContext;
 
   install(): void {
     this.middlewareCollection = {

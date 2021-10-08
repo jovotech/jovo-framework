@@ -6,12 +6,6 @@ import { GetHook } from './hooks/GetHook';
 import { NewHook } from './hooks/NewHook';
 import { GoogleCliConfig } from './utilities';
 
-declare module '@jovotech/cli-core/dist/PluginHook' {
-  export interface PluginHook {
-    $plugin: GoogleAssistantCli;
-  }
-}
-
 export class GoogleAssistantCli extends JovoCliPlugin {
   readonly id: string = 'googleAssistant';
   readonly type: PluginType = 'platform';

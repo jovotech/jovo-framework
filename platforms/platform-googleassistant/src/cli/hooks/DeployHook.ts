@@ -11,12 +11,14 @@ import {
 } from '@jovotech/cli-core';
 import { existsSync } from 'fs';
 import indent from 'indent-string';
+import { GoogleAssistantCli } from '..';
 import { checkForGactionsCli, getGactionsError, GoogleContext } from '../utilities';
 
 export interface GoogleDeployContext extends DeployPlatformContext, GoogleContext {}
 
 export class DeployHook extends PluginHook<DeployPlatformEvents> {
-  $context!: GoogleDeployContext;
+  readonly $plugin!: GoogleAssistantCli;
+  readonly $context!: GoogleDeployContext;
 
   install(): void {
     this.middlewareCollection = {

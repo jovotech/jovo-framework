@@ -1,10 +1,12 @@
 import type { NewContext, NewEvents } from '@jovotech/cli-command-new';
 import { Log, PluginHook, promptSupportedLocales } from '@jovotech/cli-core';
+import { GoogleAssistantCli } from '..';
 import { SupportedLocalesType } from '../interfaces';
 import { SupportedLocales } from '../utilities';
 
 export class NewHook extends PluginHook<NewEvents> {
-  $context!: NewContext;
+  readonly $plugin!: GoogleAssistantCli;
+  readonly $context!: NewContext;
 
   install(): void {
     this.middlewareCollection = {

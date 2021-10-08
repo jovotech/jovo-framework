@@ -13,6 +13,7 @@ import AdmZip from 'adm-zip';
 import axios, { AxiosError } from 'axios';
 import { existsSync, readFileSync, unlinkSync } from 'fs';
 import { join as joinPaths } from 'path';
+import { DialogflowCli } from '..';
 import { activateServiceAccount, getGcloudAccessToken } from '../utilities';
 
 export interface DialogflowDeployPlatformContext extends DeployPlatformContext {
@@ -24,7 +25,8 @@ export interface DialogflowDeployPlatformContext extends DeployPlatformContext {
 }
 
 export class DeployHook extends PluginHook<DeployPlatformEvents> {
-  $context!: DialogflowDeployPlatformContext;
+  readonly $plugin!: DialogflowCli;
+  readonly $context!: DialogflowDeployPlatformContext;
 
   install(): void {
     this.middlewareCollection = {

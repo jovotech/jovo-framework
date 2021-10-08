@@ -23,6 +23,7 @@ import _get from 'lodash.get';
 import _merge from 'lodash.merge';
 import _mergeWith from 'lodash.mergewith';
 import { join as joinPaths } from 'path';
+import { DialogflowCli } from '..';
 import DefaultFiles from '../DefaultFiles.json';
 import { DialogflowAgent, SupportedLocales, SupportedLocalesType } from '../utilities';
 
@@ -35,7 +36,8 @@ export interface DialogflowBuildContext extends BuildPlatformContext {
 }
 
 export class BuildHook extends PluginHook<BuildPlatformEvents> {
-  $context!: DialogflowBuildContext;
+  readonly $plugin!: DialogflowCli;
+  readonly $context!: DialogflowBuildContext;
 
   install(): void {
     this.middlewareCollection = {

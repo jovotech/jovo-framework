@@ -27,8 +27,8 @@ export interface DialogflowGetContext extends GetPlatformContext {
 }
 
 export class GetHook extends PluginHook<GetPlatformEvents> {
-  $plugin!: DialogflowCli;
-  $context!: DialogflowGetContext;
+  readonly $plugin!: DialogflowCli;
+  readonly $context!: DialogflowGetContext;
 
   install(): void {
     this.middlewareCollection = {
