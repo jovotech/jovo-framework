@@ -1,4 +1,5 @@
 import { AnyObject, App, Server } from '@jovotech/framework';
+import { InstagramOutputTemplateConverterStrategy } from '@jovotech/output-instagram';
 import {
   FacebookMessengerPlatform,
   MessengerBotEntry,
@@ -9,6 +10,7 @@ import { Instagram } from './Instagram';
 import { InstagramRequest } from './InstagramRequest';
 
 export class InstagramPlatform extends FacebookMessengerPlatform {
+  readonly outputTemplateConverterStrategy = new InstagramOutputTemplateConverterStrategy();
   readonly jovoClass = Instagram;
   readonly requestClass = InstagramRequest;
   readonly userClass = InstagramUser;

@@ -63,7 +63,7 @@ export class FacebookMessenger extends Jovo<
       await super.$send(outputConstructorOrTemplate);
     }
     const outputConverter = new OutputTemplateConverter(
-      new FacebookMessengerOutputTemplateConverterStrategy(),
+      this.$platform.outputTemplateConverterStrategy,
     );
 
     // get only the newly added output
