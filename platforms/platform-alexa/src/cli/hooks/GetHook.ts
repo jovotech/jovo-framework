@@ -13,6 +13,7 @@ import {
 } from '@jovotech/cli-core';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import _get from 'lodash.get';
+import { AlexaCli } from '..';
 import * as smapi from '../smapi';
 import { AlexaContext, AskSkillList, checkForAskCli, prepareSkillList } from '../utilities';
 import { AlexaHook } from './AlexaHook';
@@ -22,6 +23,7 @@ export interface GetContextAlexa extends AlexaContext, GetPlatformContext {
 }
 
 export class GetHook extends AlexaHook<BuildPlatformEvents | GetPlatformEvents> {
+  $plugin!: AlexaCli;
   $context!: GetContextAlexa;
 
   install(): void {
@@ -78,7 +80,12 @@ export class GetHook extends AlexaHook<BuildPlatformEvents | GetPlatformEvents> 
 
     this.$context.alexa.skillId =
       this.$context.flags['skill-id'] ||
-      _get(this.$plugin.config, '[".ask/"]["ask-states.json"].profiles.default.skillId') ||
+      _get(
+        this.$plugin.config,
+        `[".ask/"]["ask-states.json"].profiles.${
+          this.$context.alexa.askProfile || 'default'
+        }.skillId`,
+      ) ||
       _get(this.$plugin.config, 'options.skillId');
   }
 

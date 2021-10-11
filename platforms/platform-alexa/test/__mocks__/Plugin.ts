@@ -47,6 +47,10 @@ export class Plugin extends JovoCliPlugin {
     return '';
   }
 
+  get askResourcesPath(): string {
+    return '';
+  }
+
   getModelPath(): string {
     return '';
   }
