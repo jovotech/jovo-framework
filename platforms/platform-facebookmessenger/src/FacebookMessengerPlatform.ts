@@ -70,7 +70,7 @@ export class FacebookMessengerPlatform extends Platform<
   }
 
   isRequestRelated(request: AnyObject | FacebookMessengerRequest): boolean {
-    return request.id && request.time && request.messaging?.[0];
+    return request.$type === 'facebook' && request.id && request.time && request.messaging?.[0];
   }
 
   isResponseRelated(response: AnyObject | FacebookMessengerResponse): boolean {
@@ -106,7 +106,7 @@ export class FacebookMessengerPlatform extends Platform<
     return response;
   }
 
-  private augmentAppHandle() {
+  augmentAppHandle(): void {
     const APP_HANDLE = App.prototype.handle;
     const getVerifyTokenFromConfig = function (this: FacebookMessengerPlatform) {
       return this.config.verifyToken;
@@ -138,6 +138,8 @@ export class FacebookMessengerPlatform extends Platform<
         });
       } else if (isFacebookMessengerRequest) {
         const promises = request.entry.map((entry: MessengerBotEntry) => {
+          // Set platform origin on request entry
+          entry.$type = 'facebook';
           const serverCopy = _cloneDeep(server);
           // eslint-disable-next-line @typescript-eslint/no-empty-function
           serverCopy.setResponse = async () => {};

@@ -5,6 +5,7 @@ export interface MessengerBotEntry {
    * @link FacebookMessengerRequest#messaging
    */
   messaging: [MessagingData];
+  $type?: string;
 }
 
 export interface MessagingData {

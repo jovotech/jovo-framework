@@ -11,6 +11,7 @@ import { FacebookMessengerCapabilityType } from './FacebookMessengerDevice';
 import { MessagingData } from './interfaces';
 
 export class FacebookMessengerRequest extends JovoRequest {
+  $type = 'facebook';
   id?: string;
   time?: number;
   /**
