@@ -1,31 +1,58 @@
 ---
-title: 'Facebook Messenger Platform Integration'
-excerpt: 'The Facebook Messenger platform integration allows you to build custom Messenger Bots using Jovo.'
+title: 'Instagram Platform Integration'
+excerpt: 'The Instagram platform integration allows you to build custom Instagram messaging bots using Jovo.'
 ---
 
-# Facebook Messenger Platform Integration
+# Instagram Platform Integration
 
-The Facebook Messenger [platform integration](https://v4.jovo.tech/docs/platforms) allows you to build custom Messenger bots using Jovo.
+The Instagram [platform integration](https://v4.jovo.tech/docs/platforms) allows you to build custom Messenger bots using Jovo.
 
+## Introduction
 
-## Getting Started
+Apps for managing Instagram direct messages (DMs) are called Instagram messaging apps, and also referred to as bots. They work similar to [Facebook Messenger bots](https://v4.jovo.tech/marketplace/platform-facebookmessenger). You can find a general introduction into building those apps in the [official Instagram Messaging documentation](https://developers.facebook.com/docs/messenger-platform/instagram).
 
-You can install the plugin like this:
+In the [installation](#installation) section, we're going to set up a Jovo project that works with Instagram.
+
+An Instagram bot usually consists of two parts:
+
+- The Facebook app that is connected to a Facebook page in the Facebook for Developers portal
+- The code that handles the logic of your bot
+
+In the Facebook for Developers portal, you need to create an app that gets connected to a Facebook page. This page then gets connected to an Instagram business account. Learn how to set it up in the [deployment](#deployment) section.
+
+If a user sends messages to your Instagram account, the Messenger platform sends API requests to your webhook endpoint. The code is then responsible for returning an appropriate response. We're going to set up the code for this in the [installation](#installation) section, and look into [configuration](#configuration) options afterwards.
+
+Jovo is a framework that allows you to build apps that work across devices and platforms. However, this does not mean that you can't build highly complex Instagram bots with Jovo. Any custom Instagram messaging app that can be built with the official Messenger SDK can also be built with the Jovo Framework. In the [platform-specific features](#platform-specific-features) section, we're going to take a look at Instagram features in Jovo.
+
+## Installation
+
+To create a new Instagram project with Jovo, we recommend installing the Jovo CLI, creating a new Jovo project, and selecting Instagram as platform using the CLI wizard. Learn more in our [getting started guide](https://v4.jovo.tech/docs/getting-started).
 
 ```sh
-$ npm install @jovotech/platform-facebookmessenger
+# Install Jovo CLI globally
+$ npm install -g @jovotech/cli
+
+# Start new project wizard
+# In the platform step, use the space key to select Instagram
+$ jovov4 new <directory>
+```
+
+If you want to add Instagram to an existing Jovo project, you can install the plugin like this:
+
+```sh
+$ npm install @jovotech/platform-instagram
 ```
 
 Add it as plugin to your [app configuration](https://v4.jovo.tech/docs/app-config), e.g. `app.ts`:
 
 ```typescript
 import { App } from '@jovotech/framework';
-import { FacebookMessengerPlatform } from '@jovotech/platform-facebookmessenger';
+import { InstagramPlatform } from '@jovotech/platform-instagram';
 // ...
 
 const app = new App({
   plugins: [
-    new FacebookMessengerPlatform(),
+    new InstagramPlatform(),
     // ...
   ],
 });
@@ -33,18 +60,22 @@ const app = new App({
 
 ## Configuration
 
-You can configure the Facebook Messenger platform in the [app configuration](https://v4.jovo.tech/docs/app-config), for example `app.ts`:
+You can configure the Instagram platform in the [app configuration](https://v4.jovo.tech/docs/app-config), for example `app.ts`:
 
 ```typescript
-import { FacebookMessengerPlatform } from '@jovotech/platform-facebookmessenger';
+import { InstagramPlatform } from '@jovotech/platform-instagram';
 
 // ...
 
 const app = new App({
   plugins: [
-    new FacebookMessengerPlatform({
-      plugins: [ /* ... */ ],
-      session: { /* ... */ },
+    new InstagramPlatform({
+      plugins: [
+        /* ... */
+      ],
+      session: {
+        /* ... */
+      },
     }),
     // ...
   ],
@@ -53,25 +84,24 @@ const app = new App({
 
 Options include:
 
-- `plugins`: For example, you need to ddd an [NLU integration](#nlu-integration) here.
+- `plugins`: For example, you need to add an [NLU integration](#nlu-integration) here.
 - `session`: Session specific config. Take a look at [session data](#session-data) for more information.
-
 
 ### NLU Integration
 
-Facebook Messenger requests mostly consist of raw text that need to be turned into structured data using an [natural language understanding (NLU) integration](https://v4.jovo.tech/docs/nlu).
+Instagram requests mostly consist of raw text that need to be turned into structured data using an [natural language understanding (NLU) integration](https://v4.jovo.tech/docs/nlu).
 
 Here is an example how you can add an NLU integration (in this case [NLP.js](https://v4.jovo.tech/marketplace/nlu-nlpjs)) to the [app configuration](https://v4.jovo.tech/docs/app-config) in `app.ts`:
 
 ```typescript
-import { FacebookMessengerPlatform } from '@jovotech/platform-facebookmessenger';
+import { InstagramPlatform } from '@jovotech/platform-instagram';
 import { NlpjsNlu } from '@jovotech/nlu-nlpjs';
 
 // ...
 
 const app = new App({
   plugins: [
-    new FacebookMessengerPlatform({
+    new InstagramPlatform({
       plugins: [new NlpjsNlu()],
     }),
     // ...
@@ -81,62 +111,60 @@ const app = new App({
 
 ### Session Data
 
-Facebook Messenger does not offer session storage, which is needed for features like [session data](https://v4.jovo.tech/docs/data#session-data), [component data](https://v4.jovo.tech/docs/data#component-data), and the [`$state` stack](https://v4.jovo.tech/docs/state-stack).
+Instagram does not offer session storage, which is needed for features like [session data](https://v4.jovo.tech/docs/data#session-data), [component data](https://v4.jovo.tech/docs/data#component-data), and the [`$state` stack](https://v4.jovo.tech/docs/state-stack).
 
-To make Facebook Messenger bots work with these features, Jovo automatically enables the storage of session data to the active [database integration](https://v4.jovo.tech/docs/databases). Under the hood, it adds `session` to the [`storedElements` config](https://v4.jovo.tech/docs/databases#storedelements).
+To make Instagram bots work with these features, Jovo automatically enables the storage of session data to the active [database integration](https://v4.jovo.tech/docs/databases). Under the hood, it adds `session` to the [`storedElements` config](https://v4.jovo.tech/docs/databases#storedelements).
 
-Since Facebook does not have the concept of sessions, we need to define after which time a request should be seen as the start of the new session. The default is *15 minutes* and can be modified either in the [`storedElements` config](https://v4.jovo.tech/docs/databases#storedelements) (works across platforms) or in the Facebook Messenger config:
+Since Instagram does not have the concept of sessions, we need to define after which time a request should be seen as the start of the new session. The default is _15 minutes_ and can be modified either in the [`storedElements` config](https://v4.jovo.tech/docs/databases#storedelements) (works across platforms) or in the Instagram config:
 
 ```typescript
-new FacebookMessengerPlatform({
+new Instagram({
   session: {
     expiresAfterSeconds: 900,
   },
 });
 ```
 
-
 ## Platform-Specific Features
 
-You can access the Facebook Messenger specific object like this:
+You can access the Instagram specific object like this:
 
 ```typescript
-this.$facebookMessenger
+this.$instagram;
 ```
 
-You can also use this object to see if the request is coming from Facebook Messenger (or a different platform):
+You can also use this object to see if the request is coming from Instagram (or a different platform):
 
 ```typescript
-if(this.$facebookMessenger) {
+if (this.$instagram) {
   // ...
 }
 ```
 
-
 ### Output
 
-There are various Facebook Messenger specific elements that can be added to the [output](https://v4.jovo.tech/docs/output).
+There are various Instagram specific elements that can be added to the [output](https://v4.jovo.tech/docs/output).
 
-For output that is only used for Facebook Messenger, you can add the following to the output object:
+For output that is only used for Instagram, you can add the following to the output object:
 
 ```typescript
 {
   // ...
   platforms: {
-    facebookMessenger: {
+    instagram: {
       // ...
     }
   }
 }
 ```
 
-You can add response objects that should show up exactly like this in the Facebook Messenger response object using the `nativeResponse` object:
+You can add response objects that should show up exactly like this in the Instagram response object using the `nativeResponse` object:
 
 ```typescript
 {
   // ...
   platforms: {
-    facebookMessenger: {
+    instagram: {
       nativeResponse: {
         // ...
       }
@@ -146,3 +174,6 @@ You can add response objects that should show up exactly like this in the Facebo
 }
 ```
 
+## Deployment
+
+To test your Instagram messaging bot with an Instagram account, you need to create an app in the Facebook for Developers portal. [Learn more in the official Instagram Messaging docs](https://developers.facebook.com/docs/messenger-platform/instagram/get-started).
