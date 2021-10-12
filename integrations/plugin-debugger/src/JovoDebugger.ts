@@ -1,7 +1,7 @@
 import {
   AnyObject,
   App,
-  DeepPartial,
+  BuiltInHandler,
   Extensible,
   HandleRequest,
   InvalidParentError,
@@ -28,28 +28,20 @@ import { cwd } from 'process';
 import { connect, Socket } from 'socket.io-client';
 import { Writable } from 'stream';
 import { v4 as uuidV4 } from 'uuid';
+import { STATE_MUTATING_METHOD_KEYS } from './constants';
 import { DebuggerConfig } from './DebuggerConfig';
+import { JovoDebuggerEvent } from './enums';
 import { LanguageModelDirectoryNotFoundError } from './errors/LanguageModelDirectoryNotFoundError';
 import { SocketConnectionFailedError } from './errors/SocketConnectionFailedError';
 import { SocketNotConnectedError } from './errors/SocketNotConnectedError';
 import { WebhookIdNotFoundError } from './errors/WebhookIdNotFoundError';
-import { JovoDebuggerPayload, JovoUpdateData, StateMutatingJovoMethodKey } from './interfaces';
+import {
+  JovoDebuggerPayload,
+  JovoStateMutationData,
+  JovoUpdateData,
+  StateMutatingJovoMethodKey,
+} from './interfaces';
 import { MockServer } from './MockServer';
-
-export enum JovoDebuggerEvent {
-  DebuggingAvailable = 'debugging.available',
-  DebuggingUnavailable = 'debugging.unavailable',
-
-  DebuggerRequest = 'debugger.request',
-
-  AppLanguageModelResponse = 'app.language-model-response',
-  AppDebuggerConfigResponse = 'app.debugger-config-response',
-  AppConsoleLog = 'app.console-log',
-  AppRequest = 'app.request',
-  AppResponse = 'app.response',
-
-  AppJovoUpdate = 'app.jovo-update',
-}
 
 export interface JovoDebuggerConfig extends PluginConfig {
   nlu: NluPlugin;
@@ -58,8 +50,6 @@ export interface JovoDebuggerConfig extends PluginConfig {
   modelsPath: string;
   ignoredProperties: Array<keyof Jovo | string>;
 }
-
-export type JovoDebuggerInitConfig = DeepPartial<JovoDebuggerConfig>;
 
 export function getDefaultLanguageMap(): UnknownObject {
   return {
@@ -71,15 +61,9 @@ export function getDefaultLanguageMap(): UnknownObject {
   };
 }
 
-export const STATE_MUTATING_METHOD_KEYS = ['$redirect', '$delegate', '$resolve'] as const;
-
 export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   socket?: typeof Socket;
   hasOverriddenWrite = false;
-
-  constructor(config?: JovoDebuggerInitConfig) {
-    super(config);
-  }
 
   getDefaultConfig(): JovoDebuggerConfig {
     return {
@@ -146,6 +130,14 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     this.socket?.emit(JovoDebuggerEvent.AppJovoUpdate, payload);
   }
 
+  emitStateMutation(requestId: string | number, data: JovoStateMutationData): void {
+    const payload: JovoDebuggerPayload<JovoStateMutationData> = {
+      requestId,
+      data,
+    };
+    this.socket?.emit(JovoDebuggerEvent.AppStateMutation, payload);
+  }
+
   private patchHandleRequestToIncludeUniqueId() {
     // this cannot be done in a middleware-hook because the debuggerRequestId is required when initializing the jovo instance
     // and that happens before the middlewares are executed
@@ -197,6 +189,8 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     function getCompletePropertyPath(key: string, path?: string): string {
       return path ? [path, key].join('.') : key;
     }
+
+    // class Foo { bar: string} -> new Proxy(new Foo(), { get() {...}})
 
     return {
       get: (target, key: keyof T) => {
@@ -279,11 +273,39 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     key: KEY,
   ): ProxyHandler<Jovo[KEY]> {
     return {
-      apply(target: any, thisArg: Jovo, argArray: any[]): any {
-        // TODO implement setting and sending of data
-        return target.apply(thisArg, argArray);
+      apply: (target: Jovo[KEY], thisArg: Jovo, argArray: Parameters<Jovo[KEY]>): unknown => {
+        const mutationData = this.getStateMutationData(handleRequest, key, thisArg, argArray);
+        this.emitStateMutation(handleRequest.debuggerRequestId, mutationData);
+        return (target as (...args: unknown[]) => unknown).apply(thisArg, argArray);
       },
     };
+  }
+
+  private getStateMutationData<KEY extends StateMutatingJovoMethodKey>(
+    handleRequest: HandleRequest,
+    key: KEY,
+    jovo: Jovo,
+    args: Parameters<Jovo[KEY]>,
+  ): JovoStateMutationData<KEY> {
+    const data: JovoStateMutationData<KEY> = {
+      key,
+      to: { handler: BuiltInHandler.Start },
+    };
+    if (key === '$redirect' || key === '$delegate') {
+      const componentName = typeof args[0] === 'function' ? args[0].name : args[0];
+      const node = handleRequest.componentTree.getNodeRelativeTo(
+        componentName,
+        handleRequest.activeComponentNode?.path,
+      );
+      data.to.path = node?.path?.join('.');
+      if (key === '$redirect' && args[1]) {
+        data.to.handler = args[1] as string;
+      }
+    } else if (key === '$resolve') {
+      // TODO implement
+    }
+
+    return data;
   }
 
   private async onDebuggingAvailable(): Promise<void> {

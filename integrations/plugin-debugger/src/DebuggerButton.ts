@@ -1,7 +1,5 @@
-import { JovoInput, OmitWhere } from '@jovotech/framework';
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type PlainObjectType<T> = OmitWhere<T, () => any>;
+import { JovoInput } from '@jovotech/framework';
+import { PlainObjectType } from './interfaces';
 
 // Omit all functions and make `type` optional
 export type DebuggerButtonInput = Omit<PlainObjectType<JovoInput>, 'type'> &
