@@ -21,7 +21,7 @@ A Messenger bot usually consists of two parts:
 
 In the Facebook for Developers portal, you need to create an app that gets connected to a Facebook page. Learn how to set it up in the [deployment](#deployment) section.
 
-If a user sends messages to your page, the Messenger platform sends API requests to your webhook endpoint. The code is then responsible for returning an appropriate response. We're going to set up the code for this in the [installation](#alexa-skill-code) section, and look into [configuration](#configuration) options afterwards.
+If a user sends messages to your page, the Messenger platform sends API requests to your webhook endpoint. The code is then responsible for returning an appropriate response. We're going to set up the code for this in the [installation](#installation) section, and look into [configuration](#configuration) options afterwards.
 
 Jovo is a framework that allows you to build apps that work across devices and platforms. However, this does not mean that you can't build highly complex Messenger bots with Jovo. Any custom Messenger bot that can be built with the official Messenger SDK can also be built with the Jovo Framework. In the [platform-specific features](#platform-specific-features) section, we're going to take a look at Facebook Messenger features in Jovo.
 
