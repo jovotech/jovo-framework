@@ -99,6 +99,22 @@ export class RoutingExecutor {
     return routeMatches.find((match) => !match.skip);
   }
 
+  private isMatchingHandler(
+    metadata: HandlerMetadata,
+    intentNames = metadata.intentNames,
+  ): boolean {
+    // do type-matching
+    if (metadata.options?.types?.includes(this.jovo.$input.type)) {
+      return true;
+    }
+    // do intent-matching
+    const intentName = this.jovo.$input.getIntentName();
+    return (
+      (intentName && intentNames.includes(intentName)) ||
+      intentNames.includes(BuiltInHandler.Unhandled)
+    );
+  }
+
   private async getRankedGlobalRouteMatches(): Promise<RouteMatch[]> {
     const globalRouteMatches = await this.getGlobalRouteMatches();
     return globalRouteMatches.sort(this.compareRouteMatchRanking);
@@ -113,19 +129,13 @@ export class RoutingExecutor {
     if (!isGlobal) {
       return false;
     }
-    // do type-matching if possible
-    if (handlerMetadata.options?.types?.includes(this.jovo.$input.type)) {
-      return true;
-    }
-    // otherwise do intent-matching
+    // if the component is global, all intent names are global, otherwise only use global intent names
+    // the reason is, that a handler can not be locally called anyways if the component is global
     const intentNames = componentMetadata.isGlobal
       ? handlerMetadata.intentNames
       : handlerMetadata.globalIntentNames;
-    const intentName = this.jovo.$input.getIntentName();
-    return (
-      (intentName && intentNames.includes(intentName)) ||
-      intentNames.includes(BuiltInHandler.Unhandled)
-    );
+
+    return this.isMatchingHandler(handlerMetadata, intentNames);
   }
 
   private async getGlobalRouteMatches(): Promise<RouteMatch[]> {
@@ -167,14 +177,10 @@ export class RoutingExecutor {
   }
 
   private isMatchingLocalHandler(metadata: HandlerMetadata, subState?: string): boolean {
-    if (metadata.options?.types?.includes(this.jovo.$input.type)) {
-      return true;
-    }
-    const intentName = this.jovo.$input.getIntentName();
+    // if a subState is passed, make sure the handler has exactly the same subState, otherwise make sure the handler has no subState
     return (
-      ((intentName && metadata.intentNames.includes(intentName)) ||
-        metadata.intentNames.includes(BuiltInHandler.Unhandled)) &&
-      (subState ? metadata.options?.subState === subState : !metadata.options?.subState)
+      (subState ? metadata.options?.subState === subState : !metadata.options?.subState) &&
+      this.isMatchingHandler(metadata)
     );
   }
 
