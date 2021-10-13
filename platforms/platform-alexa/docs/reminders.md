@@ -154,6 +154,7 @@ Under the hood, the `AskForRemindersPermissionOutput` extends the `AskForPermiss
     alexa: {
       nativeResponse: {
         response: {
+          shouldEndSession: true,
           directives: [
             {
               type: 'Connections.SendRequest',
@@ -210,8 +211,6 @@ async remindersPermissionAccepted() {
 You can also use the following helper methods:
 
 - `AlexaHandles.onPermission('DENIED')`: Returns a `@Handle` object similar to the one above.
-- `AlexaHandles.onPermissionAccepted()`: Returns `true` for accepted permission requests.
-- `AlexaHandles.onPermissionDenied()`: Returns `true` for denied permission requests.
 
 #### Permissions Consent Card
 
