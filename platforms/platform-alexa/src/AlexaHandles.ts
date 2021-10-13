@@ -7,6 +7,7 @@ export type PermissionType = 'timers' | 'reminders';
 export class AlexaHandles {
   static onPermission(status: PermissionStatus, type?: PermissionType): HandleOptions {
     return {
+      global: true,
       types: ['Connections.Response'],
       platforms: ['alexa'],
       if: (jovo: Jovo) =>
