@@ -208,9 +208,13 @@ async remindersPermissionAccepted() {
 }
 ```
 
-You can also use the following helper methods:
+You can use the following `status` values for `AlexaHandles.onPermission(status)`:
 
-- `AlexaHandles.onPermission('DENIED')`: Returns a `@Handle` object similar to the one above.
+- `ACCEPTED`: User granted the permissions
+- `DENIED`: User refused the permissions
+- `NOT_ANSWERED`: User did not respond or was not understood
+
+[Learn more in the official Alexa docs](https://developer.amazon.com/docs/alexa/smapi/voice-permissions-for-reminders.html#send-a-connectionssendrequest-directive).
 
 #### Permissions Consent Card
 
