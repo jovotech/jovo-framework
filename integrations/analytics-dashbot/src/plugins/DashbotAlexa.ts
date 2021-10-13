@@ -1,15 +1,30 @@
 import { Jovo, Platform, UnknownObject } from '@jovotech/framework';
-import { DashbotAnalyticsPlugin } from '../interfaces';
+import { DashbotAnalyticsPlugin } from './DashbotAnalyticsPlugin';
 
-export class DashbotAlexa implements DashbotAnalyticsPlugin {
-  readonly id = 'alexa' as const;
+declare module '../interfaces' {
+  export interface DashbotAnalyticsConfigPlugins {
+    alexa?: DashbotAnalyticsPluginConfig;
+  }
+}
 
-  createRequestLog(jovo: Jovo): UnknownObject {
-    return { event: jovo.$server.getRequestObject() };
+export class DashbotAlexa extends DashbotAnalyticsPlugin {
+  get id(): string {
+    return 'alexa';
   }
 
-  createResponseLog(jovo: Jovo): UnknownObject {
-    return { event: jovo.$server.getRequestObject(), response: jovo.$response };
+  async trackRequest(jovo: Jovo, url: string): Promise<void> {
+    const requestLog: UnknownObject = { event: jovo.$request };
+
+    await this.sendDashbotRequest(url, requestLog);
+  }
+
+  async trackResponse(jovo: Jovo, url: string): Promise<void> {
+    const responseLog: UnknownObject = {
+      event: jovo.$request,
+      response: jovo.$response,
+    };
+
+    await this.sendDashbotRequest(url, responseLog);
   }
 
   canHandle(platform: Platform): boolean {

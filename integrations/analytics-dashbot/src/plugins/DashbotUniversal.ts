@@ -1,21 +1,23 @@
-import {
-  Jovo,
-  JovoRequest,
-  JovoUser,
-  JovoDevice,
-  UnknownObject,
-  Platform,
-  Intent,
-} from '@jovotech/framework';
-import { JovoResponse } from '@jovotech/output';
-import { DashbotAnalyticsPlugin } from '../interfaces';
+import { Jovo, UnknownObject, Intent, Entity, JovoResponse } from '@jovotech/framework';
+import { DashbotAnalyticsPlugin } from './DashbotAnalyticsPlugin';
+
+declare module '../interfaces' {
+  interface DashbotAnalyticsConfigPlugins {
+    universal?: DashbotAnalyticsPluginConfig;
+  }
+}
+
+export interface DashbotUniversalInput {
+  name: string;
+  value: string;
+}
 
 export interface DashbotUniversalIntent {
   name: string;
-  inputs: { name: string; value: string }[];
+  inputs: DashbotUniversalInput[];
 }
 
-export interface DashbotUniversalRequest extends UnknownObject {
+export interface DashbotUniversalRequestLog extends UnknownObject {
   text: string;
   userId: string;
   intent?: DashbotUniversalIntent;
@@ -23,45 +25,56 @@ export interface DashbotUniversalRequest extends UnknownObject {
   buttons?: UnknownObject[];
   postback?: UnknownObject;
   platformJson?: UnknownObject;
+  sessionId?: string;
 }
 
-export class DashbotUniversal implements DashbotAnalyticsPlugin {
-  readonly id: string = 'universal' as const;
+export class DashbotUniversal extends DashbotAnalyticsPlugin {
+  get id(): string {
+    return 'universal';
+  }
 
-  createRequestLog(jovo: Jovo): DashbotUniversalRequest {
-    const text: string | undefined =
-      jovo.$input.text || this.getIntentName(jovo.$input.intent) || jovo.$input.type;
-    console.log(text);
+  async trackRequest(jovo: Jovo, url: string): Promise<void> {
+    const text: string =
+      jovo.$input.text || this.getIntentName(jovo.$input.intent) || jovo.$input.type || '';
 
-    if (!text) {
-      // TODO: What to do here?
-      throw new Error('No input text available!');
-    }
-
-    const requestLog: DashbotUniversalRequest = {
+    const requestLog: DashbotUniversalRequestLog = {
       text,
       userId: jovo.$user.id || '',
       platformJson: {
         request: jovo.$server.getRequestObject(),
         input: jovo.$input,
       },
+      sessionId: jovo.$session.id || '',
     };
 
     const intentName: string = this.getIntentName(jovo.$input.intent) || jovo.$input.type;
+    const inputs: DashbotUniversalInput[] = Object.entries(jovo.$input.entities || []).map(
+      ([key, entry]) => ({
+        name: key,
+        value: entry?.value || '',
+      }),
+    );
 
-    // TODO: Inputs!
-    requestLog.intent = { name: intentName, inputs: [] };
+    requestLog.intent = { name: intentName, inputs };
 
-    return requestLog;
+    await this.sendDashbotRequest(url, requestLog);
   }
 
-  createResponseLog(jovo: Jovo): DashbotUniversalRequest {
-    const responseLog: DashbotUniversalRequest = {
-      text: 'Response',
-      userId: jovo.$user.id || '',
-    };
+  async trackResponse(jovo: Jovo, url: string): Promise<void> {
+    if (!jovo.$response) {
+      return;
+    }
 
-    return responseLog;
+    const responses: JovoResponse[] = Array.isArray(jovo.$response)
+      ? jovo.$response
+      : [jovo.$response];
+
+    for (const response of responses) {
+      // @ts-ignore
+      const responseLog: DashbotUniversalRequestLog = {};
+
+      await this.sendDashbotRequest(url, responseLog);
+    }
   }
 
   canHandle(): boolean {

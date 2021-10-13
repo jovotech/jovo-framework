@@ -1,41 +1,56 @@
-import {
-  AnalyticsPlugin,
-  AnalyticsPluginConfig,
-  axios,
-  AxiosResponse,
-  Jovo,
-  JovoError,
-  UnknownObject,
-} from '@jovotech/framework';
+import { AnalyticsPlugin, axios, Jovo, JovoError, UnknownObject } from '@jovotech/framework';
 import { URL } from 'url';
-import { DashbotAnalyticsPlugin } from './interfaces';
 import { DashbotAlexa } from './plugins/DashbotAlexa';
+import { DashbotAnalyticsPlugin } from './plugins/DashbotAnalyticsPlugin';
+import { DashbotGoogleAssistant } from './plugins/DashbotGoogleAssistant';
 import { DashbotUniversal } from './plugins/DashbotUniversal';
 import { DASHBOT_BASE_URL } from './utilities';
+import { DashbotAnalyticsConfig } from './interfaces';
+import { DashbotFacebook } from './plugins/DashbotFacebook';
 
-export type PlatformKey = typeof DashbotAnalytics.prototype.plugins[number]['id'];
-
-export interface DashbotConfig extends AnalyticsPluginConfig {
-  apiKey: string;
-  platforms: Record<typeof DashbotAnalytics.prototype.plugins[number]['id'], { apiKey: string }>;
-}
-
-export class DashbotAnalytics extends AnalyticsPlugin<DashbotConfig> {
+export class DashbotAnalytics extends AnalyticsPlugin<DashbotAnalyticsConfig> {
   // Since DashbotUniversal tracks for every platform, it needs to sit at the last position
   // in this.plugins, so a platform-specific plugin can be found, but still disabled.
-  plugins = [new DashbotAlexa(), new DashbotUniversal()] as const;
+  private readonly plugins = [
+    DashbotAlexa,
+    DashbotGoogleAssistant,
+    DashbotFacebook,
+    DashbotUniversal,
+  ];
+  private readonly initializedPlugins: DashbotAnalyticsPlugin[];
 
-  getDefaultConfig(): DashbotConfig {
-    return { apiKey: '<YOUR-API-KEY-HERE', platforms: { alexa: { apiKey: '' } } };
+  constructor(config: DashbotAnalyticsConfig) {
+    super(config);
+    this.initializedPlugins = this.plugins
+      .filter((Plugin) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        return this.config.platforms[Plugin.prototype.id]?.enabled !== false;
+      })
+      .map((Plugin) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        return new Plugin(this.config.platforms[Plugin.prototype.id]);
+      });
+  }
+
+  getDefaultConfig(): DashbotAnalyticsConfig {
+    return {
+      platforms: {
+        alexa: { apiKey: '', enabled: true },
+        google: { apiKey: '', enabled: true },
+        facebook: { apiKey: '', enabled: true },
+        universal: { apiKey: '', enabled: true },
+      },
+    };
   }
 
   async trackRequest(jovo: Jovo): Promise<void> {
-    const plugin: DashbotAnalyticsPlugin | undefined = this.plugins.find((plugin) =>
+    const plugin: DashbotAnalyticsPlugin | undefined = this.initializedPlugins.find((plugin) =>
       plugin.canHandle(jovo.$platform),
     );
 
-    // TODO: If platforms is ujndefined, track all platforms?
-    if (!plugin || !this.config.platforms[plugin.id]) {
+    if (!plugin) {
       return;
     }
 
@@ -44,16 +59,15 @@ export class DashbotAnalytics extends AnalyticsPlugin<DashbotConfig> {
     url.searchParams.append('platform', plugin.id);
     url.searchParams.append('apiKey', this.getApiKey(plugin.id));
 
-    await this.sendDashbotRequest(url.href, plugin.createRequestLog(jovo));
+    await plugin.trackRequest(jovo, url.href);
   }
 
   async trackResponse(jovo: Jovo): Promise<void> {
-    const plugin: DashbotAnalyticsPlugin | undefined = this.plugins.find((plugin) =>
+    const plugin: DashbotAnalyticsPlugin | undefined = this.initializedPlugins.find((plugin) =>
       plugin.canHandle(jovo.$platform),
     );
 
-    // TODO: If platforms is ujndefined, track all platforms?
-    if (!plugin || !this.config.platforms[plugin.id]) {
+    if (!plugin) {
       return;
     }
 
@@ -62,25 +76,12 @@ export class DashbotAnalytics extends AnalyticsPlugin<DashbotConfig> {
     url.searchParams.append('platform', plugin.id);
     url.searchParams.append('apiKey', this.getApiKey(plugin.id));
 
-    await this.sendDashbotRequest(url.href, plugin.createResponseLog(jovo));
+    await plugin.trackResponse(jovo, url.href);
   }
 
-  private async sendDashbotRequest(url: string, data: UnknownObject): Promise<void> {
-    try {
-      await axios.post(url, data);
-    } catch (error) {
-      if (error.isAxiosError) {
-        throw new JovoError({
-          message: error.message,
-          details: error.response.data.errors.join('\n'),
-        });
-      }
-
-      throw new JovoError({ message: error.message });
-    }
-  }
-
-  private getApiKey(pluginId: PlatformKey) {
+  private getApiKey(pluginId: string) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     return this.config.platforms[pluginId].apiKey;
   }
 }
