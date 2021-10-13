@@ -1,5 +1,7 @@
 import { FacebookMessengerOutputTemplateConverterStrategy } from '@jovotech/output-facebookmessenger';
+import { InstagramResponse } from './models';
 
 export class InstagramOutputTemplateConverterStrategy extends FacebookMessengerOutputTemplateConverterStrategy {
-  readonly platformName: string = 'instagram';
+  responseClass = InstagramResponse;
+  readonly platformName = 'instagram';
 }
