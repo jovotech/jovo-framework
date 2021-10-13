@@ -14,6 +14,7 @@ import {
   QUICK_REPLY_TITLE_MAX_LENGTH,
 } from './constants';
 import {
+  FacebookMessengerOutputTemplate,
   FacebookMessengerResponse,
   GenericTemplate,
   Message as FacebookMessengerMessage,
@@ -112,21 +113,25 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
       addMessageToResponses(carousel.toFacebookMessengerMessage());
     }
 
-    if (output.platforms?.facebookMessenger?.template) {
+    const platformOutput = output.platforms?.[this.platformName] as
+      | FacebookMessengerOutputTemplate
+      | undefined;
+
+    if (platformOutput?.template) {
       addMessageToResponses({
         attachment: {
           type: MessageAttachmentType.Template,
-          payload: output.platforms.facebookMessenger.template,
+          payload: platformOutput.template,
         },
       });
     }
 
-    if (output.platforms?.facebookMessenger?.nativeResponse) {
+    if (platformOutput?.nativeResponse) {
       // TODO determine what to do with nativeResponse
     }
 
     const quickReplies = output.quickReplies;
-    const nativeQuickReplies = output.platforms?.facebookMessenger?.nativeQuickReplies;
+    const nativeQuickReplies = platformOutput?.nativeQuickReplies;
     if (quickReplies?.length || nativeQuickReplies?.length) {
       const lastResponseWithMessage = responses
         .slice()
