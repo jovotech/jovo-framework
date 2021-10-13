@@ -104,16 +104,23 @@ export class RoutingExecutor {
     return globalRouteMatches.sort(this.compareRouteMatchRanking);
   }
 
-  private isGlobalHandlerMatching(
-    metadata: HandlerMetadata,
+  private isMatchingGlobalHandler(
+    handlerMetadata: HandlerMetadata,
     componentMetadata: ComponentMetadata,
   ): boolean {
-    if (metadata.options?.types?.includes(this.jovo.$input.type)) {
+    const isGlobal = handlerMetadata.options.global || componentMetadata.isGlobal;
+    // if neither handler nor component is global, abort
+    if (!isGlobal) {
+      return false;
+    }
+    // do type-matching if possible
+    if (handlerMetadata.options?.types?.includes(this.jovo.$input.type)) {
       return true;
     }
+    // otherwise do intent-matching
     const intentNames = componentMetadata.isGlobal
-      ? metadata.intentNames
-      : metadata.globalIntentNames;
+      ? handlerMetadata.intentNames
+      : handlerMetadata.globalIntentNames;
     const intentName = this.jovo.$input.getIntentName();
     return (
       (intentName && intentNames.includes(intentName)) ||
@@ -136,7 +143,7 @@ export class RoutingExecutor {
       for (const metadata of relatedHandlerMetadata) {
         // if the conditions are no fulfilled, do not add the handler
         if (
-          !this.isGlobalHandlerMatching(metadata, node.metadata) ||
+          !this.isMatchingGlobalHandler(metadata, node.metadata) ||
           !(await this.areHandlerConditionsFulfilled(metadata))
         ) {
           continue;
@@ -159,7 +166,7 @@ export class RoutingExecutor {
     });
   }
 
-  private isLocalHandlerMatching(metadata: HandlerMetadata, subState?: string): boolean {
+  private isMatchingLocalHandler(metadata: HandlerMetadata, subState?: string): boolean {
     if (metadata.options?.types?.includes(this.jovo.$input.type)) {
       return true;
     }
@@ -195,7 +202,7 @@ export class RoutingExecutor {
       for (const metadata of relatedHandlerMetadata) {
         // if the conditions are no fulfilled, do not add the handler
         if (
-          !this.isLocalHandlerMatching(metadata, subState) ||
+          !this.isMatchingLocalHandler(metadata, subState) ||
           !(await this.areHandlerConditionsFulfilled(metadata))
         ) {
           continue;
