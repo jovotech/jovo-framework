@@ -1,23 +1,12 @@
+---
+title: 'Components'
+excerpt: 'Learn more about Jovo Components, which are self-contained and reusable elements in a Jovo app.'
+---
 # Components
 
-- [Introduction](#introduction)
-- [Component Registration](#component-registration)
-  - [Register Root Components](#register-root-components)
-  - [Register Subcomponents](#register-subcomponents)
-- [Component Class](#component-class)
-  - [Handlers](#handlers)
-  - [Routing and State Management](#routing-and-state-management)
-  - [Global Components](#global-components)
-  - [Component Data](#component-data)
-  - [Component Options](#component-options)
-- [Component Folder Structure](#component-folder-structure)
-  - [Output](#output)
-  - [Models](#models)
-  - [Services](#services)
+Components are self-contained and reusable elements in a Jovo app. Similar to web frameworks like Vue and React, Jovo allows you to build complex applications composed of components of varying sizes.
 
 ## Introduction
-
-Components are self-contained and reusable elements in a Jovo app. Similar to web frameworks like Vue and React, Jovo allows you to build complex applications composed of components of varying sizes.
 
 You can see a component as an isolated part of your app that handles a specific task. It could be something small like asking for a confirmation (yes or no), and something bigger like collecting all necessary information for a restaurant table reservation. For larger cases like the latter example, it's also possible for a component to have multiple subcomponents.
 
@@ -254,7 +243,7 @@ As a rule of thumb, a global component can be seen as a "last resort" that is on
 For data that is only relevant for this specific component, you can use component data:
 
 ```typescript
-this.$component.$data.someKey = 'someValue';
+this.$component.data.someKey = 'someValue';
 ```
 
 This is then added to the [`$state` stack](./state-stack.md) and lost once the component resolves:
@@ -319,7 +308,7 @@ A folder allows for a modular approach where all relevant elements of a componen
 
 ### Output
 
-This folder contains all output classes that are used by the Jovo `$send` command. Learn more about this in our [handlers documentation](./handlers.md).
+This folder contains all output classes that are used by the Jovo `$send` command. Learn more about this in our [output classes documentation](./output-classes.md).
 
 ### Models
 

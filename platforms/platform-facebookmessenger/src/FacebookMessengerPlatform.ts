@@ -3,9 +3,11 @@ import {
   App,
   Extensible,
   ExtensibleConfig,
+  HandleRequest,
   JovoError,
   Platform,
   Server,
+  StoredElementSession,
 } from '@jovotech/framework';
 import {
   FacebookMessengerOutputTemplateConverterStrategy,
@@ -13,33 +15,50 @@ import {
 } from '@jovotech/output-facebookmessenger';
 import _cloneDeep from 'lodash.clonedeep';
 import { DEFAULT_FACEBOOK_VERIFY_TOKEN, LATEST_FACEBOOK_API_VERSION } from './constants';
+import { FacebookMessenger } from './FacebookMessenger';
+import { FacebookMessengerDevice } from './FacebookMessengerDevice';
 import { FacebookMessengerRequest } from './FacebookMessengerRequest';
+import { FacebookMessengerRequestBuilder } from './FacebookMessengerRequestBuilder';
 import { FacebookMessengerUser } from './FacebookMessengerUser';
 import { MessengerBotEntry } from './interfaces';
-import { FacebookMessenger } from './FacebookMessenger';
 
 export interface FacebookMessengerConfig extends ExtensibleConfig {
   version: typeof LATEST_FACEBOOK_API_VERSION | string;
   verifyToken: string;
   pageAccessToken: string;
+
+  session?: StoredElementSession & { enabled?: never };
 }
 
 export class FacebookMessengerPlatform extends Platform<
   FacebookMessengerRequest,
   FacebookMessengerResponse,
   FacebookMessenger,
+  FacebookMessengerUser,
+  FacebookMessengerDevice,
+  FacebookMessengerPlatform,
   FacebookMessengerConfig
 > {
   outputTemplateConverterStrategy = new FacebookMessengerOutputTemplateConverterStrategy();
   requestClass = FacebookMessengerRequest;
   jovoClass = FacebookMessenger;
   userClass = FacebookMessengerUser;
+  deviceClass = FacebookMessengerDevice;
+  requestBuilder = FacebookMessengerRequestBuilder;
 
   async initialize(parent: Extensible): Promise<void> {
     if (super.initialize) {
       await super.initialize(parent);
     }
     this.augmentAppHandle();
+  }
+
+  mount(parent: HandleRequest): Promise<void> | void {
+    super.mount(parent);
+
+    this.middlewareCollection.use('request.start', (jovo) => {
+      return this.enableDatabaseSessionStorage(jovo, this.config.session);
+    });
   }
 
   getDefaultConfig(): FacebookMessengerConfig {

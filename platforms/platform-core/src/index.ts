@@ -1,6 +1,6 @@
 import { registerPlatformSpecificJovoReference } from '@jovotech/framework';
-import { CorePlatform, CorePlatformConfig } from './CorePlatform';
 import { Core } from './Core';
+import { CorePlatform, CorePlatformConfig } from './CorePlatform';
 
 declare module '@jovotech/framework/dist/types/Extensible' {
   interface ExtensiblePluginConfig {
@@ -14,14 +14,14 @@ declare module '@jovotech/framework/dist/types/Extensible' {
 
 declare module '@jovotech/framework/dist/types/Jovo' {
   interface Jovo {
-    $corePlatform?: Core;
+    $core?: Core;
   }
 }
-registerPlatformSpecificJovoReference('$corePlatform', Core);
+registerPlatformSpecificJovoReference('$core', Core);
 
+export type { CoreResponse } from '@jovotech/output-core';
 export * from './Core';
 export * from './CorePlatform';
-export * from './CorePlatformRequest';
-export * from './CorePlatformUser';
-export type { CorePlatformResponse } from '@jovotech/output-core';
+export * from './CoreRequest';
+export * from './CoreUser';
 export * from './interfaces';

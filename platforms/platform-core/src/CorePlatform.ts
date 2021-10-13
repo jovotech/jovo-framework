@@ -1,75 +1,64 @@
 import { AnyObject, ExtensibleConfig, Platform } from '@jovotech/framework';
-import {
-  CorePlatformOutputTemplateConverterStrategy,
-  CorePlatformResponse,
-} from '@jovotech/output-core';
+import { CoreOutputTemplateConverterStrategy } from '@jovotech/output-core';
+import { CoreResponse } from '.';
 import { Core } from './Core';
-import { CorePlatformRequest } from './CorePlatformRequest';
-import { CorePlatformUser } from './CorePlatformUser';
+import { CoreDevice } from './CoreDevice';
+import { CoreRequest } from './CoreRequest';
+import { CoreUser } from './CoreUser';
+import { CoreRequestBuilder } from './CoreRequestBuilder';
 
 export interface CorePlatformConfig extends ExtensibleConfig {
-  type: 'jovo-platform-core' | string;
+  platform: 'core' | string;
 }
 
 export class CorePlatform extends Platform<
-  CorePlatformRequest,
-  CorePlatformResponse,
+  CoreRequest,
+  CoreResponse,
   Core,
+  CoreUser,
+  CoreDevice,
+  CorePlatform,
   CorePlatformConfig
 > {
-  // TODO: determine how useful this is and if this is required somewhere
-  // Creates a class with the given name that only supports requests with the given type.
-  // Allows making new platforms on the fly
-  static create(
-    name: string,
-    type: CorePlatformConfig['type'],
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ): new (...args: any[]) => CorePlatform {
-    // workaround to make the anonymous' class name equal to `name`
-    const obj = {
-      [name]: class extends CorePlatform {
-        getDefaultConfig(): CorePlatformConfig {
-          return {
-            ...super.getDefaultConfig(),
-            type,
-          };
-        }
-      },
-    };
-    return obj[name];
-  }
-
-  outputTemplateConverterStrategy = new CorePlatformOutputTemplateConverterStrategy();
-  requestClass = CorePlatformRequest;
+  outputTemplateConverterStrategy = new CoreOutputTemplateConverterStrategy();
+  requestClass = CoreRequest;
   jovoClass = Core;
-  userClass = CorePlatformUser;
+  userClass = CoreUser;
+  deviceClass = CoreDevice;
+  requestBuilder = CoreRequestBuilder;
 
   getDefaultConfig(): CorePlatformConfig {
     return {
-      type: 'jovo-platform-core',
+      platform: 'core',
     };
   }
 
-  isRequestRelated(request: AnyObject | CorePlatformRequest): boolean {
-    return request.version && request.request?.type && request.type === this.config.type;
+  isRequestRelated(request: AnyObject | CoreRequest): boolean {
+    return (
+      request.version &&
+      request.timestamp &&
+      request.input?.type &&
+      request.platform === this.config.platform
+    );
   }
 
-  isResponseRelated(response: AnyObject | CorePlatformResponse): boolean {
+  isResponseRelated(response: AnyObject | CoreResponse): boolean {
     return (
       response.version &&
       response.output &&
-      response.session &&
       response.context &&
-      response.type === this.config.type
+      response.context.user &&
+      response.context.session &&
+      response.platform === this.config.platform
     );
   }
 
   finalizeResponse(
-    response: CorePlatformResponse,
+    response: CoreResponse,
     corePlatformApp: Core,
-  ): CorePlatformResponse | Promise<CorePlatformResponse> {
-    response.type = this.config.type;
-    response.session.data = corePlatformApp.$session;
+  ): CoreResponse | Promise<CoreResponse> {
+    response.platform = this.config.platform;
+    response.context.session.data = corePlatformApp.$session;
     return response;
   }
 }

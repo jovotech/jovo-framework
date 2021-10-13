@@ -1,16 +1,11 @@
-import {
-  AnyObject,
-  Entity,
-  EntityMap,
-  ExtensibleConfig,
-  HandleRequest,
-  Jovo,
-  Platform,
-} from '@jovotech/framework';
+import { AnyObject, ExtensibleConfig, HandleRequest, Jovo, Platform } from '@jovotech/framework';
 import { AlexaOutputTemplateConverterStrategy, AlexaResponse } from '@jovotech/output-alexa';
-import { AlexaRequest } from './AlexaRequest';
 import { Alexa } from './Alexa';
+import { AlexaDevice } from './AlexaDevice';
+import { AlexaRequest } from './AlexaRequest';
+import { AlexaRequestBuilder } from './AlexaRequestBuilder';
 import { AlexaUser } from './AlexaUser';
+import { SUPPORTED_APL_ARGUMENT_TYPES } from './constants';
 
 export interface AlexaConfig extends ExtensibleConfig {
   output: {
@@ -18,12 +13,22 @@ export interface AlexaConfig extends ExtensibleConfig {
   };
 }
 
-export class AlexaPlatform extends Platform<AlexaRequest, AlexaResponse, Alexa, AlexaConfig> {
+export class AlexaPlatform extends Platform<
+  AlexaRequest,
+  AlexaResponse,
+  Alexa,
+  AlexaUser,
+  AlexaDevice,
+  AlexaPlatform,
+  AlexaConfig
+> {
   outputTemplateConverterStrategy: AlexaOutputTemplateConverterStrategy =
     new AlexaOutputTemplateConverterStrategy();
   requestClass = AlexaRequest;
   jovoClass = Alexa;
   userClass = AlexaUser;
+  deviceClass = AlexaDevice;
+  requestBuilder = AlexaRequestBuilder;
 
   getDefaultConfig(): AlexaConfig {
     return {
@@ -34,7 +39,10 @@ export class AlexaPlatform extends Platform<AlexaRequest, AlexaResponse, Alexa, 
   }
 
   mount(parent: HandleRequest): void {
-    parent.middlewareCollection.use('before.request', this.beforeRequest);
+    super.mount(parent);
+    this.middlewareCollection.use('request.start', (jovo) => {
+      return this.onRequestStart(jovo);
+    });
   }
 
   isRequestRelated(request: AnyObject | AlexaRequest): boolean {
@@ -53,31 +61,26 @@ export class AlexaPlatform extends Platform<AlexaRequest, AlexaResponse, Alexa, 
     return response;
   }
 
-  private beforeRequest = (handleRequest: HandleRequest, jovo: Jovo) => {
-    if (!(jovo.$platform instanceof AlexaPlatform)) {
-      return;
-    }
+  private onRequestStart(jovo: Jovo): void {
     // Generate generic output to APL if supported and set in config
-    this.outputTemplateConverterStrategy.config.genericOutputToApl =
-      jovo.$alexa?.$request?.isAplSupported() && this.config.output?.genericOutputToApl;
+    this.outputTemplateConverterStrategy.config.genericOutputToApl = !!(
+      jovo.$alexa?.$request?.isAplSupported() && this.config.output?.genericOutputToApl
+    );
 
     if (jovo.$alexa?.$request?.request?.type === 'Alexa.Presentation.APL.UserEvent') {
       const requestArguments = jovo.$alexa.$request.request.arguments || [];
       requestArguments.forEach((argument) => {
-        if (typeof argument === 'object' && argument.type === 'QuickReply') {
+        // if the user-event is an object and is of Selection or QuickReply type
+        if (typeof argument === 'object' && SUPPORTED_APL_ARGUMENT_TYPES.includes(argument?.type)) {
           if (argument.intent) {
-            jovo.$nlu.intent = { name: argument.intent };
+            jovo.$input.intent = argument.intent;
           }
           if (argument.entities) {
-            const entityMap: EntityMap = {};
-            argument.entities.forEach((entity: Entity) => {
-              entityMap[entity.name!] = entity;
-            });
-            jovo.$nlu.entities = { ...entityMap };
-            jovo.$entities = entityMap;
+            jovo.$input.entities = { ...argument.entities };
+            jovo.$entities = argument.entities;
           }
         }
       });
     }
-  };
+  }
 }

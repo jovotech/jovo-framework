@@ -1,5 +1,13 @@
 import {
-  App,
+  CreateTableCommand,
+  DescribeTableCommand,
+  DynamoDBClient,
+  DynamoDBClientConfig,
+  GetItemCommand,
+  PutItemCommand,
+} from '@aws-sdk/client-dynamodb';
+import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
+import {
   DbItem,
   DbPlugin,
   DbPluginConfig,
@@ -9,15 +17,6 @@ import {
   PersistableUserData,
   UnknownObject,
 } from '@jovotech/framework';
-import {
-  CreateTableCommand,
-  DescribeTableCommand,
-  DynamoDBClient,
-  DynamoDBClientConfig,
-  GetItemCommand,
-  PutItemCommand,
-} from '@aws-sdk/client-dynamodb';
-import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 
 export interface DynamoDbConfig extends DbPluginConfig {
   table: {
@@ -61,6 +60,13 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
     this.client = new DynamoDBClient(this.config.libraryConfig?.dynamoDbClient || {});
   }
 
+  mount(parent: HandleRequest): Promise<void> | void {
+    super.mount(parent);
+
+    // initialize a new client for the mounted instance with the given request-config
+    this.client = new DynamoDBClient(this.config.libraryConfig?.dynamoDbClient || {});
+  }
+
   async initialize(): Promise<void> {
     try {
       const params = {
@@ -82,12 +88,7 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
     }
   }
 
-  async install(parent: App): Promise<void> {
-    parent.middlewareCollection.use('after.request', this.loadData);
-    parent.middlewareCollection.use('before.response', this.saveData);
-  }
-
-  createTable = async (): Promise<void> => {
+  async createTable(): Promise<void> {
     const params = {
       AttributeDefinitions: [
         {
@@ -109,9 +110,9 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
     };
 
     await this.client.send(new CreateTableCommand(params));
-  };
+  }
 
-  getDbItem = async (primaryKey: string): Promise<DbItem> => {
+  async getDbItem(primaryKey: string): Promise<DbItem> {
     const params = {
       ConsistentRead: true,
       Key: {
@@ -121,30 +122,30 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
     };
     const data = await this.client.send(new GetItemCommand(params));
     return data.Item as DbItem;
-  };
+  }
 
-  loadData = async (handleRequest: HandleRequest, jovo: Jovo): Promise<void> => {
+  async loadData(userId: string, jovo: Jovo): Promise<void> {
     this.checkRequirements();
-    const dbItem = await this.getDbItem(jovo.$user.id);
 
+    const dbItem = await this.getDbItem(userId);
     if (dbItem) {
       jovo.$user.isNew = false;
       jovo.setPersistableData(unmarshall(dbItem), this.config.storedElements);
     }
-  };
+  }
 
-  saveData = async (handleRequest: HandleRequest, jovo: Jovo): Promise<void> => {
+  async saveData(userId: string, jovo: Jovo): Promise<void> {
     this.checkRequirements();
 
     const params = {
       Item: {
-        [this.config.table.primaryKeyColumn!]: jovo.$user.id as string,
+        [this.config.table.primaryKeyColumn!]: userId,
       } as UnknownObject,
       TableName: this.config.table.name!,
     };
 
     const item: DbItem = {
-      [this.config.table.primaryKeyColumn!]: jovo.$user.id,
+      [this.config.table.primaryKeyColumn!]: userId,
     };
     await this.applyPersistableData(jovo, item);
 
@@ -154,14 +155,14 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
         Item: marshall(item, { removeUndefinedValues: true }),
       }),
     );
-  };
+  }
 
-  checkRequirements = (): void | Error => {
+  checkRequirements(): void | Error {
     if (!this.config.table.primaryKeyColumn) {
       throw new Error('this.config.table.primaryKeyColumn must not be undefined');
     }
     if (!this.config.table.name) {
       throw new Error('this.config.table.name must not be undefined');
     }
-  };
+  }
 }

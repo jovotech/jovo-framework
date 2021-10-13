@@ -3,7 +3,6 @@ import _cloneDeep from 'lodash.clonedeep';
 import _merge from 'lodash.merge';
 import _set from 'lodash.set';
 import { App, AppConfig } from './App';
-import { RequestType, RequestTypeLike } from './enums';
 import { HandleRequest } from './HandleRequest';
 import {
   BaseComponent,
@@ -11,40 +10,39 @@ import {
   ComponentConfig,
   ComponentConstructor,
   ComponentData,
-  DbPluginConfig,
   DbPluginStoredElementsConfig,
   DeepPartial,
   I18NextAutoPath,
   I18NextResourcesLanguageKeys,
   I18NextResourcesNamespaceKeysOfLanguage,
   I18NextTOptions,
+  JovoInput,
   MetadataStorage,
-  OmitIndex,
   OutputConstructor,
   PersistableSessionData,
   PersistableUserData,
   PickWhere,
   Server,
   StateStackItem,
-  StoredElement,
-  StoredElementHistory,
   UnknownObject,
 } from './index';
-import { AsrData, EntityMap, NluData, RequestData } from './interfaces';
+import { EntityMap, RequestData } from './interfaces';
+import { JovoDevice } from './JovoDevice';
+import { JovoHistory, JovoHistoryItem, PersistableHistoryData } from './JovoHistory';
 import { JovoRequest } from './JovoRequest';
 import { JovoSession } from './JovoSession';
 import { JovoUser } from './JovoUser';
 import { Platform } from './Platform';
 import { JovoRoute } from './plugins/RouterPlugin';
 import { forEachDeep } from './utilities';
-import { JovoHistory, JovoHistoryItem, PersistableHistoryData } from './JovoHistory';
 
 export type JovoConstructor<
-  REQUEST extends JovoRequest = JovoRequest,
-  RESPONSE extends JovoResponse = JovoResponse,
-  JOVO extends Jovo<REQUEST, RESPONSE> = Jovo<REQUEST, RESPONSE>,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  PLATFORM extends Platform<REQUEST, RESPONSE, JOVO, any> = Platform<REQUEST, RESPONSE, JOVO, any>,
+  REQUEST extends JovoRequest,
+  RESPONSE extends JovoResponse,
+  JOVO extends Jovo<REQUEST, RESPONSE, JOVO, USER, DEVICE, PLATFORM>,
+  USER extends JovoUser<JOVO>,
+  DEVICE extends JovoDevice<JOVO>,
+  PLATFORM extends Platform<REQUEST, RESPONSE, JOVO, USER, DEVICE, PLATFORM>,
 > = new (app: App, handleRequest: HandleRequest, platform: PLATFORM, ...args: unknown[]) => JOVO;
 
 export interface JovoPersistableData {
@@ -55,18 +53,12 @@ export interface JovoPersistableData {
   updatedAt?: string;
 }
 
-export interface JovoRequestType {
-  type?: RequestTypeLike;
-  subType?: string;
-  optional?: boolean;
-}
-
 export interface JovoComponentInfo<
   DATA extends ComponentData = ComponentData,
   CONFIG extends UnknownObject = UnknownObject,
 > {
-  $data: DATA;
-  $config?: CONFIG;
+  data: DATA;
+  config?: CONFIG;
 }
 
 export interface DelegateOptions<
@@ -82,8 +74,11 @@ export function registerPlatformSpecificJovoReference<
   KEY extends keyof Jovo,
   REQUEST extends JovoRequest,
   RESPONSE extends JovoResponse,
-  JOVO extends Jovo<REQUEST, RESPONSE>,
->(key: KEY, jovoClass: JovoConstructor<REQUEST, RESPONSE, JOVO>): void {
+  JOVO extends Jovo<REQUEST, RESPONSE, JOVO, USER, DEVICE, PLATFORM>,
+  USER extends JovoUser<JOVO>,
+  DEVICE extends JovoDevice<JOVO>,
+  PLATFORM extends Platform<REQUEST, RESPONSE, JOVO, USER, DEVICE, PLATFORM>,
+>(key: KEY, jovoClass: JovoConstructor<REQUEST, RESPONSE, JOVO, USER, DEVICE, PLATFORM>): void {
   Object.defineProperty(Jovo.prototype, key, {
     get(): Jovo[KEY] | undefined {
       return this instanceof jovoClass
@@ -98,38 +93,42 @@ export function registerPlatformSpecificJovoReference<
 export abstract class Jovo<
   REQUEST extends JovoRequest = JovoRequest,
   RESPONSE extends JovoResponse = JovoResponse,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  JOVO extends Jovo<REQUEST, RESPONSE, JOVO, USER, DEVICE, PLATFORM> = any,
+  USER extends JovoUser<JOVO> = JovoUser<JOVO>,
+  DEVICE extends JovoDevice<JOVO> = JovoDevice<JOVO>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  PLATFORM extends Platform<REQUEST, RESPONSE, JOVO, USER, DEVICE, PLATFORM> = any,
 > {
-  $asr: AsrData;
-  $data: RequestData;
-  $entities: EntityMap;
-  $nlu: NluData;
-  $output: OutputTemplate | OutputTemplate[];
   $request: REQUEST;
+  $input: JovoInput;
+  $output: OutputTemplate[];
   $response?: RESPONSE | RESPONSE[];
+
+  $data: RequestData;
+  $device: DEVICE;
+  $entities: EntityMap;
+  $history: JovoHistory;
   $route?: JovoRoute;
   $session: JovoSession;
-  $type: JovoRequestType;
-  $user: JovoUser<REQUEST, RESPONSE, this>;
-
-  $history: JovoHistory;
+  $user: USER;
 
   constructor(
     readonly $app: App,
     readonly $handleRequest: HandleRequest,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    readonly $platform: Platform<REQUEST, RESPONSE, any, any>,
+    readonly $platform: PLATFORM,
   ) {
-    this.$asr = {};
-    this.$data = {};
-    this.$output = [];
     this.$request = this.$platform.createRequestInstance($handleRequest.server.getRequestObject());
-    const session = this.getSession();
-    this.$session = session instanceof JovoSession ? session : new JovoSession(session);
-    this.$type = this.$request.getRequestType() || { type: RequestType.Unknown, optional: true };
-    this.$nlu = this.$request.getNluData() || {};
-    this.$entities = this.$nlu.entities || {};
+    this.$input = this.$request.getInput();
+    this.$output = [];
+
+    this.$data = {};
+    this.$device = this.$platform.createDeviceInstance(this as unknown as JOVO);
+    this.$entities = this.getEntityMap();
     this.$history = new JovoHistory();
-    this.$user = this.$platform.createUserInstance(this);
+    this.$session = this.getSession();
+    this.$user = this.$platform.createUserInstance(this as unknown as JOVO);
   }
 
   get $config(): AppConfig {
@@ -144,42 +143,42 @@ export abstract class Jovo<
     return this.$handleRequest.plugins;
   }
 
-  get $state(): JovoSession['$state'] {
-    return this.$session.$state;
+  get $state(): JovoSession['state'] {
+    return this.$session.state;
   }
 
   get $subState(): string | undefined {
     if (!this.$state?.length) return;
-    return this.$state[this.$state.length - 1]?.$subState;
+    return this.$state[this.$state.length - 1]?.subState;
   }
 
   set $subState(value: string | undefined) {
     if (!this.$state?.length) return;
-    this.$state[this.$state.length - 1].$subState = value;
+    this.$state[this.$state.length - 1].subState = value;
   }
 
   get $component(): JovoComponentInfo {
     // global components should not have component-data
     if (!this.$state?.length) {
       return {
-        $data: {},
+        data: {},
       };
     }
     const latestStateStackItem = this.$state[this.$state.length - 1];
     return {
-      get $data(): ComponentData {
-        if (!latestStateStackItem.$data) {
-          latestStateStackItem.$data = {};
+      get data(): ComponentData {
+        if (!latestStateStackItem.data) {
+          latestStateStackItem.data = {};
         }
-        return latestStateStackItem.$data;
+        return latestStateStackItem.data;
       },
-      set $data(value: ComponentData) {
-        if (!latestStateStackItem.$data) {
-          latestStateStackItem.$data = {};
+      set data(value: ComponentData) {
+        if (!latestStateStackItem.data) {
+          latestStateStackItem.data = {};
         }
-        latestStateStackItem.$data = value;
+        latestStateStackItem.data = value;
       },
-      get $config(): UnknownObject | undefined {
+      get config(): UnknownObject | undefined {
         const deserializedStateConfig = _cloneDeep(latestStateStackItem.config);
         if (deserializedStateConfig) {
           // deserialize all found Output-constructors
@@ -204,7 +203,7 @@ export abstract class Jovo<
         }
         return deserializedStateConfig;
       },
-      set $config(value: UnknownObject | undefined) {
+      set config(value: UnknownObject | undefined) {
         latestStateStackItem.config = value;
       },
     };
@@ -267,11 +266,6 @@ export abstract class Jovo<
       newOutput = outputConstructorOrTemplate;
     }
 
-    // make $output an array if it is none
-    if (!Array.isArray(this.$output)) {
-      this.$output = [this.$output];
-    }
-
     // push the new OutputTemplate(s) to $output
     Array.isArray(newOutput) ? this.$output.push(...newOutput) : this.$output.push(newOutput);
   }
@@ -294,7 +288,7 @@ export abstract class Jovo<
     // get the node with the given name relative to the currently active component-node
     const componentNode = this.$handleRequest.componentTree.getNodeRelativeToOrFail(
       componentName,
-      this.$handleRequest.$activeComponentNode?.path,
+      this.$handleRequest.activeComponentNode?.path,
     );
 
     // update the state-stack if the component is not global
@@ -304,7 +298,7 @@ export abstract class Jovo<
       };
       if (!this.$state?.length) {
         // initialize the state-stack if it is empty or does not exist
-        this.$session.$state = [stackItem];
+        this.$session.state = [stackItem];
       } else {
         // replace last item in stack
         this.$state[this.$state.length - 1] = stackItem;
@@ -312,7 +306,7 @@ export abstract class Jovo<
     }
 
     // update the active component node in handleRequest to keep track of the state
-    this.$handleRequest.$activeComponentNode = componentNode;
+    this.$handleRequest.activeComponentNode = componentNode;
     // execute the component's handler
     await componentNode.executeHandler({
       jovo: this.jovoReference,
@@ -334,17 +328,19 @@ export abstract class Jovo<
     // get the node with the given name relative to the currently active component-node
     const componentNode = this.$handleRequest.componentTree.getNodeRelativeToOrFail(
       componentName,
-      this.$handleRequest.$activeComponentNode?.path,
+      this.$handleRequest.activeComponentNode?.path,
     );
 
-    // make sure the state-stack exists and is not empty, even if it is a global component
-    // in order to do that we need to add the path of the currently active component
-    if (!this.$session.$state?.length) {
-      this.$session.$state = [
-        {
-          component: (this.$handleRequest.$activeComponentNode?.path || []).join('.'),
-        },
-      ];
+    // if the component that is currently being executed is global
+    if (this.$handleRequest.activeComponentNode?.metadata?.isGlobal) {
+      // make sure there is a stack
+      if (!this.$session.state) {
+        this.$session.state = [];
+      }
+      // add the current component
+      this.$session.state.push({
+        component: this.$handleRequest.activeComponentNode.path.join('.'),
+      });
     }
 
     // serialize all values in 'resolve'
@@ -372,13 +368,16 @@ export abstract class Jovo<
       });
     }
     // push the delegating component to the state-stack
-    this.$session.$state.push({
+    if (!this.$session.state) {
+      this.$session.state = [];
+    }
+    this.$session.state.push({
       resolve: serializableResolve,
       config: serializableConfig,
       component: componentNode.path.join('.'),
     });
     // update the active component node in handleRequest to keep track of the state
-    this.$handleRequest.$activeComponentNode = componentNode;
+    this.$handleRequest.activeComponentNode = componentNode;
     // execute the component's handler
     await componentNode.executeHandler({
       jovo: this.jovoReference,
@@ -410,7 +409,7 @@ export abstract class Jovo<
     this.$state.pop();
 
     // update the active component node in handleRequest to keep track of the state
-    this.$handleRequest.$activeComponentNode = previousComponentNode;
+    this.$handleRequest.activeComponentNode = previousComponentNode;
     // execute the component's handler
     await previousComponentNode.executeHandler({
       jovo: this.jovoReference,
@@ -419,14 +418,13 @@ export abstract class Jovo<
     });
   }
 
-  //TODO: needs to be evaluated
-  getSession(): Partial<JovoSession> | undefined {
-    return this.$request.getSession();
+  getSession(): JovoSession {
+    const session = this.$request.getSession();
+    return session instanceof JovoSession ? session : new JovoSession(session);
   }
 
-  //TODO: needs to be evaluated
-  isNewSession(): boolean {
-    return this.$session.isNew;
+  getEntityMap(): EntityMap {
+    return this.$input.entities || this.$input.nlu?.entities || {};
   }
 
   getPersistableData(): JovoPersistableData {
@@ -442,14 +440,14 @@ export abstract class Jovo<
   setPersistableData(data: JovoPersistableData, config?: DbPluginStoredElementsConfig): void {
     const isStoredElementEnabled = (key: 'user' | 'session' | 'history') => {
       const value = config?.[key];
-      return !!(typeof value === 'object' ? value.enabled : value);
+      return typeof value === 'object' ? value.enabled !== false : !!value;
     };
 
     if (isStoredElementEnabled('user')) {
       this.$user.setPersistableData(data.user);
     }
     if (isStoredElementEnabled('session')) {
-      this.$session.setPersistableData(data.session);
+      this.$session.setPersistableData(data.session, config?.session);
     }
     if (isStoredElementEnabled('history')) {
       this.$history.setPersistableData(data.history);
@@ -460,12 +458,13 @@ export abstract class Jovo<
 
   getCurrentHistoryItem(): JovoHistoryItem {
     return {
-      output: this.$output,
-      nlu: this.$nlu,
+      request: this.$request,
+      input: this.$input,
+
       state: this.$state,
       entities: this.$entities,
-      asr: this.$asr,
-      request: this.$request,
+
+      output: this.$output,
       response: this.$response,
     };
   }

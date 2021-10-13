@@ -1,5 +1,14 @@
 import _merge from 'lodash.merge';
-import { ArrayElement, ComponentTree, I18NextOptions, IntentMap, Middleware, Plugin } from '.';
+import {
+  ArrayElement,
+  ComponentTree,
+  I18NextOptions,
+  IntentMap,
+  Middleware,
+  MiddlewareFunction,
+  Plugin,
+  PossibleMiddlewareName,
+} from '.';
 import { ComponentConstructor, ComponentDeclaration } from './BaseComponent';
 import { MatchingPlatformNotFoundError } from './errors/MatchingPlatformNotFoundError';
 import { Extensible, ExtensibleConfig, ExtensibleInitConfig } from './Extensible';
@@ -30,33 +39,30 @@ export type AppInitConfig = ExtensibleInitConfig<AppConfig> & {
 
 export type Usable = Plugin | ComponentConstructor | ComponentDeclaration;
 
-export type AppBaseMiddlewares = [
+export const APP_MIDDLEWARES = [
+  'request.start',
   'request',
+  'request.end',
+  'interpretation.start',
   'interpretation.asr',
   'interpretation.nlu',
-  'dialog.context',
-  'dialog.logic',
+  'interpretation.end',
+  'dialogue.start',
+  'dialogue.router',
+  'dialogue.logic',
+  'dialogue.end',
+  'response.start',
   'response.output',
   'response.tts',
-  'response',
-];
+  'response.end',
+] as const;
+export type AppMiddleware = ArrayElement<typeof APP_MIDDLEWARES>;
+export type AppMiddlewares = AppMiddleware[];
 
-export type AppBaseMiddleware = ArrayElement<AppBaseMiddlewares>;
-
-export const BASE_APP_MIDDLEWARES: AppBaseMiddlewares = [
-  'request',
-  'interpretation.asr',
-  'interpretation.nlu',
-  'dialog.context',
-  'dialog.logic',
-  'response.output',
-  'response.tts',
-  'response',
-];
-
-export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
+export class App extends Extensible<AppConfig, AppMiddlewares> {
   readonly componentTree: ComponentTree;
   readonly i18n: I18Next;
+  private initialized = false;
 
   constructor(config?: AppInitConfig) {
     super(config ? { ...config, components: undefined } : config);
@@ -73,6 +79,10 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
     this.i18n = new I18Next(this.config.i18n || {});
   }
 
+  get isInitialized(): boolean {
+    return this.initialized;
+  }
+
   get platforms(): ReadonlyArray<Platform> {
     return Object.values(this.plugins).filter((plugin) => plugin instanceof Platform) as Platform[];
   }
@@ -83,14 +93,20 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
     this.use(...usables);
   }
 
-  initializeMiddlewareCollection(): MiddlewareCollection<AppBaseMiddlewares> {
-    return new MiddlewareCollection(...BASE_APP_MIDDLEWARES);
+  initializeMiddlewareCollection(): MiddlewareCollection<AppMiddlewares> {
+    return new MiddlewareCollection(...APP_MIDDLEWARES);
   }
 
-  middleware(name: AppBaseMiddleware): Middleware | undefined;
+  middleware(name: PossibleMiddlewareName<AppMiddleware>): Middleware | undefined;
   middleware(name: string): Middleware | undefined;
-  middleware(name: string | AppBaseMiddleware): Middleware | undefined {
+  middleware(name: PossibleMiddlewareName<AppMiddleware> | string): Middleware | undefined {
     return this.middlewareCollection.get(name);
+  }
+
+  hook(name: PossibleMiddlewareName<AppMiddleware>, fn: MiddlewareFunction): void;
+  hook(name: string, fn: MiddlewareFunction): void;
+  hook(name: PossibleMiddlewareName<AppMiddleware> | string, fn: MiddlewareFunction): void {
+    this.middlewareCollection.use(name, fn);
   }
 
   getDefaultConfig(): AppConfig {
@@ -100,12 +116,29 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
   }
 
   async initialize(): Promise<void> {
+    if (this.initialized) {
+      return;
+    }
     await this.i18n.initialize();
-    return this.initializePlugins();
+    await this.initializePlugins();
+    this.initialized = true;
   }
 
   use<T extends Usable[]>(...usables: T): this {
-    const plugins = usables.filter((usable) => usable instanceof Plugin) as Plugin[];
+    const plugins = usables.filter((usable) => {
+      if (!(usable instanceof Plugin)) {
+        return false;
+      }
+
+      if (
+        (process.env.NODE_ENV === 'test' || process.env.JEST_WORKER_ID) &&
+        (usable as Plugin).config.skipTests
+      ) {
+        return false;
+      }
+
+      return true;
+    }) as Plugin[];
     if (plugins.length) {
       super.use(...plugins);
     }
@@ -128,18 +161,11 @@ export class App extends Extensible<AppConfig, AppBaseMiddlewares> {
     if (!relatedPlatform) {
       throw new MatchingPlatformNotFoundError(server.getRequestObject());
     }
-    handleRequest.$platform = relatedPlatform;
+    handleRequest.platform = relatedPlatform;
     const jovo = relatedPlatform.createJovoInstance(this, handleRequest);
 
     // RIDR-pipeline
-    await handleRequest.middlewareCollection.run('request', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('interpretation.asr', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('interpretation.nlu', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('dialog.context', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('dialog.logic', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('response.output', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('response.tts', handleRequest, jovo);
-    await handleRequest.middlewareCollection.run('response', handleRequest, jovo);
+    await handleRequest.middlewareCollection.run(APP_MIDDLEWARES.slice(), jovo);
 
     await handleRequest.dismount();
 

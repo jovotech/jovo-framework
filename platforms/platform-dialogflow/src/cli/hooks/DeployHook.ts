@@ -9,13 +9,12 @@ import {
   ROCKET,
   Task,
 } from '@jovotech/cli-core';
+import AdmZip from 'adm-zip';
+import axios, { AxiosError } from 'axios';
 import { existsSync, readFileSync, unlinkSync } from 'fs';
 import { join as joinPaths } from 'path';
-import axios, { AxiosError } from 'axios';
-import AdmZip from 'adm-zip';
-
 import { DialogflowCli } from '..';
-import { activateServiceAccount, getGcloudAccessToken } from '../utils';
+import { activateServiceAccount, getGcloudAccessToken } from '../utilities';
 
 export interface DialogflowDeployPlatformContext extends DeployPlatformContext {
   flags: DeployPlatformContext['flags'] & { 'project-id'?: string };
@@ -62,7 +61,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
    */
   checkForPlatform(): void {
     // Check if this plugin should be used or not.
-    if (!this.$context.platforms.includes(this.$plugin.$id)) {
+    if (!this.$context.platforms.includes(this.$plugin.id)) {
       this.uninstall();
     }
   }
@@ -71,11 +70,12 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     try {
       await execAsync('gcloud --version');
     } catch (error) {
-      throw new JovoCliError(
-        'Jovo CLI requires gcloud CLI for deployment to Dialogflow.',
-        this.$plugin.constructor.name,
-        'To install the gcloud CLI, follow this guide: https://cloud.google.com/sdk/docs/install',
-      );
+      throw new JovoCliError({
+        message: 'Jovo CLI requires gcloud CLI for deployment to Dialogflow.',
+        module: this.$plugin.name,
+        learnMore:
+          'To install the gcloud CLI, follow this guide: https://cloud.google.com/sdk/docs/install',
+      });
     }
   }
 
@@ -88,14 +88,14 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     }
 
     this.$context.dialogflow.projectId =
-      this.$context.flags['project-id'] || this.$plugin.$config.projectId;
+      this.$context.flags['project-id'] || this.$plugin.config.projectId;
 
     if (!this.$context.dialogflow.projectId) {
-      throw new JovoCliError(
-        'Could not find project ID.',
-        this.$plugin.constructor.name,
-        'Please provide a project ID by using the flag "--project-id" or in your project configuration.',
-      );
+      throw new JovoCliError({
+        message: 'Could not find project ID.',
+        module: this.$plugin.name,
+        hint: 'Please provide a project ID by using the flag "--project-id" or in your project configuration.',
+      });
     }
   }
 
@@ -103,12 +103,12 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
    * Checks if the platform folder for the current plugin exists.
    */
   checkForPlatformsFolder(): void {
-    if (!existsSync(this.$plugin.getPlatformPath())) {
-      throw new JovoCliError(
-        `Couldn't find the platform folder "${this.$plugin.platformDirectory}/".`,
-        this.$plugin.constructor.name,
-        `Please use "jovo build" to create platform-specific files.`,
-      );
+    if (!existsSync(this.$plugin.platformPath)) {
+      throw new JovoCliError({
+        message: `Couldn't find the platform folder "${this.$plugin.platformDirectory}/".`,
+        module: this.$plugin.name,
+        hint: `Please use "jovo build" to create platform-specific files.`,
+      });
     }
   }
 
@@ -126,13 +126,13 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     const uploadTask: Task = new Task(
       `Uploading your agent for project ${printHighlight(this.$context.dialogflow.projectId!)}`,
       async () => {
-        const keyFilePath: string | undefined = this.$plugin.$config.keyFile;
+        const keyFilePath: string | undefined = this.$plugin.config.keyFile;
         if (keyFilePath) {
-          if (!existsSync(joinPaths(this.$cli.$projectPath, keyFilePath))) {
-            throw new JovoCliError(
-              `Keyfile at ${keyFilePath} does not exist.`,
-              this.$plugin.constructor.name,
-            );
+          if (!existsSync(joinPaths(this.$cli.projectPath, keyFilePath))) {
+            throw new JovoCliError({
+              message: `Keyfile at ${keyFilePath} does not exist.`,
+              module: this.$plugin.name,
+            });
           }
 
           await activateServiceAccount(keyFilePath);
@@ -152,11 +152,11 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
               },
             });
           } catch (error) {
-            throw new JovoCliError(
-              (error as AxiosError).message,
-              this.$plugin.constructor.name,
-              error.response.data.error.message,
-            );
+            throw new JovoCliError({
+              message: (error as AxiosError).message,
+              module: this.$plugin.name,
+              details: error.response.data.error.message,
+            });
           }
         }
       },
@@ -175,11 +175,11 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
           },
         });
       } catch (error) {
-        throw new JovoCliError(
-          (error as AxiosError).message,
-          this.$plugin.constructor.name,
-          error.response.data.error.message,
-        );
+        throw new JovoCliError({
+          message: (error as AxiosError).message,
+          module: this.$plugin.name,
+          details: error.response.data.error.message,
+        });
       }
     });
 
@@ -196,14 +196,14 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
   async zipDialogflowFiles(): Promise<void> {
     // Remove existing zip file.
     this.$context.dialogflow.pathToZip = joinPaths(
-      this.$plugin.getPlatformPath(),
+      this.$plugin.platformPath,
       'dialogflow_agent.zip',
     );
     if (existsSync(this.$context.dialogflow.pathToZip)) {
       unlinkSync(this.$context.dialogflow.pathToZip);
     }
     const zip: AdmZip = new AdmZip();
-    zip.addLocalFolder(this.$plugin.getPlatformPath());
+    zip.addLocalFolder(this.$plugin.platformPath);
     zip.writeZip(this.$context.dialogflow.pathToZip);
   }
 }

@@ -1,14 +1,10 @@
+---
+title: 'App Configuration'
+excerpt: 'Learn how to configure a Jovo app and how to add plugins, components, and staging.'
+---
 # App Configuration
 
 The app configuration in `app.ts` is the place where you can add plugins, components, and other configurations to your Jovo app. [For project related configuration, take a look here](./project-config.md).
-- [Introduction](#introduction)
-- [Ways to add Configurations](#ways-to-add-configurations)
-- [Configuration Elements](#configuration-elements)
-  - [Components](#components)
-  - [Plugins](#plugins)
-  - [Logging](#logging)
-  - [Routing](#routing)
-- [Staging](#staging)
 
 ## Introduction
 
@@ -130,6 +126,19 @@ import { AlexaPlatform } from '@jovotech/platform-alexa';
 
 Each plugin has its own configuration options which you can find in the respective plugin's documentation.
 
+Additionally, each plugin config includes a `skipTests` option that makes sure that [unit tests](https://v4.jovo.tech/docs/unit-testing) don't use that plugin:
+
+```typescript
+{
+  plugins: [
+    new SomePlugin({
+      // ...
+      skipTests: true,
+    })
+  ],
+}
+```
+
 
 ### Logging
 
@@ -188,6 +197,33 @@ Especially with apps that work across different platforms, it might happen that 
     // ...
   },
   // ...
+}
+```
+
+For platforms like Alexa that already come with an intent in their requests, the mapped intent name is added to the root of the [`$input` object](./input.md):
+
+```typescript
+{
+  type: 'INTENT',
+  intent: 'HelpIntent',
+}
+```
+
+If you're using an [NLU integration](./nlu.md), the original intent stays in the `nlu` property and the mapped intent is added to the root of `$input`:
+
+```typescript
+{
+  type: 'TEXT',
+  text: 'My name is Max',
+  nlu: {
+    intent: 'MyNameIsIntent',
+    entities: {
+      name: {
+        value: 'Max',
+      },
+    },
+  },
+  intent: 'MappedMyNameIsIntent',
 }
 ```
 

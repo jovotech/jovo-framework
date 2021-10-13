@@ -14,13 +14,24 @@ import {
   FacebookMessengerResponse,
 } from '@jovotech/output-facebookmessenger';
 import { FACEBOOK_API_BASE_URL, LATEST_FACEBOOK_API_VERSION } from './constants';
+import { FacebookMessengerDevice } from './FacebookMessengerDevice';
+import { FacebookMessengerPlatform } from './FacebookMessengerPlatform';
 import { FacebookMessengerRequest } from './FacebookMessengerRequest';
+import { FacebookMessengerUser } from './FacebookMessengerUser';
 import { SendMessageResult } from './interfaces';
 
-export class FacebookMessenger extends Jovo<FacebookMessengerRequest, FacebookMessengerResponse> {
+export class FacebookMessenger extends Jovo<
+  FacebookMessengerRequest,
+  FacebookMessengerResponse,
+  FacebookMessenger,
+  FacebookMessengerUser,
+  FacebookMessengerDevice,
+  FacebookMessengerPlatform
+> {
   get apiVersion(): string {
     return (
-      this.$handleRequest.config.plugin?.FacebookMessengerPlatform?.version || LATEST_FACEBOOK_API_VERSION
+      this.$handleRequest.config.plugin?.FacebookMessengerPlatform?.version ||
+      LATEST_FACEBOOK_API_VERSION
     );
   }
 
@@ -45,8 +56,7 @@ export class FacebookMessenger extends Jovo<FacebookMessengerRequest, FacebookMe
       | OutputTemplate[],
     options?: DeepPartial<OUTPUT['options']>,
   ): Promise<void> {
-    // get the length of the current output, if it's an object, assume the length is 1
-    const currentOutputLength = Array.isArray(this.$output) ? this.$output.length : 1;
+    const currentOutputLength = this.$output.length;
     if (typeof outputConstructorOrTemplate === 'function') {
       await super.$send(outputConstructorOrTemplate, options);
     } else {
@@ -57,9 +67,7 @@ export class FacebookMessenger extends Jovo<FacebookMessengerRequest, FacebookMe
     );
 
     // get only the newly added output
-    const newOutput = Array.isArray(this.$output)
-      ? this.$output.slice(currentOutputLength)
-      : this.$output;
+    const newOutput = this.$output.slice(currentOutputLength);
 
     let response = await outputConverter.toResponse(newOutput);
     response = await this.$platform.finalizeResponse(response, this);

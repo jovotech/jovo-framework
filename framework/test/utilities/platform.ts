@@ -1,41 +1,73 @@
-import { OutputTemplate, OutputTemplateConverterStrategy } from '@jovotech/output';
-import { UnknownObject } from '../../dist/types';
+import {
+  OutputTemplate,
+  OutputTemplateConverterStrategy,
+  OutputTemplateConverterStrategyConfig,
+} from '@jovotech/output';
 import {
   AnyObject,
+  CapabilityType,
   EntityMap,
   ExtensibleConfig,
+  InputTypeLike,
   Jovo,
+  JovoDevice,
+  JovoInput,
   JovoRequest,
-  JovoRequestType,
   JovoResponse,
   JovoUser,
   MiddlewareCollection,
   Platform,
+  RequestBuilder,
+  UnknownObject,
 } from '../../src';
 
 export class ExamplePlatformRequest extends JovoRequest {
-  getEntities(): EntityMap | undefined {
-    return undefined;
+  getUserId(): string | undefined {
+    return;
   }
 
-  getIntentName(): string | undefined {
-    return undefined;
+  setUserId(): void {
+    return;
   }
 
   getLocale(): string | undefined {
     return undefined;
   }
 
-  getRawText(): string | undefined {
+  setLocale(): void {
+    return;
+  }
+
+  getIntent(): JovoInput['intent'] {
     return undefined;
   }
 
-  getRequestType(): JovoRequestType | undefined {
+  setIntent(): void {
+    return;
+  }
+
+  getEntities(): EntityMap | undefined {
+    return undefined;
+  }
+
+  getInputType(): InputTypeLike | undefined {
+    return undefined;
+  }
+
+  getInputText(): JovoInput['text'] {
+    return undefined;
+  }
+
+  getInputAudio(): JovoInput['audio'] {
     return undefined;
   }
 
   getSessionData(): UnknownObject | undefined {
     return undefined;
+  }
+
+  setSessionData(): void {
+    return;
   }
 
   getSessionId(): string | undefined {
@@ -45,15 +77,44 @@ export class ExamplePlatformRequest extends JovoRequest {
   isNewSession(): boolean | undefined {
     return undefined;
   }
+
+  getDeviceCapabilities(): CapabilityType[] | undefined {
+    return;
+  }
 }
 
-export class ExamplePlatformResponse extends JovoResponse {}
+export class ExamplePlatformRequestBuilder extends RequestBuilder<ExamplePlatform> {
+  launch(): ExamplePlatformRequest {
+    return new ExamplePlatformRequest();
+  }
 
-export class ExamplePlatformApp extends Jovo<ExamplePlatformRequest, ExamplePlatformResponse> {}
+  intent(name?: string): ExamplePlatformRequest;
+  intent(json?: UnknownObject): ExamplePlatformRequest;
+  intent(): ExamplePlatformRequest {
+    return new ExamplePlatformRequest();
+  }
+}
 
-export class ExamplePlatformOutputConverterStrategy
-  implements OutputTemplateConverterStrategy<ExamplePlatformResponse>
-{
+export class ExamplePlatformResponse extends JovoResponse {
+  hasSessionEnded(): boolean {
+    return false;
+  }
+}
+
+export class ExamplePlatformJovo extends Jovo<
+  ExamplePlatformRequest,
+  ExamplePlatformResponse,
+  ExamplePlatformJovo,
+  ExamplePlatformUser,
+  ExamplePlatformDevice,
+  ExamplePlatform
+> {}
+
+export class ExamplePlatformOutputConverterStrategy extends OutputTemplateConverterStrategy<
+  ExamplePlatformResponse,
+  OutputTemplateConverterStrategyConfig
+> {
+  platformName = 'Example';
   responseClass = ExamplePlatformResponse;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -63,25 +124,32 @@ export class ExamplePlatformOutputConverterStrategy
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   toResponse(output: OutputTemplate): ExamplePlatformResponse {
-    return {};
+    return this.prepareResponse({}) as ExamplePlatformResponse;
   }
 }
 
-export class ExamplePlatformUser extends JovoUser<
-  ExamplePlatformRequest,
-  ExamplePlatformResponse,
-  ExamplePlatformApp
-> {
-  get id(): string {
+export class ExamplePlatformUser extends JovoUser<ExamplePlatformJovo> {
+  get id(): string | undefined {
     return 'ExamplePlatformUser';
   }
 }
 
-export class ExamplePlatform extends Platform<ExamplePlatformRequest, ExamplePlatformResponse> {
+export class ExamplePlatformDevice extends JovoDevice<ExamplePlatformJovo> {}
+
+export class ExamplePlatform extends Platform<
+  ExamplePlatformRequest,
+  ExamplePlatformResponse,
+  ExamplePlatformJovo,
+  ExamplePlatformUser,
+  ExamplePlatformDevice,
+  ExamplePlatform
+> {
   outputTemplateConverterStrategy = new ExamplePlatformOutputConverterStrategy();
   requestClass = ExamplePlatformRequest;
-  jovoClass = ExamplePlatformApp;
+  jovoClass = ExamplePlatformJovo;
   userClass = ExamplePlatformUser;
+  deviceClass = ExamplePlatformDevice;
+  requestBuilder = ExamplePlatformRequestBuilder;
 
   getDefaultConfig(): ExtensibleConfig {
     return {};

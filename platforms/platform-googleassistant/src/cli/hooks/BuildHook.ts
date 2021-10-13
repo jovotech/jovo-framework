@@ -1,8 +1,9 @@
-import type { BuildContext, BuildEvents } from '@jovotech/cli-command-build';
+import type { BuildPlatformContext, BuildPlatformEvents } from '@jovotech/cli-command-build';
 import {
   ANSWER_BACKUP,
   ANSWER_CANCEL,
   deleteFolderRecursive,
+  DISK,
   flags,
   getResolvedLocales,
   InstallContext,
@@ -16,14 +17,14 @@ import {
   promptOverwriteReverseBuild,
   REVERSE_ARROWS,
   STATION,
-  DISK,
   Task,
   wait,
 } from '@jovotech/cli-core';
 import { FileBuilder, FileObject } from '@jovotech/filebuilder';
+import { JovoModelData, JovoModelDataV3, NativeFileInformation } from '@jovotech/model';
+import { JovoModelGoogle } from '@jovotech/model-google';
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'fs';
-import { JovoModelData, NativeFileInformation } from 'jovo-model';
-import { JovoModelGoogle } from 'jovo-model-google';
+import { copySync, removeSync } from 'fs-extra';
 import _get from 'lodash.get';
 import _has from 'lodash.has';
 import _merge from 'lodash.merge';
@@ -32,33 +33,36 @@ import _set from 'lodash.set';
 import { join as joinPaths } from 'path';
 import * as yaml from 'yaml';
 import { GoogleAssistantCli } from '..';
-import { GoogleActionActions, GoogleContext, SupportedLocalesType } from '../utils';
-import { SupportedLocales } from '../utils';
+import DefaultFiles from '../DefaultFiles.json';
+import {
+  GoogleActionActions,
+  GoogleContext,
+  SupportedLocales,
+  SupportedLocalesType,
+} from '../utilities';
 
-import DefaultFiles from '../utils/DefaultFiles.json';
-
-export interface BuildContextGoogle extends BuildContext, GoogleContext {
-  flags: BuildContext['flags'] & { 'project-id'?: string };
+export interface BuildPlatformContextGoogle extends BuildPlatformContext, GoogleContext {
+  flags: BuildPlatformContext['flags'] & { 'project-id'?: string };
   googleAssistant: GoogleContext['googleAssistant'] & {
     defaultLocale?: string;
   };
 }
 
-export class BuildHook extends PluginHook<BuildEvents> {
+export class BuildHook extends PluginHook<BuildPlatformEvents> {
   $plugin!: GoogleAssistantCli;
-  $context!: BuildContextGoogle;
+  $context!: BuildPlatformContextGoogle;
 
   install(): void {
     this.middlewareCollection = {
       'install': [this.addCliOptions.bind(this)],
-      'before.build': [
+      'before.build:platform': [
         this.checkForPlatform.bind(this),
         this.updatePluginContext.bind(this),
         this.checkForCleanBuild.bind(this),
         this.validateLocales.bind(this),
       ],
-      'build': [this.validateModels.bind(this), this.build.bind(this)],
-      'reverse.build': [this.buildReverse.bind(this)],
+      'build:platform': [this.validateModels.bind(this), this.build.bind(this)],
+      'build:platform.reverse': [this.buildReverse.bind(this)],
     };
   }
 
@@ -67,7 +71,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * @param context - Context providing an access point to command flags and args.
    */
   addCliOptions(context: InstallContext): void {
-    if (context.command !== 'build') {
+    if (context.command !== 'build:platform') {
       return;
     }
 
@@ -82,7 +86,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
    */
   checkForPlatform(): void {
     // Check if this plugin should be used or not.
-    if (!this.$context.platforms.includes(this.$plugin.$id)) {
+    if (!this.$context.platforms.includes(this.$plugin.id)) {
       this.uninstall();
     }
   }
@@ -96,14 +100,14 @@ export class BuildHook extends PluginHook<BuildEvents> {
     }
 
     this.$context.googleAssistant.projectId =
-      this.$context.flags['project-id'] || _get(this.$plugin.$config, 'projectId');
+      this.$context.flags['project-id'] || _get(this.$plugin.config, 'projectId');
 
     if (!this.$context.googleAssistant.projectId) {
-      throw new JovoCliError(
-        'Could not find project ID.',
-        this.$plugin.constructor.name,
-        'Please provide a project ID by using the flag "--project-id" or in your project configuration.',
-      );
+      throw new JovoCliError({
+        message: 'Could not find project ID.',
+        module: this.$plugin.name,
+        hint: 'Please provide a project ID by using the flag "--project-id" or in your project configuration.',
+      });
     }
 
     // Set default locale.
@@ -116,7 +120,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
   checkForCleanBuild(): void {
     // If --clean has been set, delete the respective platform folders before building.
     if (this.$context.flags.clean) {
-      deleteFolderRecursive(this.$plugin.getPlatformPath());
+      deleteFolderRecursive(this.$plugin.platformPath);
     }
   }
 
@@ -126,7 +130,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
   validateLocales(): void {
     const locales: SupportedLocalesType[] = this.$context.locales.reduce(
       (locales: string[], locale: string) => {
-        locales.push(...getResolvedLocales(locale, SupportedLocales, this.$plugin.$config.locales));
+        locales.push(...getResolvedLocales(locale, SupportedLocales, this.$plugin.config.locales));
         return locales;
       },
       [],
@@ -139,20 +143,23 @@ export class BuildHook extends PluginHook<BuildEvents> {
         SupportedLocales.includes(genericLocale as SupportedLocalesType) &&
         !locales.includes(genericLocale as SupportedLocalesType)
       ) {
-        throw new JovoCliError(
-          `Locale ${printHighlight(locale)} requires a generic locale ${printHighlight(
+        throw new JovoCliError({
+          message: `Locale ${printHighlight(locale)} requires a generic locale ${printHighlight(
             genericLocale,
           )}.`,
-          this.$plugin.constructor.name,
-        );
+          module: this.$plugin.name,
+        });
       }
 
       if (!SupportedLocales.includes(locale)) {
-        throw new JovoCliError(
-          `Locale ${printHighlight(locale)} is not supported by Google Conversational Actions.`,
-          this.$plugin.constructor.name,
-          'For more information on multiple language support: https://developers.google.com/assistant/console/languages-locales',
-        );
+        throw new JovoCliError({
+          message: `Locale ${printHighlight(
+            locale,
+          )} is not supported by Google Conversational Actions.`,
+          module: this.$plugin.name,
+          learnMore:
+            'For more information on multiple language support: https://developers.google.com/assistant/console/languages-locales',
+        });
       }
     }
   }
@@ -166,7 +173,13 @@ export class BuildHook extends PluginHook<BuildEvents> {
 
     for (const locale of this.$context.locales) {
       const localeTask = new Task(locale, async () => {
-        this.$cli.$project!.validateModel(locale, JovoModelGoogle.getValidator());
+        const model: JovoModelData | JovoModelDataV3 = await this.$cli.project!.getModel(locale);
+        await this.$cli.project!.validateModel(
+          locale,
+          model,
+          JovoModelGoogle.getValidator(model),
+          this.$plugin.name,
+        );
         await wait(500);
       });
 
@@ -181,7 +194,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
    */
   async buildReverse(): Promise<void> {
     // Since platform can be prompted for, check if this plugin should actually be executed again.
-    if (!this.$context.platforms.includes(this.$plugin.$id)) {
+    if (!this.$context.platforms.includes(this.$plugin.id)) {
       return;
     }
 
@@ -199,16 +212,16 @@ export class BuildHook extends PluginHook<BuildEvents> {
         if (platformLocales.includes(locale)) {
           selectedLocales.push(locale);
         } else {
-          throw new JovoCliError(
-            `Could not find platform models for locale: ${printHighlight(locale)}`,
-            this.$plugin.constructor.name,
-            `Available locales include: ${platformLocales.join(', ')}`,
-          );
+          throw new JovoCliError({
+            message: `Could not find platform models for locale: ${printHighlight(locale)}`,
+            module: this.$plugin.name,
+            hint: `Available locales include: ${platformLocales.join(', ')}`,
+          });
         }
       }
     }
 
-    // Try to resolve the locale according to the locale map provided in this.$plugin.$config.locales.
+    // Try to resolve the locale according to the locale map provided in this.$plugin.config.locales.
     // If en resolves to en-US, this loop will generate { 'en-US': 'en' }
     const buildLocaleMap: { [locale: string]: string } = selectedLocales.reduce(
       (localeMap: { [locale: string]: string }, locale: string) => {
@@ -217,11 +230,11 @@ export class BuildHook extends PluginHook<BuildEvents> {
       },
       {},
     );
-    for (const modelLocale in this.$plugin.$config.locales) {
+    for (const modelLocale in this.$plugin.config.locales) {
       const resolvedLocales: string[] = getResolvedLocales(
         modelLocale,
         SupportedLocales,
-        this.$plugin.$config.locales,
+        this.$plugin.config.locales,
       );
 
       for (const selectedLocale of selectedLocales) {
@@ -233,8 +246,8 @@ export class BuildHook extends PluginHook<BuildEvents> {
 
     // If Jovo model files for the current locales exist, ask whether to back them up or not.
     if (
-      this.$cli.$project!.hasModelFiles(Object.values(buildLocaleMap)) &&
-      !this.$context.flags.force
+      this.$cli.project!.hasModelFiles(Object.values(buildLocaleMap)) &&
+      !this.$context.flags.clean
     ) {
       const answer = await promptOverwriteReverseBuild();
       if (answer.overwrite === ANSWER_CANCEL) {
@@ -244,7 +257,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
         // Backup old files.
         const backupTask: Task = new Task(`${DISK} Creating backups`);
         for (const locale of Object.values(buildLocaleMap)) {
-          const localeTask: Task = new Task(locale, () => this.$cli.$project!.backupModel(locale));
+          const localeTask: Task = new Task(locale, () => this.$cli.project!.backupModel(locale));
           backupTask.add(localeTask);
         }
         await backupTask.run();
@@ -260,15 +273,15 @@ export class BuildHook extends PluginHook<BuildEvents> {
         jovoModel.importNative(platformFiles, modelLocale);
         const nativeData: JovoModelData | undefined = jovoModel.exportJovoModel();
         if (!nativeData) {
-          throw new JovoCliError(
-            'Something went wrong while exporting your Jovo model.',
-            this.$plugin.constructor.name,
-          );
+          throw new JovoCliError({
+            message: 'Something went wrong while exporting your Jovo model.',
+            module: this.$plugin.name,
+          });
         }
 
         nativeData.invocation = this.getPlatformInvocationName(platformLocale);
 
-        this.$cli.$project!.saveModel(nativeData, modelLocale);
+        this.$cli.project!.saveModel(nativeData, modelLocale);
         await wait(500);
       });
       reverseBuildTask.add(localeTask);
@@ -280,14 +293,14 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * Builds platform-specific models from Jovo language model.
    */
   async build(): Promise<void> {
-    const taskStatus: string = this.$cli.$project!.hasPlatform(this.$plugin.platformDirectory)
+    const taskStatus: string = this.$cli.project!.hasPlatform(this.$plugin.platformDirectory)
       ? 'Updating'
       : 'Creating';
 
     const buildTaskTitle = `${STATION} ${taskStatus} Google Conversational Action project files${printStage(
-      this.$cli.$project!.$stage,
+      this.$cli.project!.stage,
     )}\n${printSubHeadline(
-      `Path: ./${this.$cli.$project!.getBuildDirectory()}/${this.$plugin.platformDirectory}`,
+      `Path: ./${this.$cli.project!.getBuildDirectory()}/${this.$plugin.platformDirectory}`,
     )}`;
     // Define main build task.
     const buildTask: Task = new Task(buildTaskTitle);
@@ -303,7 +316,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
       this.createInteractionModel.bind(this),
     );
     // If no model files for the current locales exist, do not build interaction model.
-    if (!this.$cli.$project!.hasModelFiles(this.$context.locales)) {
+    if (!this.$cli.project!.hasModelFiles(this.$context.locales)) {
       buildInteractionModelTask.disable();
     }
 
@@ -315,12 +328,12 @@ export class BuildHook extends PluginHook<BuildEvents> {
   /**
    * Creates Google Conversational Action specific project files.
    */
-  createGoogleProjectFiles(): void {
+  async createGoogleProjectFiles(): Promise<void> {
     const files: FileObject = FileBuilder.normalizeFileObject(
-      _get(this.$plugin.$config, 'files', {}),
+      _get(this.$plugin.config, 'files', {}),
     );
     // If platforms folder doesn't exist, take default files and parse them with project.js config into FileBuilder.
-    const projectFiles: FileObject = this.$cli.$project!.hasPlatform(this.$plugin.platformDirectory)
+    const projectFiles: FileObject = this.$cli.project!.hasPlatform(this.$plugin.platformDirectory)
       ? files
       : _merge(DefaultFiles, files);
     // Get default locale.
@@ -349,7 +362,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
       const resolvedLocales: SupportedLocalesType[] = getResolvedLocales(
         locale,
         SupportedLocales,
-        this.$plugin.$config.locales,
+        this.$plugin.config.locales,
       ) as SupportedLocalesType[];
       for (const resolvedLocale of resolvedLocales) {
         const settingsPathArr: string[] = ['settings/'];
@@ -384,7 +397,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
         // Set minimal required localized settings, such as displayName and pronunciation.
         const localizedSettingsPath = `${settingsPath}.localizedSettings`;
 
-        const invocationName: string = this.getInvocationName(locale);
+        const invocationName: string = await this.getInvocationName(locale);
         if (!_has(projectFiles, `${localizedSettingsPath}.displayName`)) {
           _set(projectFiles, `${localizedSettingsPath}.displayName`, invocationName);
         }
@@ -394,7 +407,32 @@ export class BuildHook extends PluginHook<BuildEvents> {
       }
     }
 
-    FileBuilder.buildDirectory(projectFiles, this.$plugin.getPlatformPath());
+    FileBuilder.buildDirectory(projectFiles, this.$plugin.platformPath);
+
+    // Copies across any resources so they can be used in the project settings manifest.
+    // Docs:  https://developers.google.com/assistant/conversational/build/projects?hl=en&tool=sdk#add_resources
+    const copyResourcesTask: Task = new Task(
+      `Copying resources from ${this.$plugin.config.resourcesDirectory!}`,
+      () => {
+        const resourcesDirectory = 'resources';
+        const src: string = joinPaths(
+          this.$cli.projectPath,
+          this.$plugin.config.resourcesDirectory!,
+        );
+        const dest: string = joinPaths(this.$plugin.platformPath, resourcesDirectory);
+        // Delete existing resources folder before copying data
+        removeSync(dest);
+        copySync(src, dest);
+      },
+    );
+    copyResourcesTask.indent(2);
+
+    if (
+      this.$plugin.config.resourcesDirectory &&
+      existsSync(this.$plugin.config.resourcesDirectory)
+    ) {
+      await copyResourcesTask.run();
+    }
   }
 
   /**
@@ -405,7 +443,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
       const resolvedLocales: SupportedLocalesType[] = getResolvedLocales(
         locale,
         SupportedLocales,
-        this.$plugin.$config.locales,
+        this.$plugin.config.locales,
       ) as SupportedLocalesType[];
       const resolvedLocalesOutput: string = resolvedLocales.join(', ');
       // If the model locale is resolved to different locales, provide task details, i.e. "en (en-US, en-CA)"".
@@ -413,7 +451,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
         resolvedLocalesOutput === locale ? '' : `(${resolvedLocalesOutput})`;
 
       const localeTask: Task = new Task(`${locale} ${taskDetails}`, async () => {
-        this.buildLanguageModel(locale, resolvedLocales);
+        await this.buildLanguageModel(locale, resolvedLocales);
         await wait(500);
       });
       localeTask.indent(4);
@@ -426,12 +464,12 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * @param modelLocale - Locale of the Jovo model.
    * @param resolvedLocales - Locales to which to resolve the modelLocale.
    */
-  buildLanguageModel(modelLocale: string, resolvedLocales: string[]): void {
-    const model = this.getJovoModel(modelLocale);
+  async buildLanguageModel(modelLocale: string, resolvedLocales: string[]): Promise<void> {
+    const model = await this.getJovoModel(modelLocale);
 
     for (const locale of resolvedLocales) {
       const jovoModel = new JovoModelGoogle(
-        model,
+        model as JovoModelData,
         locale,
         this.$context.googleAssistant.defaultLocale,
       );
@@ -445,7 +483,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
 
       for (const file of modelFiles) {
         const fileName = file.path.pop()!;
-        const modelPath = joinPaths(this.$plugin.getPlatformPath(), ...file.path);
+        const modelPath = joinPaths(this.$plugin.platformPath, ...file.path);
 
         // Check if the path for the current model type (e.g. intent, types, ...) exists.
         if (!existsSync(modelPath)) {
@@ -453,7 +491,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
         }
 
         // Register actions.
-        if (file.path.includes('intents')) {
+        if (file.path.includes('global')) {
           actions.custom[fileName.replace('.yaml', '')] = {};
         }
 
@@ -463,7 +501,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
       // Merge existing actions file with configuration in project.js.
       _merge(actions, this.getProjectActions());
 
-      const actionsPath: string = joinPaths(this.$plugin.getPlatformPath(), 'actions');
+      const actionsPath: string = joinPaths(this.$plugin.platformPath, 'actions');
       if (!existsSync(actionsPath)) {
         mkdirSync(actionsPath, { recursive: true });
       }
@@ -475,7 +513,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * Gets configured actions from config.
    */
   getProjectActions(): void {
-    const actions = _get(this.$plugin.$config, 'files.["actions/"]');
+    const actions = _get(this.$plugin.config, 'files.["actions/"]');
     return actions;
   }
 
@@ -485,25 +523,21 @@ export class BuildHook extends PluginHook<BuildEvents> {
   setDefaultLocale(): void {
     const resolvedLocales: SupportedLocalesType[] = this.$context.locales.reduce(
       (locales: string[], locale: string) => {
-        locales.push(...getResolvedLocales(locale, SupportedLocales, this.$plugin.$config.locales));
+        locales.push(...getResolvedLocales(locale, SupportedLocales, this.$plugin.config.locales));
         return locales;
       },
       [],
     ) as SupportedLocalesType[];
 
     let defaultLocale: string =
-      _get(this.$plugin.$config, 'files.settings/["settings.yaml"].defaultLocale') ||
-      _get(this.$plugin.$config, 'defaultLocale');
+      _get(this.$plugin.config, 'files.settings/["settings.yaml"].defaultLocale') ||
+      _get(this.$plugin.config, 'defaultLocale');
 
     // Try to get default locale from platform-specific settings.
-    const settingsPath: string = joinPaths(
-      this.$plugin.getPlatformPath(),
-      'settings',
-      'settings.yaml',
-    );
+    const settingsPath: string = joinPaths(this.$plugin.platformPath, 'settings', 'settings.yaml');
     if (existsSync(settingsPath)) {
       const settingsFile: string = readFileSync(
-        joinPaths(this.$plugin.getPlatformPath(), 'settings', 'settings.yaml'),
+        joinPaths(this.$plugin.platformPath, 'settings', 'settings.yaml'),
         'utf-8',
       );
       const settings = yaml.parse(settingsFile);
@@ -524,11 +558,11 @@ export class BuildHook extends PluginHook<BuildEvents> {
     }
 
     if (!defaultLocale) {
-      throw new JovoCliError(
-        'Could not find a default locale.',
-        this.$plugin.constructor.name,
-        'Try adding the property "defaultLocale" to your project.js.',
-      );
+      throw new JovoCliError({
+        message: 'Could not find a default locale.',
+        module: this.$plugin.name,
+        hint: 'Try adding the property "defaultLocale" to your project.js.',
+      });
     }
 
     this.$context.googleAssistant.defaultLocale = defaultLocale;
@@ -539,15 +573,15 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * @param locale - The locale to get the resolution from.
    */
   getProjectLocales(locale: string): string[] {
-    return _get(this.$plugin.$config, `options.locales.${locale}`) as string[];
+    return _get(this.$plugin.config, `options.locales.${locale}`) as string[];
   }
 
   /**
    * Get plugin-specific endpoint.
    */
   getPluginEndpoint(): string {
-    const config = this.$cli.$project!.$config.get();
-    const endpoint = _get(this.$plugin.$config, 'endpoint') || _get(config, 'endpoint');
+    const config = this.$cli.project!.config.get();
+    const endpoint = _get(this.$plugin.config, 'endpoint') || _get(config, 'endpoint');
 
     return this.$cli.resolveEndpoint(endpoint);
   }
@@ -556,18 +590,18 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * Gets the invocation name for the specified locale.
    * @param locale - The locale of the Jovo model to fetch the invocation name from.
    */
-  getInvocationName(locale: string): string {
-    const { invocation } = this.getJovoModel(locale);
+  async getInvocationName(locale: string): Promise<string> {
+    const { invocation } = await this.getJovoModel(locale);
 
     if (typeof invocation === 'object') {
       // ToDo: Test!
-      const platformInvocation: string = invocation[this.$plugin.constructor.name];
+      const platformInvocation: string = invocation[this.$plugin.id];
 
       if (!platformInvocation) {
-        throw new JovoCliError(
-          `Can\'t find invocation name for locale ${locale}.`,
-          this.$plugin.constructor.name,
-        );
+        throw new JovoCliError({
+          message: `Can\'t find invocation name for locale ${locale}.`,
+          module: this.$plugin.name,
+        });
       }
 
       return platformInvocation;
@@ -583,7 +617,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
   getPlatformModels(locale: string): NativeFileInformation[] {
     const platformModels: NativeFileInformation[] = [];
 
-    const modelPath: string = joinPaths(this.$plugin.getPlatformPath(), 'custom');
+    const modelPath: string = joinPaths(this.$plugin.platformPath, 'custom');
     // Go through a predefined set of folders to extract intent and type information.
     const foldersToInclude: string[] = ['intents', 'types', 'scenes', 'global'];
 
@@ -626,7 +660,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * @param locale - Locale for which to parse the invocation name.
    */
   getPlatformInvocationName(locale: string): string {
-    const path: string[] = [this.$plugin.getPlatformPath(), 'settings'];
+    const path: string[] = [this.$plugin.platformPath, 'settings'];
 
     if (locale !== this.$context.googleAssistant.defaultLocale) {
       path.push(locale);
@@ -644,7 +678,7 @@ export class BuildHook extends PluginHook<BuildEvents> {
    */
   getPlatformLocales(): string[] {
     const locales: string[] = [];
-    const settingsPath: string = joinPaths(this.$plugin.getPlatformPath(), 'settings');
+    const settingsPath: string = joinPaths(this.$plugin.platformPath, 'settings');
     const files: string[] = readdirSync(settingsPath);
 
     for (const file of files) {
@@ -666,19 +700,19 @@ export class BuildHook extends PluginHook<BuildEvents> {
    * Loads a Jovo model specified by a locale and merges it with plugin-specific models.
    * @param locale - The locale that specifies which model to load.
    */
-  getJovoModel(locale: string): JovoModelData {
-    const model: JovoModelData = this.$cli.$project!.getModel(locale);
+  async getJovoModel(locale: string): Promise<JovoModelData | JovoModelDataV3> {
+    const model: JovoModelData | JovoModelDataV3 = await this.$cli.project!.getModel(locale);
 
     // Merge model with configured language model in project.js.
     _mergeWith(
       model,
-      this.$cli.$project!.$config.getParameter(`languageModel.${locale}`) || {},
+      this.$cli.project!.config.getParameter(`languageModel.${locale}`) || {},
       mergeArrayCustomizer,
     );
     // Merge model with configured, platform-specific language model in project.js.
     _mergeWith(
       model,
-      _get(this.$plugin.$config, `languageModel.${locale}`, {}),
+      _get(this.$plugin.config, `languageModel.${locale}`, {}),
       mergeArrayCustomizer,
     );
 

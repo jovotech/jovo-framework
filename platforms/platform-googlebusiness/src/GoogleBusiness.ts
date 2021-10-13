@@ -13,10 +13,19 @@ import {
 } from '@jovotech/output-googlebusiness';
 import { JWTInput } from 'google-auth-library';
 import { GOOGLE_BUSINESS_API_BASE_URL, LATEST_GOOGLE_BUSINESS_API_VERSION } from './constants';
+import { GoogleBusinessDevice } from './GoogleBusinessDevice';
 import { GoogleBusinessPlatform } from './GoogleBusinessPlatform';
 import { GoogleBusinessRequest } from './GoogleBusinessRequest';
+import { GoogleBusinessUser } from './GoogleBusinessUser';
 
-export class GoogleBusiness extends Jovo<GoogleBusinessRequest, GoogleBusinessResponse> {
+export class GoogleBusiness extends Jovo<
+  GoogleBusinessRequest,
+  GoogleBusinessResponse,
+  GoogleBusiness,
+  GoogleBusinessUser,
+  GoogleBusinessDevice,
+  GoogleBusinessPlatform
+> {
   get conversationId(): string | undefined {
     return this.$request.conversationId;
   }
@@ -42,8 +51,7 @@ export class GoogleBusiness extends Jovo<GoogleBusinessRequest, GoogleBusinessRe
       | OutputTemplate[],
     options?: DeepPartial<OUTPUT['options']>,
   ): Promise<void> {
-    // get the length of the current output, if it's an object, assume the length is 1
-    const currentOutputLength = Array.isArray(this.$output) ? this.$output.length : 1;
+    const currentOutputLength = this.$output.length;
     if (typeof outputConstructorOrTemplate === 'function') {
       await super.$send(outputConstructorOrTemplate, options);
     } else {
@@ -54,9 +62,7 @@ export class GoogleBusiness extends Jovo<GoogleBusinessRequest, GoogleBusinessRe
     );
 
     // get only the newly added output
-    const newOutput = Array.isArray(this.$output)
-      ? this.$output.slice(currentOutputLength)
-      : this.$output;
+    const newOutput = this.$output.slice(currentOutputLength);
 
     let response = await outputConverter.toResponse(newOutput);
     response = await this.$platform.finalizeResponse(response, this);

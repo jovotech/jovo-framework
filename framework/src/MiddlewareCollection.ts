@@ -1,10 +1,11 @@
-import { ArrayElement } from './index';
+import { ArrayElement, Jovo } from './index';
 import { Middleware, MiddlewareFunction } from './Middleware';
 
-export type PossibleMiddlewareName<MIDDLEWARES extends string[]> =
-  | ArrayElement<MIDDLEWARES>
-  | `after.${ArrayElement<MIDDLEWARES>}`
-  | `before.${ArrayElement<MIDDLEWARES>}`;
+export type PossibleMiddlewareNames<MIDDLEWARES extends string[]> = PossibleMiddlewareName<
+  ArrayElement<MIDDLEWARES>
+>;
+
+export type PossibleMiddlewareName<NAME extends string> = NAME | `after.${NAME}` | `before.${NAME}`;
 
 export class MiddlewareCollection<MIDDLEWARES extends string[] = string[]> {
   readonly middlewares: Record<string, Middleware>;
@@ -16,13 +17,13 @@ export class MiddlewareCollection<MIDDLEWARES extends string[] = string[]> {
     }, {});
   }
 
-  get names(): Array<PossibleMiddlewareName<MIDDLEWARES> | string> {
+  get names(): Array<PossibleMiddlewareNames<MIDDLEWARES> | string> {
     return Object.keys(this.middlewares);
   }
 
-  use(name: PossibleMiddlewareName<MIDDLEWARES>, ...fns: MiddlewareFunction[]): this;
+  use(name: PossibleMiddlewareNames<MIDDLEWARES>, ...fns: MiddlewareFunction[]): this;
   use(name: string, ...fns: MiddlewareFunction[]): this;
-  use(name: string | PossibleMiddlewareName<MIDDLEWARES>, ...fns: MiddlewareFunction[]): this {
+  use(name: string | PossibleMiddlewareNames<MIDDLEWARES>, ...fns: MiddlewareFunction[]): this {
     let middleware = this.get(name);
     if (!middleware) {
       middleware = new Middleware(name);
@@ -45,23 +46,23 @@ export class MiddlewareCollection<MIDDLEWARES extends string[] = string[]> {
     return this;
   }
 
-  has(name: PossibleMiddlewareName<MIDDLEWARES>): boolean;
+  has(name: PossibleMiddlewareNames<MIDDLEWARES>): boolean;
   has(name: string): boolean;
-  has(name: string | PossibleMiddlewareName<MIDDLEWARES>): boolean {
+  has(name: string | PossibleMiddlewareNames<MIDDLEWARES>): boolean {
     return !!this.middlewares[name] && this.middlewares[name] instanceof Middleware;
   }
 
-  get<MIDDLEWARE extends PossibleMiddlewareName<MIDDLEWARES>>(
+  get<MIDDLEWARE extends PossibleMiddlewareNames<MIDDLEWARES>>(
     name: MIDDLEWARE,
   ): Middleware<MIDDLEWARE> | undefined;
   get<MIDDLEWARE extends string>(name: MIDDLEWARE): Middleware<MIDDLEWARE> | undefined;
-  get(name: string | PossibleMiddlewareName<MIDDLEWARES>): Middleware | undefined {
+  get(name: string | PossibleMiddlewareNames<MIDDLEWARES>): Middleware | undefined {
     return this.middlewares[name];
   }
 
-  remove(...names: PossibleMiddlewareName<MIDDLEWARES>[]): this;
+  remove(...names: PossibleMiddlewareNames<MIDDLEWARES>[]): this;
   remove(...names: string[]): this;
-  remove(...names: Array<string | PossibleMiddlewareName<MIDDLEWARES>>): this {
+  remove(...names: Array<string | PossibleMiddlewareNames<MIDDLEWARES>>): this {
     names.forEach((name) => {
       if (this.has(name)) {
         delete this.middlewares[name];
@@ -70,33 +71,42 @@ export class MiddlewareCollection<MIDDLEWARES extends string[] = string[]> {
     return this;
   }
 
-  async run<T extends unknown[]>(
-    name: PossibleMiddlewareName<MIDDLEWARES>,
-    ...args: T
-  ): Promise<void>;
-  async run<T extends unknown[]>(name: string, ...args: T): Promise<void>;
-  async run<T extends unknown[]>(
-    name: string | PossibleMiddlewareName<MIDDLEWARES>,
-    ...args: T
+  clear(): this {
+    this.remove(...this.names);
+    return this;
+  }
+
+  async run(name: PossibleMiddlewareNames<MIDDLEWARES>, jovo: Jovo): Promise<void>;
+  async run(name: string, jovo: Jovo): Promise<void>;
+  async run(names: PossibleMiddlewareNames<MIDDLEWARES>[], jovo: Jovo): Promise<void>;
+  async run(names: string[], jovo: Jovo): Promise<void>;
+  async run(
+    nameOrNames:
+      | string
+      | PossibleMiddlewareNames<MIDDLEWARES>
+      | Array<string | PossibleMiddlewareNames<MIDDLEWARES>>,
+    jovo: Jovo,
   ): Promise<void> {
-    const middleware = this.get(name);
-    if (!middleware) return;
-    const beforeName = `before.${name}`;
-    if (this.has(beforeName)) {
-      await this.run(beforeName, ...args);
-    }
+    const names = typeof nameOrNames === 'string' ? [nameOrNames] : nameOrNames;
+    for (const name of names) {
+      const beforeName = `before.${name}`;
+      if (this.has(beforeName)) {
+        await this.run(beforeName, jovo);
+      }
 
-    await middleware.run(...args);
+      const middleware = this.get(name);
+      await middleware?.run(jovo);
 
-    const afterName = `after.${name}`;
-    if (this.has(afterName)) {
-      await this.run(afterName, ...args);
+      const afterName = `after.${name}`;
+      if (this.has(afterName)) {
+        await this.run(afterName, jovo);
+      }
     }
   }
 
-  disable(...names: PossibleMiddlewareName<MIDDLEWARES>[]): this;
+  disable(...names: PossibleMiddlewareNames<MIDDLEWARES>[]): this;
   disable(...names: string[]): this;
-  disable(...names: Array<string | PossibleMiddlewareName<MIDDLEWARES>>): this {
+  disable(...names: Array<string | PossibleMiddlewareNames<MIDDLEWARES>>): this {
     names.forEach((name) => {
       const middleware = this.get(name);
       if (middleware) {
@@ -106,9 +116,9 @@ export class MiddlewareCollection<MIDDLEWARES extends string[] = string[]> {
     return this;
   }
 
-  enable(...names: PossibleMiddlewareName<MIDDLEWARES>[]): this;
+  enable(...names: PossibleMiddlewareNames<MIDDLEWARES>[]): this;
   enable(...names: string[]): this;
-  enable(...names: Array<string | PossibleMiddlewareName<MIDDLEWARES>>): this {
+  enable(...names: Array<string | PossibleMiddlewareNames<MIDDLEWARES>>): this {
     names.forEach((name) => {
       const middleware = this.get(name);
       if (middleware) {

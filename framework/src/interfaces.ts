@@ -1,3 +1,4 @@
+import { Entity } from '@jovotech/output';
 import { AnyObject, UnknownObject } from './index';
 import { Jovo } from './Jovo';
 import { PluginConfig } from './Plugin';
@@ -12,18 +13,8 @@ export interface SessionData extends Data {}
 
 export interface UserData extends Data {}
 
-export interface Entity {
-  [key: string]: unknown | undefined;
-
-  name: string;
-  id?: string;
-  key?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  value?: any;
-}
-
-export interface EntityMap {
-  [key: string]: Entity | undefined;
+export interface EntityMap<ENTITY_TYPE extends Entity = Entity> {
+  [key: string]: ENTITY_TYPE | undefined;
 }
 
 export interface AsrData extends UnknownObject {
@@ -31,9 +22,7 @@ export interface AsrData extends UnknownObject {
 }
 
 export interface NluData extends UnknownObject {
-  intent?: {
-    name: string;
-  };
+  intent?: string | Intent;
   entities?: EntityMap;
 }
 
@@ -53,7 +42,11 @@ export interface StoredElement extends UnknownObject {
   enabled?: boolean;
 }
 
-export interface StoredElementHistory extends StoredElement, UnknownObject {
+export interface StoredElementSession extends StoredElement {
+  expiresAfterSeconds?: number;
+}
+
+export interface StoredElementHistory extends StoredElement {
   size?: number;
   asr?: StoredElement | boolean;
   state?: StoredElement | boolean;
@@ -69,7 +62,7 @@ export interface DbPluginConfig extends PluginConfig {
 
 export interface DbPluginStoredElementsConfig extends UnknownObject {
   user?: StoredElement | boolean;
-  session?: StoredElement | boolean;
+  session?: StoredElementSession | boolean;
   history?: StoredElementHistory | boolean;
   createdAt?: StoredElement | boolean;
   updateAt?: StoredElement | boolean;

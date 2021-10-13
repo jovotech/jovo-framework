@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/framework",
-  "version": "4.0.0-alpha.17",
+  "version": "4.0.0-beta.7",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -23,7 +23,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/output": "^4.0.0-alpha.10",
+    "@jovotech/output": "^4.0.0-beta.1",
     "axios": "^0.21.1",
     "chalk": "^4.1.0",
     "i18next": "^20.3.1",
@@ -33,8 +33,10 @@
     "lodash.merge": "^4.6.2",
     "lodash.set": "^4.3.2",
     "lodash.unset": "^4.5.2",
+    "ts-mixer": "^6.0.0",
     "ts-toolbelt": "9.5.13",
-    "type-fest": "^1.2.0"
+    "type-fest": "^1.2.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",

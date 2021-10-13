@@ -1,10 +1,10 @@
+---
+title: 'State Stack'
+excerpt: 'The Jovo State Stack remembers components that are relevant for the current user session.'
+---
 # State Stack
 
 The Jovo `$state` stack remembers components that are relevant for the current user session.
-
-- [Introduction](#introduction)
-- [Stacking Components](#stacking-components)
-- [State Properties](#state-properties)
 
 ## Introduction
 
@@ -34,7 +34,7 @@ The component is removed from the stack once it resolves or the session closes.
 
 ## Stacking Components
 
-The Jovo `$state` stack is an array, its last index (`$state.length - 1`) referencing the most recently active component.
+The Jovo `$state` stack is an array, its last index (`state.length - 1`) referencing the most recently active component.
 
 This is helpful to remember previous steps, for example after [a component delegated to a different one](./handlers.md#delegate-to-components) to complete a task.
 

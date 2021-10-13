@@ -25,6 +25,13 @@ export type PickWhere<T, U> = Pick<
     [K in keyof T]: T[K] extends U ? K : never;
   }[keyof T]
 >;
+// Construct object from properties of T that do not extend U.
+export type OmitWhere<T, U> = Omit<
+  T,
+  {
+    [K in keyof T]: T[K] extends U ? K : never;
+  }[keyof T]
+>;
 // If K equals I return never, otherwise return the key.
 export type FilterKey<K, I> = A.Equals<K, I> extends 1 ? never : K;
 // Omit index signature of T if it equals index-signature I.
@@ -33,20 +40,31 @@ export type OmitIndex<T, I extends string | number> = {
 };
 
 export {
+  Card,
+  Carousel,
+  CarouselItem,
+  CarouselItemSelection,
+  CarouselSelection,
+  DynamicEntity,
+  DynamicEntitiesModeLike,
+  DynamicEntities,
+  DynamicEntityValue,
+  DynamicEntitiesMode,
+  Entity,
   JovoResponse,
+  Listen,
+  ListenValue,
+  Message,
+  MessageValue,
   OutputTemplateConverterStrategy,
   OutputTemplateConverter,
   OutputTemplate,
   OutputTemplateBase,
   OutputTemplatePlatforms,
-  Carousel,
-  Card,
+  OutputValidationError,
+  PlatformOutputTemplate,
   QuickReply,
   QuickReplyValue,
-  Message,
-  MessageValue,
-  PlatformOutputTemplate,
-  OutputValidationError,
 } from '@jovotech/output';
 
 export * from './App';
@@ -60,16 +78,21 @@ export * from './HandleRequest';
 export * from './I18Next';
 export * from './Jovo';
 export * from './JovoError';
+export * from './JovoInput';
+export * from './JovoInputBuilder';
 export * from './JovoProxy';
 export * from './JovoRequest';
 export * from './JovoSession';
 export * from './JovoUser';
+export * from './JovoDevice';
+
 export * from './Middleware';
 export * from './MiddlewareCollection';
 export * from './NluPlugin';
 export * from './Platform';
 export * from './Plugin';
 export * from './Server';
+export * from './RequestBuilder';
 
 export * from './decorators/Component';
 export * from './decorators/Global';
@@ -80,6 +103,7 @@ export * from './decorators/Output';
 export * from './decorators/Platforms';
 export * from './decorators/PrioritizedOverUnhandled';
 export * from './decorators/SubState';
+export * from './decorators/Types';
 
 export * from './errors/ComponentNotFoundError';
 export * from './errors/DuplicateChildComponentsError';
@@ -109,3 +133,13 @@ export * from './plugins/RoutingExecutor';
 export * from './interfaces';
 export * from './enums';
 export * from './utilities';
+
+export * from './testsuite/TestJovo';
+export * from './testsuite/TestUser';
+export * from './testsuite/TestSuite';
+export * from './testsuite/TestServer';
+export * from './testsuite/TestRequest';
+export * from './testsuite/TestRequestBuilder';
+export * from './testsuite/TestResponse';
+export * from './testsuite/TestOutputConverterStrategy';
+export * from './testsuite/TestPlatform';

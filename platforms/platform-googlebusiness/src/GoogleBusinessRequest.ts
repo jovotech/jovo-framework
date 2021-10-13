@@ -1,10 +1,12 @@
 import {
   EntityMap,
+  InputType,
+  InputTypeLike,
+  JovoInput,
   JovoRequest,
-  JovoRequestType,
-  RequestType,
   UnknownObject,
 } from '@jovotech/framework';
+import { GoogleBusinessCapabilityType } from './GoogleBusinessDevice';
 import { Receipt } from './interfaces';
 
 export class GoogleBusinessRequest extends JovoRequest {
@@ -46,32 +48,48 @@ export class GoogleBusinessRequest extends JovoRequest {
     createTime: string; // RFC3339 UTC "Zulu" format
   };
 
-  getEntities(): EntityMap | undefined {
-    return undefined;
-  }
-
-  getIntentName(): string | undefined {
-    return undefined;
-  }
-
   getLocale(): string | undefined {
     return this.context?.resolvedLocale || this.context?.userInfo?.userDeviceLocale;
   }
 
-  getRawText(): string | undefined {
+  setLocale(locale: string): void {
+    if (!this.context) {
+      return;
+    }
+
+    this.context.resolvedLocale = locale;
+  }
+
+  getIntent(): JovoInput['intent'] {
+    return undefined;
+  }
+
+  setIntent(): void {
+    return;
+  }
+
+  getEntities(): EntityMap | undefined {
+    return undefined;
+  }
+
+  getInputType(): InputTypeLike | undefined {
+    return InputType.Text;
+  }
+  getInputText(): JovoInput['text'] {
     return (
       this.message?.text || this.suggestionResponse?.postbackData || this.suggestionResponse?.text
     );
   }
-
-  getRequestType(): JovoRequestType | undefined {
-    return {
-      type: RequestType.Intent,
-    };
+  getInputAudio(): JovoInput['audio'] {
+    return;
   }
 
   getSessionData(): UnknownObject | undefined {
     return undefined;
+  }
+
+  setSessionData(): void {
+    return;
   }
 
   getSessionId(): string | undefined {
@@ -80,5 +98,17 @@ export class GoogleBusinessRequest extends JovoRequest {
 
   isNewSession(): boolean | undefined {
     return undefined;
+  }
+
+  getDeviceCapabilities(): GoogleBusinessCapabilityType[] | undefined {
+    return;
+  }
+
+  getUserId(): string | undefined {
+    return;
+  }
+
+  setUserId(): void {
+    return;
   }
 }

@@ -3,6 +3,7 @@ import {
   App,
   DeepPartial,
   Extensible,
+  ExtensibleInitConfig,
   HandleRequest,
   InvalidParentError,
   Jovo,
@@ -54,9 +55,8 @@ export interface JovoUpdateData<KEY extends keyof Jovo | string = keyof Jovo | s
   path: KEY extends keyof Jovo ? KEY : string;
 }
 
-// TODO: implement config
 export interface JovoDebuggerConfig extends PluginConfig {
-  corePlatform: DeepPartial<CorePlatformConfig>;
+  corePlatform: ExtensibleInitConfig<CorePlatformConfig>;
   nlpjsNlu: NlpjsNluInitConfig;
   webhookUrl: string;
   languageModelEnabled: boolean;
@@ -79,6 +79,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   // TODO check default config
   getDefaultConfig(): JovoDebuggerConfig {
     return {
+      skipTests: true,
       corePlatform: {},
       nlpjsNlu: {
         languageMap: {
@@ -107,10 +108,10 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   }
 
   private installDebuggerPlatform(app: App) {
-    const JovoDebuggerPlatform = CorePlatform.create('JovoDebuggerPlatform', 'jovo-debugger');
     app.use(
-      new JovoDebuggerPlatform({
+      new CorePlatform({
         ...this.config.corePlatform,
+        platform: 'jovo-debugger',
         plugins: [new NlpjsNlu(this.config.nlpjsNlu)],
       }),
     );
@@ -126,19 +127,28 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       throw new Error();
     }
 
-    this.socket.on(JovoDebuggerEvent.DebuggingAvailable, this.onDebuggingAvailable);
-    this.socket.on(
-      JovoDebuggerEvent.DebuggerLanguageModelRequest,
-      this.onDebuggerLanguageModelRequest,
-    );
-    this.socket.on(JovoDebuggerEvent.DebuggerRequest, this.onDebuggerRequest.bind(this, app));
-
-    // TODO determine whether it should be called here
-    app.middlewareCollection.use('before.request', this.onRequest);
-    app.middlewareCollection.use('after.response', this.onResponse);
+    this.socket.on(JovoDebuggerEvent.DebuggingAvailable, () => {
+      return this.onDebuggingAvailable();
+    });
+    this.socket.on(JovoDebuggerEvent.DebuggerLanguageModelRequest, () => {
+      return this.onDebuggerLanguageModelRequest();
+    });
+    this.socket.on(JovoDebuggerEvent.DebuggerRequest, (request: AnyObject) => {
+      return this.onDebuggerRequest(app, request);
+    });
 
     this.patchHandleRequestToIncludeUniqueId();
     this.patchPlatformsToCreateJovoAsProxy(app.platforms);
+  }
+
+  mount(parent: HandleRequest): Promise<void> | void {
+    this.socket = parent.app.plugins.JovoDebugger?.socket;
+    parent.middlewareCollection.use('request.start', (jovo) => {
+      return this.onRequest(jovo);
+    });
+    parent.middlewareCollection.use('response.end', (jovo) => {
+      return this.onResponse(jovo);
+    });
   }
 
   // TODO: maybe find a better solution although this might work well because it is independent of the RIDR-pipeline
@@ -232,7 +242,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     };
   }
 
-  private onDebuggingAvailable = () => {
+  private onDebuggingAvailable(): void {
     if (!this.socket) {
       // TODO: implement error
       throw new Error();
@@ -253,9 +263,9 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       propagateStreamAsLog(process.stderr, this.socket);
       this.hasOverriddenWrite = true;
     }
-  };
+  }
 
-  private onDebuggerLanguageModelRequest = async () => {
+  private async onDebuggerLanguageModelRequest(): Promise<void> {
     if (!this.config.languageModelEnabled) return;
     if (!this.config.languageModelPath || !this.config.debuggerJsonPath) {
       // TODO: determine what to do (warning or error or nothing)
@@ -275,7 +285,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       console.warn('Can not emit language-model: Could not retrieve language-model.');
     }
     // TODO implement sending debuggerConfig if that is required
-  };
+  }
 
   private async getLanguageModel(): Promise<AnyObject> {
     const languageModel: AnyObject = {};
@@ -310,33 +320,33 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     return languageModel;
   }
 
-  private onDebuggerRequest = async (app: App, request: AnyObject) => {
+  private async onDebuggerRequest(app: App, request: AnyObject): Promise<void> {
     await app.handle(new MockServer(request));
-  };
+  }
 
-  private onRequest = (handleRequest: HandleRequest, jovo: Jovo) => {
+  private onRequest(jovo: Jovo) {
     if (!this.socket) {
       // TODO: implement error
       throw new Error();
     }
     const payload: JovoDebuggerPayload<JovoRequest> = {
-      requestId: handleRequest.debuggerRequestId,
+      requestId: jovo.$handleRequest.debuggerRequestId,
       data: jovo.$request,
     };
     this.socket.emit(JovoDebuggerEvent.AppRequest, payload);
-  };
+  }
 
-  private onResponse = (handleRequest: HandleRequest, jovo: Jovo) => {
+  private onResponse(jovo: Jovo) {
     if (!this.socket) {
       // TODO: implement error
       throw new Error();
     }
     const payload: JovoDebuggerPayload = {
-      requestId: handleRequest.debuggerRequestId,
+      requestId: jovo.$handleRequest.debuggerRequestId,
       data: jovo.$response,
     };
     this.socket.emit(JovoDebuggerEvent.AppResponse, payload);
-  };
+  }
 
   private async connectToWebhook() {
     const webhookId = await this.retrieveLocalWebhookId();

@@ -1,12 +1,10 @@
+---
+title: 'Platforms'
+excerpt: 'Learn more about Jovo Platform integrations are responsible for communicating with platforms like Alexa, Google Assistant, the web, and more.'
+---
 # Platforms
 
 Platform integrations are responsible for communicating with platforms like Alexa, Google Assistant, the web, and more.
-
-- [Introduction](#introduction)
-- [Configuration](#configuration)
-  - [App Configuration](#app-configuration)
-  - [Project Configuration](#project-configuration)
-- [Platform-Specific Features](#platform-specific-features)
 
 ## Introduction
 
@@ -75,6 +73,14 @@ Each platform integration offers a variety of platform-specific features. You ca
 
 ```typescript
 this.$alexa
+```
+
+If the request came from a different platform, the value of all other platform objects is `undefined`. This way you can distinguish between different platforms in your [handlers](./handlers.md) or [output classes](./output.md). 
+
+```typescript
+if(this.$alexa) {
+  // ...
+}
 ```
 
 Potentially, a platform can have various platform specific features and classes. For example, you can `$alexa` specific Jovo objects like this:

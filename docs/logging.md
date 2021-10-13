@@ -1,13 +1,10 @@
+---
+title: 'Logging'
+excerpt: 'Learn more about the different types of logging you can do in your Jovo app.'
+---
 # Logging
 
 Learn more about the different types of logging you can do in your Jovo app.
-
-- [Introduction](#introduction)
-- [Configuration](#configuration)
-  - [Request Logging](#request-logging)
-  - [Response Logging](#response-logging)
-  - [Masking](#masking)
-  - [Styling](#styling)
 
 ## Introduction
 

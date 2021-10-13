@@ -1,12 +1,10 @@
+---
+title: 'Routing'
+excerpt: 'Learn more about the different elements of routing: How the Jovo app decides which component and handler should respond to a request.'
+---
 # Routing
 
 Learn more about the different elements of routing: How the Jovo app decides which [component](./components.md) and [handler](./handlers.md) should respond to a request.
-- [Introduction](#introduction)
-- [Request Routing](#request-routing)
-  - [Handler Matches](#handler-matches)
-  - [Handler and Component Prioritization](#handler-and-component-prioritization)
-  - [UNHANDLED Prioritization](#unhandled-prioritization)
-- [Handler Routing](#handler-routing)
 
 ## Introduction
 

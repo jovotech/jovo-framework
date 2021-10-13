@@ -1,23 +1,20 @@
-import _get from 'lodash.get';
-import _set from 'lodash.set';
+import type { DeployPlatformContext, DeployPlatformEvents } from '@jovotech/cli-command-deploy';
 import {
   flags,
   getResolvedLocales,
   InstallContext,
   JovoCliError,
-  PluginHook,
   printAskProfile,
   printStage,
   ROCKET,
   Task,
 } from '@jovotech/cli-core';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
-import type { DeployPlatformEvents, DeployPlatformContext } from '@jovotech/cli-command-deploy';
-
-import * as smapi from '../smapi';
-import { checkForAskCli, AlexaContext, SupportedLocales } from '../utils';
-import DefaultFiles from '../utils/DefaultFiles.json';
+import { existsSync } from 'fs';
+import _get from 'lodash.get';
 import { AlexaCli } from '..';
+import * as smapi from '../smapi';
+import { AlexaContext, checkForAskCli, SupportedLocales } from '../utilities';
+import { AlexaHook } from './AlexaHook';
 
 export interface DeployPlatformContextAlexa extends AlexaContext, DeployPlatformContext {
   flags: DeployPlatformContext['flags'] & { 'ask-profile'?: string; 'skill-id'?: string };
@@ -26,7 +23,7 @@ export interface DeployPlatformContextAlexa extends AlexaContext, DeployPlatform
   };
 }
 
-export class DeployHook extends PluginHook<DeployPlatformEvents> {
+export class DeployHook extends AlexaHook<DeployPlatformEvents> {
   $plugin!: AlexaCli;
   $context!: DeployPlatformContextAlexa;
 
@@ -63,7 +60,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
    */
   checkForPlatform(): void {
     // Check if this plugin should be used or not.
-    if (!this.$context.platforms.includes(this.$plugin.$id)) {
+    if (!this.$context.platforms.includes(this.$plugin.id)) {
       this.uninstall();
     }
   }
@@ -71,13 +68,16 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
   /**
    * Updates the current plugin context with platform-specific values.
    */
-  updatePluginContext(): void {
+  async updatePluginContext(): Promise<void> {
     if (!this.$context.alexa) {
       this.$context.alexa = {};
     }
 
     this.$context.alexa.askProfile =
-      this.$context.flags['ask-profile'] || this.$plugin.$config.askProfile;
+      this.$context.flags['ask-profile'] ||
+      this.$plugin.config.askProfile ||
+      (await this.getAskProfile());
+
     this.$context.alexa.skillId = this.$context.flags['skill-id'] || this.getSkillId();
   }
 
@@ -85,12 +85,12 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
    * Checks if the platform folder for the current plugin exists.
    */
   checkForPlatformsFolder(): void {
-    if (!existsSync(this.$plugin.getPlatformPath())) {
-      throw new JovoCliError(
-        `Couldn't find the platform folder "${this.$plugin.platformDirectory}/".`,
-        this.$plugin.constructor.name,
-        `Please use "jovo build" to create platform-specific files.`,
-      );
+    if (!existsSync(this.$plugin.platformPath)) {
+      throw new JovoCliError({
+        message: `Couldn't find the platform folder "${this.$plugin.platformDirectory}/".`,
+        module: this.$plugin.name,
+        hint: `Please use "jovo build" to create platform-specific files.`,
+      });
     }
   }
 
@@ -99,7 +99,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
    */
   async deploy(): Promise<void> {
     const deployTask: Task = new Task(
-      `${ROCKET} Deploying Alexa Skill ${printStage(this.$cli.$project!.$stage)}`,
+      `${ROCKET} Deploying Alexa Skill ${printStage(this.$cli.project!.stage)}`,
     );
 
     if (!this.$context.alexa.skillId) {
@@ -108,7 +108,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
         `Creating Alexa Skill project ${printAskProfile(this.$context.alexa.askProfile)}`,
         async () => {
           const skillId: string = await smapi.createSkill(
-            this.$plugin.getSkillJsonPath(),
+            this.$plugin.skillJsonPath,
             this.$context.alexa.askProfile,
           );
           this.$context.alexa.skillId = skillId;
@@ -118,7 +118,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
 
           await smapi.updateAccountLinkingInformation(
             skillId,
-            this.$plugin.getAccountLinkingPath(),
+            this.$plugin.accountLinkingPath,
             'development',
             this.$context.alexa.askProfile,
           );
@@ -137,12 +137,12 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
         async () => {
           await smapi.updateSkill(
             this.$context.alexa.skillId!,
-            this.$plugin.getSkillJsonPath(),
+            this.$plugin.skillJsonPath,
             this.$context.alexa.askProfile,
           );
           await smapi.updateAccountLinkingInformation(
             this.$context.alexa.skillId!,
-            this.$plugin.getAccountLinkingPath(),
+            this.$plugin.accountLinkingPath,
             'development',
             this.$context.alexa.askProfile,
           );
@@ -158,7 +158,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
 
     const resolvedLocales: string[] = this.$context.locales.reduce(
       (locales: string[], locale: string) => {
-        locales.push(...getResolvedLocales(locale, SupportedLocales, this.$plugin.$config.locales));
+        locales.push(...getResolvedLocales(locale, SupportedLocales, this.$plugin.config.locales));
         return locales;
       },
       [],
@@ -206,7 +206,8 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
   getSkillId(): string | undefined {
     try {
       const askConfig = this.getAskConfig();
-      const skillId: string = _get(askConfig, 'profiles.default.skillId');
+      const askProfile: string = this.$context.alexa.askProfile || 'default';
+      const skillId: string = _get(askConfig, `profiles.${askProfile}.skillId`);
       if (skillId && skillId.length > 0) {
         return skillId;
       }
@@ -214,54 +215,8 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
       if (err instanceof JovoCliError) {
         throw err;
       }
-      throw new JovoCliError(err.message, this.$plugin.constructor.name);
+      throw new JovoCliError({ message: err.message, module: this.$plugin.name });
     }
-  }
-
-  /**
-   * Saves Alexa Skill ID to .ask/config.
-   * @param skillId
-   */
-  setSkillId(skillId: string): void {
-    const askConfigFolderPath = this.$plugin.getAskConfigFolderPath();
-
-    if (!existsSync(askConfigFolderPath)) {
-      mkdirSync(askConfigFolderPath);
-    }
-
-    // Check if ask-states.json exists, if not, create it.
-    if (!existsSync(this.$plugin.getAskConfigPath())) {
-      this.createEmptyAskConfig();
-    }
-
-    const askConfig = JSON.parse(readFileSync(this.$plugin.getAskConfigPath(), 'utf-8'));
-
-    _set(askConfig, 'profiles.default.skillId', skillId);
-
-    writeFileSync(this.$plugin.getAskConfigPath(), JSON.stringify(askConfig, null, 2));
-  }
-
-  /**
-   * Returns Alexa Config from .ask/config.
-   * ToDo: Typing!
-   */
-  getAskConfig(): void {
-    try {
-      return JSON.parse(readFileSync(this.$plugin.getAskConfigPath(), 'utf8'));
-    } catch (err) {
-      throw new JovoCliError(
-        'Could not read ask configuration file.',
-        this.$plugin.constructor.name,
-      );
-    }
-  }
-
-  /**
-   * Creates an empty ask config file.
-   */
-  createEmptyAskConfig(): void {
-    const config = _get(DefaultFiles, '[".ask"]["ask-states.json"]');
-    writeFileSync(this.$plugin.getAskConfigPath(), config);
   }
 
   /**
@@ -270,7 +225,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
   getSkillInformation(): { name: string; skillId?: string } {
     try {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const skillJson = require(this.$plugin.getSkillJsonPath());
+      const skillJson = require(this.$plugin.skillJsonPath);
       const info = {
         name: '',
         skillId: this.getSkillId(),
@@ -284,7 +239,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
 
       return info;
     } catch (err) {
-      throw new JovoCliError(err.message, this.$plugin.constructor.name);
+      throw new JovoCliError({ message: err.message, module: this.$plugin.name });
     }
   }
 

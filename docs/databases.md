@@ -1,16 +1,17 @@
+---
+title: 'Database Integrations'
+excerpt: 'Jovo offers a variety of integrations that allow you to store elements like user data, session data, and an interaction history in a database.'
+---
 # Database Integrations
 
 Jovo offers a variety of integrations that allow you to store elements like user data, session data, and a user's interaction history in a database. [Learn more about the different data types here](./data.md).
-
-- [Integrations](#integrations)
-- [Configuration](#configuration)
 
 ## Integrations
 
 The following database integrations are currently working with Jovo `v4`:
 
 * `FileDb`: File-based system for local prototyping. Added to the `app.dev` stage by default.
-* `DynamoDb` (*in development*): NoSQL database by AWS, typically used together with AWS Lambda.
+* `DynamoDb`: NoSQL database by AWS, typically used together with AWS Lambda.
 
 ## Configuration
 
@@ -48,6 +49,8 @@ It includes:
 * A `user` object that stores [user data](./data.md#user-data).
 * Timestamps `createdAt` and `updatedAt` that help debug users in large datasets.
 
+### storedElements
+
 There are also additional elements that can be stored in the database. These can be configured with `storedElements`, which makes it possible to granularly define which types of data should be stored in the database.
 
 The default configuration for each database integration is this:
@@ -56,8 +59,8 @@ The default configuration for each database integration is this:
 new FileDb({
   // ...
   storedElements: {
-    user: true, // this.$user.$data
-    session: false, // this.$session.$data
+    user: true, // this.$user.data
+    session: false, // this.$session.data
     history: false, // this.$history
     createdAt: true,
     updatedAt: true,
@@ -65,9 +68,53 @@ new FileDb({
 }),
 ```
 
-* `user`: Persist user data across sessions using `this.$user.$data`. Enabled by default.
-* `session`: Persist session data across interactions using `this.$session.$data`. This is necessary for some platforms (like Facebook Messenger) that don't allow for session storage.
+* `user`: Persist user data across sessions using `this.$user.data`. Enabled by default.
+* [`session`](#session): Persist session data across interactions using `this.$session.data`. This is necessary for some platforms (like Facebook Messenger) that don't allow for session storage.
 * `history`: Persist an interaction history and define which elements (e.g. `nlu` or `output`) data you want to store from previous requests and responses.
 * `createdAt` and `updatedAt`: These timestamps are enabled by default.
 
 [Learn more about the different data types here](./data.md).
+
+
+#### session
+
+Platforms like [Facebook Messenger](https://v4.jovo.tech/marketplace/platform-facebookmessenger) or [Google Business Messages](https://v4.jovo.tech/marketplace/platform-googlebusiness) don't support session storage. This is why all [session data](./data.md#session-data) needs to be persisted in a database.
+
+```typescript
+new FileDb({
+  // ...
+  storedElements: {
+    // ...
+    session: true,
+  }
+}),
+```
+
+For platforms that do not have the concept of sessions, we need to define after which time a request should be seen as the start of the new session. The default is *15 minutes* and can be modified with the `expiresAfterSeconds` option:
+
+```typescript
+new FileDb({
+  // ...
+  storedElements: {
+    // ...
+    session: {
+      expiresAfterSeconds: 900,
+    }
+  }
+}),
+```
+
+If the option is added, the `session` field is automatically enabled. However, you can also add `enabled` if you like:
+
+```typescript
+new FileDb({
+  // ...
+  storedElements: {
+    // ...
+    session: {
+      enabled: true,
+      expiresAfterSeconds: 900,
+    }
+  }
+}),
+```

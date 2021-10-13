@@ -1,12 +1,14 @@
+import { UnknownObject } from '..';
 import { BaseComponent, ComponentConstructor } from '../BaseComponent';
-import { UnknownObject } from '../index';
+import { RegisteredPlatformName } from '../decorators/Platforms';
 import { Intent, JovoConditionFunction } from '../interfaces';
+import { InputTypeLike } from '../JovoInput';
 import { HandlerOptionMetadata } from './HandlerOptionMetadata';
 import { MethodDecoratorMetadata } from './MethodDecoratorMetadata';
 
 export interface ConditionsOptions {
   if?: JovoConditionFunction;
-  platforms?: string[];
+  platforms?: Array<string | RegisteredPlatformName>;
 }
 
 export interface RoutesOptions {
@@ -14,6 +16,7 @@ export interface RoutesOptions {
   subState?: string;
   intents?: Array<string | Intent>;
   touch?: Array<string | Intent>;
+  types?: InputTypeLike[];
   gestures?: Array<string | Intent>;
   prioritizedOverUnhandled?: boolean;
 }

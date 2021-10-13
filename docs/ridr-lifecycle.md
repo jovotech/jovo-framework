@@ -1,12 +1,10 @@
+---
+title: 'RIDR Lifecycle'
+excerpt: 'Learn more about one of the key concepts of Jovo: The RIDR (Request - Interpretation - Dialogue & Logic - Response) Lifecycle.'
+---
 # RIDR Lifecycle
 
 Learn more about one of the key concepts of Jovo: The RIDR (Request - Interpretation - Dialogue & Logic - Response) Lifecycle.
-
-- [Introduction](#introduction)
-- [Request](#request)
-- [Interpretation](#interpretation)
-- [Dialogue & Logic](#dialogue--logic)
-- [Response](#response)
 
 ## Introduction
 
@@ -23,14 +21,13 @@ RIDR includes four key elements:
 
 You can find a long-form introduction to RIDR on [Context-First: An Introduction to Voice and Multimodal Interactions](https://www.context-first.com/introduction-voice-multimodal-interactions/).
 
-
 ## Request
 
 The Request step starts the interaction and captures necessary data.
 
 This step includes a few things, depending on the platform you're building for:
 
-* Platforms like Alexa and Google Assistat do a lot of the gruntwork (capturing input, doing speech recognition and natural language understanding) for you  and already come with fully populated JSON requests that include a user ID, data about the user inquiry (sometimes even `intents` and `entities`) and more
+* Platforms like Alexa and Google Assistant do a lot of the grunt work (capturing input, doing speech recognition and natural language understanding) for you  and already come with fully populated JSON requests that include a user ID, data about the user inquiry (sometimes even `intents` and `entities`) and more
 * For custom interfaces (for example web, mobile, or custom hardware), you need to take care of the user input recording yourself. Jovo helps with this process. [Take a look at our clients for more information](https://www.jovo.tech/marketplace/tag/clients).
 
 This step populates the Jovo `$request` object.
@@ -45,12 +42,10 @@ Some platforms (like Alexa and Google Assistant) already come with structured da
 Here are some of the things that might happen in this step:
 
 * [ASR](https://www.jovo.tech/marketplace/tag/asr): If the `$request` contains raw audio, a speech recognition service could be used to turn it into raw text
-* [NLU](https://www.jovo.tech/marketplace/tag/nlu): A natural language understanding service turns raw text into structured input (`intents`, `entities`)
+* [NLU](./nlu.md): A natural language understanding service turns raw text into structured input (`intents`, `entities`)
 * Potentially, you can plug in any other service, e.g. emotion detection, sentiment analysis, and more
 
-This step populates the Jovo `$input` object, among others (like `$nlu`, depending on the integration).
-
-> The `$input` object is currently in development.
+This step populates the [Jovo `$input` object](./input.md).
 
 
 ## Dialogue & Logic
@@ -67,11 +62,47 @@ Here are some of the things that happen in this step:
 * Services: Utility classes that keep business logic separated dialogue (handlers)
 * [Output](./output.md): The result of a handler is to return an appropriate output
 
-The Dialogue & Logic step usually ends with a populated Jovo `$output` object.
+The Dialogue & Logic step usually ends with a populated [Jovo `$output` array](./output.md).
 
 
 ## Response
 
-In the final Response step, the `$output` object from the previous step is translated into a native platform `$response`.
+In the final Response step, the `$output` array from the previous step is translated into a native platform `$response`. [Learn more about the Jovo `$response` object here](https://v4.jovo.tech/docs/response).
 
 This response is then returned back to the platform.
+
+## Middlewares
+
+For a detailed look into all the framework middlewares that are executed as part of the RIDR Lifecycle, take a look at table below.
+
+Middleware | Description
+--- | --- 
+`request.start` | Enters the `request` middleware group
+`request` | Turns the raw JSON request into a `$request` object
+`request.end` | Leaves the `request` middleware group with propagated `$request` object
+`interpretation.start` | Enters the `interpretation` middleware group
+`interpretation.asr` | ASR/SLU integrations turn speech audio into raw text
+`interpretation.nlu` | NLU integrations turn raw text into structured input
+`interpretation.end` | Leaves the `interpretation` middleware group with propagated `$nlu` object
+`dialogue.start` | Enters the `dialogue` middleware group
+`dialogue.router` | Uses information from the `interpretation` steps to find the right component and handler
+`dialogue.logic` | Executes the component and handler logic
+`dialogue.end` | Leaves the `dialogue` middleware group with propagated `$output` array
+`response.start` | Enters the `response` middleware group
+`response.output` | Turns `$output` into a raw JSON response
+`response.tts` | TTS integrations turn text into speech output
+`response.end` | Leaves the `response` middleware group with propagated `$response` object
+
+
+### Stopping the Middleware Execution
+
+Either a [hook](./hooks.md) or a [plugin](./plugins.md) can use `stopMiddlewareExecution` to remove all middlewares from the middleware collection of `HandleRequest` and its plugins. This way, all following middlewares won't be executed.
+
+Here is an example how this could look like for a plugin method (that was registered with a middleware inside `mount`):
+
+```typescript
+someMethod(jovo: Jovo): void {
+  // ...
+  jovo.$handleRequest.stopMiddlewareExecution();
+}
+```
