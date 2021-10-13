@@ -1,13 +1,11 @@
 import { Message as InstagramMessage, registerOutputPlatform } from '@jovotech/output';
 import {
   convertMessageToFacebookMessengerMessage,
-  FacebookMessengerResponse as InstagramResponse,
   GenericTemplate,
   GenericTemplateElement,
   QuickReply as InstagramQuickReply,
 } from '@jovotech/output-facebookmessenger';
-import { InstagramOutputTemplateConverterStrategy } from './InstagramOutputTemplateConverterStrategy';
-import { InstagramOutputTemplate } from './models/InstagramOutputTemplate';
+import { InstagramOutputTemplate } from './models';
 import { augmentModelPrototypes } from './utilities';
 
 declare module '@jovotech/output/dist/types/models/Card' {
@@ -49,10 +47,7 @@ declare module '@jovotech/output/dist/types/models/OutputTemplatePlatforms' {
 // Additionally, make class-validator and class-transformer aware of the added property
 registerOutputPlatform('instagram', InstagramOutputTemplate);
 
-export * from './models';
 export * from '@jovotech/output-facebookmessenger';
-export {
-  convertMessageToFacebookMessengerMessage as convertMessageToInstagramMessage,
-  InstagramOutputTemplateConverterStrategy,
-  InstagramResponse,
-};
+export * from './models';
+export * from './InstagramOutputTemplateConverterStrategy';
+export { convertMessageToFacebookMessengerMessage as convertMessageToInstagramMessage };
