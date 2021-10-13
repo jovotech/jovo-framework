@@ -40,7 +40,9 @@ export class GoogleAssistantPlatform extends Platform<
     parent.middlewareCollection.use('before.request.start', (jovo) => {
       if (jovo.$googleAssistant?.$request.intent?.name === 'actions.intent.HEALTH_CHECK') {
         jovo.$handleRequest.stopMiddlewareExecution();
-        return jovo.$handleRequest.server.setResponse({});
+        return jovo.$handleRequest.server.setResponse({
+          prompt: { override: true, firstSimple: { speech: 'ok', text: '' } },
+        });
       }
     });
 
