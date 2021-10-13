@@ -197,6 +197,7 @@ import { AlexaRequest } from '@jovotech/platform-alexa';
 // ...
 
 @Handle({
+  global: true,
   types: ['Connections.Response'],
   platforms: ['alexa'],
   if: (jovo: Jovo) =>
@@ -207,6 +208,8 @@ async remindersPermissionAccepted() {
   // ...
 }
 ```
+
+> **Note**: The `Connections.Response` request doesn't come with session data. This is why the accepting handler needs to be global.
 
 You can use the following `status` values for `AlexaHandles.onPermission(status)`:
 
