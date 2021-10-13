@@ -18,12 +18,4 @@ export class AlexaHandles {
           : true),
     };
   }
-
-  static onPermissionAccepted(type?: PermissionType): HandleOptions {
-    return AlexaHandles.onPermission('ACCEPTED', type);
-  }
-
-  static onPermissionDenied(type?: PermissionType): HandleOptions {
-    return AlexaHandles.onPermission('DENIED', type);
-  }
 }
