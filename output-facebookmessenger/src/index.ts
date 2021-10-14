@@ -53,6 +53,8 @@ declare module '@jovotech/output/dist/types/models/OutputTemplatePlatforms' {
 registerOutputPlatform('facebookMessenger', FacebookMessengerOutputTemplate);
 
 export * from './decorators/transformation/TransformButton';
+export * from './decorators/transformation/TransformTemplate';
+export * from './decorators/transformation/TransformQuickReply';
 export * from './decorators/validation/CastedMaxLength';
 export * from './decorators/validation/IsValidGameMetaDataString';
 
