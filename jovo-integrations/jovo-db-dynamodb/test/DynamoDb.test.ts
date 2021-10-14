@@ -268,16 +268,16 @@ describe('test database operations', () => {
               {
                 AttributeName: 'testAttrGSI',
                 AttributeType: 'S',
-                Path: 'data.testKey',
                 KeyType: 'S',
+                Path: 'data.testKey',
               },
             ],
             Projection: {
               ProjectionType: 'ALL',
             },
             ProvisionedThroughput: {
-              WriteCapacityUnits: 1,
               ReadCapacityUnits: 2,
+              WriteCapacityUnits: 1,
             },
           },
         ],
@@ -295,12 +295,12 @@ describe('test database operations', () => {
 
       expect(mockPut).toHaveBeenCalledTimes(1);
       expect(mockPut).toHaveBeenCalledWith({
-        TableName: 'test',
         Item: {
           [key]: dummyData,
           [dynamoDb.config.globalSecondaryIndexes![0].KeySchema[0].AttributeName]: 'test-value',
           userId: 'id',
         },
+        TableName: 'test',
       });
     });
   });
@@ -514,7 +514,6 @@ describe('test database operations', () => {
       };
 
       const ddbConfigWithGSI = {
-        tableName: 'TestTable',
         globalSecondaryIndexes: [
           {
             IndexName: 'TestIndex',
@@ -522,19 +521,20 @@ describe('test database operations', () => {
               {
                 AttributeName: 'test',
                 AttributeType: 'S',
-                Path: 'data.testKey',
                 KeyType: 'S',
+                Path: 'data.testKey',
               },
             ],
             Projection: {
               ProjectionType: 'ALL',
             },
             ProvisionedThroughput: {
-              WriteCapacityUnits: 1,
               ReadCapacityUnits: 2,
+              WriteCapacityUnits: 1,
             },
           },
         ],
+        tableName: 'TestTable',
       };
 
       dynamoDb = new DynamoDb(ddbConfigWithGSI);
@@ -576,9 +576,9 @@ describe('test database operations', () => {
       delete gsiRequest[0].KeySchema[0].Path;
 
       expect(mockCreateTable).toHaveBeenCalledWith({
+        AttributeDefinitions: attributeDefinitions,
         ...defaultCreateTableRequests,
         GlobalSecondaryIndexes: gsiRequest,
-        AttributeDefinitions: attributeDefinitions,
       });
     });
   });

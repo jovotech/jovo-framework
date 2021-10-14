@@ -148,7 +148,7 @@ Without GSI, Jovo will create records with two keys in DynamoDB, `userId` and `u
         "userId": "user-id-1",
         "userData": {
             "data": {
-                "subscribed": 1
+                "yourKey": 1
             }
             ...
         }
@@ -157,7 +157,7 @@ Without GSI, Jovo will create records with two keys in DynamoDB, `userId` and `u
         "userId": "user-id-2",
         "userData": {
             "data": {
-                "subscribed": 0
+                "yourKey": 0
             }
             ...
         }
@@ -166,7 +166,7 @@ Without GSI, Jovo will create records with two keys in DynamoDB, `userId` and `u
         "userId": "user-id-3",
         "userData": {
             "data": {
-                "subscribed": 1
+                "yourKey": 1
             }
             ...
         }
@@ -174,9 +174,9 @@ Without GSI, Jovo will create records with two keys in DynamoDB, `userId` and `u
 ]
 ```
 
-If you wanted to do "Give me all users that are subscribed", you can't without GSIs. 
+If you want to query your user data based on other properties, you can't without GSIs. 
 
-When you configure DynamoDB to use GSI, Jovo behind the scenes will project keys you've specified to the root level. This will allow you to perform DynamoDB queries based on keys.
+When you configure DynamoDB to use GSI, Jovo behind the scenes will project keys you've specified to the root level. This will allow you to perform DynamoDB queries based on properties inside user data.
 
 GSIs configuration example:
 
@@ -196,15 +196,16 @@ module.exports = {
                 region:  'yourRegion',
             },
             globalSecondaryIndexes: [{
-                IndexName: "subscribedIndex",
+                IndexName: "yourKeyIndex",
                 KeySchema: [
                     {
-                    AttributeName: "subscribed",
-                    // The type you want to store it as. Can only be "N","S","B" according to DynamoDB docs.
+                    AttributeName: "yourKey",
+                    // The type you want to store it as. 
+                    // LIMITATION: According to DynamoDB docs, HASH and SORT keys can only be "N","S","B".
                     AttributeType: "N", 
                     KeyType: "HASH",
-                    // The path from Jovo's userData you want to query on. In this case we want to perform queries based on the subscribed key.
-                    Path: "data.subscribed",
+                    // The path from Jovo's userData you want to query on. In this case we want to perform queries based on "yourKey".
+                    Path: "data.yourKey",
                     },
                 ],
                 ProvisionedThroughput: {
@@ -234,15 +235,16 @@ const config = {
                 region:  'yourRegion',
             },
             globalSecondaryIndexes: [{
-                IndexName: "subscribedIndex",
+                IndexName: "yourKeyIndex",
                 KeySchema: [
                     {
-                    AttributeName: "subscribed",
-                    // The type you want to store it as. Can only be "N","S","B" according to DynamoDB docs.
+                    AttributeName: "yourKey",
+                    // The type you want to store it as. 
+                    // LIMITATION: According to DynamoDB docs, HASH and SORT keys can only be "N","S","B".
                     AttributeType: "N",
                     KeyType: "HASH",
-                    // The path from Jovo's userData you want to query on. In this case we want to perform queries based on the subscribed key.
-                    Path: "data.subscribed",
+                    // The path from Jovo's userData you want to query on. In this case we want to perform queries based on "yourKey".
+                    Path: "data.yourKey",
                     },
                 ],
                 ProvisionedThroughput: {
@@ -258,7 +260,7 @@ const config = {
 };
 ```
 
-The above configuration will project `userData.data.subscribed` to the root level of the record. Using the example data above, it will transform the data to look something like this:
+The above configuration will project `userData.data.yourKey` to the root level of the record. Using the example data above, it will transform the data to look something like this:
 
 ```javascript
 // example of data saved in DynamoDB
@@ -266,30 +268,30 @@ The above configuration will project `userData.data.subscribed` to the root leve
 "Items": [
     {
         "userId": "user-id-1",
-        "subscribed": 1, // <---- New field added
+        "yourKey": 1, // <---- New field added
         "userData": {
             "data": {
-                "subscribed": 1
+                "yourKey": 1
             }
             ...
         }
     },
     {
         "userId": "user-id-2",
-        "subscribed": 0, // <---- New field added
+        "yourKey": 0, // <---- New field added
         "userData": {
             "data": {
-                "subscribed": 0
+                "yourKey": 0
             }
             ...
         }
     },
     {
         "userId": "user-id-3",
-        "subscribed": 1, // <---- New field added
+        "yourKey": 1, // <---- New field added
         "userData": {
             "data": {
-                "subscribed": 1
+                "yourKey": 1
             }
             ...
         }
@@ -297,7 +299,7 @@ The above configuration will project `userData.data.subscribed` to the root leve
 ]
 ```
 
-You can now peform DynamoDB queries based on the subscribed key.
+You can now peform DynamoDB queries based on 'yourKey'.
 
 ## Provisioned throughput
 

@@ -280,6 +280,7 @@ export class DynamoDb implements Db {
           AttributeType: 'S',
         },
       ],
+      GlobalSecondaryIndexes: [],
       KeySchema: [
         {
           AttributeName: this.config.primaryKeyColumn!,
@@ -287,7 +288,6 @@ export class DynamoDb implements Db {
         },
       ],
       ProvisionedThroughput: this.config.provisionedThroughput ?? DEFAULT_PROVISIONED_THROUGHPUT,
-      GlobalSecondaryIndexes: [],
       TableName: this.config.tableName!,
     };
 
