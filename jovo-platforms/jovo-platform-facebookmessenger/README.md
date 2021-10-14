@@ -443,6 +443,17 @@ if (this.$messengerBot)
 await this.$messengerBot?.showAction(SenderActionType.TypingOn);
 ```
 
+There is also a helper method that sends the TypingOn and TypingOff action with a delay.
+
+```javascript
+// @language=javascript
+if (this.$messengerBot)
+	await this.$messengerBot.showTyping(5000); // Show typing bubble for 5 seconds.
+
+// @language=typescript
+await this.$messengerBot?.showTyping(SenderActionType.TypingOn); // Show typing bubble for 5 seconds.
+```
+
 Read more [here](https://developers.facebook.com/docs/messenger-platform/send-messages/sender-actions).
 
 ### Sending Templates
