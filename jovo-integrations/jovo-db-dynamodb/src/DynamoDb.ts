@@ -5,6 +5,23 @@ import { BaseApp, Db, ErrorCode, Jovo, JovoError, Log, PluginConfig } from 'jovo
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
 
+interface JovoDynamoDbKeySchemaElement extends AWS.DynamoDB.Types.KeySchemaElement {
+  // This value is used to grab the value from userData and project it the root of a dynamodb record.
+  // Json path that starts from userData. i.e. if Path=$data.subscribed then it will project userData.$data.subscribed
+  Path: string;
+  // The type of the value to project. This value is required when creating the attribute definition.
+  AttributeType: AWS.DynamoDB.Types.ScalarAttributeType;
+}
+
+interface JovoDynamoDbGlobalSecondaryIndex extends AWS.DynamoDB.Types.GlobalSecondaryIndex {
+  KeySchema: JovoDynamoDbKeySchemaElement[];
+}
+
+const DEFAULT_PROVISION_THROUGHPUT: AWS.DynamoDB.ProvisionedThroughput = {
+  ReadCapacityUnits: 5,
+  WriteCapacityUnits: 5,
+};
+
 export interface Config extends PluginConfig {
   tableName?: string;
   createTableOnInit?: boolean;
@@ -13,6 +30,8 @@ export interface Config extends PluginConfig {
   prefixPrimaryKeyWithPlatform?: boolean;
   sortKeyColumn?: string;
   sortKey?: string;
+  globalSecondaryIndexes?: JovoDynamoDbGlobalSecondaryIndex[];
+  provisionedThroughput?: AWS.DynamoDB.Types.ProvisionedThroughput;
   dynamoDbConfig?: AWS.DynamoDB.Types.ClientConfiguration;
   documentClientConfig?: DocumentClient.DocumentClientOptions &
     AWS.DynamoDB.Types.ClientConfiguration;
@@ -211,6 +230,18 @@ export class DynamoDb implements Db {
       getDataMapParams.Item[this.config.sortKeyColumn!] = this.config.sortKey!;
     }
 
+    if (this.config.globalSecondaryIndexes?.length) {
+      // For each KeySchema in each GSI, we will use the path and project the data to the root level
+      this.config.globalSecondaryIndexes.forEach((gsi) => {
+        gsi.KeySchema.forEach((schema) => {
+          const { Path, AttributeName } = schema;
+          const dataToProject = _get(data, Path);
+
+          getDataMapParams.Item[AttributeName] = dataToProject;
+        });
+      });
+    }
+
     if (!this.isCreating) {
       return this.docClient!.put(getDataMapParams).promise();
     }
@@ -255,10 +286,8 @@ export class DynamoDb implements Db {
           KeyType: 'HASH',
         },
       ],
-      ProvisionedThroughput: {
-        ReadCapacityUnits: 5,
-        WriteCapacityUnits: 5,
-      },
+      ProvisionedThroughput: this.config.provisionedThroughput ?? DEFAULT_PROVISION_THROUGHPUT,
+      GlobalSecondaryIndexes: [],
       TableName: this.config.tableName!,
     };
 
@@ -274,6 +303,29 @@ export class DynamoDb implements Db {
       });
     }
 
+    if (this.config.globalSecondaryIndexes) {
+      this.config.globalSecondaryIndexes.forEach((gsi) => {
+        const awsKeySchemas = gsi.KeySchema.map((key) => {
+          // Add GSI key's to Attribute Definitions
+          newTableParams.AttributeDefinitions.push({
+            AttributeName: key.AttributeName,
+            AttributeType: key.AttributeType,
+          });
+
+          // We need to remove Jovo custom keys that aren't apart of
+          // dynamodb's api request structure.
+          const { Path, AttributeType, ...restOfKeySchema } = key;
+          return restOfKeySchema;
+        });
+
+        newTableParams.GlobalSecondaryIndexes?.push({
+          ...gsi,
+          KeySchema: awsKeySchemas,
+          // Add provision throughput
+          ProvisionedThroughput: gsi.ProvisionedThroughput ?? DEFAULT_PROVISION_THROUGHPUT,
+        });
+      });
+    }
     try {
       const result = await this.dynamoClient!.createTable(newTableParams).promise();
 
