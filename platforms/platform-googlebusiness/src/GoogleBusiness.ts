@@ -31,7 +31,7 @@ export class GoogleBusiness extends Jovo<
   }
 
   get serviceAccount(): JWTInput | undefined {
-    return this.$handleRequest.plugins?.GoogleBusinessPlatform?.config?.serviceAccount;
+    return this.$config.plugin?.GoogleBusinessPlatform?.serviceAccount;
   }
 
   async $send(outputTemplate: OutputTemplate | OutputTemplate[]): Promise<void>;

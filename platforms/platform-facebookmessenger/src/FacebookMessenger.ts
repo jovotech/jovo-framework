@@ -29,14 +29,11 @@ export class FacebookMessenger extends Jovo<
   FacebookMessengerPlatform
 > {
   get apiVersion(): string {
-    return (
-      this.$handleRequest.config.plugin?.FacebookMessengerPlatform?.version ||
-      LATEST_FACEBOOK_API_VERSION
-    );
+    return this.$config.plugin?.FacebookMessengerPlatform?.version || LATEST_FACEBOOK_API_VERSION;
   }
 
   get pageAccessToken(): string | undefined {
-    return this.$handleRequest.config.plugin?.FacebookMessengerPlatform?.pageAccessToken;
+    return this.$config.plugin?.FacebookMessengerPlatform?.pageAccessToken;
   }
 
   async $send(outputTemplate: OutputTemplate | OutputTemplate[]): Promise<void>;
