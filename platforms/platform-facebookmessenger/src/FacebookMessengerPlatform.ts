@@ -119,7 +119,7 @@ export class FacebookMessengerPlatform extends Platform<
       const verifyChallenge = query['hub.challenge'];
       const verifyToken = query['hub.verify_token'];
       const isFacebookVerifyRequest =
-        !Object.keys(request).length && verifyMode && verifyChallenge && verifyToken;
+        (!request || !Object.keys(request).length) && verifyMode && verifyChallenge && verifyToken;
 
       const isFacebookMessengerRequest =
         request?.object === 'page' && Array.isArray(request?.entry) && request?.entry?.length;
