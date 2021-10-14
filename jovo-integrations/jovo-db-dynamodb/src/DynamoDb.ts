@@ -17,7 +17,7 @@ interface JovoDynamoDbGlobalSecondaryIndex extends AWS.DynamoDB.Types.GlobalSeco
   KeySchema: JovoDynamoDbKeySchemaElement[];
 }
 
-const DEFAULT_PROVISION_THROUGHPUT: AWS.DynamoDB.ProvisionedThroughput = {
+const DEFAULT_PROVISIONED_THROUGHPUT: AWS.DynamoDB.ProvisionedThroughput = {
   ReadCapacityUnits: 5,
   WriteCapacityUnits: 5,
 };
@@ -286,7 +286,7 @@ export class DynamoDb implements Db {
           KeyType: 'HASH',
         },
       ],
-      ProvisionedThroughput: this.config.provisionedThroughput ?? DEFAULT_PROVISION_THROUGHPUT,
+      ProvisionedThroughput: this.config.provisionedThroughput ?? DEFAULT_PROVISIONED_THROUGHPUT,
       GlobalSecondaryIndexes: [],
       TableName: this.config.tableName!,
     };
@@ -322,7 +322,7 @@ export class DynamoDb implements Db {
           ...gsi,
           KeySchema: awsKeySchemas,
           // Add provision throughput
-          ProvisionedThroughput: gsi.ProvisionedThroughput ?? DEFAULT_PROVISION_THROUGHPUT,
+          ProvisionedThroughput: gsi.ProvisionedThroughput ?? DEFAULT_PROVISIONED_THROUGHPUT,
         });
       });
     }
