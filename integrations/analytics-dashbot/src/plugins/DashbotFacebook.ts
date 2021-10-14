@@ -1,4 +1,4 @@
-import { Jovo, JovoResponse, Platform, UnknownObject } from '@jovotech/framework';
+import { Jovo, JovoRequest, JovoResponse, Platform, UnknownObject } from '@jovotech/framework';
 import { DashbotAnalyticsPlugin } from './DashbotAnalyticsPlugin';
 
 declare module '../interfaces' {
@@ -7,13 +7,27 @@ declare module '../interfaces' {
   }
 }
 
+export interface DashbotFacebookRequestLog extends UnknownObject {
+  object: 'page';
+  entry: [JovoRequest];
+}
+
+export interface DashbotFacebookResponseLog extends UnknownObject {
+  qs: {
+    access_token: string;
+  };
+  uri: string;
+  json: JovoResponse;
+  method: 'POST';
+}
+
 export class DashbotFacebook extends DashbotAnalyticsPlugin {
   get id(): string {
     return 'facebook';
   }
 
   async trackRequest(jovo: Jovo, url: string): Promise<void> {
-    const requestLog: UnknownObject = {
+    const requestLog: DashbotFacebookRequestLog = {
       object: 'page',
       entry: [jovo.$request],
     };
@@ -22,7 +36,7 @@ export class DashbotFacebook extends DashbotAnalyticsPlugin {
   }
 
   async trackResponse(jovo: Jovo, url: string): Promise<void> {
-    for (const response of jovo.$response as JovoResponse[]) {
+    for (const response of (jovo.$response || []) as JovoResponse[]) {
       const responseLog: UnknownObject = {
         qs: {
           access_token: jovo.$plugins.FacebookMessengerPlatform?.config.pageAccessToken,
@@ -30,10 +44,6 @@ export class DashbotFacebook extends DashbotAnalyticsPlugin {
         uri: 'https://graph.facebook.com/v10.0/me/messages',
         json: response,
         method: 'POST',
-        responseBody: {
-          message_id: '',
-          recipient_id: '',
-        },
       };
 
       await this.sendDashbotRequest(url, responseLog);

@@ -1,4 +1,15 @@
-import { Jovo, UnknownObject, Intent, Entity, JovoResponse } from '@jovotech/framework';
+import { QuickReply, SpeechMessage, TextMessage } from '@jovotech/output';
+import {
+  Jovo,
+  UnknownObject,
+  Intent,
+  JovoResponse,
+  JovoRequest,
+  OutputTemplate,
+  Platform,
+  MessageValue,
+  QuickReplyValue,
+} from '@jovotech/framework';
 import { DashbotAnalyticsPlugin } from './DashbotAnalyticsPlugin';
 
 declare module '../interfaces' {
@@ -17,14 +28,30 @@ export interface DashbotUniversalIntent {
   inputs: DashbotUniversalInput[];
 }
 
-export interface DashbotUniversalRequestLog extends UnknownObject {
+export interface DashbotUniversalImage {
+  url: string;
+}
+
+export interface DashbotUniversalButton {
+  id?: string;
+  label?: string;
+  value?: string;
+}
+
+export interface DashbotUniversalPostback {
+  buttonClick: {
+    buttonId: string;
+  };
+}
+
+export interface DashbotUniversalLog extends UnknownObject {
   text: string;
   userId: string;
   intent?: DashbotUniversalIntent;
-  images?: UnknownObject[];
-  buttons?: UnknownObject[];
-  postback?: UnknownObject;
-  platformJson?: UnknownObject;
+  images?: DashbotUniversalImage[];
+  buttons?: DashbotUniversalButton[];
+  postback?: DashbotUniversalPostback;
+  platformJson?: JovoRequest | JovoResponse;
   sessionId?: string;
 }
 
@@ -37,13 +64,10 @@ export class DashbotUniversal extends DashbotAnalyticsPlugin {
     const text: string =
       jovo.$input.text || this.getIntentName(jovo.$input.intent) || jovo.$input.type || '';
 
-    const requestLog: DashbotUniversalRequestLog = {
+    const requestLog: DashbotUniversalLog = {
       text,
       userId: jovo.$user.id || '',
-      platformJson: {
-        request: jovo.$server.getRequestObject(),
-        input: jovo.$input,
-      },
+      platformJson: jovo.$request,
       sessionId: jovo.$session.id || '',
     };
 
