@@ -1,12 +1,12 @@
-import { AnalyticsPlugin, axios, Jovo, JovoError, UnknownObject } from '@jovotech/framework';
+import { AnalyticsPlugin, Jovo } from '@jovotech/framework';
 import { URL } from 'url';
+import { DashbotAnalyticsConfig } from './interfaces';
 import { DashbotAlexa } from './plugins/DashbotAlexa';
 import { DashbotAnalyticsPlugin } from './plugins/DashbotAnalyticsPlugin';
+import { DashbotFacebook } from './plugins/DashbotFacebook';
 import { DashbotGoogleAssistant } from './plugins/DashbotGoogleAssistant';
 import { DashbotUniversal } from './plugins/DashbotUniversal';
 import { DASHBOT_BASE_URL } from './utilities';
-import { DashbotAnalyticsConfig } from './interfaces';
-import { DashbotFacebook } from './plugins/DashbotFacebook';
 
 export class DashbotAnalytics extends AnalyticsPlugin<DashbotAnalyticsConfig> {
   // Since DashbotUniversal tracks for every platform, it needs to sit at the last position
