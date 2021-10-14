@@ -51,6 +51,9 @@ export class DashbotFacebook extends DashbotAnalyticsPlugin {
   }
 
   canHandle(platform: Platform): boolean {
-    return platform.constructor.name === 'FacebookMessenger';
+    return (
+      platform.constructor.name === 'FacebookMessengerPlatform' ||
+      platform.constructor.name === 'InstagramPlatform'
+    );
   }
 }
