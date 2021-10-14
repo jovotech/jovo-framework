@@ -85,17 +85,19 @@ export class DashbotUniversal extends DashbotAnalyticsPlugin {
   }
 
   async trackResponse(jovo: Jovo, url: string): Promise<void> {
-    if (!jovo.$response) {
-      return;
-    }
+    for (const output of jovo.$output) {
+      // Since we iterate through each output respectively,
+      // it's safe to assume thtt response is an object
+      const response: JovoResponse = (
+        jovo.$platform as Platform
+      ).outputTemplateConverterStrategy.toResponse(output) as JovoResponse;
 
-    const responses: JovoResponse[] = Array.isArray(jovo.$response)
-      ? jovo.$response
-      : [jovo.$response];
-
-    for (const response of responses) {
-      // @ts-ignore
-      const responseLog: DashbotUniversalRequestLog = {};
+      const responseLog: DashbotUniversalLog = {
+        text: this.getOutputText(output.message),
+        userId: jovo.$user.id || '',
+        platformJson: response,
+        buttons: this.getButtons(output.quickReplies),
+      };
 
       await this.sendDashbotRequest(url, responseLog);
     }
@@ -111,5 +113,27 @@ export class DashbotUniversal extends DashbotAnalyticsPlugin {
     }
 
     return typeof intent === 'string' ? intent : (intent as Intent).name;
+  }
+
+  private getButtons(quickReplies?: QuickReplyValue[]): DashbotUniversalButton[] {
+    if (!quickReplies || !quickReplies.length) {
+      return [];
+    }
+
+    return quickReplies.map((quickReply: QuickReplyValue) => {
+      if (typeof quickReply === 'string') {
+        return { label: quickReply };
+      } else {
+        return { label: quickReply.text };
+      }
+    });
+  }
+
+  private getOutputText(message: MessageValue | undefined): string {
+    if (!message) {
+      return '';
+    }
+
+    return typeof message === 'object' ? message.text || message.speech || '' : message;
   }
 }
