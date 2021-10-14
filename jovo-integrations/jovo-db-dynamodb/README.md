@@ -6,8 +6,8 @@ Learn how to store user specific data of your Alexa Skills and Google Actions to
 
 * [Introduction](#introduction)
 * [Configuration](#configuration)
-* [Global Secondary Indexes](#globalsecondaryindexes)
-* [Provisioned throughput](#provisionedthroughput)
+* [Global Secondary Indexes](#global-secondary-indexes)
+* [Provisioned throughput](#provisioned-throughput)
 * [Troubleshooting](#troubleshooting)
 
 > Tutorial: [Add DynamoDB to Store User Data](https://www.jovo.tech/tutorials/add-dynamodb-database)
