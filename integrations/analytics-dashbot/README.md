@@ -1,36 +1,43 @@
 ---
-title: 'DynamoDB Database Integration'
-excerpt: 'The DynamoDB Jovo integration allows you to store user specific data in a DynamoDB table.'
+title: 'Dashbot Analytics Integration'
+excerpt: 'The Dashbot Jovo integration allows you to monitor and analyze conversations between your Jovo app and its users.'
 ---
 
-# DynamoDB Database Integration
+# Dashbot Analytics Integration
 
-This [database integration](https://v4.jovo.tech/docs/databases) allows you to store user specific data in a DynamoDB table.
+Learn how to use Dashbot Analytics with your Jovo app.
 
 ## Introduction
 
-[DynamoDB](https://aws.amazon.com/dynamodb/) is the NoSQL database service by Amazon Web Services (AWS). Many Jovo apps that are hosted on AWS Lambda rely on DynamoDB to persist user data.
+[Dashbot](https://www.dashbot.io/) is an analytics tool for both text-based bots (Facebook Messenger, Slack, Kik, Twitter) and voice apps (Amazon Alexa, Google Assistant).
 
-If you use AWS for your deployment, we recommend [FileDb](https://v4.jovo.tech/marketplace/db-filedb) for local development and DynamoDB for deployed versions.
+To get started, take the following steps:
+
+- Go to the [Dashbot app](https://reports.dashbot.io/) and sign up or in.
+- Create a new chatbot project.
+- Select a platform of your choice. See [configuration](#configuration) for a list of our supported platforms. If you can't find your platform in the list, select *Universal*.
+- Copy the provided *API Key*.
+- [Install the Dashbot plugin](#installation) for Jovo.
+- Add the API key to the [plugin configuration](#configuration).
 
 ## Installation
 
 You can install the plugin like this:
 
 ```sh
-$ npm install @jovotech/db-dynamodb
+$ npm install @jovotech/analytics-dashbot
 ```
 
-Add it as plugin to any stage you like, e.g. `app.prod.ts`:
+Add it as plugin to any stage you like, e.g. `app.prod.ts` ([learn more about staging here](https://v4.jovo.tech/docs/staging)):
 
 ```typescript
-import { DynamoDb } from '@jovotech/db-dynamodb';
+import { DashbotAnalytics } from '@jovotech/analytics-dashbot';
 
 // ...
 
 app.configure({
   plugins: [
-    new DynamoDb({
+    new DashbotAnalytics({
       // Configuration
     }),
     // ...
@@ -38,122 +45,27 @@ app.configure({
 });
 ```
 
-Once the configuration is done, the DynamoDB database integration will create a DynamoDB table on the first read/write attempt (might take some seconds). No need for you to create the table.
-
-The rest of this section provides an introduction to the steps you need to take depending on where you host your Jovo app:
-
-* [On AWS (e.g. Lambda)](#for-apps-hosted-on-aws)
-* [Outside AWS](#for-apps-hosted-outside-aws)
-
-The [configuration section](#configuration) then provides a detailed overview of all configuration options.
-
-### For Apps Hosted on AWS
-
-If you host your app on AWS Lambda and want to use a DynamoDB table in the same region, you only need to add a table name to get started:
-
-```typescript
-new DynamoDb({
-  table: {
-    name: 'MyDynamoDbTable',
-  }
-}),
-```
-
-### For Apps Hosted Outside AWS
-
-If you want to use DynamoDB from outside AWS Lambda, you need to set it up for programmatic access. Learn more in the official guide by Amazon: [Setting Up DynamoDB (Web Service)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SettingUp.DynamoWebService.html).
-
-You can then add the necessary keys using the [`libraryConfig` property](#libraryconfig):
-
-```typescript
-new DynamoDb({
-  table: {
-    name: 'MyDynamoDbTable',
-  },
-  libraryConfig: {
-    dynamoDbClient: {
-      region: 'us-east-1',
-      credentials: {
-        accessKeyId: 'myAccessKeyId',
-        secretAccessKey: 'mySecretAccessKey',
-      },
-    },
-  }
-}),
-```
-
+The [configuration section](#configuration) provides a detailed overview of all configuration options.
 
 ## Configuration
 
 The following configurations can be added:
 
 ```typescript
-new DynamoDb({
-  table: { /* ... */ },
-  libraryConfig: { /* ... */ },
-  storedElements: { /* ... */ },
-}),
-```
-
-
-* `table`: Configuration for the table that is going to be created by the plugin. [Learn more below](#table).
-* `libraryConfig`: Any configuration for the AWS DynamoDb SDK can be passed here. [Learn more below](#libraryconfig).
-* `storedElements`: What should be stored in the database. [Learn more in the database integration documentation](https://v4.jovo.tech/docs/databases).
-
-
-
-### table
-
-The `table` property includes configuration for the creation of the DynamoDB table:
-
-```typescript
-new DynamoDb({
-  table: {
-    // Required properties
-    name: 'MyDynamoDbTable',
-
-    // Optional properties (with default values)
-    createTableOnInit: true, // Creates a table if one does not already exist
-    primaryKeyColumn: 'userId',
-    readCapacityUnits: 2, // https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughput.html
-    writeCapacityUnits: 2, // https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughput.html
+new DashbotAnalytics({
+  platforms: {
+    alexa: { apiKey: '', enabled: true },
+    google: { apiKey: '', enabled: true },
+    facebook: { apiKey: '', enabled: true },
+    universal: { apiKey: '', enabled: true },
   },
-  // ...
 }),
 ```
 
+The `platforms` option includes all Dashbot platforms (note that the name can be different to how the [platform integrations](https://v4.jovo.tech/docs/platforms) are called in Jovo):
 
-### libraryConfig
-
-The `libraryConfig` property can be used to pass configurations to the AWS DynamoDB SDK that is used by this integration.
-
-Currently, it includes the DynamoDbClient([find the official documentation here](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-dynamodb/interfaces/dynamodbclientconfig.html)):
-
-```typescript
-new DynamoDb({
-  libraryConfig: {
-    dynamoDbClient: {
-      // Add configuration here
-    },
-  },
-  // ...
-}),
-```
-
-For example, you can add `credentials` like this:
-
-```typescript
-new DynamoDb({
-  libraryConfig: {
-    dynamoDbClient: {
-      region: 'us-east-1',
-      credentials: {
-        accessKeyId: 'myAccessKeyId',
-        secretAccessKey: 'mySecretAccessKey',
-      },
-    },
-    // ...
-  }
-}),
-```
+- `alexa`: Use this for [Amazon Alexa](https://v4.jovo.tech/marketplace/platform-alexa). [Learn more in the official Dashbot docs](https://docs.dashbot.io/platforms/alexa)
+- `google`: Use this for [Google Assistant](https://v4.jovo.tech/marketplace/platform-googleassistant). [Learn more in the official Dashbot docs](https://docs.dashbot.io/platforms/google)
+- `facebook`: Use this for [Facebook Messenger](https://v4.jovo.tech/marketplace/platform-facebookmessenger). [Learn more in the official Dashbot docs](https://docs.dashbot.io/platforms/facebook)
+- `universal`: Use this for any other platform. [Learn more in the official Dashbot docs](https://docs.dashbot.io/platforms/universal).
 
