@@ -64,8 +64,8 @@ new DashbotAnalytics({
 
 The `platforms` option includes all Dashbot platforms (note that the name can be different to how the [platform integrations](https://v4.jovo.tech/docs/platforms) are called in Jovo):
 
-- `alexa`: Use this for [Amazon Alexa](https://v4.jovo.tech/marketplace/platform-alexa). [Learn more in the official Dashbot docs](https://docs.dashbot.io/platforms/alexa)
-- `google`: Use this for [Google Assistant](https://v4.jovo.tech/marketplace/platform-googleassistant). [Learn more in the official Dashbot docs](https://docs.dashbot.io/platforms/google)
-- `facebook`: Use this for [Facebook Messenger](https://v4.jovo.tech/marketplace/platform-facebookmessenger). [Learn more in the official Dashbot docs](https://docs.dashbot.io/platforms/facebook)
+- `alexa`: Use this for [Amazon Alexa](https://v4.jovo.tech/marketplace/platform-alexa). [Learn more in the official Dashbot docs](https://docs.dashbot.io/platforms/alexa).
+- `google`: Use this for [Google Assistant](https://v4.jovo.tech/marketplace/platform-googleassistant). [Learn more in the official Dashbot docs](https://docs.dashbot.io/platforms/google).
+- `facebook`: Use this for [Facebook Messenger](https://v4.jovo.tech/marketplace/platform-facebookmessenger) and [Instagram](https://v4.jovo.tech/marketplace/platform-instagram). [Learn more in the official Dashbot docs](https://docs.dashbot.io/platforms/facebook).
 - `universal`: Use this for any other platform. [Learn more in the official Dashbot docs](https://docs.dashbot.io/platforms/universal).
 
