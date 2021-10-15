@@ -1,14 +1,12 @@
-import { QuickReply, SpeechMessage, TextMessage } from '@jovotech/output';
 import {
-  Jovo,
-  UnknownObject,
   Intent,
-  JovoResponse,
+  Jovo,
   JovoRequest,
-  OutputTemplate,
-  Platform,
+  JovoResponse,
   MessageValue,
+  Platform,
   QuickReplyValue,
+  UnknownObject,
 } from '@jovotech/framework';
 import { DashbotAnalyticsPlugin } from './DashbotAnalyticsPlugin';
 
