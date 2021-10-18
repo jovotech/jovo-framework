@@ -247,6 +247,62 @@ describe('test database operations', () => {
 
       expect(dynamoDb.docClient!.put).not.toBeCalled();
     });
+
+    test('should project key and value specified in global secondary index configuration to the root level of the dynamodb put request', async () => {
+      const mockPut = jest.fn();
+      const mockDocClient = {
+        put: mockPut.mockImplementation((params) => {
+          return {
+            promise: () => {
+              return Promise.resolve({ Attributes: params.Item });
+            },
+          };
+        }),
+      };
+      dynamoDb = new DynamoDb({
+        ...config,
+        globalSecondaryIndexes: [
+          {
+            IndexName: 'TestIndex',
+            KeySchema: [
+              {
+                AttributeName: 'testAttrGSI',
+                AttributeType: 'S',
+                KeyType: 'S',
+                Path: 'data.testKey',
+              },
+            ],
+            Projection: {
+              ProjectionType: 'ALL',
+            },
+            ProvisionedThroughput: {
+              ReadCapacityUnits: 2,
+              WriteCapacityUnits: 1,
+            },
+          },
+        ],
+      });
+      _set(dynamoDb, 'docClient', mockDocClient);
+
+      const dummyData = {
+        data: {
+          testKey: 'test-value',
+        },
+      };
+
+      const key = 'key';
+      await dynamoDb.save('id', key, dummyData);
+
+      expect(mockPut).toHaveBeenCalledTimes(1);
+      expect(mockPut).toHaveBeenCalledWith({
+        Item: {
+          [key]: dummyData,
+          [dynamoDb.config.globalSecondaryIndexes![0].KeySchema[0].AttributeName]: 'test-value',
+          userId: 'id',
+        },
+        TableName: 'test',
+      });
+    });
   });
 
   describe('test delete()', () => {
@@ -445,6 +501,85 @@ describe('test database operations', () => {
 
       await dynamoDb.createTable();
       expect(dynamoDb.isCreating).toBe(true);
+    });
+
+    test('should handle global secondary indexes', async () => {
+      const mockCreateTable = jest.fn();
+      const mockDynamoClient = {
+        createTable: mockCreateTable.mockImplementation(() => {
+          return {
+            promise: jest.fn(),
+          };
+        }),
+      };
+
+      const ddbConfigWithGSI = {
+        globalSecondaryIndexes: [
+          {
+            IndexName: 'TestIndex',
+            KeySchema: [
+              {
+                AttributeName: 'test',
+                AttributeType: 'S',
+                KeyType: 'S',
+                Path: 'data.testKey',
+              },
+            ],
+            Projection: {
+              ProjectionType: 'ALL',
+            },
+            ProvisionedThroughput: {
+              ReadCapacityUnits: 2,
+              WriteCapacityUnits: 1,
+            },
+          },
+        ],
+        tableName: 'TestTable',
+      };
+
+      dynamoDb = new DynamoDb(ddbConfigWithGSI);
+      _set(dynamoDb, 'dynamoClient', mockDynamoClient);
+
+      await dynamoDb.createTable();
+
+      const defaultCreateTableRequests = {
+        KeySchema: [
+          {
+            AttributeName: 'userId',
+            KeyType: 'HASH',
+          },
+        ],
+        ProvisionedThroughput: {
+          ReadCapacityUnits: 5,
+          WriteCapacityUnits: 5,
+        },
+        TableName: 'TestTable',
+      };
+
+      const attributeDefinitions = [
+        {
+          AttributeName: 'userId',
+          AttributeType: 'S',
+        },
+        // Should add an extra attribute definitions based on GSI.
+        {
+          AttributeName: 'test',
+          AttributeType: 'S',
+        },
+      ];
+
+      expect(mockCreateTable).toHaveBeenCalledTimes(1);
+
+      // PATH and AtributeType from KeySchema should not be a part of gsi configuration.
+      const gsiRequest = JSON.parse(JSON.stringify(ddbConfigWithGSI.globalSecondaryIndexes));
+      delete gsiRequest[0].KeySchema[0].AttributeType;
+      delete gsiRequest[0].KeySchema[0].Path;
+
+      expect(mockCreateTable).toHaveBeenCalledWith({
+        AttributeDefinitions: attributeDefinitions,
+        ...defaultCreateTableRequests,
+        GlobalSecondaryIndexes: gsiRequest,
+      });
     });
   });
 });
