@@ -5,7 +5,7 @@ import {
   DynamicEntityMap,
   mergeInstances,
   MessageValue,
-  OutputTemplate,
+  NormalizedOutputTemplate,
   OutputTemplateConverterStrategyConfig,
   QuickReplyValue,
   SingleResponseOutputTemplateConverterStrategy,
@@ -27,7 +27,7 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
   platformName = 'dialogflow' as const;
   responseClass = DialogflowResponse;
 
-  protected sanitizeOutput(output: OutputTemplate): OutputTemplate {
+  protected sanitizeOutput(output: NormalizedOutputTemplate): NormalizedOutputTemplate {
     if (output.message) {
       output.message = this.sanitizeMessage(output.message, 'message');
     }
@@ -57,8 +57,8 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
     return super.sanitizeQuickReplies(quickReplies, path, maxSize, maxLength);
   }
 
-  toResponse(output: OutputTemplate): DialogflowResponse {
-    const response: DialogflowResponse = this.prepareResponse({});
+  toResponse(output: NormalizedOutputTemplate): DialogflowResponse {
+    const response: DialogflowResponse = this.normalizeResponse({});
 
     const listen = output.listen;
     if (typeof listen === 'object' && listen.entities?.types) {
@@ -122,8 +122,8 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
     return response;
   }
 
-  fromResponse(response: DialogflowResponse): OutputTemplate {
-    const output: OutputTemplate = {};
+  fromResponse(response: DialogflowResponse): NormalizedOutputTemplate {
+    const output: NormalizedOutputTemplate = {};
 
     const messageWithText = response.fulfillment_messages?.find((message) => message.message.text);
     if (messageWithText) {
