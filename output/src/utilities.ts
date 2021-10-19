@@ -1,38 +1,8 @@
 import { Type } from 'class-transformer';
 import _merge from 'lodash.merge';
 import type { A, O } from 'ts-toolbelt';
-import {
-  IsOptional,
-  ListenValue,
-  MessageValue,
-  NormalizedOutputTemplate,
-  NormalizedPlatformOutputTemplate,
-  OutputTemplatePlatforms,
-  ValidateNested,
-  ValidationError,
-} from '.';
+import { IsOptional, ListenValue, ValidateNested, ValidationError } from '.';
 import { NormalizedOutputTemplatePlatforms } from './models/NormalizedOutputTemplatePlatforms';
-
-// Construct an object-type that has the same keys as NormalizedOutputTemplate but additionally allows an array to be passed to message and reprompt.
-// Also, updates type of platforms to reference OutputTemplatePlatforms
-export type DenormalizeOutputTemplate<OUTPUT_TEMPLATE extends NormalizedOutputTemplate> = Omit<
-  OmitIndex<OUTPUT_TEMPLATE, string>,
-  'message' | 'reprompt' | 'platforms'
-> & {
-  [key: string]: unknown;
-  message?: OUTPUT_TEMPLATE['message'] | MessageValue[];
-  reprompt?: OUTPUT_TEMPLATE['reprompt'] | MessageValue[];
-  platforms?: OutputTemplatePlatforms;
-};
-
-// Construct an object-type that has the same keys as NormalizedPlatformOutputTemplate but additionally allows an array to be passed to messaged and reprompt.
-export type DenormalizePlatformOutputTemplate<
-  PLATFORM_OUTPUT_TEMPLATE extends NormalizedPlatformOutputTemplate,
-> = Omit<OmitIndex<PLATFORM_OUTPUT_TEMPLATE, string>, 'message' | 'reprompt'> & {
-  [key: string]: unknown;
-  message?: PLATFORM_OUTPUT_TEMPLATE['message'] | MessageValue[];
-  reprompt?: PLATFORM_OUTPUT_TEMPLATE['reprompt'] | MessageValue[];
-};
 
 export function registerOutputPlatform<TYPE extends Record<string, unknown>>(
   platformKey: string,

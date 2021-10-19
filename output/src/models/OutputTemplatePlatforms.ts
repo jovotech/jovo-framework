@@ -1,5 +1,5 @@
-import { DenormalizePlatformOutputTemplate } from '../utilities';
 import { NormalizedOutputTemplatePlatforms } from './NormalizedOutputTemplatePlatforms';
+import { DenormalizePlatformOutputTemplate } from './PlatformOutputTemplate';
 
 // Construct an object-type that has the same keys as NormalizedOutputTemplatePlatforms but every value is denormalized
 export type OutputTemplatePlatforms = {
