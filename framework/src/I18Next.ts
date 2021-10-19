@@ -1,4 +1,4 @@
-import i18next, { InitOptions, Resource, TOptionsBase } from 'i18next';
+import i18next, { InitOptions, Resource, TOptionsBase, TFunctionResult } from 'i18next';
 import _merge from 'lodash.merge';
 import type { A, F, U } from 'ts-toolbelt';
 import { AnyObject, OmitIndex } from './index';
@@ -35,7 +35,7 @@ export type I18NextAutoPath<
 
 // Custom init-options for i18next in case some custom properties are used in the future.
 export interface I18NextOptions extends InitOptions {}
-
+export type I18NextTFunctionResult = TFunctionResult;
 // Custom t-options for i18next, needed in order to interfere passed language and namespace.
 export interface I18NextTOptions<
   LANGUAGE extends I18NextResourcesLanguageKeys | string,
@@ -75,7 +75,8 @@ export class I18Next {
   }
 
   t<
-    PATH extends string,
+    RESULT extends I18NextTFunctionResult = string,
+    PATH extends string = string,
     LANGUAGE extends I18NextResourcesLanguageKeys | string = I18NextResourcesLanguageKeys,
     NAMESPACE extends
       | I18NextResourcesNamespaceKeysOfLanguage<LANGUAGE>
@@ -86,7 +87,7 @@ export class I18Next {
       | PATH
       | Array<I18NextAutoPath<PATH, LANGUAGE, NAMESPACE> | PATH>,
     options?: I18NextTOptions<LANGUAGE, NAMESPACE>,
-  ): string {
-    return this.i18n.t(path, options);
+  ): RESULT {
+    return this.i18n.t(path, options) as RESULT;
   }
 }
