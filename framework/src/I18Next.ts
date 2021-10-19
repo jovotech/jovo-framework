@@ -66,6 +66,7 @@ export class I18Next {
       interpolation: {
         escapeValue: false,
       },
+      returnObjects: true,
     };
   }
 
