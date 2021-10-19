@@ -38,7 +38,7 @@ declare module '@jovotech/output/dist/types/models/Message' {
 // augment the prototypes of the generic models to have methods to convert to the Alexa-variant
 augmentModelPrototypes();
 
-// Make NormalizedAlexaOutputTemplate available for the OutputTemplatePlatforms-object via the alexa-key.
+// Make NormalizedAlexaOutputTemplate available for the NormalizedOutputTemplatePlatforms-object via the alexa-key.
 declare module '@jovotech/output/dist/types/models/NormalizedOutputTemplatePlatforms' {
   interface NormalizedOutputTemplatePlatforms {
     alexa?: NormalizedAlexaOutputTemplate;
