@@ -6,6 +6,7 @@ import {
   OutputTemplate,
   OutputTemplateConverterStrategy,
   OutputTemplateConverterStrategyConfig,
+  PlainObjectType,
   ValidationConfig,
 } from '.';
 import { OutputValidationError } from './errors/OutputValidationError';
@@ -56,7 +57,7 @@ export class OutputTemplateConverter<
   }
 
   async fromResponse(
-    response: RESPONSE | RESPONSE[],
+    response: PlainObjectType<RESPONSE> | PlainObjectType<RESPONSE>[],
   ): Promise<ReturnType<STRATEGY['fromResponse']>> {
     const responseInstance = this.strategy.normalizeResponse(response);
 

@@ -57,7 +57,7 @@ export abstract class OutputTemplateConverterStrategy<
   // Normalize the output:
   // 1. get the platform specific output
   // 2. get the randomized output
-  // 3. return instance(s) of N
+  // 3. return instance(s) of NormalizedOutputTemplate
   normalizeOutput(
     output: OutputTemplate | OutputTemplate[],
   ): NormalizedOutputTemplate | NormalizedOutputTemplate[] {
@@ -67,16 +67,22 @@ export abstract class OutputTemplateConverterStrategy<
     return plainToClass(NormalizedOutputTemplate, normalizedOutput);
   }
 
-  abstract toResponse(
-    output: NormalizedOutputTemplate | NormalizedOutputTemplate[],
-  ): RESPONSE | RESPONSE[];
-
+  // Normalize the response:
+  // - return instance of responseClass
   normalizeResponse(
     response: PlainObjectType<RESPONSE> | PlainObjectType<RESPONSE>[],
   ): RESPONSE | RESPONSE[] {
     return plainToClass(this.responseClass, response);
   }
 
+  // Convert incoming output template(s) to response(s)
+  // Should only be called with normalized output template(s)
+  abstract toResponse(
+    output: NormalizedOutputTemplate | NormalizedOutputTemplate[],
+  ): RESPONSE | RESPONSE[];
+
+  // Convert incoming response(s) to output template(s)
+  // Should only be called with normalized response(s)
   abstract fromResponse(
     response: RESPONSE | RESPONSE[],
   ): NormalizedOutputTemplate | NormalizedOutputTemplate[];
