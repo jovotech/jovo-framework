@@ -5,6 +5,7 @@ import {
   DynamicEntities,
   DynamicEntityMap,
   MessageValue,
+  NormalizedOutputTemplate,
   OutputTemplate,
   OutputTemplateBase,
   OutputTemplatePlatforms,
@@ -12,6 +13,7 @@ import {
   plainToClass,
   QuickReplyValue,
 } from '.';
+import { OutputHelpers } from './OutputHelpers';
 
 export interface SanitizationConfig {
   trimArrays: boolean;
@@ -52,29 +54,45 @@ export abstract class OutputTemplateConverterStrategy<
     } as CONFIG;
   }
 
-  /**
-   * Prepare the output by applying the platform-specific output that is related to the strategy.
-   * Additionally, instances are initialized based on the objects.
-   */
-  prepareOutput(output: OutputTemplate | OutputTemplate[]): OutputTemplate | OutputTemplate[] {
-    output = Array.isArray(output)
-      ? output.map((outputItem: OutputTemplate) => this.getPlatformSpecificOutput(outputItem))
-      : this.getPlatformSpecificOutput(output);
-    return plainToClass(OutputTemplate, output);
+  // Normalize the output:
+  // 1. get the platform specific output
+  // 2. get the randomized output
+  // 3. return instance(s) of N
+  normalizeOutput(
+    output: OutputTemplate | OutputTemplate[],
+  ): NormalizedOutputTemplate | NormalizedOutputTemplate[] {
+    const normalize = (outputTemplate: OutputTemplate) =>
+      this.getRandomizedOutput(this.getPlatformSpecificOutput(outputTemplate));
+    const normalizedOutput = Array.isArray(output) ? output.map(normalize) : normalize(output);
+    return plainToClass(NormalizedOutputTemplate, normalizedOutput);
   }
 
-  abstract toResponse(output: OutputTemplate | OutputTemplate[]): RESPONSE | RESPONSE[];
+  abstract toResponse(
+    output: NormalizedOutputTemplate | NormalizedOutputTemplate[],
+  ): RESPONSE | RESPONSE[];
 
-  prepareResponse(
+  normalizeResponse(
     response: PlainObjectType<RESPONSE> | PlainObjectType<RESPONSE>[],
   ): RESPONSE | RESPONSE[] {
     return plainToClass(this.responseClass, response);
   }
 
-  abstract fromResponse(response: RESPONSE | RESPONSE[]): OutputTemplate | OutputTemplate[];
+  abstract fromResponse(
+    response: RESPONSE | RESPONSE[],
+  ): NormalizedOutputTemplate | NormalizedOutputTemplate[];
+
+  protected getRandomizedOutput(output: OutputTemplate): NormalizedOutputTemplate {
+    if (Array.isArray(output.message)) {
+      output.message = OutputHelpers.randomize(output.message);
+    }
+    if (Array.isArray(output.reprompt)) {
+      output.reprompt = OutputHelpers.randomize(output.reprompt);
+    }
+    return output as NormalizedOutputTemplate;
+  }
 
   protected getPlatformSpecificOutput(output: OutputTemplate): OutputTemplate {
-    return OutputTemplate.getKeys().reduce((outputCopy, outputKey) => {
+    return NormalizedOutputTemplate.getKeys().reduce((outputCopy, outputKey) => {
       if (outputKey === 'platforms') {
         // remove the platforms-output of all other platforms due to not being used anyways
         if (output.platforms?.[this.platformName]) {

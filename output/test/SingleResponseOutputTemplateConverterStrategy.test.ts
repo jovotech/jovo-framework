@@ -1,6 +1,6 @@
 import {
   JovoResponse,
-  OutputTemplate,
+  NormalizedOutputTemplate,
   SingleResponseOutputTemplateConverterStrategy,
 } from '../src';
 
@@ -14,15 +14,15 @@ class ExampleStrategy extends SingleResponseOutputTemplateConverterStrategy<Exam
   readonly platformName = 'example' as const;
   readonly responseClass: { new (): ExampleResponse };
 
-  toResponse(output: OutputTemplate): ExampleResponse {
+  toResponse(output: NormalizedOutputTemplate): ExampleResponse {
     return output as ExampleResponse;
   }
 
-  fromResponse(response: ExampleResponse): OutputTemplate {
+  fromResponse(response: ExampleResponse): NormalizedOutputTemplate {
     return {};
   }
 
-  protected sanitizeOutput(output: OutputTemplate): OutputTemplate {
+  protected sanitizeOutput(output: NormalizedOutputTemplate): NormalizedOutputTemplate {
     return output;
   }
 }
@@ -30,10 +30,10 @@ class ExampleStrategy extends SingleResponseOutputTemplateConverterStrategy<Exam
 const strategy = new ExampleStrategy();
 
 describe('prepareOutput', () => {
-  describe('OutputTemplate-array is merged into single object', () => {
+  describe('NormalizedOutputTemplate-array is merged into single object', () => {
     describe('messages are concatenated', () => {
       test('string + string passed', () => {
-        const preparedOutput = strategy.prepareOutput([
+        const preparedOutput = strategy.normalizeOutput([
           {
             message: 'Hello',
             reprompt: 'Hello',
@@ -49,7 +49,7 @@ describe('prepareOutput', () => {
         });
       });
       test('string + object passed', () => {
-        const preparedOutput = strategy.prepareOutput([
+        const preparedOutput = strategy.normalizeOutput([
           {
             message: 'Hello',
             reprompt: 'Hello',
@@ -71,7 +71,7 @@ describe('prepareOutput', () => {
         });
       });
       test('object + object passed', () => {
-        const preparedOutput = strategy.prepareOutput([
+        const preparedOutput = strategy.normalizeOutput([
           {
             message: { speech: 'Hello', text: 'Hello' },
             reprompt: { speech: 'Hello' },
@@ -88,7 +88,7 @@ describe('prepareOutput', () => {
       });
 
       test('multiple speak tags result in a single speak tag', () => {
-        const preparedOutput = strategy.prepareOutput([
+        const preparedOutput = strategy.normalizeOutput([
           {
             message: '<speak>Hello</speak>',
           },
@@ -101,7 +101,7 @@ describe('prepareOutput', () => {
         });
       });
       test('SSML removed for text', () => {
-        const preparedOutput = strategy.prepareOutput([
+        const preparedOutput = strategy.normalizeOutput([
           {
             message: '<speak>Hello</speak>',
           },
@@ -120,7 +120,7 @@ describe('prepareOutput', () => {
 
     describe('listen is merged', () => {
       test('true + false = false', () => {
-        const preparedOutput = strategy.prepareOutput([
+        const preparedOutput = strategy.normalizeOutput([
           {
             listen: true,
           },
@@ -134,7 +134,7 @@ describe('prepareOutput', () => {
       });
 
       test('false + true = true', () => {
-        const preparedOutput = strategy.prepareOutput([
+        const preparedOutput = strategy.normalizeOutput([
           {
             listen: false,
           },
@@ -148,7 +148,7 @@ describe('prepareOutput', () => {
       });
 
       test('object + false = false', () => {
-        const preparedOutput = strategy.prepareOutput([
+        const preparedOutput = strategy.normalizeOutput([
           {
             listen: { entities: {} },
           },
@@ -162,7 +162,7 @@ describe('prepareOutput', () => {
       });
 
       test('false + object = object', () => {
-        const preparedOutput = strategy.prepareOutput([
+        const preparedOutput = strategy.normalizeOutput([
           {
             listen: false,
           },
@@ -176,7 +176,7 @@ describe('prepareOutput', () => {
       });
 
       test('true + object = object', () => {
-        const preparedOutput = strategy.prepareOutput([
+        const preparedOutput = strategy.normalizeOutput([
           {
             listen: true,
           },
@@ -192,7 +192,7 @@ describe('prepareOutput', () => {
       });
 
       test('special case - object + true = object', () => {
-        const preparedOutput = strategy.prepareOutput([
+        const preparedOutput = strategy.normalizeOutput([
           {
             listen: { entities: {} },
           },
@@ -209,7 +209,7 @@ describe('prepareOutput', () => {
     });
 
     test('quick-replies are concatenated', () => {
-      const preparedOutput = strategy.prepareOutput([
+      const preparedOutput = strategy.normalizeOutput([
         {
           quickReplies: ['foo'],
         },
@@ -223,7 +223,7 @@ describe('prepareOutput', () => {
     });
 
     test('card is replaced', () => {
-      const preparedOutput = strategy.prepareOutput([
+      const preparedOutput = strategy.normalizeOutput([
         {
           card: {
             title: 'foo',
@@ -243,7 +243,7 @@ describe('prepareOutput', () => {
     });
 
     test('carousel is replaced', () => {
-      const preparedOutput = strategy.prepareOutput([
+      const preparedOutput = strategy.normalizeOutput([
         {
           carousel: {
             title: 'foo',
@@ -266,7 +266,7 @@ describe('prepareOutput', () => {
     });
 
     test('nativeResponse is merged', () => {
-      const preparedOutput = strategy.prepareOutput([
+      const preparedOutput = strategy.normalizeOutput([
         {
           platforms: {
             example: {
@@ -299,7 +299,7 @@ describe('prepareOutput', () => {
     });
 
     test('platform message is truncated', () => {
-      const preparedOutput = strategy.prepareOutput([
+      const preparedOutput = strategy.normalizeOutput([
         {
           platforms: {
             example: {
@@ -326,7 +326,7 @@ describe('prepareOutput', () => {
     });
 
     test('platform quick-replies are concatenated', () => {
-      const preparedOutput = strategy.prepareOutput([
+      const preparedOutput = strategy.normalizeOutput([
         {
           platforms: {
             example: {
@@ -353,7 +353,7 @@ describe('prepareOutput', () => {
     });
 
     test('platform card is replaced', () => {
-      const preparedOutput = strategy.prepareOutput([
+      const preparedOutput = strategy.normalizeOutput([
         {
           platforms: {
             example: {
@@ -388,7 +388,7 @@ describe('prepareOutput', () => {
     });
 
     test('platform carousel is replaced', () => {
-      const preparedOutput = strategy.prepareOutput([
+      const preparedOutput = strategy.normalizeOutput([
         {
           platforms: {
             example: {

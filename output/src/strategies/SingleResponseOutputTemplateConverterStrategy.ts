@@ -4,22 +4,23 @@ import {
   mergeListen,
   MessageValue,
   NullableOutputTemplateBase,
-  OutputTemplate,
+  NormalizedOutputTemplate,
   OutputTemplateBase,
   OutputTemplateConverterStrategyConfig,
   PlainObjectType,
   plainToClass,
-  PlatformOutputTemplate,
+  NormalizedPlatformOutputTemplate,
   removeSSML,
   removeSSMLSpeakTags,
   SpeechMessage,
   TextMessage,
   toSSML,
+  OutputTemplate,
 } from '..';
 import { OutputTemplateConverterStrategy } from '../OutputTemplateConverterStrategy';
 
 /**
- * Strategy that merges multiple OutputTemplates into a single OutputTemplate and only converts the merged OutputTemplate to a response.
+ * Strategy that merges multiple OutputTemplates into a single NormalizedOutputTemplate and only converts the merged NormalizedOutputTemplate to a response.
  * - Strings get concatenated and separated by a whitespace.
  * - Quick Replies get merged into a single array.
  * - Card/Carousel the last in the array is used.
@@ -30,26 +31,26 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
   RESPONSE extends Record<string, unknown>,
   CONFIG extends OutputTemplateConverterStrategyConfig,
 > extends OutputTemplateConverterStrategy<RESPONSE, CONFIG> {
-  prepareOutput(output: OutputTemplate | OutputTemplate[]): OutputTemplate {
-    output = super.prepareOutput(output);
-    if (Array.isArray(output)) {
-      output = this.mergeOutputTemplates(output);
+  normalizeOutput(output: OutputTemplate | OutputTemplate[]): NormalizedOutputTemplate {
+    let normalizedOutput = super.normalizeOutput(output);
+    if (Array.isArray(normalizedOutput)) {
+      normalizedOutput = this.mergeOutputTemplates(normalizedOutput);
     }
-    return this.shouldSanitize() ? this.sanitizeOutput(output) : output;
+    return this.shouldSanitize() ? this.sanitizeOutput(normalizedOutput) : normalizedOutput;
   }
 
-  prepareResponse(rawResponse: PlainObjectType<RESPONSE>): RESPONSE {
-    return super.prepareResponse(rawResponse) as RESPONSE;
+  normalizeResponse(rawResponse: PlainObjectType<RESPONSE>): RESPONSE {
+    return super.normalizeResponse(rawResponse) as RESPONSE;
   }
 
-  protected abstract sanitizeOutput(output: OutputTemplate): OutputTemplate;
+  protected abstract sanitizeOutput(output: NormalizedOutputTemplate): NormalizedOutputTemplate;
 
-  abstract toResponse(output: OutputTemplate): RESPONSE;
-  abstract fromResponse(response: RESPONSE): OutputTemplate;
+  abstract toResponse(output: NormalizedOutputTemplate): RESPONSE;
+  abstract fromResponse(response: RESPONSE): NormalizedOutputTemplate;
 
-  protected mergeOutputTemplates(output: OutputTemplate[]): OutputTemplate {
+  protected mergeOutputTemplates(output: NormalizedOutputTemplate[]): NormalizedOutputTemplate {
     return plainToClass(
-      OutputTemplate,
+      NormalizedOutputTemplate,
       output.reduce(
         (accumulator, current) => this.mergeOutputTemplateWith(accumulator, current),
         {},
@@ -58,9 +59,9 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
   }
 
   protected mergeOutputTemplateWith(
-    target: OutputTemplate,
-    mergeWith: OutputTemplate,
-  ): OutputTemplate {
+    target: NormalizedOutputTemplate,
+    mergeWith: NormalizedOutputTemplate,
+  ): NormalizedOutputTemplate {
     this.mergeOutputTemplateBaseWith(target, mergeWith);
 
     const platformOutput = mergeWith.platforms?.[this.platformName];
@@ -71,7 +72,9 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
       if (!target.platforms[this.platformName]) {
         target.platforms[this.platformName] = {};
       }
-      const targetPlatformOutput = target.platforms[this.platformName] as PlatformOutputTemplate;
+      const targetPlatformOutput = target.platforms[
+        this.platformName
+      ] as NormalizedPlatformOutputTemplate;
 
       if (platformOutput.nativeResponse) {
         if (!targetPlatformOutput.nativeResponse) {

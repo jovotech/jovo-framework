@@ -2,6 +2,7 @@ import { plainToClass } from 'class-transformer';
 import { validate, ValidationError } from 'class-validator';
 import {
   JovoResponse,
+  NormalizedOutputTemplate,
   OutputTemplate,
   OutputTemplateConverterStrategy,
   OutputTemplateConverterStrategyConfig,
@@ -16,8 +17,14 @@ export class OutputTemplateConverter<
 > {
   constructor(readonly strategy: STRATEGY) {}
 
-  async validateOutput(output: OutputTemplate | OutputTemplate[]): Promise<ValidationError[]> {
-    return this.validate(output, OutputTemplate);
+  async validateOutput(
+    output:
+      | OutputTemplate
+      | OutputTemplate[]
+      | NormalizedOutputTemplate
+      | NormalizedOutputTemplate[],
+  ): Promise<ValidationError[]> {
+    return this.validate(output, NormalizedOutputTemplate);
   }
 
   async validateResponse(response: RESPONSE | RESPONSE[]): Promise<ValidationError[]> {
@@ -27,16 +34,16 @@ export class OutputTemplateConverter<
   async toResponse(
     output: OutputTemplate | OutputTemplate[],
   ): Promise<ReturnType<STRATEGY['toResponse']>> {
-    const instancedOutput: OutputTemplate | OutputTemplate[] = this.strategy.prepareOutput(output);
+    const normalizedOutput = this.strategy.normalizeOutput(output);
 
     if (this.shouldValidate('before')) {
-      const errors = await this.validateOutput(instancedOutput);
+      const errors = await this.validateOutput(normalizedOutput);
       if (errors.length) {
         throw new OutputValidationError(errors, 'Can not convert.\n');
       }
     }
 
-    const response = this.strategy.toResponse(instancedOutput);
+    const response = this.strategy.toResponse(normalizedOutput);
 
     if (this.shouldValidate('after')) {
       const errors = await this.validateResponse(response);
@@ -51,7 +58,7 @@ export class OutputTemplateConverter<
   async fromResponse(
     response: RESPONSE | RESPONSE[],
   ): Promise<ReturnType<STRATEGY['fromResponse']>> {
-    const responseInstance = this.strategy.prepareResponse(response);
+    const responseInstance = this.strategy.normalizeResponse(response);
 
     if (this.shouldValidate('before')) {
       const errors = await this.validateResponse(responseInstance);
