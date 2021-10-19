@@ -1,6 +1,6 @@
 import { registerOutputPlatform } from '@jovotech/output';
 import {
-  AlexaOutputTemplate,
+  NormalizedAlexaOutputTemplate,
   AplHeader,
   AplRenderDocumentDirective,
   Card as AlexaCard,
@@ -38,14 +38,14 @@ declare module '@jovotech/output/dist/types/models/Message' {
 // augment the prototypes of the generic models to have methods to convert to the Alexa-variant
 augmentModelPrototypes();
 
-// Make AlexaOutputTemplate available for the OutputTemplatePlatforms-object via the alexa-key.
-declare module '@jovotech/output/dist/types/models/OutputTemplatePlatforms' {
-  interface OutputTemplatePlatforms {
-    alexa?: AlexaOutputTemplate;
+// Make NormalizedAlexaOutputTemplate available for the OutputTemplatePlatforms-object via the alexa-key.
+declare module '@jovotech/output/dist/types/models/NormalizedOutputTemplatePlatforms' {
+  interface NormalizedOutputTemplatePlatforms {
+    alexa?: NormalizedAlexaOutputTemplate;
   }
 }
 // Additionally, make class-validator and class-transformer aware of the added property.
-registerOutputPlatform('alexa', AlexaOutputTemplate);
+registerOutputPlatform('alexa', NormalizedAlexaOutputTemplate);
 
 export * from './decorators/validation/IsValidCardImage';
 export * from './decorators/validation/IsValidCardImageUrl';
