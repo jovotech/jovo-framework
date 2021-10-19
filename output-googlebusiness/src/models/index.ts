@@ -3,6 +3,7 @@ export * from './GoogleBusinessOutputTemplateResponse';
 export * from './GoogleBusinessResponse';
 export * from './Image';
 export * from './Representative';
+export * from './NormalizedGoogleBusinessOutputTemplate';
 export * from './RichCard';
 export * from './Suggestion';
 export * from './common/ContentInfo';

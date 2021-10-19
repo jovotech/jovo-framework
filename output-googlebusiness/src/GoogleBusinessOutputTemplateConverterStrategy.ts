@@ -2,7 +2,7 @@ import {
   Card,
   Carousel,
   MultipleResponsesOutputTemplateConverterStrategy,
-  OutputTemplate,
+  NormalizedOutputTemplate,
   OutputTemplateConverterStrategyConfig,
   QuickReplyValue,
 } from '@jovotech/output';
@@ -24,7 +24,10 @@ export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleRespo
   responseClass = GoogleBusinessResponse;
   platformName = 'googleBusiness' as const;
 
-  protected sanitizeOutput(output: OutputTemplate, index?: number): OutputTemplate {
+  protected sanitizeOutput(
+    output: NormalizedOutputTemplate,
+    index?: number,
+  ): NormalizedOutputTemplate {
     const pathPrefix = index ? `[${index}]` : '';
 
     if (output.card) {
@@ -81,9 +84,11 @@ export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleRespo
     return super.sanitizeCarousel(carousel, path, minSize, maxSize);
   }
 
-  convertOutput(output: OutputTemplate): GoogleBusinessResponse | GoogleBusinessResponse[] {
+  convertOutput(
+    output: NormalizedOutputTemplate,
+  ): GoogleBusinessResponse | GoogleBusinessResponse[] {
     const getResponseBase: () => GoogleBusinessResponse = () =>
-      this.prepareResponse({
+      this.normalizeResponse({
         messageId: '',
         representative: {
           representativeType: RepresentativeType.Bot,
@@ -155,8 +160,8 @@ export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleRespo
     return responses.length === 1 ? responses[0] : responses;
   }
 
-  convertResponse(response: GoogleBusinessResponse): OutputTemplate {
-    const output: OutputTemplate = {};
+  convertResponse(response: GoogleBusinessResponse): NormalizedOutputTemplate {
+    const output: NormalizedOutputTemplate = {};
     if (response.text) {
       output.message = response.text;
     }
