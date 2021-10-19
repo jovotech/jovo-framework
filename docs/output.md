@@ -152,6 +152,19 @@ Platforms that support multiple responses will display the example above in 2 ch
 }
 ```
 
+### i18n
+
+You can also add internationalization by storing all strings in an `i18n` file for each locale. This way, you can return output using the `$t()` method:
+
+```typescript
+// Without i18n
+return this.$send({ message: 'Hello World!' })
+
+// With i18n
+return this.$send({ message: this.$t('hello') })
+```
+
+[Learn more in the i18n docs](./i18n.md).
 
 ## Output Templates
 
