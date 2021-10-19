@@ -2,7 +2,7 @@ import {
   ListenValue,
   mergeInstances,
   mergeListen,
-  OutputTemplate,
+  NormalizedOutputTemplate,
   OutputTemplateConverterStrategy,
   OutputTemplateConverterStrategyConfig,
 } from '@jovotech/output';
@@ -15,9 +15,9 @@ export class CoreOutputTemplateConverterStrategy extends OutputTemplateConverter
   responseClass = CoreResponse;
   platformName = 'core' as const;
 
-  toResponse(output: OutputTemplate | OutputTemplate[]): CoreResponse {
+  toResponse(output: NormalizedOutputTemplate | NormalizedOutputTemplate[]): CoreResponse {
     output = Array.isArray(output) ? output : [output];
-    const response: CoreResponse = this.prepareResponse({
+    const response: CoreResponse = this.normalizeResponse({
       version: '4.0.0',
       platform: 'core',
       output,
@@ -44,7 +44,7 @@ export class CoreOutputTemplateConverterStrategy extends OutputTemplateConverter
     return response;
   }
 
-  fromResponse(response: CoreResponse): OutputTemplate[] {
+  fromResponse(response: CoreResponse): NormalizedOutputTemplate[] {
     return response.output;
   }
 }

@@ -3,7 +3,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  OutputTemplate,
+  NormalizedOutputTemplate,
   Type,
   ValidateNested,
 } from '@jovotech/output';
@@ -21,14 +21,14 @@ export class CoreOutputTemplateResponse implements Partial<CoreResponse> {
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => OutputTemplate)
-  output?: OutputTemplate[];
+  @Type(() => NormalizedOutputTemplate)
+  output?: NormalizedOutputTemplate[];
 
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => OutputTemplate)
-  repromptOutput?: OutputTemplate[];
+  @Type(() => NormalizedOutputTemplate)
+  repromptOutput?: NormalizedOutputTemplate[];
 
   @IsOptional()
   @ValidateNested()
