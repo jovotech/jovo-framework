@@ -3,8 +3,9 @@ import {
   OutputTemplateConverterStrategy,
   OutputTemplateConverterStrategyConfig,
 } from '@jovotech/output';
+import { AnyObject, UnknownObject } from '@jovotech/common';
+
 import {
-  AnyObject,
   CapabilityType,
   EntityMap,
   ExtensibleConfig,
@@ -18,7 +19,6 @@ import {
   MiddlewareCollection,
   Platform,
   RequestBuilder,
-  UnknownObject,
 } from '../../src';
 
 export class ExamplePlatformRequest extends JovoRequest {

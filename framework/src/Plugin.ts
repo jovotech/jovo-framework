@@ -1,5 +1,5 @@
 import _merge from 'lodash.merge';
-import { DeepPartial, UnknownObject } from '.';
+import { DeepPartial, UnknownObject } from '@jovotech/common';
 import { Extensible } from './Extensible';
 
 export interface PluginConfig extends UnknownObject {

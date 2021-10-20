@@ -1,4 +1,4 @@
-import { JovoError } from '@jovotech/framework';
+import { JovoError } from '@jovotech/common';
 import { AlexaApiError, AlexaApiErrorCode, AlexaApiOptions, sendApiRequest } from './AlexaApi';
 
 export enum ProfileProperty {

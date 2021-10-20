@@ -1,5 +1,6 @@
 import { JovoResponse, OutputTemplate } from '@jovotech/output';
-import { JovoInput, JovoRequest, UnknownObject } from './index';
+import { UnknownObject } from '@jovotech/common';
+import { JovoInput, JovoRequest } from './index';
 import { EntityMap } from './interfaces';
 import { JovoSession } from './JovoSession';
 

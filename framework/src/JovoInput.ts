@@ -1,5 +1,5 @@
 import { EnumLike } from '@jovotech/output';
-import { OmitWhere } from '.';
+import { OmitWhere } from '@jovotech/common';
 import { AsrData, EntityMap, Intent, NluData } from './interfaces';
 
 export enum InputType {

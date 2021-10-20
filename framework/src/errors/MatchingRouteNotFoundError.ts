@@ -1,5 +1,5 @@
-import { JovoInput, UnknownObject } from '../index';
-import { JovoError } from '../JovoError';
+import { JovoError, UnknownObject } from '@jovotech/common';
+import { JovoInput } from '../index';
 import { StateStack } from '../JovoSession';
 import { RouteMatch } from '../plugins/RouteMatch';
 

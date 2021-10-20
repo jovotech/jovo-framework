@@ -1,6 +1,6 @@
 import _merge from 'lodash.merge';
+import { ArrayElement } from '@jovotech/common';
 import {
-  ArrayElement,
   ComponentTree,
   I18NextOptions,
   IntentMap,

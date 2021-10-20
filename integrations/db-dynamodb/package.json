@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@jovotech/framework": "^4.0.0-beta.7",
+    "@jovotech/common": "^4.0.0-beta.1",
     "@types/jest": "^26.0.20",
     "@types/node": "^10.17.50",
     "@typescript-eslint/eslint-plugin": "^4.12.0",

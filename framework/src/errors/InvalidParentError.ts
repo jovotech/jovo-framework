@@ -1,5 +1,4 @@
-import { Constructor } from '..';
-import { JovoError } from '../JovoError';
+import { JovoError, Constructor } from '@jovotech/common';
 
 // TODO: improve
 export class InvalidParentError extends JovoError {

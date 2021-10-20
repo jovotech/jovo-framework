@@ -1,4 +1,5 @@
-import { RequestBuilder, UnknownObject } from '@jovotech/framework';
+import { RequestBuilder } from '@jovotech/framework';
+import { UnknownObject } from '@jovotech/common';
 import { join as joinPaths } from 'path';
 import { GoogleAssistantPlatform } from './GoogleAssistantPlatform';
 import { GoogleAssistantRequest } from './GoogleAssistantRequest';

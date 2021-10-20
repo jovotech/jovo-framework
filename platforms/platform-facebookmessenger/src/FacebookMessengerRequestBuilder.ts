@@ -1,6 +1,7 @@
-import { RequestBuilder, UnknownObject } from '@jovotech/framework';
+import { RequestBuilder } from '@jovotech/framework';
 import { join as joinPaths } from 'path';
 import { FacebookMessengerPlatform, FacebookMessengerRequest } from '.';
+import { UnknownObject } from '@jovotech/common';
 
 export class FacebookMessengerRequestBuilder extends RequestBuilder<FacebookMessengerPlatform> {
   launch(json?: UnknownObject): FacebookMessengerRequest {

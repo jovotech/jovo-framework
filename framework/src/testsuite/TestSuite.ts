@@ -4,6 +4,8 @@ import {
   OutputTemplateConverterStrategyConfig,
   SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
+import { Constructor, JovoError, OmitWhere } from '@jovotech/common';
+
 import { existsSync } from 'fs';
 import _cloneDeep from 'lodash.clonedeep';
 import _merge from 'lodash.merge';
@@ -12,12 +14,9 @@ import { PartialDeep } from 'type-fest';
 import { v4 as uuidv4 } from 'uuid';
 import {
   App,
-  Constructor,
   Jovo,
-  JovoError,
   JovoRequest,
   JovoSession,
-  OmitWhere,
   Platform,
   Plugin,
   PluginConfig,

@@ -1,5 +1,4 @@
 import {
-  AnyObject,
   DbPlugin,
   Extensible,
   ExtensibleConfig,
@@ -8,6 +7,9 @@ import {
   Platform,
   StoredElementSession,
 } from '@jovotech/framework';
+
+import { AnyObject } from '@jovotech/common';
+
 import {
   GoogleBusinessOutputTemplateConverterStrategy,
   GoogleBusinessResponse,

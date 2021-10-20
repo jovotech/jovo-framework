@@ -1,6 +1,7 @@
-import { AnyObject, Headers, QueryParams, Server, UnknownObject } from '@jovotech/framework';
+import { Headers, QueryParams, Server } from '@jovotech/framework';
 import type { APIGatewayEvent, Callback, Context } from 'aws-lambda';
 import type { APIGatewayProxyEventHeaders } from 'aws-lambda/trigger/api-gateway-proxy';
+import { AnyObject, UnknownObject } from '@jovotech/common';
 
 export class Lambda extends Server {
   isApiGateway = false;

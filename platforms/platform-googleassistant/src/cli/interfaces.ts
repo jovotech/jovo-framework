@@ -1,5 +1,5 @@
 import { PluginConfig, PluginContext } from '@jovotech/cli-core';
-import { UnknownObject } from '@jovotech/framework';
+import { UnknownObject } from '@jovotech/common';
 import { SupportedLocales } from './constants';
 
 export interface GoogleActionProjectLocales {
