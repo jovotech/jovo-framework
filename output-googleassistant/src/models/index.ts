@@ -3,6 +3,7 @@ export * from './Expected';
 export * from './GoogleAssistantOutputTemplate';
 export * from './GoogleAssistantResponse';
 export * from './Home';
+export * from './NormalizedGoogleAssistantOutputTemplate';
 export * from './Prompt';
 export * from './Scene';
 export * from './Session';

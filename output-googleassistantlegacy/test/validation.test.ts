@@ -1,4 +1,4 @@
-import { OutputTemplate, plainToClass, validate, ValidationOptions } from '@jovotech/output';
+import { NormalizedOutputTemplate, plainToClass, validate, ValidationOptions } from '@jovotech/output';
 import { SimpleResponse } from '../src';
 
 function transformAndValidate<T extends Record<string, any> = Record<string, any>>(
@@ -21,12 +21,12 @@ async function validateAndExpectLength<T>(
 
 describe('validation - OutputTemplate', () => {
   test('GoogleAssistant - optional', () => {
-    return validateAndExpectLength(OutputTemplate, {}, 0);
+    return validateAndExpectLength(NormalizedOutputTemplate, {}, 0);
   });
 
   test('GoogleAssistant - invalid: wrong type', () => {
     return validateAndExpectLength(
-      OutputTemplate,
+      NormalizedOutputTemplate,
       {
         platforms: { googleAssistant: 2 },
       } as any,
@@ -36,7 +36,7 @@ describe('validation - OutputTemplate', () => {
 
   test('GoogleAssistant - invalid: wrong nested value', () => {
     return validateAndExpectLength(
-      OutputTemplate,
+      NormalizedOutputTemplate,
       {
         platforms: {
           googleAssistant: {
@@ -50,7 +50,7 @@ describe('validation - OutputTemplate', () => {
 
   test('GoogleAssistant - valid', () => {
     return validateAndExpectLength(
-      OutputTemplate,
+      NormalizedOutputTemplate,
       {
         platforms: {
           googleAssistant: {

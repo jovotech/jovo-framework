@@ -6,7 +6,7 @@ import {
   DynamicEntityMap,
   mergeInstances,
   MessageValue,
-  OutputTemplate,
+  NormalizedOutputTemplate,
   OutputTemplateConverterStrategyConfig,
   QuickReplyValue,
   SingleResponseOutputTemplateConverterStrategy,
@@ -35,7 +35,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
   platformName = 'googleAssistant' as const;
   responseClass = GoogleAssistantResponse;
 
-  protected sanitizeOutput(output: OutputTemplate): OutputTemplate {
+  protected sanitizeOutput(output: NormalizedOutputTemplate): NormalizedOutputTemplate {
     if (output.message) {
       output.message = this.sanitizeMessage(output.message, 'message');
     }
@@ -82,8 +82,8 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
     return super.sanitizeCarousel(carousel, path, minSize, maxSize);
   }
 
-  toResponse(output: OutputTemplate): GoogleAssistantResponse {
-    const response: GoogleAssistantResponse = this.prepareResponse({});
+  toResponse(output: NormalizedOutputTemplate): GoogleAssistantResponse {
+    const response: GoogleAssistantResponse = this.normalizeResponse({});
 
     function getEmptySession(): Session {
       return { id: '', params: {}, languageCode: '' };
@@ -188,8 +188,8 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
     return response;
   }
 
-  fromResponse(response: GoogleAssistantResponse): OutputTemplate {
-    const output: OutputTemplate = {};
+  fromResponse(response: GoogleAssistantResponse): NormalizedOutputTemplate {
+    const output: NormalizedOutputTemplate = {};
 
     const simple = response.prompt?.firstSimple || response.prompt?.lastSimple;
     if (simple?.toMessage) {

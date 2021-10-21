@@ -3,7 +3,7 @@ import {
   IsNotEmpty,
   IsString,
   JovoResponse,
-  OutputTemplate,
+  NormalizedOutputTemplate,
   Type,
   ValidateNested,
 } from '@jovotech/output';
@@ -20,8 +20,8 @@ export class CoreResponse extends JovoResponse {
 
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => OutputTemplate)
-  output: OutputTemplate[];
+  @Type(() => NormalizedOutputTemplate)
+  output: NormalizedOutputTemplate[];
 
   @ValidateNested()
   @Type(() => Context)

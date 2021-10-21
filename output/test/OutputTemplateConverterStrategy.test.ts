@@ -1,28 +1,36 @@
 import {
   JovoResponse,
-  OutputTemplate,
+  NormalizedOutputTemplate,
   OutputTemplateConverterStrategy,
-  PlatformOutputTemplate,
+  NormalizedPlatformOutputTemplate,
 } from '../src';
 
-class ExampleResponse extends JovoResponse {}
+class ExampleResponse extends JovoResponse {
+  hasSessionEnded(): boolean {
+    return false;
+  }
+}
 
 class ExampleStrategy extends OutputTemplateConverterStrategy<ExampleResponse, any> {
   readonly platformName = 'example' as const;
   readonly responseClass = ExampleResponse;
 
-  fromResponse(response: ExampleResponse[] | ExampleResponse): OutputTemplate | OutputTemplate[] {
+  fromResponse(
+    response: ExampleResponse[] | ExampleResponse,
+  ): NormalizedOutputTemplate | NormalizedOutputTemplate[] {
     return [];
   }
 
-  toResponse(output: OutputTemplate | OutputTemplate[]): ExampleResponse[] | ExampleResponse {
+  toResponse(
+    output: NormalizedOutputTemplate | NormalizedOutputTemplate[],
+  ): ExampleResponse[] | ExampleResponse {
     return [];
   }
 }
 
 declare module '../src' {
-  interface OutputTemplatePlatforms {
-    example?: PlatformOutputTemplate;
+  interface NormalizedOutputTemplatePlatforms {
+    example?: NormalizedPlatformOutputTemplate;
   }
 }
 
@@ -31,7 +39,7 @@ const strategy = new ExampleStrategy();
 describe('prepareOutput', () => {
   describe('platform-specific output is returned', () => {
     test('object passed', () => {
-      const preparedOutput = strategy.prepareOutput({
+      const preparedOutput = strategy.normalizeOutput({
         message: 'foo',
         platforms: {
           example: {
@@ -50,7 +58,7 @@ describe('prepareOutput', () => {
     });
 
     test('array passed', () => {
-      const preparedOutput = strategy.prepareOutput([
+      const preparedOutput = strategy.normalizeOutput([
         {
           message: 'foo',
           platforms: {
@@ -89,7 +97,7 @@ describe('prepareOutput', () => {
     });
 
     test('other platform-specific output-templates are removed', () => {
-      const preparedOutput = strategy.prepareOutput({
+      const preparedOutput = strategy.normalizeOutput({
         message: 'foo',
         platforms: {
           example: {

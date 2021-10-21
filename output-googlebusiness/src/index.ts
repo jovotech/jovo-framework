@@ -2,7 +2,7 @@ import { registerOutputPlatform } from '@jovotech/output';
 import {
   CardContent,
   CarouselCard,
-  GoogleBusinessOutputTemplate,
+  NormalizedGoogleBusinessOutputTemplate,
   RichCard,
   StandaloneCard,
   Suggestion,
@@ -41,14 +41,14 @@ declare module '@jovotech/output/dist/types/models/QuickReply' {
 // augment the prototypes of the generic models to have methods to convert to the GoogleBusiness-variant
 augmentModelPrototypes();
 
-// Make GoogleAssistantOutputTemplate available for the OutputTemplatePlatforms-object via the googleBusiness-key.
-declare module '@jovotech/output/dist/types/models/OutputTemplatePlatforms' {
-  interface OutputTemplatePlatforms {
-    googleBusiness?: GoogleBusinessOutputTemplate;
+// Make NormalizedGoogleAssistantOutputTemplate available for the NormalizedOutputTemplatePlatforms-object via the googleBusiness-key.
+declare module '@jovotech/output/dist/types/models/NormalizedOutputTemplatePlatforms' {
+  interface NormalizedOutputTemplatePlatforms {
+    googleBusiness?: NormalizedGoogleBusinessOutputTemplate;
   }
 }
 // Additionally, make class-validator and class-transformer aware of the added property.
-registerOutputPlatform('googleBusiness', GoogleBusinessOutputTemplate);
+registerOutputPlatform('googleBusiness', NormalizedGoogleBusinessOutputTemplate);
 
 export * from './decorators/validation/IsValidRichCardObject';
 export * from './decorators/validation/IsValidSuggestedActionObject';

@@ -2,6 +2,7 @@ export * from './GoogleAssistantOutputTemplate';
 export * from './GoogleAssistantOutputTemplateResponse';
 export * from './GoogleAssistantResponse';
 export * from './LinkOutSuggestion';
+export * from './NormalizedGoogleAssistantOutputTemplate';
 export * from './OutputRichResponse';
 export * from './RichResponse';
 export * from './RichResponseItem';

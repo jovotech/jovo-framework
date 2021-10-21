@@ -2,7 +2,7 @@ import {
   Carousel,
   MessageValue,
   MultipleResponsesOutputTemplateConverterStrategy,
-  OutputTemplate,
+  NormalizedOutputTemplate,
   OutputTemplateConverterStrategyConfig,
   QuickReply,
   QuickReplyValue,
@@ -14,7 +14,7 @@ import {
   QUICK_REPLY_TITLE_MAX_LENGTH,
 } from './constants';
 import {
-  FacebookMessengerOutputTemplate,
+  NormalizedFacebookMessengerOutputTemplate,
   FacebookMessengerResponse,
   GenericTemplate,
   Message as FacebookMessengerMessage,
@@ -34,7 +34,10 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
   readonly platformName: string = 'facebookMessenger';
 
   // maybe we need more context here, like index of template
-  protected sanitizeOutput(output: OutputTemplate, index?: number): OutputTemplate {
+  protected sanitizeOutput(
+    output: NormalizedOutputTemplate,
+    index?: number,
+  ): NormalizedOutputTemplate {
     const pathPrefix = index ? `[${index}]` : '';
     if (output.message) {
       output.message = this.sanitizeMessage(output.message, `${pathPrefix}.message`);
@@ -81,11 +84,13 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
     return super.sanitizeQuickReplies(quickReplies, path, maxSize, maxLength);
   }
 
-  convertOutput(output: OutputTemplate): FacebookMessengerResponse | FacebookMessengerResponse[] {
+  convertOutput(
+    output: NormalizedOutputTemplate,
+  ): FacebookMessengerResponse | FacebookMessengerResponse[] {
     const makeResponse: (message: FacebookMessengerMessage) => FacebookMessengerResponse = (
       message,
     ) =>
-      this.prepareResponse({
+      this.normalizeResponse({
         messaging_type: MessagingType.Response,
         recipient: {
           id: '',
@@ -114,7 +119,7 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
     }
 
     const platformOutput = output.platforms?.[this.platformName] as
-      | FacebookMessengerOutputTemplate
+      | NormalizedFacebookMessengerOutputTemplate
       | undefined;
 
     if (platformOutput?.template) {
@@ -153,8 +158,8 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
     return responses.length === 1 ? responses[0] : responses;
   }
 
-  convertResponse(response: FacebookMessengerResponse): OutputTemplate {
-    const output: OutputTemplate = {};
+  convertResponse(response: FacebookMessengerResponse): NormalizedOutputTemplate {
+    const output: NormalizedOutputTemplate = {};
 
     if (response.message?.text) {
       output.message = response.message.text;

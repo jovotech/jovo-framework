@@ -1,7 +1,4 @@
-import { PlatformOutputTemplate, Type } from '@jovotech/output';
-import { CoreOutputTemplateResponse } from './CoreOutputTemplateResponse';
+import { DenormalizePlatformOutputTemplate } from '@jovotech/output';
+import { NormalizedCoreOutputTemplate } from './NormalizedCoreOutputTemplate';
 
-export class CoreOutputTemplate extends PlatformOutputTemplate<CoreOutputTemplateResponse> {
-  @Type(() => CoreOutputTemplateResponse)
-  nativeResponse?: CoreOutputTemplateResponse;
-}
+export type CoreOutputTemplate = DenormalizePlatformOutputTemplate<NormalizedCoreOutputTemplate>;

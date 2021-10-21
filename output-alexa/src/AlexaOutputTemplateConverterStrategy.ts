@@ -5,7 +5,7 @@ import {
   DynamicEntityMap,
   mergeInstances,
   MessageValue,
-  OutputTemplate,
+  NormalizedOutputTemplate,
   OutputTemplateConverterStrategyConfig,
   QuickReplyValue,
   SingleResponseOutputTemplateConverterStrategy,
@@ -38,7 +38,7 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
     return { ...super.getDefaultConfig(), genericOutputToApl: true };
   }
 
-  protected sanitizeOutput(output: OutputTemplate): OutputTemplate {
+  protected sanitizeOutput(output: NormalizedOutputTemplate): NormalizedOutputTemplate {
     if (output.message) {
       output.message = this.sanitizeMessage(output.message, 'message');
     }
@@ -78,8 +78,8 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
     return super.sanitizeDynamicEntities(dynamicEntities, path, maxSize);
   }
 
-  toResponse(output: OutputTemplate): AlexaResponse {
-    const response: AlexaResponse = this.prepareResponse({ version: '1.0', response: {} });
+  toResponse(output: NormalizedOutputTemplate): AlexaResponse {
+    const response: AlexaResponse = this.normalizeResponse({ version: '1.0', response: {} });
 
     const addToDirectives = <DIRECTIVES extends Directive[]>(...directives: DIRECTIVES) => {
       if (!response.response.directives) {
@@ -166,8 +166,8 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
     return response;
   }
 
-  fromResponse(response: AlexaResponse): OutputTemplate {
-    const output: OutputTemplate = {};
+  fromResponse(response: AlexaResponse): NormalizedOutputTemplate {
+    const output: NormalizedOutputTemplate = {};
 
     if (
       (response.response.outputSpeech?.text || response.response.outputSpeech?.ssml) &&

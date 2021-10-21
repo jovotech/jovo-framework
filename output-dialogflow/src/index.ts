@@ -1,5 +1,5 @@
 import { registerOutputPlatform } from '@jovotech/output';
-import { Card as DialogflowCard, DialogflowOutputTemplate, Text } from './models';
+import { Card as DialogflowCard, NormalizedDialogflowOutputTemplate, Text } from './models';
 import { augmentModelPrototypes } from './utilities';
 
 declare module '@jovotech/output/dist/types/models/Card' {
@@ -23,14 +23,14 @@ declare module '@jovotech/output/dist/types/models/QuickReply' {
 // augment the prototypes of the generic models to have methods to convert to the Dialogflow-variant
 augmentModelPrototypes();
 
-// Make DialogflowOutputTemplate available for the OutputTemplatePlatforms-object via the dialogflow-key.
-declare module '@jovotech/output/dist/types/models/OutputTemplatePlatforms' {
-  interface OutputTemplatePlatforms {
-    dialogflow?: DialogflowOutputTemplate;
+// Make NormalizedDialogflowOutputTemplate available for the NormalizedOutputTemplatePlatforms-object via the dialogflow-key.
+declare module '@jovotech/output/dist/types/models/NormalizedOutputTemplatePlatforms' {
+  interface NormalizedOutputTemplatePlatforms {
+    dialogflow?: NormalizedDialogflowOutputTemplate;
   }
 }
 // Additionally, make class-validator and class-transformer aware of the added property.
-registerOutputPlatform('dialogflow', DialogflowOutputTemplate);
+registerOutputPlatform('dialogflow', NormalizedDialogflowOutputTemplate);
 
 export * from './decorators/validation/EntitySynonymsContainValue';
 export * from './decorators/validation/IsValidMessageContentObject';

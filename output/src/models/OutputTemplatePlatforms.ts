@@ -1,5 +1,9 @@
-import { PlatformOutputTemplate } from './PlatformOutputTemplate';
+import { NormalizedOutputTemplatePlatforms } from './NormalizedOutputTemplatePlatforms';
+import { DenormalizePlatformOutputTemplate } from './PlatformOutputTemplate';
 
-export class OutputTemplatePlatforms {
-  [key: string]: PlatformOutputTemplate | undefined;
-}
+// Construct an object-type that has the same keys as NormalizedOutputTemplatePlatforms but every value is denormalized
+export type OutputTemplatePlatforms = {
+  [P in keyof NormalizedOutputTemplatePlatforms]:
+    | DenormalizePlatformOutputTemplate<Exclude<NormalizedOutputTemplatePlatforms[P], undefined>>
+    | undefined;
+};

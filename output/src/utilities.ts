@@ -1,16 +1,16 @@
 import { Type } from 'class-transformer';
 import _merge from 'lodash.merge';
 import type { A, O } from 'ts-toolbelt';
-import { IsOptional, Listen, ListenValue, ValidateNested, ValidationError } from '.';
-import { OutputTemplatePlatforms } from './models/OutputTemplatePlatforms';
+import { IsOptional, ListenValue, ValidateNested, ValidationError } from '.';
+import { NormalizedOutputTemplatePlatforms } from './models/NormalizedOutputTemplatePlatforms';
 
 export function registerOutputPlatform<TYPE extends Record<string, unknown>>(
   platformKey: string,
   platformType: new () => TYPE,
 ): void {
-  IsOptional()(OutputTemplatePlatforms.prototype, platformKey);
-  ValidateNested()(OutputTemplatePlatforms.prototype, platformKey);
-  Type(() => platformType)(OutputTemplatePlatforms.prototype, platformKey);
+  IsOptional()(NormalizedOutputTemplatePlatforms.prototype, platformKey);
+  ValidateNested()(NormalizedOutputTemplatePlatforms.prototype, platformKey);
+  Type(() => platformType)(NormalizedOutputTemplatePlatforms.prototype, platformKey);
 }
 
 export function isSSML(text: string): boolean {

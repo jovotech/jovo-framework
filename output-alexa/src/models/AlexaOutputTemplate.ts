@@ -1,13 +1,4 @@
-import { PlatformOutputTemplate, Type, IsOptional, ValidateNested } from '@jovotech/output';
-import { AlexaOutputTemplateResponse } from './AlexaOutputTemplateResponse';
-import { AplList } from './apl/AplList';
+import { DenormalizePlatformOutputTemplate } from '@jovotech/output';
+import { NormalizedAlexaOutputTemplate } from './NormalizedAlexaOutputTemplate';
 
-export class AlexaOutputTemplate extends PlatformOutputTemplate<AlexaOutputTemplateResponse> {
-  @Type(() => AlexaOutputTemplateResponse)
-  nativeResponse?: AlexaOutputTemplateResponse;
-
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => AplList)
-  list?: AplList;
-}
+export type AlexaOutputTemplate = DenormalizePlatformOutputTemplate<NormalizedAlexaOutputTemplate>;

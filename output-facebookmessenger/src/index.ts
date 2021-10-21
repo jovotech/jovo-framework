@@ -1,7 +1,7 @@
 import { registerOutputPlatform } from '@jovotech/output';
 import {
   Button,
-  FacebookMessengerOutputTemplate,
+  NormalizedFacebookMessengerOutputTemplate,
   GenericTemplate,
   GenericTemplateDefaultAction,
   GenericTemplateElement,
@@ -43,14 +43,14 @@ declare module '@jovotech/output/dist/types/models/QuickReply' {
 // augment the prototypes of the generic models to have methods to convert to the FacebookMessenger-variant
 augmentModelPrototypes();
 
-// Make FacebookMessengerOutputTemplate available for the OutputTemplatePlatforms-object via the facebookMessenger-key.
-declare module '@jovotech/output/dist/types/models/OutputTemplatePlatforms' {
-  interface OutputTemplatePlatforms {
-    facebookMessenger?: FacebookMessengerOutputTemplate;
+// Make NormalizedFacebookMessengerOutputTemplate available for the NormalizedOutputTemplatePlatforms-object via the facebookMessenger-key.
+declare module '@jovotech/output/dist/types/models/NormalizedOutputTemplatePlatforms' {
+  interface NormalizedOutputTemplatePlatforms {
+    facebookMessenger?: NormalizedFacebookMessengerOutputTemplate;
   }
 }
 // Additionally, make class-validator and class-transformer aware of the added property.
-registerOutputPlatform('facebookMessenger', FacebookMessengerOutputTemplate);
+registerOutputPlatform('facebookMessenger', NormalizedFacebookMessengerOutputTemplate);
 
 export * from './decorators/transformation/TransformButton';
 export * from './decorators/transformation/TransformTemplate';

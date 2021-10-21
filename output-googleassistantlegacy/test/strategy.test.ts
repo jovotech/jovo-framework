@@ -1,6 +1,6 @@
 import {
   Card,
-  OutputTemplate,
+  NormalizedOutputTemplate,
   OutputTemplateConverter,
   OutputValidationError,
   PlainObjectType,
@@ -20,7 +20,7 @@ const outputConverter = new OutputTemplateConverter(
 );
 
 async function convertToResponseAndExpectToEqual(
-  output: OutputTemplate,
+  output: NormalizedOutputTemplate,
   expectedResponse: PlainObjectType<GoogleAssistantResponse>,
 ) {
   expect(await outputConverter.toResponse(output)).toEqual(expectedResponse);
@@ -28,7 +28,7 @@ async function convertToResponseAndExpectToEqual(
 
 async function convertToOutputAndExpectToEqual(
   response: PlainObjectType<GoogleAssistantResponse>,
-  expectedOutput: OutputTemplate,
+  expectedOutput: NormalizedOutputTemplate,
 ) {
   expect(await outputConverter.fromResponse(response as GoogleAssistantResponse)).toEqual(
     expectedOutput,

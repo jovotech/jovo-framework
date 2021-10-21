@@ -2,7 +2,7 @@ import { registerOutputPlatform } from '@jovotech/output';
 import {
   Card as GoogleAssistantCard,
   Collection,
-  GoogleAssistantOutputTemplate,
+  NormalizedGoogleAssistantOutputTemplate,
   Simple,
   Suggestion,
   TypeOverride,
@@ -36,14 +36,14 @@ declare module '@jovotech/output/dist/types/models/QuickReply' {
 // augment the prototypes of the generic models to have methods to convert to the GoogleAssistant-variant
 augmentModelPrototypes();
 
-// Make GoogleAssistantOutputTemplate available for the OutputTemplatePlatforms-object via the googleAssistant-key.
-declare module '@jovotech/output/dist/types/models/OutputTemplatePlatforms' {
-  interface OutputTemplatePlatforms {
-    googleAssistant?: GoogleAssistantOutputTemplate;
+// Make NormalizedGoogleAssistantOutputTemplate available for the NormalizedOutputTemplatePlatforms-object via the googleAssistant-key.
+declare module '@jovotech/output/dist/types/models/NormalizedOutputTemplatePlatforms' {
+  interface NormalizedOutputTemplatePlatforms {
+    googleAssistant?: NormalizedGoogleAssistantOutputTemplate;
   }
 }
 // Additionally, make class-validator and class-transformer aware of the added property.
-registerOutputPlatform('googleAssistant', GoogleAssistantOutputTemplate);
+registerOutputPlatform('googleAssistant', NormalizedGoogleAssistantOutputTemplate);
 
 export * from './models';
 export * from './constants';

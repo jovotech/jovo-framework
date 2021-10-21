@@ -1,7 +1,5 @@
-import { PlatformOutputTemplate, Type } from '@jovotech/output';
-import { GoogleAssistantOutputTemplateResponse } from './GoogleAssistantOutputTemplateResponse';
+import { DenormalizePlatformOutputTemplate } from '@jovotech/output';
+import { NormalizedGoogleAssistantOutputTemplate } from './NormalizedGoogleAssistantOutputTemplate';
 
-export class GoogleAssistantOutputTemplate extends PlatformOutputTemplate<GoogleAssistantOutputTemplateResponse> {
-  @Type(() => GoogleAssistantOutputTemplateResponse)
-  nativeResponse?: GoogleAssistantOutputTemplateResponse;
-}
+export type GoogleAssistantOutputTemplate =
+  DenormalizePlatformOutputTemplate<NormalizedGoogleAssistantOutputTemplate>;

@@ -1,7 +1,5 @@
-import { PlatformOutputTemplate, Type } from '@jovotech/output';
-import { DialogflowResponse } from './DialogflowResponse';
+import { DenormalizePlatformOutputTemplate } from '@jovotech/output';
+import { NormalizedDialogflowOutputTemplate } from './NormalizedDialogflowOutputTemplate';
 
-export class DialogflowOutputTemplate extends PlatformOutputTemplate<DialogflowResponse> {
-  @Type(() => DialogflowResponse)
-  nativeResponse?: DialogflowResponse;
-}
+export type DialogflowOutputTemplate =
+  DenormalizePlatformOutputTemplate<NormalizedDialogflowOutputTemplate>;

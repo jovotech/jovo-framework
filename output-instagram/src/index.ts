@@ -5,7 +5,7 @@ import {
   GenericTemplateElement,
   QuickReply as InstagramQuickReply,
 } from '@jovotech/output-facebookmessenger';
-import { InstagramOutputTemplate } from './models';
+import { NormalizedInstagramOutputTemplate } from './models';
 import { augmentModelPrototypes } from './utilities';
 
 declare module '@jovotech/output/dist/types/models/Card' {
@@ -38,14 +38,14 @@ declare module '@jovotech/output/dist/types/models/QuickReply' {
 // Augment the prototypes of the generic models to have methods to convert to the Instagram-variant
 augmentModelPrototypes();
 
-// Make InstagramOutputTemplate available for the OutputTemplatePlatforms-object via the instagram-key
-declare module '@jovotech/output/dist/types/models/OutputTemplatePlatforms' {
-  interface OutputTemplatePlatforms {
-    instagram?: InstagramOutputTemplate;
+// Make NormalizedInstagramOutputTemplate available for the NormalizedOutputTemplatePlatforms-object via the instagram-key
+declare module '@jovotech/output/dist/types/models/NormalizedOutputTemplatePlatforms' {
+  interface NormalizedOutputTemplatePlatforms {
+    instagram?: NormalizedInstagramOutputTemplate;
   }
 }
 // Additionally, make class-validator and class-transformer aware of the added property
-registerOutputPlatform('instagram', InstagramOutputTemplate);
+registerOutputPlatform('instagram', NormalizedInstagramOutputTemplate);
 
 export * from '@jovotech/output-facebookmessenger';
 export * from './models';

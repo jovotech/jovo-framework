@@ -1,6 +1,7 @@
 export * from './FacebookMessengerOutputTemplate';
 export * from './FacebookMessengerOutputTemplateResponse';
 export * from './FacebookMessengerResponse';
+export * from './NormalizedFacebookMessengerOutputTemplate';
 export * from './button/Button';
 export * from './button/CallButton';
 export * from './button/GamePlayButton';

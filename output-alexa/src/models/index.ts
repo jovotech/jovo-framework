@@ -2,6 +2,7 @@ export * from './AlexaOutputTemplate';
 export * from './AlexaOutputTemplateResponse';
 export * from './AlexaResponse';
 export * from './Directive';
+export * from './NormalizedAlexaOutputTemplate';
 export * from './Reprompt';
 export * from './Response';
 export * from './apl/AplDataSource';

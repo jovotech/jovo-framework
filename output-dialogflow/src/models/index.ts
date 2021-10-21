@@ -3,6 +3,7 @@ export * from './DialogflowOutputTemplate';
 export * from './DialogflowResponse';
 export * from './EventInput';
 export * from './Message';
+export * from './NormalizedDialogflowOutputTemplate';
 export * from './SessionEntityType';
 export * from './message/Card';
 export * from './message/Image';
