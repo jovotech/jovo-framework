@@ -1,6 +1,6 @@
-import {BaseComponent, Component, Intents} from '@jovotech/framework';
+import { BaseComponent, Component, Intents } from '@jovotech/framework';
 
-import {YesNoOutput} from '../output/YesNoOutput';
+import { YesNoOutput } from '../output/YesNoOutput';
 
 @Component()
 export class LoveHatePizzaComponent extends BaseComponent {

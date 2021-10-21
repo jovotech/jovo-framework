@@ -1,5 +1,5 @@
-import {app} from './app';
-import {Lambda} from '@jovotech/server-lambda';
+import { app } from './app';
+import { Lambda } from '@jovotech/server-lambda';
 
 export const handler = async (event, context, callback) => {
   await app.initialize();
