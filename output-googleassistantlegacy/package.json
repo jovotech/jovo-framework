@@ -1,0 +1,52 @@
+{
+  "name": "@jovotech/output-googleassistantlegacy",
+  "version": "4.0.0-beta.6",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm5/index.js",
+  "es2015": "dist/esm2015/index.js",
+  "types": "dist/types/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prebuild": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json --clean",
+    "build": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json",
+    "watch": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json --watch",
+    "update-model-exports": "barrelsby -d src/models -D -q ",
+    "prettier": "prettier -w -l src test",
+    "eslint": "eslint src test --fix --ext .ts",
+    "rimraf": "rimraf ./dist",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@jovotech/output": "^4.0.0-beta.6",
+    "@types/jest": "^26.0.20",
+    "@typescript-eslint/eslint-plugin": "^4.12.0",
+    "@typescript-eslint/parser": "^4.12.0",
+    "barrelsby": "^2.2.0",
+    "eslint": "^7.17.0",
+    "eslint-config-prettier": "^7.1.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "jest": "^26.6.3",
+    "prettier": "^2.2.1",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^26.5.4",
+    "typescript": "^4.2.3"
+  },
+  "peerDependencies": {
+    "@jovotech/output": "4.0.0-beta.6"
+  },
+  "bugs": {
+    "url": "https://github.com/jovotech/jovo-output/issues"
+  },
+  "homepage": "https://github.com/jovotech/jovo-output#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jovotech/jovo-output.git"
+  },
+  "prettier": "../.prettierrc.js",
+  "publishConfig": {
+    "access": "public"
+  }
+}
