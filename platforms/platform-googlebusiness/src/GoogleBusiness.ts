@@ -5,7 +5,7 @@ import {
   OutputTemplate,
   OutputTemplateConverter,
 } from '@jovotech/framework';
-import { DeepPartial, JovoError } from '@jovotech/common';
+import { DeepPartial, JovoError } from '@jovotech/framework';
 
 import {
   GoogleBusinessOutputTemplateConverterStrategy,

@@ -1,5 +1,5 @@
 import { Headers, QueryParams, Server } from '@jovotech/framework';
-import { AnyObject } from '@jovotech/common';
+import { AnyObject } from '@jovotech/framework';
 
 export class MockServer extends Server {
   constructor(readonly req: AnyObject) {

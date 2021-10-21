@@ -6,7 +6,7 @@ import { AlexaRequest } from './AlexaRequest';
 import { AlexaRequestBuilder } from './AlexaRequestBuilder';
 import { AlexaUser } from './AlexaUser';
 import { SUPPORTED_APL_ARGUMENT_TYPES } from './constants';
-import { AnyObject } from '@jovotech/common';
+import { AnyObject } from '@jovotech/framework';
 
 export interface AlexaConfig extends ExtensibleConfig {
   output: {

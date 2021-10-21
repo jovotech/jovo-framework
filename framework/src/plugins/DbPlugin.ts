@@ -1,4 +1,4 @@
-import { AnyObject } from '@jovotech/common';
+import { AnyObject } from '@jovotech/framework';
 import { HandleRequest, InvalidParentError } from '..';
 import { ExtensibleInitConfig } from '../Extensible';
 import {

@@ -48,7 +48,6 @@
     "@jovotech/cli-core": "^4.0.0-beta.4",
     "@jovotech/filebuilder": "^0.0.1",
     "@jovotech/framework": "^4.0.0-beta.7",
-    "@jovotech/common": "4.0.0-beta.1",
     "@types/copyfiles": "^2.4.1",
     "@types/fs-extra": "^8.1.0",
     "@types/jest": "^26.0.20",
@@ -81,8 +80,7 @@
     "@jovotech/cli-command-new": "^4.0.0-beta.4",
     "@jovotech/cli-core": "^4.0.0-beta.4",
     "@jovotech/filebuilder": "^0.0.1",
-    "@jovotech/framework": "4.0.0-beta.7",
-    "@jovotech/common": "4.0.0-beta.1"
+    "@jovotech/framework": "4.0.0-beta.7"
   },
   "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176",
   "prettier": "../../.prettierrc.js",

@@ -1,6 +1,6 @@
 import { ExtensibleConfig, Platform } from '@jovotech/framework';
 import { CoreOutputTemplateConverterStrategy } from '@jovotech/output-core';
-import { AnyObject } from '@jovotech/common';
+import { AnyObject } from '@jovotech/framework';
 
 import { CoreResponse } from '.';
 import { Core } from './Core';

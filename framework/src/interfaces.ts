@@ -1,5 +1,5 @@
 import { Entity } from '@jovotech/output';
-import { AnyObject, UnknownObject } from '@jovotech/common';
+import { AnyObject, UnknownObject } from '@jovotech/framework';
 import { Jovo } from './Jovo';
 import { PluginConfig } from './Plugin';
 

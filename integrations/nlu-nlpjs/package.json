@@ -28,7 +28,6 @@
   },
   "devDependencies": {
     "@jovotech/framework": "^4.0.0-beta.7",
-    "@jovotech/common": "4.0.0-beta.1",
     "@types/jest": "^26.0.20",
     "@types/node": "^10.17.50",
     "@types/tv4": "^1.2.29",
@@ -44,8 +43,7 @@
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
-    "@jovotech/framework": "4.0.0-beta.7",
-    "@jovotech/common": "4.0.0-beta.1"
+    "@jovotech/framework": "4.0.0-beta.7"
   },
   "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176",
   "prettier": "../../.prettierrc.js",

@@ -16,7 +16,7 @@ import {
   PersistableSessionData,
   PersistableUserData,
 } from '@jovotech/framework';
-import { UnknownObject } from '@jovotech/common';
+import { UnknownObject } from '@jovotech/framework';
 
 export interface DynamoDbConfig extends DbPluginConfig {
   table: {

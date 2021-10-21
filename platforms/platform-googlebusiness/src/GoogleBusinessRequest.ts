@@ -1,5 +1,5 @@
 import { EntityMap, InputType, InputTypeLike, JovoInput, JovoRequest } from '@jovotech/framework';
-import { UnknownObject } from '@jovotech/common';
+import { UnknownObject } from '@jovotech/framework';
 
 import { GoogleBusinessCapabilityType } from './GoogleBusinessDevice';
 import { Receipt } from './interfaces';

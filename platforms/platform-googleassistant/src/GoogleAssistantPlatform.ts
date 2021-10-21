@@ -3,7 +3,7 @@ import {
   GoogleAssistantOutputTemplateConverterStrategy,
   GoogleAssistantResponse,
 } from '@jovotech/output-googleassistant';
-import { AnyObject } from '@jovotech/common';
+import { AnyObject } from '@jovotech/framework';
 
 import _mergeWith from 'lodash.mergewith';
 import { v4 as uuidV4 } from 'uuid';

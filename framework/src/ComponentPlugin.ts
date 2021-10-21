@@ -1,4 +1,4 @@
-import { DeepPartial } from '@jovotech/common';
+import { DeepPartial } from '@jovotech/framework';
 import { App } from './App';
 import {
   BaseComponent,

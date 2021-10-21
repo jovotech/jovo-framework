@@ -1,5 +1,5 @@
 import { RequestBuilder } from '@jovotech/framework';
-import { UnknownObject } from '@jovotech/common';
+import { UnknownObject } from '@jovotech/framework';
 import { join as joinPaths } from 'path';
 import { CorePlatform } from './CorePlatform';
 import { CoreRequest } from './CoreRequest';

@@ -9,7 +9,7 @@ import {
   NluData,
   NluPlugin,
 } from '@jovotech/framework';
-import { JovoError } from '@jovotech/common';
+import { JovoError } from '@jovotech/framework';
 
 import { EntityType, IntentEntityType, JovoModelData } from '@jovotech/model';
 import { join as joinPaths, resolve } from 'path';

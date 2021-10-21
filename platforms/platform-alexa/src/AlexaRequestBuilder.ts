@@ -2,7 +2,7 @@ import { RequestBuilder } from '@jovotech/framework';
 import { join as joinPaths } from 'path';
 import { AlexaPlatform } from './AlexaPlatform';
 import { AlexaRequest } from './AlexaRequest';
-import { UnknownObject } from '@jovotech/common';
+import { UnknownObject } from '@jovotech/framework';
 
 export class AlexaRequestBuilder extends RequestBuilder<AlexaPlatform> {
   launch(json?: UnknownObject): AlexaRequest {

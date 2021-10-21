@@ -1,5 +1,5 @@
 import { axios, JovoUser } from '@jovotech/framework';
-import { JovoError } from '@jovotech/common';
+import { JovoError } from '@jovotech/framework';
 
 import { AccountLinkingStatus, UserVerificationStatus } from '@jovotech/output-googleassistant';
 import { GoogleAssistant } from './GoogleAssistant';

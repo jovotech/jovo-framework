@@ -1,5 +1,5 @@
 import { PluginConfig, PluginContext } from '@jovotech/cli-core';
-import { UnknownObject } from '@jovotech/common';
+import { UnknownObject } from '@jovotech/framework';
 
 import { SupportedLocales } from './constants';
 

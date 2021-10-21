@@ -10,7 +10,7 @@ import {
   Plugin,
   PluginConfig,
 } from '@jovotech/framework';
-import { AnyObject, DeepPartial, JovoError, UnknownObject } from '@jovotech/common';
+import { AnyObject, DeepPartial, JovoError, UnknownObject } from '@jovotech/framework';
 
 import { NlpjsNlu, NlpjsNluInitConfig } from '@jovotech/nlu-nlpjs';
 import { CorePlatform, CorePlatformConfig } from '@jovotech/platform-core';

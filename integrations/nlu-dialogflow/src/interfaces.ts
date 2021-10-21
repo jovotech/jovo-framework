@@ -1,4 +1,4 @@
-import type { AnyObject } from '@jovotech/common';
+import type { AnyObject } from '@jovotech/framework';
 import type { Message } from '@jovotech/output-dialogflow';
 
 export interface DetectIntentRequest {

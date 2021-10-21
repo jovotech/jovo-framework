@@ -1,4 +1,4 @@
-import { AnyObject, Constructor } from '@jovotech/common';
+import { AnyObject, Constructor } from '@jovotech/framework';
 import { ClassDecoratorMetadata } from './ClassDecoratorMetadata';
 
 export abstract class MethodDecoratorMetadata<

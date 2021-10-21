@@ -31,7 +31,6 @@
     "@jovotech/cli-core": "^4.0.0-beta.4",
     "@jovotech/filebuilder": "^0.0.1",
     "@jovotech/framework": "^4.0.0-beta.7",
-    "@jovotech/common": "4.0.0-beta.1",
     "@jovotech/model": "^4.0.0-beta.3",
     "@jovotech/model-dialogflow": "^4.0.0-beta.3",
     "@jovotech/model-google": "^4.0.0-beta.3",
@@ -70,8 +69,7 @@
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
-    "@jovotech/framework": "4.0.0-beta.7",
-    "@jovotech/common": "4.0.0-beta.1"
+    "@jovotech/framework": "4.0.0-beta.7"
   },
   "browser": {
     "@jovotech/cli-command-build": false,

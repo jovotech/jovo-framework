@@ -8,7 +8,7 @@ import {
   NluPlugin,
   NluPluginConfig,
 } from '@jovotech/framework';
-import { DeepPartial } from '@jovotech/common';
+import { DeepPartial } from '@jovotech/framework';
 
 import { RasaEntity, RasaIntent, RasaResponse } from './interfaces';
 

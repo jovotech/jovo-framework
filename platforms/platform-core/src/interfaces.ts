@@ -1,5 +1,5 @@
 import { Capability, JovoSession } from '@jovotech/framework';
-import { UnknownObject } from '@jovotech/common';
+import { UnknownObject } from '@jovotech/framework';
 
 export interface Intent {
   name: string;

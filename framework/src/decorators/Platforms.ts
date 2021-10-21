@@ -1,4 +1,4 @@
-import { OmitIndex } from '@jovotech/common';
+import { OmitIndex } from '@jovotech/framework';
 import { getValuesOfDecoratorRestParameter, OutputTemplatePlatforms } from '../index';
 import { createHandlerOptionDecorator } from '../metadata/HandlerOptionMetadata';
 

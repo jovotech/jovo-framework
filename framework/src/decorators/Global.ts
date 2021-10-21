@@ -1,4 +1,4 @@
-import { AnyObject } from '@jovotech/common';
+import { AnyObject } from '@jovotech/framework';
 import { ComponentConstructor } from '../BaseComponent';
 import { createComponentOptionDecorator } from '../metadata/ComponentOptionMetadata';
 import { createHandlerOptionDecorator } from '../metadata/HandlerOptionMetadata';

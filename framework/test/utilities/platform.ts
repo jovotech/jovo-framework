@@ -3,7 +3,7 @@ import {
   OutputTemplateConverterStrategy,
   OutputTemplateConverterStrategyConfig,
 } from '@jovotech/output';
-import { AnyObject, UnknownObject } from '@jovotech/common';
+import { AnyObject, UnknownObject } from '@jovotech/framework';
 
 import {
   CapabilityType,

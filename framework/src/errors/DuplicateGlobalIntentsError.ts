@@ -1,4 +1,4 @@
-import { JovoError } from '@jovotech/common';
+import { JovoError } from '@jovotech/framework';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
 
 export function buildDuplicateGlobalIntentsErrorMessage(

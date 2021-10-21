@@ -1,4 +1,4 @@
-import { ArrayElement } from '@jovotech/common';
+import { ArrayElement } from '@jovotech/framework';
 import { Jovo } from './index';
 import { Middleware, MiddlewareFunction } from './Middleware';
 

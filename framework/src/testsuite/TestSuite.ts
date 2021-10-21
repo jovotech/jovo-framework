@@ -4,7 +4,7 @@ import {
   OutputTemplateConverterStrategyConfig,
   SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
-import { Constructor, JovoError, OmitWhere } from '@jovotech/common';
+import { Constructor, JovoError, OmitWhere } from '@jovotech/framework';
 
 import { existsSync } from 'fs';
 import _cloneDeep from 'lodash.clonedeep';

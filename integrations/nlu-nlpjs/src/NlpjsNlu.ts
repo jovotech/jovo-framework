@@ -6,7 +6,7 @@ import {
   NluPluginConfig,
   Platform,
 } from '@jovotech/framework';
-import { DeepPartial, UnknownObject } from '@jovotech/common';
+import { DeepPartial, UnknownObject } from '@jovotech/framework';
 
 import { JovoModelNlpjs } from '@jovotech/model-nlpjs';
 import { promises } from 'fs';

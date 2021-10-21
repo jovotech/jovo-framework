@@ -1,4 +1,4 @@
-import { Constructor } from '@jovotech/common';
+import { Constructor } from '@jovotech/framework';
 import {
   OutputTemplateConverterStrategyConfig,
   SingleResponseOutputTemplateConverterStrategy,

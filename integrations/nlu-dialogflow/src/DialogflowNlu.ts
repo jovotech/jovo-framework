@@ -1,5 +1,5 @@
 import { Jovo, NluData, NluPlugin, NluPluginConfig } from '@jovotech/framework';
-import { DeepPartial, JovoError } from '@jovotech/common';
+import { DeepPartial, JovoError } from '@jovotech/framework';
 
 import { JWT, JWTInput } from 'google-auth-library';
 import { DIALOGFLOW_API_BASE_URL } from './constants';

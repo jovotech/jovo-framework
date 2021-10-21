@@ -1,5 +1,5 @@
 import { JovoResponse, OutputTemplate } from '@jovotech/output';
-import { DeepPartial, PickWhere, UnknownObject } from '@jovotech/common';
+import { DeepPartial, PickWhere, UnknownObject } from '@jovotech/framework';
 import _cloneDeep from 'lodash.clonedeep';
 import _merge from 'lodash.merge';
 import _set from 'lodash.set';

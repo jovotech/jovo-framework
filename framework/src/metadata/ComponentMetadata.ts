@@ -1,4 +1,4 @@
-import { AnyObject, DeepPartial, UnknownObject } from '@jovotech/common';
+import { AnyObject, DeepPartial, UnknownObject } from '@jovotech/framework';
 import {
   BaseComponent,
   ComponentConfig,
