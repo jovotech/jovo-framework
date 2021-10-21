@@ -41,14 +41,14 @@
     "@jovotech/output": "4.0.0-beta.6"
   },
   "bugs": {
-    "url": "https://github.com/jovotech/jovo-output/issues"
+    "url": "https://github.com/jovotech/jovo-framework/issues"
   },
-  "homepage": "https://github.com/jovotech/jovo-output#readme",
+  "homepage": "https://github.com/jovotech/jovo-framework#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jovotech/jovo-output.git"
+    "url": "git+https://github.com/jovotech/jovo-framework.git"
   },
-  "prettier": "../.prettierrc.js",
+  "prettier": "../../.prettierrc.js",
   "publishConfig": {
     "access": "public"
   }
