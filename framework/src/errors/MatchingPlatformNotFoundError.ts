@@ -1,4 +1,4 @@
-import { JovoError, UnknownObject } from '@jovotech/framework';
+import { JovoError, UnknownObject } from '@jovotech/common';
 
 export class MatchingPlatformNotFoundError extends JovoError {
   constructor(request: UnknownObject) {

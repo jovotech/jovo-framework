@@ -1,4 +1,4 @@
-import { UnknownObject } from '@jovotech/framework';
+import { UnknownObject } from '@jovotech/common';
 import { DbPluginStoredElementsConfig, DEFAULT_SESSION_EXPIRES_AFTER_SECONDS } from './index';
 import { ComponentData, SessionData } from './interfaces';
 

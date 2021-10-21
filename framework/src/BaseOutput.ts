@@ -1,5 +1,5 @@
 import { JovoResponse, OutputTemplate } from '@jovotech/output';
-import { DeepPartial } from '@jovotech/framework';
+import { DeepPartial } from '@jovotech/common';
 import _merge from 'lodash.merge';
 import { JovoRequest } from './index';
 import { Jovo } from './Jovo';

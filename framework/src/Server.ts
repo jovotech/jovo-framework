@@ -1,4 +1,4 @@
-import { AnyObject } from '@jovotech/framework';
+import { AnyObject } from '@jovotech/common';
 // TODO implement
 
 export interface Headers {

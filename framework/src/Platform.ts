@@ -1,5 +1,5 @@
 import { JovoResponse, OutputTemplateConverterStrategy } from '@jovotech/output';
-import { AnyObject, Constructor } from '@jovotech/framework';
+import { AnyObject, Constructor } from '@jovotech/common';
 import _merge from 'lodash.merge';
 import {
   App,

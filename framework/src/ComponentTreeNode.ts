@@ -1,4 +1,4 @@
-import { PickWhere } from '@jovotech/framework';
+import { PickWhere } from '@jovotech/common';
 import { BaseComponent, ComponentConstructor, ComponentDeclaration } from './BaseComponent';
 import { ComponentTree, Tree } from './ComponentTree';
 import { BuiltInHandler } from './enums';

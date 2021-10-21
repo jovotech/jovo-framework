@@ -1,5 +1,5 @@
 import i18next, { InitOptions, Resource, TOptionsBase } from 'i18next';
-import { AnyObject, OmitIndex } from '@jovotech/framework';
+import { AnyObject, OmitIndex } from '@jovotech/common';
 import _merge from 'lodash.merge';
 import type { A, F, U } from 'ts-toolbelt';
 

@@ -1,4 +1,4 @@
-import { UnknownObject } from '@jovotech/framework';
+import { UnknownObject } from '@jovotech/common';
 import { ComponentData, JovoComponentInfo } from './index';
 import { Jovo } from './Jovo';
 import { JovoProxy } from './JovoProxy';
