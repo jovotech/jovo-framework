@@ -33,7 +33,7 @@ const MODULE_COMPILER_OPTIONS_MAP = {
   const filteredPackages = await getFilteredPackages(
     packageGraph,
     { cwd },
-    { ignore: ['@jovotech/output', '@jovotech/output-*', '@jovotech/e2e', '@jovotech/examples-*'] },
+    { ignore: ['@jovotech/e2e', '@jovotech/examples-*'] },
   );
 
   const compilerOptionModuleKeys = Object.keys(MODULE_COMPILER_OPTIONS_MAP);
