@@ -24,6 +24,7 @@ const log = require('npmlog');
     { cwd },
     {
       ignore: [
+        '@jovotech/common',
         '@jovotech/framework',
         '@jovotech/output',
         '@jovotech/output-*',
