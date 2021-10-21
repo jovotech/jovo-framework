@@ -2,13 +2,13 @@ import {
   axios,
   AxiosRequestConfig,
   AxiosResponse,
+  DeepPartial,
   EntityMap,
   Jovo,
   NluData,
   NluPlugin,
   NluPluginConfig,
 } from '@jovotech/framework';
-import { DeepPartial } from '@jovotech/framework';
 
 import { RasaEntity, RasaIntent, RasaResponse } from './interfaces';
 

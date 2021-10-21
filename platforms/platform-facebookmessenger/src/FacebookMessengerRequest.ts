@@ -1,5 +1,11 @@
-import { EntityMap, InputType, InputTypeLike, JovoInput, JovoRequest } from '@jovotech/framework';
-import { UnknownObject } from '@jovotech/framework';
+import {
+  EntityMap,
+  InputType,
+  InputTypeLike,
+  JovoInput,
+  JovoRequest,
+  UnknownObject,
+} from '@jovotech/framework';
 
 import { FACEBOOK_LAUNCH_PAYLOAD } from '.';
 import { FacebookMessengerCapabilityType } from './FacebookMessengerDevice';

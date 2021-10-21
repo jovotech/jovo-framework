@@ -5,8 +5,8 @@ import {
   InputTypeLike,
   JovoInput,
   JovoRequest,
+  UnknownObject,
 } from '@jovotech/framework';
-import { UnknownObject } from '@jovotech/framework';
 
 import type { Device, Home, Scene, Session, User } from '@jovotech/output-googleassistant';
 import { Capability as NativeCapability } from '@jovotech/output-googleassistant';

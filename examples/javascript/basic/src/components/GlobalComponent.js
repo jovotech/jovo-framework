@@ -1,5 +1,5 @@
-import { Component, BaseComponent, Global } from '@jovotech/framework';
-import { LoveHatePizzaComponent } from './LoveHatePizzaComponent';
+import {BaseComponent, Component, Global} from '@jovotech/framework';
+import {LoveHatePizzaComponent} from './LoveHatePizzaComponent';
 
 @Global()
 @Component()

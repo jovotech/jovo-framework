@@ -1,4 +1,4 @@
-import { ExtensibleConfig, HandleRequest, Jovo, Platform } from '@jovotech/framework';
+import { AnyObject, ExtensibleConfig, HandleRequest, Jovo, Platform } from '@jovotech/framework';
 import { AlexaOutputTemplateConverterStrategy, AlexaResponse } from '@jovotech/output-alexa';
 import { Alexa } from './Alexa';
 import { AlexaDevice } from './AlexaDevice';
@@ -6,7 +6,6 @@ import { AlexaRequest } from './AlexaRequest';
 import { AlexaRequestBuilder } from './AlexaRequestBuilder';
 import { AlexaUser } from './AlexaUser';
 import { SUPPORTED_APL_ARGUMENT_TYPES } from './constants';
-import { AnyObject } from '@jovotech/framework';
 
 export interface AlexaConfig extends ExtensibleConfig {
   output: {

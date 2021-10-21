@@ -1,5 +1,4 @@
-import { Entity } from '@jovotech/framework';
-import { AnyObject } from '@jovotech/framework';
+import { AnyObject, Entity } from '@jovotech/framework';
 
 export interface Handler {
   name?: string;

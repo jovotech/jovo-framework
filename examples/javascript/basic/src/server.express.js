@@ -1,5 +1,5 @@
-import { ExpressJs, Webhook } from '@jovotech/server-express';
-import { app } from './app';
+import {ExpressJs, Webhook} from '@jovotech/server-express';
+import {app} from './app';
 
 /*
 |--------------------------------------------------------------------------

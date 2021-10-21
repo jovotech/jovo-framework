@@ -1,5 +1,4 @@
-import { BaseOutput, Output } from '@jovotech/framework';
-import { OutputTemplate } from '@jovotech/output';
+import {BaseOutput, Output} from '@jovotech/framework';
 
 @Output()
 export class YesNoOutput extends BaseOutput {

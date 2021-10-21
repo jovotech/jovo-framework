@@ -1,6 +1,5 @@
-import { AxiosError } from '@jovotech/framework';
+import { AxiosError, JovoError } from '@jovotech/framework';
 import { AlexaApiError, AlexaApiErrorCode, AlexaApiOptions, sendApiRequest } from './AlexaApi';
-import { JovoError } from '@jovotech/framework';
 
 export interface AlertInfo {
   spokenInfo: {

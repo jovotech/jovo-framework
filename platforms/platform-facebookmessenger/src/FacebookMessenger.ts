@@ -2,7 +2,9 @@ import {
   axios,
   AxiosResponse,
   BaseOutput,
+  DeepPartial,
   Jovo,
+  JovoError,
   OutputConstructor,
   OutputTemplate,
   OutputTemplateConverter,
@@ -11,7 +13,6 @@ import {
   FacebookMessengerOutputTemplateConverterStrategy,
   FacebookMessengerResponse,
 } from '@jovotech/output-facebookmessenger';
-import { DeepPartial, JovoError } from '@jovotech/framework';
 
 import { FACEBOOK_API_BASE_URL, LATEST_FACEBOOK_API_VERSION } from './constants';
 import { FacebookMessengerDevice } from './FacebookMessengerDevice';

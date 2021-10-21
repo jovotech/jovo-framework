@@ -1,6 +1,5 @@
-import { Headers, QueryParams, Server } from '@jovotech/framework';
+import { AnyObject, Headers, QueryParams, Server } from '@jovotech/framework';
 import type { Request, Response } from 'express';
-import { AnyObject } from '@jovotech/framework';
 
 export interface ErrorResponse {
   code: number;

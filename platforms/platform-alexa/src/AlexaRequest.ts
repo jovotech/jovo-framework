@@ -6,8 +6,8 @@ import {
   JovoInput,
   JovoRequest,
   JovoSession,
+  UnknownObject,
 } from '@jovotech/framework';
-import { UnknownObject } from '@jovotech/framework';
 
 import { ResolutionPerAuthorityStatusCode } from '@jovotech/output-alexa';
 import { AlexaCapability, AlexaCapabilityType } from './AlexaDevice';

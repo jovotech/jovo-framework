@@ -1,10 +1,10 @@
-import { JovoResponse, OutputTemplateConverterStrategy } from '@jovotech/output';
 import { AnyObject, Constructor } from '@jovotech/common';
+import { JovoResponse, OutputTemplateConverterStrategy } from '@jovotech/output';
 import _merge from 'lodash.merge';
 import {
   App,
-  AppMiddlewares,
   APP_MIDDLEWARES,
+  AppMiddlewares,
   DbPlugin,
   HandleRequest,
   InvalidParentError,

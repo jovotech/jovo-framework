@@ -1,5 +1,11 @@
-import { axios, AxiosRequestConfig, AxiosResponse, Method } from '@jovotech/framework';
-import { JovoError, JovoErrorOptions } from '@jovotech/framework';
+import {
+  axios,
+  AxiosRequestConfig,
+  AxiosResponse,
+  JovoError,
+  JovoErrorOptions,
+  Method,
+} from '@jovotech/framework';
 
 import { URL } from 'url';
 

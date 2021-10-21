@@ -1,16 +1,19 @@
 import {
+  AnyObject,
   App,
+  DeepPartial,
   Extensible,
   ExtensibleInitConfig,
   HandleRequest,
   InvalidParentError,
   Jovo,
+  JovoError,
   JovoRequest,
   Platform,
   Plugin,
   PluginConfig,
+  UnknownObject,
 } from '@jovotech/framework';
-import { AnyObject, DeepPartial, JovoError, UnknownObject } from '@jovotech/framework';
 
 import { NlpjsNlu, NlpjsNluInitConfig } from '@jovotech/nlu-nlpjs';
 import { CorePlatform, CorePlatformConfig } from '@jovotech/platform-core';

@@ -1,9 +1,9 @@
+import { AnyObject, UnknownObject } from '@jovotech/framework';
 import {
   OutputTemplate,
   OutputTemplateConverterStrategy,
   OutputTemplateConverterStrategyConfig,
 } from '@jovotech/output';
-import { AnyObject, UnknownObject } from '@jovotech/framework';
 
 import {
   CapabilityType,

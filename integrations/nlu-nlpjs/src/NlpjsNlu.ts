@@ -1,12 +1,13 @@
 import {
+  DeepPartial,
   EntityMap,
   Jovo,
   NluData,
   NluPlugin,
   NluPluginConfig,
   Platform,
+  UnknownObject,
 } from '@jovotech/framework';
-import { DeepPartial, UnknownObject } from '@jovotech/framework';
 
 import { JovoModelNlpjs } from '@jovotech/model-nlpjs';
 import { promises } from 'fs';

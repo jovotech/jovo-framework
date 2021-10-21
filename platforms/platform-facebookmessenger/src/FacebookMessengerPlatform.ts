@@ -1,8 +1,10 @@
 import {
+  AnyObject,
   App,
   Extensible,
   ExtensibleConfig,
   HandleRequest,
+  JovoError,
   Platform,
   Server,
   StoredElementSession,
@@ -11,7 +13,6 @@ import {
   FacebookMessengerOutputTemplateConverterStrategy,
   FacebookMessengerResponse,
 } from '@jovotech/output-facebookmessenger';
-import { AnyObject, JovoError } from '@jovotech/framework';
 
 import _cloneDeep from 'lodash.clonedeep';
 import { DEFAULT_FACEBOOK_VERIFY_TOKEN, LATEST_FACEBOOK_API_VERSION } from './constants';

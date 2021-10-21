@@ -1,11 +1,12 @@
 import {
   BaseOutput,
+  DeepPartial,
   Jovo,
+  JovoError,
   OutputConstructor,
   OutputTemplate,
   OutputTemplateConverter,
 } from '@jovotech/framework';
-import { DeepPartial, JovoError } from '@jovotech/framework';
 
 import {
   GoogleBusinessOutputTemplateConverterStrategy,

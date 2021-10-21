@@ -1,13 +1,12 @@
-import { ExtensibleConfig, Platform } from '@jovotech/framework';
+import { AnyObject, ExtensibleConfig, Platform } from '@jovotech/framework';
 import { CoreOutputTemplateConverterStrategy } from '@jovotech/output-core';
-import { AnyObject } from '@jovotech/framework';
 
 import { CoreResponse } from '.';
 import { Core } from './Core';
 import { CoreDevice } from './CoreDevice';
 import { CoreRequest } from './CoreRequest';
-import { CoreUser } from './CoreUser';
 import { CoreRequestBuilder } from './CoreRequestBuilder';
+import { CoreUser } from './CoreUser';
 
 export interface CorePlatformConfig extends ExtensibleConfig {
   platform: 'core' | string;
