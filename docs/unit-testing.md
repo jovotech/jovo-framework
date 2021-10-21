@@ -422,7 +422,7 @@ You can find all input types and properties in the [`$input` documentation](./in
 
 ### Output
 
-The `$output` array is assembled by the handlers that return output using the `$send` method. This structured output is then turned into a native platform response. [Learn more about the `$output` property here](./output.md).
+The `$output` array is assembled by the handlers that return output using the `$send()` method. This structured output is then turned into a native platform response. [Learn more about the `$output` property here](./output.md).
 
 Since the `$output` property is an array of abstracted [output templates](https://v4.jovo.tech/docs/output-templates) that work across platforms, we recommend using this method over [response testing](#response) for most use cases.
 

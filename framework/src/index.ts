@@ -38,6 +38,7 @@ export {
 } from '@jovotech/output';
 
 export * from './App';
+export * from './AsyncJovo';
 export * from './BaseComponent';
 export * from './BaseOutput';
 export * from './ComponentPlugin';
