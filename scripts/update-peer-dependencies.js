@@ -1,8 +1,5 @@
-const fs = require('fs');
-const { PackageGraph } = require('@lerna/package-graph');
 const { Project } = require('@lerna/project');
-const { getFilteredPackages } = require('@lerna/filter-options');
-const { join, relative } = require('path');
+const { join } = require('path');
 const log = require('npmlog');
 
 function getPackagesWithPeerDependency(packages, peerDependencyName) {
@@ -19,10 +16,6 @@ async function updatePeerDependents(cwd, packages, name) {
   log.info('peer', 'Updating %s peer-dependency to %s', name, peerDependencyPackage.version);
 
   const filteredPackages = getPackagesWithPeerDependency(packages, name);
-  console.log(
-    name,
-    filteredPackages.map((pkg) => pkg.name),
-  );
 
   const promises = filteredPackages.map((pkg) => {
     pkg.peerDependencies[name] = peerDependencyPackage.version;
@@ -43,11 +36,10 @@ async function updateOutputPeerDependents(cwd, packages) {
   const cwd = join(__dirname, '..');
   const project = new Project(cwd);
   const packages = await project.getPackages();
-  const packageGraph = new PackageGraph(packages);
 
   await Promise.all([
-    updateFrameworkPeerDependents(cwd, packages, packageGraph),
-    updateOutputPeerDependents(cwd, packages, packageGraph),
+    updateFrameworkPeerDependents(cwd, packages),
+    updateOutputPeerDependents(cwd, packages),
   ]);
 })()
   .then(() => {
