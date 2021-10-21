@@ -64,11 +64,15 @@ export class ComponentTreeNode<COMPONENT extends BaseComponent = BaseComponent> 
       jovo,
       this.metadata.options?.config,
     );
-    if (!componentInstance[handler as keyof COMPONENT]) {
-      throw new HandlerNotFoundError(componentInstance.constructor.name, handler.toString());
+    try {
+      if (!componentInstance[handler as keyof COMPONENT]) {
+        throw new HandlerNotFoundError(componentInstance.constructor.name, handler.toString());
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (componentInstance as any)[handler](...(callArgs || []));
+    } catch (e) {
+      return jovo.$app.handleError(e, jovo);
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await (componentInstance as any)[handler](...(callArgs || []));
   }
 
   toJSON(): Omit<ComponentTreeNode<COMPONENT>, 'parent'> & { parent?: string } {
