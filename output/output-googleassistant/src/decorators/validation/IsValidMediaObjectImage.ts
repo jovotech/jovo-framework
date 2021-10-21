@@ -4,7 +4,7 @@ import {
   validate,
   ValidationOptions,
 } from '@jovotech/output';
-import { MediaImage } from '../../models/content/Media';
+import { Image, MediaImage } from '../../models';
 
 export function IsValidMediaObjectImage(validationOptions?: ValidationOptions): PropertyDecorator {
   return IsEitherValid<MediaImage>(
