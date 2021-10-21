@@ -45,9 +45,14 @@ const MODULE_COMPILER_OPTIONS_MAP = {
     const normalizedRelativePathToBuildTsConfig = relativePathToBuildTsConfig.replace(/\\/g, '/');
 
     const writePromises = compilerOptionModuleKeys.map((key) => {
+      const compilerOptions = { ...MODULE_COMPILER_OPTIONS_MAP[key] };
+      // disable strict property initialization for output packages
+      if (pkg.name.startsWith('@jovotech/output')) {
+        compilerOptions.strictPropertyInitialization = false;
+      }
       const tsconfig = {
         extends: normalizedRelativePathToBuildTsConfig,
-        compilerOptions: MODULE_COMPILER_OPTIONS_MAP[key],
+        compilerOptions,
         include: ['src'],
       };
       const tsconfigBuffer = Buffer.from(JSON.stringify(tsconfig, undefined, 2));
