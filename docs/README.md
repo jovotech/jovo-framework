@@ -16,7 +16,7 @@ Here are a few of the key concepts of Jovo `v4`:
 
 * [Components](./components.md): A component can be seen as the equivalent of a *state* in Jovo `v3`. A Jovo app usually consists of multiple components. Each component has its own file that may contain multiple handlers.
 * [Handlers](./handlers.md): A handler responds to a certain type of request (for example, an intent) and contains the app logic. A handler can delegate to other components and return output.
-* [Output](./output.md): Using the `$send` method, you can return structured output that is then translated into a native platform response.
+* [Output](./output.md): Using the `$send()` method, you can return structured output that is then translated into a native platform response.
 
 In this guide, we will take a look at [first steps with Jovo](#first-steps-with-jovo) by installing a new project, and then go from there with [next steps](#next-steps).
 

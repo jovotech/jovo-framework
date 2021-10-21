@@ -231,21 +231,22 @@ export abstract class Jovo<
     return this.$app.i18n.t<PATH, LANGUAGE, NAMESPACE>(path, options);
   }
 
-  async $send(outputTemplate: OutputTemplate | OutputTemplate[]): Promise<void>;
+  async $send(outputTemplateOrMessage: OutputTemplate | OutputTemplate[] | string): Promise<void>;
   async $send<OUTPUT extends BaseOutput>(
     outputConstructor: OutputConstructor<OUTPUT, REQUEST, RESPONSE, this>,
     options?: DeepPartial<OUTPUT['options']>,
   ): Promise<void>;
   async $send<OUTPUT extends BaseOutput>(
-    outputConstructorOrTemplate:
+    outputConstructorOrTemplateOrMessage:
+      | string
       | OutputConstructor<OUTPUT, REQUEST, RESPONSE, this>
       | OutputTemplate
       | OutputTemplate[],
     options?: DeepPartial<OUTPUT['options']>,
   ): Promise<void> {
     let newOutput: OutputTemplate | OutputTemplate[];
-    if (typeof outputConstructorOrTemplate === 'function') {
-      const outputInstance = new outputConstructorOrTemplate(this, options);
+    if (typeof outputConstructorOrTemplateOrMessage === 'function') {
+      const outputInstance = new outputConstructorOrTemplateOrMessage(this, options);
       const output = await outputInstance.build();
       // overwrite reserved properties of the built object i.e. message
       OutputTemplate.getKeys().forEach((key) => {
@@ -262,8 +263,12 @@ export abstract class Jovo<
         }
       });
       newOutput = output;
+    } else if (typeof outputConstructorOrTemplateOrMessage === 'string') {
+      newOutput = {
+        message: outputConstructorOrTemplateOrMessage,
+      };
     } else {
-      newOutput = outputConstructorOrTemplate;
+      newOutput = outputConstructorOrTemplateOrMessage;
     }
 
     // push the new OutputTemplate(s) to $output
