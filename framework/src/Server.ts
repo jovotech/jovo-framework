@@ -48,4 +48,28 @@ export abstract class Server {
      Calls fail method of server
      **/
   abstract fail(error: Error): void;
+
+  /**
+   * Converts header keys to lowercase
+   *
+   * Example:
+   * headers = {
+   *    Host: 'localhost:3000',
+   *    Authorization: 'Bearer TOKEN',
+   * }
+   * Converts to:
+   * headers = {
+   *    host: 'localhost:3000',
+   *    authorization: 'Bearer TOKEN',
+   * }
+   *
+   *
+   * @param headers
+   */
+  static convertToLowerCaseHeaderKeys(headers: Headers): Headers {
+    return Object.keys(headers).reduce((destination: Headers, key: string) => {
+      destination[key.toLowerCase()] = headers[key];
+      return destination;
+    }, {});
+  }
 }

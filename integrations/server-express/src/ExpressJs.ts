@@ -40,7 +40,7 @@ export class ExpressJs extends Server {
   }
 
   getRequestHeaders(): Headers {
-    return this.req.headers || {};
+    return Server.convertToLowerCaseHeaderKeys(this.req.headers || {});
   }
 
   hasWriteFileAccess(): boolean {
