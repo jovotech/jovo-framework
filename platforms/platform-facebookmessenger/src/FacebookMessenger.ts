@@ -1,4 +1,4 @@
-import { axios, AxiosResponse, Jovo, JovoError } from '@jovotech/framework';
+import { AsyncJovo, axios, AxiosResponse, JovoError } from '@jovotech/framework';
 import { FacebookMessengerResponse } from '@jovotech/output-facebookmessenger';
 import { FACEBOOK_API_BASE_URL, LATEST_FACEBOOK_API_VERSION } from './constants';
 import { FacebookMessengerDevice } from './FacebookMessengerDevice';
@@ -7,7 +7,7 @@ import { FacebookMessengerRequest } from './FacebookMessengerRequest';
 import { FacebookMessengerUser } from './FacebookMessengerUser';
 import { SendMessageResult } from './interfaces';
 
-export class FacebookMessenger extends Jovo<
+export class FacebookMessenger extends AsyncJovo<
   FacebookMessengerRequest,
   FacebookMessengerResponse,
   FacebookMessenger,
