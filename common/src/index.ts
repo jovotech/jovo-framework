@@ -1,11 +1,12 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 import { PartialDeep } from 'type-fest';
 import type { A } from 'ts-toolbelt';
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyObject = Record<string, any>;
 export type UnknownObject = Record<string, unknown>;
 
 // Return the type of the items in the array.
 export type ArrayElement<ARRAY_TYPE extends readonly unknown[]> = ARRAY_TYPE[number];
+// Adapter to make it easier to replace the type in the future
 export type DeepPartial<T> = PartialDeep<T>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Constructor<T = AnyObject, ARGS extends unknown[] = any[]> = new (...args: ARGS) => T;
