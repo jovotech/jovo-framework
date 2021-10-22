@@ -133,6 +133,10 @@ export class GoogleAnalytics implements Analytics {
   setEndReason(jovo: Jovo, endReason: validEndReasons): void {
     jovo.$session.$data.endReason = endReason;
     const gaMetricNumber = this.customMetricsIndicesMap.get(endReason);
+    if (jovo.$alexaSkill?.getEndReason() === 'ERROR') {
+      // Error is increased in intent before alexa sends the session ended request
+      return;
+    }
     if (gaMetricNumber) {
       jovo.$googleAnalytics.setCustomMetric(gaMetricNumber, '1');
     } else {
@@ -272,9 +276,7 @@ export class GoogleAnalytics implements Analytics {
       // don't send anything
       return;
     }
-
-    // Stop the current tracking session.
-    jovo.$googleAnalytics.visitor!.set('sessionControl', 'end');
+    this.setEndReason(jovo, 'ERROR');
 
     return new Promise((resolve, reject) => {
       jovo.$googleAnalytics.visitor

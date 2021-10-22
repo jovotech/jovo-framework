@@ -46,6 +46,15 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
     });
   }
 
+  protected async sendError(handleRequest: HandleRequest) {
+    const jovo: Jovo = handleRequest.jovo!;
+    if (jovo?.constructor.name !== 'AlexaSkill') {
+      // don't send anything
+      return;
+    }
+    await super.sendError(handleRequest);
+  }
+
   protected setGoogleAnalyticsObject(handleRequest: HandleRequest) {
     const jovo: Jovo = handleRequest.jovo!;
     if (!jovo) {
@@ -69,6 +78,7 @@ export class GoogleAnalyticsAlexa extends GoogleAnalytics {
       return;
     }
     const endReason = jovo.$alexaSkill?.getEndReason();
+
     const responseWillEndSessionWithTell =
       _get(jovo.$output, 'Alexa.tell') || _get(jovo.$output, 'tell'); // aus AlexaCore.ts Zeile 95
     if (this.config.trackEndReasons && endReason) {
