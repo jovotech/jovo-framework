@@ -1,8 +1,7 @@
-import { EventEmitter } from 'events';
 import _defaultsDeep from 'lodash.defaultsdeep';
-import { BrowserDetector, DeepPartial, ErrorListener, VoidListener } from '..';
+import { BrowserDetector, DeepPartial, VoidListener } from '..';
+import { EventListenerMap, TypedEventEmitter } from '../utilities/TypedEventEmitter';
 
-// TODO maybe rename SpeechRecognized to Processing to have almost identical events as the AudioRecorder
 export enum SpeechRecognizerEvent {
   Start = 'start',
   Stop = 'stop',
@@ -15,15 +14,16 @@ export enum SpeechRecognizerEvent {
   End = 'end',
 }
 
-export type SpeechRecognizerEndListener = (event?: SpeechRecognitionEvent) => void;
-export type SpeechRecognizerSpeechRecognizedListener = (event: SpeechRecognitionEvent) => void;
-export type SpeechRecognizerVoidEvents =
-  | SpeechRecognizerEvent.Start
-  | SpeechRecognizerEvent.Abort
-  | SpeechRecognizerEvent.StartDetected
-  | SpeechRecognizerEvent.SilenceDetected
-  | SpeechRecognizerEvent.Timeout
-  | SpeechRecognizerEvent.Stop;
+export interface SpeechRecognizerEventListenerMap extends EventListenerMap {
+  [SpeechRecognizerEvent.End]: (event: SpeechRecognitionEvent | null) => void;
+  [SpeechRecognizerEvent.SpeechRecognized]: (event: SpeechRecognitionEvent) => void;
+  [SpeechRecognizerEvent.Start]: VoidListener;
+  [SpeechRecognizerEvent.Abort]: VoidListener;
+  [SpeechRecognizerEvent.StartDetected]: VoidListener;
+  [SpeechRecognizerEvent.SilenceDetected]: VoidListener;
+  [SpeechRecognizerEvent.Timeout]: VoidListener;
+  [SpeechRecognizerEvent.Stop]: VoidListener;
+}
 
 export interface SpeechRecognizerDetectionConfig {
   enabled: boolean;
@@ -41,7 +41,7 @@ export interface SpeechRecognizerConfig extends SpeechRecognitionConfig {
   grammars: SpeechGrammarList | null;
 }
 
-export class SpeechRecognizer extends EventEmitter {
+export class SpeechRecognizer extends TypedEventEmitter<SpeechRecognizerEventListenerMap> {
   get isRecording(): boolean {
     return this.recording;
   }
@@ -113,65 +113,7 @@ export class SpeechRecognizer extends EventEmitter {
     }
   }
 
-  addListener(
-    event: SpeechRecognizerEvent.SpeechRecognized,
-    listener: SpeechRecognizerSpeechRecognizedListener,
-  ): this;
-  addListener(event: SpeechRecognizerEvent.End, listener: SpeechRecognizerEndListener): this;
-  addListener(event: SpeechRecognizerEvent.Error, listener: ErrorListener): this;
-  addListener(event: SpeechRecognizerVoidEvents, listener: VoidListener): this;
-  addListener(event: string | symbol, listener: AnyListener): this {
-    return super.addListener(event, listener);
-  }
-
-  on(
-    event: SpeechRecognizerEvent.SpeechRecognized,
-    listener: SpeechRecognizerSpeechRecognizedListener,
-  ): this;
-  on(event: SpeechRecognizerEvent.End, listener: SpeechRecognizerEndListener): this;
-  on(event: SpeechRecognizerEvent.Error, listener: ErrorListener): this;
-  on(event: SpeechRecognizerVoidEvents, listener: VoidListener): this;
-  on(event: string | symbol, listener: AnyListener): this {
-    return super.on(event, listener);
-  }
-
-  once(
-    event: SpeechRecognizerEvent.SpeechRecognized,
-    listener: SpeechRecognizerSpeechRecognizedListener,
-  ): this;
-  once(event: SpeechRecognizerEvent.End, listener: SpeechRecognizerEndListener): this;
-  once(event: SpeechRecognizerEvent.Error, listener: ErrorListener): this;
-  once(event: SpeechRecognizerVoidEvents, listener: VoidListener): this;
-  once(event: string | symbol, listener: AnyListener): this {
-    return super.once(event, listener);
-  }
-
-  prependListener(
-    event: SpeechRecognizerEvent.SpeechRecognized,
-    listener: SpeechRecognizerSpeechRecognizedListener,
-  ): this;
-  prependListener(event: SpeechRecognizerEvent.End, listener: SpeechRecognizerEndListener): this;
-  prependListener(event: SpeechRecognizerEvent.Error, listener: ErrorListener): this;
-  prependListener(event: SpeechRecognizerVoidEvents, listener: VoidListener): this;
-  prependListener(event: string | symbol, listener: AnyListener): this {
-    return super.prependListener(event, listener);
-  }
-
-  prependOnceListener(
-    event: SpeechRecognizerEvent.SpeechRecognized,
-    listener: SpeechRecognizerSpeechRecognizedListener,
-  ): this;
-  prependOnceListener(
-    event: SpeechRecognizerEvent.End,
-    listener: SpeechRecognizerEndListener,
-  ): this;
-  prependOnceListener(event: SpeechRecognizerEvent.Error, listener: ErrorListener): this;
-  prependOnceListener(event: SpeechRecognizerVoidEvents, listener: VoidListener): this;
-  prependOnceListener(event: string | symbol, listener: AnyListener): this {
-    return super.prependOnceListener(event, listener);
-  }
-
-  start() {
+  start(): void {
     if (this.recording || !this.isAvailable) {
       return;
     }
@@ -181,7 +123,7 @@ export class SpeechRecognizer extends EventEmitter {
     this.emit(SpeechRecognizerEvent.Start);
   }
 
-  stop() {
+  stop(): void {
     if (!this.recording || !this.isAvailable) {
       return;
     }
@@ -189,7 +131,7 @@ export class SpeechRecognizer extends EventEmitter {
     this.recognition?.stop();
   }
 
-  abort() {
+  abort(): void {
     if (!this.recording || !this.isAvailable) {
       return;
     }
@@ -248,17 +190,17 @@ export class SpeechRecognizer extends EventEmitter {
 
   private scheduleStartDetectionTimeout() {
     this.clearTimeout();
-    this.timeoutId = (setTimeout(() => {
+    this.timeoutId = setTimeout(() => {
       if (this.startDetectionEnabled) {
         this.emit(SpeechRecognizerEvent.Timeout);
         this.abort();
       }
-    }, this.config.silenceDetection.timeoutInMs) as unknown) as number;
+    }, this.config.silenceDetection.timeoutInMs) as unknown as number;
   }
 
   private scheduleSilenceDetectionTimeout() {
     this.clearTimeout();
-    this.timeoutId = (setTimeout(() => {
+    this.timeoutId = setTimeout(() => {
       if (this.silenceDetectionEnabled) {
         this.emit(SpeechRecognizerEvent.SilenceDetected);
         if (this.lastRecognitionEvent) {
@@ -268,7 +210,7 @@ export class SpeechRecognizer extends EventEmitter {
           this.abort();
         }
       }
-    }, this.config.silenceDetection.timeoutInMs) as unknown) as number;
+    }, this.config.silenceDetection.timeoutInMs) as unknown as number;
   }
 
   private clearTimeout() {

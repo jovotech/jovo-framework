@@ -1,7 +1,11 @@
 import { EventEmitter } from 'events';
-import { AnyListener } from '../interfaces';
+import { AnyListener, ErrorListener } from '../interfaces';
 
-export type EventListenerMap = Record<string, AnyListener>;
+// export type EventListenerMap = Record<string, AnyListener>;
+export interface EventListenerMap {
+  [key: string]: AnyListener;
+  error: ErrorListener;
+}
 
 export class TypedEventEmitter<EVENT_LISTENER_MAP extends EventListenerMap> {
   static listenerCount<

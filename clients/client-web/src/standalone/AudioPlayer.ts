@@ -1,6 +1,6 @@
 import { JovoError } from '@jovotech/common';
 import _defaultsDeep from 'lodash.defaultsdeep';
-import { Base64Converter, DeepPartial, ErrorListener, VoidListener } from '..';
+import { Base64Converter, DeepPartial, VoidListener } from '..';
 import { EventListenerMap, TypedEventEmitter } from '../utilities/TypedEventEmitter';
 
 export class AudioPlayerNotInitializedError extends JovoError {
@@ -21,9 +21,7 @@ export enum AudioPlayerEvent {
 }
 
 export interface AudioPlayerEventListenerMap extends EventListenerMap {
-  play: (audioSource: string) => void;
-  // [AudioPlayerEvent.Play]: (audioSource: string) => void;
-  [AudioPlayerEvent.Error]: ErrorListener;
+  [AudioPlayerEvent.Play]: (audioSource: string) => void;
   [AudioPlayerEvent.Resume]: VoidListener;
   [AudioPlayerEvent.End]: VoidListener;
   [AudioPlayerEvent.Pause]: VoidListener;
