@@ -53,12 +53,16 @@ import { FacebookMessengerPlatform } from '@jovotech/platform-facebookmessenger'
 
 const app = new App({
   plugins: [
-    new FacebookMessengerPlatform(),
+    new FacebookMessengerPlatform({
+      pageAccessToken: '<yourAccessToken>',
+      verifyToken: '<yourVerifyToken>',
+    }),
     // ...
   ],
 });
 ```
 
+The integration needs at least a `pageAccessToken` and a `verifyToken`. Learn more in the [configuration section](#configuration).
 
 ## Configuration
 
@@ -72,6 +76,8 @@ import { FacebookMessengerPlatform } from '@jovotech/platform-facebookmessenger'
 const app = new App({
   plugins: [
     new FacebookMessengerPlatform({
+      pageAccessToken: '<yourAccessToken>',
+      verifyToken: '<yourVerifyToken>',
       plugins: [ /* ... */ ],
       session: { /* ... */ },
     }),
@@ -82,6 +88,8 @@ const app = new App({
 
 Options include:
 
+- `pageAccessToken`: The access token to your page generated in the Facebook Developer portal. See [deployment](#deployment) for more information.
+- `verifyToken`: A string to add to the Facebook developer portal to verify server requests. See [deployment](#deployment) for more information.
 - `plugins`: For example, you need to add an [NLU integration](#nlu-integration) here.
 - `session`: Session specific config. Take a look at [session data](#session-data) for more information.
 
@@ -178,3 +186,8 @@ You can add response objects that should show up exactly like this in the Facebo
 ## Deployment
 
 To test your Messenger bot with a Facebook page, you need to create an app in the Facebook for Developers portal. [Learn more in the official Messenger docs](https://developers.facebook.com/docs/messenger-platform/getting-started/app-setup).
+
+You need to do two things:
+
+- Connect a page to the app, generate an access token, and add it to the [`accessToken` configuration](#configuration).
+- Add your app endpoint (for example your [Jovo Webhook URL](https://v4.jovo.tech/docs/webhook) for testing) as callback URL and add a verify token that you also specify in the [`verifyToken` configuration](#configuration). This will be used by Facebook to verify your server.
