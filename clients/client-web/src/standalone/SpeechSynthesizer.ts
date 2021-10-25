@@ -1,6 +1,6 @@
-import { EventEmitter } from 'events';
 import _defaultsDeep from 'lodash.defaultsdeep';
-import { DeepPartial, ErrorListener, VoidListener } from '..';
+import { DeepPartial, VoidListener } from '..';
+import { EventListenerMap, TypedEventEmitter } from '../utilities/TypedEventEmitter';
 
 export enum SpeechSynthesizerEvent {
   Speak = 'speak',
@@ -11,12 +11,13 @@ export enum SpeechSynthesizerEvent {
   Error = 'error',
 }
 
-export type SpeechSynthesizerSpeakListener = (utterance: SpeechSynthesisUtterance) => void;
-export type SpeechSynthesizerVoidEvents =
-  | SpeechSynthesizerEvent.Pause
-  | SpeechSynthesizerEvent.Resume
-  | SpeechSynthesizerEvent.Stop
-  | SpeechSynthesizerEvent.End;
+export interface SpeechSynthesizerEventListenerMap extends EventListenerMap {
+  [SpeechSynthesizerEvent.Speak]: (utterance: SpeechSynthesisUtterance) => void;
+  [SpeechSynthesizerEvent.Pause]: VoidListener;
+  [SpeechSynthesizerEvent.Resume]: VoidListener;
+  [SpeechSynthesizerEvent.Stop]: VoidListener;
+  [SpeechSynthesizerEvent.End]: VoidListener;
+}
 
 export interface SpeechSynthesizerConfig {
   enabled: boolean;
@@ -24,7 +25,7 @@ export interface SpeechSynthesizerConfig {
   voice?: SpeechSynthesisVoice;
 }
 
-export class SpeechSynthesizer extends EventEmitter {
+export class SpeechSynthesizer extends TypedEventEmitter<SpeechSynthesizerEventListenerMap> {
   get volume(): number {
     return this.$volume;
   }
@@ -71,47 +72,6 @@ export class SpeechSynthesizer extends EventEmitter {
     this.config = config ? _defaultsDeep(config, defaultConfig) : defaultConfig;
 
     this.synthesis = window.speechSynthesis || null;
-  }
-
-  addListener(event: SpeechSynthesizerVoidEvents, listener: VoidListener): this;
-  addListener(event: SpeechSynthesizerEvent.Speak, listener: SpeechSynthesizerSpeakListener): this;
-  addListener(event: SpeechSynthesizerEvent.Error, listener: ErrorListener): this;
-  addListener(event: string | symbol, listener: AnyListener): this {
-    return super.addListener(event, listener);
-  }
-
-  on(event: SpeechSynthesizerVoidEvents, listener: VoidListener): this;
-  on(event: SpeechSynthesizerEvent.Speak, listener: SpeechSynthesizerSpeakListener): this;
-  on(event: SpeechSynthesizerEvent.Error, listener: ErrorListener): this;
-  on(event: string | symbol, listener: AnyListener): this {
-    return super.on(event, listener);
-  }
-
-  once(event: SpeechSynthesizerVoidEvents, listener: VoidListener): this;
-  once(event: SpeechSynthesizerEvent.Speak, listener: SpeechSynthesizerSpeakListener): this;
-  once(event: SpeechSynthesizerEvent.Error, listener: ErrorListener): this;
-  once(event: string | symbol, listener: AnyListener): this {
-    return super.once(event, listener);
-  }
-
-  prependListener(event: SpeechSynthesizerVoidEvents, listener: VoidListener): this;
-  prependListener(
-    event: SpeechSynthesizerEvent.Speak,
-    listener: SpeechSynthesizerSpeakListener,
-  ): this;
-  prependListener(event: SpeechSynthesizerEvent.Error, listener: ErrorListener): this;
-  prependListener(event: string | symbol, listener: AnyListener): this {
-    return super.prependListener(event, listener);
-  }
-
-  prependOnceListener(event: SpeechSynthesizerVoidEvents, listener: VoidListener): this;
-  prependOnceListener(
-    event: SpeechSynthesizerEvent.Speak,
-    listener: SpeechSynthesizerSpeakListener,
-  ): this;
-  prependOnceListener(event: SpeechSynthesizerEvent.Error, listener: ErrorListener): this;
-  prependOnceListener(event: string | symbol, listener: AnyListener): this {
-    return super.prependOnceListener(event, listener);
   }
 
   resume() {

@@ -1,6 +1,6 @@
-import { EventEmitter } from 'events';
 import _defaultsDeep from 'lodash.defaultsdeep';
-import { AnyListener, DeepPartial, OperatingSystemDetector, VoidListener } from '..';
+import { DeepPartial, OperatingSystemDetector, VoidListener } from '..';
+import { EventListenerMap, TypedEventEmitter } from '../utilities/TypedEventEmitter';
 
 interface AudioRecorderNodes {
   inputStream?: MediaStreamAudioSourceNode;
@@ -30,14 +30,15 @@ export enum AudioRecorderEvent {
   Stop = 'stop',
 }
 
-export type AudioRecorderStopListener = (result: AudioRecorderResult) => void;
-export type AudioRecorderProcessingListener = (data: AudioRecorderProcessingData) => void;
-export type AudioRecorderVoidEvents =
-  | AudioRecorderEvent.Start
-  | AudioRecorderEvent.Abort
-  | AudioRecorderEvent.StartDetected
-  | AudioRecorderEvent.SilenceDetected
-  | AudioRecorderEvent.Timeout;
+export interface AudioRecorderEventListenerMap extends EventListenerMap {
+  [AudioRecorderEvent.Stop]: (result: AudioRecorderResult) => void;
+  [AudioRecorderEvent.Processing]: (data: AudioRecorderProcessingData) => void;
+  [AudioRecorderEvent.Start]: VoidListener;
+  [AudioRecorderEvent.Abort]: VoidListener;
+  [AudioRecorderEvent.StartDetected]: VoidListener;
+  [AudioRecorderEvent.SilenceDetected]: VoidListener;
+  [AudioRecorderEvent.Timeout]: VoidListener;
+}
 
 export interface AudioRecorderDetectionConfig {
   enabled: boolean;
@@ -61,7 +62,7 @@ export interface AudioRecorderConfig {
   silenceDetection: AudioRecorderDetectionConfig;
 }
 
-export class AudioRecorder extends EventEmitter {
+export class AudioRecorder extends TypedEventEmitter<AudioRecorderEventListenerMap> {
   get isInitialized(): boolean {
     return this.initialized;
   }
@@ -234,50 +235,6 @@ export class AudioRecorder extends EventEmitter {
     }
 
     this.emit(AudioRecorderEvent.Start);
-  }
-
-  addListener(event: AudioRecorderEvent.Stop, listener: AudioRecorderStopListener): this;
-  addListener(
-    event: AudioRecorderEvent.Processing,
-    listener: AudioRecorderProcessingListener,
-  ): this;
-  addListener(event: AudioRecorderVoidEvents, listener: VoidListener): this;
-  addListener(event: string | symbol, listener: AnyListener): this {
-    return super.addListener(event, listener);
-  }
-
-  on(event: AudioRecorderEvent.Stop, listener: AudioRecorderStopListener): this;
-  on(event: AudioRecorderEvent.Processing, listener: AudioRecorderProcessingListener): this;
-  on(event: AudioRecorderVoidEvents, listener: VoidListener): this;
-  on(event: string | symbol, listener: AnyListener): this {
-    return super.on(event, listener);
-  }
-
-  once(event: AudioRecorderEvent.Stop, listener: AudioRecorderStopListener): this;
-  once(event: AudioRecorderEvent.Processing, listener: AudioRecorderProcessingListener): this;
-  once(event: AudioRecorderVoidEvents, listener: VoidListener): this;
-  once(event: string | symbol, listener: AnyListener): this {
-    return super.once(event, listener);
-  }
-
-  prependListener(event: AudioRecorderEvent.Stop, listener: AudioRecorderStopListener): this;
-  prependListener(
-    event: AudioRecorderEvent.Processing,
-    listener: AudioRecorderProcessingListener,
-  ): this;
-  prependListener(event: AudioRecorderVoidEvents, listener: VoidListener): this;
-  prependListener(event: string | symbol, listener: AnyListener): this {
-    return super.prependListener(event, listener);
-  }
-
-  prependOnceListener(event: AudioRecorderEvent.Stop, listener: AudioRecorderStopListener): this;
-  prependOnceListener(
-    event: AudioRecorderEvent.Processing,
-    listener: AudioRecorderProcessingListener,
-  ): this;
-  prependOnceListener(event: AudioRecorderVoidEvents, listener: VoidListener): this;
-  prependOnceListener(event: string | symbol, listener: AnyListener): this {
-    return super.prependOnceListener(event, listener);
   }
 
   private initializeStartDetection() {
