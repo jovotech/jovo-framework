@@ -12,6 +12,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsc --emitDeclarationOnly && esbuild src/index.ts --bundle --outfile=dist/JovoWebClient.js --minify --sourcemap --global-name=JovoWebClient",
+    "start:dev": "esbuild src/index.ts --bundle --servedir=demo --outdir=demo/js --global-name=JovoWebClient",
     "prettier": "prettier -w -l src test",
     "eslint": "eslint src test --fix --ext .ts",
     "rimraf": "rimraf dist",
@@ -20,6 +21,9 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
+    "@jovotech/common": "^4.0.0-beta.1",
+    "@jovotech/output": "^4.0.0-beta.6",
+    "@jovotech/platform-core": "^4.0.0-beta.7",
     "detect-browser": "^5.2.1",
     "events": "^3.3.0",
     "lodash.defaultsdeep": "^4.6.1",
