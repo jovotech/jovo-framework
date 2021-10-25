@@ -1,20 +1,28 @@
 import {
   AnyObject,
   App,
+  axios,
+  AxiosResponse,
   Extensible,
   ExtensibleConfig,
   HandleRequest,
+  Jovo,
   JovoError,
   Platform,
   Server,
   StoredElementSession,
+  UnknownObject,
 } from '@jovotech/framework';
 import {
   FacebookMessengerOutputTemplateConverterStrategy,
   FacebookMessengerResponse,
 } from '@jovotech/output-facebookmessenger';
 import _cloneDeep from 'lodash.clonedeep';
-import { DEFAULT_FACEBOOK_VERIFY_TOKEN, LATEST_FACEBOOK_API_VERSION } from './constants';
+import {
+  DEFAULT_FACEBOOK_VERIFY_TOKEN,
+  FACEBOOK_API_BASE_URL,
+  LATEST_FACEBOOK_API_VERSION,
+} from './constants';
 import { FacebookMessenger } from './FacebookMessenger';
 import { FacebookMessengerDevice } from './FacebookMessengerDevice';
 import { FacebookMessengerRequest } from './FacebookMessengerRequest';
@@ -45,6 +53,18 @@ export class FacebookMessengerPlatform extends Platform<
   userClass = FacebookMessengerUser;
   deviceClass = FacebookMessengerDevice;
   requestBuilder = FacebookMessengerRequestBuilder;
+
+  get apiVersion(): string {
+    return this.config.version || LATEST_FACEBOOK_API_VERSION;
+  }
+
+  get pageAccessToken(): string {
+    return this.config.pageAccessToken;
+  }
+
+  get endpoint(): string {
+    return `${FACEBOOK_API_BASE_URL}/${this.apiVersion}/me/messages?access_token=${this.pageAccessToken}`;
+  }
 
   async initialize(parent: Extensible): Promise<void> {
     if (super.initialize) {
@@ -85,7 +105,7 @@ export class FacebookMessengerPlatform extends Platform<
     | Promise<FacebookMessengerResponse>
     | Promise<FacebookMessengerResponse[]>
     | FacebookMessengerResponse {
-    const senderId = jovo.$request.messaging?.[0]?.sender?.id;
+    const senderId = jovo.$user.id;
     if (!senderId) {
       // TODO determine if error is good here
       throw new JovoError({
@@ -153,5 +173,27 @@ export class FacebookMessengerPlatform extends Platform<
         return APP_HANDLE.call(this, server);
       }
     };
+  }
+
+  async sendData<RESPONSE extends AnyObject>(
+    data: UnknownObject,
+  ): Promise<AxiosResponse<RESPONSE>> {
+    if (!this.pageAccessToken) {
+      throw new JovoError({
+        message: 'Can not send message to Facebook due to a missing or empty page-access-token.',
+      });
+    }
+    try {
+      console.log(data);
+      // TODO: AttachmentMessage-support
+      return await axios.post<RESPONSE>(this.endpoint, data);
+    } catch (error) {
+      if (error.isAxiosError) {
+        console.log(error.response.data);
+        throw new JovoError({ message: error.message, details: error.response.data.error.message });
+      }
+
+      throw error;
+    }
   }
 }
