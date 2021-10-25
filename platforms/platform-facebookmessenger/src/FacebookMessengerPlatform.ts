@@ -76,9 +76,18 @@ export class FacebookMessengerPlatform extends Platform<
   mount(parent: HandleRequest): Promise<void> | void {
     super.mount(parent);
 
-    this.middlewareCollection.use('request.start', (jovo) => {
-      return this.enableDatabaseSessionStorage(jovo, this.config.session);
-    });
+    this.middlewareCollection.use(
+      'after.request.end',
+      (jovo) => this.enableDatabaseSessionStorage(jovo, this.config.session),
+      (jovo) => this.markAsSeen(jovo as FacebookMessenger),
+    );
+
+    this.middlewareCollection.use('dialog.start', (jovo) =>
+      this.enableTypingIndicator(jovo as FacebookMessenger),
+    );
+    this.middlewareCollection.use('dialog.end', (jovo) =>
+      this.disableTypingIndicator(jovo as FacebookMessenger),
+    );
   }
 
   getDefaultConfig(): FacebookMessengerConfig {
@@ -87,6 +96,18 @@ export class FacebookMessengerPlatform extends Platform<
       pageAccessToken: '',
       version: LATEST_FACEBOOK_API_VERSION,
     };
+  }
+
+  private async markAsSeen(jovo: FacebookMessenger): Promise<void> {
+    await this.sendData({ recipient: { id: jovo.$user.id }, sender_action: 'mark_seen' });
+  }
+
+  private async enableTypingIndicator(jovo: FacebookMessenger) {
+    await this.sendData({ recipient: { id: jovo.$user.id }, sender_action: 'typing_on' });
+  }
+
+  private async disableTypingIndicator(jovo: FacebookMessenger) {
+    await this.sendData({ recipient: { id: jovo.$user.id }, sender_action: 'typing_off' });
   }
 
   isRequestRelated(request: AnyObject | FacebookMessengerRequest): boolean {
