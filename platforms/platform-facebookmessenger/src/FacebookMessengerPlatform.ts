@@ -2,6 +2,7 @@ import {
   AnyObject,
   App,
   axios,
+  AxiosError,
   AxiosResponse,
   Extensible,
   ExtensibleConfig,
@@ -190,6 +191,10 @@ export class FacebookMessengerPlatform extends Platform<
     };
   }
 
+  /**
+   * Sends data to the Facebook Messenger API
+   * @param data - Data to be sent
+   */
   async sendData<RESPONSE extends AnyObject>(
     data: UnknownObject,
   ): Promise<AxiosResponse<RESPONSE>> {
@@ -203,7 +208,10 @@ export class FacebookMessengerPlatform extends Platform<
       return await axios.post<RESPONSE>(this.endpoint, data);
     } catch (error) {
       if (error.isAxiosError) {
-        throw new JovoError({ message: error.message, details: error.response.data.error.message });
+        throw new JovoError({
+          message: error.message,
+          details: (error as AxiosError).response?.data?.error?.message,
+        });
       }
 
       throw error;
