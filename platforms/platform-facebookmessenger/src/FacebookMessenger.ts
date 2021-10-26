@@ -1,7 +1,9 @@
 import {
   AsyncJovo,
+  AxiosResponse,
   BaseOutput,
   DeepPartial,
+  JovoError,
   OutputConstructor,
   OutputTemplate,
   OutputTemplateConverter,
@@ -21,45 +23,9 @@ export class FacebookMessenger extends AsyncJovo<
   FacebookMessengerDevice,
   FacebookMessengerPlatform
 > {
-  async $send(outputTemplate: OutputTemplate | OutputTemplate[]): Promise<void>;
-  async $send<OUTPUT extends BaseOutput>(
-    outputConstructor: OutputConstructor<
-      OUTPUT,
-      FacebookMessengerRequest,
-      FacebookMessengerResponse,
-      this
-    >,
-    options?: DeepPartial<OUTPUT['options']>,
-  ): Promise<void>;
-  async $send<OUTPUT extends BaseOutput>(
-    outputConstructorOrTemplate:
-      | OutputConstructor<OUTPUT, FacebookMessengerRequest, FacebookMessengerResponse, this>
-      | OutputTemplate
-      | OutputTemplate[],
-    options?: DeepPartial<OUTPUT['options']>,
-  ): Promise<void> {
-    const currentOutputLength = this.$output.length;
-    if (typeof outputConstructorOrTemplate === 'function') {
-      await super.$send(outputConstructorOrTemplate, options);
-    } else {
-      await super.$send(outputConstructorOrTemplate);
-    }
-    const outputConverter = new OutputTemplateConverter(
-      this.$platform.outputTemplateConverterStrategy,
-    );
-
-    // get only the newly added output
-    const newOutput = this.$output.slice(currentOutputLength);
-
-    let response = await outputConverter.toResponse(newOutput);
-    response = await this.$platform.finalizeResponse(response, this);
-
-    if (Array.isArray(response)) {
-      for (const responseItem of response) {
-        await this.$platform.sendData<SendMessageResult>(responseItem);
-      }
-    } else if (response) {
-      await this.$platform.sendData<SendMessageResult>(response);
-    }
+  protected sendResponse(
+    response: FacebookMessengerResponse,
+  ): Promise<AxiosResponse<SendMessageResult>> {
+    return this.$platform.sendData<SendMessageResult>(response);
   }
 }
