@@ -81,10 +81,10 @@ export class FacebookMessengerPlatform extends Platform<
       (jovo) => this.markAsSeen(jovo as FacebookMessenger),
     );
 
-    this.middlewareCollection.use('dialog.start', (jovo) =>
+    this.middlewareCollection.use('dialogue.start', (jovo) =>
       this.enableTypingIndicator(jovo as FacebookMessenger),
     );
-    this.middlewareCollection.use('dialog.end', (jovo) =>
+    this.middlewareCollection.use('dialogue.end', (jovo) =>
       this.disableTypingIndicator(jovo as FacebookMessenger),
     );
   }
