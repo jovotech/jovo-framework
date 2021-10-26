@@ -1,13 +1,4 @@
-import {
-  AsyncJovo,
-  AxiosResponse,
-  BaseOutput,
-  DeepPartial,
-  JovoError,
-  OutputConstructor,
-  OutputTemplate,
-  OutputTemplateConverter,
-} from '@jovotech/framework';
+import { AsyncJovo, AxiosResponse } from '@jovotech/framework';
 import { FacebookMessengerResponse } from '@jovotech/output-facebookmessenger';
 import { FacebookMessengerDevice } from './FacebookMessengerDevice';
 import { FacebookMessengerPlatform } from './FacebookMessengerPlatform';
