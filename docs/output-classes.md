@@ -15,7 +15,7 @@ Output classes are stored in a component's `output` folder. As a convention, the
 Each output class contains:
 
 - A [`build` method](#build-method) that returns an output template
-- [`options`](#output-options) that can be passed using `$send`
+- [`options`](#output-options) that can be passed using `$send()`
 - Optionally [helper methods](#helper-methods) that can be used to build the output object
 
 Here is an example of a `HelloWorldOutput` class:
@@ -34,7 +34,7 @@ export class HelloWorldOutput extends BaseOutput {
 }
 ```
 
-An output class can get passed to the `$send` method (which you can learn more about in the [output documentation](./output.md)):
+An output class can get passed to the `$send()` method (which you can learn more about in the [output documentation](./output.md)):
 
 ```typescript
 import { SomeOutput } from './output/SomeOutput';
@@ -111,7 +111,7 @@ There are two types of properties that can be passed:
 
 ### Reserved Properties
 
-Reserved properties are output elements that can be passed as options. They are automatically added to the output object and allow the `$send` method to override [generic output properties](https://v4.jovo.tech/docs/output-templates#generic-output-elements) in the output template.
+Reserved properties are output elements that can be passed as options. They are automatically added to the output object and allow the `$send()` method to override [generic output properties](https://v4.jovo.tech/docs/output-templates#generic-output-elements) in the output template.
 
 For example, a `message` can be passed right from the handler:
 
@@ -211,7 +211,7 @@ export class YourOutput extends BaseOutput<YourOutputOptions> {
 }
 ```
 
-If the `$send` method doesn't pass a proper `name` to the output class in the above example, the response will be `Hey there!`.
+If the `$send()` method doesn't pass a proper `name` to the output class in the above example, the response will be `Hey there!`.
 
 
 ## Helper Methods

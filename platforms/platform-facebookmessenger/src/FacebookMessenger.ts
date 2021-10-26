@@ -1,7 +1,7 @@
 import {
+  AsyncJovo,
   BaseOutput,
   DeepPartial,
-  Jovo,
   OutputConstructor,
   OutputTemplate,
   OutputTemplateConverter,
@@ -13,7 +13,7 @@ import { FacebookMessengerRequest } from './FacebookMessengerRequest';
 import { FacebookMessengerUser } from './FacebookMessengerUser';
 import { SendMessageResult } from './interfaces';
 
-export class FacebookMessenger extends Jovo<
+export class FacebookMessenger extends AsyncJovo<
   FacebookMessengerRequest,
   FacebookMessengerResponse,
   FacebookMessenger,

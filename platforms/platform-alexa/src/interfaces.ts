@@ -61,7 +61,7 @@ export interface Speed {
   accuracyInMetersPerSecond?: number; // [0, MAX_INTEGER]
 }
 
-export type PermissionStatus = 'GRANTED' | 'DENIED' | 'ACCEPTED' | 'NOT_ANSWERED';
+export type PermissionStatus = 'DENIED' | 'ACCEPTED' | 'NOT_ANSWERED';
 
 export interface System {
   application: Application;

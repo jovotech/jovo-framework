@@ -32,6 +32,7 @@ import _mergeWith from 'lodash.mergewith';
 import _set from 'lodash.set';
 import { join as joinPaths } from 'path';
 import * as yaml from 'yaml';
+import { GoogleAssistantCli } from '..';
 import DefaultFiles from '../DefaultFiles.json';
 import {
   GoogleActionActions,
@@ -48,6 +49,7 @@ export interface BuildPlatformContextGoogle extends BuildPlatformContext, Google
 }
 
 export class BuildHook extends PluginHook<BuildPlatformEvents> {
+  $plugin!: GoogleAssistantCli;
   $context!: BuildPlatformContextGoogle;
 
   install(): void {

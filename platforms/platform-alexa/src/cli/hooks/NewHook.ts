@@ -3,12 +3,14 @@ import { Log, promptSupportedLocales } from '@jovotech/cli-core';
 import { JovoModelData } from '@jovotech/model';
 import { readdirSync, readFileSync, writeFileSync } from 'fs';
 import { join as joinPaths } from 'path';
+import { AlexaCli } from '..';
 import AlexaModel from '../boilerplate/AlexaModel.json';
 import { SupportedLocales } from '../constants';
 import { AlexaContext, SupportedLocalesType } from '../interfaces';
 import { AlexaHook } from './AlexaHook';
 
 export class NewHook extends AlexaHook<NewEvents> {
+  $plugin!: AlexaCli;
   $context!: NewContext & AlexaContext;
 
   install(): void {
