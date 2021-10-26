@@ -1,10 +1,4 @@
-import {
-  InputTypeLike,
-  JovoInput,
-  JovoInputObject,
-  JovoRequest,
-  UnknownObject,
-} from '@jovotech/framework';
+import { Input, InputTypeLike, JovoInput, JovoRequest, UnknownObject } from '@jovotech/framework';
 
 import { CoreCapabilityType } from './CoreDevice';
 import { Context } from './interfaces';
@@ -17,7 +11,7 @@ export class CoreRequest extends JovoRequest {
   timeZone?: string; // IANA time zone names e.g. Europe/Berlin
   locale?: string; // e.g. de-DE, en-US
   data?: UnknownObject; // this.$request
-  input?: JovoInputObject;
+  input?: Input;
   context?: Context;
 
   getLocale(): string | undefined {
@@ -50,7 +44,7 @@ export class CoreRequest extends JovoRequest {
   }
 
   getSessionData(): UnknownObject | undefined {
-    return this.context?.session?.data;
+    return this.context?.session;
   }
 
   getSessionId(): string | undefined {
@@ -58,7 +52,7 @@ export class CoreRequest extends JovoRequest {
   }
 
   isNewSession(): boolean | undefined {
-    return this.context?.session?.new;
+    return this.context?.session?.isNew;
   }
 
   getDeviceCapabilities(): CoreCapabilityType[] | undefined {
@@ -74,7 +68,7 @@ export class CoreRequest extends JovoRequest {
       return;
     }
 
-    this.context.session.data.data = data;
+    this.context.session.data = data;
   }
 
   getUserId(): string | undefined {
