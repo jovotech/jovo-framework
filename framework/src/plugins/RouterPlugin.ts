@@ -1,7 +1,8 @@
+import { Intent } from '@jovotech/common';
 import { App } from '../App';
 import { DuplicateGlobalIntentsError } from '../errors/DuplicateGlobalIntentsError';
 import { HandleRequest } from '../HandleRequest';
-import { Intent, IntentMap } from '../interfaces';
+import { IntentMap } from '../interfaces';
 import { Jovo } from '../Jovo';
 import { JovoInput } from '../JovoInput';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';

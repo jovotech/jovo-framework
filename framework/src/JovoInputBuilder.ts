@@ -1,4 +1,5 @@
-import { DEFAULT_INPUT_TYPE, InputTypeLike, JovoInput } from './JovoInput';
+import { InputTypeLike } from '@jovotech/common';
+import { DEFAULT_INPUT_TYPE, JovoInput } from './JovoInput';
 
 export class JovoInputBuilder {
   private readonly input: JovoInput;
@@ -16,3 +17,4 @@ export class JovoInputBuilder {
     return this.input;
   }
 }
+
