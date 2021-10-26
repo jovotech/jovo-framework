@@ -249,6 +249,8 @@ If you're using an [NLU integration](./nlu.md), the original intent stays in the
 
 Stage-specific configurations from a file called `app.<stage>.ts` get merged into the default configuration from `app.ts`.
 
+For example, most Jovo projects include an `app.dev.ts` file that comes with specific configuration for local development ([FileDb](https://v4.jovo.tech/marketplace/db-filedb), [ExpressJS server](https://v4.jovo.tech/marketplace/server-express) and the [Jovo Debugger](https://v4.jovo.tech/docs/debugger)).
+
 You can create a new stage like this:
 
 ```sh
@@ -259,3 +261,5 @@ $ jovov4 new:stage prod
 ```
 
 This creates a new file `app.prod.ts`. In the process, you can select plugins and a [server integration](./server.md) to work with this stage.
+
+For an overall overview of staging, [take a look here](./staging.md).
