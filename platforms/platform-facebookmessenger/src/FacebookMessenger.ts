@@ -1,16 +1,12 @@
 import {
-  axios,
-  AxiosResponse,
   BaseOutput,
   DeepPartial,
   Jovo,
-  JovoError,
   OutputConstructor,
   OutputTemplate,
   OutputTemplateConverter,
 } from '@jovotech/framework';
 import { FacebookMessengerResponse } from '@jovotech/output-facebookmessenger';
-import { FACEBOOK_API_BASE_URL } from './constants';
 import { FacebookMessengerDevice } from './FacebookMessengerDevice';
 import { FacebookMessengerPlatform } from './FacebookMessengerPlatform';
 import { FacebookMessengerRequest } from './FacebookMessengerRequest';

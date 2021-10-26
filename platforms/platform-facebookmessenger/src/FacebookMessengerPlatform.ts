@@ -6,7 +6,6 @@ import {
   Extensible,
   ExtensibleConfig,
   HandleRequest,
-  Jovo,
   JovoError,
   Platform,
   Server,
@@ -126,7 +125,7 @@ export class FacebookMessengerPlatform extends Platform<
     | Promise<FacebookMessengerResponse>
     | Promise<FacebookMessengerResponse[]>
     | FacebookMessengerResponse {
-    const senderId = jovo.$user.id;
+    const senderId: string | undefined = jovo.$user.id;
     if (!senderId) {
       // TODO determine if error is good here
       throw new JovoError({

@@ -26,7 +26,7 @@ export class InstagramPlatform extends FacebookMessengerPlatform {
     return request.$type === 'instagram' && request.id && request.time && !!request.messaging?.[0];
   }
 
-  async beforeRequestStart(jovo: Jovo) {
+  async beforeRequestStart(jovo: Jovo): Promise<void> {
     const senderId = jovo.$instagram?.$request?.messaging?.[0]?.sender?.id;
     const businessAccountId = jovo.$instagram?.$request?.id;
     if (senderId && businessAccountId && senderId === businessAccountId) {
