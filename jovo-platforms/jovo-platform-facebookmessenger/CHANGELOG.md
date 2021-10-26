@@ -2,6 +2,9 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+### 2021-10-06 [3.5.5]
+- [#983](https://github.com/jovotech/jovo-framework/pull/983) :bug: V3/bugfix/facebook messenger platform ([@brody-ly](https://github.com/brody-ly))
+
 ### 2020-09-29 [3.1.0]
 
 - [#817](https://github.com/jovotech/jovo-framework/pull/817) :recycle: :sparkles: Refactor Facebook Messenger platform - asynchronous Responses ([@m-ripper](https://github.com/m-ripper))

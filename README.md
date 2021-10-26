@@ -1,6 +1,6 @@
 # Jovo Framework
 
-> [**We're working heavily on Jovo `v4`! Check out the `v4dev` branch for more information**](https://github.com/jovotech/jovo-framework/tree/v4dev)
+> [**We're working heavily on Jovo `v4`! Check out the `v4/release` branch for more information**](https://github.com/jovotech/jovo-framework/tree/v4/release)
 
 [![Jovo Framework](./docs/img/jovo-header.jpg)](https://www.jovo.tech)
 

@@ -3,7 +3,7 @@ import { Config } from './FacebookMessenger';
 import { ApiVersion, QuickReply } from './Interfaces';
 import { Message } from './responses/Message';
 
-export { FacebookMessenger, Config } from './FacebookMessenger';
+export { FacebookMessenger, Config, PersistentMenuElement } from './FacebookMessenger';
 
 export const BASE_URL = 'https://graph.facebook.com';
 export const DEFAULT_VERSION: ApiVersion = 'v8.0';

@@ -30,7 +30,7 @@ export interface Config extends ExtensibleConfig {
   credentialsFile?: string;
   spreadsheetId?: string;
   sheets?: GoogleSheetsSheet[];
-  access?: string;
+  access?: string; // @deprecated
   caching?: boolean;
 }
 
@@ -92,6 +92,7 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
     }
   }
 
+  // @deprecated
   async loadPublicSpreadsheetData(spreadsheetId: string, sheetPosition = 1) {
     const url = `https://spreadsheets.google.com/feeds/list/${spreadsheetId}/${sheetPosition}/public/values?alt=json`;
     Log.verbose('Accessing public spreadsheet: ' + url);

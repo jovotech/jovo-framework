@@ -30,6 +30,10 @@ import {
   MessengerBotRequest,
   MessengerBotResponse,
   MessengerBotUser,
+  PersistentMenuItemType,
+  WebViewHeightRatio,
+  WebViewShareButton,
+  DisabledSurfaces,
 } from '.';
 
 export interface UpdateConfig<T> {
@@ -42,11 +46,30 @@ export interface GreetingElement {
   text: string;
 }
 
+export interface PersistentMenuItem {
+  type: PersistentMenuItemType;
+  title: string;
+  url?: string;
+  payload: string;
+  webview_height_ratio?: WebViewHeightRatio;
+  messenger_extensions?: Boolean;
+  fallback_url?: string;
+  webview_share_button?: WebViewShareButton;
+}
+
+export interface PersistentMenuElement {
+  locale: string;
+  composer_input_disabled?: boolean;
+  disabled_surfaces: Array<DisabledSurfaces>;
+  call_to_actions: Array<PersistentMenuItem>;
+}
+
 export interface Config extends ExtensibleConfig {
   shouldOverrideAppHandle?: boolean;
   shouldIgnoreSynchronousResponse?: boolean;
   greeting?: UpdateConfig<GreetingElement[]>;
   launch?: UpdateConfig<string>;
+  persistentMenu?: UpdateConfig<PersistentMenuElement[]>;
   pageAccessToken?: string;
   verifyToken?: string;
   locale?: string;
@@ -66,6 +89,9 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
       updateOnSetup: false,
     },
     launch: {
+      updateOnSetup: false,
+    },
+    persistentMenu: {
       updateOnSetup: false,
     },
     pageAccessToken: process.env.FB_PAGE_ACCESS_TOKEN || '',
@@ -105,6 +131,7 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
 
     app.middleware('platform.output')!.use(this.output.bind(this));
     app.middleware('response')!.use(this.response.bind(this));
+    app.middleware('after.response')!.use(this.afterResponse.bind(this));
 
     this.use(new FacebookMessengerCore());
 
@@ -160,6 +187,19 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
       }
 
       data.greeting = greetingElements;
+    }
+
+    if (this.config.persistentMenu && this.config.persistentMenu.updateOnSetup) {
+      const persistentMenuElements = this.config.persistentMenu.data;
+      if (!persistentMenuElements || persistentMenuElements.length < 1) {
+        throw new JovoError(
+          `Cannot set persistent menu elements to 'undefined' or an empty array.`,
+          ErrorCode.ERR_PLUGIN,
+          'FacebookMessenger',
+        );
+      }
+
+      data.persistent_menu = persistentMenuElements;
     }
 
     if (Object.keys(data).length === 0) {
@@ -290,6 +330,13 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
     }
   }
 
+  async afterResponse(handleRequest: HandleRequest) {
+    if (!handleRequest.jovo || handleRequest.jovo.constructor.name !== this.getAppType()) {
+      return Promise.resolve();
+    }
+    await handleRequest.host.setResponse(handleRequest.jovo.$response);
+  }
+
   makeTestSuite(): TestSuite<FacebookMessengerRequestBuilder, FacebookMessengerResponseBuilder> {
     return new TestSuite(
       new FacebookMessengerRequestBuilder(),
@@ -319,12 +366,9 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
         request.entry.length > 0;
       if (isMessengerRequest) {
         const promises: Array<Promise<any>> = [];
+        const responses: MessengerBotResponse[] = [];
         request.entry.forEach((entry: MessengerBotEntry) => {
           const hostCopy: Host = Object.create(host.constructor.prototype);
-          // tslint:disable-next-line
-          hostCopy.setResponse = async function (obj: any) {
-            return;
-          };
           for (const key in host) {
             if (host.hasOwnProperty(key)) {
               const value = (host as any)[key];
@@ -338,11 +382,15 @@ export class FacebookMessenger extends Platform<MessengerBotRequest, MessengerBo
               }
             }
           }
+          // tslint:disable-next-line
+          hostCopy.setResponse = async function (obj: any) {
+            responses.push(obj);
+          };
           promises.push(PROTOTYPE_BACKUP.call(this, hostCopy));
         });
 
         await Promise.all(promises);
-        return host.setResponse({});
+        return host.setResponse(responses);
       }
       return PROTOTYPE_BACKUP.call(this, host);
     };

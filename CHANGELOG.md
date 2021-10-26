@@ -2,6 +2,14 @@
 
 ### Latest Framework Version: 3.5.2<br><br>
 
+#### 2021-10-06
+
+##### `jovo-platform-messenger [3.5.3]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-messenger) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-messenger) | [npm](https://www.npmjs.com/package/jovo-platform-messenger)
+- [#983](https://github.com/jovotech/jovo-framework/pull/983) :bug: V3/bugfix/facebook messenger platform ([@brody-ly](https://github.com/brody-ly))
+
+##### `jovo-cms-googleshets [3.5.2]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-cms-googleshets) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-cms-googleshets) | [npm](https://www.npmjs.com/package/jovo-cms-googleshets)
+- [#1059](https://github.com/jovotech/jovo-framework/pull/1059 ) :bug: Fix/google sheets after API deprecation ([@aswetlow](https://github.com/aswetlow))
+
 
 #### 2021-09-23
 
