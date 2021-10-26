@@ -1,19 +1,18 @@
 import { AnyObject, App, HandleRequest, Jovo, Server } from '@jovotech/framework';
 import { InstagramOutputTemplateConverterStrategy } from '@jovotech/output-instagram';
-import {
-  FacebookMessengerPlatform,
-  FacebookMessengerUser as InstagramUser,
-  MessengerBotEntry,
-} from '@jovotech/platform-facebookmessenger';
+import { FacebookMessengerPlatform, MessengerBotEntry } from '@jovotech/platform-facebookmessenger';
 import _cloneDeep from 'lodash.clonedeep';
 import { Instagram } from './Instagram';
+import { InstagramDevice } from './InstagramDevice';
 import { InstagramRequest } from './InstagramRequest';
+import { InstagramUser } from './InstagramUser';
 
 export class InstagramPlatform extends FacebookMessengerPlatform {
   readonly outputTemplateConverterStrategy = new InstagramOutputTemplateConverterStrategy();
   readonly jovoClass = Instagram;
   readonly requestClass = InstagramRequest;
   readonly userClass = InstagramUser;
+  readonly deviceClass = InstagramDevice;
 
   mount(parent: HandleRequest): Promise<void> | void {
     super.mount(parent);
