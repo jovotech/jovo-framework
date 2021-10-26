@@ -1,11 +1,28 @@
-import { AnyObject, App, HandleRequest, Jovo, Server } from '@jovotech/framework';
+import {
+  AnyObject,
+  App,
+  ExtensibleInitConfig,
+  HandleRequest,
+  Jovo,
+  Server,
+} from '@jovotech/framework';
+import { OmitIndex } from '@jovotech/output';
 import { InstagramOutputTemplateConverterStrategy } from '@jovotech/output-instagram';
-import { FacebookMessengerPlatform, MessengerBotEntry } from '@jovotech/platform-facebookmessenger';
+import {
+  FacebookMessengerConfig,
+  FacebookMessengerPlatform,
+  MessengerBotEntry,
+} from '@jovotech/platform-facebookmessenger';
 import _cloneDeep from 'lodash.clonedeep';
 import { Instagram } from './Instagram';
 import { InstagramDevice } from './InstagramDevice';
 import { InstagramRequest } from './InstagramRequest';
 import { InstagramUser } from './InstagramUser';
+
+export interface InstagramConfig
+  extends Omit<OmitIndex<FacebookMessengerConfig, string>, 'senderActions'> {
+  [key: string]: unknown;
+}
 
 export class InstagramPlatform extends FacebookMessengerPlatform {
   readonly outputTemplateConverterStrategy = new InstagramOutputTemplateConverterStrategy();
@@ -13,6 +30,12 @@ export class InstagramPlatform extends FacebookMessengerPlatform {
   readonly requestClass = InstagramRequest;
   readonly userClass = InstagramUser;
   readonly deviceClass = InstagramDevice;
+
+  // Overwrite the constructor to apply typings from InstagramConfig,
+  // since we can't pass the type in the generic parameters
+  constructor(config: ExtensibleInitConfig<InstagramConfig>) {
+    super(config);
+  }
 
   mount(parent: HandleRequest): Promise<void> | void {
     super.mount(parent);

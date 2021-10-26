@@ -1,7 +1,6 @@
 import { registerPlatformSpecificJovoReference } from '@jovotech/framework';
-import { FacebookMessengerConfig as InstagramConfig } from '@jovotech/platform-facebookmessenger';
 import { Instagram } from './Instagram';
-import { InstagramPlatform } from './InstagramPlatform';
+import { InstagramConfig, InstagramPlatform } from './InstagramPlatform';
 
 declare module '@jovotech/framework/dist/types/Extensible' {
   interface ExtensiblePluginConfig {
