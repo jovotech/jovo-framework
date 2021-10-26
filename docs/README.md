@@ -8,7 +8,7 @@
 
 Category | Sub-Category | Additional Content
 :--- | :--- | :---
-Getting Started | [Quickstart Guide](./getting-started) | &nbsp;
+Getting Started | [Quick Start Guide](./getting-started) | &nbsp;
 &nbsp; | [Installation](./getting-started/installation.md) | &nbsp;
 &nbsp; | [Next Steps](./getting-started/next-steps.md) | &nbsp;
 &nbsp; | [Voice App Basics](./getting-started/voice-app-basics.md) | &nbsp;
