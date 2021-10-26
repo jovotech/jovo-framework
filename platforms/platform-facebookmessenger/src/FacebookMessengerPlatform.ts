@@ -104,18 +104,6 @@ export class FacebookMessengerPlatform extends Platform<
     };
   }
 
-  private async markAsSeen(jovo: FacebookMessenger): Promise<void> {
-    await this.sendData({ recipient: { id: jovo.$user.id }, sender_action: 'mark_seen' });
-  }
-
-  private async enableTypingIndicator(jovo: FacebookMessenger) {
-    await this.sendData({ recipient: { id: jovo.$user.id }, sender_action: 'typing_on' });
-  }
-
-  private async disableTypingIndicator(jovo: FacebookMessenger) {
-    await this.sendData({ recipient: { id: jovo.$user.id }, sender_action: 'typing_off' });
-  }
-
   isRequestRelated(request: AnyObject | FacebookMessengerRequest): boolean {
     return request.$type === 'facebook' && request.id && request.time && request.messaging?.[0];
   }
@@ -220,5 +208,37 @@ export class FacebookMessengerPlatform extends Platform<
 
       throw error;
     }
+  }
+
+  private async markAsSeen(jovo: FacebookMessenger): Promise<void> {
+    if (this.config.senderActions?.markSeen === false) {
+      return;
+    }
+
+    await this.sendSenderAction(jovo, 'mark_seen');
+  }
+
+  private async enableTypingIndicator(jovo: FacebookMessenger) {
+    if (this.config.senderActions?.typingIndicator === false) {
+      return;
+    }
+
+    await this.sendSenderAction(jovo, 'typing_on');
+  }
+
+  private async disableTypingIndicator(jovo: FacebookMessenger) {
+    if (this.config.senderActions?.typingIndicator === false) {
+      return;
+    }
+
+    await this.sendSenderAction(jovo, 'typing_off');
+  }
+
+  private async sendSenderAction(jovo: FacebookMessenger, senderAction: SenderAction) {
+    if (!this.isRequestRelated(jovo.$request)) {
+      return;
+    }
+
+    await this.sendData({ recipient: { id: jovo.$user.id }, sender_action: senderAction });
   }
 }
