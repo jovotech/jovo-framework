@@ -4,6 +4,7 @@
     "common",
     "framework",
     "clients/**",
+    "output/**",
     "platforms/**",
     "integrations/**",
     "examples/**"
