@@ -120,7 +120,7 @@ export class GoogleAnalytics implements Analytics {
 
     app.middleware('before.handler')!.use(GoogleAnalytics.saveStartStateAndLastUsed.bind(this));
     app.middleware('after.platform.init')!.use(this.setGoogleAnalyticsObject.bind(this));
-    app.middleware('after.response')!.use(this.track.bind(this));
+    app.middleware('response')!.use(this.track.bind(this));
     app.middleware('fail')!.use(this.sendError.bind(this));
   }
 
