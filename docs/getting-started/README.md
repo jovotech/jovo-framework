@@ -21,7 +21,7 @@ Watch the video here:
 
 We highly recommend using the Jovo CLI if you want to benefit from all the features coming with Jovo. You can find alternatives on our [installation page](./installation './installation').
 
-Install the Jovo CLI globally with:
+Install the Jovo CLI globally by using the following command:
 
 ```sh
 $ npm install -g jovo-cli
@@ -33,7 +33,7 @@ After successful installation, you should be able to see the Jovo CLI menu by ju
 $ jovo
 ```
 
-You can check the version number (and compare it to the [jovo-cli npm package](https://www.npmjs.com/package/jovo-cli) version) with this command:
+You can check the version number (and compare it to the [jovo-cli npm package](https://www.npmjs.com/package/jovo-cli) version) by using the following command:
 
 ```sh
 $ jovo -v
@@ -44,7 +44,7 @@ $ jovo -v
 
 ## Create a new Jovo Project
 
-You can create a Jovo project into a new directory with the following command:
+You can create a Jovo project into a new directory by using the following command:
 
 ```sh
 // @language=javascript
