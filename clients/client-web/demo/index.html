@@ -3,14 +3,57 @@
   <head>
     <meta charset="UTF-8" />
     <title>Title</title>
+
+    <style>
+      #initializedContainer {
+        display: none;
+      }
+    </style>
   </head>
   <body>
     <div>
       <button id="initialize">Initialize</button>
+
+      <div id="initializedContainer">
+        <button id="start">Start</button>
+        <button id="stop">Stop</button>
+        <button id="abort">Abort</button>
+      </div>
     </div>
 
     <script src="js/index.js"></script>
     <script>
+
+      const client = new window.JovoWebClient.Client('http://localhost:3000/webhook', {});
+
+      const initializedContainer = document.getElementById('initializedContainer');
+      const initializeButton = document.getElementById('initialize');
+
+      const startButton = document.getElementById('start');
+      const stopButton = document.getElementById('stop');
+      const abortButton = document.getElementById('abort');
+
+
+      initializeButton.addEventListener('click', async () => {
+        initializeButton.style.display = 'none';
+        initializedContainer.style.display = 'block';
+        await client.initialize();
+      });
+
+      startButton.addEventListener('click', async () => {
+        await client.startInputRecording()
+      })
+
+      stopButton.addEventListener('click', () => {
+        client.stopInputRecording();
+      });
+
+      abortButton.addEventListener('click', () => {
+        client.abortInputRecording()
+      });
+
+
+
 
     </script>
   </body>

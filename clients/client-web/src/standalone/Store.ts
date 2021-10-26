@@ -1,24 +1,14 @@
+import { Session, User } from '@jovotech/platform-core';
 import _defaultsDeep from 'lodash.defaultsdeep';
 import { v4 as uuidV4 } from 'uuid';
 import { DeepPartial } from '..';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Data = Record<string, any>;
 
-export interface SessionData {
-  id: string;
-  data: Data;
-  new: boolean;
-  lastUpdatedAt: Date;
-}
-
-export interface UserData {
-  id: string;
-  data: Data;
-}
-
 export interface PersistedData {
-  user: UserData;
-  session?: SessionData;
+  user: User;
+  session?: Session;
 }
 
 export interface StoreConfig {
@@ -27,7 +17,6 @@ export interface StoreConfig {
   sessionExpirationInSeconds: number;
 }
 
-// TODO Could be improved/changed
 export class Store {
   static getDefaultConfig(): StoreConfig {
     return {
@@ -36,10 +25,12 @@ export class Store {
       sessionExpirationInSeconds: 1800,
     };
   }
+
   readonly config: StoreConfig;
+
   data: Data = {};
-  sessionData!: SessionData;
-  userData!: UserData;
+  sessionData!: Session;
+  userData!: User;
 
   constructor(config?: DeepPartial<StoreConfig>) {
     const defaultConfig = Store.getDefaultConfig();
@@ -47,24 +38,24 @@ export class Store {
     this.load();
   }
 
-  resetSession() {
+  resetSession(): void {
     this.sessionData = this.newSessionData();
   }
 
-  load() {
+  load(): void {
     const rawPersistedData = localStorage.getItem(this.config.storageKey) || '{}';
     const persistedData: Partial<PersistedData> = JSON.parse(rawPersistedData);
 
-    const defaultUserData: UserData = {
+    const defaultUserData: User = {
       id: uuidV4(),
       data: {},
     };
     this.userData = _defaultsDeep(persistedData.user, defaultUserData);
 
-    const defaultSessionData: SessionData = this.newSessionData();
+    const defaultSessionData = this.newSessionData();
     const sessionExpirationDate = persistedData.session?.lastUpdatedAt
       ? this.config.sessionExpirationInSeconds * 1000 +
-        new Date(persistedData.session.lastUpdatedAt).getTime()
+        new Date(persistedData.session.updatedAt).getTime()
       : undefined;
     const isExpired = sessionExpirationDate && sessionExpirationDate < new Date().getTime();
     this.sessionData = isExpired
@@ -72,7 +63,7 @@ export class Store {
       : _defaultsDeep(persistedData.session, defaultSessionData);
   }
 
-  save() {
+  save(): void {
     const persistedData: Partial<PersistedData> = {
       user: this.userData,
       session: this.config.shouldPersistSession ? this.sessionData : undefined,
@@ -80,12 +71,13 @@ export class Store {
     localStorage.setItem(this.config.storageKey, JSON.stringify(persistedData));
   }
 
-  private newSessionData(): SessionData {
+  private newSessionData(): Session {
     return {
       id: uuidV4(),
       data: {},
-      new: true,
-      lastUpdatedAt: new Date(),
+      state: [],
+      isNew: true,
+      updatedAt: new Date(),
     };
   }
 }

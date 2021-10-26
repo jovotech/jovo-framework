@@ -1,5 +1,5 @@
 import _defaultsDeep from 'lodash.defaultsdeep';
-import { DeepPartial, OperatingSystemDetector, VoidListener } from '..';
+import { DeepPartial, NotInitializedError, OperatingSystemDetector, VoidListener } from '..';
 import { EventListenerMap, TypedEventEmitter } from '../utilities/TypedEventEmitter';
 
 interface AudioRecorderNodes {
@@ -63,30 +63,6 @@ export interface AudioRecorderConfig {
 }
 
 export class AudioRecorder extends TypedEventEmitter<AudioRecorderEventListenerMap> {
-  get isInitialized(): boolean {
-    return this.initialized;
-  }
-
-  get isRecording(): boolean {
-    return this.recording;
-  }
-
-  get startDetectionEnabled(): boolean {
-    return !!(
-      this.config.startDetection.enabled &&
-      this.config.startDetection.threshold &&
-      this.config.startDetection.timeoutInMs
-    );
-  }
-
-  get silenceDetectionEnabled(): boolean {
-    return !!(
-      this.config.silenceDetection.enabled &&
-      this.config.silenceDetection.threshold &&
-      this.config.silenceDetection.timeoutInMs
-    );
-  }
-
   static getDefaultConfig(): AudioRecorderConfig {
     return {
       sampleRate: 16000,
@@ -131,6 +107,30 @@ export class AudioRecorder extends TypedEventEmitter<AudioRecorderEventListenerM
 
     const defaultConfig = AudioRecorder.getDefaultConfig();
     this.config = config ? _defaultsDeep(config, defaultConfig) : defaultConfig;
+  }
+
+  get isInitialized(): boolean {
+    return this.initialized;
+  }
+
+  get isRecording(): boolean {
+    return this.recording;
+  }
+
+  get startDetectionEnabled(): boolean {
+    return !!(
+      this.config.startDetection.enabled &&
+      this.config.startDetection.threshold &&
+      this.config.startDetection.timeoutInMs
+    );
+  }
+
+  get silenceDetectionEnabled(): boolean {
+    return !!(
+      this.config.silenceDetection.enabled &&
+      this.config.silenceDetection.threshold &&
+      this.config.silenceDetection.timeoutInMs
+    );
   }
 
   /**
@@ -204,7 +204,7 @@ export class AudioRecorder extends TypedEventEmitter<AudioRecorderEventListenerM
 
   private startRecording(stream: MediaStream) {
     if (!this.audioContext) {
-      throw new Error('The AudioRecorder has to be initialized before it can be used!');
+      throw new NotInitializedError('AudioRecorder');
     }
 
     this.chunks = [];
@@ -348,16 +348,14 @@ export class AudioRecorder extends TypedEventEmitter<AudioRecorderEventListenerM
 
   private checkForInitialization() {
     if (!this.initialized) {
-      throw new Error(
-        `The AudioRecorder has to be initialized by calling the 'initialize'-method before being able to use it.`,
-      );
+      throw new NotInitializedError('AudioRecorder');
     }
   }
 
   private checkForBrowserCompatibility() {
-    if (location.hostname !== 'localhost' && location.protocol !== 'https:') {
-      throw new Error('Recording is only allowed on https-sites except for localhost.');
-    }
+    // if (location.hostname !== 'localhost' && location.protocol !== 'https:') {
+    //   throw new Error('Recording is only allowed on https-sites except for localhost.');
+    // }
     if (!navigator || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       throw new Error(
         '`navigator.mediaDevices.getUserMedia` is not available - recording is not supported',

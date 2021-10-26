@@ -1,3 +1,5 @@
+import { CoreRequest, CoreResponse } from '@jovotech/platform-core';
+
 declare global {
   interface Window {
     webkitSpeechRecognition?: new () => SpeechRecognition;
@@ -10,13 +12,16 @@ declare global {
   }
 }
 
-export type { CoreRequest, CoreResponse } from '@jovotech/platform-core';
+export type { CoreRequest, CoreResponse };
 
 export * from './interfaces';
 export * from './utilities';
-export * from './core/ActionHandler';
+
 export * from './core/RepromptHandler';
 export * from './core/SSMLHandler';
+
+export * from './errors/NotInitializedError';
+
 export * from './standalone/AudioPlayer';
 export * from './standalone/AudioRecorder';
 export * from './standalone/SpeechRecognizer';

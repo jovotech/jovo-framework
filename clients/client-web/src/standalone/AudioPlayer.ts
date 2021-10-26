@@ -1,15 +1,7 @@
-import { JovoError } from '@jovotech/common';
 import _defaultsDeep from 'lodash.defaultsdeep';
 import { Base64Converter, DeepPartial, VoidListener } from '..';
+import { NotInitializedError } from '../errors/NotInitializedError';
 import { EventListenerMap, TypedEventEmitter } from '../utilities/TypedEventEmitter';
-
-export class AudioPlayerNotInitializedError extends JovoError {
-  constructor() {
-    super({
-      message: 'AudioPlayer has to be initialized before being used.',
-    });
-  }
-}
 
 export enum AudioPlayerEvent {
   Play = 'play',
@@ -37,6 +29,19 @@ export class AudioPlayer extends TypedEventEmitter<AudioPlayerEventListenerMap> 
     return {
       enabled: true,
     };
+  }
+
+  readonly config: AudioPlayerConfig;
+  private audioVolume = 1.0;
+  private audio: HTMLAudioElement | null = null;
+  private isAudioPlaying = false;
+  private initialized = false;
+
+  constructor(config?: DeepPartial<AudioPlayerConfig>) {
+    super();
+
+    const defaultConfig = AudioPlayer.getDefaultConfig();
+    this.config = config ? _defaultsDeep(config, defaultConfig) : defaultConfig;
   }
 
   get isInitialized(): boolean {
@@ -70,19 +75,6 @@ export class AudioPlayer extends TypedEventEmitter<AudioPlayerEventListenerMap> 
     }
   }
 
-  readonly config: AudioPlayerConfig;
-  private audioVolume = 1.0;
-  private audio: HTMLAudioElement | null = null;
-  private isAudioPlaying = false;
-  private initialized = false;
-
-  constructor(config?: DeepPartial<AudioPlayerConfig>) {
-    super();
-
-    const defaultConfig = AudioPlayer.getDefaultConfig();
-    this.config = config ? _defaultsDeep(config, defaultConfig) : defaultConfig;
-  }
-
   // Has to be called synchronously within an user-interaction handler (click, touch) in order to work on Safari
   initialize(): void {
     if (this.initialized) {
@@ -111,7 +103,7 @@ export class AudioPlayer extends TypedEventEmitter<AudioPlayerEventListenerMap> 
     this.checkForInitialization();
     return new Promise(async (resolve, reject) => {
       if (!this.audio) {
-        return reject(new AudioPlayerNotInitializedError());
+        return reject(new NotInitializedError('AudioPlayer'));
       }
 
       if (!audioSource.startsWith('https://')) {
@@ -189,7 +181,7 @@ export class AudioPlayer extends TypedEventEmitter<AudioPlayerEventListenerMap> 
 
   private checkForInitialization() {
     if (!this.initialized) {
-      throw new AudioPlayerNotInitializedError();
+      throw new NotInitializedError('AudioPlayer');
     }
   }
 }

@@ -1,104 +1,98 @@
-import { EventEmitter } from 'events';
+import { Input, InputType, PlainObjectType } from '@jovotech/common';
+import { CoreRequest, CoreResponse, Device } from '@jovotech/platform-core';
 import _defaultsDeep from 'lodash.defaultsdeep';
+import { v4 as uuidV4 } from 'uuid';
+import { HttpTransportStrategy } from './core/HttpTransportStrategy';
+import { NetworkTransportStrategy } from './core/NetworkTransportStrategy';
 import { OutputProcessor } from './core/OutputProcessor';
 import {
-  AnyListener,
   AudioHelper,
   AudioPlayer,
   AudioPlayerConfig,
   AudioRecorder,
   AudioRecorderConfig,
   AudioRecorderEvent,
-  AudioRecorderStopListener,
-  CoreRequest,
-  CoreResponse,
+  AudioRecorderEventListenerMap,
+  Base64Converter,
   DeepPartial,
   RepromptHandler,
   RepromptHandlerConfig,
   SpeechRecognizer,
   SpeechRecognizerConfig,
-  SpeechRecognizerEndListener,
   SpeechRecognizerEvent,
+  SpeechRecognizerEventListenerMap,
   SpeechSynthesizer,
   SpeechSynthesizerConfig,
   Store,
   StoreConfig,
   VoidListener,
 } from './index';
+import { EventListenerMap, TypedEventEmitter } from './utilities/TypedEventEmitter';
+
+export type ClientRequest = PlainObjectType<CoreRequest>;
+export type ClientResponse = PlainObjectType<CoreResponse>;
 
 export enum ClientEvent {
   Request = 'request',
   Response = 'response',
-  Action = 'action',
-  ActionsHandled = 'actions-handled',
-  Reprompt = 'reprompt',
   RepromptLimitReached = 'reprompt-limit-reached',
 }
 
-// export type ClientRequestListener = (request: WebRequest) => void;
-// export type ClientResponseListener = (response: WebResponse) => void;
-// export type ClientActionListener = (action: Action) => void;
-// export type ClientActionsHandledListener = (actions: Action[]) => void;
-// export type ClientRepromptListener = (repromptActions: Action[]) => void;
-export type ClientRequestListener = (request: CoreRequest) => void;
-export type ClientResponseListener = (response: CoreResponse) => void;
-export type ClientVoidEvents = ClientEvent.RepromptLimitReached;
+export interface ClientEventListenerMap extends EventListenerMap {
+  [ClientEvent.Request]: (request: ClientRequest) => void;
+  [ClientEvent.Response]: (response: ClientResponse) => void;
+  [ClientEvent.RepromptLimitReached]: VoidListener;
+}
+
+export interface InputConfig {
+  audioRecorder: AudioRecorderConfig;
+  speechRecognizer: SpeechRecognizerConfig;
+}
+
+export interface OutputConfig {
+  audioPlayer: AudioPlayerConfig;
+  speechSynthesizer: SpeechSynthesizerConfig;
+  reprompts: RepromptHandlerConfig;
+}
 
 export interface Config {
   version: string;
-  appId: string;
-  platform: string;
-  // device: Device;
-  device: any;
   locale: string;
-  audioPlayer: AudioPlayerConfig;
-  audioRecorder: AudioRecorderConfig;
-  repromptHandler: RepromptHandlerConfig;
-  speechRecognizer: SpeechRecognizerConfig;
-  speechSynthesizer: SpeechSynthesizerConfig;
+  platform: string;
+  device: Device;
+  input: InputConfig;
+  output: OutputConfig;
   store: StoreConfig;
 }
 
-export class Client extends EventEmitter {
-  get isInitialized(): boolean {
-    return this.initialized;
-  }
+export interface InitConfig extends Config {
+  networkTransportStrategy?: NetworkTransportStrategy;
+}
 
-  get isPlayingAudio(): boolean {
-    return this.audioPlayer.isPlaying || this.speechSynthesizer.isSpeaking;
-  }
-
-  get isRecordingInput(): boolean {
-    return this.audioRecorder.isRecording || this.speechRecognizer.isRecording;
-  }
-
-  get isUsingSpeechRecognition(): boolean {
-    return this.useSpeechRecognition;
-  }
-
+export class Client extends TypedEventEmitter<ClientEventListenerMap> {
   static getDefaultConfig(): Config {
     return {
-      version: '3.4.0',
-      appId: '',
-      platform: '',
-      device: {
-        id: '',
-        type: '',
-        capabilities: {
-          AUDIO: true,
-          HTML: true,
-          TEXT: true,
-        },
-      },
+      version: '4.0-beta',
       locale: 'en',
-      audioPlayer: AudioPlayer.getDefaultConfig(),
-      audioRecorder: AudioRecorder.getDefaultConfig(),
-      repromptHandler: RepromptHandler.getDefaultConfig(),
-      speechRecognizer: SpeechRecognizer.getDefaultConfig(),
-      speechSynthesizer: SpeechSynthesizer.getDefaultConfig(),
+      platform: 'web',
+      device: {
+        id: uuidV4(),
+        capabilities: ['SCREEN', 'AUDIO'],
+      },
+      input: {
+        audioRecorder: AudioRecorder.getDefaultConfig(),
+        speechRecognizer: SpeechRecognizer.getDefaultConfig(),
+      },
+      output: {
+        audioPlayer: AudioPlayer.getDefaultConfig(),
+        speechSynthesizer: SpeechSynthesizer.getDefaultConfig(),
+        reprompts: RepromptHandler.getDefaultConfig(),
+      },
       store: Store.getDefaultConfig(),
     };
   }
+
+  networkTransportStrategy: NetworkTransportStrategy;
 
   readonly audioPlayer: AudioPlayer;
   readonly audioRecorder: AudioRecorder;
@@ -111,17 +105,22 @@ export class Client extends EventEmitter {
   private isInputProcessOngoing = false;
   private initialized = false;
 
-  constructor(readonly endpointUrl: string, config?: DeepPartial<Config>) {
+  constructor(readonly endpointUrl: string, config?: DeepPartial<InitConfig>) {
     super();
+
+    this.networkTransportStrategy =
+      config?.networkTransportStrategy instanceof HttpTransportStrategy
+        ? (config.networkTransportStrategy as HttpTransportStrategy)
+        : new HttpTransportStrategy(this.endpointUrl);
 
     const defaultConfig = Client.getDefaultConfig();
     this.config = config ? _defaultsDeep(config, defaultConfig) : defaultConfig;
 
-    this.audioPlayer = new AudioPlayer(this.config.audioPlayer);
-    this.audioRecorder = new AudioRecorder(this.config.audioRecorder);
+    this.audioPlayer = new AudioPlayer(this.config.output.audioPlayer);
+    this.audioRecorder = new AudioRecorder(this.config.input.audioRecorder);
     this.outputProcessor = new OutputProcessor(this);
-    this.speechRecognizer = new SpeechRecognizer(this.config.speechRecognizer);
-    this.speechSynthesizer = new SpeechSynthesizer(this.config.speechSynthesizer);
+    this.speechRecognizer = new SpeechRecognizer(this.config.input.speechRecognizer);
+    this.speechSynthesizer = new SpeechSynthesizer(this.config.output.speechSynthesizer);
     this.store = new Store(this.config.store);
     this.store.load();
 
@@ -164,49 +163,26 @@ export class Client extends EventEmitter {
       }
     });
 
-    this.on(ClientEvent.Response, (res) => {
-      return this.handleResponse(res);
-    });
-
     this.on(ClientEvent.RepromptLimitReached, () => {
       this.store.resetSession();
       this.store.save();
     });
   }
 
-  addListener(event: ClientEvent.Request, listener: ClientRequestListener): this;
-  addListener(event: ClientEvent.Response, listener: ClientResponseListener): this;
-  addListener(event: ClientVoidEvents, listener: VoidListener): this;
-  addListener(event: string | symbol, listener: AnyListener): this {
-    return super.addListener(event, listener);
+  get isInitialized(): boolean {
+    return this.initialized;
   }
 
-  on(event: ClientEvent.Request, listener: ClientRequestListener): this;
-  on(event: ClientEvent.Response, listener: ClientResponseListener): this;
-  on(event: ClientVoidEvents, listener: VoidListener): this;
-  on(event: string | symbol, listener: AnyListener): this {
-    return super.on(event, listener);
+  get isPlayingAudio(): boolean {
+    return this.audioPlayer.isPlaying || this.speechSynthesizer.isSpeaking;
   }
 
-  once(event: ClientEvent.Request, listener: ClientRequestListener): this;
-  once(event: ClientEvent.Response, listener: ClientResponseListener): this;
-  once(event: ClientVoidEvents, listener: VoidListener): this;
-  once(event: string | symbol, listener: AnyListener): this {
-    return super.once(event, listener);
+  get isRecordingInput(): boolean {
+    return this.audioRecorder.isRecording || this.speechRecognizer.isRecording;
   }
 
-  prependListener(event: ClientEvent.Request, listener: ClientRequestListener): this;
-  prependListener(event: ClientEvent.Response, listener: ClientResponseListener): this;
-  prependListener(event: ClientVoidEvents, listener: VoidListener): this;
-  prependListener(event: string | symbol, listener: AnyListener): this {
-    return super.prependListener(event, listener);
-  }
-
-  prependOnceListener(event: ClientEvent.Request, listener: ClientRequestListener): this;
-  prependOnceListener(event: ClientEvent.Response, listener: ClientResponseListener): this;
-  prependOnceListener(event: ClientVoidEvents, listener: VoidListener): this;
-  prependOnceListener(event: string | symbol, listener: AnyListener): this {
-    return super.prependOnceListener(event, listener);
+  get isUsingSpeechRecognition(): boolean {
+    return this.useSpeechRecognition;
   }
 
   /**
@@ -261,31 +237,61 @@ export class Client extends EventEmitter {
     this.isInputProcessOngoing = false;
   }
 
-  protected async handleResponse(response: CoreResponse): Promise<void> {
+  createRequest(input: Input): ClientRequest {
+    return {
+      version: this.config.version,
+      platform: this.config.platform,
+      id: uuidV4(),
+      timestamp: new Date().toISOString(),
+      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      locale: this.config.locale,
+      input,
+      context: {
+        device: this.config.device,
+        session: this.store.sessionData,
+        user: this.store.userData,
+      },
+    };
+  }
+
+  async send(input: Input): Promise<ClientResponse> {
+    const request = this.createRequest(input);
+    const response = await this.networkTransportStrategy.send(request);
+    this.emit(ClientEvent.Response, response);
+    await this.handleResponse(response);
+    return response;
+  }
+
+  protected async handleResponse(response: ClientResponse): Promise<void> {
+    // TODO update to latest version
     if (response.context.session.end) {
       this.store.resetSession();
     } else {
-      this.store.sessionData.new = false;
+      this.store.sessionData.isNew = false;
+      this.store.sessionData.state = response.context.session.state;
       this.store.sessionData.data = response.context.session.data;
+      this.store.sessionData.updatedAt = new Date();
     }
     if (response.context.user?.data) {
       this.store.userData.data = response.context.user.data;
     }
     this.store.save();
 
-    if(response.output?.length) {
-
+    if (response.output?.length) {
+      await this.outputProcessor.processSequence(response.output);
     }
   }
 
-  private onSpeechRecognizerEnd: SpeechRecognizerEndListener = async (event) => {
+  private onSpeechRecognizerEnd: SpeechRecognizerEventListenerMap['end'] = async (event) => {
     if (!event) {
       this.onSpeechRecognizerAbort();
       return;
     }
     const text = AudioHelper.textFromSpeechRecognition(event);
-    // TODO implement
-    // await this.createRequest({ type: 'TRANSCRIBED_TEXT', body: { text } }).send();
+    await this.send({
+      type: InputType.TranscribedSpeech,
+      text,
+    });
     this.onSpeechRecognizerAbort();
   };
 
@@ -296,12 +302,14 @@ export class Client extends EventEmitter {
     this.speechRecognizer.off(SpeechRecognizerEvent.Timeout, this.onSpeechRecognizerAbort);
   };
 
-  private onAudioRecorderStop: AudioRecorderStopListener = async (result) => {
-    // TODO implement
-    // await this.createRequest({
-    //   type: 'SPEECH',
-    //   body: AudioHelper.getRequestBodyFromAudioRecorderResult(result),
-    // }).send();
+  private onAudioRecorderStop: AudioRecorderEventListenerMap['stop'] = async (result) => {
+    await this.send({
+      type: InputType.Speech,
+      audio: {
+        sampleRate: result.sampleRate,
+        base64: Base64Converter.arrayBufferToBase64(result.data.buffer),
+      },
+    });
     this.onAudioRecorderAbort();
   };
 

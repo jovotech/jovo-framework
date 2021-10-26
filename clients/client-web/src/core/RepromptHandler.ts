@@ -38,8 +38,9 @@ export class RepromptHandler {
 
   async onInputTimeout() {
     if (this.attempts < this.config.maxAttempts) {
-      this.client.emit(ClientEvent.Reprompt, this.actions);
-      await this.client.actionHandler.handleActions(this.actions);
+      // TODO implement
+      // this.client.emit(ClientEvent.Reprompt, this.actions);
+      // await this.client.actionHandler.handleActions(this.actions);
       await this.startReprompt();
       this.attempts++;
     } else {

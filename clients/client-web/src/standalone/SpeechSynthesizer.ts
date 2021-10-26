@@ -26,12 +26,24 @@ export interface SpeechSynthesizerConfig {
 }
 
 export class SpeechSynthesizer extends TypedEventEmitter<SpeechSynthesizerEventListenerMap> {
-  get volume(): number {
-    return this.$volume;
+  static getDefaultConfig(): SpeechSynthesizerConfig {
+    return {
+      enabled: true,
+      language: 'en',
+    };
   }
+  volume = 1.0;
+  readonly config: SpeechSynthesizerConfig;
+  private readonly synthesis: SpeechSynthesis | null;
+  private isSpeakingUtterance = false;
 
-  set volume(value: number) {
-    this.$volume = value;
+  constructor(config?: DeepPartial<SpeechSynthesizerConfig>) {
+    super();
+
+    const defaultConfig = SpeechSynthesizer.getDefaultConfig();
+    this.config = config ? _defaultsDeep(config, defaultConfig) : defaultConfig;
+
+    this.synthesis = window.speechSynthesis || null;
   }
 
   get isAvailable(): boolean {
@@ -54,54 +66,28 @@ export class SpeechSynthesizer extends TypedEventEmitter<SpeechSynthesizerEventL
     return !!this.synthesis && this.synthesis.speaking;
   }
 
-  static getDefaultConfig(): SpeechSynthesizerConfig {
-    return {
-      enabled: true,
-      language: 'en',
-    };
-  }
-  readonly config: SpeechSynthesizerConfig;
-  private $volume = 1.0;
-  private readonly synthesis: SpeechSynthesis | null;
-  private isSpeakingUtterance = false;
-
-  constructor(config?: DeepPartial<SpeechSynthesizerConfig>) {
-    super();
-
-    const defaultConfig = SpeechSynthesizer.getDefaultConfig();
-    this.config = config ? _defaultsDeep(config, defaultConfig) : defaultConfig;
-
-    this.synthesis = window.speechSynthesis || null;
-  }
-
-  resume() {
-    if (!this.config.enabled) {
+  resume(): void {
+    if (!this.config.enabled || !this.canResume || !this.synthesis) {
       return;
     }
-    if (this.canResume) {
-      this.synthesis!.resume();
-      this.emit(SpeechSynthesizerEvent.Resume);
-    }
+    this.synthesis.resume();
+    this.emit(SpeechSynthesizerEvent.Resume);
   }
 
-  pause() {
-    if (!this.config.enabled) {
+  pause(): void {
+    if (!this.config.enabled || !this.canPause || !this.synthesis) {
       return;
     }
-    if (this.canPause) {
-      this.synthesis!.pause();
-      this.emit(SpeechSynthesizerEvent.Pause);
-    }
+    this.synthesis.pause();
+    this.emit(SpeechSynthesizerEvent.Pause);
   }
 
-  stop() {
-    if (!this.config.enabled) {
+  stop(): void {
+    if (!this.config.enabled || !this.canStop || !this.synthesis) {
       return;
     }
-    if (this.canStop) {
-      this.synthesis!.cancel();
-      this.emit(SpeechSynthesizerEvent.Stop);
-    }
+    this.synthesis.cancel();
+    this.emit(SpeechSynthesizerEvent.Stop);
   }
 
   speak(utterance: SpeechSynthesisUtterance | string, forceVolume = true): Promise<void> {
@@ -116,7 +102,7 @@ export class SpeechSynthesizer extends TypedEventEmitter<SpeechSynthesizerEventL
         typeof utterance === 'string' ? new SpeechSynthesisUtterance(utterance) : utterance;
 
       if (forceVolume) {
-        utterance.volume = this.$volume;
+        utterance.volume = this.volume;
       }
       if (this.config.language) {
         utterance.lang = this.config.language;
@@ -142,7 +128,7 @@ export class SpeechSynthesizer extends TypedEventEmitter<SpeechSynthesizerEventL
         return resolve();
       };
 
-      this.synthesis?.speak(utterance);
+      this.synthesis.speak(utterance);
       this.isSpeakingUtterance = true;
       this.emit(SpeechSynthesizerEvent.Speak, utterance);
     });

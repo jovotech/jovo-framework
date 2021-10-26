@@ -1,7 +1,6 @@
 import { EventEmitter } from 'events';
 import { AnyListener, ErrorListener } from '../interfaces';
 
-// export type EventListenerMap = Record<string, AnyListener>;
 export interface EventListenerMap {
   [key: string]: AnyListener;
   error: ErrorListener;

@@ -42,32 +42,6 @@ export interface SpeechRecognizerConfig extends SpeechRecognitionConfig {
 }
 
 export class SpeechRecognizer extends TypedEventEmitter<SpeechRecognizerEventListenerMap> {
-  get isRecording(): boolean {
-    return this.recording;
-  }
-
-  get isAvailable(): boolean {
-    return !!this.recognition;
-  }
-
-  get startDetectionEnabled(): boolean {
-    return !!(
-      this.config.continuous &&
-      this.config.interimResults &&
-      this.config.startDetection.enabled &&
-      this.config.startDetection.timeoutInMs
-    );
-  }
-
-  get silenceDetectionEnabled(): boolean {
-    return !!(
-      this.config.continuous &&
-      this.config.interimResults &&
-      this.config.silenceDetection.enabled &&
-      this.config.silenceDetection.timeoutInMs
-    );
-  }
-
   static isSupported(): boolean {
     return (
       !!(window.SpeechRecognition || window.webkitSpeechRecognition) && BrowserDetector.isChrome()
@@ -113,31 +87,57 @@ export class SpeechRecognizer extends TypedEventEmitter<SpeechRecognizerEventLis
     }
   }
 
+  get isRecording(): boolean {
+    return this.recording;
+  }
+
+  get isAvailable(): boolean {
+    return !!this.recognition;
+  }
+
+  get startDetectionEnabled(): boolean {
+    return !!(
+      this.config.continuous &&
+      this.config.interimResults &&
+      this.config.startDetection.enabled &&
+      this.config.startDetection.timeoutInMs
+    );
+  }
+
+  get silenceDetectionEnabled(): boolean {
+    return !!(
+      this.config.continuous &&
+      this.config.interimResults &&
+      this.config.silenceDetection.enabled &&
+      this.config.silenceDetection.timeoutInMs
+    );
+  }
+
   start(): void {
-    if (this.recording || !this.isAvailable) {
+    if (this.recording || !this.recognition) {
       return;
     }
     this.lastRecognitionEvent = null;
-    this.recognition?.start();
+    this.recognition.start();
     this.recording = true;
     this.emit(SpeechRecognizerEvent.Start);
   }
 
   stop(): void {
-    if (!this.recording || !this.isAvailable) {
+    if (!this.recording || !this.recognition) {
       return;
     }
     this.emit(SpeechRecognizerEvent.Stop);
-    this.recognition?.stop();
+    this.recognition.stop();
   }
 
   abort(): void {
-    if (!this.recording || !this.isAvailable) {
+    if (!this.recording || !this.recognition) {
       return;
     }
     this.emit(SpeechRecognizerEvent.Abort);
     this.ignoreNextEnd = true;
-    this.recognition?.abort();
+    this.recognition.abort();
   }
 
   private setupSpeechRecognition(recognition: SpeechRecognition) {

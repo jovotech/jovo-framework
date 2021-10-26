@@ -22,7 +22,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@jovotech/common": "^4.0.0-beta.1",
-    "@jovotech/output": "^4.0.0-beta.6",
+    "@jovotech/output": "^4.0.0-beta.1",
     "@jovotech/platform-core": "^4.0.0-beta.7",
     "detect-browser": "^5.2.1",
     "events": "^3.3.0",
