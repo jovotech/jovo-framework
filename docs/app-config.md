@@ -2,6 +2,7 @@
 title: 'App Configuration'
 excerpt: 'Learn how to configure a Jovo app and how to add plugins, components, and staging.'
 ---
+
 # App Configuration
 
 The app configuration in `app.ts` is the place where you can add plugins, components, and other configurations to your Jovo app. [For project related configuration, take a look here](./project-config.md).
@@ -10,19 +11,18 @@ The app configuration in `app.ts` is the place where you can add plugins, compon
 
 The app configuration files are the main entry point of your Jovo apps. Each Jovo project usually comes with at least two files for this:
 
-* `app.ts`: Default configurations
-* `app.dev.ts`: Configurations for local development
+- `app.ts`: Default configurations
+- `app.dev.ts`: Configurations for local development ([FileDb](https://v4.jovo.tech/marketplace/db-filedb), [ExpressJS server](https://v4.jovo.tech/marketplace/server-express) and the [Jovo Debugger](https://v4.jovo.tech/docs/debugger))
 
 Jovo offers different [ways to add configurations](#ways-to-add-configurations), [many configuration options](#configuration-elements), and [staging](#staging) that makes it possible to have different Jovo app versions for different deployment environments.
-
 
 ## Ways to add Configurations
 
 There are three ways how app configurations can be done:
 
-* Using the `new App()` constructor in `app.ts` for default configurations.
-* Using `app.configure` for stage-specific configurations.
-* Using `app.use` to add specific plugins and components anywhere in the app.
+- Using the `new App()` constructor in `app.ts` for default configurations.
+- Using `app.configure` for stage-specific configurations.
+- Using `app.use` to add specific plugins and components anywhere in the app.
 
 In the `app.ts`, the configuration is added like this:
 
@@ -58,9 +58,11 @@ import { SomePlugin } from './plugin';
 
 // ...
 
-app.use(new SomePlugin({
-  // Configuration
-}));
+app.use(
+  new SomePlugin({
+    // Configuration
+  }),
+);
 ```
 
 ## Configuration Elements
@@ -139,7 +141,6 @@ Additionally, each plugin config includes a `skipTests` option that makes sure t
 }
 ```
 
-
 ### Logging
 
 [Logging](./logging.md) is enabled by adding the following to the app config:
@@ -148,7 +149,7 @@ Additionally, each plugin config includes a `skipTests` option that makes sure t
 {
   // ...
 
-  logging: true
+  logging: true;
 }
 ```
 
@@ -165,7 +166,6 @@ You can also add granular configurations by turning `logging` into an object:
 ```
 
 [Learn more about logging and its configuration options here](./logging.md).
-
 
 ### Routing
 
@@ -245,7 +245,6 @@ If you're using an [NLU integration](./nlu.md), the original intent stays in the
 
 [Learn more about `intentsToSkipUnhandled` here](./routing.md#intentstoskipunhadled).
 
-
 ## Staging
 
 Stage-specific configurations from a file called `app.<stage>.ts` get merged into the default configuration from `app.ts`.
@@ -259,4 +258,4 @@ $ jovov4 new:stage <stage>
 $ jovov4 new:stage prod
 ```
 
-This creates a new file `app.prod.ts`. In the process, you can select plugins and a server integration to work with this stage.
+This creates a new file `app.prod.ts`. In the process, you can select plugins and a [server integration](./server.md) to work with this stage.
