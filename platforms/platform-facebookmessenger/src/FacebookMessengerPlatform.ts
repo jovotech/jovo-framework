@@ -27,13 +27,16 @@ import { FacebookMessengerDevice } from './FacebookMessengerDevice';
 import { FacebookMessengerRequest } from './FacebookMessengerRequest';
 import { FacebookMessengerRequestBuilder } from './FacebookMessengerRequestBuilder';
 import { FacebookMessengerUser } from './FacebookMessengerUser';
-import { MessengerBotEntry } from './interfaces';
+import { MessengerBotEntry, SenderAction } from './interfaces';
 
 export interface FacebookMessengerConfig extends ExtensibleConfig {
   version: typeof LATEST_FACEBOOK_API_VERSION | string;
   verifyToken: string;
   pageAccessToken: string;
-
+  senderActions?: {
+    markSeen?: boolean;
+    typingIndicator?: boolean;
+  };
   session?: StoredElementSession & { enabled?: never };
 }
 
@@ -94,6 +97,10 @@ export class FacebookMessengerPlatform extends Platform<
       verifyToken: DEFAULT_FACEBOOK_VERIFY_TOKEN,
       pageAccessToken: '',
       version: LATEST_FACEBOOK_API_VERSION,
+      senderActions: {
+        markSeen: true,
+        typingIndicator: true,
+      },
     };
   }
 
@@ -204,12 +211,10 @@ export class FacebookMessengerPlatform extends Platform<
       });
     }
     try {
-      console.log(data);
       // TODO: AttachmentMessage-support
       return await axios.post<RESPONSE>(this.endpoint, data);
     } catch (error) {
       if (error.isAxiosError) {
-        console.log(error.response.data);
         throw new JovoError({ message: error.message, details: error.response.data.error.message });
       }
 
