@@ -1,11 +1,7 @@
 import { registerPlatformSpecificJovoReference } from '@jovotech/framework';
-import {
-  FacebookMessengerConfig as InstagramConfig,
-  FacebookMessengerUser as InstagramUser,
-} from '@jovotech/platform-facebookmessenger';
+import { FacebookMessengerConfig as InstagramConfig } from '@jovotech/platform-facebookmessenger';
 import { Instagram } from './Instagram';
 import { InstagramPlatform } from './InstagramPlatform';
-import { InstagramResponse } from '@jovotech/output-instagram';
 
 declare module '@jovotech/framework/dist/types/Extensible' {
   interface ExtensiblePluginConfig {
@@ -27,4 +23,5 @@ registerPlatformSpecificJovoReference('$instagram', Instagram);
 export * from './Instagram';
 export * from './InstagramPlatform';
 export * from './InstagramRequest';
-export { InstagramResponse, InstagramUser };
+export * from './InstagramUser';
+export type { InstagramResponse } from '@jovotech/output-instagram';
