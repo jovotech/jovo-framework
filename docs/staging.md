@@ -24,7 +24,7 @@ For example, new Jovo templates come with an `app.ts` for all default configurat
 
 Stage-specific configurations get merged into the default `app.ts` config.
 
-You can create a new stage file like this:
+You can create a new stage file using the [`new:stage` command](https://v4.jovo.tech/docs/new-command#new-stage):
 
 ```sh
 $ jovov4 new:stage <stage>
@@ -33,7 +33,7 @@ $ jovov4 new:stage <stage>
 $ jovov4 new:stage prod
 ```
 
-This command also let's you specify which [server integration](./server.md) should be used for that stage.
+This command also lets you specify which [server integration](./server.md) should be used for that stage.
 
 Learn more about app staging [in the app config documentation](./app-config.md#staging).
 
