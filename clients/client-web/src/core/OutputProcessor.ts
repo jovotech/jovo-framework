@@ -16,7 +16,7 @@ export class OutputProcessor {
     if (reprompts.length) {
       await this.client.repromptProcessor.processReprompts(
         reprompts,
-        this.client.isUsingSpeechRecognition,
+        this.client.previousRecordingModality,
       );
     }
   }

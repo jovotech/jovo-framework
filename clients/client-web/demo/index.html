@@ -23,7 +23,6 @@
 
     <script src="js/index.js"></script>
     <script>
-
       const client = new window.JovoWebClient.Client('http://localhost:3000/webhook', {});
 
       const initializedContainer = document.getElementById('initializedContainer');
@@ -33,7 +32,6 @@
       const stopButton = document.getElementById('stop');
       const abortButton = document.getElementById('abort');
 
-
       initializeButton.addEventListener('click', async () => {
         initializeButton.style.display = 'none';
         initializedContainer.style.display = 'block';
@@ -41,20 +39,16 @@
       });
 
       startButton.addEventListener('click', async () => {
-        await client.startInputRecording()
-      })
+        await client.startRecording();
+      });
 
       stopButton.addEventListener('click', () => {
-        client.stopInputRecording();
+        client.stopRecording();
       });
 
       abortButton.addEventListener('click', () => {
-        client.abortInputRecording()
+        client.abortRecording();
       });
-
-
-
-
     </script>
   </body>
 </html>

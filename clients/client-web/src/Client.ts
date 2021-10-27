@@ -1,27 +1,30 @@
-import { Input, InputType, PlainObjectType } from '@jovotech/common';
+import { Input, PlainObjectType } from '@jovotech/common';
 import { NormalizedOutputTemplate } from '@jovotech/output';
 import { CoreRequest, CoreResponse, Device } from '@jovotech/platform-core';
 import _defaultsDeep from 'lodash.defaultsdeep';
 import { v4 as uuidV4 } from 'uuid';
+import { AudioRecordingStrategy } from './core/AudioRecordingStrategy';
 import { HttpTransportStrategy } from './core/HttpTransportStrategy';
 import { NetworkTransportStrategy } from './core/NetworkTransportStrategy';
 import { OutputProcessor } from './core/OutputProcessor';
 import {
-  AudioHelper,
+  RecordingModality,
+  RecordingModalityType,
+  RecordingModalityTypeLike,
+  RecordingStrategy,
+} from './core/RecordingStrategy';
+import {
   AudioPlayer,
   AudioPlayerConfig,
   AudioRecorder,
   AudioRecorderConfig,
   AudioRecorderEvent,
-  AudioRecorderEventListenerMap,
-  Base64Converter,
   DeepPartial,
   RepromptHandlerConfig,
   RepromptProcessor,
   SpeechRecognizer,
   SpeechRecognizerConfig,
   SpeechRecognizerEvent,
-  SpeechRecognizerEventListenerMap,
   SpeechSynthesizer,
   SpeechSynthesizerConfig,
   Store,
@@ -36,6 +39,7 @@ export type ClientResponse = PlainObjectType<CoreResponse>;
 export enum ClientEvent {
   Request = 'request',
   Response = 'response',
+  Input = 'input',
   Output = 'output',
   RepromptLimitReached = 'reprompt-limit-reached',
 }
@@ -43,6 +47,7 @@ export enum ClientEvent {
 export interface ClientEventListenerMap extends EventListenerMap {
   [ClientEvent.Request]: (request: ClientRequest) => void;
   [ClientEvent.Response]: (response: ClientResponse) => void;
+  [ClientEvent.Input]: (input: Input) => void;
   [ClientEvent.Output]: (output: NormalizedOutputTemplate) => void;
   [ClientEvent.RepromptLimitReached]: VoidListener;
 }
@@ -97,6 +102,12 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
 
   networkTransportStrategy: NetworkTransportStrategy;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  recordingStrategies: RecordingStrategy<any, any>[];
+
+  currentRecordingModality?: RecordingModality;
+  previousRecordingModality?: RecordingModality;
+
   readonly audioPlayer: AudioPlayer;
   readonly audioRecorder: AudioRecorder;
   readonly outputProcessor: OutputProcessor;
@@ -105,8 +116,6 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
   readonly speechSynthesizer: SpeechSynthesizer;
   readonly store: Store;
   readonly config: Config;
-  private useSpeechRecognition = true;
-  private isInputProcessOngoing = false;
   private initialized = false;
 
   constructor(readonly endpointUrl: string, config?: DeepPartial<InitConfig>) {
@@ -119,6 +128,8 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
 
     const defaultConfig = Client.getDefaultConfig();
     this.config = config ? _defaultsDeep(config, defaultConfig) : defaultConfig;
+
+    this.recordingStrategies = [new AudioRecordingStrategy(this)];
 
     this.audioPlayer = new AudioPlayer(this.config.output.audioPlayer);
     this.audioRecorder = new AudioRecorder(this.config.input.audioRecorder);
@@ -172,6 +183,10 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
       this.store.resetSession();
       this.store.save();
     });
+
+    this.on(ClientEvent.Input, async (input) => {
+      await this.send(input);
+    });
   }
 
   get isInitialized(): boolean {
@@ -186,10 +201,6 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
     return this.audioRecorder.isRecording || this.speechRecognizer.isRecording;
   }
 
-  get isUsingSpeechRecognition(): boolean {
-    return this.useSpeechRecognition;
-  }
-
   /**
    * Should be called synchronously in a click-handler!
    */
@@ -199,47 +210,34 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
     this.initialized = true;
   }
 
-  async startInputRecording(useSpeechRecognizerIfAvailable = true): Promise<void> {
-    if (this.isInputProcessOngoing) {
+  async startRecording(
+    modality: RecordingModality = { type: RecordingModalityType.Audio },
+  ): Promise<void> {
+    if (this.currentRecordingModality) {
       return;
     }
-    this.useSpeechRecognition = useSpeechRecognizerIfAvailable;
-    if (useSpeechRecognizerIfAvailable && this.speechRecognizer.isAvailable) {
-      this.speechRecognizer.once(SpeechRecognizerEvent.End, this.onSpeechRecognizerEnd);
-      this.speechRecognizer.once(SpeechRecognizerEvent.Abort, this.onSpeechRecognizerAbort);
-      this.speechRecognizer.once(SpeechRecognizerEvent.Timeout, this.onSpeechRecognizerAbort);
-      this.speechRecognizer.start();
-    } else {
-      this.audioRecorder.once(AudioRecorderEvent.Stop, this.onAudioRecorderStop);
-      this.audioRecorder.once(AudioRecorderEvent.Abort, this.onAudioRecorderAbort);
-      this.audioRecorder.once(AudioRecorderEvent.Timeout, this.onAudioRecorderAbort);
-      await this.audioRecorder.start();
-    }
-    this.isInputProcessOngoing = true;
+    const relatedRecordingStrategy = this.getRelatedRecordingStrategy(modality.type);
+    this.setRecordingModality(await relatedRecordingStrategy?.startRecording(modality));
   }
 
-  stopInputRecording(): void {
-    if (!this.isInputProcessOngoing) {
+  stopRecording(): void {
+    if (!this.currentRecordingModality) {
       return;
     }
-    if (this.useSpeechRecognition && this.speechRecognizer.isAvailable) {
-      this.speechRecognizer.stop();
-    } else {
-      this.audioRecorder.stop();
-    }
-    this.isInputProcessOngoing = false;
+    const relatedRecordingStrategy = this.getRelatedRecordingStrategy(
+      this.currentRecordingModality.type,
+    );
+    relatedRecordingStrategy?.stopRecording();
   }
 
-  abortInputRecording(): void {
-    if (!this.isInputProcessOngoing) {
+  abortRecording(): void {
+    if (!this.currentRecordingModality) {
       return;
     }
-    if (this.useSpeechRecognition && this.speechRecognizer.isAvailable) {
-      this.speechRecognizer.abort();
-    } else {
-      this.audioRecorder.abort();
-    }
-    this.isInputProcessOngoing = false;
+    const relatedRecordingStrategy = this.getRelatedRecordingStrategy(
+      this.currentRecordingModality.type,
+    );
+    relatedRecordingStrategy?.abortRecording();
   }
 
   createRequest(input: Input): ClientRequest {
@@ -267,6 +265,11 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
     return response;
   }
 
+  setRecordingModality(modality?: RecordingModality): void {
+    this.previousRecordingModality = this.currentRecordingModality;
+    this.currentRecordingModality = modality;
+  }
+
   protected async handleResponse(response: ClientResponse): Promise<void> {
     if (response.context.session.end) {
       this.store.resetSession();
@@ -286,41 +289,10 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
     }
   }
 
-  private onSpeechRecognizerEnd: SpeechRecognizerEventListenerMap['end'] = async (event) => {
-    if (!event) {
-      this.onSpeechRecognizerAbort();
-      return;
-    }
-    this.onSpeechRecognizerAbort();
-    const text = AudioHelper.textFromSpeechRecognition(event);
-    await this.send({
-      type: InputType.TranscribedSpeech,
-      text,
-    });
-  };
-
-  private onSpeechRecognizerAbort = () => {
-    this.isInputProcessOngoing = false;
-    this.speechRecognizer.off(SpeechRecognizerEvent.End, this.onSpeechRecognizerEnd);
-    this.speechRecognizer.off(SpeechRecognizerEvent.Abort, this.onSpeechRecognizerAbort);
-    this.speechRecognizer.off(SpeechRecognizerEvent.Timeout, this.onSpeechRecognizerAbort);
-  };
-
-  private onAudioRecorderStop: AudioRecorderEventListenerMap['stop'] = async (result) => {
-    this.onAudioRecorderAbort();
-    await this.send({
-      type: InputType.Speech,
-      audio: {
-        sampleRate: result.sampleRate,
-        base64: Base64Converter.arrayBufferToBase64(result.data.buffer),
-      },
-    });
-  };
-
-  private onAudioRecorderAbort = () => {
-    this.isInputProcessOngoing = false;
-    this.audioRecorder.off(AudioRecorderEvent.Stop, this.onAudioRecorderStop);
-    this.audioRecorder.off(AudioRecorderEvent.Abort, this.onAudioRecorderAbort);
-    this.audioRecorder.off(AudioRecorderEvent.Timeout, this.onAudioRecorderAbort);
-  };
+  private getRelatedRecordingStrategy<TYPE extends RecordingModalityTypeLike>(
+    type: TYPE,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ): RecordingStrategy<TYPE, any> | undefined {
+    return this.recordingStrategies.find((recordingStrategy) => recordingStrategy.type === type);
+  }
 }

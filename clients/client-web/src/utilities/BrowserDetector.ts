@@ -1,4 +1,4 @@
-import { Browser as SupportedBrowser, BrowserInfo, detect, OperatingSystem } from 'detect-browser';
+import { Browser as SupportedBrowser, detect, OperatingSystem } from 'detect-browser';
 
 export type Browser = SupportedBrowser | 'brave';
 

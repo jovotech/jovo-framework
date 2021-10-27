@@ -1,5 +1,6 @@
 import { NormalizedOutputTemplate } from '@jovotech/output';
 import { AudioRecorderEvent, Client, ClientEvent, SpeechRecognizerEvent } from '..';
+import { RecordingModality } from './RecordingStrategy';
 
 export interface RepromptHandlerConfig {
   enabled: boolean;
@@ -22,24 +23,27 @@ export class RepromptProcessor {
 
   private reprompts: NormalizedOutputTemplate['reprompt'][] = [];
   private attempts = 0;
-  private useSpeechRecognition = true;
+  private recordingModality?: RecordingModality;
   private timeoutFn = this.onInputTimeout.bind(this);
   private endFn = this.onInputEnd.bind(this);
 
   constructor(readonly client: Client) {}
 
   private get isUsingSpeechRecognition(): boolean {
-    return this.useSpeechRecognition && this.client.speechRecognizer.isAvailable;
+    return (
+      !!this.recordingModality?.useSpeechRecognition && this.client.speechRecognizer.isAvailable
+    );
   }
 
-  async processReprompts(reprompts: RepromptType[], useSpeechRecognition: boolean): Promise<void> {
-    if (!this.config.enabled) {
+  async processReprompts(reprompts: RepromptType[], modality?: RecordingModality): Promise<void> {
+    console.log('process reprompts', modality);
+    if (!this.config.enabled || !modality) {
       return;
     }
     this.attempts = 0;
+    this.recordingModality = modality;
     this.reprompts = reprompts;
-    this.useSpeechRecognition = useSpeechRecognition;
-    return this.startRepromptInputRecording();
+    return this.startRecording();
   }
 
   async onInputTimeout(): Promise<void> {
@@ -68,7 +72,7 @@ export class RepromptProcessor {
       })),
     );
 
-    await this.startRepromptInputRecording();
+    await this.startRecording();
     this.attempts++;
   }
 
@@ -77,12 +81,12 @@ export class RepromptProcessor {
     return this.onInputEnd();
   }
 
-  private async startRepromptInputRecording(): Promise<void> {
-    if (!this.config.enabled) {
+  private async startRecording(): Promise<void> {
+    if (!this.config.enabled || !this.recordingModality) {
       return;
     }
     this.addInputEventListeners();
-    return this.client.startInputRecording(this.isUsingSpeechRecognition);
+    return this.client.startRecording(this.recordingModality);
   }
 
   private addInputEventListeners() {
