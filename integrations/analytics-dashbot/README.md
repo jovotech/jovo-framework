@@ -15,10 +15,9 @@ To get started, take the following steps:
 
 - Go to the [Dashbot app](https://reports.dashbot.io/) and sign up or in.
 - Create a new chatbot project.
-- Select a platform of your choice. See [configuration](#configuration) for a list of our supported platforms. If you can't find your platform in the list, select *Universal*.
-- Copy the provided *API Key*.
-- [Install the Dashbot plugin](#installation) for Jovo.
-- Add the API key to the [plugin configuration](#configuration).
+- Select a platform of your choice. See [platforms](#platforms) for a list of our supported platforms. If you can't find your platform in the list, select _Universal_.
+- Copy the provided _API Key_.
+- [Install the Dashbot plugin](#installation) for Jovo and add the API key to the configuration.
 
 ## Installation
 
@@ -28,44 +27,42 @@ You can install the plugin like this:
 $ npm install @jovotech/analytics-dashbot
 ```
 
-Add it as plugin to any stage you like, e.g. `app.prod.ts` ([learn more about staging here](https://v4.jovo.tech/docs/staging)):
+Dashbot is a plugin that gets added to a [platform](https://v4.jovo.tech/docs/platforms) integration, probably only for production environments, for example in an `app.prod.ts` file. [Learn more about staging here](https://v4.jovo.tech/docs/staging).
+
+Since platforms are usually initialized in `app.ts`, we recommend using this syntax in `app.prod.ts`:
 
 ```typescript
+import { app } from './app';
 import { DashbotAnalytics } from '@jovotech/analytics-dashbot';
+// ...
 
+app.plugins.AlexaPlatform.use(new DashbotAnalytics({ apiKey: '<yourApiKey>' }));
+```
+
+Which is a shortcut for the following:
+
+```typescript
+import { AlexaPlatform } from '@jovotech/platform-alexa';
+import { DashbotAnalytics } from '@jovotech/analytics-dashbot';
 // ...
 
 app.configure({
   plugins: [
-    new DashbotAnalytics({
-      // Configuration
+    new AlexaPlatform({
+      plugins: [
+        new DashbotAnalytics({ apiKey: '<yourApiKey>' }),
+        // ...
+      ],
     }),
-    // ...
   ],
 });
 ```
 
-The [configuration section](#configuration) provides a detailed overview of all configuration options.
+## Platforms
 
-## Configuration
+The Jovo Dashbot integration automatically maps the following Jovo [platforms](https://v4.jovo.tech/docs/platforms) to Dashbot platforms:
 
-The following configurations can be added:
-
-```typescript
-new DashbotAnalytics({
-  platforms: {
-    alexa: { apiKey: '', enabled: true },
-    google: { apiKey: '', enabled: true },
-    facebook: { apiKey: '', enabled: true },
-    universal: { apiKey: '', enabled: true },
-  },
-}),
-```
-
-The `platforms` option includes all Dashbot platforms (note that the name can be different to how the [platform integrations](https://v4.jovo.tech/docs/platforms) are called in Jovo):
-
-- `alexa`: Use this for [Amazon Alexa](https://v4.jovo.tech/marketplace/platform-alexa). [Learn more in the official Dashbot docs](https://docs.dashbot.io/platforms/alexa).
-- `google`: Use this for [Google Assistant](https://v4.jovo.tech/marketplace/platform-googleassistant). [Learn more in the official Dashbot docs](https://docs.dashbot.io/platforms/google).
-- `facebook`: Use this for [Facebook Messenger](https://v4.jovo.tech/marketplace/platform-facebookmessenger) and [Instagram](https://v4.jovo.tech/marketplace/platform-instagram). [Learn more in the official Dashbot docs](https://docs.dashbot.io/platforms/facebook).
-- `universal`: Use this for any other platform. [Learn more in the official Dashbot docs](https://docs.dashbot.io/platforms/universal).
-
+- [Amazon Alexa](https://v4.jovo.tech/marketplace/platform-alexa) gets mapped to Dashbot's [`alexa`](https://docs.dashbot.io/platforms/alexa) integration.
+- [Google Assistant](https://v4.jovo.tech/marketplace/platform-googleassistant) gets mapped to Dashbot's [`google`](https://docs.dashbot.io/platforms/google) integration.
+- [Facebook Messenger](https://v4.jovo.tech/marketplace/platform-facebookmessenger) and [Instagram](https://v4.jovo.tech/marketplace/platform-instagram) get mapped to Dashbot's [`facebook`](https://docs.dashbot.io/platforms/facebook) integration.
+- All other platforms get mapped to Dashbot's [`universal`](https://docs.dashbot.io/platforms/universal) platform.
