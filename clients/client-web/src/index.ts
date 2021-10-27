@@ -17,7 +17,7 @@ export type { CoreRequest, CoreResponse };
 export * from './interfaces';
 export * from './utilities';
 
-export * from './core/RepromptHandler';
+export * from './core/RepromptProcessor';
 export * from './core/SSMLHandler';
 
 export * from './errors/NotInitializedError';

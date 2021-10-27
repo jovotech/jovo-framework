@@ -41,6 +41,7 @@ export class TypedEventEmitter<EVENT_LISTENER_MAP extends EventListenerMap> {
     type: EVENT,
     ...args: Parameters<EVENT_LISTENER_MAP[EVENT]>
   ): boolean {
+    console.debug(`[${this.constructor.name}]`, type, args);
     return this.eventEmitter.emit(type as string | symbol, ...args);
   }
 

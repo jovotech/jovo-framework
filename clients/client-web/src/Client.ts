@@ -1,4 +1,5 @@
 import { Input, InputType, PlainObjectType } from '@jovotech/common';
+import { NormalizedOutputTemplate } from '@jovotech/output';
 import { CoreRequest, CoreResponse, Device } from '@jovotech/platform-core';
 import _defaultsDeep from 'lodash.defaultsdeep';
 import { v4 as uuidV4 } from 'uuid';
@@ -15,8 +16,8 @@ import {
   AudioRecorderEventListenerMap,
   Base64Converter,
   DeepPartial,
-  RepromptHandler,
   RepromptHandlerConfig,
+  RepromptProcessor,
   SpeechRecognizer,
   SpeechRecognizerConfig,
   SpeechRecognizerEvent,
@@ -35,12 +36,14 @@ export type ClientResponse = PlainObjectType<CoreResponse>;
 export enum ClientEvent {
   Request = 'request',
   Response = 'response',
+  Output = 'output',
   RepromptLimitReached = 'reprompt-limit-reached',
 }
 
 export interface ClientEventListenerMap extends EventListenerMap {
   [ClientEvent.Request]: (request: ClientRequest) => void;
   [ClientEvent.Response]: (response: ClientResponse) => void;
+  [ClientEvent.Output]: (output: NormalizedOutputTemplate) => void;
   [ClientEvent.RepromptLimitReached]: VoidListener;
 }
 
@@ -86,7 +89,7 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
       output: {
         audioPlayer: AudioPlayer.getDefaultConfig(),
         speechSynthesizer: SpeechSynthesizer.getDefaultConfig(),
-        reprompts: RepromptHandler.getDefaultConfig(),
+        reprompts: RepromptProcessor.getDefaultConfig(),
       },
       store: Store.getDefaultConfig(),
     };
@@ -97,6 +100,7 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
   readonly audioPlayer: AudioPlayer;
   readonly audioRecorder: AudioRecorder;
   readonly outputProcessor: OutputProcessor;
+  readonly repromptProcessor: RepromptProcessor;
   readonly speechRecognizer: SpeechRecognizer;
   readonly speechSynthesizer: SpeechSynthesizer;
   readonly store: Store;
@@ -119,6 +123,7 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
     this.audioPlayer = new AudioPlayer(this.config.output.audioPlayer);
     this.audioRecorder = new AudioRecorder(this.config.input.audioRecorder);
     this.outputProcessor = new OutputProcessor(this);
+    this.repromptProcessor = new RepromptProcessor(this);
     this.speechRecognizer = new SpeechRecognizer(this.config.input.speechRecognizer);
     this.speechSynthesizer = new SpeechSynthesizer(this.config.output.speechSynthesizer);
     this.store = new Store(this.config.store);
@@ -200,14 +205,14 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
     }
     this.useSpeechRecognition = useSpeechRecognizerIfAvailable;
     if (useSpeechRecognizerIfAvailable && this.speechRecognizer.isAvailable) {
-      this.speechRecognizer.on(SpeechRecognizerEvent.End, this.onSpeechRecognizerEnd);
-      this.speechRecognizer.on(SpeechRecognizerEvent.Abort, this.onSpeechRecognizerAbort);
-      this.speechRecognizer.on(SpeechRecognizerEvent.Timeout, this.onSpeechRecognizerAbort);
+      this.speechRecognizer.once(SpeechRecognizerEvent.End, this.onSpeechRecognizerEnd);
+      this.speechRecognizer.once(SpeechRecognizerEvent.Abort, this.onSpeechRecognizerAbort);
+      this.speechRecognizer.once(SpeechRecognizerEvent.Timeout, this.onSpeechRecognizerAbort);
       this.speechRecognizer.start();
     } else {
-      this.audioRecorder.on(AudioRecorderEvent.Stop, this.onAudioRecorderStop);
-      this.audioRecorder.on(AudioRecorderEvent.Abort, this.onAudioRecorderAbort);
-      this.audioRecorder.on(AudioRecorderEvent.Timeout, this.onAudioRecorderAbort);
+      this.audioRecorder.once(AudioRecorderEvent.Stop, this.onAudioRecorderStop);
+      this.audioRecorder.once(AudioRecorderEvent.Abort, this.onAudioRecorderAbort);
+      this.audioRecorder.once(AudioRecorderEvent.Timeout, this.onAudioRecorderAbort);
       await this.audioRecorder.start();
     }
     this.isInputProcessOngoing = true;
@@ -263,7 +268,6 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
   }
 
   protected async handleResponse(response: ClientResponse): Promise<void> {
-    // TODO update to latest version
     if (response.context.session.end) {
       this.store.resetSession();
     } else {
@@ -287,12 +291,12 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
       this.onSpeechRecognizerAbort();
       return;
     }
+    this.onSpeechRecognizerAbort();
     const text = AudioHelper.textFromSpeechRecognition(event);
     await this.send({
       type: InputType.TranscribedSpeech,
       text,
     });
-    this.onSpeechRecognizerAbort();
   };
 
   private onSpeechRecognizerAbort = () => {
@@ -303,6 +307,7 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
   };
 
   private onAudioRecorderStop: AudioRecorderEventListenerMap['stop'] = async (result) => {
+    this.onAudioRecorderAbort();
     await this.send({
       type: InputType.Speech,
       audio: {
@@ -310,7 +315,6 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
         base64: Base64Converter.arrayBufferToBase64(result.data.buffer),
       },
     });
-    this.onAudioRecorderAbort();
   };
 
   private onAudioRecorderAbort = () => {
