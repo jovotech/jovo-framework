@@ -265,7 +265,7 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
     return response;
   }
 
-  setRecordingModality(modality?: RecordingModality): void {
+  setRecordingModality(modality: RecordingModality | undefined): void {
     this.previousRecordingModality = this.currentRecordingModality;
     this.currentRecordingModality = modality;
   }

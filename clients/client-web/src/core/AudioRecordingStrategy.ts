@@ -72,7 +72,7 @@ export class AudioRecordingStrategy extends RecordingStrategy<
   };
 
   private onSpeechRecognizerFinished = () => {
-    this.client.setRecordingModality();
+    this.client.setRecordingModality(undefined);
     this.removeSpeechRecognizerEventListeners();
   };
 
@@ -88,7 +88,7 @@ export class AudioRecordingStrategy extends RecordingStrategy<
   };
 
   private onAudioRecorderFinished = () => {
-    this.client.setRecordingModality();
+    this.client.setRecordingModality(undefined);
     this.removeAudioRecorderEventListeners();
   };
 
