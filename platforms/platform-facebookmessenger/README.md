@@ -7,7 +7,6 @@ excerpt: 'The Facebook Messenger platform integration allows you to build custom
 
 The Facebook Messenger [platform integration](https://v4.jovo.tech/docs/platforms) allows you to build custom Messenger bots using Jovo.
 
-
 ## Introduction
 
 Apps for Facebook Messenger are called Messenger bots. You can find a general introduction into building those bots in the [official Messenger documentation](https://developers.facebook.com/docs/messenger-platform/).
@@ -70,7 +69,6 @@ You can configure the Facebook Messenger platform in the [app configuration](htt
 
 ```typescript
 import { FacebookMessengerPlatform } from '@jovotech/platform-facebookmessenger';
-
 // ...
 
 const app = new App({
@@ -78,8 +76,15 @@ const app = new App({
     new FacebookMessengerPlatform({
       pageAccessToken: '<yourAccessToken>',
       verifyToken: '<yourVerifyToken>',
-      plugins: [ /* ... */ ],
-      session: { /* ... */ },
+      plugins: [
+        /* ... */
+      ],
+      session: {
+        /* ... */
+      },
+      senderActions: {
+        /* ... */
+      },
     }),
     // ...
   ],
@@ -92,7 +97,7 @@ Options include:
 - `verifyToken`: A string to add to the Facebook developer portal to verify server requests. See [deployment](#deployment) for more information.
 - `plugins`: For example, you need to add an [NLU integration](#nlu-integration) here.
 - `session`: Session specific config. Take a look at [session data](#session-data) for more information.
-
+- `senderActions`: Facebook Messenger [sender actions](#sender-actions).
 
 ### NLU Integration
 
@@ -103,7 +108,6 @@ Here is an example how you can add an NLU integration (in this case [NLP.js](htt
 ```typescript
 import { FacebookMessengerPlatform } from '@jovotech/platform-facebookmessenger';
 import { NlpjsNlu } from '@jovotech/nlu-nlpjs';
-
 // ...
 
 const app = new App({
@@ -122,7 +126,7 @@ Facebook Messenger does not offer session storage, which is needed for features 
 
 To make Facebook Messenger bots work with these features, Jovo automatically enables the storage of session data to the active [database integration](https://v4.jovo.tech/docs/databases). Under the hood, it adds `session` to the [`storedElements` config](https://v4.jovo.tech/docs/databases#storedelements).
 
-Since Facebook does not have the concept of sessions, we need to define after which time a request should be seen as the start of the new session. The default is *15 minutes* and can be modified either in the [`storedElements` config](https://v4.jovo.tech/docs/databases#storedelements) (works across platforms) or in the Facebook Messenger config:
+Since Facebook does not have the concept of sessions, we need to define after which time a request should be seen as the start of the new session. The default is _15 minutes_ and can be modified either in the [`storedElements` config](https://v4.jovo.tech/docs/databases#storedelements) (works across platforms) or in the Facebook Messenger config:
 
 ```typescript
 new FacebookMessengerPlatform({
@@ -132,23 +136,41 @@ new FacebookMessengerPlatform({
 });
 ```
 
+### Sender Actions
+
+Facebook Messenger [sender actions](https://developers.facebook.com/docs/messenger-platform/send-messages/sender-actions/) allow you to mark latest user messages as seen and enable typing indicators while your bot is working on sending a response.
+
+By default, both actions are enabled by default:
+
+```typescript
+new FacebookMessengerPlatform({
+  senderActions: {
+    markSeen: true,
+    typingIndicators: true,
+  },
+});
+```
+
+- `markSeen`: This adds the `mark_seen` sender action and show latest messages as read.
+- `typingIndicators`: This turns typing indicators on when a request was received (in the [`dialogue.start` middleware](https://v4.jovo.tech/docs/ridr-lifecycle#middlewares)) and turns them off when the dialogue lifecycle is completed (in the [`dialogue.end` middleware](https://v4.jovo.tech/docs/ridr-lifecycle#middlewares)).
+
+Note: Although [Instagram](https://v4.jovo.tech/marketplace/platform-instagram) works similar compared to Facebook Messenger, it does not support sender actions at the moment.
 
 ## Platform-Specific Features
 
 You can access the Facebook Messenger specific object like this:
 
 ```typescript
-this.$facebookMessenger
+this.$facebookMessenger;
 ```
 
 You can also use this object to see if the request is coming from Facebook Messenger (or a different platform):
 
 ```typescript
-if(this.$facebookMessenger) {
+if (this.$facebookMessenger) {
   // ...
 }
 ```
-
 
 ### Output
 
