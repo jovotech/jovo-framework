@@ -1,6 +1,6 @@
 {
 	"name": "jovo-analytics-googleanalytics",
-	"version": "3.5.10",
+	"version": "3.5.11",
 	"description": "Jovo Plugin for GoogleAnalytics",
 	"main": "dist/src/index",
 	"types": "dist/src/index.d.ts",
@@ -33,7 +33,7 @@
 		"@types/node": "^10.3.1",
 		"@types/universal-analytics": "^0.4.2",
 		"jest": "^25.1.0",
-		"jovo-platform-alexa": "^3.5.4",
+		"jovo-platform-alexa": "^3.5.5",
 		"jovo-platform-googleassistant": "^3.5.4",
 		"prettier": "2.0.2",
 		"rimraf": "^2.6.2",

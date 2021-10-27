@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-ts-user",
-  "version": "3.5.5",
+  "version": "3.5.6",
   "private": true,
   "description": "",
   "main": "dist/src/index",
@@ -19,7 +19,7 @@
   "dependencies": {
     "jovo-db-filedb": "^3.5.1",
     "jovo-framework": "^3.5.2",
-    "jovo-platform-alexa": "^3.5.4",
+    "jovo-platform-alexa": "^3.5.5",
     "jovo-platform-googleassistant": "^3.5.4",
     "jovo-plugin-debugger": "^3.5.1"
   },
