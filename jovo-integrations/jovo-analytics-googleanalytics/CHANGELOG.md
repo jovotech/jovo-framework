@@ -4,6 +4,11 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+### 2021-10-27 [3.5.11]
+* [#1051](https://github.com/jovotech/jovo-framework/pull/1051) Fix session end for alexa errors + move error metrics to according intent  ([@freiSMS(https://github.com/freiSMS))
+* [#1048](https://github.com/jovotech/jovo-framework/pull/1048) Google Analytics - track use wrong middleware  ([@kouz75(https://github.com/kouz75))
+
+
 ### 2021-09-23 [3.5.10]
 * [#1036](https://github.com/jovotech/jovo-framework/pull/1036) :bug: Google analytics skill events + error tracking fixed  ([@freiSMS(https://github.com/freiSMS))
 

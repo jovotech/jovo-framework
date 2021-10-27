@@ -2,12 +2,26 @@
 
 ### Latest Framework Version: 3.5.2<br><br>
 
+#### 2021-10-27
+
+##### `jovo-analytics-googleanalytics [3.5.11]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-googleanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-googleanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-googleanalytics)
+* [#1051](https://github.com/jovotech/jovo-framework/pull/1051) Fix session end for alexa errors + move error metrics to according intent  ([@freiSMS(https://github.com/freiSMS))
+* [#1048](https://github.com/jovotech/jovo-framework/pull/1048) Google Analytics - track use wrong middleware  ([@kouz75(https://github.com/kouz75))
+
+##### `jovo-db-dynamodb [3.5.2]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-db-dynamodb) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-db-dynamodb) | [npm](https://www.npmjs.com/package/jovo-db-dynamodb)
+* [#1075](https://github.com/jovotech/jovo-framework/pull/1075) Global Secondary Indexes and provisioned throughput for DynamoDB  ([@brody-ly(https://github.com/brody-ly))
+
+##### `jovo-platform-alexa [3.5.5]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-alexa) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-alexa) | [npm](https://www.npmjs.com/package/jovo-platform-alexa)
+- [#1084](https://github.com/jovotech/jovo-framework/pull/1084) :bug: Fix deleteShouldEndSession for `ask` ([@aswetlow](https://github.com/aswetlow))
+
+
+
 #### 2021-10-06
 
 ##### `jovo-platform-messenger [3.5.3]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-messenger) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-messenger) | [npm](https://www.npmjs.com/package/jovo-platform-messenger)
 - [#983](https://github.com/jovotech/jovo-framework/pull/983) :bug: V3/bugfix/facebook messenger platform ([@brody-ly](https://github.com/brody-ly))
 
-##### `jovo-cms-googleshets [3.5.2]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-cms-googleshets) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-cms-googleshets) | [npm](https://www.npmjs.com/package/jovo-cms-googleshets)
+##### `jovo-cms-googlesheets [3.5.2]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-cms-googleshets) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-cms-googleshets) | [npm](https://www.npmjs.com/package/jovo-cms-googleshets)
 - [#1059](https://github.com/jovotech/jovo-framework/pull/1059 ) :bug: Fix/google sheets after API deprecation ([@aswetlow](https://github.com/aswetlow))
 
 

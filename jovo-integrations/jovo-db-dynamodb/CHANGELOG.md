@@ -2,7 +2,8 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
-
+### 2021-10-27 [3.5.2]
+* [#1075](https://github.com/jovotech/jovo-framework/pull/1075) Global Secondary Indexes and provisioned throughput for DynamoDB  ([@brody-ly(https://github.com/brody-ly))
 
 ## 3.0.16 (2020-05-21)
 
