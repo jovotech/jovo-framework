@@ -13,9 +13,7 @@ export interface DashbotGoogleAssistantResponseLog extends DashbotGoogleAssistan
 }
 
 export class DashbotGoogleAssistant extends DashbotAnalyticsPlugin {
-  get id(): string {
-    return 'google';
-  }
+  readonly id: string = 'google';
 
   async trackRequest(jovo: Jovo, url: string): Promise<void> {
     const requestLog: DashbotGoogleAssistantRequestLog = {

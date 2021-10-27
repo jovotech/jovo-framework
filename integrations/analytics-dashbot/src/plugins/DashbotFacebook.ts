@@ -16,9 +16,7 @@ export interface DashbotFacebookResponseLog extends UnknownObject {
 }
 
 export class DashbotFacebook extends DashbotAnalyticsPlugin {
-  get id(): string {
-    return 'facebook';
-  }
+  readonly id: string = 'facebook';
 
   async trackRequest(jovo: Jovo, url: string): Promise<void> {
     const requestLog: DashbotFacebookRequestLog = {

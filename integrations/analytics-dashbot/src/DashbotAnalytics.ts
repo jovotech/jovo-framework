@@ -21,21 +21,17 @@ export class DashbotAnalytics extends AnalyticsPlugin<DashbotAnalyticsConfig> {
     DashbotFacebook,
     DashbotUniversal,
   ];
-  private readonly initializedPlugins: DashbotAnalyticsPlugin[];
+  private initializedPlugin!: DashbotAnalyticsPlugin;
 
-  constructor(config: DashbotAnalyticsConfig) {
-    super(config);
-    this.initializedPlugins = this.plugins
-      .filter((Plugin) => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        return this.config.platforms[Plugin.prototype.id]?.enabled !== false;
-      })
-      .map((Plugin) => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        return new Plugin(this.config.platforms[Plugin.prototype.id]);
-      });
+  mount(parent: Platform): void {
+    const HandlingPlugin = this.plugins.find((Plugin) => Plugin.prototype.canHandle(parent));
+
+    if (!HandlingPlugin || this.config.enabled === false) {
+      return;
+    }
+
+    this.initializedPlugin = new HandlingPlugin();
+    super.mount(parent);
   }
 
   getDefaultConfig(): DashbotAnalyticsConfig {
@@ -45,42 +41,20 @@ export class DashbotAnalytics extends AnalyticsPlugin<DashbotAnalyticsConfig> {
   }
 
   async trackRequest(jovo: Jovo): Promise<void> {
-    const plugin: DashbotAnalyticsPlugin | undefined = this.initializedPlugins.find((plugin) =>
-      plugin.canHandle(jovo.$platform),
-    );
-
-    if (!plugin) {
-      return;
-    }
-
     const url: URL = new URL(DASHBOT_BASE_URL);
     url.searchParams.append('type', 'incoming');
-    url.searchParams.append('platform', plugin.id);
-    url.searchParams.append('apiKey', this.getApiKey(plugin.id));
+    url.searchParams.append('platform', this.initializedPlugin.id);
+    url.searchParams.append('apiKey', this.config.apiKey);
 
-    await plugin.trackRequest(jovo, url.href);
+    await this.initializedPlugin.trackRequest(jovo, url.href);
   }
 
   async trackResponse(jovo: Jovo): Promise<void> {
-    const plugin: DashbotAnalyticsPlugin | undefined = this.initializedPlugins.find((plugin) =>
-      plugin.canHandle(jovo.$platform),
-    );
-
-    if (!plugin) {
-      return;
-    }
-
     const url: URL = new URL(DASHBOT_BASE_URL);
     url.searchParams.append('type', 'outgoing');
-    url.searchParams.append('platform', plugin.id);
-    url.searchParams.append('apiKey', this.getApiKey(plugin.id));
+    url.searchParams.append('platform', this.initializedPlugin.id);
+    url.searchParams.append('apiKey', this.config.apiKey);
 
-    await plugin.trackResponse(jovo, url.href);
-  }
-
-  private getApiKey(pluginId: string) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return this.config.platforms[pluginId].apiKey;
+    await this.initializedPlugin.trackResponse(jovo, url.href);
   }
 }

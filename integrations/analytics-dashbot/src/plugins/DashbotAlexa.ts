@@ -10,9 +10,7 @@ export interface DashbotAlexaResponseLog extends DashbotAlexaRequestLog {
 }
 
 export class DashbotAlexa extends DashbotAnalyticsPlugin {
-  get id(): string {
-    return 'alexa';
-  }
+  readonly id: string = 'alexa';
 
   async trackRequest(jovo: Jovo, url: string): Promise<void> {
     const requestLog: DashbotAlexaRequestLog = { event: jovo.$request };

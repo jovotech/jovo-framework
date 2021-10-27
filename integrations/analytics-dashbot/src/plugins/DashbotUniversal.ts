@@ -48,9 +48,7 @@ export interface DashbotUniversalLog extends UnknownObject {
 }
 
 export class DashbotUniversal extends DashbotAnalyticsPlugin {
-  get id(): string {
-    return 'universal';
-  }
+  readonly id: string = 'universal';
 
   async trackRequest(jovo: Jovo, url: string): Promise<void> {
     const text: string =
