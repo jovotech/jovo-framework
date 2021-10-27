@@ -146,7 +146,7 @@ export class AlexaCore implements Plugin {
     }
 
     if (_get(output, 'Alexa.deleteShouldEndSession')) {
-      if (_get(alexaSkill.$response, 'response.shouldEndSession')) {
+      if (typeof _get(alexaSkill.$response, 'response.shouldEndSession') !== 'undefined') {
         delete (alexaSkill.$response as AlexaResponse).response.shouldEndSession;
       }
     }
