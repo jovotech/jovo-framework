@@ -1,12 +1,6 @@
 import { Jovo, JovoRequest, JovoResponse, Platform, UnknownObject } from '@jovotech/framework';
 import { DashbotAnalyticsPlugin } from './DashbotAnalyticsPlugin';
 
-declare module '../interfaces' {
-  interface DashbotAnalyticsConfigPlugins {
-    facebook?: DashbotAnalyticsPluginConfig;
-  }
-}
-
 export interface DashbotFacebookRequestLog extends UnknownObject {
   object: 'page';
   entry: [JovoRequest];

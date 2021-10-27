@@ -1,12 +1,16 @@
-import { AnalyticsPlugin, Jovo } from '@jovotech/framework';
+import { AnalyticsPlugin, AnalyticsPluginConfig, Jovo, Platform } from '@jovotech/framework';
 import { URL } from 'url';
-import { DashbotAnalyticsConfig } from './interfaces';
 import { DashbotAlexa } from './plugins/DashbotAlexa';
 import { DashbotAnalyticsPlugin } from './plugins/DashbotAnalyticsPlugin';
 import { DashbotFacebook } from './plugins/DashbotFacebook';
 import { DashbotGoogleAssistant } from './plugins/DashbotGoogleAssistant';
 import { DashbotUniversal } from './plugins/DashbotUniversal';
 import { DASHBOT_BASE_URL } from './utilities';
+
+export interface DashbotAnalyticsConfig extends AnalyticsPluginConfig {
+  apiKey: string;
+  enabled?: boolean;
+}
 
 export class DashbotAnalytics extends AnalyticsPlugin<DashbotAnalyticsConfig> {
   // Since DashbotUniversal tracks for every platform, it needs to sit at the last position
@@ -36,12 +40,7 @@ export class DashbotAnalytics extends AnalyticsPlugin<DashbotAnalyticsConfig> {
 
   getDefaultConfig(): DashbotAnalyticsConfig {
     return {
-      platforms: {
-        alexa: { apiKey: '', enabled: true },
-        google: { apiKey: '', enabled: true },
-        facebook: { apiKey: '', enabled: true },
-        universal: { apiKey: '', enabled: true },
-      },
+      apiKey: '<YOUR-API-KEY>',
     };
   }
 

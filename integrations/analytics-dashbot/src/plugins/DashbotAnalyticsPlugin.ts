@@ -1,17 +1,7 @@
 import { axios, Jovo, JovoError, Platform, UnknownObject } from '@jovotech/framework';
-import { DashbotAnalyticsPluginConfig } from '../interfaces';
 
-export abstract class DashbotAnalyticsPlugin<
-  CONFIG extends DashbotAnalyticsPluginConfig = DashbotAnalyticsPluginConfig,
-> {
-  readonly config: CONFIG;
-
-  // This must be a getter to be accessible within the scope of the prototype
-  abstract get id(): string;
-
-  constructor(config: CONFIG) {
-    this.config = config;
-  }
+export abstract class DashbotAnalyticsPlugin {
+  abstract readonly id: string;
 
   protected async sendDashbotRequest(url: string, data: UnknownObject): Promise<void> {
     try {

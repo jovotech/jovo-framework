@@ -1,12 +1,6 @@
 import { Jovo, JovoRequest, JovoResponse, Platform, UnknownObject } from '@jovotech/framework';
 import { DashbotAnalyticsPlugin } from './DashbotAnalyticsPlugin';
 
-declare module '../interfaces' {
-  export interface DashbotAnalyticsConfigPlugins {
-    alexa?: DashbotAnalyticsPluginConfig;
-  }
-}
-
 export interface DashbotAlexaRequestLog extends UnknownObject {
   event: JovoRequest;
 }

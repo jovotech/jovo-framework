@@ -10,12 +10,6 @@ import {
 } from '@jovotech/framework';
 import { DashbotAnalyticsPlugin } from './DashbotAnalyticsPlugin';
 
-declare module '../interfaces' {
-  interface DashbotAnalyticsConfigPlugins {
-    universal?: DashbotAnalyticsPluginConfig;
-  }
-}
-
 export interface DashbotUniversalInput {
   name: string;
   value: string;

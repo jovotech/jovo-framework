@@ -1,12 +1,6 @@
 import { Jovo, JovoRequest, JovoResponse, Platform, UnknownObject } from '@jovotech/framework';
 import { DashbotAnalyticsPlugin } from './DashbotAnalyticsPlugin';
 
-declare module '../interfaces' {
-  interface DashbotAnalyticsConfigPlugins {
-    google?: DashbotAnalyticsPluginConfig;
-  }
-}
-
 export interface DashbotGoogleAssistantRequestLog extends UnknownObject {
   request_body: {
     fulfillmentLib: '@assistant/conversation';
