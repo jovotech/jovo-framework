@@ -1,3 +1,3 @@
-import { FacebookMessengerDevice } from '@jovotech/platform-facebookmessenger/dist/types/FacebookMessengerDevice';
+import { FacebookMessengerDevice } from '@jovotech/platform-facebookmessenger';
 
 export class InstagramDevice extends FacebookMessengerDevice {}
