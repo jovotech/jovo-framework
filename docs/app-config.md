@@ -158,7 +158,7 @@ This can be helpful if you want to add additional configurations to the default 
 {
   // ...
 
-  logging: true;
+  logging: true,
 }
 ```
 
