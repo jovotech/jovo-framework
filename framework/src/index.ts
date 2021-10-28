@@ -15,6 +15,8 @@ export {
   CarouselItem,
   CarouselItemSelection,
   CarouselSelection,
+  DenormalizePlatformOutputTemplate,
+  DenormalizeOutputTemplate,
   DynamicEntity,
   DynamicEntitiesModeLike,
   DynamicEntities,
@@ -26,6 +28,9 @@ export {
   ListenValue,
   Message,
   MessageValue,
+  NormalizedOutputTemplate,
+  NormalizedPlatformOutputTemplate,
+  NormalizedOutputTemplatePlatforms,
   OutputTemplateConverterStrategy,
   OutputTemplateConverter,
   OutputTemplate,
@@ -58,7 +63,6 @@ export * from './JovoDevice';
 
 export * from './Middleware';
 export * from './MiddlewareCollection';
-export * from './NluPlugin';
 export * from './Platform';
 export * from './Plugin';
 export * from './Server';
@@ -92,13 +96,7 @@ export * from './metadata/MetadataStorage';
 export * from './metadata/MethodDecoratorMetadata';
 export * from './metadata/OutputMetadata';
 
-export * from './plugins/BasicLogging';
-export * from './plugins/DbPlugin';
-export * from './plugins/HandlerPlugin';
-export * from './plugins/OutputPlugin';
-export * from './plugins/RouteMatch';
-export * from './plugins/RouterPlugin';
-export * from './plugins/RoutingExecutor';
+export * from './plugins';
 
 export * from './interfaces';
 export * from './enums';

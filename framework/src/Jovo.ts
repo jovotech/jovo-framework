@@ -1,5 +1,5 @@
 import { DeepPartial, PickWhere, UnknownObject } from '@jovotech/common';
-import { JovoResponse, OutputTemplate } from '@jovotech/output';
+import { JovoResponse, NormalizedOutputTemplate, OutputTemplate } from '@jovotech/output';
 import _cloneDeep from 'lodash.clonedeep';
 import _merge from 'lodash.merge';
 import _set from 'lodash.set';
@@ -248,7 +248,7 @@ export abstract class Jovo<
       const outputInstance = new outputConstructorOrTemplateOrMessage(this, options);
       const output = await outputInstance.build();
       // overwrite reserved properties of the built object i.e. message
-      OutputTemplate.getKeys().forEach((key) => {
+      NormalizedOutputTemplate.getKeys().forEach((key) => {
         if (options?.[key]) {
           if (Array.isArray(output)) {
             output[output.length - 1][key] =

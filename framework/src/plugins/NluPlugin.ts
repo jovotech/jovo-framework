@@ -1,10 +1,10 @@
-import { InvalidParentError } from './errors/InvalidParentError';
-import { Extensible } from './Extensible';
-import { NluData } from './interfaces';
-import { Jovo } from './Jovo';
-import { InputType, InputTypeLike } from './JovoInput';
-import { Platform } from './Platform';
-import { Plugin, PluginConfig } from './Plugin';
+import { InvalidParentError } from '../errors/InvalidParentError';
+import { Extensible } from '../Extensible';
+import { NluData } from '../interfaces';
+import { Jovo } from '../Jovo';
+import { InputType, InputTypeLike } from '../JovoInput';
+import { Platform } from '../Platform';
+import { Plugin, PluginConfig } from '../Plugin';
 
 export interface NluPluginInputConfig {
   supportedTypes: InputTypeLike[];
