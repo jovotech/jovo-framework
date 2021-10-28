@@ -47,7 +47,7 @@
   "peerDependencies": {
     "@jovotech/framework": "4.0.0-beta.8"
   },
-  "gitHead": "9c310ac282a2e19bb9d3f269badd99e2a01dd71b",
+  "gitHead": "02f1a666ceff33f0907bff129f78be4088d87241",
   "prettier": "../../.prettierrc.js",
   "publishConfig": {
     "access": "public"
