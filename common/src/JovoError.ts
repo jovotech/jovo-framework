@@ -26,7 +26,7 @@ export class JovoError extends Error {
     this.name = options.name || this.constructor.name;
   }
 
-  // Used by JSON.stringify
+  // Used by JSON.stringify.
   toJSON(): JovoError {
     return {
       ...this,
