@@ -78,9 +78,11 @@ export class DashbotUniversal extends DashbotAnalyticsPlugin {
     for (const output of jovo.$output) {
       // Since we iterate through each output respectively,
       // it's safe to assume thtt response is an object
+      const strategy = (jovo.$platform as Platform).outputTemplateConverterStrategy;
+      const normalizedOutput = strategy.normalizeOutput(output);
       const response: JovoResponse = (
         jovo.$platform as Platform
-      ).outputTemplateConverterStrategy.toResponse(output) as JovoResponse;
+      ).outputTemplateConverterStrategy.toResponse(normalizedOutput) as JovoResponse;
 
       const responseLog: DashbotUniversalLog = {
         text: this.getOutputText(output.message),
@@ -119,11 +121,18 @@ export class DashbotUniversal extends DashbotAnalyticsPlugin {
     });
   }
 
-  private getOutputText(message: MessageValue | undefined): string {
+  private getOutputText(message: MessageValue | MessageValue[] | undefined): string {
     if (!message) {
       return '';
     }
 
-    return typeof message === 'object' ? message.text || message.speech || '' : message;
+    message = Array.isArray(message) ? this.getRandomElement(message) : message;
+
+    return (typeof message === 'object' ? message.text || message.speech : message) || '';
+  }
+
+  private getRandomElement<T>(array: T[]): T | undefined {
+    const randomIndex = Math.floor(Math.random() * array.length);
+    return array[randomIndex];
   }
 }
