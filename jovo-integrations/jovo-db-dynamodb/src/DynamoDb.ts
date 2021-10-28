@@ -280,7 +280,6 @@ export class DynamoDb implements Db {
           AttributeType: 'S',
         },
       ],
-      GlobalSecondaryIndexes: [],
       KeySchema: [
         {
           AttributeName: this.config.primaryKeyColumn!,
@@ -304,6 +303,7 @@ export class DynamoDb implements Db {
     }
 
     if (this.config.globalSecondaryIndexes) {
+      newTableParams.GlobalSecondaryIndexes = [];
       this.config.globalSecondaryIndexes.forEach((gsi) => {
         const awsKeySchemas = gsi.KeySchema.map((key) => {
           // Add GSI key's to Attribute Definitions
