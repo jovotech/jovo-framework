@@ -80,11 +80,7 @@ export function registerPlatformSpecificJovoReference<
 >(key: KEY, jovoClass: JovoConstructor<REQUEST, RESPONSE, JOVO, USER, DEVICE, PLATFORM>): void {
   Object.defineProperty(Jovo.prototype, key, {
     get(): Jovo[KEY] | undefined {
-      return this instanceof jovoClass
-        ? this
-        : this.jovo instanceof jovoClass
-        ? this.jovo
-        : undefined;
+      return this instanceof jovoClass ? this : undefined;
     },
   });
 }
@@ -282,7 +278,10 @@ export abstract class Jovo<
       keyof BaseComponent
     >,
   >(constructor: ComponentConstructor<COMPONENT>, handler?: HANDLER): Promise<void>;
-  async $redirect(componentName: string, handler?: string): Promise<void>;
+  async $redirect(
+    constructorOrName: ComponentConstructor | string,
+    handler?: string,
+  ): Promise<void>;
   async $redirect(
     constructorOrName: ComponentConstructor | string,
     handler?: string,
@@ -313,7 +312,7 @@ export abstract class Jovo<
     this.$handleRequest.activeComponentNode = componentNode;
     // execute the component's handler
     await componentNode.executeHandler({
-      jovo: this.jovoReference,
+      jovo: this.getJovoReference(),
       handler,
     });
   }
@@ -322,7 +321,10 @@ export abstract class Jovo<
     constructor: ComponentConstructor<COMPONENT>,
     options: DelegateOptions<ComponentConfig<COMPONENT>>,
   ): Promise<void>;
-  async $delegate(componentName: string, options: DelegateOptions): Promise<void>;
+  async $delegate(
+    constructorOrName: ComponentConstructor | string,
+    options: DelegateOptions,
+  ): Promise<void>;
   async $delegate(
     constructorOrName: ComponentConstructor | string,
     options: DelegateOptions,
@@ -384,7 +386,7 @@ export abstract class Jovo<
     this.$handleRequest.activeComponentNode = componentNode;
     // execute the component's handler
     await componentNode.executeHandler({
-      jovo: this.jovoReference,
+      jovo: this.getJovoReference(),
     });
   }
 
@@ -416,7 +418,7 @@ export abstract class Jovo<
     this.$handleRequest.activeComponentNode = previousComponentNode;
     // execute the component's handler
     await previousComponentNode.executeHandler({
-      jovo: this.jovoReference,
+      jovo: this.getJovoReference(),
       handler: resolvedHandler,
       callArgs: eventArgs,
     });
@@ -473,7 +475,7 @@ export abstract class Jovo<
     };
   }
 
-  private get jovoReference(): Jovo {
+  protected getJovoReference(): Jovo {
     return (this as { jovo?: Jovo })?.jovo || (this as unknown as Jovo);
   }
 }
