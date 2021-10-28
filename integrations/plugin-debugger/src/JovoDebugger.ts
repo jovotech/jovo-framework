@@ -444,8 +444,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       const absoluteDebuggerConfigPath = resolve(cwd(), this.config.debuggerConfigPath);
       return this.requireUncached(absoluteDebuggerConfigPath);
     } catch (e) {
-      console.warn('Error occurred while loading debugger-config, using default config.');
-      console.warn(e.message);
+      console.info('Error occurred while loading debugger-config, using default config.');
       return new DebuggerConfig();
     }
   }
