@@ -2,6 +2,12 @@
 
 ### Latest Framework Version: 3.5.2<br><br>
 
+#### 2021-10-28
+
+##### `jovo-db-dynamodb [3.5.3]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-db-dynamodb) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-db-dynamodb) | [npm](https://www.npmjs.com/package/jovo-db-dynamodb)
+* [#1086](https://github.com/jovotech/jovo-framework/pull/1086) Remove GlobalSecondaryIndexes array on table create  ([@aswetlow(https://github.com/aswetlow))
+
+
 #### 2021-10-27
 
 ##### `jovo-analytics-googleanalytics [3.5.11]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-googleanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-googleanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-googleanalytics)

@@ -2,6 +2,10 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+### 2021-10-28 [3.5.3]
+* [#1086](https://github.com/jovotech/jovo-framework/pull/1086) Remove GlobalSecondaryIndexes array on table create  ([@aswetlow(https://github.com/aswetlow))
+
+
 ### 2021-10-27 [3.5.2]
 * [#1075](https://github.com/jovotech/jovo-framework/pull/1075) Global Secondary Indexes and provisioned throughput for DynamoDB  ([@brody-ly(https://github.com/brody-ly))
 
