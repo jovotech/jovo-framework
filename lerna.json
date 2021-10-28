@@ -2,6 +2,7 @@
   "packages": [
     "e2e",
     "framework",
+    "output/**",
     "platforms/**",
     "integrations/**",
     "examples/**"
