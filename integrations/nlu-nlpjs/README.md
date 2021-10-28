@@ -92,6 +92,22 @@ Each key (in the above case `en`) represents a locale that can be found in your 
 You can find more information about [supported languages](https://github.com/axa-group/nlp.js/blob/master/docs/v4/language-support.md) and [available packages](https://github.com/axa-group/nlp.js/tree/master/packages) in the official NLP.js docs.
 
 
+## Entities
+
+You can access NLP.js entities by using the `$entities` property. You can learn more in the [Jovo Model](https://v4.jovo.tech/docs/models) and the [`$entities` documentation](https://v4.jovo.tech/docs/entities).
+
+The NLP.js entity values are translated into the following Jovo entity properties:
+
+```typescript
+{
+  value: utteranceText, // what the user said
+  resolved: option, // the resolved value
+  id: option, // same as resolved, since NLP.js doesn't support IDs
+  native: { /* raw API response for this entity */ }
+}
+```
+
+
 ## Jovo Model
 
 You can use the [Jovo Model](https://www.jovo.tech/marketplace/jovo-model) to turn the language model files in your `models` folder into an NLP.js model. [Learn more about the NLP.js Jovo Model integration here](https://v4.jovo.tech/marketplace/nlu-nlpjs/model).

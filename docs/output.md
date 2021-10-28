@@ -12,7 +12,7 @@ A big part of building a Jovo app is returning output to the user. This output c
 
 The goal of a [handler](./handlers.md) is to return one or more structured [output templates](#output-templates) that get stored inside the Jovo `$output` array. This `$output` then gets translated into a native platform response in the next step of the [RIDR lifecycle](./ridr-lifecycle.md).
 
-The most popular way to return output is using the `$send` method:
+The most popular way to return output is using the `$send()` method:
 
 ```typescript
 yourHandler() {
@@ -29,7 +29,7 @@ Learn more about [ways to return output](#ways-to-return-output), [output templa
 
 ## Ways to Return Output
 
-We recommend using the `$send` method to return output:
+We recommend using the `$send()` method to return output:
 
 ```typescript
 yourHandler() {
@@ -40,9 +40,37 @@ yourHandler() {
 }
 ```
 
-You can either [send an output template directly](#send-an-output-template) or [send an output class](#send-an-output-class). The `$send` method comes with additional features like making it possible to [send multiple responses](#send-multiple-responses).
+You can either [send a message](#send-a-message) by passing a string:
 
-While we recommend using `$send`, it is also possible to populate `$output` directly:
+```typescript
+return this.$send('Hello World!');
+```
+
+If you want to add output elements beyond a message, you can [send an output template](#send-an-output-template):
+
+```typescript
+return this.$send({ message: 'Hello World!', /* ... */ });
+```
+
+You can also [send an output class](#send-an-output-class):
+
+```typescript
+return this.$send(SomeOutput, { /* output options */ });
+```
+
+The `$send()` method comes with additional features like making it possible to [send multiple responses](#send-multiple-responses):
+
+```typescript
+someHandler() {
+  this.$send('Hello world!');
+
+  // ...
+
+  return this.$send('This is a second chat bubble.')
+}
+```
+
+While we recommend using `$send()`, it is also possible to populate `$output` directly:
 
 ```typescript
 yourHandler() {
@@ -56,9 +84,33 @@ yourHandler() {
 }
 ```
 
+### Send a Message
+
+You can pass a string to the `$send()` method:
+
+```typescript
+yourHandler() {
+  
+  // ...
+
+  return this.$send('Hello World!');
+}
+```
+
+This will populate the [`message` output element](https://v4.jovo.tech/docs/output-templates#message) and is the same as the below example that [sends an output template](#send-an-output-template):
+
+```typescript
+yourHandler() {
+  
+  // ...
+
+  return this.$send({ message: 'Hello World!' });
+}
+```
+
 ### Send an Output Template
 
-You can directly add an [output template](#output-templates) to the `$send` method:
+You can directly add an [output template](#output-templates) to the `$send()` method:
 
 ```typescript
 yourHandler() {
@@ -85,7 +137,7 @@ yourHandler() {
 
 For more complex output, we recommend using [output classes](#output-classes).
 
-The below example imports an output class called `SomeOutput` and passes it to `$send` together with potential options:
+The below example imports an output class called `SomeOutput` and passes it to `$send()` together with potential options:
 
 ```typescript
 import { SomeOutput } from './output/SomeOutput';
@@ -132,15 +184,15 @@ You can also return an array of output templates:
 ]
 ```
 
-This can also be done by doing multiple `$send` calls in a [handler](./handlers.md).
+This can also be done by doing multiple `$send()` calls in a [handler](./handlers.md).
 
 ```typescript
 someHandler() {
-  this.$send({ message: 'Hello world!' });
+  this.$send('Hello world!');
 
   // ...
 
-  return this.$send({ message: 'This is a second chat bubble.' })
+  return this.$send('This is a second chat bubble.')
 }
 ```
 
@@ -155,7 +207,7 @@ Platforms that support multiple responses will display the example above in 2 ch
 
 ## Output Templates
 
-Output templates offer a structured format to return output to a user. These templates can be added to `$send` directly or returned from an output class.
+Output templates offer a structured format to return output to a user. These templates can be added to `$send()` directly or returned from an output class.
 
 ```typescript
 {
@@ -174,12 +226,12 @@ For better separation between logic and output, Jovo has a concept called output
 Here is an example of a `HelloWorldOutput` class:
 
 ```typescript
-import { Output, BaseOutput } from '@jovotech/framework';
+import { Output, BaseOutput, OutputTemplate } from '@jovotech/framework';
 
 @Output()
 export class HelloWorldOutput extends BaseOutput {
 
-  build() {
+  build(): OutputTemplate | OutputTemplate[] {
     return {
       message: 'Hello World!',
     };

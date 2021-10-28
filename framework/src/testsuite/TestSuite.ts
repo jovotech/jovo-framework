@@ -129,7 +129,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     const platform = new this.config.platform();
     this.requestBuilder = new platform.requestBuilder();
 
-    const request = platform.createRequestInstance({});
+    const request = platform.createRequestInstance(this.requestBuilder.launch());
     const server: TestServer = new TestServer(request);
     const handleRequest: HandleRequest = new HandleRequest(this.app, server);
 

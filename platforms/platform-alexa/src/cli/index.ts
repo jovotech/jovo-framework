@@ -7,9 +7,9 @@ import { NewHook } from './hooks/NewHook';
 import { AlexaCliConfig } from './interfaces';
 
 export class AlexaCli extends JovoCliPlugin {
-  readonly $id: string = 'alexa';
-  readonly $type: PluginType = 'platform';
-  readonly $config!: AlexaCliConfig;
+  readonly id: string = 'alexa';
+  readonly type: PluginType = 'platform';
+  readonly config!: AlexaCliConfig;
   readonly platformDirectory: string = 'platform.alexa';
 
   constructor(config: AlexaCliConfig) {
@@ -20,44 +20,52 @@ export class AlexaCli extends JovoCliPlugin {
     return [BuildHook, GetHook, DeployHook, NewHook];
   }
 
-  /**
-   * Returns base path to platform's build folder.
-   */
-  getPlatformPath(): string {
-    return joinPaths(this.$cli.$project!.getBuildPath(), this.platformDirectory);
+  get name(): string {
+    return this.constructor.name;
   }
 
   /**
-   * Returns path to Alexa skill package folder.
+   * The base path to platform's build folder
    */
-  getSkillPackagePath(): string {
-    return joinPaths(this.getPlatformPath(), 'skill-package');
+  get platformPath(): string {
+    return joinPaths(this.$cli.project!.getBuildPath(), this.platformDirectory);
   }
 
   /**
-   * Returns path to skill.json.
+   * The path to Alexa skill package folder
    */
-  getSkillJsonPath(): string {
-    return joinPaths(this.getSkillPackagePath(), 'skill.json');
+  get skillPackagePath(): string {
+    return joinPaths(this.platformPath, 'skill-package');
   }
 
-  getModelsPath(): string {
-    return joinPaths(this.getSkillPackagePath(), 'interactionModels', 'custom');
+  /**
+   * The path to the skill.json file
+   */
+  get skillJsonPath(): string {
+    return joinPaths(this.skillPackagePath, 'skill.json');
+  }
+
+  get modelsPath(): string {
+    return joinPaths(this.skillPackagePath, 'interactionModels', 'custom');
+  }
+
+  get accountLinkingPath(): string {
+    return joinPaths(this.skillPackagePath, 'accountLinking.json');
+  }
+
+  get askConfigFolderPath(): string {
+    return joinPaths(this.platformPath, '.ask');
+  }
+
+  get askConfigPath(): string {
+    return joinPaths(this.askConfigFolderPath, 'ask-states.json');
+  }
+
+  get askResourcesPath(): string {
+    return joinPaths(this.platformPath, 'ask-resources.json');
   }
 
   getModelPath(locale: string): string {
-    return joinPaths(this.getModelsPath(), `${locale}.json`);
-  }
-
-  getAccountLinkingPath(): string {
-    return joinPaths(this.getSkillPackagePath(), 'accountLinking.json');
-  }
-
-  getAskConfigFolderPath(): string {
-    return joinPaths(this.getPlatformPath(), '.ask');
-  }
-
-  getAskConfigPath(): string {
-    return joinPaths(this.getAskConfigFolderPath(), 'ask-states.json');
+    return joinPaths(this.modelsPath, `${locale}.json`);
   }
 }

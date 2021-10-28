@@ -61,7 +61,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
    */
   checkForPlatform(): void {
     // Check if this plugin should be used or not.
-    if (!this.$context.platforms.includes(this.$plugin.$id)) {
+    if (!this.$context.platforms.includes(this.$plugin.id)) {
       this.uninstall();
     }
   }
@@ -72,7 +72,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     } catch (error) {
       throw new JovoCliError({
         message: 'Jovo CLI requires gcloud CLI for deployment to Dialogflow.',
-        module: this.$plugin.constructor.name,
+        module: this.$plugin.name,
         learnMore:
           'To install the gcloud CLI, follow this guide: https://cloud.google.com/sdk/docs/install',
       });
@@ -88,12 +88,12 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     }
 
     this.$context.dialogflow.projectId =
-      this.$context.flags['project-id'] || this.$plugin.$config.projectId;
+      this.$context.flags['project-id'] || this.$plugin.config.projectId;
 
     if (!this.$context.dialogflow.projectId) {
       throw new JovoCliError({
         message: 'Could not find project ID.',
-        module: this.$plugin.constructor.name,
+        module: this.$plugin.name,
         hint: 'Please provide a project ID by using the flag "--project-id" or in your project configuration.',
       });
     }
@@ -103,10 +103,10 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
    * Checks if the platform folder for the current plugin exists.
    */
   checkForPlatformsFolder(): void {
-    if (!existsSync(this.$plugin.getPlatformPath())) {
+    if (!existsSync(this.$plugin.platformPath)) {
       throw new JovoCliError({
         message: `Couldn't find the platform folder "${this.$plugin.platformDirectory}/".`,
-        module: this.$plugin.constructor.name,
+        module: this.$plugin.name,
         hint: `Please use "jovo build" to create platform-specific files.`,
       });
     }
@@ -126,12 +126,12 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
     const uploadTask: Task = new Task(
       `Uploading your agent for project ${printHighlight(this.$context.dialogflow.projectId!)}`,
       async () => {
-        const keyFilePath: string | undefined = this.$plugin.$config.keyFile;
+        const keyFilePath: string | undefined = this.$plugin.config.keyFile;
         if (keyFilePath) {
-          if (!existsSync(joinPaths(this.$cli.$projectPath, keyFilePath))) {
+          if (!existsSync(joinPaths(this.$cli.projectPath, keyFilePath))) {
             throw new JovoCliError({
               message: `Keyfile at ${keyFilePath} does not exist.`,
-              module: this.$plugin.constructor.name,
+              module: this.$plugin.name,
             });
           }
 
@@ -154,7 +154,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
           } catch (error) {
             throw new JovoCliError({
               message: (error as AxiosError).message,
-              module: this.$plugin.constructor.name,
+              module: this.$plugin.name,
               details: error.response.data.error.message,
             });
           }
@@ -177,7 +177,7 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
       } catch (error) {
         throw new JovoCliError({
           message: (error as AxiosError).message,
-          module: this.$plugin.constructor.name,
+          module: this.$plugin.name,
           details: error.response.data.error.message,
         });
       }
@@ -196,14 +196,14 @@ export class DeployHook extends PluginHook<DeployPlatformEvents> {
   async zipDialogflowFiles(): Promise<void> {
     // Remove existing zip file.
     this.$context.dialogflow.pathToZip = joinPaths(
-      this.$plugin.getPlatformPath(),
+      this.$plugin.platformPath,
       'dialogflow_agent.zip',
     );
     if (existsSync(this.$context.dialogflow.pathToZip)) {
       unlinkSync(this.$context.dialogflow.pathToZip);
     }
     const zip: AdmZip = new AdmZip();
-    zip.addLocalFolder(this.$plugin.getPlatformPath());
+    zip.addLocalFolder(this.$plugin.platformPath);
     zip.writeZip(this.$context.dialogflow.pathToZip);
   }
 }
