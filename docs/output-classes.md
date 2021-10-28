@@ -16,7 +16,7 @@ Output classes are stored in a component's `output` folder. As a convention, the
 Each output class contains:
 
 - A [`build` method](#build-method) that returns an output template
-- [`options`](#output-options) that can be passed using `$send`
+- [`options`](#output-options) that can be passed using `$send()`
 - Optionally [helper methods](#helper-methods) that can be used to build the output object
 
 Here is an example of a `HelloWorldOutput` class:
@@ -34,7 +34,7 @@ export class HelloWorldOutput extends BaseOutput {
 }
 ```
 
-An output class can get passed to the `$send` method (which you can learn more about in the [output documentation](./output.md)):
+An output class can get passed to the `$send()` method (which you can learn more about in the [output documentation](./output.md)):
 
 ```typescript
 import { SomeOutput } from './output/SomeOutput';
@@ -210,7 +210,7 @@ export class YourOutput extends BaseOutput<YourOutputOptions> {
 }
 ```
 
-If the `$send` method doesn't pass a proper `name` to the output class in the above example, the response will be `Hey there!`.
+If the `$send()` method doesn't pass a proper `name` to the output class in the above example, the response will be `Hey there!`.
 
 ## Helper Methods
 

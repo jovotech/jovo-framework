@@ -24,7 +24,7 @@ yourHandler() {
   // ...
 }
 ```
-The inside of a handler defines its logic. In the end, each handler should either return some output using the `$send` method, or redirect/delegate to a different handler or component. [Learn more about handler logic below](#handler-logic).
+The inside of a handler defines its logic. In the end, each handler should either return some output using the `$send()` method, or redirect/delegate to a different handler or component. [Learn more about handler logic below](#handler-logic).
 
 ```typescript
 import { SomeOutput } from './output/SomeOutput';
@@ -438,7 +438,7 @@ yourHandler() {
 
 A handler usually concludes with one of these tasks:
 
-* [Return output using `$send`](#return-output)
+* [Return output using `$send()`](#return-output)
 * [Redirect to a different component using `$redirect`](#redirect-to-components)
 * [Delegate to a component using `$delegate`](#delegate-to-components)
 * [Report back to a delegating component using `$resolve`](#resolve-a-component)
