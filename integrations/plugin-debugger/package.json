@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/plugin-debugger",
-  "version": "4.0.0-beta.7",
+  "version": "4.0.0-beta.8",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -22,8 +22,8 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/nlu-nlpjs": "^4.0.0-beta.7",
-    "@jovotech/platform-core": "^4.0.0-beta.7",
+    "@jovotech/nlu-nlpjs": "^4.0.0-beta.8",
+    "@jovotech/platform-core": "^4.0.0-beta.8",
     "@nlpjs/lang-de": "^4.22.0",
     "@nlpjs/lang-en": "^4.22.0",
     "@nlpjs/lang-es": "^4.22.0",
@@ -35,7 +35,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@jovotech/framework": "^4.0.0-beta.7",
+    "@jovotech/framework": "^4.0.0-beta.8",
     "@types/jest": "^26.0.20",
     "@types/node": "^10.17.50",
     "@types/uuid": "^8.3.0",
@@ -51,7 +51,7 @@
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
-    "@jovotech/framework": "4.0.0-beta.7"
+    "@jovotech/framework": "4.0.0-beta.8"
   },
   "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176",
   "prettier": "../../.prettierrc.js",
