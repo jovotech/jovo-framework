@@ -82,7 +82,7 @@
     "@jovotech/filebuilder": "^0.0.1",
     "@jovotech/framework": "4.0.0-beta.8"
   },
-  "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176",
+  "gitHead": "9c310ac282a2e19bb9d3f269badd99e2a01dd71b",
   "prettier": "../../.prettierrc.js",
   "publishConfig": {
     "access": "public"

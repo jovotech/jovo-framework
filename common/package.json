@@ -40,7 +40,7 @@
     "ts-jest": "^26.5.4",
     "typescript": "^4.2.3"
   },
-  "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176",
+  "gitHead": "9c310ac282a2e19bb9d3f269badd99e2a01dd71b",
   "prettier": "../.prettierrc.js",
   "publishConfig": {
     "access": "public"
