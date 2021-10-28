@@ -1,8 +1,5 @@
-import {
-  DbPluginStoredElementsConfig,
-  DEFAULT_SESSION_EXPIRES_AFTER_SECONDS,
-  UnknownObject,
-} from './index';
+import { UnknownObject } from '@jovotech/common';
+import { DbPluginStoredElementsConfig, DEFAULT_SESSION_EXPIRES_AFTER_SECONDS } from './index';
 import { ComponentData, SessionData } from './interfaces';
 
 export interface StateStackItem extends UnknownObject {

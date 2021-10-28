@@ -1,6 +1,6 @@
-import { PermissionStatus } from './interfaces';
 import { HandleOptions, Jovo } from '@jovotech/framework';
 import { AlexaRequest } from './AlexaRequest';
+import { PermissionStatus } from './interfaces';
 
 export type PermissionType = 'timers' | 'reminders';
 

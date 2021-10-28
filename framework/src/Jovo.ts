@@ -1,3 +1,4 @@
+import { DeepPartial, PickWhere, UnknownObject } from '@jovotech/common';
 import { JovoResponse, NormalizedOutputTemplate, OutputTemplate } from '@jovotech/output';
 import _cloneDeep from 'lodash.clonedeep';
 import _merge from 'lodash.merge';
@@ -11,7 +12,6 @@ import {
   ComponentConstructor,
   ComponentData,
   DbPluginStoredElementsConfig,
-  DeepPartial,
   I18NextAutoPath,
   I18NextResourcesLanguageKeys,
   I18NextResourcesNamespaceKeysOfLanguage,
@@ -21,11 +21,10 @@ import {
   OutputConstructor,
   PersistableSessionData,
   PersistableUserData,
-  PickWhere,
   Server,
   StateStackItem,
-  UnknownObject,
 } from './index';
+
 import { EntityMap, RequestData } from './interfaces';
 import { JovoDevice } from './JovoDevice';
 import { JovoHistory, JovoHistoryItem, PersistableHistoryData } from './JovoHistory';

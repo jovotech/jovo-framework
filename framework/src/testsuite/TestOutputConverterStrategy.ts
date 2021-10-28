@@ -1,9 +1,10 @@
+import { Constructor } from '@jovotech/common';
 import {
   NormalizedOutputTemplate,
   OutputTemplateConverterStrategyConfig,
   SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
-import { Constructor, OutputTemplate } from '..';
+import { OutputTemplate } from '..';
 import { TestResponse } from './TestResponse';
 
 export class TestOutputConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<

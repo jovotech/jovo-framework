@@ -1,4 +1,4 @@
-import { UnknownObject } from '..';
+import { UnknownObject } from '@jovotech/common';
 import { BaseComponent, ComponentConstructor } from '../BaseComponent';
 import { RegisteredPlatformName } from '../decorators/Platforms';
 import { Intent, JovoConditionFunction } from '../interfaces';

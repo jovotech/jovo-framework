@@ -1,5 +1,5 @@
+import { DeepPartial } from '@jovotech/common';
 import _merge from 'lodash.merge';
-import { DeepPartial } from '.';
 import { MiddlewareCollection } from './MiddlewareCollection';
 import { Plugin, PluginConfig } from './Plugin';
 

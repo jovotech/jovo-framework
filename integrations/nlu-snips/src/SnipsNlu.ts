@@ -10,6 +10,7 @@ import {
   NluData,
   NluPlugin,
 } from '@jovotech/framework';
+
 import { EntityType, IntentEntityType, JovoModelData } from '@jovotech/model';
 import { join as joinPaths, resolve } from 'path';
 import { v4 as uuidV4 } from 'uuid';
