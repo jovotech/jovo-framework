@@ -2,6 +2,7 @@ import {
   AnyObject,
   App,
   BuiltInHandler,
+  ComponentTreeNode,
   Extensible,
   HandleRequest,
   InvalidParentError,
@@ -275,7 +276,9 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     return {
       apply: (target: Jovo[KEY], thisArg: Jovo, argArray: Parameters<Jovo[KEY]>): unknown => {
         const mutationData = this.getStateMutationData(handleRequest, key, thisArg, argArray);
-        this.emitStateMutation(handleRequest.debuggerRequestId, mutationData);
+        if (mutationData) {
+          this.emitStateMutation(handleRequest.debuggerRequestId, mutationData);
+        }
         return (target as (...args: unknown[]) => unknown).apply(thisArg, argArray);
       },
     };
@@ -286,26 +289,40 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     key: KEY,
     jovo: Jovo,
     args: Parameters<Jovo[KEY]>,
-  ): JovoStateMutationData<KEY> {
-    const data: JovoStateMutationData<KEY> = {
-      key,
-      to: { handler: BuiltInHandler.Start },
-    };
+  ): JovoStateMutationData<KEY> | undefined {
+    let node: ComponentTreeNode | undefined;
+    let handler: string = BuiltInHandler.Start;
     if (key === '$redirect' || key === '$delegate') {
       const componentName = typeof args[0] === 'function' ? args[0].name : args[0];
-      const node = handleRequest.componentTree.getNodeRelativeTo(
+      node = handleRequest.componentTree.getNodeRelativeTo(
         componentName,
         handleRequest.activeComponentNode?.path,
       );
-      data.to.path = node?.path?.join('.');
-      if (key === '$redirect' && args[1]) {
-        data.to.handler = args[1] as string;
-      }
+      handler = args[1] as string;
     } else if (key === '$resolve') {
-      // TODO implement
+      if (!jovo.$state) {
+        return;
+      }
+      const currentStateStackItem = jovo.$state[jovo.$state.length - 1];
+      const previousStateStackItem = jovo.$state[jovo.$state.length - 2];
+      // make sure the state-stack exists and it long enough
+      if (!currentStateStackItem?.resolve || !previousStateStackItem) {
+        return;
+      }
+      const previousComponentPath = previousStateStackItem.component.split('.');
+      node = handleRequest.componentTree.getNodeAt(previousComponentPath);
+      handler = currentStateStackItem.resolve[args[0] as string];
     }
-
-    return data;
+    if (!node) {
+      return;
+    }
+    return {
+      key,
+      to: {
+        path: node.path.join('.'),
+        handler,
+      },
+    };
   }
 
   private async onDebuggingAvailable(): Promise<void> {
