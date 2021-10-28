@@ -1,4 +1,4 @@
-import { AnyObject, Constructor } from '../index';
+import { AnyObject, Constructor } from '@jovotech/common';
 
 export abstract class ClassDecoratorMetadata<TARGET = AnyObject> {
   // eslint-disable-next-line @typescript-eslint/ban-types

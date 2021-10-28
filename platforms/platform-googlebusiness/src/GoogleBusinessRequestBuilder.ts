@@ -1,4 +1,5 @@
 import { RequestBuilder, UnknownObject } from '@jovotech/framework';
+
 import { join as joinPaths } from 'path';
 import { GoogleBusinessPlatform } from './GoogleBusinessPlatform';
 import { GoogleBusinessRequest } from './GoogleBusinessRequest';

@@ -1,4 +1,5 @@
-import { JovoResponse, OutputTemplate } from '@jovotech/output';
+import { DeepPartial, PickWhere, UnknownObject } from '@jovotech/common';
+import { JovoResponse, NormalizedOutputTemplate, OutputTemplate } from '@jovotech/output';
 import _cloneDeep from 'lodash.clonedeep';
 import _merge from 'lodash.merge';
 import _set from 'lodash.set';
@@ -11,7 +12,6 @@ import {
   ComponentConstructor,
   ComponentData,
   DbPluginStoredElementsConfig,
-  DeepPartial,
   I18NextAutoPath,
   I18NextResourcesLanguageKeys,
   I18NextResourcesNamespaceKeysOfLanguage,
@@ -21,11 +21,10 @@ import {
   OutputConstructor,
   PersistableSessionData,
   PersistableUserData,
-  PickWhere,
   Server,
   StateStackItem,
-  UnknownObject,
 } from './index';
+
 import { EntityMap, RequestData } from './interfaces';
 import { JovoDevice } from './JovoDevice';
 import { JovoHistory, JovoHistoryItem, PersistableHistoryData } from './JovoHistory';
@@ -245,7 +244,7 @@ export abstract class Jovo<
       const outputInstance = new outputConstructorOrTemplateOrMessage(this, options);
       const output = await outputInstance.build();
       // overwrite reserved properties of the built object i.e. message
-      OutputTemplate.getKeys().forEach((key) => {
+      NormalizedOutputTemplate.getKeys().forEach((key) => {
         if (options?.[key]) {
           if (Array.isArray(output)) {
             output[output.length - 1][key] =
