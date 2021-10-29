@@ -34,6 +34,7 @@ export abstract class Platform<
   PLATFORM extends Platform<REQUEST, RESPONSE, JOVO, USER, DEVICE, PLATFORM, CONFIG> = any,
   CONFIG extends ExtensibleConfig = ExtensibleConfig,
 > extends Extensible<CONFIG, PlatformMiddlewares> {
+  abstract readonly id: string;
   abstract readonly requestClass: Constructor<REQUEST>;
   abstract readonly jovoClass: JovoConstructor<REQUEST, RESPONSE, JOVO, USER, DEVICE, PLATFORM>;
   abstract readonly userClass: JovoUserConstructor<JOVO>;

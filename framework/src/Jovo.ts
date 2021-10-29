@@ -113,6 +113,8 @@ export abstract class Jovo<
   $session: JovoSession;
   $user: USER;
 
+  $cms: Record<string, unknown> = {};
+
   constructor(
     readonly $app: App,
     readonly $handleRequest: HandleRequest,
@@ -225,9 +227,15 @@ export abstract class Jovo<
     if (!options) {
       options = {};
     }
+
     if (!options.lng) {
       options.lng = this.$request.getLocale() as LANGUAGE;
     }
+
+    if (!options.platform) {
+      options.platform = this.$platform.id;
+    }
+
     return this.$app.i18n.t<PATH, LANGUAGE, NAMESPACE>(path, options);
   }
 
