@@ -1,7 +1,8 @@
+import type { OmitIndex } from '@jovotech/output';
 import i18next, { InitOptions, Resource, TOptionsBase } from 'i18next';
-import _merge from 'lodash.merge';
 import type { A, F, U } from 'ts-toolbelt';
-import { AnyObject, OmitIndex } from './index';
+import { AnyObject } from '.';
+import { Plugin, PluginConfig } from './Plugin';
 
 // Provide an interface that can be augmented in order to provide code-completion for translation-keys.
 export interface I18NextResources extends Resource {}
@@ -34,7 +35,7 @@ export type I18NextAutoPath<
 > = F.AutoPath<MERGED[A.Cast<NAMESPACE, keyof MERGED>], PATH>;
 
 // Custom init-options for i18next in case some custom properties are used in the future.
-export interface I18NextOptions extends InitOptions {}
+export interface I18NextConfig extends InitOptions, PluginConfig {}
 
 // Custom t-options for i18next, needed in order to interfere passed language and namespace.
 export interface I18NextTOptions<
@@ -53,15 +54,10 @@ export interface I18NextTOptions<
   >;
 }
 
-export class I18Next {
+export class I18Next extends Plugin<I18NextConfig> {
   readonly i18n = i18next;
-  readonly options: I18NextOptions;
 
-  constructor(options: I18NextOptions = {}) {
-    this.options = _merge(this.getDefaultOptions(), options);
-  }
-
-  getDefaultOptions(): I18NextOptions {
+  getDefaultConfig(): I18NextConfig {
     return {
       interpolation: {
         escapeValue: false,
@@ -70,7 +66,7 @@ export class I18Next {
   }
 
   async initialize(): Promise<void> {
-    await this.i18n.init(this.options);
+    await this.i18n.init(this.config);
   }
 
   t<

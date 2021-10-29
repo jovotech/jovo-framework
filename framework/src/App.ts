@@ -2,7 +2,7 @@ import _merge from 'lodash.merge';
 import {
   ArrayElement,
   ComponentTree,
-  I18NextOptions,
+  I18NextConfig,
   IntentMap,
   Middleware,
   MiddlewareFunction,
@@ -28,7 +28,7 @@ export interface AppRoutingConfig {
 }
 
 export interface AppConfig extends ExtensibleConfig {
-  i18n?: I18NextOptions;
+  i18n?: I18NextConfig;
   logging?: BasicLoggingConfig | boolean;
   routing?: AppRoutingConfig;
 }
@@ -76,7 +76,7 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
     this.use(new RouterPlugin(), new HandlerPlugin(), new OutputPlugin());
 
     this.componentTree = new ComponentTree(...(config?.components || []));
-    this.i18n = new I18Next(this.config.i18n || {});
+    this.i18n = new I18Next(this.config.i18n);
   }
 
   get isInitialized(): boolean {
