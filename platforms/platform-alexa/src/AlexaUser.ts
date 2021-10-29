@@ -5,14 +5,14 @@ import { AlexaRequest } from './AlexaRequest';
 import { ProfileProperty, sendCustomerProfileApiRequest } from './api';
 import {
   AbsoluteReminder,
+  deleteReminder,
+  getAllReminders,
+  getReminder,
   RelativeReminder,
   ReminderListResponse,
   ReminderResponse,
   setReminder,
-  getAllReminders,
-  getReminder,
   updateReminder,
-  deleteReminder,
 } from './api/ReminderApi';
 
 export class AlexaUser extends JovoUser<Alexa> {

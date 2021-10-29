@@ -1,5 +1,5 @@
+import { AnyObject } from '@jovotech/common';
 import { ComponentConstructor } from '../BaseComponent';
-import { AnyObject } from '../index';
 import { createComponentOptionDecorator } from '../metadata/ComponentOptionMetadata';
 import { createHandlerOptionDecorator } from '../metadata/HandlerOptionMetadata';
 

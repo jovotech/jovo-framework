@@ -1,11 +1,10 @@
+import { AnyObject, Constructor } from '@jovotech/common';
 import { JovoResponse, OutputTemplateConverterStrategy } from '@jovotech/output';
 import _merge from 'lodash.merge';
 import {
-  AnyObject,
   App,
-  AppMiddlewares,
   APP_MIDDLEWARES,
-  Constructor,
+  AppMiddlewares,
   DbPlugin,
   HandleRequest,
   InvalidParentError,
@@ -15,6 +14,7 @@ import {
   RequestBuilder,
   StoredElementSession,
 } from '.';
+
 import { Extensible, ExtensibleConfig } from './Extensible';
 import { JovoDevice, JovoDeviceConstructor } from './JovoDevice';
 import { JovoRequest } from './JovoRequest';

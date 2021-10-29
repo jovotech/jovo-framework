@@ -5,6 +5,7 @@ import {
   JovoRequest,
   UnknownObject,
 } from '@jovotech/framework';
+
 import { CoreCapabilityType } from './CoreDevice';
 import { Context } from './interfaces';
 

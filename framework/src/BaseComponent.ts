@@ -1,4 +1,5 @@
-import { ComponentData, JovoComponentInfo, UnknownObject } from './index';
+import { UnknownObject } from '@jovotech/common';
+import { ComponentData, JovoComponentInfo } from './index';
 import { Jovo } from './Jovo';
 import { JovoProxy } from './JovoProxy';
 import { ComponentOptions } from './metadata/ComponentMetadata';

@@ -1,6 +1,6 @@
 import { registerPlatformSpecificJovoReference } from '@jovotech/framework';
-import { GoogleBusinessPlatform, GoogleBusinessConfig } from './GoogleBusinessPlatform';
 import { GoogleBusiness } from './GoogleBusiness';
+import { GoogleBusinessConfig, GoogleBusinessPlatform } from './GoogleBusinessPlatform';
 
 declare module '@jovotech/framework/dist/types/Extensible' {
   interface ExtensiblePluginConfig {

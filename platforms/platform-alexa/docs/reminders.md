@@ -76,7 +76,7 @@ You need to [add permissions to your skill manifest](#add-reminder-permissions-t
 
 To be able to use reminders in your Alexa Skill, you need to add the permission to the Skill project.
 
-While you can manually enable the permission in the Alexa developer console, we recommend to add it to the `skill.json` manifest directly using the [Jovo project config]([docs/](https://v4.jovo.tech/docs/)project-config):
+While you can manually enable the permission in the Alexa developer console, we recommend to add it to the `skill.json` manifest directly using the [Alexa project config](https://v4.jovo.tech/marketplace/platform-alexa/project-config):
 
 ```js
 const project = new ProjectConfig({
@@ -145,7 +145,7 @@ someHandler() {
 }
 ```
 
-Under the hood, the `AskForRemindersPermissionOutput` extends the `AskForPermissionOutput` and like this:
+Under the hood, the `AskForRemindersPermissionOutput` extends the `AskForPermissionOutput` like this:
 
 ```typescript
 {
@@ -154,6 +154,7 @@ Under the hood, the `AskForRemindersPermissionOutput` extends the `AskForPermiss
     alexa: {
       nativeResponse: {
         response: {
+          shouldEndSession: true,
           directives: [
             {
               type: 'Connections.SendRequest',
@@ -175,30 +176,48 @@ Under the hood, the `AskForRemindersPermissionOutput` extends the `AskForPermiss
 
 Once a permission is accepted, Alexa sends a request with the type `Connections.Response`. [Learn more in the official Alexa docs](https://developer.amazon.com/docs/alexa/smapi/voice-permissions-for-reminders.html#send-a-connectionssendrequest-directive).
 
-You can use the `isRemindersPermissionAcceptedRequest` to look for requests like this in your handlers:
+You can use the `onPermission` handle helper to have a handler respond to requests like this:
 
 ```typescript
 import { Handle } from '@jovotech/framework';
-import { isRemindersPermissionAcceptedRequest } from '@jovotech/platform-alexa';
+import { AlexaHandles } from '@jovotech/platform-alexa';
+// ...
+
+@Handle(AlexaHandles.onPermission('ACCEPTED'))
+async remindersPermissionAccepted() {
+  // ...
+}
+```
+
+Using this helper is the same as using the following [`@Handle` decorator](https://v4.jovo.tech/docs/handlers#handler-routing-and-the-handle-decorator):
+
+```typescript
+import { Handle, Jovo } from '@jovotech/framework';
+import { AlexaRequest } from '@jovotech/platform-alexa';
 // ...
 
 @Handle({
   global: true,
-  intents: [ 'Connections.Response' ],
-  if: isRemindersPermissionAcceptedRequest
+  types: ['Connections.Response'],
+  platforms: ['alexa'],
+  if: (jovo: Jovo) =>
+    (jovo.$request as AlexaRequest).request?.name === 'AskFor' &&
+    (jovo.$request as AlexaRequest).request?.payload?.status === 'ACCEPTED'       
 })
 async remindersPermissionAccepted() {
   // ...
 }
 ```
 
-> **Note**: The request doesn't come with session data. This is why the accepting handler needs to be `global`.
+> **Note**: The `Connections.Response` request doesn't come with session data. This is why the accepting handler needs to be global.
 
-Here are additional helper functions that you can use similar to `isRemindersPermissionAcceptedRequest`:
+You can use the following `status` values for `AlexaHandles.onPermission(status)`:
 
-* `isRemindersPermissionRequest`
-* `isRemindersPermissionDeniedRequest`
-* `isRemindersPermissionNotAnsweredRequest`
+- `ACCEPTED`: User granted the permissions
+- `DENIED`: User refused the permissions
+- `NOT_ANSWERED`: User did not respond or was not understood
+
+[Learn more in the official Alexa docs](https://developer.amazon.com/docs/alexa/smapi/voice-permissions-for-reminders.html#send-a-connectionssendrequest-directive).
 
 #### Permissions Consent Card
 

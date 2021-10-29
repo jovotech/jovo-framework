@@ -15,6 +15,7 @@ export class AskForPermissionOutput extends BaseOutput<AskForPermissionOutputOpt
         alexa: {
           nativeResponse: {
             response: {
+              shouldEndSession: true,
               directives: [
                 {
                   type: 'Connections.SendRequest',

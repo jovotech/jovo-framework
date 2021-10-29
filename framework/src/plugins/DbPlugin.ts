@@ -1,4 +1,5 @@
-import { AnyObject, HandleRequest, InvalidParentError } from '..';
+import { AnyObject } from '@jovotech/common';
+import { HandleRequest, InvalidParentError } from '..';
 import { ExtensibleInitConfig } from '../Extensible';
 import {
   DbPluginConfig,
