@@ -1,6 +1,6 @@
 # Changelog
 
-## [@jovotech/platform-googlebusiness@4.0.0-beta.6](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-googlebusiness@4.0.0-beta.3...@jovotech/platform-googlebusiness@4.0.0-beta.6)
+## [@jovotech/nlu-snips@4.0.0-beta.6](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-snips@4.0.0-beta.3...@jovotech/nlu-snips@4.0.0-beta.6)
 
 > 5 October 2021
 
@@ -13,24 +13,15 @@
 - ✨ Improve model validation [`#1020`](https://github.com/jovotech/jovo-framework/pull/1020)
 - ✨ Add accessToken property to JovoUser [`#1027`](https://github.com/jovotech/jovo-framework/pull/1027)
 
-## [@jovotech/platform-googlebusiness@4.0.0-beta.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-googlebusiness@4.0.0-beta.2...@jovotech/platform-googlebusiness@4.0.0-beta.3)
+## [@jovotech/nlu-snips@4.0.0-beta.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-snips@4.0.0-beta.2...@jovotech/nlu-snips@4.0.0-beta.3)
 
 > 10 September 2021
 
-## [@jovotech/platform-googlebusiness@4.0.0-beta.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-googlebusiness@4.0.0-beta.1...@jovotech/platform-googlebusiness@4.0.0-beta.2)
+## [@jovotech/nlu-snips@4.0.0-beta.2](https://github.com/jovotech/jovo-framework/compare/v3.5...@jovotech/nlu-snips@4.0.0-beta.2)
 
 > 31 August 2021
 
 - Async Model [`#996`](https://github.com/jovotech/jovo-framework/pull/996)
-
-## [@jovotech/platform-googlebusiness@4.0.0-beta.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-googlebusiness@4.0.0-beta.0...@jovotech/platform-googlebusiness@4.0.0-beta.1)
-
-> 24 August 2021
-
-## [@jovotech/platform-googlebusiness@4.0.0-beta.0](https://github.com/jovotech/jovo-framework/compare/v3.5...@jovotech/platform-googlebusiness@4.0.0-beta.0)
-
-> 19 August 2021
-
 - 🚚 Only use $ for direct properties of `Jovo` [`#986`](https://github.com/jovotech/jovo-framework/pull/986)
 - Improve type for device capabilities [`#985`](https://github.com/jovotech/jovo-framework/pull/985)
 - ✨ Alexa reminders  [`#972`](https://github.com/jovotech/jovo-framework/pull/972)
