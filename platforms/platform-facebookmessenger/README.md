@@ -146,13 +146,13 @@ By default, both actions are enabled by default:
 new FacebookMessengerPlatform({
   senderActions: {
     markSeen: true,
-    typingIndicators: true,
+    typingIndicator: true,
   },
 });
 ```
 
 - `markSeen`: This adds the `mark_seen` sender action and show latest messages as read.
-- `typingIndicators`: This turns typing indicators on when a request was received (in the [`dialogue.start` middleware](https://v4.jovo.tech/docs/ridr-lifecycle#middlewares)) and turns them off when the dialogue lifecycle is completed (in the [`dialogue.end` middleware](https://v4.jovo.tech/docs/ridr-lifecycle#middlewares)).
+- `typingIndicator`: This turns typing indicators on when a request was received (in the [`dialogue.start` middleware](https://v4.jovo.tech/docs/ridr-lifecycle#middlewares)) and turns them off when the dialogue lifecycle is completed (in the [`dialogue.end` middleware](https://v4.jovo.tech/docs/ridr-lifecycle#middlewares)).
 
 Note: Although [Instagram](https://v4.jovo.tech/marketplace/platform-instagram) works similar compared to Facebook Messenger, it does not support sender actions at the moment.
 

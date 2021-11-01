@@ -244,7 +244,7 @@ export class FacebookMessengerPlatform extends Platform<
   }
 
   private async sendSenderAction(jovo: FacebookMessenger, senderAction: SenderAction) {
-    if (!this.isRequestRelated(jovo.$request)) {
+    if (jovo.$platform.constructor.name === this.constructor.name) {
       return;
     }
 
