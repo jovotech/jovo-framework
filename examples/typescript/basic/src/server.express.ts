@@ -1,4 +1,4 @@
-import { ExpressJs, Webhook, Request, Response } from '@jovotech/server-express';
+import { ExpressJs, Request, Response, Webhook } from '@jovotech/server-express';
 import { app } from './app';
 
 /*

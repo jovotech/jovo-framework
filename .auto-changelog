@@ -1,0 +1,7 @@
+{
+  "template": "./changelog-template.hbs",
+  "hideEmptyReleases": true,
+  "hideCredit": true,
+  "ignoreCommitPattern": ":memo:|:bookmark:",
+  "breakingPattern": ":boom:"
+}

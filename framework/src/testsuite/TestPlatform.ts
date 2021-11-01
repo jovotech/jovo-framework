@@ -1,4 +1,4 @@
-import { Platform, ExtensibleConfig } from '..';
+import { ExtensibleConfig, Platform } from '..';
 import { TestDevice } from './TestDevice';
 import { TestJovo } from './TestJovo';
 import { TestOutputConverterStrategy } from './TestOutputConverterStrategy';

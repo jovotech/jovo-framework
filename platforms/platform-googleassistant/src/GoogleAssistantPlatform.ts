@@ -3,6 +3,7 @@ import {
   GoogleAssistantOutputTemplateConverterStrategy,
   GoogleAssistantResponse,
 } from '@jovotech/output-googleassistant';
+
 import _mergeWith from 'lodash.mergewith';
 import { v4 as uuidV4 } from 'uuid';
 import { GoogleAssistant } from './GoogleAssistant';

@@ -1,7 +1,6 @@
-import type { OmitIndex } from '@jovotech/output';
+import { AnyObject, OmitIndex } from '@jovotech/common';
 import i18next, { InitOptions, Resource, TOptionsBase } from 'i18next';
 import type { A, F, U } from 'ts-toolbelt';
-import { AnyObject } from '.';
 import { Plugin, PluginConfig } from './Plugin';
 
 // Provide an interface that can be augmented in order to provide code-completion for translation-keys.
