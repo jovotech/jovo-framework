@@ -86,16 +86,15 @@ export class I18Next extends Plugin<I18NextConfig> {
     if (options?.platform) {
       if (Array.isArray(path)) {
         for (const p of path) {
-          if (this.i18n.exists(`${options.platform}.translation.${p}`)) {
-            return this.i18n.t(`${options.platform}.translation.${p}`, options);
+          const platformPath = `${options.platform}:translation:${p}`;
+          if (this.i18n.exists(platformPath, options)) {
+            return this.i18n.t(platformPath, options);
           }
         }
       } else {
-        if (this.i18n.exists(`${options.platform}.translation.${path}`)) {
-          return this.i18n.t(
-            `${options.lng!}${options.platform}.translation.${options.platform}`,
-            options,
-          );
+        const platformPath = `${options.platform}:translation:${path}`;
+        if (this.i18n.exists(platformPath, options)) {
+          return this.i18n.t(platformPath, options);
         }
       }
     }
