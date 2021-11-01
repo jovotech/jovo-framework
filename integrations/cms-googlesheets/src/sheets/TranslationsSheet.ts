@@ -66,6 +66,7 @@ export class TranslationsSheet extends GoogleSheetsCmsSheet<TranslationsSheetCon
 
         const i18nKey = `${locale}${platform ? `.${platform.id}` : ''}.translation.${key}`;
 
+        // If a value already exists, concatenate the current value
         let existingValue: string | string[] = _get(resources, i18nKey) as unknown as
           | string
           | string[];
@@ -84,7 +85,6 @@ export class TranslationsSheet extends GoogleSheetsCmsSheet<TranslationsSheetCon
       }
     }
 
-    console.log(JSON.stringify(resources));
     // Feed resources to i18n, if configured
     for (const locale of Object.keys(resources)) {
       for (const key of Object.keys(resources[locale])) {

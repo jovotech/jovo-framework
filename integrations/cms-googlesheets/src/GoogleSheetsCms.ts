@@ -1,9 +1,9 @@
 import { App, Jovo, JovoError, Plugin, PluginConfig } from '@jovotech/framework';
-import { Credentials } from './interfaces';
-import path from 'path';
 import { existsSync, readFileSync } from 'fs';
-import { google, sheets_v4 } from 'googleapis';
 import { JWT } from 'google-auth-library';
+import { google, sheets_v4 } from 'googleapis';
+import path from 'path';
+import { Credentials } from './interfaces';
 import { GoogleSheetsCmsSheet } from './sheets/GoogleSheetsCmsSheet';
 
 export interface GoogleSheetsCmsConfig extends PluginConfig {
@@ -47,14 +47,16 @@ export class GoogleSheetsCms extends Plugin<GoogleSheetsCmsConfig> {
 
       if (!spreadsheetId) {
         throw new JovoError({
-          message: 'spreadsheetId has to be set.',
-          hint: 'The spreadsheetId has to be defined in your config.js file',
+          message: `spreadsheetId has to be set for ${sheetName}`,
           learnMore: 'https://www.jovo.tech/docs/cms/google-sheets#configuration',
         });
       }
 
       if (!sheet.config.range) {
-        throw new JovoError({ message: 'range has to bet set' });
+        throw new JovoError({
+          message: `range has to bet set for ${sheetName}`,
+          learnMore: 'https://www.jovo.tech/docs/cms/google-sheets#configuration',
+        });
       }
 
       try {
@@ -74,11 +76,15 @@ export class GoogleSheetsCms extends Plugin<GoogleSheetsCmsConfig> {
 
   private async initializeJWT(): Promise<JWT> {
     if (!this.config.credentialsFile) {
-      throw new JovoError({ message: 'Credentials are mandatory, please provide them' });
+      throw new JovoError({
+        message: 'credentialsFile has to bet set in your config',
+      });
     }
 
     if (!existsSync(this.config.credentialsFile)) {
-      throw new JovoError({ message: "Couldn't find credentials file" });
+      throw new JovoError({
+        message: `Couldn\'t read credentials file from ${this.config.credentialsFile}`,
+      });
     }
 
     try {
