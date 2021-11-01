@@ -7,6 +7,7 @@ import {
   Extensible,
   ExtensibleConfig,
   HandleRequest,
+  Jovo,
   JovoError,
   Platform,
   Server,
@@ -83,15 +84,12 @@ export class FacebookMessengerPlatform extends Platform<
     this.middlewareCollection.use(
       'after.request.end',
       (jovo) => this.enableDatabaseSessionStorage(jovo, this.config.session),
-      (jovo) => this.markAsSeen(jovo as FacebookMessenger),
+      this.markAsSeen.bind(this),
     );
 
-    this.middlewareCollection.use('dialogue.start', (jovo) =>
-      this.enableTypingIndicator(jovo as FacebookMessenger),
-    );
-    this.middlewareCollection.use('dialogue.end', (jovo) =>
-      this.disableTypingIndicator(jovo as FacebookMessenger),
-    );
+    this.middlewareCollection.use('dialogue.start', this.enableTypingIndicator.bind(this));
+    this.middlewareCollection.use('dialogue.end', this.disableTypingIndicator.bind(this));
+    this.middlewareCollection.use('before.request.start', this.ignoreOwnSenderId.bind(this));
   }
 
   getDefaultConfig(): FacebookMessengerConfig {
@@ -104,6 +102,17 @@ export class FacebookMessengerPlatform extends Platform<
         typingIndicator: true,
       },
     };
+  }
+
+  async ignoreOwnSenderId(jovo: Jovo): Promise<void> {
+    const senderId: string | undefined = (jovo.$request as FacebookMessengerRequest)?.messaging?.[0]
+      ?.sender?.id;
+    const businessAccountId: string | undefined = (jovo.$request as FacebookMessengerRequest)?.id;
+
+    if (senderId && businessAccountId && senderId === businessAccountId) {
+      jovo.$handleRequest.stopMiddlewareExecution();
+      return jovo.$handleRequest.server.setResponse({});
+    }
   }
 
   isRequestRelated(request: AnyObject | FacebookMessengerRequest): boolean {
@@ -219,7 +228,7 @@ export class FacebookMessengerPlatform extends Platform<
     }
   }
 
-  private async markAsSeen(jovo: FacebookMessenger): Promise<void> {
+  private async markAsSeen(jovo: Jovo): Promise<void> {
     if (this.config.senderActions?.markSeen === false) {
       return;
     }
@@ -227,7 +236,7 @@ export class FacebookMessengerPlatform extends Platform<
     await this.sendSenderAction(jovo, 'mark_seen');
   }
 
-  private async enableTypingIndicator(jovo: FacebookMessenger) {
+  private async enableTypingIndicator(jovo: Jovo) {
     if (this.config.senderActions?.typingIndicator === false) {
       return;
     }
@@ -235,7 +244,7 @@ export class FacebookMessengerPlatform extends Platform<
     await this.sendSenderAction(jovo, 'typing_on');
   }
 
-  private async disableTypingIndicator(jovo: FacebookMessenger) {
+  private async disableTypingIndicator(jovo: Jovo) {
     if (this.config.senderActions?.typingIndicator === false) {
       return;
     }
@@ -243,8 +252,8 @@ export class FacebookMessengerPlatform extends Platform<
     await this.sendSenderAction(jovo, 'typing_off');
   }
 
-  private async sendSenderAction(jovo: FacebookMessenger, senderAction: SenderAction) {
-    if (jovo.$platform.constructor.name === this.constructor.name) {
+  private async sendSenderAction(jovo: Jovo, senderAction: SenderAction) {
+    if (jovo.$platform.constructor.name !== 'FacebookMessengerPlatform') {
       return;
     }
 

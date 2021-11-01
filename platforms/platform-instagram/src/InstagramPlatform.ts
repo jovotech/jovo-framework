@@ -1,11 +1,4 @@
-import {
-  AnyObject,
-  App,
-  ExtensibleInitConfig,
-  HandleRequest,
-  Jovo,
-  Server,
-} from '@jovotech/framework';
+import { AnyObject, App, ExtensibleInitConfig, Server } from '@jovotech/framework';
 import { OmitIndex } from '@jovotech/output';
 import { InstagramOutputTemplateConverterStrategy } from '@jovotech/output-instagram';
 import {
@@ -33,28 +26,12 @@ export class InstagramPlatform extends FacebookMessengerPlatform {
 
   // Overwrite the constructor to apply typings from InstagramConfig,
   // since we can't pass the type in the generic parameters
-  constructor(config: ExtensibleInitConfig<InstagramConfig>) {
+  constructor(config?: ExtensibleInitConfig<InstagramConfig>) {
     super(config);
-  }
-
-  mount(parent: HandleRequest): Promise<void> | void {
-    super.mount(parent);
-    parent.middlewareCollection.use('before.request.start', (jovo) => {
-      return this.beforeRequestStart(jovo);
-    });
   }
 
   isRequestRelated(request: AnyObject | InstagramRequest): boolean {
     return request.$type === 'instagram' && request.id && request.time && !!request.messaging?.[0];
-  }
-
-  async beforeRequestStart(jovo: Jovo): Promise<void> {
-    const senderId = jovo.$instagram?.$request?.messaging?.[0]?.sender?.id;
-    const businessAccountId = jovo.$instagram?.$request?.id;
-    if (senderId && businessAccountId && senderId === businessAccountId) {
-      jovo.$handleRequest.stopMiddlewareExecution();
-      return jovo.$handleRequest.server.setResponse({});
-    }
   }
 
   augmentAppHandle(): void {
