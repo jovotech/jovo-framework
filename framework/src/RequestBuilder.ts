@@ -1,4 +1,4 @@
-import { UnknownObject } from '.';
+import { UnknownObject } from '@jovotech/common';
 import { Platform } from './Platform';
 
 export type RequestBuilderRequest<PLATFORM extends Platform> = PLATFORM extends Platform<

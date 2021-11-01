@@ -8,6 +8,7 @@ import {
   Platform,
   UnknownObject,
 } from '@jovotech/framework';
+
 import { JovoModelNlpjs } from '@jovotech/model-nlpjs';
 import { promises } from 'fs';
 import { join } from 'path';

@@ -6,6 +6,7 @@ import {
   JovoRequest,
   UnknownObject,
 } from '@jovotech/framework';
+
 import { FACEBOOK_LAUNCH_PAYLOAD } from '.';
 import { FacebookMessengerCapabilityType } from './FacebookMessengerDevice';
 import { MessagingData } from './interfaces';

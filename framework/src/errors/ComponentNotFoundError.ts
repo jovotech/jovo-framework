@@ -1,4 +1,4 @@
-import { JovoError } from '../JovoError';
+import { JovoError } from '@jovotech/common';
 
 // TODO: improve
 export class ComponentNotFoundError extends JovoError {

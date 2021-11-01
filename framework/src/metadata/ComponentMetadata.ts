@@ -1,10 +1,11 @@
+import { AnyObject, DeepPartial, UnknownObject } from '@jovotech/common';
 import {
   BaseComponent,
   ComponentConfig,
   ComponentConstructor,
   ComponentDeclaration,
 } from '../BaseComponent';
-import { AnyObject, DeepPartial, JovoConditionFunction, UnknownObject } from '../index';
+import { JovoConditionFunction } from '../index';
 import { ClassDecoratorMetadata } from './ClassDecoratorMetadata';
 import { ComponentOptionMetadata } from './ComponentOptionMetadata';
 

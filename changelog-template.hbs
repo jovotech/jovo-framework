@@ -1,0 +1,25 @@
+# Changelog
+
+{{#each releases}}
+
+## [{{title}}]({{href}})
+
+> {{niceDate}}
+
+{{#if summary}}
+{{summary}}
+{{/if}}
+
+{{#if merges}}
+{{#each merges}}
+- {{#if commit.breaking}}**Breaking change:** {{/if}}{{message}} {{#if href}}[`#{{id}}`]({{href}}){{/if}}
+{{/each}}
+{{/if}}
+
+{{#if fixes}}
+{{#each fixes}}
+- {{#if commit.breaking}}**Breaking change:** {{/if}}{{commit.subject}}{{#each fixes}} {{#if href}}[`#{{id}}`]({{href}}){{/if}}{{/each}}
+{{/each}}
+{{/if}}
+
+{{/each}}

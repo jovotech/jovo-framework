@@ -17,6 +17,7 @@ import {
   FacebookMessengerOutputTemplateConverterStrategy,
   FacebookMessengerResponse,
 } from '@jovotech/output-facebookmessenger';
+
 import _cloneDeep from 'lodash.clonedeep';
 import {
   DEFAULT_FACEBOOK_VERIFY_TOKEN,

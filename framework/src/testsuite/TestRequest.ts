@@ -1,4 +1,5 @@
-import { JovoRequest, JovoSession, EntityMap, UnknownObject } from '..';
+import { UnknownObject } from '@jovotech/common';
+import { EntityMap, JovoRequest, JovoSession } from '..';
 import { Intent } from '../interfaces';
 import { AudioInput, InputType, InputTypeLike } from '../JovoInput';
 
