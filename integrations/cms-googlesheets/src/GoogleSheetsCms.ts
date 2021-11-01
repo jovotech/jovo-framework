@@ -2,7 +2,6 @@ import { App, Jovo, JovoError, Plugin, PluginConfig } from '@jovotech/framework'
 import { existsSync, readFileSync } from 'fs';
 import { JWT } from 'google-auth-library';
 import { google, sheets_v4 } from 'googleapis';
-import path from 'path';
 import { Credentials } from './interfaces';
 import { GoogleSheetsCmsSheet } from './sheets/GoogleSheetsCmsSheet';
 
@@ -14,26 +13,21 @@ export interface GoogleSheetsCmsConfig extends PluginConfig {
 }
 
 export class GoogleSheetsCms extends Plugin<GoogleSheetsCmsConfig> {
+  private jwt?: JWT;
+
   getDefaultConfig(): GoogleSheetsCmsConfig {
     return { credentialsFile: '', sheets: {} };
   }
 
   install(app: App): void {
-    // If in a unit test, we need to resolve the correct path to the credentials file
-    if (
-      process.env.JEST_WORKER_ID &&
-      this.config.credentialsFile &&
-      !path.isAbsolute(this.config.credentialsFile)
-    ) {
-      this.config.credentialsFile = path.join('./src', this.config.credentialsFile);
-    }
-
     app.middlewareCollection.use('request.start', this.retrieveSpreadsheetData.bind(this));
   }
 
-  async retrieveSpreadsheetData(jovo: Jovo): Promise<void> {
-    const jwt: JWT = await this.initializeJWT();
+  async initialize(): Promise<void> {
+    this.jwt = await this.initializeJWT();
+  }
 
+  async retrieveSpreadsheetData(jovo: Jovo): Promise<void> {
     for (const [sheetName, sheet] of Object.entries(this.config.sheets)) {
       // Cache cms data, if not configured otherwise
       if (
@@ -54,13 +48,13 @@ export class GoogleSheetsCms extends Plugin<GoogleSheetsCmsConfig> {
 
       if (!sheet.config.range) {
         throw new JovoError({
-          message: `range has to bet set for ${sheetName}`,
+          message: `range has to be set for ${sheetName}`,
           learnMore: 'https://www.jovo.tech/docs/cms/google-sheets#configuration',
         });
       }
 
       try {
-        const sheets: sheets_v4.Sheets = google.sheets({ version: 'v4', auth: jwt });
+        const sheets: sheets_v4.Sheets = google.sheets({ version: 'v4', auth: this.jwt });
         const response = await sheets.spreadsheets.values.get({
           range: `${sheetName}!${sheet.config.range}`,
           spreadsheetId,
@@ -77,7 +71,8 @@ export class GoogleSheetsCms extends Plugin<GoogleSheetsCmsConfig> {
   private async initializeJWT(): Promise<JWT> {
     if (!this.config.credentialsFile) {
       throw new JovoError({
-        message: 'credentialsFile has to bet set in your config',
+        message: 'credentialsFile has to bet set',
+        learnMore: 'https://www.jovo.tech/docs/cms/google-sheets#configuration',
       });
     }
 
