@@ -68,7 +68,6 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
 
   getDefaultConfig(): JovoDebuggerConfig {
     return {
-      skipTests: true,
       nlu: new NlpjsNlu({
         languageMap: getDefaultLanguageMap(),
       }),
