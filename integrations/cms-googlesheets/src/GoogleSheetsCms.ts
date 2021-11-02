@@ -16,7 +16,7 @@ export class GoogleSheetsCms extends Plugin<GoogleSheetsCmsConfig> {
   private jwt?: JWT;
 
   getDefaultConfig(): GoogleSheetsCmsConfig {
-    return { credentialsFile: '', sheets: {} };
+    return { credentialsFile: 'credentials.json', sheets: {} };
   }
 
   install(app: App): void {
@@ -37,7 +37,7 @@ export class GoogleSheetsCms extends Plugin<GoogleSheetsCmsConfig> {
         continue;
       }
 
-      const spreadsheetId = this.config.spreadsheetId || sheet.config.spreadsheetId;
+      const spreadsheetId = sheet.config.spreadsheetId || this.config.spreadsheetId;
 
       if (!spreadsheetId) {
         throw new JovoError({
