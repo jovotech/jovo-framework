@@ -1,5 +1,37 @@
 # Changelog
 
+## [@jovotech/platform-dialogflow@4.0.0-beta.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-dialogflow@4.0.0-beta.2...@jovotech/platform-dialogflow@4.0.0-beta.3)
+
+> 31 August 2021
+
+## [@jovotech/platform-dialogflow@4.0.0-beta.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-dialogflow@4.0.0-beta.1...@jovotech/platform-dialogflow@4.0.0-beta.2)
+
+> 31 August 2021
+
+- Async Model [`#996`](https://github.com/jovotech/jovo-framework/pull/996)
+
+## [@jovotech/platform-dialogflow@4.0.0-beta.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-dialogflow@4.0.0-beta.0...@jovotech/platform-dialogflow@4.0.0-beta.1)
+
+> 24 August 2021
+
+## [@jovotech/platform-dialogflow@4.0.0-beta.0](https://github.com/jovotech/jovo-framework/compare/v3.5...@jovotech/platform-dialogflow@4.0.0-beta.0)
+
+> 19 August 2021
+
+- 🚚 Only use $ for direct properties of `Jovo` [`#986`](https://github.com/jovotech/jovo-framework/pull/986)
+- Improve type for device capabilities [`#985`](https://github.com/jovotech/jovo-framework/pull/985)
+- ✨ Alexa reminders  [`#972`](https://github.com/jovotech/jovo-framework/pull/972)
+- ✨ Implement this.$device (wip) [`#966`](https://github.com/jovotech/jovo-framework/pull/966)
+- 🚚 Rename platform resources [`#962`](https://github.com/jovotech/jovo-framework/pull/962)
+- ✨ Implement Alexa Customer Profile API [`#970`](https://github.com/jovotech/jovo-framework/pull/970)
+- ✨ Implement Alexa Customer Profile API [`#969`](https://github.com/jovotech/jovo-framework/pull/969)
+- ✨ Initial DynamoDb implementation (wip) [`#953`](https://github.com/jovotech/jovo-framework/pull/953)
+- ✨ Introduce plugin-specific context [`#939`](https://github.com/jovotech/jovo-framework/pull/939)
+- ⬆️ Update dependencies [`#936`](https://github.com/jovotech/jovo-framework/pull/936)
+- ✨ Add Dialogflow CLI Plugin [`#928`](https://github.com/jovotech/jovo-framework/pull/928)
+- 🚚 Abstract JovoCli class, pass instance to plugins [`#926`](https://github.com/jovotech/jovo-framework/pull/926)
+- ✨ Add CLI plugins for Alexa and Google Assistant [`#925`](https://github.com/jovotech/jovo-framework/pull/925)
+
 ## [v3.5](https://github.com/jovotech/jovo-framework/compare/v3.3...v3.5)
 
 > 22 February 2021

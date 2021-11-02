@@ -1,5 +1,43 @@
 # Changelog
 
+## [@jovotech/output-facebookmessenger@4.0.0-beta.7](https://github.com/jovotech/jovo-framework/compare/@jovotech/output-facebookmessenger@4.0.0-beta.6...@jovotech/output-facebookmessenger@4.0.0-beta.7)
+
+> 19 October 2021
+
+- :sparkles: Introduce Instagram [`#40`](https://github.com/jovotech/jovo-framework/pull/40)
+
+## [@jovotech/output-facebookmessenger@4.0.0-beta.6](https://github.com/jovotech/jovo-framework/compare/@jovotech/output-facebookmessenger@4.0.0-beta.5...@jovotech/output-facebookmessenger@4.0.0-beta.6)
+
+> 30 September 2021
+
+## [@jovotech/output-facebookmessenger@4.0.0-beta.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/output-facebookmessenger@4.0.0-beta.4...@jovotech/output-facebookmessenger@4.0.0-beta.5)
+
+> 24 September 2021
+
+## [@jovotech/output-facebookmessenger@4.0.0-beta.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/output-facebookmessenger@4.0.0-beta.3...@jovotech/output-facebookmessenger@4.0.0-beta.4)
+
+> 22 September 2021
+
+- ✨ Add hasSessionEnded() to JovoResponse [`#29`](https://github.com/jovotech/jovo-framework/pull/29)
+
+## [@jovotech/output-facebookmessenger@4.0.0-beta.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/output-facebookmessenger@4.0.0-beta.2...@jovotech/output-facebookmessenger@4.0.0-beta.3)
+
+> 10 September 2021
+
+## [@jovotech/output-facebookmessenger@4.0.0-beta.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/output-facebookmessenger@4.0.0-beta.1...@jovotech/output-facebookmessenger@4.0.0-beta.2)
+
+> 31 August 2021
+
+## [@jovotech/output-facebookmessenger@4.0.0-beta.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/output-facebookmessenger@4.0.0-beta.0...@jovotech/output-facebookmessenger@4.0.0-beta.1)
+
+> 18 August 2021
+
+## [@jovotech/output-facebookmessenger@4.0.0-beta.0](https://github.com/jovotech/jovo-framework/compare/v3.5...@jovotech/output-facebookmessenger@4.0.0-beta.0)
+
+> 18 August 2021
+
+- :recycle: Update CorePlatform response [`#16`](https://github.com/jovotech/jovo-framework/pull/16)
+
 ## [v3.5](https://github.com/jovotech/jovo-framework/compare/v3.3...v3.5)
 
 > 22 February 2021

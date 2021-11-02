@@ -1,5 +1,13 @@
 # Changelog
 
+## [@jovotech/output-instagram@4.0.0-beta.0](https://github.com/jovotech/jovo-framework/compare/v3.5...@jovotech/output-instagram@4.0.0-beta.0)
+
+> 19 October 2021
+
+- :sparkles: Introduce Instagram [`#40`](https://github.com/jovotech/jovo-framework/pull/40)
+- ✨ Add hasSessionEnded() to JovoResponse [`#29`](https://github.com/jovotech/jovo-framework/pull/29)
+- :recycle: Update CorePlatform response [`#16`](https://github.com/jovotech/jovo-framework/pull/16)
+
 ## [v3.5](https://github.com/jovotech/jovo-framework/compare/v3.3...v3.5)
 
 > 22 February 2021
