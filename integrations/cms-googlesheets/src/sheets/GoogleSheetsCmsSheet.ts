@@ -8,5 +8,5 @@ export interface GoogleSheetsCmsSheetConfig extends PluginConfig {
 export abstract class GoogleSheetsCmsSheet<
   CONFIG extends GoogleSheetsCmsSheetConfig = GoogleSheetsCmsSheetConfig,
 > extends Plugin<CONFIG> {
-  abstract parse(jovo: Jovo, values: unknown[][]): unknown;
+  abstract parse(values: unknown[][], jovo?: Jovo): unknown;
 }

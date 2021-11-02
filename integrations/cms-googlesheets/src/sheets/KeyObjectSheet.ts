@@ -7,7 +7,7 @@ export class KeyObjectSheet extends GoogleSheetsCmsSheet {
     return { range: 'A:Z' };
   }
 
-  parse(_jovo: Jovo, values: Array<string | string[]>[]): unknown {
+  parse(values: Array<string | string[]>[]): unknown {
     const resources = {};
     const headers: string[] = values.shift() as string[];
 

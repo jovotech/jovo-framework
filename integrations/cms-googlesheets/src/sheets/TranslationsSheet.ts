@@ -1,27 +1,18 @@
+import { Jovo, Platform } from '@jovotech/framework';
 import _get from 'lodash.get';
 import _set from 'lodash.set';
-import { Jovo, App, AppInitConfig, Platform, Plugin } from '@jovotech/framework';
-import { GaxiosPromise } from 'gaxios';
-import { sheets_v4 } from 'googleapis';
-import { GoogleSheetsCmsConfig } from '..';
 import { GoogleSheetsCmsSheet, GoogleSheetsCmsSheetConfig } from './GoogleSheetsCmsSheet';
-
-export interface TranslationsSheetConfig extends GoogleSheetsCmsSheetConfig {
-  i18n?: {
-    load: string;
-  };
-}
 
 export interface Resources {
   [key: string]: string | string[] | Resources;
 }
 
-export class TranslationsSheet extends GoogleSheetsCmsSheet<TranslationsSheetConfig> {
-  getDefaultConfig(): TranslationsSheetConfig {
+export class TranslationsSheet extends GoogleSheetsCmsSheet {
+  getDefaultConfig(): GoogleSheetsCmsSheetConfig {
     return { range: 'A:Z' };
   }
 
-  parse(jovo: Jovo, values: string[][]): Record<string, Resources> {
+  parse(values: string[][], jovo: Jovo): Record<string, Resources> {
     const headers: string[] = values.shift()!;
     const resources: Record<string, Resources> = {};
     const platforms: Platform[] = Object.values(jovo.$plugins).filter(

@@ -60,10 +60,10 @@ export class GoogleSheetsCms extends Plugin<GoogleSheetsCmsConfig> {
           spreadsheetId,
         });
         // TODO: Data can be undefined?
-        const parsed = sheet.parse(jovo, response.data.values!);
+        const parsed = sheet.parse(response.data.values!, jovo);
         jovo.$cms[sheetName] = parsed;
       } catch (error) {
-        throw new JovoError({ message: error.message });
+        throw new JovoError({ message: (error as Error).message });
       }
     }
   }
@@ -97,7 +97,7 @@ export class GoogleSheetsCms extends Plugin<GoogleSheetsCmsConfig> {
 
       return jwt;
     } catch (error) {
-      throw new JovoError({ message: error.message });
+      throw new JovoError({ message: (error as Error).message });
     }
   }
 }

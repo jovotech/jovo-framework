@@ -7,7 +7,7 @@ export class ObjectArraySheet extends GoogleSheetsCmsSheet {
     return { range: 'A:Z' };
   }
 
-  parse(_jovo: Jovo, values: Array<string | string[]>[]): Record<string, unknown>[] {
+  parse(values: Array<string | string[]>[]): Record<string, unknown>[] {
     const resources: Record<string, unknown>[] = [];
     const headers: string[] = values.shift() as string[];
 
