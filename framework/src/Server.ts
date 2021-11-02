@@ -30,11 +30,6 @@ export abstract class Server {
   abstract getQueryParams(): QueryParams;
 
   /**
-     Returns request headers
-     **/
-  abstract getRequestHeaders(): Headers;
-
-  /**
      Sets additional response headers. Will be merged with existing
      **/
   abstract setResponseHeaders(header: Record<string, string>): void;
@@ -50,7 +45,12 @@ export abstract class Server {
   abstract fail(error: Error): void;
 
   /**
-   * Converts header keys to lowercase
+   Returns request headers
+   **/
+  abstract getNativeRequestHeaders(): Headers;
+
+  /**
+   * Converts native header keys to lowercase
    *
    * Example:
    * headers = {
@@ -63,10 +63,9 @@ export abstract class Server {
    *    authorization: 'Bearer TOKEN',
    * }
    *
-   *
-   * @param headers
    */
-  static convertToLowerCaseHeaderKeys(headers: Headers): Headers {
+  getRequestHeaders() {
+    const headers = this.getNativeRequestHeaders();
     return Object.keys(headers).reduce((destination: Headers, key: string) => {
       destination[key.toLowerCase()] = headers[key];
       return destination;
