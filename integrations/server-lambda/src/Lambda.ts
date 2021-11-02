@@ -58,8 +58,8 @@ export class Lambda extends Server {
     return this.requestPayload;
   }
 
-  getRequestHeaders(): Headers {
-    return Server.convertToLowerCaseHeaderKeys(this.headers || {});
+  getNativeRequestHeaders(): Headers {
+    return this.headers;
   }
 
   hasWriteFileAccess(): boolean {
