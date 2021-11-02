@@ -222,6 +222,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
 
     if (!this.isRequest(this.requestOrInput)) {
       jovo.$input = this.requestOrInput;
+      jovo.$entities = jovo.getEntityMap();
     }
     _merge(jovo.$user.data, this.$user.data);
     _merge(jovo.$session, this.$session);
