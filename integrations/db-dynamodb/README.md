@@ -21,7 +21,7 @@ You can install the plugin like this:
 $ npm install @jovotech/db-dynamodb
 ```
 
-Add it as plugin to any stage you like, e.g. `app.prod.ts`:
+Add it as a plugin to any stage you like, e.g. `app.prod.ts`:
 
 ```typescript
 import { DynamoDb } from '@jovotech/db-dynamodb';

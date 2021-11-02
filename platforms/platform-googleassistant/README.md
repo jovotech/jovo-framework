@@ -42,7 +42,7 @@ If you want to add Google Assistant to an existing Jovo project, you can install
 $ npm install @jovotech/platform-googleassistant
 ```
 
-Add it as plugin to your [app configuration](https://v4.jovo.tech/docs/app-config), e.g. `app.ts`:
+Add it as a plugin to your [app configuration](https://v4.jovo.tech/docs/app-config), e.g. `app.ts`:
 
 ```typescript
 import { App } from '@jovotech/framework';

@@ -44,7 +44,7 @@ If you want to add Alexa to an existing Jovo project, you can install the plugin
 $ npm install @jovotech/platform-alexa
 ```
 
-Add it as plugin to your [app configuration](https://v4.jovo.tech/docs/app-config), e.g. `app.ts`:
+Add it as a plugin to your [app configuration](https://v4.jovo.tech/docs/app-config), e.g. `app.ts`:
 
 ```typescript
 import { App } from '@jovotech/framework';
