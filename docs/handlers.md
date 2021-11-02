@@ -12,7 +12,7 @@ Handlers are methods inside a [Jovo component](./components.md) that are respons
 
 A handler can fulfill multiple types of requests, like intents and touch selections, and then return output.
 
-A component usually has multiple handlers. The `@Handle` decorator is used to define which handler should be responsible for which type of request. For example, one or multiple intents could be added as intents, and a handler could be even more specialized if you added conditions like platforms. [Learn more about handler routing below](#handler-routing-and-state-management).
+A component usually has multiple handlers. The `@Handle` decorator is used to define which handler should be responsible for which type of request. For example, one or multiple intents could be added as intents, and a handler could be even more specialized if you added conditions like platforms. [Learn more about handler routing below](#handler-routing-and-the-handle-decorator).
 
 ```typescript
 import { Handle } from '@jovotech/framework';
