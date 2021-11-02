@@ -1,36 +1,39 @@
 ---
-title: 'DynamoDB Database Integration'
-excerpt: 'The DynamoDB Jovo integration allows you to store user specific data in a DynamoDB table.'
+title: 'GoogleSheets CMS Integration'
+excerpt: 'The GoogleSheets Jovo integration lets you manage your content in Google Spreadsheets.'
 ---
 
-# DynamoDB Database Integration
+# GoogleSheets CMS Integration
 
-This [database integration](https://v4.jovo.tech/docs/databases) allows you to store user specific data in a DynamoDB table.
+This [CMS integration](https://v4.jovo.tech/docs/cms) lets you manage your content in Google Spreadsheets.
 
 ## Introduction
 
-[DynamoDB](https://aws.amazon.com/dynamodb/) is the NoSQL database service by Amazon Web Services (AWS). Many Jovo apps that are hosted on AWS Lambda rely on DynamoDB to persist user data.
+With [Google Spreadsheets](), you can manage all the content of your Jovo app in a Google Spreadsheet. This makes collaboration easier and enables you update and add content faster.
 
-If you use AWS for your deployment, we recommend [FileDb](https://v4.jovo.tech/marketplace/db-filedb) for local development and DynamoDB for deployed versions.
+Here is what a sample spreadsheet could look like:
+![Google Sheets CMS for Alexa and Google Assistant]()
+
+> [You can use this Spreadsheet as a starter template]().
 
 ## Installation
 
 You can install the plugin like this:
 
 ```sh
-$ npm install @jovotech/db-dynamodb
+$ npm install @jovotech/cms-googlesheets
 ```
 
-Add it as plugin to any stage you like, e.g. `app.prod.ts`:
+Add it as a a plugin to your `app.ts`:
 
 ```typescript
-import { DynamoDb } from '@jovotech/db-dynamodb';
+import { GoogleSheetsCms } from '@jovotech/cms-googlesheets';
 
 // ...
 
-app.configure({
+const app = new App({
   plugins: [
-    new DynamoDb({
+    new GoogleSheetsCms({
       // Configuration
     }),
     // ...
@@ -38,122 +41,285 @@ app.configure({
 });
 ```
 
-Once the configuration is done, the DynamoDB database integration will create a DynamoDB table on the first read/write attempt (might take some seconds). No need for you to create the table.
-
-The rest of this section provides an introduction to the steps you need to take depending on where you host your Jovo app:
-
-* [On AWS (e.g. Lambda)](#for-apps-hosted-on-aws)
-* [Outside AWS](#for-apps-hosted-outside-aws)
-
-The [configuration section](#configuration) then provides a detailed overview of all configuration options.
-
-### For Apps Hosted on AWS
-
-If you host your app on AWS Lambda and want to use a DynamoDB table in the same region, you only need to add a table name to get started:
-
-```typescript
-new DynamoDb({
-  table: {
-    name: 'MyDynamoDbTable',
-  }
-}),
-```
-
-### For Apps Hosted Outside AWS
-
-If you want to use DynamoDB from outside AWS Lambda, you need to set it up for programmatic access. Learn more in the official guide by Amazon: [Setting Up DynamoDB (Web Service)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SettingUp.DynamoWebService.html).
-
-You can then add the necessary keys using the [`libraryConfig` property](#libraryconfig):
-
-```typescript
-new DynamoDb({
-  table: {
-    name: 'MyDynamoDbTable',
-  },
-  libraryConfig: {
-    dynamoDbClient: {
-      region: 'us-east-1',
-      credentials: {
-        accessKeyId: 'myAccessKeyId',
-        secretAccessKey: 'mySecretAccessKey',
-      },
-    },
-  }
-}),
-```
-
-
 ## Configuration
 
 The following configurations can be added:
 
 ```typescript
 new DynamoDb({
-  table: { /* ... */ },
-  libraryConfig: { /* ... */ },
-  storedElements: { /* ... */ },
+  caching: false,
+  credentialsFile: 'path/to/credentials.json',
+  spreadsheetId: '<YOUR-SPREADSHEET-ID>';
+  sheets: { /* ... */ },
+
 }),
 ```
 
+- `caching`: Determines whether to cache spreadsheet data for faster response times. True by default. [Learn more below](#caching).
+- `credentialsFile`: Path to your credentials from your configured service account. [Learn more below](#credentialsFile).
+- `spreadsheetId`: Unique spreadsheet ID. [Learn more below](#spreadsheetid).
+- `sheets`: Configurations for your different sheets. [Learn more below](#sheets).
 
-* `table`: Configuration for the table that is going to be created by the plugin. [Learn more below](#table).
-* `libraryConfig`: Any configuration for the AWS DynamoDb SDK can be passed here. [Learn more below](#libraryconfig).
-* `storedElements`: What should be stored in the database. [Learn more in the database integration documentation](https://v4.jovo.tech/docs/databases).
+### caching
 
-
-
-### table
-
-The `table` property includes configuration for the creation of the DynamoDB table:
+The content of all sheets is cached by default, meaning that the data is fetched once and then stored for faster response times. However, for some use cases, it might make sense to refresh the data with every request by setting `caching` to `false`.
 
 ```typescript
-new DynamoDb({
-  table: {
-    // Required properties
-    name: 'MyDynamoDbTable',
+new GoogleSheetsCms({
+  caching: false,
+});
+```
 
-    // Optional properties (with default values)
-    createTableOnInit: true, // Creates a table if one does not already exist
-    primaryKeyColumn: 'userId',
-    readCapacityUnits: 2, // https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughput.html
-    writeCapacityUnits: 2, // https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughput.html
+### credentialsFile
+
+To work with the GoogleSheets CMS integration, you need to create a service account with the Google Sheets API enabled and create security credentials. These can be downloaded as a JSON file and then referenced with the `credentialsFile` property. The default value is `./credentials.json`.
+
+```typescript
+new GoogleSheetsCms({
+  credentialsFile: 'path/to/credentials.json',
+});
+```
+
+### spreadsheetId
+
+Every spreadsheet is represented by a unique `spreadsheetId`, which is used to fetch the sheet contents. You can find the ID in the URL of your spreadsheet: `https://docs.google.com/spreadsheets/d/<spreadsheetId>/edit#gid=0`
+
+```typescript
+new GoogleSheetsCms({
+  spreadsheetId: <YOUR-SPREADSHEET-ID>,
+});
+```
+
+### sheets
+
+Google Sheets offer flexible ways to structure your data. This is why the GoogleSheets CMS integration provides several sheet types to handle your data:
+
+- [TranslationsSheet](#translationssheet)
+- [KeyValueSheet](#keyvaluesheet)
+- [KeyObjectSheet](#keyobjectsheet)
+- [ObjectArraySheet](#objectarraysheet)
+
+For each sheet you want to use in your Jovo app, you need to add the sheet name with the corresponding sheet type and it's configuration to the `sheets` element:
+
+```typescript
+new GoogleSheetsCms({
+  sheets: {
+    yourSheet: new KeyObjectSheet({
+      /* ... */
+    }),
   },
-  // ...
-}),
+});
 ```
 
-
-### libraryConfig
-
-The `libraryConfig` property can be used to pass configurations to the AWS DynamoDB SDK that is used by this integration.
-
-Currently, it includes the DynamoDbClient([find the official documentation here](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-dynamodb/interfaces/dynamodbclientconfig.html)):
+You can access your data inside your handler by accessing `this.$cms`:
 
 ```typescript
-new DynamoDb({
-  libraryConfig: {
-    dynamoDbClient: {
-      // Add configuration here
-    },
+this.$cms.yourSheet;
+```
+
+Each sheet type accepts the following configuration:
+
+```typescript
+{
+  range: 'A:Z',
+  spreadsheetId: '<YOUR-SPREADSHEET-ID>',
+  caching: false,
+}
+```
+
+- `range`: Represents a range of cells, e.g. `A:C`, `A1:B2`, ...
+- `caching`: Determines whether to cache the data for this specific sheet. True by default. [Learn more above](#caching).
+- `spreadsheetId`: Unique spreadsheet ID for this specific sheet. [Learn more above](#spreadsheetid).
+
+#### TranslationsSheet
+
+If you define your sheet as `TranslationsSheet`, the integration expects a sheet of at least two columns:
+
+- keys, e.g. `welcome` or `bye`
+- a locale, such as `en` or `en-US`
+
+In addition to being added to `this.$cms`, this sheet type will add your resources to the [I18n integration](), so you can access your values like this:
+
+```typescript
+this.$t('welcome');
+```
+
+#### KeyValueSheet
+
+`KeyValueSheet` expects a sheet of at least two columns. The first one will be used as keys, the second one as values.
+If you define more than two columns, the last one will override the prior ones, in that case we recommend to use [KeyObjectSheet](#keyobjectsheet).
+
+```typescript
+new GoogleSheetsCms({
+  sheets: {
+    yourSheet: new KeyValueSheet({
+      /* ... */
+    }),
   },
-  // ...
-}),
+});
 ```
 
-For example, you can add `credentials` like this:
+Here's an example sheet:
+
+| key   | taste |
+| :---- | :---- |
+| apple | sour  |
+| peach | sweet |
+
+And here's the data you will receive:
 
 ```typescript
-new DynamoDb({
-  libraryConfig: {
-    dynamoDbClient: {
-      region: 'us-east-1',
-      credentials: {
-        accessKeyId: 'myAccessKeyId',
-        secretAccessKey: 'mySecretAccessKey',
-      },
-    },
+{
+  apple: 'sour',
+  peach: 'sweet',
+}
+```
+
+Access the data using:
+
+```typescript
+const taste: string = this.$cms.yourSheet.apple;
+```
+
+#### KeyObjectSheet
+
+`KeyObjectSheet` is an extension of [`KeyValueSheet`](#keyvaluesheet), but instead of assigning a single value to each key, an object containing the values of all columns is assigned.
+
+```typescript
+new GoogleSheetsCms({
+  sheets: {
+    yourSheet: new KeyObjectSheet({
+      /* ... */
+    }),
+  },
+});
+```
+
+Here's an example sheet:
+
+| key   | taste | color |
+| :---- | :---- | :---- |
+| apple | sour  | green |
+| peach | sweet | red   |
+
+And here's the data you will receive:
+
+```typescript
+{
+  apple: { taste: 'sour', color: 'green' },
+  peach: { taste: 'sweet', color: 'red' },
+}
+```
+
+Access the data using:
+
+```typescript
+const { taste, color } = this.$cms.yourSheet.apple;
+```
+
+#### ObjectArraySheet
+
+If you define your sheet as `ObjectArraySheet`, you will receive an array of objects where each row is converted to an object with the first row specifying the keys.
+
+```typescript
+new GoogleSheetsCms({
+  sheets: {
+    yourSheet: new ObjectArraySheet({
+      /* ... */
+    }),
+  },
+});
+```
+
+Here's an example sheet:
+
+| key   | taste | color |
+| :---- | :---- | :---- |
+| apple | sour  | green |
+| peach | sweet | red   |
+
+And here's the data you will receive:
+
+```typescript
+[
+  {
+    key: 'apple',
+    taste: 'sour',
+    color: 'green',
+  },
+  {
+    key: 'peach',
+    taste: 'sweet',
+    color: 'red',
+  },
+];
+```
+
+Access the data using:
+
+```typescript
+const { taste, color } = this.$cms.yourSheet[0];
+```
+
+## Define your own sheet type
+
+If you want to customize how the GoogleSheets integration handles your data, you can build your own sheet type and use it inside your app configuration.
+
+```typescript
+// src/sheets/OwnSheetType.ts
+
+import { Jovo } from '@jovotech/framework';
+import { GoogleSheetsCmsSheet, GoogleSheetsCmsSheetConfig } from '@jovotech/cms-googlesheets';
+
+export class OwnSheetType extends GoogleSheetsCmsSheet {
+  getDefaultConfig(): GoogleSheetsCmsSheetConfig {
+    return { range: 'A:B' };
+  }
+
+  parse(values: unknown[][]): unknown {
+    // Act upon values
+    return {
+      /* ... */
+    };
+  }
+}
+```
+
+You can then integrate your own sheet type into the GoogleSheets integration:
+
+```typescript
+// src/app.ts
+
+new GoogleSheetsCms({
+  sheets: {
+    yourSheet: new OwnSheetType({
+      /* ... */
+    }),
+  },
+});
+```
+
+The plugin consists of two functions:
+
+- `getDefaultConfig()`: Returns an initial config with default values, which will be merged with the config you pass into the constructor.
+- `parse()`: Accepts a two-dimensional array of values, which represents your rows with the respective cells, and can return any data you'd like, which you can then access in your handler with `this.$cms`.
+
+You can also extend the sheet config:
+
+```typescript
+// src/sheets/OwnSheetType.ts
+
+export interface OwnSheetTypeConfig extends GoogleSheetsCmsSheetConfig {
+  configKey: string;
+}
+
+export class OwnSheetType extends GoogleSheetsCmsSheet<OwnSheetTypeConfig> {
+  getDefaultConfig(): OwnSheetTypeConfig {
     // ...
   }
-}),
-```
 
+  parse(values: unknown[][]): unknown {
+    // ...
+  }
+}
+```
