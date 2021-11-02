@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/framework",
-  "version": "4.0.0-beta.8",
+  "version": "4.0.0-beta.9",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -23,8 +23,8 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/common": "^4.0.0-beta.1",
-    "@jovotech/output": "^4.0.0-beta.7",
+    "@jovotech/common": "^4.0.0-beta.2",
+    "@jovotech/output": "^4.0.0-beta.8",
     "axios": "^0.21.1",
     "chalk": "^4.1.0",
     "i18next": "^20.3.1",
