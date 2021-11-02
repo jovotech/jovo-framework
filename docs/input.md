@@ -40,7 +40,7 @@ This works for [default input types](#default-input-types):
 
 ```typescript
 @Handle({
-  types: 'ERROR',
+  types: ['ERROR'],
 })
 respondToError() {
   // ...
@@ -51,7 +51,7 @@ As well as [custom ones](#custom-input-types):
 
 ```typescript
 @Handle({
-  types: 'Connections.Response',
+  types: ['Connections.Response'],
 })
 onSuccessfulConnection() {
   // ...
@@ -227,7 +227,7 @@ You can map a [handler](./handlers.md) to a type like this:
 
 ```typescript
 @Handle({
-  types: 'Connections.Response',
+  types: ['Connections.Response'],
 })
 onSuccessfulConnection() {
   // ...
