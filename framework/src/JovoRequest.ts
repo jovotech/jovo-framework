@@ -1,10 +1,5 @@
-import {
-  CapabilityType,
-  DEFAULT_INPUT_TYPE,
-  InputTypeLike,
-  JovoInput,
-  UnknownObject,
-} from './index';
+import { UnknownObject } from '@jovotech/common';
+import { CapabilityType, DEFAULT_INPUT_TYPE, InputTypeLike, JovoInput } from './index';
 import { JovoInputBuilder } from './JovoInputBuilder';
 import { JovoSession } from './JovoSession';
 

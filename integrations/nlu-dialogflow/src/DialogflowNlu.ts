@@ -6,6 +6,7 @@ import {
   NluPlugin,
   NluPluginConfig,
 } from '@jovotech/framework';
+
 import { JWT, JWTInput } from 'google-auth-library';
 import { DIALOGFLOW_API_BASE_URL } from './constants';
 import { DetectIntentRequest, DetectIntentResponse, TextInput } from './interfaces';

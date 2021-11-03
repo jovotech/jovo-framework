@@ -1,4 +1,4 @@
-import { Component, BaseComponent, Intents } from '@jovotech/framework';
+import { BaseComponent, Component, Intents } from '@jovotech/framework';
 
 import { YesNoOutput } from '../output/YesNoOutput';
 

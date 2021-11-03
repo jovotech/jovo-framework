@@ -8,6 +8,7 @@ import {
   JovoSession,
   UnknownObject,
 } from '@jovotech/framework';
+
 import { ResolutionPerAuthorityStatusCode } from '@jovotech/output-alexa';
 import { AlexaCapability, AlexaCapabilityType } from './AlexaDevice';
 import { DYNAMIC_ENTITY_MATCHES_PREFIX, STATIC_ENTITY_MATCHES_PREFIX } from './constants';

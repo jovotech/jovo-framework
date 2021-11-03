@@ -16,7 +16,7 @@
     "version": "node scripts/update-peer-dependencies.js",
     "preparePublish": "npm run bootstrap && npm run rimraf && npm run prettier && npm run eslint && npm run build && npm run test",
     "updateVersions": "lerna version --no-push",
-    "publishPackages": "lerna publish from-package --no-push",
+    "publishPackages": "lerna publish from-package",
     "doPublish": "npm run updateVersions && npm run publishPackages"
   },
   "author": "jovotech",
@@ -34,5 +34,6 @@
     "rimraf": "^3.0.2",
     "ts-jest": "^26.5.4",
     "typescript": "^4.2.3"
-  }
+  },
+  "dependencies": {}
 }

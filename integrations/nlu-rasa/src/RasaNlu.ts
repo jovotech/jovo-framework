@@ -9,6 +9,7 @@ import {
   NluPlugin,
   NluPluginConfig,
 } from '@jovotech/framework';
+
 import { RasaEntity, RasaIntent, RasaResponse } from './interfaces';
 
 export interface RasaNluConfig extends NluPluginConfig {
