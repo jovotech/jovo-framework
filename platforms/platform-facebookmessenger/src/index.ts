@@ -23,7 +23,7 @@ export * from './FacebookMessenger';
 export * from './FacebookMessengerDevice';
 export * from './FacebookMessengerPlatform';
 export * from './FacebookMessengerRequest';
+export * from './FacebookMessengerResponse';
 export * from './FacebookMessengerUser';
-export type { FacebookMessengerResponse } from '@jovotech/output-facebookmessenger';
 export * from './interfaces';
 export * from './constants';
