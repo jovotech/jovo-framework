@@ -2,6 +2,7 @@
 title: 'Staging'
 excerpt: 'Learn how staging provides the ability to build, deploy, and run Jovo apps in different environments, including local development.'
 ---
+
 # Staging
 
 Staging provides the ability to build, deploy, and run Jovo apps in different environments, including local development.
@@ -10,20 +11,20 @@ Staging provides the ability to build, deploy, and run Jovo apps in different en
 
 Most Jovo projects start with local development. After a while, the app needs to get deployed somewhere for testing, later for production use. While already being deployed, there might be some local development going on.
 
-For use cases like this, Jovo offers different staging features that make it easier to have [different app versions depending on a stage](#app-staging) as well as [different project versions](#project-staging) (e.g. different Alexa Skills).
+For use cases like this, Jovo offers different staging features that make it easier to have [different app versions depending on a stage](#app-staging) as well as [different project versions](#project-staging) (e.g. different Skills in the Alexa Developer Console).
 
 ## App Staging
 
 The [app configuration](./app-config.md) is usually spread across multiple files:
 
-* `app.ts`: Default configurations
-* `app.<stage>.ts`: Stage-specific configurations
+- `app.ts`: Default configurations
+- `app.<stage>.ts`: Stage-specific configurations
 
-For example, new Jovo templates come with an `app.ts` for all default configurations that should work across stages (platform integrations, components, ...) and an `app.dev.ts` file that comes with specific configuration for local development ([FileDb](https://v4.jovo.tech/marketplace/db-filedb) and the Jovo Debugger).
+For example, new Jovo templates come with an `app.ts` for all default configurations that should work across stages (platform integrations, components, ...) and an `app.dev.ts` file that comes with specific configuration for local development ([FileDb](https://v4.jovo.tech/marketplace/db-filedb), [ExpressJS server](https://v4.jovo.tech/marketplace/server-express) and the [Jovo Debugger](https://v4.jovo.tech/docs/debugger)).
 
 Stage-specific configurations get merged into the default `app.ts` config.
 
-You can create a new stage file like this:
+You can create a new stage file using the [`new:stage` command](https://v4.jovo.tech/docs/new-command#new-stage):
 
 ```sh
 $ jovov4 new:stage <stage>
@@ -32,8 +33,9 @@ $ jovov4 new:stage <stage>
 $ jovov4 new:stage prod
 ```
 
-[Learn more about app staging here](./app-config.md#staging).
+This command also lets you specify which [server integration](./server.md) should be used for that stage.
 
+Learn more about app staging [in the app config documentation](./app-config.md#staging).
 
 ## Project Staging
 
@@ -51,22 +53,22 @@ const project = new ProjectConfig({
       endpoint: '${JOVO_WEBHOOK_URL}',
       plugins: [
         new AlexaCli({
-          skillId: 'devSkillId'
-        })
-      ]
+          skillId: 'devSkillId',
+        }),
+      ],
       // ...
     },
     prod: {
       endpoint: process.env.ENDPOINT_PROD,
       plugins: [
         new AlexaCli({
-          skillId: 'prodSkillId'
-        })
-      ]
+          skillId: 'prodSkillId',
+        }),
+      ],
       // ...
-    }
-  }
+    },
+  },
 });
 ```
 
-[Learn more about project staging here](./project-config.md#staging).
+Learn more about project staging [in the project config documentation](./project-config.md#staging).
