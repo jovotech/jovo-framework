@@ -27,7 +27,6 @@ import {
   Server,
   StateStackItem,
   StringLiteral,
-  UnknownObject,
 } from './index';
 
 import { EntityMap, RequestData } from './interfaces';
