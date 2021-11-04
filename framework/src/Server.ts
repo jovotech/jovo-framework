@@ -1,6 +1,6 @@
-// TODO implement
+import { AnyObject } from '@jovotech/common';
 
-import { AnyObject } from './index';
+// TODO implement
 
 export interface Headers {
   [header: string]: string | string[] | undefined;

@@ -1,4 +1,5 @@
 import {
+  NormalizedOutputTemplate,
   OutputTemplate,
   OutputTemplateConverterStrategy,
   OutputTemplateConverterStrategyConfig,
@@ -118,13 +119,13 @@ export class ExamplePlatformOutputConverterStrategy extends OutputTemplateConver
   responseClass = ExamplePlatformResponse;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  fromResponse(response: ExamplePlatformResponse): OutputTemplate {
+  fromResponse(response: ExamplePlatformResponse): NormalizedOutputTemplate {
     return {};
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  toResponse(output: OutputTemplate): ExamplePlatformResponse {
-    return this.prepareResponse({}) as ExamplePlatformResponse;
+  toResponse(output: NormalizedOutputTemplate): ExamplePlatformResponse {
+    return this.normalizeResponse({}) as ExamplePlatformResponse;
   }
 }
 

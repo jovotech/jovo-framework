@@ -1,6 +1,6 @@
 import { registerPlatformSpecificJovoReference } from '@jovotech/framework';
-import { FacebookMessengerPlatform, FacebookMessengerConfig } from './FacebookMessengerPlatform';
 import { FacebookMessenger } from './FacebookMessenger';
+import { FacebookMessengerConfig, FacebookMessengerPlatform } from './FacebookMessengerPlatform';
 
 declare module '@jovotech/framework/dist/types/Extensible' {
   interface ExtensiblePluginConfig {
@@ -20,6 +20,7 @@ declare module '@jovotech/framework/dist/types/Jovo' {
 registerPlatformSpecificJovoReference('$facebookMessenger', FacebookMessenger);
 
 export * from './FacebookMessenger';
+export * from './FacebookMessengerDevice';
 export * from './FacebookMessengerPlatform';
 export * from './FacebookMessengerRequest';
 export * from './FacebookMessengerUser';

@@ -14,6 +14,7 @@ The app configuration files are the main entry point of your Jovo apps. Each Jov
 - `app.ts`: Default configurations
 - `app.dev.ts`: Configurations for local development ([FileDb](https://v4.jovo.tech/marketplace/db-filedb), [ExpressJS server](https://v4.jovo.tech/marketplace/server-express) and the [Jovo Debugger](https://v4.jovo.tech/docs/debugger))
 
+
 Jovo offers different [ways to add configurations](#ways-to-add-configurations), [many configuration options](#configuration-elements), and [staging](#staging) that makes it possible to have different Jovo app versions for different deployment environments.
 
 ## Ways to add Configurations
@@ -21,8 +22,8 @@ Jovo offers different [ways to add configurations](#ways-to-add-configurations),
 There are three ways how app configurations can be done:
 
 - Using the `new App()` constructor in `app.ts` for default configurations.
-- Using `app.configure` for stage-specific configurations.
-- Using `app.use` to add specific plugins and components anywhere in the app.
+- Using `app.configure()` for stage-specific configurations.
+- Using `app.use()` to add specific plugins and components anywhere in the app.
 
 In the `app.ts`, the configuration is added like this:
 
@@ -40,7 +41,6 @@ On top of the default configuration, you can add [stages](#staging) with specifi
 
 ```typescript
 import { app } from './app';
-
 // ...
 
 app.configure({
@@ -48,14 +48,13 @@ app.configure({
 });
 ```
 
-Both the constructor and `configure` support the full range of [configuration elements](#configuration-elements).
+Both the constructor and `configure()` support the full range of [configuration elements](#configuration-elements).
 
-The third option is the `use` method. It allows you to add plugins and components anywhere in the app:
+The third option is the `use()` method. It allows you to add plugins and components anywhere in the app:
 
 ```typescript
 import { app } from './app';
 import { SomePlugin } from './plugin';
-
 // ...
 
 app.use(
@@ -67,7 +66,7 @@ app.use(
 
 ## Configuration Elements
 
-The configuration object that can be passed to both the constructor and the `configure` method contains [components](#components), [plugins](#plugins), [logging](#logging), and [routing](#routing).
+The configuration object that can be passed to both the constructor and the `configure()` method contains [components](#components), [plugins](#plugins), [logging](#logging), and [routing](#routing).
 
 ```typescript
 {
@@ -141,6 +140,17 @@ Additionally, each plugin config includes a `skipTests` option that makes sure t
 }
 ```
 
+You can also access a specific plugin like this:
+
+```typescript
+app.plugins.<PluginConstructor>
+
+// Example
+app.plugins.SomePlugin
+```
+
+This can be helpful if you want to add additional configurations to the default plugin config outside `app.ts`. See [staging](#staging) for more information.
+
 ### Logging
 
 [Logging](./logging.md) is enabled by adding the following to the app config:
@@ -149,7 +159,7 @@ Additionally, each plugin config includes a `skipTests` option that makes sure t
 {
   // ...
 
-  logging: true;
+  logging: true,
 }
 ```
 
@@ -260,6 +270,27 @@ $ jovov4 new:stage <stage>
 $ jovov4 new:stage prod
 ```
 
-This creates a new file `app.prod.ts`. In the process, you can select plugins and a [server integration](./server.md) to work with this stage.
+This creates a new file `app.prod.ts`. In the process, you can select plugins and a server integration to work with this stage.
 
-For an overall overview of staging, [take a look here](./staging.md).
+Typically, a stage app config uses the `configure()` method to modify the configuration.
+
+```typescript
+import { app } from './app';
+// ...
+
+app.configure({
+  // Configuration
+});
+```
+
+It is also possible to reference a plugin from the default configuration in `app.ts` and add plugins to it using the `use()` method.
+
+Here is an example for [Dashbot Analytics](https://v4.jovo.tech/marketplace/analytics-dashbot) being added to [Alexa](https://v4.jovo.tech/marketplace/platform) in `app.prod.ts`:
+
+```typescript
+import { app } from './app';
+import { DashbotAnalytics } from '@jovotech/analytics-dashbot';
+// ...
+
+app.plugins.AlexaPlatform.use(new DashbotAnalytics({ apiKey: '<yourApiKey>' }));
+```
