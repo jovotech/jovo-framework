@@ -1,6 +1,5 @@
 import { AnyObject, App, ExtensibleInitConfig, Server } from '@jovotech/framework';
 import { OmitIndex } from '@jovotech/output';
-import { InstagramOutputTemplateConverterStrategy } from '@jovotech/output-instagram';
 import {
   FacebookMessengerConfig,
   FacebookMessengerPlatform,
@@ -11,6 +10,7 @@ import { Instagram } from './Instagram';
 import { InstagramDevice } from './InstagramDevice';
 import { InstagramRequest } from './InstagramRequest';
 import { InstagramUser } from './InstagramUser';
+import { InstagramOutputTemplateConverterStrategy } from './output';
 
 export interface InstagramConfig
   extends Omit<OmitIndex<FacebookMessengerConfig, string>, 'senderActions'> {
