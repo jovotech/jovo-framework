@@ -27,3 +27,4 @@ export * from './FacebookMessengerResponse';
 export * from './FacebookMessengerUser';
 export * from './interfaces';
 export * from './constants';
+export * from './output';

@@ -9,14 +9,14 @@ export interface MessengerBotEntry {
 }
 
 export interface MessagingData {
-  sender: IdentityData;
-  recipient: IdentityData;
+  sender: RequestIdentityData;
+  recipient: RequestIdentityData;
   timestamp: number;
   message?: MessageData;
   postback?: PostbackData;
 }
 
-export interface IdentityData {
+export interface RequestIdentityData {
   id: string;
 }
 
