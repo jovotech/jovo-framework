@@ -1,7 +1,4 @@
-export type DeepPartial<T> = {
-  [P in keyof T]?: DeepPartial<T[P]>;
-};
-
+export type { DeepPartial } from '@jovotech/common';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyListener = (...args: any[]) => any;
 export type VoidListener = () => void;
