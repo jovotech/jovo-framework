@@ -7,12 +7,11 @@ import {
   JovoRequest,
   UnknownObject,
 } from '@jovotech/framework';
-
-import type { Device, Home, Scene, Session, User } from '@jovotech/output-googleassistant';
-import { Capability as NativeCapability } from '@jovotech/output-googleassistant';
 import { GoogleAssistantSystemInputType, GoogleAssistantSystemIntent } from './enums';
 import { GoogleAssistantCapability, GoogleAssistantCapabilityType } from './GoogleAssistantDevice';
 import { Context, GoogleAssistantEntity, Handler, Intent } from './interfaces';
+import type { Device, Home, Scene, Session, User } from './output';
+import { Capability as NativeCapability } from './output';
 
 export class GoogleAssistantRequest extends JovoRequest {
   handler?: Handler;
