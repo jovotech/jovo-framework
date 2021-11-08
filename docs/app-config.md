@@ -12,7 +12,8 @@ The app configuration in `app.ts` is the place where you can add plugins, compon
 The app configuration files are the main entry point of your Jovo apps. Each Jovo project usually comes with at least two files for this:
 
 - `app.ts`: Default configurations
-- `app.dev.ts`: Configurations for local development
+- `app.dev.ts`: Configurations for local development ([FileDb](https://v4.jovo.tech/marketplace/db-filedb), [ExpressJS server](https://v4.jovo.tech/marketplace/server-express) and the [Jovo Debugger](https://v4.jovo.tech/docs/debugger))
+
 
 Jovo offers different [ways to add configurations](#ways-to-add-configurations), [many configuration options](#configuration-elements), and [staging](#staging) that makes it possible to have different Jovo app versions for different deployment environments.
 
@@ -257,6 +258,8 @@ If you're using an [NLU integration](./nlu.md), the original intent stays in the
 ## Staging
 
 Stage-specific configurations from a file called `app.<stage>.ts` get merged into the default configuration from `app.ts`.
+
+For example, most Jovo projects include an `app.dev.ts` file that comes with specific configuration for local development ([FileDb](https://v4.jovo.tech/marketplace/db-filedb), [ExpressJS server](https://v4.jovo.tech/marketplace/server-express) and the [Jovo Debugger](https://v4.jovo.tech/docs/debugger)).
 
 You can create a new stage like this:
 
