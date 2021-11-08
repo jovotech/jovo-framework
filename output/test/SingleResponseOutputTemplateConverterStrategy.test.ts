@@ -1,6 +1,7 @@
 import {
   JovoResponse,
   NormalizedOutputTemplate,
+  OutputTemplateConverterStrategyConfig,
   SingleResponseOutputTemplateConverterStrategy,
 } from '../src';
 
@@ -10,15 +11,18 @@ class ExampleResponse extends JovoResponse {
   }
 }
 
-class ExampleStrategy extends SingleResponseOutputTemplateConverterStrategy<ExampleResponse, any> {
+class ExampleStrategy extends SingleResponseOutputTemplateConverterStrategy<
+  ExampleResponse,
+  OutputTemplateConverterStrategyConfig
+> {
   readonly platformName = 'example' as const;
-  readonly responseClass: { new (): ExampleResponse };
+  readonly responseClass!: { new (): ExampleResponse };
 
   toResponse(output: NormalizedOutputTemplate): ExampleResponse {
     return output as ExampleResponse;
   }
 
-  fromResponse(response: ExampleResponse): NormalizedOutputTemplate {
+  fromResponse(): NormalizedOutputTemplate {
     return {};
   }
 
