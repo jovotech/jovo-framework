@@ -1,5 +1,5 @@
 import { BaseOutput, Output, OutputOptions, OutputTemplate } from '@jovotech/framework';
-import { PermissionScopeLike } from '@jovotech/output-alexa';
+import { PermissionScopeLike } from '../models';
 
 export interface AskForPermissionOutputOptions extends OutputOptions {
   token?: string;

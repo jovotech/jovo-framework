@@ -1,0 +1,144 @@
+{
+  "document": {
+    "type": "APL",
+    "version": "1.6",
+    "theme": "dark",
+    "import": [
+      {
+        "name": "alexa-layouts",
+        "version": "1.2.0"
+      }
+    ],
+    "mainTemplate": {
+      "parameters": ["data"],
+      "items": [
+        {
+          "type": "Container",
+          "height": "100vh",
+          "width": "100vw",
+          "items": [
+            {
+              "type": "AlexaBackground",
+              "backgroundImageSource": "${data.backgroundImageUrl}"
+            },
+            {
+              "type": "AlexaHeader",
+              "headerAttributionImage": "${data.header.logo}",
+              "headerTitle": "${data.header.title}"
+            },
+            {
+              "type": "Container",
+              "height": "100%",
+              "width": "100%",
+              "shrink": 1,
+              "items": [
+                {
+                  "type": "Container",
+                  "height": "100%",
+                  "width": "100%",
+                  "position": "absolute",
+                  "alignItems": "start",
+                  "direction": "row",
+                  "paddingLeft": "70",
+                  "paddingRight": "70",
+                  "paddingBottom": "30",
+                  "items": [
+                    {
+                      "type": "Image",
+                      "source": "${data.imageUrl}",
+                      "scale": "best-fit",
+                      "paddingRight": "${viewport.shape == 'round' ? '10' : '30'}",
+                      "align": "left",
+                      "width": "33%",
+                      "height": "100%",
+                      "borderRadius": 10
+                    },
+                    {
+                      "type": "Container",
+                      "width": "66%",
+                      "height": "100%",
+                      "items": [
+                        {
+                          "type": "Text",
+                          "text": "${data.title}",
+                          "maxLines": 1,
+                          "fontSize": "5vw",
+                          "fontWeight": "bold",
+                          "paddingTop": "10"
+                        },
+                        {
+                          "type": "Text",
+                          "text": "${data.subtitle}",
+                          "fontSize": "3vw",
+                          "paddingBottom": "20"
+                        },
+                        {
+                          "type": "ScrollView",
+                          "width": "100%",
+                          "height": "100%",
+                          "items": [
+                            {
+                              "type": "Text",
+                              "fontSize": "3vw",
+                              "text": "${data.content}"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Container",
+              "width": "100%",
+              "paddingRight": "70",
+              "paddingLeft": "70",
+              "when": "${data.quickReplies.length}",
+              "items": [
+                {
+                  "type": "Sequence",
+                  "id": "footer",
+                  "width": "100%",
+                  "alignSelf": "center",
+                  "scrollDirection": "horizontal",
+                  "data": "${data.quickReplies}",
+                  "paddingBottom": "30",
+                  "snap": "start",
+                  "items": [
+                    {
+                      "type": "AlexaButton",
+                      "buttonText": "${data.text}",
+                      "buttonStyle": "outlined",
+                      "touchForward": "true",
+                      "primaryAction": {
+                        "type": "SendEvent",
+                        "arguments": ["${data}"]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "datasources": {
+    "data": {
+      "title": "",
+      "subtitle": "",
+      "content": "",
+      "imageUrl": "",
+      "header": {
+        "title": "",
+        "logo": ""
+      },
+      "backgroundImageUrl": "",
+      "quickReplies": []
+    }
+  },
+  "sources": {}
+}

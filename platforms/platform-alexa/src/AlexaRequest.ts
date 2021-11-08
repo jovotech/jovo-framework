@@ -8,11 +8,10 @@ import {
   JovoSession,
   UnknownObject,
 } from '@jovotech/framework';
-
-import { ResolutionPerAuthorityStatusCode } from '@jovotech/output-alexa';
 import { AlexaCapability, AlexaCapabilityType } from './AlexaDevice';
 import { DYNAMIC_ENTITY_MATCHES_PREFIX, STATIC_ENTITY_MATCHES_PREFIX } from './constants';
-import { AlexaEntity, AuthorityResolution, Context, Request, Session } from './interfaces';
+import { AlexaEntity, Context, Request, Session } from './interfaces';
+import { ResolutionPerAuthority, ResolutionPerAuthorityStatusCode } from './output';
 
 export const ALEXA_REQUEST_TYPE_TO_INPUT_TYPE_MAP: Record<string, InputTypeLike> = {
   'LaunchRequest': InputType.Launch,
@@ -59,9 +58,11 @@ export class AlexaRequest extends JovoRequest {
         entity.resolved = slots[slotKey].value;
       }
 
-      const modifyEntityByAuthorityResolutions = (authorityResolutions: AuthorityResolution[]) => {
-        authorityResolutions.forEach((authorityResolution) => {
-          const { name, id } = authorityResolution.values[0].value;
+      const modifyEntityByAuthorityResolutions = (
+        resolutionsPerAuthority: ResolutionPerAuthority[],
+      ) => {
+        resolutionsPerAuthority.forEach((resolutionPerAuthority) => {
+          const { name, id } = resolutionPerAuthority.values[0].value;
           entity.resolved = name;
           entity.id = id || name;
         });
@@ -78,15 +79,15 @@ export class AlexaRequest extends JovoRequest {
     }, {});
   }
 
-  getStaticEntityMatches(slotKey: string): AuthorityResolution[] {
+  getStaticEntityMatches(slotKey: string): ResolutionPerAuthority[] {
     return this.getEntityResolutions(slotKey, STATIC_ENTITY_MATCHES_PREFIX);
   }
 
-  getDynamicEntityMatches(slotKey: string): AuthorityResolution[] {
+  getDynamicEntityMatches(slotKey: string): ResolutionPerAuthority[] {
     return this.getEntityResolutions(slotKey, DYNAMIC_ENTITY_MATCHES_PREFIX);
   }
 
-  private getEntityResolutions(slotKey: string, startsWith: string): AuthorityResolution[] {
+  private getEntityResolutions(slotKey: string, startsWith: string): ResolutionPerAuthority[] {
     return (
       this.request?.intent?.slots?.[slotKey]?.resolutions?.resolutionsPerAuthority || []
     ).filter(

@@ -42,6 +42,7 @@
     "@jovotech/cli-core": "^4.0.0-beta.4",
     "@jovotech/filebuilder": "^0.0.1",
     "@jovotech/framework": "^4.0.0-beta.9",
+    "@jovotech/output": "^4.0.0-beta.8",
     "@types/jest": "^26.0.20",
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.has": "^4.5.6",
@@ -71,7 +72,8 @@
     "@jovotech/cli-command-new": "^4.0.0-beta.4",
     "@jovotech/cli-core": "^4.0.0-beta.4",
     "@jovotech/filebuilder": "^0.0.1",
-    "@jovotech/framework": "4.0.0-beta.9"
+    "@jovotech/framework": "4.0.0-beta.9",
+    "@jovotech/output": "^4.0.0-beta.8"
   },
   "gitHead": "02f1a666ceff33f0907bff129f78be4088d87241",
   "prettier": "../../.prettierrc.js",

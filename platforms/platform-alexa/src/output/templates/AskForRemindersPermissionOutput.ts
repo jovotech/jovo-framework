@@ -1,5 +1,5 @@
 import { Jovo, Output } from '@jovotech/framework';
-import { PermissionScope } from '@jovotech/output-alexa';
+import { PermissionScope } from '../models';
 import { AskForPermissionOutput } from './AskForPermissionOutput';
 
 @Output()
