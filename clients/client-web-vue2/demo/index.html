@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+
+    <style>
+      #initializedContainer {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      {{message}}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="js/index.js"></script>
+    <script>
+
+      console.log(JovoWebClientVue);
+
+      var app = new Vue({
+        el: '#app',
+        data: {
+          message: 'Hello Vue!'
+        }
+      })
+    </script>
+  </body>
+</html>
