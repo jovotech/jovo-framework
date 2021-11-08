@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/output",
-  "version": "4.0.0-beta.6",
+  "version": "4.0.0-beta.8",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
   "es2015": "dist/esm2015/index.js",
@@ -53,5 +53,6 @@
   "prettier": "../../.prettierrc.js",
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "02f1a666ceff33f0907bff129f78be4088d87241"
 }

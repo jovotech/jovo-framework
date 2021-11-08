@@ -8,11 +8,11 @@ Turn raw text into structured meaning with the Jovo Framework integration for th
 
 ## Introduction
 
-[NLP.js](https://github.com/axa-group/nlp.js) is an open source [natural language understanding (NLU)](https://www.jovo.tech/marketplace/tag/nlu) library with features like entity extraction, sentiment analysis, and language detection.
+[NLP.js](https://github.com/axa-group/nlp.js) is an open source [natural language understanding (NLU)](https://www.jovo.tech/docs/nlu) library with features like entity extraction, sentiment analysis, and language detection.
 
 Since it is an open source service, you can host NLP.js on your own servers without any external API calls.
 
-You can use the Jovo NLP.js integration for projects where you receive raw text input that needs to be translated into structured meaning to work with the Jovo intent structure. Patforms like the [Jovo Core Platform](https://www.jovo.tech/marketplace/jovo-platform-core) (e.g. in conjunction with the [Jovo Web Client](https://www.jovo.tech/marketplace/jovo-client-web)), [Facebook Messenger](https://www.jovo.tech/marketplace/jovo-platform-facebookmessenger), and [Google Business Messages](https://www.jovo.tech/marketplace/jovo-platform-googlebusiness) are some examples where this would work.
+You can use the Jovo NLP.js integration for projects where you receive raw text input that needs to be translated into structured meaning to work with the Jovo intent structure. Learn more in the [NLU integration docs](https://www.jovo.tech/docs/nlu).
 
 Smaller NLP.js language models are fast to train and can even be used on serverless infrastructure like [AWS Lambda](https://www.jovo.tech/docs/hosting/aws-lambda) without having to use any additional server infrastructure. We recommend taking a close look at the execution times though, as larger models can take quite some time to build.
 
@@ -56,13 +56,41 @@ new NlpjsNlu({
 }),
 ```
 
-- `languageMap`: An object where the key represents a language, and the value is a language-package of NLP.js. By default, it is an empty object.
-- `useModel` and `preTrainedModelFilePath`: NLP.js can take a pretrained model if `useModel` is set to `true`. It looks for the model in the `preTrainedModelFilePath`. The default is `./model.nlp`.
+- `languageMap`: Maps locales to NLP.js language packages. The default is an empty object. See [language configuration](#language-configuration) for more information.
+- `useModel` and `preTrainedModelFilePath`: NLP.js can take a pre-trained model if `useModel` is set to `true`. It looks for the model in the `preTrainedModelFilePath`. The default is `./model.nlp`.
 - `setupModelCallback`: A function that can be passed to set up NLP.js. The first parameter is the current `Platform` and the second parameter is the `Nlp`-instance of NLP.js.
 
 Depending on the configuration, NlpjsNlu will try to use the `setupModelCallback` if it exists.
 Otherwise, the integration will check if `useModel` is set to `true`, if that's the case, the model is getting loaded from `preTrainedModelFilePath`.
-If `setupModellCallback` does not exist and `useModel` is falsy, the integration will attempt to build a model based on the local models and train it.
+If `setupModelCallback` does not exist and `useModel` is falsy, the integration will attempt to build a model based on the local models and train it.
+
+### Language Configuration
+
+For each language you want to use with NLP.js, you need to download the respective language package. Here is an example for [`en` (English)](https://github.com/axa-group/nlp.js/tree/master/packages/lang-en):
+
+```sh
+$ npm install @nlpjs/lang-en
+```
+
+You can then add this to your `languageMap`:
+
+```typescript
+import { LangEn } from '@nlpjs/lang-en';
+// ...
+
+new NlpjsNlu({
+  languageMap: {
+    en: LangEn,
+    // ...
+  },
+  // ...
+}),
+```
+
+Each key (in the above case `en`) represents a locale that can be found in your [Jovo Model](#jovo-model).
+
+You can find more information about [supported languages](https://github.com/axa-group/nlp.js/blob/master/docs/v4/language-support.md) and [available packages](https://github.com/axa-group/nlp.js/tree/master/packages) in the official NLP.js docs.
+
 
 ## Entities
 

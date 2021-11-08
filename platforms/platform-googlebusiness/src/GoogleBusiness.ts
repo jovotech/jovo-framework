@@ -21,7 +21,7 @@ export class GoogleBusiness extends AsyncJovo<
   }
 
   get serviceAccount(): JWTInput | undefined {
-    return this.$handleRequest.plugins?.GoogleBusinessPlatform?.config?.serviceAccount;
+    return this.$config.plugin?.GoogleBusinessPlatform?.serviceAccount;
   }
 
   protected sendResponse(

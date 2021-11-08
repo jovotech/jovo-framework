@@ -1,0 +1,29 @@
+#!/usr/bin/env node
+
+const { join: joinPaths } = require('path');
+const { writeFileSync } = require('fs');
+const { execSync } = require('child_process');
+const { Project } = require('@lerna/project');
+const project = new Project();
+
+(async () => {
+	// Generate root changelog
+  execSync(`npx auto-changelog --tag-pattern '@jovotech'`);
+
+  const packages = await project.getPackages();
+  for (const pkg of packages) {
+    const stdout = execSync(
+      `npx auto-changelog --tag-prefix ${pkg.name}@ --stdout`,
+      { encoding: 'utf-8' }
+    );
+    writeFileSync(joinPaths(pkg.location, 'CHANGELOG.md'), stdout);
+  }
+})()
+  .then(() => {
+    console.log('✅ Generated changelogs successfully');
+  })
+  .catch((error) => {
+    console.error('❌ Error while generating changelogs');
+    console.error(error);
+    process.exit(1);
+  });
