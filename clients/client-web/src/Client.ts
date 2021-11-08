@@ -73,7 +73,7 @@ export interface Config {
   store: StoreConfig;
 }
 
-export interface InitConfig extends Config {
+export interface InitConfig extends DeepPartial<Config> {
   networkTransportStrategy?: NetworkTransportStrategy;
 }
 
@@ -118,7 +118,7 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
   readonly config: Config;
   private initialized = false;
 
-  constructor(readonly endpointUrl: string, config?: DeepPartial<InitConfig>) {
+  constructor(readonly endpointUrl: string, config?: InitConfig) {
     super();
 
     this.networkTransportStrategy =
