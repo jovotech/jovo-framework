@@ -3,7 +3,6 @@ import _merge from 'lodash.merge';
 import type { A, F, O, S, U } from 'ts-toolbelt';
 import { AnyObject, OmitIndex } from '@jovotech/common';
 
-
 // Make an explicit string literal out of a passed string. If T equals string return never
 export type StringLiteral<T> = T extends string ? (string extends T ? never : T) : never;
 
