@@ -36,7 +36,6 @@ export class RepromptProcessor {
   }
 
   async processReprompts(reprompts: RepromptType[], modality?: RecordingModality): Promise<void> {
-    console.log('process reprompts', modality);
     if (!this.config.enabled || !modality) {
       return;
     }

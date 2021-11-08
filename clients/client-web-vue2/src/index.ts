@@ -20,7 +20,6 @@ export interface JovoWebClientVueConfig {
 
 const plugin: PluginObject<JovoWebClientVueConfig> = {
   install: (vue, config) => {
-    console.log('foo');
     if (!config?.url) {
       throw new Error(
         `At least the 'url' option has to be set in order to use the JovoWebClientPlugin. `,
