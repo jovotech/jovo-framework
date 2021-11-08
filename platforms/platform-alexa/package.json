@@ -26,7 +26,6 @@
   "dependencies": {
     "@jovotech/model": "^4.0.0-beta.3",
     "@jovotech/model-alexa": "^4.0.0-beta.3",
-    "@jovotech/output-alexa": "^4.0.0-beta.8",
     "chalk": "^4.1.0",
     "lodash.get": "^4.4.2",
     "lodash.has": "^4.5.2",

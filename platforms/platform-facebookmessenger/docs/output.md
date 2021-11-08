@@ -263,7 +263,7 @@ For this, you can use the `nativeQuickReplies` element that offers all propertie
 Here is an example for a phone number quick reply:
 
 ```typescript
-import { QuickReplyContentType } from '@jovotech/output-facebookmessenger';
+import { QuickReplyContentType } from '@jovotech/platform-facebookmessenger';
 
 // ...
 
@@ -296,7 +296,7 @@ Facebook offers different types of message templates. The generic template (whic
 You can add a template like this:
 
 ```typescript
-import { TemplateType } from '@jovotech/output-facebookmessenger';
+import { TemplateType } from '@jovotech/platform-facebookmessenger';
 
 // ...
 
@@ -317,7 +317,7 @@ import { TemplateType } from '@jovotech/output-facebookmessenger';
 Depending on the type, different properties can be added in the same way they are used in the Facebook Messenger API,for example:
 
 ```typescript
-import { TemplateType } from '@jovotech/output-facebookmessenger';
+import { TemplateType } from '@jovotech/platform-facebookmessenger';
 
 // ...
 
@@ -372,7 +372,7 @@ A template gets translated into the following:
 All [templates](#template) (including the [generic `card` element](#card) that gets translated into a generic template) may contain buttons, which are added using the `buttons` array.
 
 ```typescript
-import { ButtonType } from '@jovotech/output-facebookmessenger';
+import { ButtonType } from '@jovotech/platform-facebookmessenger';
 
 // ...
 

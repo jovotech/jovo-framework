@@ -255,7 +255,7 @@ These elements include:
 The [generic `card` element](#card) that gets translated into a generic template may contain buttons, which are added using the `buttons` array.
 
 ```typescript
-import { ButtonType } from '@jovotech/output-instagram';
+import { ButtonType } from '@jovotech/platform-instagram';
 
 // ...
 
