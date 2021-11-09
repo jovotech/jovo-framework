@@ -1,4 +1,3 @@
-import { Jovo } from '@jovotech/framework';
 import _set from 'lodash.set';
 import { GoogleSheetsCmsSheet, GoogleSheetsCmsSheetConfig } from './GoogleSheetsCmsSheet';
 
