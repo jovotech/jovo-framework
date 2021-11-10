@@ -51,15 +51,6 @@ export type I18NextValueAt<
   >,
 > = RESULT extends undefined ? string : RESULT;
 
-export type I18NextTFunctionReturnType<
-  FORCED_RESULT extends any,
-  PATH extends string,
-  LANGUAGE extends I18NextResourcesLanguageKeys | string,
-  NAMESPACE extends I18NextResourcesNamespaceKeysOfLanguage<LANGUAGE> | string,
-  VALUE = I18NextValueAt<PATH, LANGUAGE, NAMESPACE>,
-  // if the forced result is not never, return the forced result, otherwise return the value
-> = A.Equals<FORCED_RESULT, never> extends 0 ? FORCED_RESULT : VALUE;
-
 // Custom init-options for i18next in case some custom properties are used in the future.
 export interface I18NextOptions extends InitOptions {}
 export type I18NextTFunctionResult = TFunctionResult;
