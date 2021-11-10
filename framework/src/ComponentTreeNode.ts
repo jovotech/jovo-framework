@@ -31,14 +31,20 @@ export class ComponentTreeNode<COMPONENT extends BaseComponent = BaseComponent> 
   readonly children?: Tree<ComponentTreeNode>;
   readonly path: string[];
 
-  constructor({ path, metadata, parent, children }: ComponentTreeNodeOptions<COMPONENT>) {
+  constructor(
+    componentTree: ComponentTree,
+    { path, metadata, parent, children }: ComponentTreeNodeOptions<COMPONENT>,
+  ) {
     this.path = path.slice();
     this.metadata = metadata;
     if (parent) {
       this.parent = parent;
     }
     if (children?.length) {
-      this.children = children.reduce(ComponentTree.createComponentsToTreeReducer(this), {});
+      this.children = children.reduce(
+        ComponentTree.createComponentsToTreeReducer(componentTree, this),
+        {},
+      );
     }
   }
 

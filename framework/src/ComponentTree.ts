@@ -4,6 +4,7 @@ import { ComponentConstructor, ComponentDeclaration } from './BaseComponent';
 import { ComponentTreeNode } from './ComponentTreeNode';
 import { ComponentNotFoundError } from './errors/ComponentNotFoundError';
 import { DuplicateChildComponentsError } from './errors/DuplicateChildComponentsError';
+import { InvalidComponentTreeBuiltError } from './errors/InvalidComponentTreeBuiltError';
 import { ComponentMetadata } from './metadata/ComponentMetadata';
 import { MetadataStorage } from './metadata/MetadataStorage';
 
@@ -54,7 +55,7 @@ export interface Tree<NODE extends { children?: Tree<NODE> }> {
  */
 export class ComponentTree {
   // returns a map-callback that will create a ComponentTreeNode for the given component (constructor or declaration)
-  static createComponentToNodeMapper(parent?: ComponentTreeNode) {
+  static createComponentToNodeMapper(componentTree: ComponentTree, parent?: ComponentTreeNode) {
     return (component: ComponentConstructor | ComponentDeclaration): ComponentTreeNode => {
       const componentConstructor =
         typeof component === 'function' ? component : component.component;
@@ -69,7 +70,7 @@ export class ComponentTree {
       );
       const componentName = componentMetadata?.options?.name || componentConstructor.name;
       // return a new node with metadata, that is constructed from the constructor and the merged component options, as well as additional data
-      return new ComponentTreeNode({
+      return new ComponentTreeNode(componentTree, {
         metadata: new ComponentMetadata(componentConstructor, mergedComponentOptions),
         parent,
         children: mergedComponentOptions.components,
@@ -79,21 +80,27 @@ export class ComponentTree {
   }
 
   // returns a reduce-callback that will create a Tree from the components it's called on
-  static createComponentsToTreeReducer(parent?: ComponentTreeNode) {
+  static createComponentsToTreeReducer(componentTree: ComponentTree, parent?: ComponentTreeNode) {
     return (
       tree: Tree<ComponentTreeNode>,
       component: ComponentConstructor | ComponentDeclaration,
     ): Tree<ComponentTreeNode> => {
-      const node = ComponentTree.createComponentToNodeMapper(parent)(component);
-      if (tree[node.name]) {
-        throw new DuplicateChildComponentsError(node.name, parent?.name || 'Root');
+      const node = ComponentTree.createComponentToNodeMapper(componentTree, parent)(component);
+      if (!tree[node.name]) {
+        tree[node.name] = node;
+        // throw new DuplicateChildComponentsError(node.name, parent?.name || 'Root');
+      } else {
+        componentTree.initialBuildErrors.push(
+          new DuplicateChildComponentsError(node.name, parent?.name || 'Root'),
+        );
+        // console.warn(`Duplicate child component ${node.name} of ${parent?.name || 'Root'}`);
       }
-      tree[node.name] = node;
       return tree;
     };
   }
 
   readonly tree: Tree<ComponentTreeNode>;
+  readonly initialBuildErrors: Array<DuplicateChildComponentsError | Error> = [];
 
   constructor(...components: Array<ComponentConstructor | ComponentDeclaration>) {
     this.tree = this.buildTreeForComponents(...components);
@@ -108,6 +115,12 @@ export class ComponentTree {
     return {
       next: () => ({ value: nodes[++index], done: !(index in nodes) }),
     };
+  }
+
+  async initialize(): Promise<void> {
+    if (this.initialBuildErrors.length) {
+      throw new InvalidComponentTreeBuiltError(this.initialBuildErrors);
+    }
   }
 
   add(...components: Array<ComponentConstructor | ComponentDeclaration>): void {
@@ -172,6 +185,6 @@ export class ComponentTree {
   private buildTreeForComponents(
     ...components: Array<ComponentConstructor | ComponentDeclaration>
   ): Tree<ComponentTreeNode> {
-    return components.reduce(ComponentTree.createComponentsToTreeReducer(), {});
+    return components.reduce(ComponentTree.createComponentsToTreeReducer(this), {});
   }
 }
