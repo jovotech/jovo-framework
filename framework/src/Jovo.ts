@@ -15,8 +15,10 @@ import {
   I18NextAutoPath,
   I18NextResourcesLanguageKeys,
   I18NextResourcesNamespaceKeysOfLanguage,
-  I18NextTFunctionReturnType,
+  I18NextTFunctionOptions,
+  I18NextTFunctionResult,
   I18NextTOptions,
+  I18NextValueAt,
   JovoInput,
   MetadataStorage,
   OutputConstructor,
@@ -206,21 +208,21 @@ export abstract class Jovo<
   }
 
   $t<
-    FORCED_RESULT = never,
-    PATH extends string = string,
+    PATH extends string,
     LANGUAGE extends I18NextResourcesLanguageKeys | string = I18NextResourcesLanguageKeys,
     NAMESPACE extends
       | I18NextResourcesNamespaceKeysOfLanguage<LANGUAGE>
       | string = I18NextResourcesNamespaceKeysOfLanguage<LANGUAGE>,
-    RETURN_TYPE = I18NextTFunctionReturnType<FORCED_RESULT, PATH, LANGUAGE, NAMESPACE>,
   >(
     path:
       | I18NextAutoPath<PATH, LANGUAGE, NAMESPACE>
       | PATH
       | Array<I18NextAutoPath<PATH, LANGUAGE, NAMESPACE> | PATH>,
     options?: I18NextTOptions<LANGUAGE, NAMESPACE>,
-  ): RETURN_TYPE {
-    return this.$app.i18n.t<FORCED_RESULT, PATH, LANGUAGE, NAMESPACE, RETURN_TYPE>(path, options);
+  ): I18NextValueAt<PATH, LANGUAGE, NAMESPACE>;
+  $t<FORCED_RESULT>(path: string | string[], options?: I18NextTFunctionOptions): FORCED_RESULT;
+  $t(path: string | string[], options?: I18NextTFunctionOptions): I18NextTFunctionResult {
+    return this.$app.i18n.t(path, options);
   }
 
   async $send(outputTemplateOrMessage: OutputTemplate | OutputTemplate[] | string): Promise<void>;

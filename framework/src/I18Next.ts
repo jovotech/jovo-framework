@@ -104,20 +104,20 @@ export class I18Next {
   }
 
   t<
-    FORCED_RESULT = never,
-    PATH extends string = string,
+    PATH extends string,
     LANGUAGE extends I18NextResourcesLanguageKeys | string = I18NextResourcesLanguageKeys,
     NAMESPACE extends
       | I18NextResourcesNamespaceKeysOfLanguage<LANGUAGE>
       | string = I18NextResourcesNamespaceKeysOfLanguage<LANGUAGE>,
-    RETURN_TYPE = I18NextTFunctionReturnType<FORCED_RESULT, PATH, LANGUAGE, NAMESPACE>,
   >(
     path:
       | I18NextAutoPath<PATH, LANGUAGE, NAMESPACE>
       | PATH
       | Array<I18NextAutoPath<PATH, LANGUAGE, NAMESPACE> | PATH>,
     options?: I18NextTOptions<LANGUAGE, NAMESPACE>,
-  ): RETURN_TYPE {
-    return this.i18n.t(path, options) as unknown as RETURN_TYPE;
+  ): I18NextValueAt<PATH, LANGUAGE, NAMESPACE>;
+  t<FORCED_RESULT>(path: string | string[], options?: I18NextTFunctionOptions): FORCED_RESULT;
+  t(path: string | string[], options?: I18NextTFunctionOptions): I18NextTFunctionResult {
+    return this.i18n.t(path, options);
   }
 }
