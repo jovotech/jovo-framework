@@ -136,7 +136,7 @@ The [generic `quickReplies` element](https://v4.jovo.tech/docs/output-templates#
 ```typescript
 {
   // ...
-  quickReplies: ['Yes', 'No'];
+  quickReplies: ['Yes', 'No'],
 }
 ```
 
@@ -165,7 +165,7 @@ If you define your `quickReplies` using objects instead of strings, the `text` p
       value: 'yes',
     },
     // ...
-  ];
+  ],
 }
 ```
 
