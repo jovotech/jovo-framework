@@ -9,9 +9,9 @@ This [database integration](https://v4.jovo.tech/docs/databases) allows you to s
 
 ## Introduction
 
-[DynamoDB](https://aws.amazon.com/dynamodb/) is the NoSQL database service by Amazon Web Services (AWS). Many Jovo apps that are hosted on AWS Lambda rely on DynamoDB to persist user data.
+[DynamoDB](https://aws.amazon.com/dynamodb/) is the NoSQL database service by Amazon Web Services (AWS). Many Jovo apps that are hosted on [AWS Lambda](https://v4.jovo.tech/marketplace/server-lambda) rely on DynamoDB to persist user data.
 
-If you use AWS for your deployment, we recommend [FileDb](https://v4.jovo.tech/marketplace/db-filedb) for local development and DynamoDB for deployed versions.
+If you use AWS for your deployment, we recommend [FileDb](https://v4.jovo.tech/marketplace/db-filedb) for local development and DynamoDB for deployed versions. [Learn more about staging here](https://v4.jovo.tech/docs/staging).
 
 ## Installation
 
@@ -42,14 +42,14 @@ Once the configuration is done, the DynamoDB database integration will create a 
 
 The rest of this section provides an introduction to the steps you need to take depending on where you host your Jovo app:
 
-* [On AWS (e.g. Lambda)](#for-apps-hosted-on-aws)
-* [Outside AWS](#for-apps-hosted-outside-aws)
+- [On AWS (e.g. Lambda)](#for-apps-hosted-on-aws)
+- [Outside AWS](#for-apps-hosted-outside-aws)
 
 The [configuration section](#configuration) then provides a detailed overview of all configuration options.
 
 ### For Apps Hosted on AWS
 
-If you host your app on AWS Lambda and want to use a DynamoDB table in the same region, you only need to add a table name to get started:
+If you host your app on [AWS Lambda](https://v4.jovo.tech/marketplace/server-lambda) and want to use a DynamoDB table in the same region, you only need to add a table name to get started:
 
 ```typescript
 new DynamoDb({
@@ -82,7 +82,6 @@ new DynamoDb({
 }),
 ```
 
-
 ## Configuration
 
 The following configurations can be added:
@@ -95,12 +94,9 @@ new DynamoDb({
 }),
 ```
 
-
-* `table`: Configuration for the table that is going to be created by the plugin. [Learn more below](#table).
-* `libraryConfig`: Any configuration for the AWS DynamoDb SDK can be passed here. [Learn more below](#libraryconfig).
-* `storedElements`: What should be stored in the database. [Learn more in the database integration documentation](https://v4.jovo.tech/docs/databases).
-
-
+- `table`: Configuration for the table that is going to be created by the plugin. [Learn more below](#table).
+- `libraryConfig`: Any configuration for the AWS DynamoDb SDK can be passed here. [Learn more below](#libraryconfig).
+- `storedElements`: What should be stored in the database. [Learn more in the database integration documentation](https://v4.jovo.tech/docs/databases).
 
 ### table
 
@@ -121,7 +117,6 @@ new DynamoDb({
   // ...
 }),
 ```
-
 
 ### libraryConfig
 
@@ -156,4 +151,3 @@ new DynamoDb({
   }
 }),
 ```
-

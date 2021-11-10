@@ -39,8 +39,8 @@ export class ExpressJs extends Server {
     return this.req.body;
   }
 
-  getRequestHeaders(): Headers {
-    return this.req.headers || {};
+  getNativeRequestHeaders(): Headers {
+    return this.req.headers;
   }
 
   hasWriteFileAccess(): boolean {

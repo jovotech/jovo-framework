@@ -17,7 +17,7 @@ export class TestServer extends Server {
     return {};
   }
 
-  getRequestHeaders(): Headers {
+  getNativeRequestHeaders(): Headers {
     return { 'jovo-test': 'TestServer' };
   }
 
