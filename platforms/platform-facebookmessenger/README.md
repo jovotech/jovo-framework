@@ -7,7 +7,6 @@ excerpt: 'The Facebook Messenger platform integration allows you to build custom
 
 The Facebook Messenger [platform integration](https://v4.jovo.tech/docs/platforms) allows you to build custom Messenger bots using Jovo.
 
-
 ## Getting Started
 
 You can install the plugin like this:
@@ -43,8 +42,12 @@ import { FacebookMessengerPlatform } from '@jovotech/platform-facebookmessenger'
 const app = new App({
   plugins: [
     new FacebookMessengerPlatform({
-      plugins: [ /* ... */ ],
-      session: { /* ... */ },
+      plugins: [
+        /* ... */
+      ],
+      session: {
+        /* ... */
+      },
     }),
     // ...
   ],
@@ -55,7 +58,6 @@ Options include:
 
 - `plugins`: For example, you need to ddd an [NLU integration](#nlu-integration) here.
 - `session`: Session specific config. Take a look at [session data](#session-data) for more information.
-
 
 ### NLU Integration
 
@@ -85,7 +87,7 @@ Facebook Messenger does not offer session storage, which is needed for features 
 
 To make Facebook Messenger bots work with these features, Jovo automatically enables the storage of session data to the active [database integration](https://v4.jovo.tech/docs/databases). Under the hood, it adds `session` to the [`storedElements` config](https://v4.jovo.tech/docs/databases#storedelements).
 
-Since Facebook does not have the concept of sessions, we need to define after which time a request should be seen as the start of the new session. The default is *15 minutes* and can be modified either in the [`storedElements` config](https://v4.jovo.tech/docs/databases#storedelements) (works across platforms) or in the Facebook Messenger config:
+Since Facebook does not have the concept of sessions, we need to define after which time a request should be seen as the start of the new session. The default is _15 minutes_ and can be modified either in the [`storedElements` config](https://v4.jovo.tech/docs/databases#storedelements) (works across platforms) or in the Facebook Messenger config:
 
 ```typescript
 new FacebookMessengerPlatform({
@@ -95,23 +97,21 @@ new FacebookMessengerPlatform({
 });
 ```
 
-
 ## Platform-Specific Features
 
 You can access the Facebook Messenger specific object like this:
 
 ```typescript
-this.$facebookMessenger
+this.$facebookMessenger;
 ```
 
 You can also use this object to see if the request is coming from Facebook Messenger (or a different platform):
 
 ```typescript
-if(this.$facebookMessenger) {
+if (this.$facebookMessenger) {
   // ...
 }
 ```
-
 
 ### Output
 
@@ -145,4 +145,3 @@ You can add response objects that should show up exactly like this in the Facebo
   }
 }
 ```
-

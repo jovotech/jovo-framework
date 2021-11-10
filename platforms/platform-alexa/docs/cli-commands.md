@@ -9,7 +9,7 @@ Learn how to build and deploy Alexa projects using the Jovo CLI.
 
 ## Introduction
 
-The Alexa CLI plugin allows you to interact with the [Alexa Developer Console](https://developer.amazon.com/alexa/console/ask#/) using the Jovo CLI. 
+The Alexa CLI plugin allows you to interact with the [Alexa Developer Console](https://developer.amazon.com/alexa/console/ask#/) using the Jovo CLI.
 
 To use the Alexa CLI, add it as plugin to your `jovo.project.js` file. [Learn more about Alexa project configuration here](./project-config.md).
 
@@ -23,7 +23,7 @@ const project = new ProjectConfig({
   plugins: [
     new AlexaCli(),
     // ...
-  ]
+  ],
 });
 ```
 
@@ -34,7 +34,6 @@ The Alexa CLI plugin hooks into the following commands:
 - [`build`](#build): Create Alexa project files based on the project config and `models` folder
 - [`deploy`](#deploy): Deploy project files to the Alexa Developer Console
 - [`get`](#get): Synchronize your local project files with the Alexa Developer Console
-
 
 ## build
 
@@ -50,11 +49,9 @@ The folder then contains an `ask-resources.json` file and a `skill-package` fold
 
 The Alexa CLI plugin adds the following flags to the [`build` command](https://v4.jovo.tech/docs/build-command):
 
-| Flag | Description | Examples |
-|---|---|---|
-| `--ask-profile` | Add the specified ASK profile to the `ask-states.json` file. [Learn more about ASK profile configuration here](./project-config.md#askprofile).  | `--ask-profile default`  |
-
-
+| Flag            | Description                                                                                                                                     | Examples                |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `--ask-profile` | Add the specified ASK profile to the `ask-states.json` file. [Learn more about ASK profile configuration here](./project-config.md#askprofile). | `--ask-profile default` |
 
 ## deploy
 
@@ -68,11 +65,9 @@ After successful deployment, you can open the [Alexa Developer Console](https://
 
 The Alexa CLI plugin adds the following flags to the [`deploy:platform` command](https://v4.jovo.tech/docs/deploy-command#deploy:platform):
 
-| Flag | Description | Examples |
-|---|---|---|
-| `--ask-profile` | Deploy to using the specified ASK profile. [Learn more about ASK profile configuration here](./project-config.md#askprofile). | `--ask-profile default`  |
-
-
+| Flag            | Description                                                                                                                   | Examples                |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `--ask-profile` | Deploy to using the specified ASK profile. [Learn more about ASK profile configuration here](./project-config.md#askprofile). | `--ask-profile default` |
 
 ## get
 
@@ -86,6 +81,6 @@ This is helpful if you've made any updates to the Skill's configuration (for exa
 
 The Alexa CLI plugin adds the following flags to the [`get:platform` command](https://v4.jovo.tech/docs/get-command#get:platform):
 
-| Flag | Description | Examples |
-|---|---|---|
-| `--ask-profile` | Retrieve data using the specified ASK profile. [Learn more about ASK profile configuration here](./project-config.md#askprofile). | `--ask-profile default`  |
+| Flag            | Description                                                                                                                       | Examples                |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `--ask-profile` | Retrieve data using the specified ASK profile. [Learn more about ASK profile configuration here](./project-config.md#askprofile). | `--ask-profile default` |

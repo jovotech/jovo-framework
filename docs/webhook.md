@@ -7,7 +7,6 @@ excerpt: 'Develop and test your voice apps and chatbots locally using Jovo.'
 
 The Jovo Webhook allows you test your Jovo app without uploading your code to a server.
 
-
 ## Introduction
 
 The Jovo Webhook is a free service that creates a link to your local development server. This way, you can prototype locally without having to deal with servers or cloud deployments to test changes.
@@ -25,7 +24,6 @@ This link can be used in a number of use cases:
 - Access the [Jovo Debugger](#jovo-debugger) for convenient, browser-based testing
 - Connect [platform developer consoles and clients](#developer-consoles-and-clients) to your local code
 
-
 ## Jovo Debugger
 
 By pasting the Webhook URL into your browser's address bar (or by typing `.` after executing the [`run` command](https://v4.jovo.tech/docs/run-command)), you can access The Jovo Debugger.
@@ -33,7 +31,6 @@ By pasting the Webhook URL into your browser's address bar (or by typing `.` aft
 The Jovo Debugger can be used to send requests to your local development server. This makes debugging and testing of your Jovo app more efficient and convenient.
 
 Learn more in the [Jovo Debugger documentation](https://v4.jovo.tech/docs/debugger).
-
 
 ## Developer Consoles and Clients
 

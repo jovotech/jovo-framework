@@ -2,6 +2,7 @@
 title: 'Input'
 excerpt: 'Learn more about the Jovo Input property, which includes structured user input.'
 ---
+
 # Input
 
 Learn more about the Jovo `$input` property, which includes structured user input.
@@ -191,7 +192,6 @@ An `ERROR` input happens when the platform throws an error and sends an error re
   type: 'ERROR',
 }
 ```
-
 
 ### END
 
