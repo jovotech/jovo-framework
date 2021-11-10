@@ -1,4 +1,5 @@
 import {
+  ArrayMaxSize,
   IsArray,
   IsObject,
   IsOptional,
@@ -6,6 +7,7 @@ import {
   Type,
   ValidateNested,
 } from '@jovotech/output';
+import { QUICK_REPLIES_MAX_SIZE } from '../constants';
 import { TransformQuickReply } from '../decorators/transformation/TransformQuickReply';
 import { TransformTemplate } from '../decorators/transformation/TransformTemplate';
 import { FacebookMessengerOutputTemplateResponse } from './FacebookMessengerOutputTemplateResponse';
@@ -18,6 +20,7 @@ export class NormalizedFacebookMessengerOutputTemplate extends NormalizedPlatfor
 
   @IsOptional()
   @IsArray()
+  @ArrayMaxSize(QUICK_REPLIES_MAX_SIZE)
   @ValidateNested()
   @TransformQuickReply()
   nativeQuickReplies?: QuickReply[];
