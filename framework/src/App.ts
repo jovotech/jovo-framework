@@ -46,7 +46,7 @@ export type AppMiddleware = ArrayElement<typeof APP_MIDDLEWARES>;
 export type AppMiddlewares = AppMiddleware[];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type AppErrorCallback = (error: Error, jovo?: Jovo) => any;
+export type AppErrorListener = (error: Error, jovo?: Jovo) => any;
 
 export interface AppRoutingConfig {
   intentMap?: IntentMap;
@@ -67,7 +67,7 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
   readonly componentTree: ComponentTree;
   readonly i18n: I18Next;
   private initialized = false;
-  private errorCallback?: AppErrorCallback;
+  private errorListeners: AppErrorListener[] = [];
 
   constructor(config?: AppInitConfig) {
     super(config ? { ...config, components: undefined } : config);
@@ -98,8 +98,11 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
     this.use(...usables);
   }
 
-  onError(cb: AppErrorCallback): void {
-    this.errorCallback = cb;
+  onError(listener: AppErrorListener): void {
+    if (this.errorListeners.includes(listener)) {
+      return;
+    }
+    this.errorListeners.push(listener);
   }
 
   initializeMiddlewareCollection(): MiddlewareCollection<AppMiddlewares> {
@@ -129,6 +132,7 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
       return;
     }
     try {
+      await this.componentTree.initialize();
       await this.i18n.initialize();
       await this.initializePlugins();
       this.initialized = true;
@@ -195,11 +199,12 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  handleError(e: any, jovo?: Jovo) {
-    if (this.errorCallback) {
-      return this.errorCallback(e, jovo);
+  async handleError(e: any, jovo?: Jovo): Promise<void> {
+    if (!this.errorListeners?.length) {
+      throw e;
     }
-    // TODO implement default error handling
-    throw e;
+    for (const listener of this.errorListeners) {
+      await listener(e, jovo);
+    }
   }
 }
