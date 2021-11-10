@@ -17,6 +17,8 @@ Jovo also has an error class called [`JovoError`](#jovoerror) which can be used 
 
 ## onError
 
+`onError()` allows you to add a callback function with an `error` and `jovo` parameter. It is a method of `app`, so it is recommended to use it somewhere in your [app configuration files](./app-config.md), for example `app.ts`:
+
 ```typescript
 import { Jovo } from '@jovotech/framework';
 // ...
