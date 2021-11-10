@@ -88,12 +88,10 @@ export class ComponentTree {
       const node = ComponentTree.createComponentToNodeMapper(componentTree, parent)(component);
       if (!tree[node.name]) {
         tree[node.name] = node;
-        // throw new DuplicateChildComponentsError(node.name, parent?.name || 'Root');
       } else {
         componentTree.initialBuildErrors.push(
           new DuplicateChildComponentsError(node.name, parent?.name || 'Root'),
         );
-        // console.warn(`Duplicate child component ${node.name} of ${parent?.name || 'Root'}`);
       }
       return tree;
     };
