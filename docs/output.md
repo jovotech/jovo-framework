@@ -2,6 +2,7 @@
 title: 'Output'
 excerpt: 'Learn more about how to return structured output that works across platforms like Alexa, Google Assistant, Facebook Messenger, the web, and more.'
 ---
+
 # Output
 
 Learn more about how to return output to the user.
@@ -16,7 +17,7 @@ The most popular way to return output is using the `$send()` method:
 
 ```typescript
 yourHandler() {
-  
+
   // ...
 
   return this.$send(/* output */);
@@ -33,7 +34,7 @@ We recommend using the `$send()` method to return output:
 
 ```typescript
 yourHandler() {
-  
+
   // ...
 
   return this.$send(/* output */);
@@ -74,7 +75,7 @@ While we recommend using `$send()`, it is also possible to populate `$output` di
 
 ```typescript
 yourHandler() {
-  
+
   // ...
 
   this.$output = [{
@@ -114,19 +115,20 @@ You can directly add an [output template](#output-templates) to the `$send()` me
 
 ```typescript
 yourHandler() {
-  
+
   // ...
 
   return this.$send({ /* output */ });
 }
 ```
-This object can contain all output template elements that are described in the [output template documentation](https://v4.jovo.tech/docs/output-templates).
+
+This object can contain all output template elements that are described in the [output template documentation](./output-templates.md).
 
 Here is an example output that just contains a `message`:
 
 ```typescript
 yourHandler() {
-  
+
   // ...
 
   return this.$send({ message: 'Hello World!' });
@@ -145,7 +147,7 @@ import { SomeOutput } from './output/SomeOutput';
 // ...
 
 yourHandler() {
-  
+
   // ...
 
   return this.$send(SomeOutput, { /* output options */ });
@@ -160,7 +162,7 @@ import { SomeOutput } from './output/SomeOutput';
 // ...
 
 yourHandler() {
-  
+
   // ...
 
   return this.$send(SomeOutput, { message: 'This overrides the message from SomeOutput' });
@@ -180,8 +182,8 @@ You can also return an array of output templates:
   },
   {
     message: 'This is a second chat bubble.',
-  }
-]
+  },
+];
 ```
 
 This can also be done by doing multiple `$send()` calls in a [handler](./handlers.md).
@@ -205,6 +207,21 @@ Platforms that support multiple responses will display the example above in 2 ch
 ```
 
 
+### i18n
+
+You can also add internationalization by storing all strings in an `i18n` file for each locale. This way, you can return output using the `$t()` method:
+
+```typescript
+// Without i18n
+return this.$send({ message: 'Hello World!' })
+
+// With i18n
+return this.$send({ message: this.$t('hello') })
+```
+
+[Learn more in the i18n docs](./i18n.md).
+
+
 ## Output Templates
 
 Output templates offer a structured format to return output to a user. These templates can be added to `$send()` directly or returned from an output class.
@@ -217,7 +234,7 @@ Output templates offer a structured format to return output to a user. These tem
 }
 ```
 
-[Learn more about the structure of output templates here](https://v4.jovo.tech/docs/output-templates).
+[Learn more about the structure of output templates here](./output-templates.md).
 
 ## Output Classes
 
@@ -230,7 +247,6 @@ import { Output, BaseOutput, OutputTemplate } from '@jovotech/framework';
 
 @Output()
 export class HelloWorldOutput extends BaseOutput {
-
   build(): OutputTemplate | OutputTemplate[] {
     return {
       message: 'Hello World!',
@@ -240,5 +256,3 @@ export class HelloWorldOutput extends BaseOutput {
 ```
 
 [Learn more in the output classes docs](./output-classes.md).
-
-

@@ -1,9 +1,11 @@
+import { Constructor, JovoError, OmitWhere } from '@jovotech/common';
 import {
   JovoResponse,
   OutputTemplate,
   OutputTemplateConverterStrategyConfig,
   SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
+
 import { existsSync } from 'fs';
 import _cloneDeep from 'lodash.clonedeep';
 import _merge from 'lodash.merge';
@@ -12,12 +14,9 @@ import { PartialDeep } from 'type-fest';
 import { v4 as uuidv4 } from 'uuid';
 import {
   App,
-  Constructor,
   Jovo,
-  JovoError,
   JovoRequest,
   JovoSession,
-  OmitWhere,
   Platform,
   Plugin,
   PluginConfig,
@@ -223,6 +222,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
 
     if (!this.isRequest(this.requestOrInput)) {
       jovo.$input = this.requestOrInput;
+      jovo.$entities = jovo.getEntityMap();
     }
     _merge(jovo.$user.data, this.$user.data);
     _merge(jovo.$session, this.$session);
