@@ -49,7 +49,7 @@ $state = [
 ];
 ```
 
-The `TableReservationComponent` then needs to collect some information and delegates to a `CollectNumberOfPeopleComponent`. That component can either [resolve](./handlers.md#resolve-a-component) with a `success` or an `exit` event. The delegating component references handlers to be called for each of these events to the `$delegate` call:
+The `TableReservationComponent` then needs to collect some information and delegates to a `CollectNumberOfPeopleComponent`. That component can either [resolve](./handlers.md#resolve-a-component) with a `success` or an `exit` event. The delegating component references handlers to be called for each of these events to the `$delegate()` call:
 
 ```typescript
 return this.$delegate(CollectNumberOfPeopleComponent, {
@@ -82,7 +82,7 @@ There are now several things that could happen in `CollectNumberOfPeopleComponen
 - It delegates to another component, adding that one to the `$state` as well
 - It collects the information and then resolves, which results in its removal from the `$state`
 
-If the `CollectNumberOfPeopleComponent` gets removed, the router looks if there are any components left. In this case it's `TableReservationComponent`. Here, the router invokes the right handler based on the event coming from the `$resolve`.
+If the `CollectNumberOfPeopleComponent` gets removed, the router looks if there are any components left. In this case it's `TableReservationComponent`. Here, the router invokes the right handler based on the event coming from the `$resolve()`.
 
 ## State Properties
 
@@ -90,7 +90,7 @@ Each object in the `$state` array contains at least a `component` string which r
 
 The object may also include:
 
-- A `resolve` object that references handlers that should be called for specific events. This data is added using the [`$delegate` method](./handlers.md#delegate-to-components).
+- A `resolve` object that references handlers that should be called for specific events. This data is added using the [`$delegate()` method](./handlers.md#delegate-to-components).
 - A `data` object with [component data](./data.md#component-data).
 - A [`subState`](./handlers.md#substate)
-- A `config` object with additional elements passed with [`$delegate`](./handlers.md#delegate-to-components).
+- A `config` object with additional elements passed with [`$delegate()`](./handlers.md#delegate-to-components).
