@@ -11,15 +11,16 @@ import {
   GENERIC_TEMPLATE_MAX_SIZE,
   GENERIC_TEMPLATE_MIN_SIZE,
   MESSAGE_TEXT_MAX_LENGTH,
+  QUICK_REPLIES_MAX_SIZE,
   QUICK_REPLY_TITLE_MAX_LENGTH,
 } from './constants';
 import {
-  NormalizedFacebookMessengerOutputTemplate,
   FacebookMessengerResponse,
   GenericTemplate,
   Message as FacebookMessengerMessage,
   MessageAttachmentType,
   MessagingType,
+  NormalizedFacebookMessengerOutputTemplate,
   QuickReply as FacebookMessengerQuickReply,
   QuickReplyContentType,
   TemplateType,
@@ -78,7 +79,7 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
   protected sanitizeQuickReplies(
     quickReplies: QuickReplyValue[],
     path: string,
-    maxSize = Infinity,
+    maxSize = QUICK_REPLIES_MAX_SIZE,
     maxLength = QUICK_REPLY_TITLE_MAX_LENGTH,
   ): QuickReplyValue[] {
     return super.sanitizeQuickReplies(quickReplies, path, maxSize, maxLength);
