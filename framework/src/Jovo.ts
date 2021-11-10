@@ -15,9 +15,7 @@ import {
   I18NextAutoPath,
   I18NextResourcesLanguageKeys,
   I18NextResourcesNamespaceKeysOfLanguage,
-  I18NextResult,
-  I18NextTFunctionOptions,
-  I18NextTFunctionResult,
+  I18NextTFunctionReturnType,
   I18NextTOptions,
   JovoInput,
   MetadataStorage,
@@ -26,7 +24,6 @@ import {
   PersistableUserData,
   Server,
   StateStackItem,
-  StringLiteral,
 } from './index';
 
 import { EntityMap, RequestData } from './interfaces';
@@ -208,27 +205,22 @@ export abstract class Jovo<
     };
   }
 
-  // The first signature only allows string literals
   $t<
-    PATH extends string,
+    FORCED_RESULT = never,
+    PATH extends string = string,
     LANGUAGE extends I18NextResourcesLanguageKeys | string = I18NextResourcesLanguageKeys,
     NAMESPACE extends
       | I18NextResourcesNamespaceKeysOfLanguage<LANGUAGE>
       | string = I18NextResourcesNamespaceKeysOfLanguage<LANGUAGE>,
-    LITERAL_PATH extends string = StringLiteral<PATH>,
+    RETURN_TYPE = I18NextTFunctionReturnType<FORCED_RESULT, PATH, LANGUAGE, NAMESPACE>,
   >(
     path:
-      | I18NextAutoPath<LITERAL_PATH, LANGUAGE, NAMESPACE>
-      | LITERAL_PATH
-      | Array<I18NextAutoPath<LITERAL_PATH, LANGUAGE, NAMESPACE> | LITERAL_PATH>,
+      | I18NextAutoPath<PATH, LANGUAGE, NAMESPACE>
+      | PATH
+      | Array<I18NextAutoPath<PATH, LANGUAGE, NAMESPACE> | PATH>,
     options?: I18NextTOptions<LANGUAGE, NAMESPACE>,
-  ): I18NextResult<LITERAL_PATH, LANGUAGE, NAMESPACE>;
-  $t<RESULT extends I18NextTFunctionResult = string>(
-    path: string | string[],
-    options?: I18NextTFunctionOptions,
-  ): RESULT;
-  $t(path: string | string[], options?: I18NextTFunctionOptions): I18NextTFunctionResult {
-    return this.$app.i18n.t(path, options);
+  ): RETURN_TYPE {
+    return this.$app.i18n.t<FORCED_RESULT, PATH, LANGUAGE, NAMESPACE, RETURN_TYPE>(path, options);
   }
 
   async $send(outputTemplateOrMessage: OutputTemplate | OutputTemplate[] | string): Promise<void>;

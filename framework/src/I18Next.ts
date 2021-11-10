@@ -1,11 +1,7 @@
+import { AnyObject, OmitIndex } from '@jovotech/common';
 import i18next, { InitOptions, Resource, TFunctionResult, TOptionsBase } from 'i18next';
 import _merge from 'lodash.merge';
 import type { A, F, O, S, U } from 'ts-toolbelt';
-import { AnyObject, OmitIndex } from '@jovotech/common';
-
-
-// Make an explicit string literal out of a passed string. If T equals string return never
-export type StringLiteral<T> = T extends string ? (string extends T ? never : T) : never;
 
 // Provide an interface that can be augmented in order to provide code-completion for translation-keys.
 export interface I18NextResources extends Resource {}
@@ -45,7 +41,7 @@ export type I18NextFullPath<
 > = S.Join<[LANGUAGE, A.Cast<NAMESPACE, string>, PATH], '.'>;
 
 // Type that returns the actual value in I18NextResources relative to the given path, language and namespace
-export type I18NextResult<
+export type I18NextValueAt<
   PATH extends string,
   LANGUAGE extends I18NextResourcesLanguageKeys | string,
   NAMESPACE extends I18NextResourcesNamespaceKeysOfLanguage<LANGUAGE> | string,
@@ -53,7 +49,16 @@ export type I18NextResult<
     NonIndexedI18NextResources,
     S.Split<I18NextFullPath<PATH, LANGUAGE, NAMESPACE>, '.'>
   >,
-> = RESULT extends undefined ? I18NextTFunctionResult : RESULT;
+> = RESULT extends undefined ? string : RESULT;
+
+export type I18NextTFunctionReturnType<
+  FORCED_RESULT extends any,
+  PATH extends string,
+  LANGUAGE extends I18NextResourcesLanguageKeys | string,
+  NAMESPACE extends I18NextResourcesNamespaceKeysOfLanguage<LANGUAGE> | string,
+  VALUE = I18NextValueAt<PATH, LANGUAGE, NAMESPACE>,
+  // if the forced result is not never, return the forced result, otherwise return the value
+> = A.Equals<FORCED_RESULT, never> extends 0 ? FORCED_RESULT : VALUE;
 
 // Custom init-options for i18next in case some custom properties are used in the future.
 export interface I18NextOptions extends InitOptions {}
@@ -98,26 +103,21 @@ export class I18Next {
     await this.i18n.init(this.options);
   }
 
-  // The first signature only allows string literals
   t<
-    PATH extends string,
+    FORCED_RESULT = never,
+    PATH extends string = string,
     LANGUAGE extends I18NextResourcesLanguageKeys | string = I18NextResourcesLanguageKeys,
     NAMESPACE extends
       | I18NextResourcesNamespaceKeysOfLanguage<LANGUAGE>
       | string = I18NextResourcesNamespaceKeysOfLanguage<LANGUAGE>,
-    LITERAL_PATH extends string = StringLiteral<PATH>,
+    RETURN_TYPE = I18NextTFunctionReturnType<FORCED_RESULT, PATH, LANGUAGE, NAMESPACE>,
   >(
     path:
-      | I18NextAutoPath<LITERAL_PATH, LANGUAGE, NAMESPACE>
-      | LITERAL_PATH
-      | Array<I18NextAutoPath<LITERAL_PATH, LANGUAGE, NAMESPACE> | LITERAL_PATH>,
+      | I18NextAutoPath<PATH, LANGUAGE, NAMESPACE>
+      | PATH
+      | Array<I18NextAutoPath<PATH, LANGUAGE, NAMESPACE> | PATH>,
     options?: I18NextTOptions<LANGUAGE, NAMESPACE>,
-  ): I18NextResult<LITERAL_PATH, LANGUAGE, NAMESPACE>;
-  t<RESULT extends I18NextTFunctionResult = string>(
-    path: string | string[],
-    options?: I18NextTFunctionOptions,
-  ): RESULT;
-  t(path: string | string[], options?: I18NextTFunctionOptions): I18NextTFunctionResult {
-    return this.i18n.t(path, options);
+  ): RETURN_TYPE {
+    return this.i18n.t(path, options) as unknown as RETURN_TYPE;
   }
 }
