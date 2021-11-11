@@ -188,7 +188,7 @@ new GoogleSheetsCms({
 If you define your sheet as `TranslationsSheet`, the integration expects a sheet of at least two columns:
 
 - keys, e.g. `welcome` or `bye`
-- a locale, such as `en` or `en-US`
+- a locale, such as `en` or `en-US` (you can add as many locale columns as you like)
 
 By using this sheet type, you can access translation strings like this:
 
