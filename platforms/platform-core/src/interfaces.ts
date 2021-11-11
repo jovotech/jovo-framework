@@ -12,11 +12,11 @@ export interface RequestAudioData {
   data?: Float32Array;
 }
 
-export interface Session
+export interface CoreRequestSession
   extends Pick<JovoSession, 'id' | 'data' | 'state' | 'isNew' | 'updatedAt'>,
     UnknownObject {}
 
-export interface User {
+export interface CoreRequestUser {
   id: string;
   data?: UnknownObject;
 }
@@ -26,8 +26,8 @@ export interface Device {
   capabilities: Array<Capability | string>;
 }
 
-export interface Context {
+export interface CoreRequestContext {
   device: Device;
-  session: Session;
-  user: User;
+  session: CoreRequestSession;
+  user: CoreRequestUser;
 }
