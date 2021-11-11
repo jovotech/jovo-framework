@@ -1,10 +1,10 @@
-import { Intent } from '@jovotech/common';
+import { InputType, Intent } from '@jovotech/common';
 import { App } from '../App';
 import { DuplicateGlobalIntentsError } from '../errors/DuplicateGlobalIntentsError';
 import { HandleRequest } from '../HandleRequest';
 import { IntentMap } from '../interfaces';
 import { Jovo } from '../Jovo';
-import { InputType, JovoInput } from '../JovoInput';
+import { JovoInput } from '../JovoInput';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
 import { MetadataStorage } from '../metadata/MetadataStorage';
 import { Plugin, PluginConfig } from '../Plugin';
