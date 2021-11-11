@@ -32,3 +32,4 @@ export type OmitIndex<T, I extends string | number> = {
 };
 
 export * from './JovoError';
+export * from './JovoLogger';
