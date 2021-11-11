@@ -1,12 +1,4 @@
-import {
-  App,
-  Jovo,
-  JovoError,
-  JovoUser,
-  Plugin,
-  PluginConfig,
-  UnknownObject,
-} from '@jovotech/framework';
+import { App, Jovo, JovoError, Plugin, PluginConfig } from '@jovotech/framework';
 import Airtable, { FieldSet, Records } from 'airtable';
 import { AirtableBase } from 'airtable/lib/airtable_base';
 import { AirtableTable } from './tables';
@@ -61,14 +53,21 @@ export class AirtableCms extends Plugin<AirtableCmsConfig> {
         continue;
       }
 
-      // TODO: What if view is not table but other view (kanban)
-      // TODO Test differnet data types
       const records: Records<FieldSet> = await this.airtableBase(tableName)
         .select(table.config.selectOptions)
         .all();
       const values: unknown[][] = [];
 
-      const keys: string[] = table.config.selectOptions?.fields || Object.keys(records[0].fields);
+      const keys: string[] =
+        table.config.order ||
+        table.config.selectOptions?.fields ||
+        table.config.selectOptions?.sort?.map((el) => el.field) ||
+        Object.keys(records.find((record) => Object.keys(record.fields).length)?.fields || []);
+
+      if (!keys.length) {
+        continue;
+      }
+
       values.push(keys);
 
       for (const record of records) {
@@ -81,10 +80,9 @@ export class AirtableCms extends Plugin<AirtableCmsConfig> {
         values.push(recordValues);
       }
 
-      const parsed: unknown = table.parse(values);
+      const parsed: unknown = table.parse(values, jovo);
 
       jovo.$cms[tableName] = parsed;
-      console.log(jovo.$cms);
     }
   }
 }
