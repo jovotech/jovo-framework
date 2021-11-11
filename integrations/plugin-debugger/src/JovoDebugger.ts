@@ -65,6 +65,7 @@ export function getDefaultLanguageMap(): UnknownObject {
 export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   socket?: typeof Socket;
   hasOverriddenWrite = false;
+  hasShownConnectionError = false;
 
   getDefaultConfig(): JovoDebuggerConfig {
     return {
@@ -327,7 +328,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
 
   private async onDebuggingAvailable(): Promise<void> {
     if (!this.socket) {
-      throw new SocketNotConnectedError(this.config.webhookUrl);
+      return this.onSocketNotConnected();
     }
 
     await this.emitDebuggerConfig();
@@ -355,7 +356,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
 
   private onRequest(jovo: Jovo): void {
     if (!this.socket) {
-      throw new SocketNotConnectedError(this.config.webhookUrl);
+      return this.onSocketNotConnected();
     }
     const payload: JovoDebuggerPayload<JovoRequest> = {
       requestId: jovo.$handleRequest.debuggerRequestId,
@@ -366,7 +367,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
 
   private onResponse(jovo: Jovo): void {
     if (!this.socket) {
-      throw new SocketNotConnectedError(this.config.webhookUrl);
+      return this.onSocketNotConnected();
     }
     const payload: JovoDebuggerPayload = {
       requestId: jovo.$handleRequest.debuggerRequestId,
@@ -380,10 +381,13 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       return;
     }
     if (!this.socket) {
-      throw new SocketNotConnectedError(this.config.webhookUrl);
+      return this.onSocketNotConnected();
     }
     try {
       const languageModel = await this.loadLanguageModel();
+      if (!languageModel) {
+        return;
+      }
       this.socket.emit(JovoDebuggerEvent.AppLanguageModelResponse, languageModel);
     } catch (e) {
       return;
@@ -391,14 +395,15 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   }
 
   // Return the language models found at the configured location
-  private async loadLanguageModel(): Promise<AnyObject> {
+  private async loadLanguageModel(): Promise<AnyObject | undefined> {
     const languageModel: AnyObject = {};
     const absoluteModelsPath = resolve(cwd(), this.config.modelsPath);
     let files: string[] = [];
     try {
       files = await promises.readdir(absoluteModelsPath);
     } catch (e) {
-      throw new LanguageModelDirectoryNotFoundError(absoluteModelsPath);
+      console.warn(new LanguageModelDirectoryNotFoundError(absoluteModelsPath));
+      return;
     }
     const isValidFileRegex = /^.*([.]js(?:on)?)$/;
     for (let i = 0, len = files.length; i < len; i++) {
@@ -428,7 +433,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       return;
     }
     if (!this.socket) {
-      throw new SocketNotConnectedError(this.config.webhookUrl);
+      return this.onSocketNotConnected();
     }
     try {
       const debuggerConfig = await this.loadDebuggerConfig();
@@ -458,8 +463,14 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
         type: 'app',
       },
     });
+    socket.on('connect', () => {
+      this.hasShownConnectionError = false;
+    });
     socket.on('connect_error', (error: Error) => {
-      throw new SocketConnectionFailedError(this.config.webhookUrl, error);
+      if (!this.hasShownConnectionError) {
+        console.warn(new SocketConnectionFailedError(this.config.webhookUrl, error).message);
+        this.hasShownConnectionError = true;
+      }
     });
     return socket;
   }
@@ -476,6 +487,10 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     } catch (e) {
       throw new WebhookIdNotFoundError(homeConfigPath);
     }
+  }
+
+  private onSocketNotConnected() {
+    console.warn(new SocketNotConnectedError(this.config.webhookUrl).message);
   }
 
   // Require the module and clear cache if there is any
