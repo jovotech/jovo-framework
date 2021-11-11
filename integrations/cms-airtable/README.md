@@ -166,11 +166,27 @@ If you define your table as `TranslationsTable`, the integration expects a table
 - keys, e.g. `welcome` or `bye`
 - a locale, such as `en` or `en-US` (you can add as many locale columns as you like)
 
+Here's an example table:
+
+| key     | en           |
+| :------ | :----------- |
+| welcome | Hello World! |
+| bye     | Goodbye!     |
+
 By using this table type, you can access translation strings like this:
 
 ```typescript
 this.$t('welcome');
 ```
+
+You can also add [platform specific translations](https://v4.jovo.tech/docs/i18n#platform-specific-translations) by appending a `:` colon followed by the platform name (in camel case) to the locale:
+
+| key     | en           | en:alexa          |
+| :------ | :----------- | :---------------- |
+| welcome | Hello World! | Hello Alexa user! |
+| bye     | Goodbye!     |                   |
+
+Jovo automatically returns the right string depending on the current platform. If a platform specific key is empty, the key from its locale (in the example `en`) is used as a fallback.
 
 ### KeyValueTable
 
