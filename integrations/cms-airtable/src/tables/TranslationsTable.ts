@@ -9,7 +9,7 @@ export interface Resources {
 
 export class TranslationsTable extends AirtableTable {
   getDefaultConfig(): AirtableTableConfig {
-    return { range: 'A:Z' };
+    return {};
   }
 
   parse(values: string[][], jovo: Jovo): Record<string, Resources> {

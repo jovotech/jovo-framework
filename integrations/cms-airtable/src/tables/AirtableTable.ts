@@ -3,10 +3,12 @@ import { QueryParams } from 'airtable/lib/query_params';
 
 export interface AirtableTableConfig extends PluginConfig {
   caching?: boolean;
-  /* Correct order of columns, i.e. index 0 should be the first column of table */
   order?: string[];
-  /* Documentation for selectOptions here: https://www.jovo.tech/docs/cms/airtable#configuration */
-  selectOptions?: QueryParams<UnknownObject>;
+  // Documentation for selectOptions here: https://www.jovo.tech/docs/cms/airtable#configuration
+  selectOptions?: Omit<
+    QueryParams<UnknownObject>,
+    'pageSize' | 'maxRecords' | 'view' | 'cellFormat' | 'timeZone' | 'userLocale' | 'offset'
+  >;
 }
 
 export abstract class AirtableTable<

@@ -123,15 +123,38 @@ Each table type accepts the following configuration:
 
 ```typescript
 {
-  range: 'A:Z',
-  baseId: '<YOUR-BASE-ID>',
   caching: false,
+  order: [],
+  selectOptions: {
+    // ...
+  }
 }
 ```
 
-- `range`: Represents a range of cells, e.g. `A:C`, `A1:B2`, ...
 - `caching`: Determines whether to cache the data for this specific table. `true` by default. [Learn more above](#caching).
-- `baseId`: Unique base ID for this specific table.
+- `order`: To ensure that the values we retrieve from the Airtable API are in the correct order, you can specify an array of strings representing the order of columns.
+- `selectOptions`: Allows you to specify how the data should be retrieved from your table. [Learn more below](#selectoptions).
+
+#### selectOptions
+
+`selectOptions` allows you to customize the way your data is retrieved from your table. You can specify the following options:
+
+```typescript
+{
+  fields: [],
+  filterByFormula: '',
+  sort: [
+    {
+      field: '',
+      direction: 'asc'
+    }
+  ],
+}
+```
+
+- `fields`: Specify the fields (columns) that should be retrieved.
+- `filterByFormula`: Allows you to apply an Airtable formula used to filter records. [Learn more here](https://support.airtable.com/hc/en-us/articles/203255215-Formula-Field-Reference).
+- `sort`: An array of objects that specifie how the records of a field will be ordered. Each sort object must have a field key specifying the name of the field to sort on, and an optional direction key that is either "asc" or "desc". The default direction is "asc".
 
 ## Table Types
 
@@ -328,12 +351,11 @@ If you want to customize how the Airtable CMS integration handles your data, you
 ```typescript
 // src/tables/OwnTableType.ts
 
-import { Jovo } from '@jovotech/framework';
 import { AirtableCmsTable, AirtableCmsTableConfig } from '@jovotech/cms-airtable';
 
 export class OwnTableType extends AirtableCmsTable {
   getDefaultConfig(): AirtableCmsTableConfig {
-    return { range: 'A:B' };
+    return {};
   }
 
   parse(values: unknown[][]): unknown {
