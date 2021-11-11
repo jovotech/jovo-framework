@@ -34,17 +34,17 @@ export class AirtableCms extends Plugin<AirtableCmsConfig> {
 
     if (!this.config.apiKey) {
       throw new JovoError({
-        message: `Can't find api key`,
+        message: 'apiKey has to be set',
         hint: 'To use the Airtable integration you have to provide a valid api key',
-        learnMore: 'You can find your api key on https://airtable.com/api',
+        learnMore: 'https://www.jovo.tech/docs/cms/airtable#configuration',
       });
     }
 
     if (!this.config.baseId) {
       throw new JovoError({
-        message: `Can't find baseId`,
+        message: 'baseId has to bet set',
         hint: 'To use the Airtable integrations you have to provide a baseId',
-        learnMore: 'You can find your baseId on https://airtable.com/api',
+        learnMore: 'https://www.jovo.tech/docs/cms/airtable#configuration',
       });
     }
 
