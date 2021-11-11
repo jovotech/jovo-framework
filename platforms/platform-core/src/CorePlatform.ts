@@ -21,12 +21,13 @@ export class CorePlatform extends Platform<
   CorePlatform,
   CorePlatformConfig
 > {
-  outputTemplateConverterStrategy = new CoreOutputTemplateConverterStrategy();
-  requestClass = CoreRequest;
-  jovoClass = Core;
-  userClass = CoreUser;
-  deviceClass = CoreDevice;
-  requestBuilder = CoreRequestBuilder;
+  readonly id: string = 'core';
+  readonly outputTemplateConverterStrategy = new CoreOutputTemplateConverterStrategy();
+  readonly requestClass = CoreRequest;
+  readonly jovoClass = Core;
+  readonly userClass = CoreUser;
+  readonly deviceClass = CoreDevice;
+  readonly requestBuilder = CoreRequestBuilder;
 
   getDefaultConfig(): CorePlatformConfig {
     return {
