@@ -3,8 +3,11 @@ import colorize from 'json-colorizer';
 import _get from 'lodash.get';
 import _set from 'lodash.set';
 import _unset from 'lodash.unset';
-import { HandleRequest, Jovo } from '../index';
+import _merge from 'lodash.merge';
+
+import { HandleRequest, Jovo, Logger } from '../index';
 import { Plugin, PluginConfig } from '../Plugin';
+import { ISettingsParam } from '@jovotech/common';
 
 declare module '../interfaces' {
   interface RequestData {
@@ -48,6 +51,7 @@ export interface BasicLoggingConfig extends PluginConfig {
       NULL_LITERAL?: string;
     };
   };
+  libConfig?: ISettingsParam;
 }
 
 export class BasicLogging extends Plugin<BasicLoggingConfig> {
@@ -55,7 +59,7 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
     return {
       skipTests: true,
       enabled: true,
-      request: false,
+      request: true,
       maskValue: '[ Hidden ]',
       requestObjects: [],
       maskedRequestObjects: [],
@@ -75,6 +79,11 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
         },
       },
     };
+  }
+
+  constructor(config: BasicLoggingConfig) {
+    super(config);
+    Logger.setSettings(_merge(Logger.settings, config.libConfig));
   }
 
   mount(parent: HandleRequest): Promise<void> | void {

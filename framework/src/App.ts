@@ -5,6 +5,7 @@ import {
   I18NextOptions,
   IntentMap,
   Jovo,
+  Logger,
   Middleware,
   MiddlewareFunction,
   Plugin,
@@ -47,7 +48,6 @@ export type AppMiddlewares = AppMiddleware[];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AppErrorListener = (error: Error, jovo?: Jovo) => any;
-
 export interface AppRoutingConfig {
   intentMap?: IntentMap;
   intentsToSkipUnhandled?: string[];
@@ -77,7 +77,9 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
     } else if (typeof this.config.logging === 'object') {
       this.use(new BasicLogging(this.config.logging));
     }
-
+    this.onError((error, jovo) => {
+      Logger.error(error);
+    });
     this.use(new RouterPlugin(), new HandlerPlugin(), new OutputPlugin());
 
     this.componentTree = new ComponentTree(...(config?.components || []));
