@@ -161,7 +161,7 @@ new AirtableCms({
 });
 ```
 
-If you define your sheet as `TranslationsTable`, the integration expects a sheet of at least two columns:
+If you define your table as `TranslationsTable`, the integration expects a table of at least two columns:
 
 - keys, e.g. `welcome` or `bye`
 - a locale, such as `en` or `en-US` (you can add as many locale columns as you like)
@@ -257,7 +257,7 @@ this.$cms.yourTable.apple.taste;
 
 ### ObjectArrayTable
 
-If you define your sheet as `ObjectArrayTable`, you will receive an array of objects where each row is converted to an object with the first row specifying the keys.
+If you define your table as `ObjectArrayTable`, you will receive an array of objects where each row is converted to an object with the first row specifying the keys.
 
 ```typescript
 import { AirtableCms, ObjectArrayTable } from '@jovotech/cms-airtable';
@@ -310,12 +310,12 @@ this.$cms.yourTable[0].taste;
 If you want to customize how the Airtable CMS integration handles your data, you can build your own table type and use it inside your app configuration.
 
 ```typescript
-// src/sheets/OwnTableType.ts
+// src/tables/OwnTableType.ts
 
 import { Jovo } from '@jovotech/framework';
 import { AirtableCmsTable, AirtableCmsTableConfig } from '@jovotech/cms-airtable';
 
-export class OwnSheetType extends AirtableCmsTable {
+export class OwnTableType extends AirtableCmsTable {
   getDefaultConfig(): AirtableCmsTableConfig {
     return { range: 'A:B' };
   }
@@ -351,7 +351,7 @@ The plugin consists of two functions:
 You can also extend the table config:
 
 ```typescript
-// src/sheets/OwnTableType.ts
+// src/tables/OwnTableType.ts
 
 export interface OwnTableTypeConfig extends AirtableCmsTableConfig {
   configKey: string;
