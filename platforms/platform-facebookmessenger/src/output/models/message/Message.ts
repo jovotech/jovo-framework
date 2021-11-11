@@ -1,4 +1,5 @@
 import {
+  ArrayMaxSize,
   formatValidationErrors,
   IsArray,
   IsEitherValid,
@@ -10,7 +11,11 @@ import {
   validate,
   ValidateNested,
 } from '@jovotech/output';
-import { MESSAGE_TEXT_MAX_LENGTH, PAYLOAD_MAX_LENGTH } from '../../constants';
+import {
+  MESSAGE_TEXT_MAX_LENGTH,
+  PAYLOAD_MAX_LENGTH,
+  QUICK_REPLIES_MAX_SIZE,
+} from '../../constants';
 import { TransformQuickReply } from '../../decorators/transformation/TransformQuickReply';
 import { QuickReply } from '../quick-reply/QuickReply';
 import { MessageAttachment } from './MessageAttachment';
@@ -54,6 +59,7 @@ export class Message {
 
   @IsOptional()
   @IsArray()
+  @ArrayMaxSize(QUICK_REPLIES_MAX_SIZE)
   @ValidateNested({ each: true })
   @TransformQuickReply()
   quick_replies?: QuickReply[];

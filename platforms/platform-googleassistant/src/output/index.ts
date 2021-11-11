@@ -47,6 +47,6 @@ registerOutputPlatform('googleAssistant', NormalizedGoogleAssistantOutputTemplat
 
 export * from './models';
 export * from './constants';
-
+export * from './NextSceneOutput';
 export * from './GoogleAssistantOutputTemplateConverterStrategy';
 export { convertMessageToGoogleAssistantSimple } from './utilities';

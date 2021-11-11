@@ -47,7 +47,6 @@ It includes the following properties:
 - [`locales`](#locales): An array of strings with supported locales. Default: `en`.
 - [`buttons`](#buttons): An array of objects that defines the buttons that can be used in the Debugger.
 
-
 ## locales
 
 The `locales` property defines which locales can be selected in the Debugger:

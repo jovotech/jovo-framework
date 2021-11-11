@@ -44,5 +44,7 @@ export * from './GoogleAssistantRequest';
 export * from './GoogleAssistantResponse';
 export * from './GoogleAssistantLegacyResponse';
 export * from './GoogleAssistantUser';
+export * from './GoogleAssistantHandles';
+
 export * from './interfaces';
 export * from './output';

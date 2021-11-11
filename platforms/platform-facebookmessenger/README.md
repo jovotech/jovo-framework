@@ -99,6 +99,7 @@ Options include:
 - `session`: Session specific config. Take a look at [session data](#session-data) for more information.
 - `senderActions`: Facebook Messenger [sender actions](#sender-actions).
 
+
 ### NLU Integration
 
 Facebook Messenger requests mostly consist of raw text that need to be turned into structured data using a [natural language understanding (NLU) integration](https://v4.jovo.tech/docs/nlu).
@@ -155,6 +156,7 @@ new FacebookMessengerPlatform({
 - `typingIndicator`: This turns typing indicators on when a request was received (in the [`dialogue.start` middleware](https://v4.jovo.tech/docs/ridr-lifecycle#middlewares)) and turns them off when the dialogue lifecycle is completed (in the [`dialogue.end` middleware](https://v4.jovo.tech/docs/ridr-lifecycle#middlewares)).
 
 Note: Although [Instagram](https://v4.jovo.tech/marketplace/platform-instagram) works similar compared to Facebook Messenger, it does not support sender actions at the moment.
+
 
 ## Platform-Specific Features
 
