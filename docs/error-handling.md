@@ -35,6 +35,16 @@ Currently, `onError()` catches the following events:
 - Errors happening during handler execution (`ComponentTreeNode.executeHandler()`)
 - When a platform sends an [`ERROR` request](https://v4.jovo.tech/docs/input#error)
 
+The `jovo` parameter is `undefined` if the error is thrown outside a handler (for example during `initialize()`).
+
+The function that is passed to `onError()` can also be asynchronous:
+
+```typescript
+app.onError(async (error: Error, jovo: Jovo) => {
+  // ...
+});
+```
+
 You can also use `onError()` multiple times:
 
 ```typescript
