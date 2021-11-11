@@ -22,7 +22,7 @@ export function IsOfEitherType(
       constraints: [types],
       options,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: unknown, args: ValidationArguments) {
           if (!value) {
             return false;
           }

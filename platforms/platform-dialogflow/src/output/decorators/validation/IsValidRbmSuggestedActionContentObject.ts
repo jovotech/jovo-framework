@@ -1,13 +1,11 @@
+import { UnknownObject } from '@jovotech/framework';
 import {
   formatValidationErrors,
   IsEitherValid,
   validate,
   ValidationOptions,
 } from '@jovotech/output';
-import {
-  RbmSuggestedActionContent,
-  RbmSuggestionContent,
-} from '../../models/message/rbm/RbmSuggestion';
+import { RbmSuggestedActionContent } from '../../models/message/rbm/RbmSuggestion';
 
 export function IsValidRbmSuggestedActionContentObject(
   validationOptions?: ValidationOptions,
@@ -16,7 +14,7 @@ export function IsValidRbmSuggestedActionContentObject(
     {
       name: 'isValidRbmSuggestedActionContentObject',
       keys: ['dial', 'open_url', 'share_location'],
-      validate: async (value, args) => {
+      validate: async (value: UnknownObject) => {
         const errors = await validate(value);
         if (errors.length) {
           return formatValidationErrors(errors, {

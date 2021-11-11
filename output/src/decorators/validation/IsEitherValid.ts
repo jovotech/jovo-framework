@@ -1,3 +1,4 @@
+import { AnyObject } from '@jovotech/common';
 import {
   formatList,
   isDefined,
@@ -6,23 +7,23 @@ import {
   ValidationOptions,
 } from '../..';
 
-export interface IsEitherValidOptions<T = any> {
+export interface IsEitherValidOptions<T = unknown> {
   name?: string;
   keys: Array<keyof T>;
   validate?: (
-    value: any,
+    value: unknown,
     args: ValidationArguments,
   ) => string | undefined | void | Promise<string | undefined | void>;
 }
 
-export function IsEitherValid<T = any>(
+export function IsEitherValid<T = unknown>(
   options: IsEitherValidOptions<T>,
   validationOptions?: ValidationOptions,
 ): PropertyDecorator {
   if (options.keys.length <= 1) {
     throw new Error('At least 2 keys have to be defined in order to use IsEitherValid.');
   }
-  return function (object: any, propertyKey: string | symbol) {
+  return function (object: AnyObject, propertyKey: string | symbol) {
     registerDecorator({
       name: options.name || 'isEitherValid',
       target: object.constructor,
@@ -31,13 +32,13 @@ export function IsEitherValid<T = any>(
       options: validationOptions,
       async: true,
       validator: {
-        async validate(value: any, args: ValidationArguments) {
+        async validate(value: unknown, args: ValidationArguments) {
           const { keys, validate } = args.constraints[0] as IsEitherValidOptions<T>;
 
           const otherKeys = keys.filter((key) => {
             return key !== args.property;
           });
-          const otherPropertyMap: Partial<Record<keyof T, any>> = {};
+          const otherPropertyMap: Partial<Record<keyof T, unknown>> = {};
 
           for (const key of otherKeys) {
             otherPropertyMap[key] = (args.object as unknown as T)[key];

@@ -242,6 +242,7 @@ export abstract class OutputTemplateConverterStrategy<
     if (this.config.omitWarnings) {
       return;
     }
+    // eslint-disable-next-line no-console
     console.warn(message);
   }
 

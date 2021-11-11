@@ -8,7 +8,7 @@ export class HtmlHandleMessageDirective extends Directive<'Alexa.Presentation.HT
 
   @IsOptional()
   @IsObject()
-  message?: Record<string, any>;
+  message?: Record<string, unknown>;
 
   @IsOptional()
   @ValidateNested()

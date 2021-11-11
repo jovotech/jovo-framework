@@ -1,3 +1,4 @@
+import { AnyObject, UnknownObject } from '@jovotech/common';
 import {
   registerDecorator,
   validate,
@@ -7,10 +8,10 @@ import {
 } from '../..';
 
 export function IsStringOrInstance(
-  classType: new () => any,
+  classType: new () => UnknownObject,
   options?: ValidationOptions,
 ): PropertyDecorator {
-  return function (object: any, propertyKey: string | symbol) {
+  return function (object: AnyObject, propertyKey: string | symbol) {
     registerDecorator({
       name: 'isStringOrInstance',
       target: object.constructor,
@@ -19,7 +20,7 @@ export function IsStringOrInstance(
       options,
       async: true,
       validator: {
-        async validate(value: any, args: ValidationArguments) {
+        async validate(value: string | UnknownObject, args: ValidationArguments) {
           if (typeof value === 'string' && value.length) {
             return true;
           } else if (typeof value === 'object' && value instanceof args.constraints[0]) {

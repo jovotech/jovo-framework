@@ -1,5 +1,5 @@
 import { Entity, JovoSession } from '@jovotech/framework';
-import { ConfirmationStatus, ResolutionPerAuthority, Resolutions } from './output';
+import { ConfirmationStatus, Resolutions } from './output';
 
 export interface Session {
   new: boolean;
@@ -175,6 +175,7 @@ export interface Request {
   arguments?: any[];
   token?: string;
   offsetInMilliseconds?: number;
+  // TODO: Use the same type
   intent?: RequestIntent;
   status?: {
     // Connections.Response

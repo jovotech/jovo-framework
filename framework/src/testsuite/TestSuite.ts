@@ -42,13 +42,15 @@ export type PlatformTypes<PLATFORM extends Platform> = PLATFORM extends Platform
 /**
  * Determines whether the provided response type is of type array or not
  */
-export type PlatformResponseType<PLATFORM extends Platform, RESPONSE extends JovoResponse> =
-  PLATFORM['outputTemplateConverterStrategy'] extends SingleResponseOutputTemplateConverterStrategy<
-    RESPONSE,
-    OutputTemplateConverterStrategyConfig
-  >
-    ? RESPONSE
-    : RESPONSE | RESPONSE[];
+export type PlatformResponseType<
+  PLATFORM extends Platform,
+  RESPONSE extends JovoResponse,
+> = PLATFORM['outputTemplateConverterStrategy'] extends SingleResponseOutputTemplateConverterStrategy<
+  RESPONSE,
+  OutputTemplateConverterStrategyConfig
+>
+  ? RESPONSE
+  : RESPONSE | RESPONSE[];
 
 /**
  * Return type of TestSuite.prototype.run().

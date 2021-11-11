@@ -1,7 +1,9 @@
+import { AnyObject } from '@jovotech/common';
 import { plainToClass } from 'class-transformer';
 import {
   Card,
   Carousel,
+  CarouselItem,
   Message,
   NormalizedOutputTemplate,
   QuickReply,
@@ -9,7 +11,7 @@ import {
   ValidationOptions,
 } from '../src';
 
-function transformAndValidate<T extends Record<string, any> = Record<string, any>>(
+function transformAndValidate<T extends AnyObject = AnyObject>(
   objClass: new () => T,
   obj: T,
   options?: ValidationOptions,
@@ -17,7 +19,7 @@ function transformAndValidate<T extends Record<string, any> = Record<string, any
   return validate(plainToClass(objClass, obj), options);
 }
 
-function testStringProperty<T extends Record<string, any> = Record<string, any>>(
+function testStringProperty<T extends AnyObject = AnyObject>(
   objClass: new () => T,
   propertyKey: keyof T,
   additionalData: Partial<T> = {},
@@ -54,7 +56,7 @@ function testStringProperty<T extends Record<string, any> = Record<string, any>>
   });
 }
 
-function testOptionalStringProperty<T extends Record<string, any> = Record<string, any>>(
+function testOptionalStringProperty<T extends AnyObject = AnyObject>(
   objClass: new () => T,
   propertyKey: keyof T,
   additionalData: Partial<T> = {},
@@ -129,7 +131,7 @@ describe('validation - Card', () => {
       Card,
       {
         title: 'foo',
-        imageUrl: 2 as any,
+        imageUrl: 2 as unknown as string,
       },
       1,
     );
@@ -161,7 +163,7 @@ describe('validation - Carousel', () => {
     await validateAndExpectLength(
       Carousel,
       {
-        items: {} as any,
+        items: {} as unknown as CarouselItem[],
       },
       1,
     );
@@ -179,7 +181,7 @@ describe('validation - Carousel', () => {
     await validateAndExpectLength(
       Carousel,
       {
-        items: [2] as any,
+        items: [2] as unknown as CarouselItem[],
       },
       1,
     );
@@ -188,7 +190,7 @@ describe('validation - Carousel', () => {
     await validateAndExpectLength(
       Carousel,
       {
-        items: [{ title: 2 as any }],
+        items: [{ title: 2 as unknown as string }],
       },
       1,
     );
@@ -226,7 +228,7 @@ describe('validation - OutputTemplate', () => {
     await validateAndExpectLength(
       NormalizedOutputTemplate,
       {
-        message: 2 as any,
+        message: 2 as unknown as string,
       },
       1,
     );
@@ -245,7 +247,7 @@ describe('validation - OutputTemplate', () => {
     await validateAndExpectLength(
       NormalizedOutputTemplate,
       {
-        message: {} as any,
+        message: {} as unknown as string,
       },
       1,
     );
@@ -293,7 +295,7 @@ describe('validation - OutputTemplate', () => {
     await validateAndExpectLength(
       NormalizedOutputTemplate,
       {
-        listen: 3 as any,
+        listen: 3 as unknown as boolean,
       },
       1,
     );
@@ -312,10 +314,18 @@ describe('validation - OutputTemplate', () => {
     await validateAndExpectLength(NormalizedOutputTemplate, {}, 0);
   });
   test('quickReplies - invalid: wrong type', async () => {
-    await validateAndExpectLength(NormalizedOutputTemplate, { quickReplies: {} as any }, 1);
+    await validateAndExpectLength(
+      NormalizedOutputTemplate,
+      { quickReplies: {} as unknown as QuickReply[] },
+      1,
+    );
   });
   test('quickReplies - invalid: invalid element', async () => {
-    await validateAndExpectLength(NormalizedOutputTemplate, { quickReplies: [2] as any }, 1);
+    await validateAndExpectLength(
+      NormalizedOutputTemplate,
+      { quickReplies: [2] as unknown as QuickReply[] },
+      1,
+    );
   });
   test('quickReplies - valid', async () => {
     await validateAndExpectLength(
@@ -329,10 +339,10 @@ describe('validation - OutputTemplate', () => {
     await validateAndExpectLength(NormalizedOutputTemplate, {}, 0);
   });
   test('cards - invalid: wrong type', async () => {
-    await validateAndExpectLength(NormalizedOutputTemplate, { card: 2 as any }, 1);
+    await validateAndExpectLength(NormalizedOutputTemplate, { card: 2 as unknown as Card }, 1);
   });
   test('cards - invalid: invalid object', async () => {
-    await validateAndExpectLength(NormalizedOutputTemplate, { card: {} as any }, 1);
+    await validateAndExpectLength(NormalizedOutputTemplate, { card: {} as unknown as Card }, 1);
   });
   test('cards - valid', async () => {
     await validateAndExpectLength(NormalizedOutputTemplate, { card: { title: 'foo' } }, 0);
@@ -342,10 +352,18 @@ describe('validation - OutputTemplate', () => {
     await validateAndExpectLength(NormalizedOutputTemplate, {}, 0);
   });
   test('collection - invalid: wrong type', async () => {
-    await validateAndExpectLength(NormalizedOutputTemplate, { carousel: 'foo' as any }, 1);
+    await validateAndExpectLength(
+      NormalizedOutputTemplate,
+      { carousel: 'foo' as unknown as Carousel },
+      1,
+    );
   });
   test('collection - invalid: invalid object', async () => {
-    await validateAndExpectLength(NormalizedOutputTemplate, { carousel: { items: {} as any } }, 1);
+    await validateAndExpectLength(
+      NormalizedOutputTemplate,
+      { carousel: { items: {} as unknown as CarouselItem[] } },
+      1,
+    );
   });
   test('collection - valid', async () => {
     await validateAndExpectLength(

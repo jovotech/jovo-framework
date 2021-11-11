@@ -16,6 +16,7 @@ export interface MessagingData {
   postback?: PostbackData;
 }
 
+// TODO: Use the same type
 export interface RequestIdentityData {
   id: string;
 }

@@ -10,7 +10,7 @@ export function EntitySynonymsContainValue(options?: ValidationOptions): Propert
       constraints: [],
       options,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: string[], args: ValidationArguments) {
           const entityValue = (args.object as Entity).value;
           if (!value.includes(entityValue)) {
             args.constraints[0] = '$property must contain exactly one synonym equal to value';

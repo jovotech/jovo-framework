@@ -28,7 +28,7 @@ export enum Platform {
 
 export type PlatformLike = EnumLike<Platform>;
 
-export class Message<P extends Record<string, unknown> = Record<string, unknown>> {
+export class Message {
   @IsOptional()
   @IsEnum(Platform)
   platform?: PlatformLike;

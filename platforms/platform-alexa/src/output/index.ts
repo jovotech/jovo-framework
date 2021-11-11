@@ -6,7 +6,6 @@ import {
   Card as AlexaCard,
   CardType,
   OutputSpeech,
-  OutputSpeechType,
 } from './models';
 import { augmentModelPrototypes } from './utilities';
 

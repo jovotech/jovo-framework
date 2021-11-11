@@ -14,7 +14,7 @@ export function IsValidDirectivesArray(options?: ValidationOptions): PropertyDec
       constraints: [],
       options,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: unknown, args: ValidationArguments) {
           if (!Array.isArray(value)) {
             args.constraints[0] = '$property must be an array of Directives';
             return false;

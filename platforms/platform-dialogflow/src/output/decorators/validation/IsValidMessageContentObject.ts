@@ -5,7 +5,6 @@ import {
   ValidationOptions,
 } from '@jovotech/output';
 import { MessageContent } from '../../models/Message';
-import { RbmSuggestionContent } from '../../models/message/rbm/RbmSuggestion';
 
 const KEYS: Array<keyof MessageContent> = [
   'text',

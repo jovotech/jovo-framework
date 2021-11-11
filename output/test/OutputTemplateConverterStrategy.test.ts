@@ -3,6 +3,7 @@ import {
   NormalizedOutputTemplate,
   OutputTemplateConverterStrategy,
   NormalizedPlatformOutputTemplate,
+  OutputTemplateConverterStrategyConfig,
 } from '../src';
 
 class ExampleResponse extends JovoResponse {
@@ -11,19 +12,18 @@ class ExampleResponse extends JovoResponse {
   }
 }
 
-class ExampleStrategy extends OutputTemplateConverterStrategy<ExampleResponse, any> {
+class ExampleStrategy extends OutputTemplateConverterStrategy<
+  ExampleResponse,
+  OutputTemplateConverterStrategyConfig
+> {
   readonly platformName = 'example' as const;
   readonly responseClass = ExampleResponse;
 
-  fromResponse(
-    response: ExampleResponse[] | ExampleResponse,
-  ): NormalizedOutputTemplate | NormalizedOutputTemplate[] {
+  fromResponse(): NormalizedOutputTemplate | NormalizedOutputTemplate[] {
     return [];
   }
 
-  toResponse(
-    output: NormalizedOutputTemplate | NormalizedOutputTemplate[],
-  ): ExampleResponse[] | ExampleResponse {
+  toResponse(): ExampleResponse[] | ExampleResponse {
     return [];
   }
 }

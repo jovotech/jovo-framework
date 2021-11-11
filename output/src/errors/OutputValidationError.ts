@@ -1,4 +1,4 @@
-import { formatValidationErrors, IsString, ValidationError } from '..';
+import { formatValidationErrors, ValidationError } from '..';
 
 export class OutputValidationError extends Error {
   constructor(readonly validationErrors: ValidationError[], readonly prefix = '') {

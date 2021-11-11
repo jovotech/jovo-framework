@@ -14,7 +14,7 @@ export function IsValidOutputSpeechString(
       constraints: [],
       options,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: string, args: ValidationArguments) {
           const type = (args.object as OutputSpeech).type;
           // if there is no type, skip for now because another decorator should take care of that
           if (!type) {

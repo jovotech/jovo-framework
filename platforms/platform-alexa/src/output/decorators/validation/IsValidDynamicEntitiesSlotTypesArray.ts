@@ -23,7 +23,7 @@ export function IsValidDynamicEntitiesSlotTypesArray(
       options,
       async: true,
       validator: {
-        async validate(value: any, args: ValidationArguments) {
+        async validate(value: unknown, args: ValidationArguments) {
           const behavior = (args.object as DialogUpdateDynamicEntitiesDirective).updateBehavior;
 
           if (behavior === DynamicEntitiesUpdateBehavior.Replace) {

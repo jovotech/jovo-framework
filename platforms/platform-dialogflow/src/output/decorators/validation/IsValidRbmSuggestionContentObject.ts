@@ -1,3 +1,4 @@
+import { UnknownObject } from '@jovotech/framework';
 import {
   formatValidationErrors,
   IsEitherValid,
@@ -13,7 +14,7 @@ export function IsValidRbmSuggestionContentObject(
     {
       name: 'isValidRbmSuggestionContentObject',
       keys: ['action', 'reply'],
-      validate: async (value, args) => {
+      validate: async (value: UnknownObject) => {
         const errors = await validate(value);
         if (errors.length) {
           return formatValidationErrors(errors, {

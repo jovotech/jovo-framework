@@ -1,10 +1,11 @@
+import { AnyObject, UnknownObject } from '@jovotech/common';
 import { registerDecorator, ValidationArguments, ValidationOptions } from '../..';
 
-export function ConditionalMaxLength<T = any>(
+export function ConditionalMaxLength<T = UnknownObject>(
   conditionFn: (obj: T) => number,
   options?: ValidationOptions,
 ): PropertyDecorator {
-  return function (object: any, propertyKey: string | symbol) {
+  return function (object: AnyObject, propertyKey: string | symbol) {
     registerDecorator({
       name: 'conditionalMaxLength',
       target: object.constructor,
@@ -12,7 +13,7 @@ export function ConditionalMaxLength<T = any>(
       constraints: [conditionFn],
       options,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: string, args: ValidationArguments) {
           if (!value) {
             return false;
           }
