@@ -26,7 +26,10 @@ const plugin: Plugin = {
       );
     }
 
-    // this is probably not working because the new reactivity system of vue is much worse in v3
+    // Issue: It seems like it is impossible to attach reactive data to jovo from a plugin.
+    // This means that compared to the vue2-variant, this will require workarounds to use properties of the client.
+    // Another solution would be to simply add the client to the data of the Root-component and provide it from there.
+    // This would fix the reactivity issue.
     app.config.globalProperties.$client = reactive(new Client(config.url, config.client));
   },
 };
