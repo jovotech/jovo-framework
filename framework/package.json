@@ -37,7 +37,6 @@
     "ts-mixer": "^6.0.0",
     "ts-toolbelt": "^9.6.0",
     "type-fest": "^2.5.1",
-    "tslog": "^3.2.2",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
