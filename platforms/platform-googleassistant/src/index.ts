@@ -46,4 +46,3 @@ export * from './GoogleAssistantLegacyResponse';
 export * from './GoogleAssistantUser';
 export * from './interfaces';
 export * from './output';
-export * from './output-legacy';
