@@ -1,9 +1,4 @@
 import { AnyObject, App, ExtensibleConfig, Jovo, Platform } from '@jovotech/framework';
-import {
-  GoogleAssistantOutputTemplateConverterStrategy,
-  GoogleAssistantResponse,
-} from '@jovotech/output-googleassistant';
-
 import _mergeWith from 'lodash.mergewith';
 import { v4 as uuidV4 } from 'uuid';
 import { GoogleAssistant } from './GoogleAssistant';
@@ -11,7 +6,9 @@ import { GoogleAssistantDevice } from './GoogleAssistantDevice';
 import { GoogleAssistantRepromptComponent } from './GoogleAssistantRepromptComponent';
 import { GoogleAssistantRequest } from './GoogleAssistantRequest';
 import { GoogleAssistantRequestBuilder } from './GoogleAssistantRequestBuilder';
+import { GoogleAssistantResponse } from './GoogleAssistantResponse';
 import { GoogleAssistantUser } from './GoogleAssistantUser';
+import { GoogleAssistantOutputTemplateConverterStrategy } from './output';
 
 export interface GoogleAssistantConfig extends ExtensibleConfig {}
 

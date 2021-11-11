@@ -64,8 +64,8 @@ export abstract class Server {
    * }
    *
    */
-  getRequestHeaders() {
-    const headers = this.getNativeRequestHeaders();
+  getRequestHeaders(): Headers {
+    const headers: Headers = this.getNativeRequestHeaders();
     return Object.keys(headers).reduce((destination: Headers, key: string) => {
       destination[key.toLowerCase()] = headers[key];
       return destination;
