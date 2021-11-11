@@ -9,7 +9,7 @@
     "bundle:dev": "npm run bundle -- \"src/app.dev.ts\"",
     "bundle:prod": "npm run bundle -- \"src/app.prod.ts\" --minify",
     "prebundle": "rimraf bundle",
-    "bundle": "esbuild --bundle --sourcemap --platform=node --outfile=bundle/index.js",
+    "bundle": "esbuild --bundle --outfile=bundle/index.js --sourcemap --minify --keep-names --platform=node --target=node14 --format=cjs  --external:aws-sdk --external:@oclif/* --external:@jovotech/cli*",
     "postbundle": "cd bundle && bestzip ../bundle.zip * && cd ..",
     "eslint": "eslint src test --fix --ext .ts",
     "test": "jest"
