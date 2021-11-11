@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/server-express",
-  "version": "4.0.0-beta.8",
+  "version": "4.0.0-beta.9",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@aws-sdk/types": "^3.6.1",
-    "@jovotech/framework": "^4.0.0-beta.8",
+    "@jovotech/framework": "^4.0.0-beta.9",
     "@types/jest": "^26.0.20",
     "@types/node": "^10.17.50",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
@@ -42,7 +42,7 @@
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
-    "@jovotech/framework": "4.0.0-beta.8"
+    "@jovotech/framework": "4.0.0-beta.9"
   },
   "gitHead": "9c310ac282a2e19bb9d3f269badd99e2a01dd71b",
   "prettier": "../../.prettierrc.js",
