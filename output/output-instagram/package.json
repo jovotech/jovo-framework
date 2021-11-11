@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/output-instagram",
-  "version": "4.0.0-beta.1",
+  "version": "4.0.0-beta.2",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
   "es2015": "dist/esm2015/index.js",
@@ -20,10 +20,10 @@
     "test": "jest"
   },
   "dependencies": {
-    "@jovotech/output-facebookmessenger": "^4.0.0-beta.8"
+    "@jovotech/output-facebookmessenger": "^4.0.0-beta.9"
   },
   "devDependencies": {
-    "@jovotech/output": "^4.0.0-beta.7",
+    "@jovotech/output": "^4.0.0-beta.8",
     "@types/jest": "^26.0.20",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
@@ -38,7 +38,7 @@
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
-    "@jovotech/output": "4.0.0-beta.7"
+    "@jovotech/output": "4.0.0-beta.8"
   },
   "bugs": {
     "url": "https://github.com/jovotech/jovo-framework/issues"

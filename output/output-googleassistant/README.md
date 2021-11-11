@@ -2,6 +2,7 @@
 title: 'Google Assistant Output'
 excerpt: 'Learn more about Jovo output templates for Google Assistant Output.'
 ---
+
 # Google Assistant Output
 
 Learn more about output templates for [Google Assistant](https://v4.jovo.tech/marketplace/platform-googleassistant).
@@ -33,7 +34,6 @@ You can also add platform-specific output to an output template. [Learn more abo
 }
 ```
 
-
 ## Generic Output Elements
 
 Generic output elements are in the root of the output template and work across platforms. [Learn more in the Jovo output template docs](https://v4.jovo.tech/docs/output-templates).
@@ -43,9 +43,9 @@ Below, you can find a list of generic output elements that work with Google Assi
 - [`message`](#message)
 - [`reprompt`](#reprompt)
 - [`listen`](#listen)
-- [`quickReplies`](#quickreplies-suggestions) (called *suggestions* in Google Assistant)
+- [`quickReplies`](#quickreplies-suggestions) (called _suggestions_ in Google Assistant)
 - [`card`](#card)
-- [`carousel`](#carousel) (called *collection* in Google Assistant)
+- [`carousel`](#carousel) (called _collection_ in Google Assistant)
 
 ### message
 
@@ -114,7 +114,7 @@ Under the hood, Jovo translates the `reprompt` into `NO_INPUT_1`, `NO_INPUT_2`, 
 
 ### listen
 
-The [`listen` element](https://v4.jovo.tech/docs/output-templates#listen)  determines if Google Assistant should keep the microphone open and wait for a user's response.
+The [`listen` element](https://v4.jovo.tech/docs/output-templates#listen) determines if Google Assistant should keep the microphone open and wait for a user's response.
 
 By default (if you don't specify it otherwise in the template), `listen` is set to `true`. If you want to close a session after a response, you need to set it to `false`:
 
@@ -136,7 +136,7 @@ The [generic `quickReplies` element](https://v4.jovo.tech/docs/output-templates#
 ```typescript
 {
   // ...
-  quickReplies: [ 'Yes', 'No' ]
+  quickReplies: ['Yes', 'No'],
 }
 ```
 
@@ -157,19 +157,17 @@ Under the hood, Jovo translates `quickReplies` into the following:
 
 If you define your `quickReplies` using objects instead of strings, the `text` property will be used for the resulting `title`:
 
-
 ```typescript
 {
   quickReplies: [
     {
       text: 'oh yeah', // this is used for 'title'
-      value: 'yes'
+      value: 'yes',
     },
     // ...
-  ]
+  ],
 }
 ```
-
 
 ### card
 
@@ -197,7 +195,7 @@ Under the hood, this gets translated into the following object as part of the re
     "text": "Welcome to this new app built with Jovo.", // Taken from 'content'
     "image": {
       "alt": "Hello world!", // Taken from 'title'
-      "url": "https://...",
+      "url": "https://..."
     }
   }
 }
@@ -205,7 +203,7 @@ Under the hood, this gets translated into the following object as part of the re
 
 ### carousel (Collection)
 
-A [generic `carousel` element](https://v4.jovo.tech/docs/output-templates#carousel) is a horizontally scrollable set of [`card`](#card) items. In Google Assistant, this is called a *collection*. [Learn more in the official Google Assistant docs](https://developers.google.com/assistant/conversational/prompts-selection?hl=en#collection).
+A [generic `carousel` element](https://v4.jovo.tech/docs/output-templates#carousel) is a horizontally scrollable set of [`card`](#card) items. In Google Assistant, this is called a _collection_. [Learn more in the official Google Assistant docs](https://developers.google.com/assistant/conversational/prompts-selection?hl=en#collection).
 
 ```typescript
 {
@@ -246,10 +244,9 @@ A [generic `carousel` element](https://v4.jovo.tech/docs/output-templates#carous
 
 It includes the following properties:
 
-* `selection` (required): This is used to map a selection of an item to both an `intent` and an `entityType`. The type is needed to create a type override ([see official Google documentation](https://developers.google.com/assistant/conversational/webhooks?hl=en&tool=builder#runtime_type_overrides)).
-* `items` (required): An array of elements to be displayed. They also need to include a `selection` property with an `entities` map.
-* `title` (optional): A string that gets displayed at the top.
-
+- `selection` (required): This is used to map a selection of an item to both an `intent` and an `entityType`. The type is needed to create a type override ([see official Google documentation](https://developers.google.com/assistant/conversational/webhooks?hl=en&tool=builder#runtime_type_overrides)).
+- `items` (required): An array of elements to be displayed. They also need to include a `selection` property with an `entities` map.
+- `title` (optional): A string that gets displayed at the top.
 
 ## Google Assistant Output Elements
 
@@ -285,7 +282,11 @@ The [`nativeResponse` property](https://v4.jovo.tech/docs/output-templates#nativ
 }
 ```
 
-For example, you can add `scene` information ([see the official Google docs](https://developers.google.com/assistant/conversational/webhooks?hl=en&tool=builder#response-json_4)) like this:
+You can find examples for the [Google Assistant response format in the official Google documentation](https://developers.google.com/assistant/conversational/webhooks?hl=en&tool=builder#example-response).
+
+### scene
+
+By using [`nativeResponse`](#nativeresponse) you can add information about [Google Assistant scenes](https://v4.jovo.tech/marketplace/platform-googleassistant/scenes) like this:
 
 ```typescript
 {
@@ -297,7 +298,7 @@ For example, you can add `scene` information ([see the official Google docs](htt
           name: 'SceneName',
           slots: {},
           next: {
-            name: 'HiddenScene',
+            name: 'SomeScene',
           }
         }
       }
@@ -306,4 +307,4 @@ For example, you can add `scene` information ([see the official Google docs](htt
 }
 ```
 
-You can find examples for the [Google Assistant response format in the official Google documentation](https://developers.google.com/assistant/conversational/webhooks?hl=en&tool=builder#example-response).
+This way, you can transition to a scene (like `SomeScene` in the example above).

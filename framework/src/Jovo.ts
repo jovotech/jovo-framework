@@ -15,7 +15,10 @@ import {
   I18NextAutoPath,
   I18NextResourcesLanguageKeys,
   I18NextResourcesNamespaceKeysOfLanguage,
+  I18NextTFunctionOptions,
+  I18NextTFunctionResult,
   I18NextTOptions,
+  I18NextValueAt,
   JovoInput,
   MetadataStorage,
   OutputConstructor,
@@ -216,14 +219,10 @@ export abstract class Jovo<
       | PATH
       | Array<I18NextAutoPath<PATH, LANGUAGE, NAMESPACE> | PATH>,
     options?: I18NextTOptions<LANGUAGE, NAMESPACE>,
-  ): string {
-    if (!options) {
-      options = {};
-    }
-    if (!options.lng) {
-      options.lng = this.$request.getLocale() as LANGUAGE;
-    }
-    return this.$app.i18n.t<PATH, LANGUAGE, NAMESPACE>(path, options);
+  ): I18NextValueAt<PATH, LANGUAGE, NAMESPACE>;
+  $t<FORCED_RESULT>(path: string | string[], options?: I18NextTFunctionOptions): FORCED_RESULT;
+  $t(path: string | string[], options?: I18NextTFunctionOptions): I18NextTFunctionResult {
+    return this.$app.i18n.t(path, options);
   }
 
   async $send(outputTemplateOrMessage: OutputTemplate | OutputTemplate[] | string): Promise<void>;
