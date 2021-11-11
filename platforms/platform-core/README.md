@@ -59,7 +59,7 @@ The Core Platform has the following default config properties:
 new CorePlatform({
   platform: 'core',
   plugins: [],
-});
+}),
 ```
 
 - `platform`: The `platform` name that you can find in the [request documentation below](#request) can be overridden with this property.
@@ -158,4 +158,34 @@ You can also use this object to see if the request is coming from Core (or a dif
 if (this.$core) {
   // ...
 }
+```
+
+## Custom Platforms
+
+You can create a custom platform based on the Jovo Core Platform using the `createCustomPlatform()` method.
+
+In order to make the type system aware of the new class, some module augmentations have to be done. Here is an example how this is done in the [Jovo Web Platform](https://v4.jovo.tech/marketplace/platform-web):
+
+```typescript
+declare module '@jovotech/framework/dist/types/Extensible' {
+  interface ExtensiblePluginConfig {
+    WebPlatform?: CorePlatformConfig<'web'>;
+  }
+
+  interface ExtensiblePlugins {
+    WebPlatform?: CorePlatform<'web'>;
+  }
+}
+
+declare module '@jovotech/framework/dist/types/Jovo' {
+  interface Jovo {
+    $web?: Core;
+  }
+}
+
+// Create the custom platform class
+const webPlatform = CorePlatform.createCustomPlatform('WebPlatform', 'web');
+
+// Instantiate the class
+const webPlatform = new WebPlatform();
 ```
