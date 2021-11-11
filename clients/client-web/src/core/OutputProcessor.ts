@@ -28,9 +28,14 @@ export class OutputProcessor {
       typeof output.message === 'string'
         ? output.message
         : output.message?.speech || output.message?.text;
-    if (text) {
-      // TODO fully integrate SSML
+    if (!text) {
+      return;
+    }
+
+    if (this.client.ssmlProcessor.isPlainText(text)) {
       await this.client.speechSynthesizer.speak(text);
+    } else {
+      await this.client.ssmlProcessor.processSSML(text);
     }
   }
 }

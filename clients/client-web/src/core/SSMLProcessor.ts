@@ -5,7 +5,7 @@ export const TAG_BREAK = 'break';
 
 export const SUPPORTED_TAGS = [TAG_AUDIO, TAG_BREAK];
 
-export class SSMLHandler {
+export class SSMLProcessor {
   constructor(readonly client: Client) {}
 
   isPlainText(ssml: string): boolean {
@@ -18,13 +18,13 @@ export class SSMLHandler {
     });
   }
 
-  async handleSSML(ssml: string) {
+  async processSSML(ssml: string) {
     const ssmlParts = this.getSSMLParts(ssml);
     for (let i = 0, len = ssmlParts.length; i < len; i++) {
       if (this.isPlainText(ssmlParts[i])) {
         await this.client.speechSynthesizer.speak(ssmlParts[i]);
       } else if (this.isSupportedTag(ssmlParts[i])) {
-        await this.handleSSMLPart(ssmlParts[i]);
+        await this.processSSMLPart(ssmlParts[i]);
       }
     }
   }
@@ -44,7 +44,7 @@ export class SSMLHandler {
     return noSSMLText;
   }
 
-  private async handleSSMLPart(part: string) {
+  private async processSSMLPart(part: string) {
     switch (this.getTag(part)) {
       case TAG_AUDIO:
         const audioSource = this.getAudioSource(part);

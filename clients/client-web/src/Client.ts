@@ -27,6 +27,7 @@ import {
   SpeechRecognizerEvent,
   SpeechSynthesizer,
   SpeechSynthesizerConfig,
+  SSMLProcessor,
   Store,
   StoreConfig,
   VoidListener,
@@ -112,6 +113,7 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
   readonly audioRecorder: AudioRecorder;
   readonly outputProcessor: OutputProcessor;
   readonly repromptProcessor: RepromptProcessor;
+  readonly ssmlProcessor: SSMLProcessor;
   readonly speechRecognizer: SpeechRecognizer;
   readonly speechSynthesizer: SpeechSynthesizer;
   readonly store: Store;
@@ -135,6 +137,7 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
     this.audioRecorder = new AudioRecorder(this.config.input.audioRecorder);
     this.outputProcessor = new OutputProcessor(this);
     this.repromptProcessor = new RepromptProcessor(this);
+    this.ssmlProcessor = new SSMLProcessor(this);
     this.speechRecognizer = new SpeechRecognizer(this.config.input.speechRecognizer);
     this.speechSynthesizer = new SpeechSynthesizer(this.config.output.speechSynthesizer);
     this.store = new Store(this.config.store);

@@ -18,7 +18,7 @@ export * from './interfaces';
 export * from './utilities';
 
 export * from './core/RepromptProcessor';
-export * from './core/SSMLHandler';
+export * from './core/SSMLProcessor';
 
 export * from './errors/NotInitializedError';
 
