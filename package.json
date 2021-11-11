@@ -13,8 +13,11 @@
     "eslint": "lerna exec npm run eslint --ignore @jovotech/examples-* --ignore @jovotech/e2e",
     "rimraf": "lerna exec npm run rimraf --ignore @jovotech/examples-*",
     "test": "lerna exec npm run test --ignore @jovotech/examples-*",
+    "version": "node scripts/update-peer-dependencies.js",
     "preparePublish": "npm run bootstrap && npm run rimraf && npm run prettier && npm run eslint && npm run build && npm run test",
-    "publish": "lerna publish --no-push"
+    "updateVersions": "lerna version --no-push",
+    "publishPackages": "lerna publish from-package",
+    "doPublish": "npm run updateVersions && npm run publishPackages"
   },
   "author": "jovotech",
   "license": "Apache-2.0",
@@ -30,6 +33,8 @@
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "ts-jest": "^26.5.4",
+    "ts-toolbelt": "9.5.13",
     "typescript": "^4.2.3"
-  }
+  },
+  "dependencies": {}
 }

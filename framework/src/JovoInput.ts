@@ -1,3 +1,4 @@
+import { OmitWhere } from '@jovotech/common';
 import { EnumLike } from '@jovotech/output';
 import { AsrData, EntityMap, Intent, NluData } from './interfaces';
 
@@ -13,6 +14,9 @@ export enum InputType {
 
 export const DEFAULT_INPUT_TYPE = InputType.Intent;
 
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type JovoInputObject = Partial<OmitWhere<JovoInput, Function>>;
+
 export type InputTypeLike = EnumLike<InputType> | string;
 
 export interface AudioInput {
@@ -21,6 +25,7 @@ export interface AudioInput {
 }
 
 export class JovoInput {
+  type: InputTypeLike;
   asr?: AsrData;
   nlu?: NluData;
   intent?: NluData['intent'];
@@ -28,7 +33,13 @@ export class JovoInput {
   text?: string;
   audio?: AudioInput;
 
-  constructor(public type: InputTypeLike) {}
+  constructor(typeOrObject: InputTypeLike | JovoInputObject = DEFAULT_INPUT_TYPE) {
+    // make sure a type always exists, due to the possibility of passing a partial input-object, a type could be omitted
+    this.type = typeof typeOrObject === 'string' ? typeOrObject : DEFAULT_INPUT_TYPE;
+    if (typeof typeOrObject === 'object') {
+      Object.assign(this, typeOrObject);
+    }
+  }
 
   getIntentName(): string | undefined {
     function getIntentName(intent: Intent | string): string {

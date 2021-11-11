@@ -99,26 +99,43 @@ export class RoutingExecutor {
     return routeMatches.find((match) => !match.skip);
   }
 
-  private async getRankedGlobalRouteMatches(): Promise<RouteMatch[]> {
-    const globalRouteMatches = await this.getGlobalRouteMatches();
-    return globalRouteMatches.sort(this.compareRouteMatchRanking);
-  }
-
-  private isGlobalHandlerMatching(
+  private isMatchingHandler(
     metadata: HandlerMetadata,
-    componentMetadata: ComponentMetadata,
+    intentNames = metadata.intentNames,
   ): boolean {
+    // do type-matching
     if (metadata.options?.types?.includes(this.jovo.$input.type)) {
       return true;
     }
-    const intentNames = componentMetadata.isGlobal
-      ? metadata.intentNames
-      : metadata.globalIntentNames;
+    // do intent-matching
     const intentName = this.jovo.$input.getIntentName();
     return (
       (intentName && intentNames.includes(intentName)) ||
       intentNames.includes(BuiltInHandler.Unhandled)
     );
+  }
+
+  private async getRankedGlobalRouteMatches(): Promise<RouteMatch[]> {
+    const globalRouteMatches = await this.getGlobalRouteMatches();
+    return globalRouteMatches.sort(this.compareRouteMatchRanking);
+  }
+
+  private isMatchingGlobalHandler(
+    handlerMetadata: HandlerMetadata,
+    componentMetadata: ComponentMetadata,
+  ): boolean {
+    const isGlobal = handlerMetadata.options.global || componentMetadata.isGlobal;
+    // if neither handler nor component is global, abort
+    if (!isGlobal) {
+      return false;
+    }
+    // if the component is global, all intent names are global, otherwise only use global intent names
+    // the reason is, that a handler can not be locally called anyways if the component is global
+    const intentNames = componentMetadata.isGlobal
+      ? handlerMetadata.intentNames
+      : handlerMetadata.globalIntentNames;
+
+    return this.isMatchingHandler(handlerMetadata, intentNames);
   }
 
   private async getGlobalRouteMatches(): Promise<RouteMatch[]> {
@@ -136,7 +153,7 @@ export class RoutingExecutor {
       for (const metadata of relatedHandlerMetadata) {
         // if the conditions are no fulfilled, do not add the handler
         if (
-          !this.isGlobalHandlerMatching(metadata, node.metadata) ||
+          !this.isMatchingGlobalHandler(metadata, node.metadata) ||
           !(await this.areHandlerConditionsFulfilled(metadata))
         ) {
           continue;
@@ -159,15 +176,11 @@ export class RoutingExecutor {
     });
   }
 
-  private isLocalHandlerMatching(metadata: HandlerMetadata, subState?: string): boolean {
-    if (metadata.options?.types?.includes(this.jovo.$input.type)) {
-      return true;
-    }
-    const intentName = this.jovo.$input.getIntentName();
+  private isMatchingLocalHandler(metadata: HandlerMetadata, subState?: string): boolean {
+    // if a subState is passed, make sure the handler has exactly the same subState, otherwise make sure the handler has no subState
     return (
-      ((intentName && metadata.intentNames.includes(intentName)) ||
-        metadata.intentNames.includes(BuiltInHandler.Unhandled)) &&
-      (subState ? metadata.options?.subState === subState : !metadata.options?.subState)
+      (subState ? metadata.options?.subState === subState : !metadata.options?.subState) &&
+      this.isMatchingHandler(metadata)
     );
   }
 
@@ -195,7 +208,7 @@ export class RoutingExecutor {
       for (const metadata of relatedHandlerMetadata) {
         // if the conditions are no fulfilled, do not add the handler
         if (
-          !this.isLocalHandlerMatching(metadata, subState) ||
+          !this.isMatchingLocalHandler(metadata, subState) ||
           !(await this.areHandlerConditionsFulfilled(metadata))
         ) {
           continue;

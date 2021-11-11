@@ -12,7 +12,7 @@ export class MockServer extends Server {
     return {};
   }
 
-  getRequestHeaders(): Headers {
+  getNativeRequestHeaders(): Headers {
     return {};
   }
 

@@ -5,14 +5,14 @@ import { AlexaRequest } from './AlexaRequest';
 import { ProfileProperty, sendCustomerProfileApiRequest } from './api';
 import {
   AbsoluteReminder,
+  deleteReminder,
+  getAllReminders,
+  getReminder,
   RelativeReminder,
   ReminderListResponse,
   ReminderResponse,
   setReminder,
-  getAllReminders,
-  getReminder,
   updateReminder,
-  deleteReminder,
 } from './api/ReminderApi';
 
 export class AlexaUser extends JovoUser<Alexa> {
@@ -20,8 +20,8 @@ export class AlexaUser extends JovoUser<Alexa> {
     super(jovo);
   }
 
-  get id(): string {
-    return this.jovo.$request.session?.user?.userId || 'AlexaUser';
+  get id(): string | undefined {
+    return this.jovo.$request.getUserId();
   }
 
   get accessToken(): string | undefined {

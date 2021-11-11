@@ -21,7 +21,7 @@ const SCRIPTS_MAP = {
   const filteredPackages = await getFilteredPackages(
     packageGraph,
     { cwd },
-    { ignore: ['@jovotech/output', '@jovotech/output-*', '@jovotech/e2e', '@jovotech/examples-*'] },
+    { ignore: ['@jovotech/e2e', '@jovotech/examples-*'] },
   );
 
   const promises = filteredPackages.map((pkg) => {

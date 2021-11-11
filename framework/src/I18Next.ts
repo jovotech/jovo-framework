@@ -1,7 +1,7 @@
-import i18next, { InitOptions, Resource, TOptionsBase } from 'i18next';
+import { AnyObject, OmitIndex } from '@jovotech/common';
+import i18next, { InitOptions, Resource, TFunctionResult, TOptionsBase } from 'i18next';
 import _merge from 'lodash.merge';
-import type { A, F, U } from 'ts-toolbelt';
-import { AnyObject, OmitIndex } from './index';
+import type { A, F, O, S, U } from 'ts-toolbelt';
 
 // Provide an interface that can be augmented in order to provide code-completion for translation-keys.
 export interface I18NextResources extends Resource {}
@@ -33,8 +33,28 @@ export type I18NextAutoPath<
   MERGED = U.Merge<I18NextResources[LANGUAGE]>,
 > = F.AutoPath<MERGED[A.Cast<NAMESPACE, keyof MERGED>], PATH>;
 
+// Type that returns the full path joined by a dot limiter
+export type I18NextFullPath<
+  PATH extends string,
+  LANGUAGE extends I18NextResourcesLanguageKeys | string,
+  NAMESPACE extends I18NextResourcesNamespaceKeysOfLanguage<LANGUAGE> | string,
+> = S.Join<[LANGUAGE, A.Cast<NAMESPACE, string>, PATH], '.'>;
+
+// Type that returns the actual value in I18NextResources relative to the given path, language and namespace
+export type I18NextValueAt<
+  PATH extends string,
+  LANGUAGE extends I18NextResourcesLanguageKeys | string,
+  NAMESPACE extends I18NextResourcesNamespaceKeysOfLanguage<LANGUAGE> | string,
+  RESULT = O.Path<
+    NonIndexedI18NextResources,
+    S.Split<I18NextFullPath<PATH, LANGUAGE, NAMESPACE>, '.'>
+  >,
+> = RESULT extends undefined ? string : RESULT;
+
 // Custom init-options for i18next in case some custom properties are used in the future.
 export interface I18NextOptions extends InitOptions {}
+export type I18NextTFunctionResult = TFunctionResult;
+export type I18NextTFunctionOptions = TOptionsBase;
 
 // Custom t-options for i18next, needed in order to interfere passed language and namespace.
 export interface I18NextTOptions<
@@ -66,6 +86,7 @@ export class I18Next {
       interpolation: {
         escapeValue: false,
       },
+      returnObjects: true,
     };
   }
 
@@ -85,8 +106,9 @@ export class I18Next {
       | PATH
       | Array<I18NextAutoPath<PATH, LANGUAGE, NAMESPACE> | PATH>,
     options?: I18NextTOptions<LANGUAGE, NAMESPACE>,
-  ): string {
-    // "Type argument cannot be inferred from usage"-warning can be ignored, it will be inferred, at least in ts 4.2.4.
+  ): I18NextValueAt<PATH, LANGUAGE, NAMESPACE>;
+  t<FORCED_RESULT>(path: string | string[], options?: I18NextTFunctionOptions): FORCED_RESULT;
+  t(path: string | string[], options?: I18NextTFunctionOptions): I18NextTFunctionResult {
     return this.i18n.t(path, options);
   }
 }

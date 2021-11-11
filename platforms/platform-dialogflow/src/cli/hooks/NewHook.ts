@@ -1,8 +1,10 @@
 import type { NewContext, NewEvents } from '@jovotech/cli-command-new';
 import { Log, PluginHook, promptSupportedLocales } from '@jovotech/cli-core';
+import { DialogflowCli } from '..';
 import { SupportedLocales, SupportedLocalesType } from '../utilities';
 
 export class NewHook extends PluginHook<NewEvents> {
+  $plugin!: DialogflowCli;
   $context!: NewContext;
 
   install(): void {
@@ -27,11 +29,11 @@ export class NewHook extends PluginHook<NewEvents> {
           continue;
         }
 
-        if (!this.$plugin.$config.locales) {
-          this.$plugin.$config.locales = {};
+        if (!this.$plugin.config.locales) {
+          this.$plugin.config.locales = {};
         }
 
-        this.$plugin.$config.locales[locale] = locales;
+        this.$plugin.config.locales[locale] = locales as SupportedLocalesType[];
       }
     }
   }

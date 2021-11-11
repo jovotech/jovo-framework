@@ -1,10 +1,5 @@
-import {
-  CapabilityType,
-  DEFAULT_INPUT_TYPE,
-  InputTypeLike,
-  JovoInput,
-  UnknownObject,
-} from './index';
+import { UnknownObject } from '@jovotech/common';
+import { CapabilityType, DEFAULT_INPUT_TYPE, InputTypeLike, JovoInput } from './index';
 import { JovoInputBuilder } from './JovoInputBuilder';
 import { JovoSession } from './JovoSession';
 
@@ -13,7 +8,10 @@ export abstract class JovoRequest {
 
   abstract getLocale(): string | undefined;
 
+  abstract setLocale(locale: string): void;
+
   abstract getIntent(): JovoInput['intent'];
+  abstract setIntent(intent: string): void;
   abstract getEntities(): JovoInput['entities'];
 
   abstract getInputType(): InputTypeLike | undefined;
@@ -28,6 +26,12 @@ export abstract class JovoRequest {
       .set('audio', this.getInputAudio())
       .build();
   }
+
+  abstract setSessionData(data: Record<string, unknown>): void;
+
+  abstract getUserId(): string | undefined;
+
+  abstract setUserId(userId: string): void;
 
   abstract getSessionData(): UnknownObject | undefined;
   abstract getSessionId(): string | undefined;

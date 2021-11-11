@@ -6,6 +6,7 @@ import {
   JovoRequest,
   UnknownObject,
 } from '@jovotech/framework';
+
 import { GoogleBusinessCapabilityType } from './GoogleBusinessDevice';
 import { Receipt } from './interfaces';
 
@@ -52,8 +53,20 @@ export class GoogleBusinessRequest extends JovoRequest {
     return this.context?.resolvedLocale || this.context?.userInfo?.userDeviceLocale;
   }
 
+  setLocale(locale: string): void {
+    if (!this.context) {
+      return;
+    }
+
+    this.context.resolvedLocale = locale;
+  }
+
   getIntent(): JovoInput['intent'] {
     return undefined;
+  }
+
+  setIntent(): void {
+    return;
   }
 
   getEntities(): EntityMap | undefined {
@@ -75,14 +88,28 @@ export class GoogleBusinessRequest extends JovoRequest {
   getSessionData(): UnknownObject | undefined {
     return undefined;
   }
+
+  setSessionData(): void {
+    return;
+  }
+
   getSessionId(): string | undefined {
     return this.conversationId;
   }
+
   isNewSession(): boolean | undefined {
     return undefined;
   }
 
   getDeviceCapabilities(): GoogleBusinessCapabilityType[] | undefined {
+    return;
+  }
+
+  getUserId(): string | undefined {
+    return;
+  }
+
+  setUserId(): void {
     return;
   }
 }

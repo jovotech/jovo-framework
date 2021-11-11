@@ -9,6 +9,7 @@ import {
   NluPlugin,
   NluPluginConfig,
 } from '@jovotech/framework';
+
 import { RasaEntity, RasaIntent, RasaResponse } from './interfaces';
 
 export interface RasaNluConfig extends NluPluginConfig {
@@ -84,8 +85,9 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
     }
     entityMap[entityAlias] = {
       id: entityAlias,
-      key: entityAlias,
+      resolved: entityAlias,
       value: rasaEntity.value,
+      native: rasaEntity,
     };
 
     return entityMap;

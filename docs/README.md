@@ -2,6 +2,7 @@
 title: 'Getting Started with the Jovo Framework'
 excerpt: 'Learn how to build your first project with Jovo v4, the framework that lets you create powerful conversational apps that work across voice and chat platforms like Alexa, Google Assistant, Facebook Messenger, the web, and more.'
 ---
+
 # Getting Started
 
 Learn how to build your first project with Jovo `v4`, the framework that lets you create powerful conversational apps that work across voice and chat platforms like Alexa, Google Assistant, Facebook Messenger, the web, and more.
@@ -14,12 +15,11 @@ If you're used to Jovo `v3`, you will see that there are a few differences which
 
 Here are a few of the key concepts of Jovo `v4`:
 
-* [Components](./components.md): A component can be seen as the equivalent of a *state* in Jovo `v3`. A Jovo app usually consists of multiple components. Each component has its own file that may contain multiple handlers.
-* [Handlers](./handlers.md): A handler responds to a certain type of request (for example, an intent) and contains the app logic. A handler can delegate to other components and return output.
-* [Output](./output.md): Using the `$send` method, you can return structured output that is then translated into a native platform response.
+- [Components](./components.md): A component can be seen as the equivalent of a _state_ in Jovo `v3`. A Jovo app usually consists of multiple components. Each component has its own file that may contain multiple handlers.
+- [Handlers](./handlers.md): A handler responds to a certain type of request (for example, an intent) and contains the app logic. A handler can delegate to other components and return output.
+- [Output](./output.md): Using the `$send()` method, you can return structured output that is then translated into a native platform response.
 
 In this guide, we will take a look at [first steps with Jovo](#first-steps-with-jovo) by installing a new project, and then go from there with [next steps](#next-steps).
-
 
 ## First Steps with Jovo
 
@@ -41,7 +41,6 @@ $ jovov4 -v
 
 **A note on versions:** For Jovo `v4`, we're moving to [organization scoped packages](https://docs.npmjs.com/creating-and-publishing-an-organization-scoped-package). Instead of e.g. `jovo-cli`, you are now installing `@jovotech/cli`. This is especially helpful for the beta phase: You will still be able to use the `jovo-cli` package with the CLI name `jovo` in parallel with the `@jovotech/cli` package and the CLI name `jovov4`.
 
-
 ### Create a new Project
 
 After installing the Jovo CLI, you can install the template (which can be found in [this repository](https://github.com/jovotech/jovo-v4-template)) using the `new` command:
@@ -54,27 +53,26 @@ This will download the template into a new `<directory>` folder and install all 
 
 By using the "select features manually" option, you can choose which platforms you want to build Jovo apps for.
 
-
 ### A Look at the Project Structure
 
 Change your working directory into your newly created project and open it in the code editor of your choice.
 
 ```sh
 $ cd <directory>
-``` 
+```
 
 The [Jovo `v4` template](https://github.com/jovotech/jovo-v4-template) includes the following key folders and files:
 
-* `jovo.project.js`: This file contains the [Jovo project configuration](./project-config.md) that is used by the Jovo CLI.
-* `models`: This folder contains the [Jovo Model files](./models.md).
-* `src`: This folder contains the actual app logic.
+- `jovo.project.js`: This file contains the [Jovo project configuration](./project-config.md) that is used by the Jovo CLI.
+- `models`: This folder contains the [Jovo Model files](./models.md).
+- `src`: This folder contains the actual app logic.
 
 Here are all the files and folders inside `src`:
 
-* `app.ts`: This file contains the default [Jovo app configuration](./app-config.md). Plugins and other configurations are added here.
-* `app.dev.ts`: This file contains the app configuration for local development (`dev` stage). [Learn more about staging here](./staging.md).
-* `components`: This folder contains all [components](./components.md). In this example, a `GlobalComponent` and a `LoveHatePizzaComponent`.
-* `output`: This folder contains all [output classes](./output-classes.md), which offer a modular way to return structured output. This example includes a `YesNoOutput` class that is used by th `START` handler of the `LoveHatePizzaComponent`.
+- `app.ts`: This file contains the default [Jovo app configuration](./app-config.md). Plugins and other configurations are added here.
+- `app.dev.ts`: This file contains the app configuration for local development (`dev` stage). [Learn more about staging here](./staging.md).
+- `components`: This folder contains all [components](./components.md). In this example, a `GlobalComponent` and a `LoveHatePizzaComponent`.
+- `output`: This folder contains all [output classes](./output-classes.md), which offer a modular way to return structured output. This example includes a `YesNoOutput` class that is used by th `START` handler of the `LoveHatePizzaComponent`.
 
 If we take a look at the `GlobalComponent`, we can find a `LAUNCH` [handler](./handlers.md) that is executed for users who open the app:
 
@@ -106,7 +104,6 @@ hatesPizza() {
 }
 ```
 
-
 ### Run the Local Development Server
 
 You can test the app code by running the local development server from the project directory:
@@ -115,7 +112,7 @@ You can test the app code by running the local development server from the proje
 $ jovov4 run
 ```
 
-You can now open the Jovo Debugger with the `.` key. 
+You can now open the Jovo Debugger with the `.` key.
 
 **Note:** The v4 Debugger can be reached using `webhookv4.jovo.cloud` instead of `webhook.jovo.cloud`.
 
@@ -125,8 +122,8 @@ You can then use the request buttons or type input to test the flow of the app.
 
 Here are a few things you can do to extend the app:
 
-* Add more intents and entities to the [Jovo Model](./models.md).
-* Add [handlers](./handlers.md) for these intents to the existing components.
-* Create new [components](./components.md).
-* Learn more about [routing](./routing.md) to understand when which components ad handlers are executed.
-* Learn more about [Jovo properties](./jovo-properties.md) and how to use them.
+- Add more intents and entities to the [Jovo Model](./models.md).
+- Add [handlers](./handlers.md) for these intents to the existing components.
+- Create new [components](./components.md).
+- Learn more about [routing](./routing.md) to understand when which components ad handlers are executed.
+- Learn more about [Jovo properties](./jovo-properties.md) and how to use them.

@@ -2,6 +2,7 @@
 title: 'Snips NLU Integration'
 excerpt: 'Turn raw text into structured meaning with the Jovo Framework integration for the open source natural language understanding service Snips NLU.'
 ---
+
 # Snips NLU Integration
 
 Turn raw text into structured meaning with the Jovo Framework integration for the open source natural language understanding service Snips NLU.
@@ -13,7 +14,6 @@ Turn raw text into structured meaning with the Jovo Framework integration for th
 Since it is an open source service, you can host Snips NLU on your own servers without any external API calls. You can learn how to set up a server in the [official Snips NLU documentation](https://snips-nlu.readthedocs.io/en/latest/).
 
 You can use the Jovo Snips NLU integration for projects where you receive raw text input that needs to be translated into structured meaning to work with the Jovo intent structure. Platforms like the [Jovo Core Platform](https://www.jovo.tech/marketplace/jovo-platform-core) (e.g. in conjunction with the [Jovo Web Client](https://www.jovo.tech/marketplace/jovo-client-web)), [Facebook Messenger](https://www.jovo.tech/marketplace/jovo-platform-facebookmessenger), and [Google Business Messages](https://www.jovo.tech/marketplace/jovo-platform-googlebusiness) are some examples where this would work.
-
 
 ## Installation
 
@@ -60,6 +60,22 @@ new SnipsNlu({
 - `engineId`: This ID gets passed to the Snips NLU server. Default: Random `uuid`.
 - `dynamicEntities`: [See more information about dynamic entities below](#dynamic-entities).
 
+## Entities
+
+You can access Snips slots by using the `$entities` property. You can learn more in the [Jovo Model](https://v4.jovo.tech/docs/models) and the [`$entities` documentation](https://v4.jovo.tech/docs/entities).
+
+The Snips slot values are translated into the following Jovo entity properties:
+
+```typescript
+{
+  value: rawValue, // what the user said
+  resolved: value.value, // the resolved value
+  id: value.value, // same as resolved, since Snips doesn't support IDs
+  native: { /* raw API response for this slot */ }
+}
+```
+
+You can learn more about the Snips slot format in the [official Snips documentation](https://snips-nlu.readthedocs.io/en/latest/data_model.html#slot).
 
 ## Dynamic Entities
 
@@ -86,8 +102,8 @@ new SnipsNlu({
 }),
 ```
 
-* `enabled`: Setting this to `true` will enable the training of dynamic entities.
-* `serverPath`: This is the endpoint of the server that handles the training. Uses the same base `serverUrl` as the [main configuration](#configuration).
-* `passModels`: Since the server trains a new model that includes only the intents that use the dynamic entities, it needs access to the existing language model. You can either modify the server to access them, or pass the models using this NLU integration. If the latter, there are two options:
-  * `modelsDirectory`: Reference the folder that includes all the model files. If you're deploying the app, make sure that the models files are included in the bundle.
-  * `models`: Import the model files and reference them here. This property is prioritized over `modelsDirectory` if both are used.
+- `enabled`: Setting this to `true` will enable the training of dynamic entities.
+- `serverPath`: This is the endpoint of the server that handles the training. Uses the same base `serverUrl` as the [main configuration](#configuration).
+- `passModels`: Since the server trains a new model that includes only the intents that use the dynamic entities, it needs access to the existing language model. You can either modify the server to access them, or pass the models using this NLU integration. If the latter, there are two options:
+  - `modelsDirectory`: Reference the folder that includes all the model files. If you're deploying the app, make sure that the models files are included in the bundle.
+  - `models`: Import the model files and reference them here. This property is prioritized over `modelsDirectory` if both are used.

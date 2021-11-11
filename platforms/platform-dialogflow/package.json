@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/platform-dialogflow",
-  "version": "4.0.0-beta.5",
+  "version": "4.0.0-beta.10",
   "private": true,
   "description": "",
   "main": "dist/cjs/index.js",
@@ -30,7 +30,7 @@
     "@jovotech/cli-command-new": "^4.0.0-beta.4",
     "@jovotech/cli-core": "^4.0.0-beta.4",
     "@jovotech/filebuilder": "^0.0.1",
-    "@jovotech/framework": "^4.0.0-beta.4",
+    "@jovotech/framework": "^4.0.0-beta.9",
     "@jovotech/model": "^4.0.0-beta.3",
     "@jovotech/model-dialogflow": "^4.0.0-beta.3",
     "@jovotech/model-google": "^4.0.0-beta.3",
@@ -69,7 +69,7 @@
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
-    "@jovotech/framework": ">=4.0.0-beta.0 <4.0.0"
+    "@jovotech/framework": "4.0.0-beta.9"
   },
   "browser": {
     "@jovotech/cli-command-build": false,

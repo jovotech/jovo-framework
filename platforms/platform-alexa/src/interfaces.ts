@@ -1,4 +1,4 @@
-import { JovoSession } from '@jovotech/framework';
+import { Entity, JovoSession } from '@jovotech/framework';
 
 export interface Session {
   new: boolean;
@@ -61,7 +61,7 @@ export interface Speed {
   accuracyInMetersPerSecond?: number; // [0, MAX_INTEGER]
 }
 
-export type PermissionStatus = 'GRANTED' | 'DENIED' | 'ACCEPTED' | 'NOT_ANSWERED';
+export type PermissionStatus = 'DENIED' | 'ACCEPTED' | 'NOT_ANSWERED';
 
 export interface System {
   application: Application;
@@ -181,13 +181,17 @@ export interface AuthorityResolutionValueItem {
 
 export interface AuthorityResolutionValue {
   name: string;
-  id: string;
+  id?: string;
 }
 
 export interface Intent {
   name: string;
   confirmationStatus?: ConfirmationStatus;
   slots?: { [key: string]: Slot };
+}
+
+export interface AlexaEntity extends Entity {
+  native: Slot;
 }
 
 export interface Request {
@@ -231,13 +235,3 @@ export interface Request {
   eventPublishingTime?: string; // AlexaSkillEvent.*
   dialogState?: string;
 }
-
-// export interface AlexaInput extends Input {
-//   alexaSkill: {
-//     name?: string;
-//     value?: string;
-//     confirmationStatus?: string;
-//     source?: string;
-//     resolutions?: Resolutions;
-//   };
-// }

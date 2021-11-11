@@ -2,6 +2,7 @@
 title: 'Handlers'
 excerpt: 'Learn more about Jovo Handlers, which are methods inside a Jovo Component that are responsible for handling a request and returning output.'
 ---
+
 # Handlers
 
 Handlers are methods inside a [Jovo component](./components.md) that are responsible for handling a request and returning output.
@@ -12,7 +13,7 @@ Handlers are methods inside a [Jovo component](./components.md) that are respons
 
 A handler can fulfill multiple types of requests, like intents and touch selections, and then return output.
 
-A component usually has multiple handlers. The `@Handle` decorator is used to define which handler should be responsible for which type of request. For example, one or multiple intents could be added as intents, and a handler could be even more specialized if you added conditions like platforms. [Learn more about handler routing below](#handler-routing-and-state-management).
+A component usually has multiple handlers. The `@Handle` decorator is used to define which handler should be responsible for which type of request. For example, one or multiple intents could be added as intents, and a handler could be even more specialized if you added conditions like platforms. [Learn more about handler routing below](#handler-routing-and-the-handle-decorator).
 
 ```typescript
 import { Handle } from '@jovotech/framework';
@@ -24,7 +25,8 @@ yourHandler() {
   // ...
 }
 ```
-The inside of a handler defines its logic. In the end, each handler should either return some output using the `$send` method, or redirect/delegate to a different handler or component. [Learn more about handler logic below](#handler-logic).
+
+The inside of a handler defines its logic. In the end, each handler should either return some output using the `$send()` method, or redirect/delegate to a different handler or component. [Learn more about handler logic below](#handler-logic).
 
 ```typescript
 import { SomeOutput } from './output/SomeOutput';
@@ -32,13 +34,12 @@ import { SomeOutput } from './output/SomeOutput';
 // ...
 
 yourHandler() {
-  
+
   // ...
 
   return this.$send(SomeOutput, { /* output options */ });
 }
 ```
-
 
 ## Handler Routing and the Handle Decorator
 
@@ -71,9 +72,8 @@ showMenu() {
 
 The `@Handle` includes two types of properties:
 
-* [Routing properties](#routing-properties): The router first looks if the handler matches a specific route, e.g. [`intents`](#intents) or [`types](#types).
-* [Condition properties](#condition-properties): After that, it is evaluated if there are additional conditions that have to be fulfilled, e.g. [`platforms`](#platforms).
-
+- [Routing properties](#routing-properties): The router first looks if the handler matches a specific route, e.g. [`intents`](#intents) or [`types](#types).
+- [Condition properties](#condition-properties): After that, it is evaluated if there are additional conditions that have to be fulfilled, e.g. [`platforms`](#platforms).
 
 ### Routing Properties
 
@@ -81,11 +81,11 @@ Routing properties define the core elements a router is looking for when determi
 
 They include:
 
-* [`intents`](#intents)
-* [`types`](#types)
-* [`global`](#global-handlers)
-* [`subState`](#substate)
-* [`prioritizedOverUnhandled`](#prioritizedOverUnhandled)
+- [`intents`](#intents)
+- [`types`](#types)
+- [`global`](#global-handlers)
+- [`subState`](#substate)
+- [`prioritizedOverUnhandled`](#prioritizedOverUnhandled)
 
 #### Intents
 
@@ -249,7 +249,7 @@ showMenu() {
 
 #### SubState
 
-As components have their own state management system, we usually recommend using the `$delegate` method if you have steps that need an additional state. However, sometimes it might be more convenient to have all handlers in one component.
+As components have their own state management system, we usually recommend using the `$delegate()` method if you have steps that need an additional state. However, sometimes it might be more convenient to have all handlers in one component.
 
 For this, you can set a `$subState` in your handlers
 
@@ -264,8 +264,8 @@ $state = [
   {
     component: 'YourComponent',
     subState: 'YourSubState',
-  }
-]
+  },
+];
 ```
 
 You can then add `subState` to your `@Handle` decorator to make sure that this handler only responds to requests of this specific state.
@@ -329,8 +329,9 @@ Condition properties are additional elements that need to be fulfilled for a han
 
 Currently, they include:
 
-* [`platforms`](#platforms)
-* [`if`](#if)
+- [`platforms`](#platforms)
+- [`if`](#if)
+
 #### Platforms
 
 You can specify that a handler is only responsible for specific platforms. The `platforms` property is an array of strings with the names of each platform in camel case:
@@ -392,7 +393,6 @@ yourHandler() {
 }
 ```
 
-
 ### Handler Prioritization
 
 It's possible that multiple handlers are able to fulfill a request, for example:
@@ -418,7 +418,6 @@ If this is the case, the handler with more conditions is the one being prioritiz
 
 [Learn more about handler prioritization in the routing docs](./routing.md#handler-and-component-prioritization).
 
-
 ## Handler Logic
 
 Inside a handler is typically where the conversational logic is happening.
@@ -427,7 +426,7 @@ You can access all Jovo-related methods using the `this` context. For example, t
 
 ```typescript
 yourHandler() {
-  
+
   // ...
 
   this.$user.data.someKey = 'someValue';
@@ -438,10 +437,10 @@ yourHandler() {
 
 A handler usually concludes with one of these tasks:
 
-* [Return output using `$send`](#return-output)
-* [Redirect to a different component using `$redirect`](#redirect-to-components)
-* [Delegate to a component using `$delegate`](#delegate-to-components)
-* [Report back to a delegating component using `$resolve`](#resolve-a-component)
+- [Return output using `$send()`](#return-output)
+- [Redirect to a different component using `$redirect()`](#redirect-to-components)
+- [Delegate to a component using `$delegate()`](#delegate-to-components)
+- [Report back to a delegating component using `$resolve()`](#resolve-a-component)
 
 ### Return Output
 
@@ -449,7 +448,7 @@ In most cases, the goal of a handler is to return output to the user.
 
 ```typescript
 yourHandler() {
-  
+
   // ...
 
   return this.$send(/* output */);
@@ -460,7 +459,7 @@ yourHandler() {
 
 ### Redirect to Components
 
-If you `$redirect` to a different component, the current one is removed from the `$state` stack. You can see this as a permanent redirect.
+If you `$redirect()` to a different component, the current one is removed from the `$state` stack. You can see this as a permanent redirect.
 
 If no handler name is specified, the redirect triggers the other component's `START` handler.
 
@@ -470,7 +469,7 @@ import { AnotherComponent } from './AnotherComponent';
 // ...
 
 yourHandler() {
-  
+
   // ...
 
   return this.$redirect(AnotherComponent);
@@ -485,7 +484,7 @@ import { AnotherComponent } from './AnotherComponent';
 // ...
 
 yourHandler() {
-  
+
   // ...
 
   return this.$redirect(AnotherComponent, 'someHandler');
@@ -500,7 +499,7 @@ import { YesNoComponent } from './YesNoComponent';
 // ...
 
 yourHandler() {
-  
+
   // ...
 
   return this.$delegate(YesNoComponent, {
@@ -523,31 +522,31 @@ onNo() {
 }
 ```
 
-The following options can be added to `$delegate`:
+The following options can be added to `$delegate()`:
 
-* `resolve`: Handlers that should be called after the child component resolves with certain data.
-    * Can include references to handler functions like `this.onYes` (doesn't work with anonymous functions)
-    * Can include a string to the handler key: `'onYes'`
-* `config`: The config that is used by the child component. Can be accessed inside the child component with `this.config`
+- `resolve`: Handlers that should be called after the child component resolves with certain data.
+  - Can include references to handler functions like `this.onYes` (doesn't work with anonymous functions)
+  - Can include a string to the handler key: `'onYes'`
+- `config`: The config that is used by the child component. Can be accessed inside the child component with `this.config`
 
 ### Resolve a Component
 
 In our previous example, a component delegated to another component (e.g. `YesNoComponent`), expecting it to return a specific result.
 
-After successful handling, the delegated component can use `$resolve` to report back:
+After successful handling, the delegated component can use `$resolve()` to report back:
 
 ```typescript
 // YesNoComponent
 
 YesIntent() {
-  
+
   // ...
 
   return this.$resolve('yes');
 }
 ```
 
-The component is then removed from the `$state` stack and the delegating component is called, looking for a handler that matches the event that is passed with `$resolve` (in the above example `yes`).
+The component is then removed from the `$state` stack and the delegating component is called, looking for a handler that matches the event that is passed with `$resolve()` (in the above example `yes`).
 
 ## Handler Types
 
@@ -581,7 +580,6 @@ START() {
   // ...
 }
 ```
-
 
 ### UNHANDLED
 

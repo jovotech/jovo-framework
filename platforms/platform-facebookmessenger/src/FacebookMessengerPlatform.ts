@@ -1,31 +1,45 @@
 import {
   AnyObject,
   App,
+  axios,
+  AxiosError,
+  AxiosResponse,
   Extensible,
   ExtensibleConfig,
   HandleRequest,
+  Jovo,
   JovoError,
   Platform,
   Server,
   StoredElementSession,
+  UnknownObject,
 } from '@jovotech/framework';
 import {
   FacebookMessengerOutputTemplateConverterStrategy,
   FacebookMessengerResponse,
 } from '@jovotech/output-facebookmessenger';
+
 import _cloneDeep from 'lodash.clonedeep';
-import { DEFAULT_FACEBOOK_VERIFY_TOKEN, LATEST_FACEBOOK_API_VERSION } from './constants';
+import {
+  DEFAULT_FACEBOOK_VERIFY_TOKEN,
+  FACEBOOK_API_BASE_URL,
+  LATEST_FACEBOOK_API_VERSION,
+} from './constants';
 import { FacebookMessenger } from './FacebookMessenger';
 import { FacebookMessengerDevice } from './FacebookMessengerDevice';
 import { FacebookMessengerRequest } from './FacebookMessengerRequest';
+import { FacebookMessengerRequestBuilder } from './FacebookMessengerRequestBuilder';
 import { FacebookMessengerUser } from './FacebookMessengerUser';
-import { MessengerBotEntry } from './interfaces';
+import { MessengerBotEntry, SenderAction } from './interfaces';
 
 export interface FacebookMessengerConfig extends ExtensibleConfig {
   version: typeof LATEST_FACEBOOK_API_VERSION | string;
   verifyToken: string;
   pageAccessToken: string;
-
+  senderActions?: {
+    markSeen?: boolean;
+    typingIndicator?: boolean;
+  };
   session?: StoredElementSession & { enabled?: never };
 }
 
@@ -43,6 +57,19 @@ export class FacebookMessengerPlatform extends Platform<
   jovoClass = FacebookMessenger;
   userClass = FacebookMessengerUser;
   deviceClass = FacebookMessengerDevice;
+  requestBuilder = FacebookMessengerRequestBuilder;
+
+  get apiVersion(): string {
+    return this.config.version || LATEST_FACEBOOK_API_VERSION;
+  }
+
+  get pageAccessToken(): string {
+    return this.config.pageAccessToken;
+  }
+
+  get endpoint(): string {
+    return `${FACEBOOK_API_BASE_URL}/${this.apiVersion}/me/messages?access_token=${this.pageAccessToken}`;
+  }
 
   async initialize(parent: Extensible): Promise<void> {
     if (super.initialize) {
@@ -54,9 +81,15 @@ export class FacebookMessengerPlatform extends Platform<
   mount(parent: HandleRequest): Promise<void> | void {
     super.mount(parent);
 
-    this.middlewareCollection.use('request.start', (jovo) => {
-      return this.enableDatabaseSessionStorage(jovo, this.config.session);
-    });
+    this.middlewareCollection.use(
+      'after.request.end',
+      (jovo) => this.enableDatabaseSessionStorage(jovo, this.config.session),
+      this.markAsSeen.bind(this),
+    );
+
+    this.middlewareCollection.use('dialogue.start', this.enableTypingIndicator.bind(this));
+    this.middlewareCollection.use('dialogue.end', this.disableTypingIndicator.bind(this));
+    this.middlewareCollection.use('before.request.start', this.ignoreOwnSenderId.bind(this));
   }
 
   getDefaultConfig(): FacebookMessengerConfig {
@@ -64,11 +97,26 @@ export class FacebookMessengerPlatform extends Platform<
       verifyToken: DEFAULT_FACEBOOK_VERIFY_TOKEN,
       pageAccessToken: '',
       version: LATEST_FACEBOOK_API_VERSION,
+      senderActions: {
+        markSeen: true,
+        typingIndicator: true,
+      },
     };
   }
 
+  async ignoreOwnSenderId(jovo: Jovo): Promise<void> {
+    const senderId: string | undefined = (jovo.$request as FacebookMessengerRequest)?.messaging?.[0]
+      ?.sender?.id;
+    const businessAccountId: string | undefined = (jovo.$request as FacebookMessengerRequest)?.id;
+
+    if (senderId && businessAccountId && senderId === businessAccountId) {
+      jovo.$handleRequest.stopMiddlewareExecution();
+      return jovo.$handleRequest.server.setResponse({});
+    }
+  }
+
   isRequestRelated(request: AnyObject | FacebookMessengerRequest): boolean {
-    return request.id && request.time && request.messaging?.[0];
+    return request.$type === 'facebook' && request.id && request.time && request.messaging?.[0];
   }
 
   isResponseRelated(response: AnyObject | FacebookMessengerResponse): boolean {
@@ -83,7 +131,7 @@ export class FacebookMessengerPlatform extends Platform<
     | Promise<FacebookMessengerResponse>
     | Promise<FacebookMessengerResponse[]>
     | FacebookMessengerResponse {
-    const senderId = jovo.$request.messaging?.[0]?.sender?.id;
+    const senderId: string | undefined = jovo.$user.id;
     if (!senderId) {
       // TODO determine if error is good here
       throw new JovoError({
@@ -104,7 +152,7 @@ export class FacebookMessengerPlatform extends Platform<
     return response;
   }
 
-  private augmentAppHandle() {
+  augmentAppHandle(): void {
     const APP_HANDLE = App.prototype.handle;
     const getVerifyTokenFromConfig = function (this: FacebookMessengerPlatform) {
       return this.config.verifyToken;
@@ -117,7 +165,7 @@ export class FacebookMessengerPlatform extends Platform<
       const verifyChallenge = query['hub.challenge'];
       const verifyToken = query['hub.verify_token'];
       const isFacebookVerifyRequest =
-        !Object.keys(request).length && verifyMode && verifyChallenge && verifyToken;
+        (!request || !Object.keys(request).length) && verifyMode && verifyChallenge && verifyToken;
 
       const isFacebookMessengerRequest =
         request?.object === 'page' && Array.isArray(request?.entry) && request?.entry?.length;
@@ -137,6 +185,8 @@ export class FacebookMessengerPlatform extends Platform<
       } else if (isFacebookMessengerRequest) {
         const responses: FacebookMessengerResponse[] = [];
         const promises = request.entry.map((entry: MessengerBotEntry) => {
+          // Set platform origin on request entry
+          entry.$type = 'facebook';
           const serverCopy = _cloneDeep(server);
           // eslint-disable-next-line @typescript-eslint/no-empty-function
           serverCopy.setResponse = async (response: FacebookMessengerResponse) => {
@@ -151,5 +201,64 @@ export class FacebookMessengerPlatform extends Platform<
         return APP_HANDLE.call(this, server);
       }
     };
+  }
+
+  /**
+   * Sends data to the Facebook Messenger API
+   * @param data - Data to be sent
+   */
+  async sendData<RESPONSE extends AnyObject>(
+    data: UnknownObject,
+  ): Promise<AxiosResponse<RESPONSE>> {
+    if (!this.pageAccessToken) {
+      throw new JovoError({
+        message: 'Can not send message to Facebook due to a missing or empty page-access-token.',
+      });
+    }
+    try {
+      // TODO: AttachmentMessage-support
+      return await axios.post<RESPONSE>(this.endpoint, data);
+    } catch (error) {
+      if (error.isAxiosError) {
+        throw new JovoError({
+          message: error.message,
+          details: (error as AxiosError).response?.data?.error?.message,
+        });
+      }
+
+      throw error;
+    }
+  }
+
+  private async markAsSeen(jovo: Jovo): Promise<void> {
+    if (this.config.senderActions?.markSeen === false) {
+      return;
+    }
+
+    await this.sendSenderAction(jovo, 'mark_seen');
+  }
+
+  private async enableTypingIndicator(jovo: Jovo) {
+    if (this.config.senderActions?.typingIndicator === false) {
+      return;
+    }
+
+    await this.sendSenderAction(jovo, 'typing_on');
+  }
+
+  private async disableTypingIndicator(jovo: Jovo) {
+    if (this.config.senderActions?.typingIndicator === false) {
+      return;
+    }
+
+    await this.sendSenderAction(jovo, 'typing_off');
+  }
+
+  private async sendSenderAction(jovo: Jovo, senderAction: SenderAction) {
+    if (jovo.$platform.constructor.name !== 'FacebookMessengerPlatform') {
+      return;
+    }
+
+    await this.sendData({ recipient: { id: jovo.$user.id }, sender_action: senderAction });
   }
 }

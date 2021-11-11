@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/platform-facebookmessenger",
-  "version": "4.0.0-beta.4",
+  "version": "4.0.0-beta.9",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -8,7 +8,8 @@
   "types": "dist/types/index.d.ts",
   "sideEffects": false,
   "files": [
-    "dist"
+    "dist",
+    "sample-requests"
   ],
   "scripts": {
     "prebuild": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json --clean",
@@ -22,11 +23,11 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/output-facebookmessenger": "^4.0.0-beta.1",
+    "@jovotech/output-facebookmessenger": "^4.0.0-beta.9",
     "lodash.clonedeep": "^4.5.0"
   },
   "devDependencies": {
-    "@jovotech/framework": "^4.0.0-beta.4",
+    "@jovotech/framework": "^4.0.0-beta.9",
     "@types/jest": "^26.0.20",
     "@types/lodash.clonedeep": "^4.5.6",
     "@types/node": "^10.17.50",
@@ -42,9 +43,9 @@
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
-    "@jovotech/framework": ">=4.0.0-beta.0 <4.0.0"
+    "@jovotech/framework": "4.0.0-beta.9"
   },
-  "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176",
+  "gitHead": "02f1a666ceff33f0907bff129f78be4088d87241",
   "prettier": "../../.prettierrc.js",
   "publishConfig": {
     "access": "public"

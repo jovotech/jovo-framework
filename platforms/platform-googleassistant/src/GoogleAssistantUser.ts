@@ -1,14 +1,13 @@
 import { axios, JovoError, JovoUser } from '@jovotech/framework';
+
 import { AccountLinkingStatus, UserVerificationStatus } from '@jovotech/output-googleassistant';
+import _set from 'lodash.set';
 import { GoogleAssistant } from './GoogleAssistant';
 import { GoogleAccountProfile } from './interfaces';
 
 export class GoogleAssistantUser extends JovoUser<GoogleAssistant> {
-  get id(): string {
-    return (
-      (this.jovo.$request.user?.params as Record<'userId' | string, string> | undefined)?.userId ||
-      'GoogleAssistantUser'
-    );
+  get id(): string | undefined {
+    return this.jovo.$request.user?.params?._GOOGLE_ASSISTANT_USER_ID_ as string | undefined;
   }
 
   get accessToken(): string | undefined {
@@ -22,6 +21,11 @@ export class GoogleAssistantUser extends JovoUser<GoogleAssistant> {
 
   isVerified(): boolean {
     return this.jovo.$request.user?.verificationStatus === UserVerificationStatus.Verified;
+  }
+
+  // TODO: determine whether a method or setter is better
+  setId(id: string | undefined): void {
+    _set(this.jovo.$request, 'user.params._GOOGLE_ASSISTANT_USER_ID_', id);
   }
 
   async getGoogleProfile(): Promise<GoogleAccountProfile> {

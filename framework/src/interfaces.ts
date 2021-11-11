@@ -1,4 +1,5 @@
-import { AnyObject, UnknownObject } from './index';
+import { AnyObject, UnknownObject } from '@jovotech/common';
+import { Entity } from '@jovotech/output';
 import { Jovo } from './Jovo';
 import { PluginConfig } from './Plugin';
 
@@ -12,15 +13,8 @@ export interface SessionData extends Data {}
 
 export interface UserData extends Data {}
 
-export interface Entity extends UnknownObject {
-  id?: string;
-  key?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  value?: any;
-}
-
-export interface EntityMap {
-  [key: string]: Entity | undefined;
+export interface EntityMap<ENTITY_TYPE extends Entity = Entity> {
+  [key: string]: ENTITY_TYPE | undefined;
 }
 
 export interface AsrData extends UnknownObject {

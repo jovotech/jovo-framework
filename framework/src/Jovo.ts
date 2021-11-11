@@ -1,4 +1,5 @@
-import { JovoResponse, OutputTemplate } from '@jovotech/output';
+import { DeepPartial, PickWhere, UnknownObject } from '@jovotech/common';
+import { JovoResponse, NormalizedOutputTemplate, OutputTemplate } from '@jovotech/output';
 import _cloneDeep from 'lodash.clonedeep';
 import _merge from 'lodash.merge';
 import _set from 'lodash.set';
@@ -11,21 +12,22 @@ import {
   ComponentConstructor,
   ComponentData,
   DbPluginStoredElementsConfig,
-  DeepPartial,
   I18NextAutoPath,
   I18NextResourcesLanguageKeys,
   I18NextResourcesNamespaceKeysOfLanguage,
+  I18NextTFunctionOptions,
+  I18NextTFunctionResult,
   I18NextTOptions,
+  I18NextValueAt,
   JovoInput,
   MetadataStorage,
   OutputConstructor,
   PersistableSessionData,
   PersistableUserData,
-  PickWhere,
   Server,
   StateStackItem,
-  UnknownObject,
 } from './index';
+
 import { EntityMap, RequestData } from './interfaces';
 import { JovoDevice } from './JovoDevice';
 import { JovoHistory, JovoHistoryItem, PersistableHistoryData } from './JovoHistory';
@@ -81,11 +83,7 @@ export function registerPlatformSpecificJovoReference<
 >(key: KEY, jovoClass: JovoConstructor<REQUEST, RESPONSE, JOVO, USER, DEVICE, PLATFORM>): void {
   Object.defineProperty(Jovo.prototype, key, {
     get(): Jovo[KEY] | undefined {
-      return this instanceof jovoClass
-        ? this
-        : this.jovo instanceof jovoClass
-        ? this.jovo
-        : undefined;
+      return this instanceof jovoClass ? this : undefined;
     },
   });
 }
@@ -102,7 +100,7 @@ export abstract class Jovo<
 > {
   $request: REQUEST;
   $input: JovoInput;
-  $output: OutputTemplate | OutputTemplate[];
+  $output: OutputTemplate[];
   $response?: RESPONSE | RESPONSE[];
 
   $data: RequestData;
@@ -221,34 +219,31 @@ export abstract class Jovo<
       | PATH
       | Array<I18NextAutoPath<PATH, LANGUAGE, NAMESPACE> | PATH>,
     options?: I18NextTOptions<LANGUAGE, NAMESPACE>,
-  ): string {
-    if (!options) {
-      options = {};
-    }
-    if (!options.lng) {
-      options.lng = this.$request.getLocale() as LANGUAGE;
-    }
-    return this.$app.i18n.t<PATH, LANGUAGE, NAMESPACE>(path, options);
+  ): I18NextValueAt<PATH, LANGUAGE, NAMESPACE>;
+  $t<FORCED_RESULT>(path: string | string[], options?: I18NextTFunctionOptions): FORCED_RESULT;
+  $t(path: string | string[], options?: I18NextTFunctionOptions): I18NextTFunctionResult {
+    return this.$app.i18n.t(path, options);
   }
 
-  async $send(outputTemplate: OutputTemplate | OutputTemplate[]): Promise<void>;
+  async $send(outputTemplateOrMessage: OutputTemplate | OutputTemplate[] | string): Promise<void>;
   async $send<OUTPUT extends BaseOutput>(
     outputConstructor: OutputConstructor<OUTPUT, REQUEST, RESPONSE, this>,
     options?: DeepPartial<OUTPUT['options']>,
   ): Promise<void>;
   async $send<OUTPUT extends BaseOutput>(
-    outputConstructorOrTemplate:
+    outputConstructorOrTemplateOrMessage:
+      | string
       | OutputConstructor<OUTPUT, REQUEST, RESPONSE, this>
       | OutputTemplate
       | OutputTemplate[],
     options?: DeepPartial<OUTPUT['options']>,
   ): Promise<void> {
     let newOutput: OutputTemplate | OutputTemplate[];
-    if (typeof outputConstructorOrTemplate === 'function') {
-      const outputInstance = new outputConstructorOrTemplate(this, options);
+    if (typeof outputConstructorOrTemplateOrMessage === 'function') {
+      const outputInstance = new outputConstructorOrTemplateOrMessage(this, options);
       const output = await outputInstance.build();
       // overwrite reserved properties of the built object i.e. message
-      OutputTemplate.getKeys().forEach((key) => {
+      NormalizedOutputTemplate.getKeys().forEach((key) => {
         if (options?.[key]) {
           if (Array.isArray(output)) {
             output[output.length - 1][key] =
@@ -262,13 +257,12 @@ export abstract class Jovo<
         }
       });
       newOutput = output;
+    } else if (typeof outputConstructorOrTemplateOrMessage === 'string') {
+      newOutput = {
+        message: outputConstructorOrTemplateOrMessage,
+      };
     } else {
-      newOutput = outputConstructorOrTemplate;
-    }
-
-    // make $output an array if it is none
-    if (!Array.isArray(this.$output)) {
-      this.$output = [this.$output];
+      newOutput = outputConstructorOrTemplateOrMessage;
     }
 
     // push the new OutputTemplate(s) to $output
@@ -283,7 +277,10 @@ export abstract class Jovo<
       keyof BaseComponent
     >,
   >(constructor: ComponentConstructor<COMPONENT>, handler?: HANDLER): Promise<void>;
-  async $redirect(componentName: string, handler?: string): Promise<void>;
+  async $redirect(
+    constructorOrName: ComponentConstructor | string,
+    handler?: string,
+  ): Promise<void>;
   async $redirect(
     constructorOrName: ComponentConstructor | string,
     handler?: string,
@@ -314,7 +311,7 @@ export abstract class Jovo<
     this.$handleRequest.activeComponentNode = componentNode;
     // execute the component's handler
     await componentNode.executeHandler({
-      jovo: this.jovoReference,
+      jovo: this.getJovoReference(),
       handler,
     });
   }
@@ -323,7 +320,10 @@ export abstract class Jovo<
     constructor: ComponentConstructor<COMPONENT>,
     options: DelegateOptions<ComponentConfig<COMPONENT>>,
   ): Promise<void>;
-  async $delegate(componentName: string, options: DelegateOptions): Promise<void>;
+  async $delegate(
+    constructorOrName: ComponentConstructor | string,
+    options: DelegateOptions,
+  ): Promise<void>;
   async $delegate(
     constructorOrName: ComponentConstructor | string,
     options: DelegateOptions,
@@ -336,14 +336,16 @@ export abstract class Jovo<
       this.$handleRequest.activeComponentNode?.path,
     );
 
-    // make sure the state-stack exists and is not empty, even if it is a global component
-    // in order to do that we need to add the path of the currently active component
-    if (!this.$session.state?.length) {
-      this.$session.state = [
-        {
-          component: (this.$handleRequest.activeComponentNode?.path || []).join('.'),
-        },
-      ];
+    // if the component that is currently being executed is global
+    if (this.$handleRequest.activeComponentNode?.metadata?.isGlobal) {
+      // make sure there is a stack
+      if (!this.$session.state) {
+        this.$session.state = [];
+      }
+      // add the current component
+      this.$session.state.push({
+        component: this.$handleRequest.activeComponentNode.path.join('.'),
+      });
     }
 
     // serialize all values in 'resolve'
@@ -371,6 +373,9 @@ export abstract class Jovo<
       });
     }
     // push the delegating component to the state-stack
+    if (!this.$session.state) {
+      this.$session.state = [];
+    }
     this.$session.state.push({
       resolve: serializableResolve,
       config: serializableConfig,
@@ -380,7 +385,7 @@ export abstract class Jovo<
     this.$handleRequest.activeComponentNode = componentNode;
     // execute the component's handler
     await componentNode.executeHandler({
-      jovo: this.jovoReference,
+      jovo: this.getJovoReference(),
     });
   }
 
@@ -412,7 +417,7 @@ export abstract class Jovo<
     this.$handleRequest.activeComponentNode = previousComponentNode;
     // execute the component's handler
     await previousComponentNode.executeHandler({
-      jovo: this.jovoReference,
+      jovo: this.getJovoReference(),
       handler: resolvedHandler,
       callArgs: eventArgs,
     });
@@ -469,7 +474,7 @@ export abstract class Jovo<
     };
   }
 
-  private get jovoReference(): Jovo {
+  protected getJovoReference(): Jovo {
     return (this as { jovo?: Jovo })?.jovo || (this as unknown as Jovo);
   }
 }

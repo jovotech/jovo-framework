@@ -2,13 +2,15 @@ import { AnyObject, App, ExtensibleConfig, Jovo, Platform } from '@jovotech/fram
 import {
   GoogleAssistantOutputTemplateConverterStrategy,
   GoogleAssistantResponse,
-  SlotFillingStatus,
 } from '@jovotech/output-googleassistant';
+
 import _mergeWith from 'lodash.mergewith';
+import { v4 as uuidV4 } from 'uuid';
 import { GoogleAssistant } from './GoogleAssistant';
 import { GoogleAssistantDevice } from './GoogleAssistantDevice';
 import { GoogleAssistantRepromptComponent } from './GoogleAssistantRepromptComponent';
 import { GoogleAssistantRequest } from './GoogleAssistantRequest';
+import { GoogleAssistantRequestBuilder } from './GoogleAssistantRequestBuilder';
 import { GoogleAssistantUser } from './GoogleAssistantUser';
 
 export interface GoogleAssistantConfig extends ExtensibleConfig {}
@@ -27,6 +29,7 @@ export class GoogleAssistantPlatform extends Platform<
   jovoClass = GoogleAssistant;
   userClass = GoogleAssistantUser;
   deviceClass = GoogleAssistantDevice;
+  requestBuilder = GoogleAssistantRequestBuilder;
 
   getDefaultConfig(): GoogleAssistantConfig {
     return {};
@@ -34,6 +37,16 @@ export class GoogleAssistantPlatform extends Platform<
 
   mount(parent: App): void {
     super.mount(parent);
+
+    parent.middlewareCollection.use('before.request.start', (jovo) => {
+      if (jovo.$googleAssistant?.$request.intent?.name === 'actions.intent.HEALTH_CHECK') {
+        jovo.$handleRequest.stopMiddlewareExecution();
+        return jovo.$handleRequest.server.setResponse({
+          prompt: { override: true, firstSimple: { speech: 'ok', text: '' } },
+        });
+      }
+    });
+
     this.middlewareCollection.use('request.start', (jovo) => {
       return this.onRequestStart(jovo);
     });
@@ -67,6 +80,13 @@ export class GoogleAssistantPlatform extends Platform<
         }
       },
     );
+
+    if (googleAssistant.$request.user) {
+      response.user = {
+        ...googleAssistant.$request.user,
+      };
+    }
+
     if (response.scene && googleAssistant.$request.scene?.name) {
       response.scene.name = googleAssistant.$request.scene.name;
     }
@@ -74,17 +94,23 @@ export class GoogleAssistantPlatform extends Platform<
   }
 
   onRequestStart(jovo: Jovo): void {
+    const user = jovo.$googleAssistant?.$user;
+    // if the user is linked and has no user id, generate one
+    if (user && user.isVerified() && !user.id) {
+      user.setId(uuidV4());
+    }
+
     const request = jovo.$googleAssistant?.$request;
     // if it is a selection-event
     if (
       request?.intent &&
       !request?.intent?.name &&
-      (request.scene?.slotFillingStatus === SlotFillingStatus.Final ||
-        request.scene?.slotFillingStatus === SlotFillingStatus.Unspecified) &&
+      !!request.scene?.slotFillingStatus &&
       Object.keys(request.intent?.params || {}).length &&
       request.session?.params?._GOOGLE_ASSISTANT_SELECTION_INTENT_
     ) {
       jovo.$input.intent = request.session.params._GOOGLE_ASSISTANT_SELECTION_INTENT_;
+      delete request.session.params._GOOGLE_ASSISTANT_SELECTION_INTENT_;
     }
   }
 }

@@ -9,8 +9,8 @@ import {
   JovoRequest,
   NluData,
   NluPlugin,
-  OutputTemplate,
 } from '@jovotech/framework';
+
 import { EntityType, IntentEntityType, JovoModelData } from '@jovotech/model';
 import { join as joinPaths, resolve } from 'path';
 import { v4 as uuidV4 } from 'uuid';
@@ -69,7 +69,12 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
         nluData.entities = {};
       }
 
-      nluData.entities[slot.slotName] = { key: slot.rawValue, value: slot.value.value };
+      nluData.entities[slot.slotName] = {
+        id: slot.value.value,
+        resolved: slot.value.value,
+        value: slot.rawValue,
+        native: slot,
+      };
     }
 
     return nluData;
@@ -84,10 +89,9 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
     if (!this.config.dynamicEntities?.enabled) {
       return;
     }
-    const outputs: OutputTemplate[] = Array.isArray(jovo.$output) ? jovo.$output : [jovo.$output];
     const locale: string = this.getLocale(jovo.$request);
 
-    for (const output of outputs) {
+    for (const output of jovo.$output) {
       const listen = output.platforms?.[jovo.$platform.constructor.name]?.listen ?? output.listen;
 
       if (

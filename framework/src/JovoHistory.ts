@@ -1,5 +1,6 @@
+import { UnknownObject } from '@jovotech/common';
 import { JovoResponse, OutputTemplate } from '@jovotech/output';
-import { JovoInput, JovoRequest, UnknownObject } from './index';
+import { JovoInput, JovoRequest } from './index';
 import { EntityMap } from './interfaces';
 import { JovoSession } from './JovoSession';
 
@@ -10,7 +11,7 @@ export interface JovoHistoryItem extends UnknownObject {
   state?: JovoSession['$state'];
   entities?: EntityMap;
 
-  output?: OutputTemplate | OutputTemplate[];
+  output?: OutputTemplate[];
   response?: JovoResponse | JovoResponse[];
 }
 

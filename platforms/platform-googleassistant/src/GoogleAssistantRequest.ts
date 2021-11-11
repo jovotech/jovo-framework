@@ -7,11 +7,12 @@ import {
   JovoRequest,
   UnknownObject,
 } from '@jovotech/framework';
+
 import type { Device, Home, Scene, Session, User } from '@jovotech/output-googleassistant';
 import { Capability as NativeCapability } from '@jovotech/output-googleassistant';
 import { GoogleAssistantSystemInputType, GoogleAssistantSystemIntent } from './enums';
 import { GoogleAssistantCapability, GoogleAssistantCapabilityType } from './GoogleAssistantDevice';
-import { Context, Handler, Intent } from './interfaces';
+import { Context, GoogleAssistantEntity, Handler, Intent } from './interfaces';
 
 export class GoogleAssistantRequest extends JovoRequest {
   handler?: Handler;
@@ -27,19 +28,35 @@ export class GoogleAssistantRequest extends JovoRequest {
     return this.user?.locale;
   }
 
+  setLocale(locale: string): void {
+    if (!this.user) {
+      return;
+    }
+
+    this.user.locale = locale;
+  }
+
   getIntent(): JovoInput['intent'] {
     return this.intent?.name;
   }
 
-  getEntities(): EntityMap | undefined {
-    const entities: EntityMap = {};
+  setIntent(intent: string): void {
+    if (!this.intent) {
+      this.intent = { name: intent, params: {} };
+    }
 
+    this.intent.name = intent;
+  }
+
+  getEntities(): EntityMap<GoogleAssistantEntity> | undefined {
+    const entities: EntityMap<GoogleAssistantEntity> = {};
     for (const param in this.intent?.params) {
       if (this.intent?.params.hasOwnProperty(param)) {
         entities[param] = {
-          id: this.intent?.params[param].resolved as string,
-          value: this.intent?.params[param].original,
-          key: this.intent?.params[param].resolved as string,
+          native: this.intent.params[param],
+          id: this.intent.params[param].resolved as string,
+          value: this.intent.params[param].original,
+          resolved: this.intent.params[param].resolved as string,
         };
       }
     }
@@ -71,6 +88,15 @@ export class GoogleAssistantRequest extends JovoRequest {
   getSessionData(): UnknownObject | undefined {
     return this.session?.params;
   }
+
+  setSessionData(data: UnknownObject): void {
+    if (!this.session) {
+      return;
+    }
+
+    this.session.params = data;
+  }
+
   getSessionId(): string | undefined {
     return this.session?.id;
   }
@@ -100,5 +126,17 @@ export class GoogleAssistantRequest extends JovoRequest {
       capabilities.push(GoogleAssistantCapability.InteractiveCanvas);
     }
     return capabilities;
+  }
+
+  getUserId(): string | undefined {
+    return this.user?.params?.userId as string;
+  }
+
+  setUserId(userId: string): void {
+    if (!this.user?.params) {
+      return;
+    }
+
+    this.user.params.userId = userId;
   }
 }

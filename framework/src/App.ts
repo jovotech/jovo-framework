@@ -1,9 +1,10 @@
+import { ArrayElement } from '@jovotech/common';
 import _merge from 'lodash.merge';
 import {
-  ArrayElement,
   ComponentTree,
   I18NextOptions,
   IntentMap,
+  Jovo,
   Middleware,
   MiddlewareFunction,
   Plugin,
@@ -21,21 +22,6 @@ import { HandlerPlugin } from './plugins/HandlerPlugin';
 import { OutputPlugin } from './plugins/OutputPlugin';
 import { RouterPlugin } from './plugins/RouterPlugin';
 import { Server } from './Server';
-
-export interface AppRoutingConfig {
-  intentMap?: IntentMap;
-  intentsToSkipUnhandled?: string[];
-}
-
-export interface AppConfig extends ExtensibleConfig {
-  i18n?: I18NextOptions;
-  logging?: BasicLoggingConfig | boolean;
-  routing?: AppRoutingConfig;
-}
-
-export type AppInitConfig = ExtensibleInitConfig<AppConfig> & {
-  components?: Array<ComponentConstructor | ComponentDeclaration>;
-};
 
 export type Usable = Plugin | ComponentConstructor | ComponentDeclaration;
 
@@ -59,10 +45,29 @@ export const APP_MIDDLEWARES = [
 export type AppMiddleware = ArrayElement<typeof APP_MIDDLEWARES>;
 export type AppMiddlewares = AppMiddleware[];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type AppErrorListener = (error: Error, jovo?: Jovo) => any;
+
+export interface AppRoutingConfig {
+  intentMap?: IntentMap;
+  intentsToSkipUnhandled?: string[];
+}
+
+export interface AppConfig extends ExtensibleConfig {
+  i18n?: I18NextOptions;
+  logging?: BasicLoggingConfig | boolean;
+  routing?: AppRoutingConfig;
+}
+
+export type AppInitConfig = ExtensibleInitConfig<AppConfig> & {
+  components?: Array<ComponentConstructor | ComponentDeclaration>;
+};
+
 export class App extends Extensible<AppConfig, AppMiddlewares> {
   readonly componentTree: ComponentTree;
   readonly i18n: I18Next;
   private initialized = false;
+  private errorListeners: AppErrorListener[] = [];
 
   constructor(config?: AppInitConfig) {
     super(config ? { ...config, components: undefined } : config);
@@ -93,6 +98,13 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
     this.use(...usables);
   }
 
+  onError(listener: AppErrorListener): void {
+    if (this.errorListeners.includes(listener)) {
+      return;
+    }
+    this.errorListeners.push(listener);
+  }
+
   initializeMiddlewareCollection(): MiddlewareCollection<AppMiddlewares> {
     return new MiddlewareCollection(...APP_MIDDLEWARES);
   }
@@ -119,13 +131,31 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
     if (this.initialized) {
       return;
     }
-    await this.i18n.initialize();
-    await this.initializePlugins();
-    this.initialized = true;
+    try {
+      await this.componentTree.initialize();
+      await this.i18n.initialize();
+      await this.initializePlugins();
+      this.initialized = true;
+    } catch (e) {
+      return this.handleError(e);
+    }
   }
 
   use<T extends Usable[]>(...usables: T): this {
-    const plugins = usables.filter((usable) => usable instanceof Plugin) as Plugin[];
+    const plugins = usables.filter((usable) => {
+      if (!(usable instanceof Plugin)) {
+        return false;
+      }
+
+      if (
+        (process.env.NODE_ENV === 'test' || process.env.JEST_WORKER_ID) &&
+        (usable as Plugin).config.skipTests
+      ) {
+        return false;
+      }
+
+      return true;
+    }) as Plugin[];
     if (plugins.length) {
       super.use(...plugins);
     }
@@ -139,28 +169,42 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
   }
 
   async handle(server: Server): Promise<void> {
-    const handleRequest = new HandleRequest(this, server);
-    await handleRequest.mount();
+    try {
+      const handleRequest = new HandleRequest(this, server);
+      await handleRequest.mount();
 
-    const relatedPlatform = handleRequest.platforms.find((platform) =>
-      platform.isRequestRelated(server.getRequestObject()),
-    );
-    if (!relatedPlatform) {
-      throw new MatchingPlatformNotFoundError(server.getRequestObject());
+      const relatedPlatform = handleRequest.platforms.find((platform) =>
+        platform.isRequestRelated(server.getRequestObject()),
+      );
+      if (!relatedPlatform) {
+        throw new MatchingPlatformNotFoundError(server.getRequestObject());
+      }
+      handleRequest.platform = relatedPlatform;
+      const jovo = relatedPlatform.createJovoInstance(this, handleRequest);
+
+      // RIDR-pipeline
+      await handleRequest.middlewareCollection.run(APP_MIDDLEWARES.slice(), jovo);
+
+      await handleRequest.dismount();
+
+      // TODO determine what to do if there is not response
+      if (!jovo.$response) {
+        return;
+      }
+
+      await server.setResponse(jovo.$response);
+    } catch (e) {
+      return this.handleError(e);
     }
-    handleRequest.platform = relatedPlatform;
-    const jovo = relatedPlatform.createJovoInstance(this, handleRequest);
+  }
 
-    // RIDR-pipeline
-    await handleRequest.middlewareCollection.run(APP_MIDDLEWARES.slice(), jovo);
-
-    await handleRequest.dismount();
-
-    // TODO determine what to do if there is not response
-    if (!jovo.$response) {
-      return;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async handleError(e: any, jovo?: Jovo): Promise<void> {
+    if (!this.errorListeners?.length) {
+      throw e;
     }
-
-    await server.setResponse(jovo.$response);
+    for (const listener of this.errorListeners) {
+      await listener(e, jovo);
+    }
   }
 }

@@ -3,6 +3,7 @@ import { AlexaOutputTemplateConverterStrategy, AlexaResponse } from '@jovotech/o
 import { Alexa } from './Alexa';
 import { AlexaDevice } from './AlexaDevice';
 import { AlexaRequest } from './AlexaRequest';
+import { AlexaRequestBuilder } from './AlexaRequestBuilder';
 import { AlexaUser } from './AlexaUser';
 import { SUPPORTED_APL_ARGUMENT_TYPES } from './constants';
 
@@ -27,6 +28,7 @@ export class AlexaPlatform extends Platform<
   jovoClass = Alexa;
   userClass = AlexaUser;
   deviceClass = AlexaDevice;
+  requestBuilder = AlexaRequestBuilder;
 
   getDefaultConfig(): AlexaConfig {
     return {

@@ -8,6 +8,7 @@ import {
   Platform,
   UnknownObject,
 } from '@jovotech/framework';
+
 import { JovoModelNlpjs } from '@jovotech/model-nlpjs';
 import { promises } from 'fs';
 import { join } from 'path';
@@ -99,8 +100,9 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
       (entityMap: EntityMap, entity: NlpJsEntity) => {
         entityMap[entity.entity] = {
           id: entity.option,
-          key: entity.option,
+          resolved: entity.option,
           value: entity.utteranceText,
+          native: entity,
         };
         return entityMap;
       },

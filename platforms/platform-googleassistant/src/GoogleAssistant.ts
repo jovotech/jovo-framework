@@ -1,6 +1,7 @@
 import {
   App,
   DbPluginStoredElementsConfig,
+  EntityMap,
   HandleRequest,
   Jovo,
   JovoPersistableData,
@@ -10,6 +11,7 @@ import { GoogleAssistantDevice } from './GoogleAssistantDevice';
 import { GoogleAssistantPlatform } from './GoogleAssistantPlatform';
 import { GoogleAssistantRequest } from './GoogleAssistantRequest';
 import { GoogleAssistantUser } from './GoogleAssistantUser';
+import { GoogleAssistantEntity } from './interfaces';
 
 export class GoogleAssistant extends Jovo<
   GoogleAssistantRequest,
@@ -19,6 +21,8 @@ export class GoogleAssistant extends Jovo<
   GoogleAssistantDevice,
   GoogleAssistantPlatform
 > {
+  $entities!: EntityMap<GoogleAssistantEntity>;
+
   constructor($app: App, $handleRequest: HandleRequest, $platform: GoogleAssistantPlatform) {
     super($app, $handleRequest, $platform);
     if (this.$request.session?.params?._GOOGLE_ASSISTANT_REPROMPTS_) {

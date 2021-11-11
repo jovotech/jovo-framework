@@ -2,6 +2,7 @@
 title: 'Entities'
 excerpt: 'Learn how to access entities and configure dynamic entities using Jovo'
 ---
+
 # Entities
 
 Learn how to access entities and configure dynamic entities using Jovo.
@@ -10,7 +11,7 @@ Learn how to access entities and configure dynamic entities using Jovo.
 
 Entities are variable elements of an intent that can be defined in a [model](./models.md) and retrieved by a [platform](./platforms.md) or [NLU](./nlu.md) integration.
 
-For example, a user saying "*my name is max*" could result in a `MyNameIsIntent` with the entity `name` being filled with `max`. Here is what the corresponding [`$input` object](./input.md) could look like:
+For example, a user saying "_my name is max_" could result in a `MyNameIsIntent` with the entity `name` being filled with `max`. Here is what the corresponding [`$input` object](./input.md) could look like:
 
 ```typescript
 {
@@ -28,7 +29,6 @@ Depending on if the information is coming from a [platform](./platforms.md) dire
 
 Usually, entities and their entity types are defined in the [Jovo Model](./models.md). The downside of this is that the trained models are static and can't be dynamically updated, e.g. by using data from an API call. Jovo offers a concept called [dynamic entities](#dynamic-entities) to update entity values during runtime.
 
-
 ## Access Entities
 
 You can access the complete object of entities with `this.$entities`, and a specific entity by its name, `this.$entities.entityName`.
@@ -40,7 +40,7 @@ this.$entities.entityName
 someHandler() {
   // ...
 
-  const color = this.$entities.color!.value;  
+  const color = this.$entities.color!.value;
 }
 ```
 
@@ -49,14 +49,16 @@ Each entity is an object that contains the following information:
 ```typescript
 {
   value: 'entityValue',
+  resolved: 'mappedEntityValue',
   id: 'entityValueId',
-  key: 'mappedEntityValue',
+  native: { /* ... */ }
 }
 ```
-* `value`: The value retrieved from the user input.
-* `key`: If the entity value was a synonym, the "main" value of the language model will be provided here.
-* `id`: Some platforms and NLUs provide the possibility to add IDs to their entity values. If there is no ID available, the `id` will be the same as the `value`.
 
+- `value`: The (raw) value retrieved from the user input.
+- `resolved`: If the entity value was a synonym, the "main" value of the language model will be provided here. If there is no resolved value, this will default to `value`.
+- `id`: Some platforms and NLUs provide the possibility to add IDs to their entity values. If there is no ID available, the `id` will be the same as `resolved`.
+- `native`: For platforms that support additional entity features, the raw entity data of the API response will be stored here.
 
 ## Dynamic Entities
 
@@ -83,7 +85,7 @@ This will set `listen` to `true` and add dynamic entities to all platforms/NLUs 
       PizzaType: {
         values: [
           {
-            value: 'peperoni'
+            value: 'peperoni',
             synonyms: [ 'salami' ], // optional
             id: 'someId', // optional
           },
@@ -96,6 +98,6 @@ This will set `listen` to `true` and add dynamic entities to all platforms/NLUs 
 
 The following modes are supported:
 
-* `REPLACE`: Only uses the new entities
-* `MERGE`: Supplements the new entities with existing ones
-* `CLEAR`: Deletes the dynamic entities
+- `REPLACE`: Only uses the new entities
+- `MERGE`: Supplements the new entities with existing ones
+- `CLEAR`: Deletes the dynamic entities
