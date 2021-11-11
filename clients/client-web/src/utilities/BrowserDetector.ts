@@ -14,7 +14,9 @@ export class BrowserDetector {
     if (!this.detectedData) {
       const detectedData = detect() as CustomBrowserInfo | null;
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if (detectedData?.name === 'chrome' && (navigator as any).brave) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (detectedData as any).name = 'brave';
       }
 
