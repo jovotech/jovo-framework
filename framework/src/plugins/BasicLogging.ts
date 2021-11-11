@@ -51,7 +51,7 @@ export interface BasicLoggingConfig extends PluginConfig {
       NULL_LITERAL?: string;
     };
   };
-  libConfig?: ISettingsParam;
+  tslog?: ISettingsParam;
 }
 
 export class BasicLogging extends Plugin<BasicLoggingConfig> {
@@ -83,7 +83,7 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
 
   constructor(config: BasicLoggingConfig) {
     super(config);
-    Logger.setSettings(_merge(Logger.settings, config.libConfig));
+    Logger.setSettings(_merge(Logger.settings, config.tslog));
   }
 
   mount(parent: HandleRequest): Promise<void> | void {
