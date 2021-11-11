@@ -7,17 +7,18 @@ import { CoreResponse } from './CoreResponse';
 import { CoreUser } from './CoreUser';
 import { CoreOutputTemplateConverterStrategy } from './output';
 
-export interface CorePlatformConfig extends ExtensibleConfig {
-  platform: 'core' | string;
+export interface CorePlatformConfig<PLATFORM extends string = 'core' | string>
+  extends ExtensibleConfig {
+  platform: PLATFORM | string;
 }
 
-export class CorePlatform extends Platform<
+export class CorePlatform<PLATFORM extends string = 'core' | string> extends Platform<
   CoreRequest,
   CoreResponse,
   Core,
   CoreUser,
   CoreDevice,
-  CorePlatform,
+  CorePlatform<PLATFORM>,
   CorePlatformConfig
 > {
   readonly outputTemplateConverterStrategy = new CoreOutputTemplateConverterStrategy();

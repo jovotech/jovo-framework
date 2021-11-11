@@ -85,7 +85,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
 
   install(parent: Extensible): void {
     if (!(parent instanceof App)) {
-      throw new InvalidParentError(this.constructor.name, App);
+      throw new InvalidParentError(this.name, App);
     }
     this.installDebuggerPlatform(parent);
   }
