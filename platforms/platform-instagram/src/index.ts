@@ -22,5 +22,6 @@ registerPlatformSpecificJovoReference('$instagram', Instagram);
 export * from './Instagram';
 export * from './InstagramPlatform';
 export * from './InstagramRequest';
+export * from './InstagramResponse';
 export * from './InstagramUser';
-export type { InstagramResponse } from '@jovotech/output-instagram';
+export * from './output';

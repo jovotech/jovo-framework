@@ -3,6 +3,9 @@ import i18next, { InitOptions, Resource, TFunctionResult, TOptionsBase } from 'i
 import _merge from 'lodash.merge';
 import type { A, F, O, S, U } from 'ts-toolbelt';
 
+// Make an explicit string literal out of a passed string. If T equals string return never
+export type StringLiteral<T> = T extends string ? (string extends T ? never : T) : never;
+
 // Provide an interface that can be augmented in order to provide code-completion for translation-keys.
 export interface I18NextResources extends Resource {}
 
