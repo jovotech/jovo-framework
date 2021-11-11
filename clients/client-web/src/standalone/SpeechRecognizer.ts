@@ -146,13 +146,13 @@ export class SpeechRecognizer extends TypedEventEmitter<SpeechRecognizerEventLis
     recognition.interimResults = this.config.interimResults;
     recognition.maxAlternatives = this.config.maxAlternatives;
 
-    recognition.onaudiostart = (event: Event) => {
+    recognition.onaudiostart = () => {
       if (this.startDetectionEnabled) {
         this.scheduleStartDetectionTimeout();
       }
     };
 
-    recognition.onspeechstart = (event: Event) => {
+    recognition.onspeechstart = () => {
       if (this.startDetectionEnabled && this.timeoutId) {
         this.emit(SpeechRecognizerEvent.StartDetected);
         clearTimeout(this.timeoutId);
@@ -170,6 +170,7 @@ export class SpeechRecognizer extends TypedEventEmitter<SpeechRecognizerEventLis
       this.emit(SpeechRecognizerEvent.SpeechRecognized, event);
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     recognition.onerror = (err: any) => {
       if (err.error === 'aborted') {
         return;
@@ -177,7 +178,7 @@ export class SpeechRecognizer extends TypedEventEmitter<SpeechRecognizerEventLis
       this.emit(SpeechRecognizerEvent.Error, err);
     };
 
-    recognition.onend = (event: Event) => {
+    recognition.onend = () => {
       this.recording = false;
       this.clearTimeout();
       if (this.ignoreNextEnd) {

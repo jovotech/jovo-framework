@@ -18,7 +18,7 @@ export class SSMLProcessor {
     });
   }
 
-  async processSSML(ssml: string) {
+  async processSSML(ssml: string): Promise<void> {
     const ssmlParts = this.getSSMLParts(ssml);
     for (let i = 0, len = ssmlParts.length; i < len; i++) {
       if (this.isPlainText(ssmlParts[i])) {
