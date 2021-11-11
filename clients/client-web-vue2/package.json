@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
+    "@types/web": "0.0.1",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
     "esbuild": "^0.13.8",
