@@ -3,7 +3,7 @@
     "e2e",
     "common",
     "framework",
-    "output/**",
+    "output",
     "platforms/**",
     "integrations/**",
     "examples/**"

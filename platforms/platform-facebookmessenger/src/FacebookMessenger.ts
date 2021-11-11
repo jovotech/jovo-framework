@@ -1,8 +1,8 @@
 import { AsyncJovo, AxiosResponse } from '@jovotech/framework';
-import { FacebookMessengerResponse } from '@jovotech/output-facebookmessenger';
 import { FacebookMessengerDevice } from './FacebookMessengerDevice';
 import { FacebookMessengerPlatform } from './FacebookMessengerPlatform';
 import { FacebookMessengerRequest } from './FacebookMessengerRequest';
+import { FacebookMessengerResponse } from './FacebookMessengerResponse';
 import { FacebookMessengerUser } from './FacebookMessengerUser';
 import { SendMessageResult } from './interfaces';
 

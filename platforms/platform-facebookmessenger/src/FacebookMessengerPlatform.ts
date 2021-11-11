@@ -14,11 +14,6 @@ import {
   StoredElementSession,
   UnknownObject,
 } from '@jovotech/framework';
-import {
-  FacebookMessengerOutputTemplateConverterStrategy,
-  FacebookMessengerResponse,
-} from '@jovotech/output-facebookmessenger';
-
 import _cloneDeep from 'lodash.clonedeep';
 import {
   DEFAULT_FACEBOOK_VERIFY_TOKEN,
@@ -29,8 +24,10 @@ import { FacebookMessenger } from './FacebookMessenger';
 import { FacebookMessengerDevice } from './FacebookMessengerDevice';
 import { FacebookMessengerRequest } from './FacebookMessengerRequest';
 import { FacebookMessengerRequestBuilder } from './FacebookMessengerRequestBuilder';
+import { FacebookMessengerResponse } from './FacebookMessengerResponse';
 import { FacebookMessengerUser } from './FacebookMessengerUser';
 import { MessengerBotEntry, SenderAction } from './interfaces';
+import { FacebookMessengerOutputTemplateConverterStrategy } from './output';
 
 export interface FacebookMessengerConfig extends ExtensibleConfig {
   version: typeof LATEST_FACEBOOK_API_VERSION | string;
@@ -52,12 +49,12 @@ export class FacebookMessengerPlatform extends Platform<
   FacebookMessengerPlatform,
   FacebookMessengerConfig
 > {
-  outputTemplateConverterStrategy = new FacebookMessengerOutputTemplateConverterStrategy();
-  requestClass = FacebookMessengerRequest;
-  jovoClass = FacebookMessenger;
-  userClass = FacebookMessengerUser;
-  deviceClass = FacebookMessengerDevice;
-  requestBuilder = FacebookMessengerRequestBuilder;
+  readonly outputTemplateConverterStrategy = new FacebookMessengerOutputTemplateConverterStrategy();
+  readonly requestClass = FacebookMessengerRequest;
+  readonly jovoClass = FacebookMessenger;
+  readonly userClass = FacebookMessengerUser;
+  readonly deviceClass = FacebookMessengerDevice;
+  readonly requestBuilder = FacebookMessengerRequestBuilder;
 
   get apiVersion(): string {
     return this.config.version || LATEST_FACEBOOK_API_VERSION;

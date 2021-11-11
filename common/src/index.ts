@@ -31,4 +31,6 @@ export type OmitIndex<T, I extends string | number> = {
   [K in keyof T as FilterKey<K, I>]: T[K];
 };
 
+export type EnumLike<T extends string> = T | `${T}`;
+
 export * from './JovoError';
