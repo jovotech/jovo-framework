@@ -28,6 +28,6 @@ export class DashbotAlexa extends DashbotAnalyticsPlugin {
   }
 
   canHandle(platform: Platform): boolean {
-    return platform.constructor.name === 'AlexaPlatform';
+    return platform.name === 'AlexaPlatform';
   }
 }

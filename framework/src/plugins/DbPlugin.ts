@@ -81,7 +81,7 @@ export abstract class DbPlugin<
 
   mount(parent: HandleRequest): void {
     if (!(parent instanceof HandleRequest)) {
-      throw new InvalidParentError(this.constructor.name, HandleRequest);
+      throw new InvalidParentError(this.name, HandleRequest);
     }
 
     parent.middlewareCollection.use('request.end', (jovo) => {

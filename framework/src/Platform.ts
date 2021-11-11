@@ -58,12 +58,12 @@ export abstract class Platform<
 
   mount(parent: Extensible): void {
     if (!(parent instanceof HandleRequest)) {
-      throw new InvalidParentError(this.constructor.name, HandleRequest);
+      throw new InvalidParentError(this.name, HandleRequest);
     }
     // propagate runs of middlewares of parent to middlewares of this
     this.middlewareCollection.names.forEach((middlewareName) => {
       parent.middlewareCollection.use(middlewareName, async (jovo) => {
-        if (jovo.$platform?.constructor?.name !== this.constructor.name) {
+        if (jovo.$platform?.name !== this.name) {
           return;
         }
         return this.middlewareCollection.run(middlewareName, jovo);
@@ -107,7 +107,7 @@ export abstract class Platform<
         dbPlugin.config.storedElements = dbPlugin.getDefaultConfig().storedElements || {};
       }
       // eslint-disable-next-line no-console
-      console.warn(`Session storage was enabled for database plugin ${dbPlugin.constructor.name}`);
+      console.warn(`Session storage was enabled for database plugin ${dbPlugin.name}`);
 
       if (sessionConfig) {
         dbPlugin.config.storedElements.session = { ...sessionConfig, enabled: true };
