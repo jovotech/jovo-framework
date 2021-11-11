@@ -1,4 +1,11 @@
-import { AnyObject, ExtensibleConfig, Platform } from '@jovotech/framework';
+import {
+  AnyObject,
+  ExtensibleConfig,
+  ExtensibleInitConfig,
+  Jovo,
+  Platform,
+  registerPlatformSpecificJovoReference,
+} from '@jovotech/framework';
 import { CoreOutputTemplateConverterStrategy } from '@jovotech/output-core';
 
 import { CoreResponse } from '.';
@@ -8,19 +15,75 @@ import { CoreRequest } from './CoreRequest';
 import { CoreRequestBuilder } from './CoreRequestBuilder';
 import { CoreUser } from './CoreUser';
 
-export interface CorePlatformConfig extends ExtensibleConfig {
-  platform: 'core' | string;
+export interface CorePlatformConfig<PLATFORM extends string = 'core' | string>
+  extends ExtensibleConfig {
+  platform: PLATFORM | string;
 }
 
-export class CorePlatform extends Platform<
+export class CorePlatform<PLATFORM extends string = 'core' | string> extends Platform<
   CoreRequest,
   CoreResponse,
   Core,
   CoreUser,
   CoreDevice,
-  CorePlatform,
+  CorePlatform<PLATFORM>,
   CorePlatformConfig
 > {
+  /**
+   Returns a new platform-class with the given name that extends CorePlatform.
+
+   In order to make the type-system aware of the new class, some module augmentations have to be done.
+   For a reference, take a look at the example below.
+
+   Example:
+
+   declare module '@jovotech/framework/dist/types/Extensible' {
+     interface ExtensiblePluginConfig {
+       WebPlatform?: CorePlatformConfig<'web'>;
+     }
+
+     interface ExtensiblePlugins {
+       WebPlatform?: CorePlatform<'web'>;
+     }
+   }
+
+   declare module '@jovotech/framework/dist/types/Jovo' {
+     interface Jovo {
+       $web?: Core;
+     }
+   }
+
+   // create the class
+   const WebPlatform = CorePlatform.createCustomPlatform('WebPlatform', 'web');
+   // instantiate the class
+   const webPlatform = new WebPlatform();
+  */
+  static createCustomPlatform<PLATFORM extends string>(
+    className: string,
+    platform: PLATFORM,
+    jovoReferenceKey = `$${platform}`,
+  ): new (config?: ExtensibleInitConfig<CorePlatformConfig>) => CorePlatform<PLATFORM> {
+    // Workaround to make the anonymous' class name equal to className
+    const obj = {
+      [className]: class extends CorePlatform<PLATFORM> {
+        getDefaultConfig(): CorePlatformConfig<PLATFORM> {
+          return {
+            ...super.getDefaultConfig(),
+            platform,
+          };
+        }
+        get name(): string {
+          return className;
+        }
+      },
+    };
+
+    // Make the Core-instance that is related to this new class available to Jovo
+    registerPlatformSpecificJovoReference(jovoReferenceKey as keyof Jovo, Core);
+
+    return obj[className];
+  }
+
   outputTemplateConverterStrategy = new CoreOutputTemplateConverterStrategy();
   requestClass = CoreRequest;
   jovoClass = Core;
