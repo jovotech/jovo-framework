@@ -1,153 +1,369 @@
 ---
-title: 'DynamoDB Database Integration'
-excerpt: 'The DynamoDB Jovo integration allows you to store user specific data in a DynamoDB table.'
+title: 'Airtable CMS Integration'
+excerpt: 'The Airtable Jovo integration lets you manage your voice and chatbot content in Airtable.'
 ---
 
-# DynamoDB Database Integration
+# Airtable CMS Integration
 
-This [database integration](https://v4.jovo.tech/docs/databases) allows you to store user specific data in a DynamoDB table.
+This [CMS integration](https://v4.jovo.tech/docs/cms) lets you manage your content in Airtable.
 
 ## Introduction
 
-[DynamoDB](https://aws.amazon.com/dynamodb/) is the NoSQL database service by Amazon Web Services (AWS). Many Jovo apps that are hosted on [AWS Lambda](https://v4.jovo.tech/marketplace/server-lambda) rely on DynamoDB to persist user data.
+[Airtable](https://www.airtable.com/) is a popular spreadsheet-meets-database product that is used for all sorts of use cases.
 
-If you use AWS for your deployment, we recommend [FileDb](https://v4.jovo.tech/marketplace/db-filedb) for local development and DynamoDB for deployed versions. [Learn more about staging here](https://v4.jovo.tech/docs/staging).
+With this Jovo CMS integration, you can manage all the content of your Jovo app in an Airtable base. This makes collaboration easier and enables you to update and add content faster.
+
+Here is a screenshot of our [sample base](https://airtable.com/shrkniYL5az4MbrXh) that stores [translations](#translationstable) for the [Jovo v4 template](https://github.com/jovotech/jovo-v4-template):
+
+![Airtable CMS for Voice Apps and Chatbots](./img/jovo-cms-sample-airtable.png)
+
+Learn more about setting up Airtable with Jovo in the [installation](#installation) and [configuration](#configuration) sections.
+
+It's possible to use pre-defined table types (like [translations](#TranslationsTable) in the example above) as well as defining your own ones. Learn more in the [table types](#table-types) section.
 
 ## Installation
 
-You can install the plugin like this:
+As first step, create an Airtable base with at least one table. Most projects usually contain a [`translations` table](#translationstable) for [i18n](https://v4.jovo.tech/docs/i18n). You can get started by copying our [sample base](https://airtable.com/shrkniYL5az4MbrXh).
+
+Install the plugin like this:
 
 ```sh
-$ npm install @jovotech/db-dynamodb
+$ npm install @jovotech/cms-airtable
 ```
 
-Add it as plugin to any stage you like, e.g. `app.prod.ts`:
+Add it as a plugin to your [app configuration](https://v4.jovo.tech/docs/app-config), for example `app.ts`:
 
 ```typescript
-import { DynamoDb } from '@jovotech/db-dynamodb';
-
+import { AirtableCms, TranslationsTable } from '@jovotech/cms-airtable';
 // ...
 
-app.configure({
+const app = new App({
   plugins: [
-    new DynamoDb({
-      // Configuration
+    new AirtableCms({
+      apiKey: '<YOUR-API-KEY>',
+      baseId: '<YOUR-BASE-ID>',
+      tables: {
+        translations: new TranslationsTable(),
+      },
+      // ...
     }),
     // ...
   ],
 });
 ```
 
-Once the configuration is done, the DynamoDB database integration will create a DynamoDB table on the first read/write attempt (might take some seconds). No need for you to create the table.
+You need the following for the integration to work:
 
-The rest of this section provides an introduction to the steps you need to take depending on where you host your Jovo app:
+- `apiKey`: Your Airtable API key. [You can retrieve it in your Airtable account overview](https://airtable.com/account).
+- `baseId`: The ID of the Airtable base you are using. [You can retrieve it here](https://airtable.com/api).
 
-- [On AWS (e.g. Lambda)](#for-apps-hosted-on-aws)
-- [Outside AWS](#for-apps-hosted-outside-aws)
-
-The [configuration section](#configuration) then provides a detailed overview of all configuration options.
-
-### For Apps Hosted on AWS
-
-If you host your app on [AWS Lambda](https://v4.jovo.tech/marketplace/server-lambda) and want to use a DynamoDB table in the same region, you only need to add a table name to get started:
-
-```typescript
-new DynamoDb({
-  table: {
-    name: 'MyDynamoDbTable',
-  }
-}),
-```
-
-### For Apps Hosted Outside AWS
-
-If you want to use DynamoDB from outside AWS Lambda, you need to set it up for programmatic access. Learn more in the official guide by Amazon: [Setting Up DynamoDB (Web Service)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SettingUp.DynamoWebService.html).
-
-You can then add the necessary keys using the [`libraryConfig` property](#libraryconfig):
-
-```typescript
-new DynamoDb({
-  table: {
-    name: 'MyDynamoDbTable',
-  },
-  libraryConfig: {
-    dynamoDbClient: {
-      region: 'us-east-1',
-      credentials: {
-        accessKeyId: 'myAccessKeyId',
-        secretAccessKey: 'mySecretAccessKey',
-      },
-    },
-  }
-}),
-```
+All other configuration options can be found in the [configuration section](#configuration).
 
 ## Configuration
 
 The following configurations can be added:
 
 ```typescript
-new DynamoDb({
-  table: { /* ... */ },
-  libraryConfig: { /* ... */ },
-  storedElements: { /* ... */ },
+new AirtableCms({
+  apiKey: '<YOUR-API-KEY>',
+  baseId: '<YOUR-BASE-ID>',
+  caching: true,
+  tables: { /* ... */ },
 }),
 ```
 
-- `table`: Configuration for the table that is going to be created by the plugin. [Learn more below](#table).
-- `libraryConfig`: Any configuration for the AWS DynamoDb SDK can be passed here. [Learn more below](#libraryconfig).
-- `storedElements`: What should be stored in the database. [Learn more in the database integration documentation](https://v4.jovo.tech/docs/databases).
+- `apiKey`: Your Airtable API key. [You can retrieve it in your Airtable account overview](https://airtable.com/account).
+- `baseId`: The ID of the Airtable base you are using. [You can retrieve it here](https://airtable.com/api).
+- [`caching`](#caching): Determines whether to caches data for faster response times. `true` by default.
+- [`tables`](#tables): Configurations for your different tables.
 
-### table
+### caching
 
-The `table` property includes configuration for the creation of the DynamoDB table:
+The content of all tables is cached by default, meaning that the data is fetched once and then stored for faster response times. However, for some use cases, it might make sense to refresh the data with every request by setting `caching` to `false`.
 
 ```typescript
-new DynamoDb({
-  table: {
-    // Required properties
-    name: 'MyDynamoDbTable',
+new AirtableCms({
+  caching: false,
+});
+```
 
-    // Optional properties (with default values)
-    createTableOnInit: true, // Creates a table if one does not already exist
-    primaryKeyColumn: 'userId',
-    readCapacityUnits: 2, // https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughput.html
-    writeCapacityUnits: 2, // https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughput.html
+### tables
+
+Airtable offers flexible ways to structure your data. This is why the Jovo Airtable CMS integration provides several table types to handle your data, for example:
+
+- [TranslationsTable](#translationstable)
+- [KeyValueTable](#keyvaluetable)
+- [KeyObjectTable](#keyobjecttable)
+- [ObjectArrayTable](#objectarraytable)
+
+You can learn more about those types in the [table types](#table-types) section.
+
+For each table you want to use in your Jovo app, you need to add the table name (for example `translations` in the [sample base](https://airtable.com/shrkniYL5az4MbrXh)) with the corresponding table type and its configuration to the `table` element:
+
+```typescript
+import { AirtableCms, KeyObjectTable } from '@jovotech/cms-airtable';
+// ...
+
+new AirtableCms({
+  tables: {
+    yourTable: new KeyObjectTable({
+      /* ... */
+    }),
   },
-  // ...
-}),
+});
 ```
 
-### libraryConfig
-
-The `libraryConfig` property can be used to pass configurations to the AWS DynamoDB SDK that is used by this integration.
-
-Currently, it includes the DynamoDbClient([find the official documentation here](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-dynamodb/interfaces/dynamodbclientconfig.html)):
+You can access your data inside your handler by accessing `this.$cms`:
 
 ```typescript
-new DynamoDb({
-  libraryConfig: {
-    dynamoDbClient: {
-      // Add configuration here
-    },
+this.$cms.yourTable;
+```
+
+Each table type accepts the following configuration:
+
+```typescript
+{
+  range: 'A:Z',
+  baseId: '<YOUR-BASE-ID>',
+  caching: false,
+}
+```
+
+- `range`: Represents a range of cells, e.g. `A:C`, `A1:B2`, ...
+- `caching`: Determines whether to cache the data for this specific table. `true` by default. [Learn more above](#caching).
+- `baseId`: Unique base ID for this specific table.
+
+## Table Types
+
+The Jovo Airtable integration comes with a few default table types:
+
+- [TranslationsTable](#TranslationsTable)
+- [KeyValueTable](#KeyValueTable)
+- [KeyObjectTable](#KeyObjectTable)
+- [ObjectArrayTable](#ObjectArrayTable)
+
+You can also learn more about creating your own [custom table types](#custom-table-types).
+
+### TranslationsTable
+
+This table type makes use of the Jovo [i18n](https://v4.jovo.tech/docs/i18n) and allows you to store translation strings in an Airtable table.
+
+```typescript
+import { AirtableCms, TranslationsTable } from '@jovotech/cms-airtable';
+// ...
+
+new AirtableCms({
+  tables: {
+    translations: new TranslationsTable({
+      /* ... */
+    }),
   },
-  // ...
-}),
+});
 ```
 
-For example, you can add `credentials` like this:
+If you define your sheet as `TranslationsTable`, the integration expects a sheet of at least two columns:
+
+- keys, e.g. `welcome` or `bye`
+- a locale, such as `en` or `en-US` (you can add as many locale columns as you like)
+
+By using this table type, you can access translation strings like this:
 
 ```typescript
-new DynamoDb({
-  libraryConfig: {
-    dynamoDbClient: {
-      region: 'us-east-1',
-      credentials: {
-        accessKeyId: 'myAccessKeyId',
-        secretAccessKey: 'mySecretAccessKey',
-      },
-    },
+this.$t('welcome');
+```
+
+### KeyValueTable
+
+`KeyValueTable` expects a table of at least two columns. The first one will be used as keys, the second one as values.
+
+If you define more than two columns, the last one will override the prior ones. In that case we recommend to use [KeyObjectTable](#KeyObjectTable).
+
+```typescript
+import { AirtableCms, KeyValueTable } from '@jovotech/cms-airtable';
+// ...
+
+new AirtableCms({
+  tables: {
+    yourTable: new KeyValueTable({
+      /* ... */
+    }),
+  },
+});
+```
+
+Here's an example table:
+
+| key   | taste |
+| :---- | :---- |
+| apple | sour  |
+| peach | sweet |
+
+And here's the data you will receive:
+
+```typescript
+{
+  apple: 'sour',
+  peach: 'sweet',
+}
+```
+
+Access the data using:
+
+```typescript
+const taste: string = this.$cms.yourTable.apple;
+```
+
+### KeyObjectTable
+
+`KeyObjectTable` is an extension of [`KeyValueTable`](#KeyValueTable), but instead of assigning a single value to each key, an object containing the values of all columns is assigned.
+
+```typescript
+import { AirtableCms, KeyObjectTable } from '@jovotech/cms-airtable';
+// ...
+
+new AirtableCms({
+  tables: {
+    yourTable: new KeyObjectTable({
+      /* ... */
+    }),
+  },
+});
+```
+
+Here's an example table:
+
+| key   | taste | color |
+| :---- | :---- | :---- |
+| apple | sour  | green |
+| peach | sweet | red   |
+
+And here's the data you will receive:
+
+```typescript
+{
+  apple: { taste: 'sour', color: 'green' },
+  peach: { taste: 'sweet', color: 'red' },
+}
+```
+
+Access the data using:
+
+```typescript
+const { taste, color } = this.$cms.yourTable.apple;
+
+// Or
+this.$cms.yourTable.apple.taste;
+```
+
+### ObjectArrayTable
+
+If you define your sheet as `ObjectArrayTable`, you will receive an array of objects where each row is converted to an object with the first row specifying the keys.
+
+```typescript
+import { AirtableCms, ObjectArrayTable } from '@jovotech/cms-airtable';
+// ...
+
+new AirtableCms({
+  tables: {
+    yourTable: new ObjectArrayTable({
+      /* ... */
+    }),
+  },
+});
+```
+
+Here's an example table:
+
+| key   | taste | color |
+| :---- | :---- | :---- |
+| apple | sour  | green |
+| peach | sweet | red   |
+
+And here's the data you will receive:
+
+```typescript
+[
+  {
+    key: 'apple',
+    taste: 'sour',
+    color: 'green',
+  },
+  {
+    key: 'peach',
+    taste: 'sweet',
+    color: 'red',
+  },
+];
+```
+
+Access the data using:
+
+```typescript
+const { taste, color } = this.$cms.yourTable[0];
+
+// Or
+this.$cms.yourTable[0].taste;
+```
+
+### Custom Table Types
+
+If you want to customize how the Airtable CMS integration handles your data, you can build your own table type and use it inside your app configuration.
+
+```typescript
+// src/sheets/OwnTableType.ts
+
+import { Jovo } from '@jovotech/framework';
+import { AirtableCmsTable, AirtableCmsTableConfig } from '@jovotech/cms-airtable';
+
+export class OwnSheetType extends AirtableCmsTable {
+  getDefaultConfig(): AirtableCmsTableConfig {
+    return { range: 'A:B' };
+  }
+
+  parse(values: unknown[][]): unknown {
+    // Act upon values
+    return {
+      /* ... */
+    };
+  }
+}
+```
+
+You can then integrate your own table type into the Airtable CMS integration:
+
+```typescript
+// src/app.ts
+
+new AirtableCms({
+  tables: {
+    yourTable: new OwnTableType({
+      /* ... */
+    }),
+  },
+});
+```
+
+The plugin consists of two functions:
+
+- `getDefaultConfig()`: Returns an initial config with default values, which will be merged with the config you pass into the constructor.
+- `parse()`: Accepts a two-dimensional array of values, which represents your rows with the respective cells, and can return any data you'd like, which you can then access in your handler with `this.$cms`.
+
+You can also extend the table config:
+
+```typescript
+// src/sheets/OwnTableType.ts
+
+export interface OwnTableTypeConfig extends AirtableCmsTableConfig {
+  configKey: string;
+}
+
+export class OwnTableType extends AirtableCmsTable<OwnTableTypeConfig> {
+  getDefaultConfig(): OwnTableTypeConfig {
     // ...
   }
-}),
+
+  parse(values: unknown[][]): unknown {
+    // ...
+  }
+}
 ```
