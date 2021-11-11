@@ -1,33 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8"/>
-  <title>Title</title>
-</head>
-<body>
-<div id="app">
-  <button v-if="!$client.isInitialized" @click="initialize">Initialize</button>
-  <div v-else>
-    <button @click="startRecording">Start</button>
-    <button @click="stopRecording">Stop</button>
-    <button @click="abortRecording">Abort</button>
-  </div>
-</div>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+  </head>
+  <body>
+    <div id="app">
+      <button v-if="!client.isInitialized" @click="client.initialize">Initialize</button>
+      <div v-else>
+        <button @click="client.startRecording">Start</button>
+        <button @click="client.stopRecording">Stop</button>
+        <button @click="client.abortRecording">Abort</button>
+      </div>
+    </div>
 
-<script src="https://unpkg.com/vue@next"></script>
-<script src="js/index.js"></script>
-<script>
-  const App = {};
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="js/index.js"></script>
+    <script>
+      const App = {
+        inject: ['client'],
+      };
 
-  const app = Vue.createApp(App);
+      const app = Vue.createApp(App);
 
-  app.use(JovoWebClientVue.default, {
-    url: 'http://localhost:3000/webhook',
-    client: {},
-  });
+      app.use(JovoWebClientVue.default, {
+        url: 'http://localhost:3000/webhook',
+        client: {},
+      });
 
-
-  app.mount('#app');
-</script>
-</body>
+      app.mount('#app');
+    </script>
+  </body>
 </html>
