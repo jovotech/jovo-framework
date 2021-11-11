@@ -1,7 +1,7 @@
-import { UnknownObject } from '@jovotech/framework';
 import {
   formatValidationErrors,
   IsEitherValid,
+  isObject,
   validate,
   ValidationOptions,
 } from '@jovotech/output';
@@ -12,7 +12,10 @@ export function IsValidSuggestionObject(validationOptions?: ValidationOptions): 
     {
       name: 'isValidSuggestionObject',
       keys: ['reply', 'action', 'liveAgentRequest', 'authenticationRequest'],
-      validate: async (value: UnknownObject) => {
+      validate: async (value) => {
+        if (!isObject(value)) {
+          return '$property must be an object.';
+        }
         const errors = await validate(value);
         if (errors.length) {
           return formatValidationErrors(errors, {

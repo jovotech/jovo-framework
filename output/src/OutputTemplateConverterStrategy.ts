@@ -1,3 +1,4 @@
+import { Constructor } from '@jovotech/common';
 import _defaultsDeep from 'lodash.defaultsdeep';
 import { PartialDeep } from 'type-fest';
 import {
@@ -40,7 +41,7 @@ export abstract class OutputTemplateConverterStrategy<
 > {
   readonly config: CONFIG;
   abstract readonly platformName: keyof OutputTemplatePlatforms;
-  abstract readonly responseClass: new () => RESPONSE;
+  abstract readonly responseClass: Constructor<RESPONSE>;
 
   constructor(config?: PartialDeep<CONFIG>) {
     this.config = _defaultsDeep(this.getDefaultConfig(), config || {});

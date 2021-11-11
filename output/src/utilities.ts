@@ -1,3 +1,4 @@
+import { Constructor } from '@jovotech/common';
 import { Type } from 'class-transformer';
 import _merge from 'lodash.merge';
 import type { A, O } from 'ts-toolbelt';
@@ -6,7 +7,7 @@ import { NormalizedOutputTemplatePlatforms } from './models/NormalizedOutputTemp
 
 export function registerOutputPlatform<TYPE extends Record<string, unknown>>(
   platformKey: string,
-  platformType: new () => TYPE,
+  platformType: Constructor<TYPE>,
 ): void {
   IsOptional()(NormalizedOutputTemplatePlatforms.prototype, platformKey);
   ValidateNested()(NormalizedOutputTemplatePlatforms.prototype, platformKey);

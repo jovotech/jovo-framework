@@ -1,6 +1,7 @@
 import {
   formatValidationErrors,
   IsEitherValid,
+  isObject,
   validate,
   ValidationOptions,
 } from '@jovotech/output';
@@ -52,6 +53,9 @@ export function IsValidMessageContentObject(
         if (ACTIONS_ON_GOOGLE_KEYS.includes(args.property as keyof MessageContent)) {
           // do not validate actions on google-objects for now
           return;
+        }
+        if (!isObject(value)) {
+          return '$property must be an object.';
         }
         const errors = await validate(value);
         if (errors.length) {

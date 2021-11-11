@@ -6,6 +6,7 @@ import {
   IsBoolean,
   IsEitherValid,
   IsNotEmpty,
+  isObject,
   IsOptional,
   isString,
   IsString,
@@ -59,7 +60,7 @@ export class GoogleBusinessOutputTemplateResponse implements Partial<GoogleBusin
   @IsEitherValid<GoogleBusinessResponse>({
     name: 'isValidGoogleBusinessResponseContent',
     keys: ['text', 'image', 'richCard'],
-    validate: async (value: string) => {
+    validate: async (value) => {
       if (!isString(value)) {
         return '$property must be a string';
       }
@@ -75,7 +76,10 @@ export class GoogleBusinessOutputTemplateResponse implements Partial<GoogleBusin
   @IsEitherValid<GoogleBusinessResponse>({
     name: 'isValidGoogleBusinessResponseContent',
     keys: ['text', 'image', 'richCard'],
-    validate: async (value: UnknownObject) => {
+    validate: async (value) => {
+      if (!isObject(value)) {
+        return '$property must be an object.';
+      }
       const errors = await validate(value);
       if (errors.length) {
         return formatValidationErrors(errors, {
@@ -94,7 +98,10 @@ export class GoogleBusinessOutputTemplateResponse implements Partial<GoogleBusin
   @IsEitherValid<GoogleBusinessResponse>({
     name: 'isValidGoogleBusinessResponseContent',
     keys: ['text', 'image', 'richCard'],
-    validate: async (value: UnknownObject) => {
+    validate: async (value) => {
+      if (!isObject(value)) {
+        return '$property must be an object.';
+      }
       const errors = await validate(value);
       if (errors.length) {
         return formatValidationErrors(errors, {

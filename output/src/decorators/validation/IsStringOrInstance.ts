@@ -1,4 +1,4 @@
-import { AnyObject, UnknownObject } from '@jovotech/common';
+import { AnyObject, Constructor, UnknownObject } from '@jovotech/common';
 import {
   registerDecorator,
   validate,
@@ -8,7 +8,7 @@ import {
 } from '../..';
 
 export function IsStringOrInstance(
-  classType: new () => UnknownObject,
+  classType: Constructor,
   options?: ValidationOptions,
 ): PropertyDecorator {
   return function (object: AnyObject, propertyKey: string | symbol) {

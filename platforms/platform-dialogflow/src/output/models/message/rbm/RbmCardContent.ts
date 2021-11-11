@@ -17,7 +17,7 @@ import { RbmSuggestion } from './RbmSuggestion';
 export class RbmCardContent {
   @IsSomeValid<RbmCardContent>({
     keys: ['title', 'description', 'media'],
-    validate: (value: unknown) => {
+    validate: (value) => {
       if (!isString(value)) {
         return '$property must be a string';
       }
@@ -31,7 +31,7 @@ export class RbmCardContent {
 
   @IsSomeValid<RbmCardContent>({
     keys: ['title', 'description', 'media'],
-    validate: (value: unknown) => {
+    validate: (value) => {
       if (!isString(value)) {
         return '$property must be a string';
       }
@@ -45,7 +45,7 @@ export class RbmCardContent {
 
   @IsSomeValid<RbmCardContent>({
     keys: ['title', 'description', 'media'],
-    validate: async (value: unknown) => {
+    validate: async (value) => {
       if (!(value instanceof RbmMedia)) {
         return `$property has to be an instance of RbmMedia`;
       }

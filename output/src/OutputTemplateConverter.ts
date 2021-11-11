@@ -1,3 +1,4 @@
+import { Constructor } from '@jovotech/common';
 import { plainToClass } from 'class-transformer';
 import { validate, ValidationError } from 'class-validator';
 import {
@@ -89,9 +90,9 @@ export class OutputTemplateConverter<
       : this.strategy.config.validation;
   }
 
-  private async validate<T = unknown>(
+  private async validate<T = any>(
     objOrArray: T | T[],
-    targetClass: new (...args: unknown[]) => T,
+    targetClass: Constructor<T>,
   ): Promise<ValidationError[]> {
     // eslint-disable-next-line @typescript-eslint/ban-types
     const getInstance = (item: T) => plainToClass(targetClass, item) as unknown as object;

@@ -27,7 +27,7 @@ export class Card {
 
   @IsSomeValid<Card>({
     keys: ['text', 'image'],
-    validate: (value: unknown) => {
+    validate: (value) => {
       if (!isString(value)) {
         return '$property must be a string';
       }
@@ -41,7 +41,7 @@ export class Card {
 
   @IsSomeValid<Card>({
     keys: ['text', 'image'],
-    validate: async (value: unknown) => {
+    validate: async (value) => {
       if (!(value instanceof Image)) {
         return `$property has to be an instance of Image`;
       }

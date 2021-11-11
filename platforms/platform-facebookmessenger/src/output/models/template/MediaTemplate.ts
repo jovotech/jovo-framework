@@ -28,7 +28,7 @@ export class MediaTemplateElement {
 
   @IsEitherValid<MediaTemplateElement>({
     keys: ['attachment_id', 'url'],
-    validate: (value: unknown) => {
+    validate: (value) => {
       if (!isString(value)) {
         return '$property must be a string';
       }
@@ -41,8 +41,8 @@ export class MediaTemplateElement {
 
   @IsEitherValid<MediaTemplateElement>({
     keys: ['attachment_id', 'url'],
-    validate: (value: string) => {
-      if (!isURL(value)) {
+    validate: (value) => {
+      if (!isString(value) || !isURL(value)) {
         return '$property must be an URL address';
       }
     },

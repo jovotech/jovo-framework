@@ -1,17 +1,10 @@
 import { Type } from 'class-transformer';
-import {
-  IsArray,
-  IsBooleanOrInstance,
-  IsInstance,
-  IsOptional,
-  Listen,
-  ListenValue,
-  ValidateNested,
-} from '..';
+import { IsArray, IsBooleanOrInstance, IsInstance, IsOptional, ValidateNested } from '..';
 import { TransformMessage } from '../decorators/transformation/TransformMessage';
 import { IsStringOrInstance } from '../decorators/validation/IsStringOrInstance';
 import { Card } from './Card';
 import { Carousel } from './Carousel';
+import { Listen, ListenValue } from './Listen';
 import { Message, MessageValue } from './Message';
 import { QuickReply, QuickReplyValue } from './QuickReply';
 

@@ -8,7 +8,7 @@ export function IsValidTelephonySynthesizeSpeechString(
     {
       name: 'isValidTelephonySynthesizeSpeechString.ts',
       keys: ['text', 'ssml'],
-      validate: (value: string) => {
+      validate: (value) => {
         if (!isString(value)) {
           return '$property must be a string';
         }

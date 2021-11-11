@@ -1,6 +1,7 @@
 import {
   formatValidationErrors,
   IsEitherValid,
+  isObject,
   validate,
   ValidationOptions,
 } from '@jovotech/output';
@@ -13,7 +14,10 @@ export function IsValidSuggestedActionObject(
     {
       name: 'isValidSuggestedActionObject',
       keys: ['openUrlAction', 'dialAction'],
-      validate: async (value: Record<string, unknown>) => {
+      validate: async (value) => {
+        if (!isObject(value)) {
+          return '$property must be an object.';
+        }
         const errors = await validate(value);
         if (errors.length) {
           return formatValidationErrors(errors, {

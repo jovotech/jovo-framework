@@ -1,7 +1,8 @@
+import { Constructor, UnknownObject } from '@jovotech/common';
 import { plainToClass, Transform } from '../..';
 
-export function TransformMap<T extends Record<string, unknown>>(
-  typeFunction: () => new () => T,
+export function TransformMap<T extends UnknownObject>(
+  typeFunction: () => Constructor<T>,
 ): PropertyDecorator {
   return Transform(({ value }) => {
     const result: Record<string, T> = {};

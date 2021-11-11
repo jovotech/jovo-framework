@@ -1,4 +1,4 @@
-import { IsEitherValid, isURL, ValidationOptions } from '@jovotech/output';
+import { IsEitherValid, isString, isURL, ValidationOptions } from '@jovotech/output';
 import { CARD_IMAGE_URL_MAX_LENGTH } from '../../constants';
 import { CardImage } from '../../models';
 
@@ -7,8 +7,8 @@ export function IsValidCardImageUrl(options?: ValidationOptions): PropertyDecora
     {
       name: 'isValidCardImageUrl',
       keys: ['smallImageUrl', 'largeImageUrl'],
-      validate: async (value: string) => {
-        if (!isURL(value, { protocols: ['https'] })) {
+      validate: async (value) => {
+        if (!isString(value) || !isURL(value, { protocols: ['https'] })) {
           return '$property must be an URL address';
         }
 

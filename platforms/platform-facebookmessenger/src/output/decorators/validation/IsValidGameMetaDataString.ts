@@ -8,7 +8,7 @@ export function IsValidGameMetaDataString(
     {
       name: 'isValidGameMetaDataString',
       keys: ['player_id', 'context_id'],
-      validate: (value: unknown) => {
+      validate: (value) => {
         if (!isString(value)) {
           return '$property must be a string';
         }

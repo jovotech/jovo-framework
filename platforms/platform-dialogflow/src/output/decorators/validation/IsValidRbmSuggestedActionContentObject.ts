@@ -2,6 +2,7 @@ import { UnknownObject } from '@jovotech/framework';
 import {
   formatValidationErrors,
   IsEitherValid,
+  isObject,
   validate,
   ValidationOptions,
 } from '@jovotech/output';
@@ -14,7 +15,10 @@ export function IsValidRbmSuggestedActionContentObject(
     {
       name: 'isValidRbmSuggestedActionContentObject',
       keys: ['dial', 'open_url', 'share_location'],
-      validate: async (value: UnknownObject) => {
+      validate: async (value) => {
+        if (!isObject(value)) {
+          return '$property must be an object.';
+        }
         const errors = await validate(value);
         if (errors.length) {
           return formatValidationErrors(errors, {

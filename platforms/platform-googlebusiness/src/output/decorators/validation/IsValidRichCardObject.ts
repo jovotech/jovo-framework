@@ -1,6 +1,7 @@
 import {
   formatValidationErrors,
   IsEitherValid,
+  isObject,
   validate,
   ValidationOptions,
 } from '@jovotech/output';
@@ -11,7 +12,10 @@ export function IsValidRichCardObject(validationOptions?: ValidationOptions): Pr
     {
       name: 'isValidRichCardObject',
       keys: ['standaloneCard', 'carouselCard'],
-      validate: async (value: Record<string, unknown>) => {
+      validate: async (value) => {
+        if (!isObject(value)) {
+          return '$property must be an object.';
+        }
         const errors = await validate(value);
         if (errors.length) {
           return formatValidationErrors(errors, {

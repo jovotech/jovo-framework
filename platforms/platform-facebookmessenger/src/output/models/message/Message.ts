@@ -23,7 +23,7 @@ import { MessageAttachment } from './MessageAttachment';
 export class Message {
   @IsEitherValid<Message>({
     keys: ['text', 'attachment'],
-    validate: (value: unknown) => {
+    validate: (value) => {
       if (!isString(value)) {
         return '$property must be a string';
       }
@@ -40,7 +40,7 @@ export class Message {
 
   @IsEitherValid<Message>({
     keys: ['text', 'attachment'],
-    validate: async (value: unknown) => {
+    validate: async (value) => {
       if (!(value instanceof MessageAttachment)) {
         return '$property must be an instance of MessageAttachment';
       }

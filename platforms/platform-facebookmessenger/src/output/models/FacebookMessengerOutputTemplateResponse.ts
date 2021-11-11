@@ -33,7 +33,7 @@ export class FacebookMessengerOutputTemplateResponse implements Partial<Facebook
   @IsOptional()
   @IsEitherValid<FacebookMessengerResponse>({
     keys: ['message', 'sender_action'],
-    validate: async (value: unknown) => {
+    validate: async (value) => {
       if (!(value instanceof Message)) {
         return '$property must be an instance of Message';
       }
@@ -53,7 +53,7 @@ export class FacebookMessengerOutputTemplateResponse implements Partial<Facebook
   @IsOptional()
   @IsEitherValid<FacebookMessengerResponse>({
     keys: ['message', 'sender_action'],
-    validate: (value: unknown) => {
+    validate: (value) => {
       if (!isEnum(value, SenderActionType)) {
         return '$property must be a valid enum value';
       }

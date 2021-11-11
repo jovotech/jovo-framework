@@ -11,7 +11,7 @@ export function IsValidMediaObjectImage(validationOptions?: ValidationOptions): 
     {
       name: 'isValidMediaObjectImage',
       keys: ['large', 'icon'],
-      validate: async (value: unknown) => {
+      validate: async (value) => {
         if (!(value instanceof Image)) {
           return `$property has to be an instance of Image`;
         }

@@ -1,6 +1,7 @@
 import {
   formatValidationErrors,
   IsEitherValid,
+  isObject,
   validate,
   ValidationOptions,
 } from '@jovotech/output';
@@ -13,7 +14,7 @@ export function IsValidContentObject(validationOptions?: ValidationOptions): Pro
       keys: ['card', 'image', 'table', 'media', 'collection', 'list'],
       validate: async (value, args) => {
         const className = `${args.property.charAt(0).toUpperCase()}${args.property.slice(1)}`;
-        if (value?.constructor?.name !== className) {
+        if (!isObject(value) || value?.constructor?.name !== className) {
           return `$property has to be an instance of ${className}`;
         }
 

@@ -7,7 +7,8 @@ import {
   ValidationOptions,
 } from '../..';
 
-export interface IsSomeValidOptions<T = unknown> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface IsSomeValidOptions<T = any> {
   name?: string;
   keys: Array<keyof T>;
   validate: (
@@ -16,7 +17,8 @@ export interface IsSomeValidOptions<T = unknown> {
   ) => string | undefined | void | Promise<string | undefined | void>;
 }
 
-export function IsSomeValid<T = unknown>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function IsSomeValid<T = any>(
   options: IsSomeValidOptions<T>,
   validationOptions?: ValidationOptions,
 ): PropertyDecorator {

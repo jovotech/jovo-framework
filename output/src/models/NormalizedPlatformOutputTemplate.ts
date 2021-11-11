@@ -2,8 +2,6 @@ import {
   IsArray,
   IsInstance,
   IsOptional,
-  Listen,
-  ListenValue,
   NullableOutputTemplateBase,
   Type,
   ValidateNested,
@@ -11,6 +9,7 @@ import {
 import { TransformMessage } from '../decorators/transformation/TransformMessage';
 import { IsBooleanOrInstance } from '../decorators/validation/IsBooleanOrInstance';
 import { IsStringOrInstance } from '../decorators/validation/IsStringOrInstance';
+import { Listen, ListenValue } from './Listen';
 import { Card } from './Card';
 import { Carousel } from './Carousel';
 import { Message, MessageValue } from './Message';
