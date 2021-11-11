@@ -1,6 +1,9 @@
 import { AnyObject, App, ExtensibleInitConfig, Server } from '@jovotech/framework';
 import { OmitIndex } from '@jovotech/output';
-import { InstagramOutputTemplateConverterStrategy } from '@jovotech/output-instagram';
+import {
+  InstagramOutputTemplateConverterStrategy,
+  InstagramResponse,
+} from '@jovotech/output-instagram';
 import {
   FacebookMessengerConfig,
   FacebookMessengerPlatform,
@@ -44,19 +47,20 @@ export class InstagramPlatform extends FacebookMessengerPlatform {
         request?.object === 'instagram' && Array.isArray(request?.entry) && request?.entry?.length;
 
       if (isInstagramRequest) {
+        const responses: InstagramResponse[] = [];
         const promises = request.entry.map((entry: MessengerBotEntry) => {
           // Set platform origin on request entry
           entry.$type = 'instagram';
           const serverCopy = _cloneDeep(server);
           // eslint-disable-next-line @typescript-eslint/no-empty-function
-          serverCopy.setResponse = async () => {};
+          serverCopy.setResponse = async (response: InstagramResponse) => {
+            responses.push(response);
+          };
           serverCopy.getRequestObject = () => entry;
-
           return APP_HANDLE.call(this, serverCopy);
         });
         await Promise.all(promises);
-        // TODO determine response content
-        return server.setResponse({});
+        return server.setResponse(responses);
       } else {
         return APP_HANDLE.call(this, server);
       }
