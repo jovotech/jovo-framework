@@ -6,10 +6,10 @@ import {
   Jovo,
   JovoPersistableData,
 } from '@jovotech/framework';
-import { GoogleAssistantResponse } from '@jovotech/output-googleassistant';
 import { GoogleAssistantDevice } from './GoogleAssistantDevice';
 import { GoogleAssistantPlatform } from './GoogleAssistantPlatform';
 import { GoogleAssistantRequest } from './GoogleAssistantRequest';
+import { GoogleAssistantResponse } from './GoogleAssistantResponse';
 import { GoogleAssistantUser } from './GoogleAssistantUser';
 import { GoogleAssistantEntity } from './interfaces';
 

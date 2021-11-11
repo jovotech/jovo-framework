@@ -1,6 +1,6 @@
 import { CapabilityType, JovoDevice } from '@jovotech/framework';
-import { Capability as NativeCapability } from '@jovotech/output-googleassistant';
 import { GoogleAssistant } from './GoogleAssistant';
+import { Capability as NativeCapability } from './output';
 
 export enum GoogleAssistantCapability {
   InteractiveCanvas = 'GOOGLE_ASSISTANT:INTERACTIVE_CANVAS',

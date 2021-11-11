@@ -1,6 +1,5 @@
 import {
   NormalizedOutputTemplate,
-  OutputTemplate,
   OutputTemplateConverterStrategy,
   OutputTemplateConverterStrategyConfig,
 } from '@jovotech/output';

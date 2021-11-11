@@ -24,7 +24,7 @@ The client sends a request to the Jovo app that may contain audio, text, or othe
 Depending on the client, it may be necessary to add integrations to the platform to convert the input to structured data:
 
 - [Automatic Speech Recognition (ASR)](https://www.jovo.tech/marketplace/tag/asr) to turn spoken audio into transcribed text
-- [Natural Language Understanding (NLU)](https://v4.jovo.tech/docs/nlu) to turn raw text into structured input
+- [Natural Language Understanding (NLU)](https://www.jovo.tech/marketplace/tag/nlu) to turn raw text into structured input
 
 After these integrations are added, building a Jovo app for custom clients is similar to building for platforms like Alexa and Google Assistant.
 
@@ -158,4 +158,34 @@ You can also use this object to see if the request is coming from Core (or a dif
 if (this.$core) {
   // ...
 }
+```
+
+## Custom Platforms
+
+You can create a custom platform based on the Jovo Core Platform using the `createCustomPlatform()` method.
+
+In order to make the type system aware of the new class, some module augmentations have to be done. Here is an example how this is done in the [Jovo Web Platform](https://v4.jovo.tech/marketplace/platform-web):
+
+```typescript
+declare module '@jovotech/framework/dist/types/Extensible' {
+  interface ExtensiblePluginConfig {
+    WebPlatform?: CorePlatformConfig<'web'>;
+  }
+
+  interface ExtensiblePlugins {
+    WebPlatform?: CorePlatform<'web'>;
+  }
+}
+
+declare module '@jovotech/framework/dist/types/Jovo' {
+  interface Jovo {
+    $web?: Core;
+  }
+}
+
+// Create the custom platform class
+const webPlatform = CorePlatform.createCustomPlatform('WebPlatform', 'web');
+
+// Instantiate the class
+const webPlatform = new WebPlatform();
 ```

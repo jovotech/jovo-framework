@@ -2,6 +2,7 @@
 title: 'Alexa Reminders'
 excerpt: 'Learn how to use the Alexa Skill Reminders feature with Jovo.'
 ---
+
 # Alexa Reminders
 
 Learn how to use the Alexa Skill Reminders feature with Jovo.
@@ -67,7 +68,6 @@ async someHandler() {
 
 You need to [ask the user for permission](#permissions) before you can [add and modify reminders](#add-and-modify-reminders).
 
-
 ## Permissions
 
 You need to [add permissions to your skill manifest](#add-reminder-permissions-to-the-skill-manifest) as well as [ask the users for permission](#ask-users-for-permission) during the interaction.
@@ -87,19 +87,16 @@ const project = new ProjectConfig({
       files: {
         'skill-package/skill.json': {
           manifest: {
-            permissions: [
-              { name: 'alexa::alerts:reminders:skill:readwrite' }
-            ]
-          }
+            permissions: [{ name: 'alexa::alerts:reminders:skill:readwrite' }],
+          },
         },
-      }
-    })
+      },
+    }),
   ],
 });
 ```
 
 Learn more about the [`permissions` field in the official Alexa documentation](https://developer.amazon.com/docs/alexa/smapi/skill-manifest.html#permissions).
-
 
 ### Ask Users for Permission
 
@@ -130,7 +127,7 @@ If this error occurs, you need to first ask your user for the permission to read
 
 Voice permissions provide a frictionless way to ask users if they want to provide access to their reminders. [Learn more in the official Alexa docs](https://developer.amazon.com/docs/alexa/smapi/voice-permissions-for-reminders.html).
 
-You can use the  `AskForRemindersPermissionOutput` for this:
+You can use the `AskForRemindersPermissionOutput` for this:
 
 ```typescript
 import { AskForRemindersPermissionOutput } from '@jovotech/platform-alexa';
@@ -202,7 +199,7 @@ import { AlexaRequest } from '@jovotech/platform-alexa';
   platforms: ['alexa'],
   if: (jovo: Jovo) =>
     (jovo.$request as AlexaRequest).request?.name === 'AskFor' &&
-    (jovo.$request as AlexaRequest).request?.payload?.status === 'ACCEPTED'       
+    (jovo.$request as AlexaRequest).request?.payload?.status === 'ACCEPTED'
 })
 async remindersPermissionAccepted() {
   // ...
@@ -222,7 +219,6 @@ You can use the following `status` values for `AlexaHandles.onPermission(status)
 #### Permissions Consent Card
 
 You can also ask for permissions by sending a permissions consent card to the user's Alexa mobile app. [Learn more in the official Alexa docs](https://developer.amazon.com/docs/alexa/custom-skills/request-customer-contact-information-for-use-in-your-skill.html#permissions-card-for-requesting-customer-consent).
-
 
 ```typescript
 import { AskForPermissionsConsentCardOutput } from '@jovotech/platform-alexa';
@@ -257,7 +253,6 @@ Under the hood, the `AskForPermissionsConsentCardOutput` looks like this:
   },
 }
 ```
-
 
 ## Add and Modify Reminders
 
@@ -312,7 +307,6 @@ async someHandler() {
 },
 ```
 
-
 ### Get Reminders
 
 ```typescript
@@ -351,7 +345,6 @@ async someHandler() {
 },
 ```
 
-
 ### Delete Reminders
 
 ```typescript
@@ -362,7 +355,7 @@ async someHandler() {
 
   try {
     const result = await this.$alexa!.$user.deleteReminder(alertToken);
-    
+
     return this.$send({ message: 'Your reminder has been deleted.'});
 
   } catch(error: Error) {

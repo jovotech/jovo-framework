@@ -28,7 +28,7 @@ export abstract class NluPlugin<
 
   mount(parent: Extensible): Promise<void> | void {
     if (!(parent instanceof Platform)) {
-      throw new InvalidParentError(this.constructor.name, 'Platform');
+      throw new InvalidParentError(this.name, 'Platform');
     }
     parent.middlewareCollection.use('interpretation.nlu', (jovo) => {
       return this.nlu(jovo);

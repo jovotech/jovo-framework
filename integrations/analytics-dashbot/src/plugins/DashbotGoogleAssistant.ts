@@ -44,6 +44,6 @@ export class DashbotGoogleAssistant extends DashbotAnalyticsPlugin {
   }
 
   canHandle(platform: Platform): boolean {
-    return platform.constructor.name === 'GoogleAssistantPlatform';
+    return platform.name === 'GoogleAssistantPlatform';
   }
 }

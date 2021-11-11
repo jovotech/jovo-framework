@@ -92,7 +92,7 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
     const locale: string = this.getLocale(jovo.$request);
 
     for (const output of jovo.$output) {
-      const listen = output.platforms?.[jovo.$platform.constructor.name]?.listen ?? output.listen;
+      const listen = output.platforms?.[jovo.$platform.name]?.listen ?? output.listen;
 
       if (
         typeof listen !== 'object' ||

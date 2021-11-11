@@ -83,6 +83,7 @@ export * from './errors/ComponentNotFoundError';
 export * from './errors/DuplicateChildComponentsError';
 export * from './errors/DuplicateGlobalIntentsError';
 export * from './errors/HandlerNotFoundError';
+export * from './errors/InvalidComponentTreeBuiltError';
 export * from './errors/InvalidParentError';
 export * from './errors/MatchingRouteNotFoundError';
 export * from './errors/MatchingPlatformNotFoundError';

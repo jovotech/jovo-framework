@@ -4,7 +4,6 @@ import {
   OutputTemplateConverterStrategyConfig,
   SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
-import { OutputTemplate } from '..';
 import { TestResponse } from './TestResponse';
 
 export class TestOutputConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<

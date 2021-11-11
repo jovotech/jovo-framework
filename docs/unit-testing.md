@@ -76,13 +76,13 @@ test('should ask the user if they like pizza', async () => {
 A test file consists of the following elements:
 
 - [`TestSuite` initialization](#testsuite-initialization): The TestSuite gets configured here.
-- [`test`](#test): Each unit test is added as a callback function inside this method.
-- [`run`](#run): This method takes either an input object or a native request object and returns output and a native response.
-- [`expect`](#expect): This and other Jest methods are used to test if the result from `run` looks as expected.
+- [`test()`](#test): Each unit test is added as a callback function inside this method.
+- [`run()`](#run): This method takes either an input object or a native request object and returns output and a native response.
+- [`expect()`](#expect): This and other Jest methods are used to test if the result from `run()` looks as expected.
 
 ### TestSuite Initialization
 
-The `TestSuite` is used to simulate a conversational request-response lifecycle that can then be tested using the Jest [`expect` method](#expect).
+The `TestSuite` is used to simulate a conversational request-response lifecycle that can then be tested using the Jest [`expect()` method](#expect).
 
 In most cases, the suite is initialized globally before all tests:
 
@@ -112,7 +112,7 @@ There are various options like `platform` that can be added to the constructor. 
 
 ### test
 
-A test file is separated into multiple unit tests that are all defined using a `test` method. The first parameter is the `name` of the test (which will be displayed when executing the tests) and the second is a callback function that includes the test logic. Learn more about [`test` in the official Jest docs](https://jestjs.io/docs/api#testname-fn-timeout).
+A test file is separated into multiple unit tests that are all defined using a `test()` method. The first parameter is the `name` of the test (which will be displayed when executing the tests) and the second is a callback function that includes the test logic. Learn more about [`test()` in the official Jest docs](https://jestjs.io/docs/api#testname-fn-timeout).
 
 ```typescript
 test('should ...', async () => {
@@ -133,7 +133,7 @@ describe(`...` , async () => {
 
 ### run
 
-The `run` method either takes an [input object](#input) or a [request](#request), executes the [RIDR lifecycle](./ridr-lifecycle.md), and returns both [`output`](#output) and a [`response`](#response):
+The `run()` method either takes an [input object](#input) or a [request](#request), executes the [RIDR lifecycle](./ridr-lifecycle.md), and returns both [`output`](#output) and a [`response`](#response):
 
 ```typescript
 import { TestSuite, InputType } from '@jovotech/framework';
@@ -150,12 +150,12 @@ test('should ask the user if they like pizza', async () => {
 });
 ```
 
-The following results are returned by `run`:
+The following results are returned by `run()`:
 
 - `output`: The Jovo [`$output` array](./output.md) as the result of the handler execution. Useful for cross-platform testing.
 - `response`: The native platform response that the `$output` gets translated to. Useful for platform-specific testing.
 
-It is also possible to [test sequences](#sequence-testing) by either using the `run` command multiple times or by passing an array. The below example first simulates a `LAUNCH` input and then a `YesIntent`:
+It is also possible to [test sequences](#sequence-testing) by either using the `run()` method multiple times or by passing an array. The below example first simulates a `LAUNCH` input and then a `YesIntent`:
 
 ```typescript
 import { TestSuite, InputType } from '@jovotech/framework';
@@ -181,7 +181,7 @@ Learn more in the [sequence testing](#test-sequences) section.
 
 ### expect
 
-The `output` and `response` from `run` can be tested using `expect`.
+The `output` and `response` from `run()` can be tested using `expect()`.
 
 Below is an example that tests if the resulting `output` equals an output template:
 
@@ -345,7 +345,7 @@ The TestSuite utilizes the [RIDR lifecycle](./ridr-lifecycle.md) and potentially
 - [Output](#output): An array that contains structured output objects.
 - [Response](#response): The native JSON response that is returned to the platform.
 
-The TestSuite's [`run` method](#run) method accepts either a request or an input object, and returns both output and a response:
+The TestSuite's [`run()` method](#run) method accepts either a request or an input object, and returns both output and a response:
 
 ```typescript
 const { output, response } = await testSuite.run(/* request or input */);
@@ -357,7 +357,7 @@ We recommend using [input](#input) and [output](#output) for most flows that don
 
 You can use JSON requests to test the flow in the same way as if a platform sends a request to your app. For most use cases, we recommend [input testing](#input).
 
-Below, you can find an example that imports a request JSON file and passes it to the [`run` method](#run):
+Below, you can find an example that imports a request JSON file and passes it to the [`run()` method](#run):
 
 ```typescript
 import CustomRequest from './requests/CustomRequest';
@@ -376,7 +376,7 @@ test('should accept a custom request', async () => {
 
 The Jovo `$input` property contains structured data that is derived from a request. Since it is an abstracted object that works across platforms, we recommend using the input object for running unit tests for most use cases. [Learn more about the `$input` property here](./input.md).
 
-You can pass an input object to the [`run` method](#run) like this:
+You can pass an input object to the [`run()` method](#run) like this:
 
 ```typescript
 import { TestSuite, InputType } from '@jovotech/framework';
@@ -414,7 +414,7 @@ The `$output` array is assembled by the handlers that return output using the `$
 
 Since the `$output` property is an array of abstracted [output templates](./output-templates.md) that work across platforms, we recommend using this method over [response testing](#response) for most use cases.
 
-For example, you can use `toEqual` (see the [`expect` section](#expect) above) to test if the tested and desired `output` arrays match:
+For example, you can use `toEqual()` (see the [`expect()` section](#expect) above) to test if the tested and desired `output` arrays match:
 
 ```typescript
 const { output } = await testSuite.run(/* request or input */);
@@ -454,7 +454,7 @@ The TestSuite automatically infers the types depending on the platform. In the e
 
 ## Test Sequences
 
-For conversations that include multiple interactions, you can use the [`run` method](#run) multiple times in one test:
+For conversations that include multiple interactions, you can use the [`run()` method](#run) multiple times in one test:
 
 ```typescript
 import { TestSuite, InputType } from '@jovotech/framework';
@@ -477,7 +477,7 @@ test('should respond in a positive way if user likes pizza', async () => {
 });
 ```
 
-You can also pass an array to the `run` method:
+You can also pass an array to the `run()` method:
 
 ```typescript
 import { TestSuite, InputType } from '@jovotech/framework';
@@ -532,7 +532,7 @@ test('should respond in a positive way if user likes pizza', async () => {
 
 ## Test Context
 
-The TestSuite allows you to access [Jovo properties](./jovo-properties.md) in order to modify certain elements before the [`run` method](#run) is executed.
+The TestSuite allows you to access [Jovo properties](./jovo-properties.md) in order to modify certain elements before the [`run()` method](#run) is executed.
 
 This is especially relevant for [different types of data](./data.md), for example user data that needs to be set before running a test:
 
