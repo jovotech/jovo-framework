@@ -24,7 +24,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "ts-toolbelt": "9.5.13",
-    "type-fest": "^1.2.0"
+    "type-fest": "^2.5.1"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
