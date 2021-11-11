@@ -43,4 +43,8 @@ export * from './GoogleAssistant';
 export * from './GoogleAssistantPlatform';
 export * from './GoogleAssistantRequest';
 export * from './GoogleAssistantUser';
+export * from './GoogleAssistantHandles';
+
 export * from './interfaces';
+
+export * from './output/NextSceneOutput';
