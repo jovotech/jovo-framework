@@ -59,7 +59,7 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
     return {
       skipTests: true,
       enabled: true,
-      request: true,
+      request: false,
       maskValue: '[ Hidden ]',
       requestObjects: [],
       maskedRequestObjects: [],
