@@ -2,6 +2,7 @@
 title: 'Staging'
 excerpt: 'Learn how staging provides the ability to build, deploy, and run Jovo apps in different environments, including local development.'
 ---
+
 # Staging
 
 Staging provides the ability to build, deploy, and run Jovo apps in different environments, including local development.
@@ -16,8 +17,8 @@ For use cases like this, Jovo offers different staging features that make it eas
 
 The [app configuration](./app-config.md) is usually spread across multiple files:
 
-* `app.ts`: Default configurations
-* `app.<stage>.ts`: Stage-specific configurations
+- `app.ts`: Default configurations
+- `app.<stage>.ts`: Stage-specific configurations
 
 For example, new Jovo templates come with an `app.ts` for all default configurations that should work across stages (platform integrations, components, ...) and an `app.dev.ts` file that comes with specific configuration for local development ([FileDb](https://v4.jovo.tech/marketplace/db-filedb) and the Jovo Debugger).
 
@@ -33,7 +34,6 @@ $ jovov4 new:stage prod
 ```
 
 [Learn more about app staging here](./app-config.md#staging).
-
 
 ## Project Staging
 
@@ -51,21 +51,21 @@ const project = new ProjectConfig({
       endpoint: '${JOVO_WEBHOOK_URL}',
       plugins: [
         new AlexaCli({
-          skillId: 'devSkillId'
-        })
-      ]
+          skillId: 'devSkillId',
+        }),
+      ],
       // ...
     },
     prod: {
       endpoint: process.env.ENDPOINT_PROD,
       plugins: [
         new AlexaCli({
-          skillId: 'prodSkillId'
-        })
-      ]
+          skillId: 'prodSkillId',
+        }),
+      ],
       // ...
-    }
-  }
+    },
+  },
 });
 ```
 

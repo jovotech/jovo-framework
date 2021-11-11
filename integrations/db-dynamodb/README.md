@@ -42,8 +42,8 @@ Once the configuration is done, the DynamoDB database integration will create a 
 
 The rest of this section provides an introduction to the steps you need to take depending on where you host your Jovo app:
 
-* [On AWS (e.g. Lambda)](#for-apps-hosted-on-aws)
-* [Outside AWS](#for-apps-hosted-outside-aws)
+- [On AWS (e.g. Lambda)](#for-apps-hosted-on-aws)
+- [Outside AWS](#for-apps-hosted-outside-aws)
 
 The [configuration section](#configuration) then provides a detailed overview of all configuration options.
 
@@ -82,7 +82,6 @@ new DynamoDb({
 }),
 ```
 
-
 ## Configuration
 
 The following configurations can be added:
@@ -95,12 +94,9 @@ new DynamoDb({
 }),
 ```
 
-
-* `table`: Configuration for the table that is going to be created by the plugin. [Learn more below](#table).
-* `libraryConfig`: Any configuration for the AWS DynamoDb SDK can be passed here. [Learn more below](#libraryconfig).
-* `storedElements`: What should be stored in the database. [Learn more in the database integration documentation](https://v4.jovo.tech/docs/databases).
-
-
+- `table`: Configuration for the table that is going to be created by the plugin. [Learn more below](#table).
+- `libraryConfig`: Any configuration for the AWS DynamoDb SDK can be passed here. [Learn more below](#libraryconfig).
+- `storedElements`: What should be stored in the database. [Learn more in the database integration documentation](https://v4.jovo.tech/docs/databases).
 
 ### table
 
@@ -121,7 +117,6 @@ new DynamoDb({
   // ...
 }),
 ```
-
 
 ### libraryConfig
 
@@ -156,4 +151,3 @@ new DynamoDb({
   }
 }),
 ```
-

@@ -2,6 +2,7 @@
 title: 'Jovo Debugger'
 excerpt: 'The Jovo Debugger allows you to test and debug your Jovo app by displaying the most important information about each interaction in one place.'
 ---
+
 # Jovo Debugger
 
 Learn more about the Jovo debugging environment.
@@ -23,7 +24,6 @@ After the [installation](#installation) section, we're going to take a look at c
 
 - [Make changes to the Debugger plugin](#debugger-plugin-configuration) that is responsible for connecting your Jovo app with the Debugger
 - [Customize your Debugger experience](#debugger-customization), for example which buttons should be displayed in the frontend
-
 
 ## Installation
 
@@ -62,12 +62,12 @@ import { JovoDebugger } from '@jovotech/plugin-debugger';
 app.configure({
   plugins: [
     new JovoDebugger({
-			nlu: new NlpjsNlu(),
-			webhookUrl: 'https://webhookv4.jovo.cloud',
-			debuggerConfigPath: './jovo.debugger.js',
-			modelsPath: './models',
-			ignoredProperties: ['$app', '$handleRequest', '$platform']
-		}),
+      nlu: new NlpjsNlu(),
+      webhookUrl: 'https://webhookv4.jovo.cloud',
+      debuggerConfigPath: './jovo.debugger.js',
+      modelsPath: './models',
+      ignoredProperties: ['$app', '$handleRequest', '$platform'],
+    }),
     // ...
   ],
 });
@@ -89,14 +89,14 @@ By default, the Debugger uses [NLP.js as NLU integration](https://v4.jovo.tech/m
 
 ```typescript
 nlu: new NlpjsNlu({
-	languageMap: {
-		de: LangDe,
+  languageMap: {
+    de: LangDe,
     en: LangEn,
     es: LangEs,
     fr: LangFr,
     it: LangIt,
-	}
-})
+  },
+});
 ```
 
 By default, the languages `de`, `en`, `es`, `fr`, and `it` are supported. If you want to support a different language, you need to install the NLP.js language package as explained in the [NLP.js Jovo integration docs](https://v4.jovo.tech/marketplace/nlu-nlpjs#language-configuration), and then add it like this:
@@ -110,13 +110,13 @@ import { LangHi } from '@nlpjs/lang-hi';
 app.configure({
   plugins: [
     new JovoDebugger({
-			nlu: new NlpjsNlu({
-				languageMap: {
-					hi: LangHi
-				}
-			}),
-			// ...
-		}),
+      nlu: new NlpjsNlu({
+        languageMap: {
+          hi: LangHi,
+        },
+      }),
+      // ...
+    }),
     // ...
   ],
 });
@@ -133,14 +133,14 @@ import { LangHi } from '@nlpjs/lang-hi';
 app.configure({
   plugins: [
     new JovoDebugger({
-			nlu: new NlpjsNlu({
-				languageMap: {
-					...getDefaultLanguageMap(),
-					hi: LangHi
-				}
-			}),
-			// ...
-		}),
+      nlu: new NlpjsNlu({
+        languageMap: {
+          ...getDefaultLanguageMap(),
+          hi: LangHi,
+        },
+      }),
+      // ...
+    }),
     // ...
   ],
 });
@@ -156,14 +156,13 @@ import { SnipsNlu } from '@jovotech/nlu-snips';
 app.configure({
   plugins: [
     new JovoDebugger({
-			nlu: new SnipsNlu(),
-			// ...
-		}),
+      nlu: new SnipsNlu(),
+      // ...
+    }),
     // ...
   ],
 });
 ```
-
 
 ## Debugger Customization
 

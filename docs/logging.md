@@ -2,6 +2,7 @@
 title: 'Logging'
 excerpt: 'Learn more about the different types of logging you can do in your Jovo app.'
 ---
+
 # Logging
 
 Learn more about the different types of logging you can do in your Jovo app.
@@ -21,7 +22,6 @@ new App({
 
 This default configuration will show the full request and response JSON objects in your logs. If you're developing locally, the logs are displayed in your terminal/command line. For other deployment environments, they show up in the respective log service, for example [CloudWatch](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/WhatIsCloudWatchLogs.html) on AWS.
 
-
 ## Configuration
 
 You can modify the logging configuration by turning `logging: true` into an object, like this:
@@ -31,7 +31,7 @@ new App({
   logging: {
     enabled: true,
     // ...
-  }
+  },
   // ...
 });
 ```
@@ -49,7 +49,7 @@ logging: {
   response: false,
   maskedResponseObjects: [],
   excludedResponseObjects: [],
-  responseObjects: [], 
+  responseObjects: [],
   indentation: '  ',
   styling: true,
   colorizeSettings: {
@@ -64,7 +64,6 @@ logging: {
 ```
 
 Below, you can find more information about each of the configurations.
-
 
 ### Request Logging
 
@@ -101,7 +100,6 @@ logging: {
 ```
 
 In a similar fashion, you can also [mask objects](#masking) or completely remove them from the logs using `excludedRequestObjects`.
-
 
 ### Response Logging
 
