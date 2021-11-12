@@ -1,5 +1,5 @@
-import { Entity, JovoSession } from '@jovotech/framework';
-import { ConfirmationStatus, Resolutions } from './output';
+import { Entity, JovoSession, PartialWhere } from '@jovotech/framework';
+import { ConfirmationStatus, Intent, Resolutions, Slot } from './output';
 
 export interface Session {
   new: boolean;
@@ -148,22 +148,8 @@ export interface Application {
   applicationId: string;
 }
 
-export interface RequestSlot {
-  name: string;
-  confirmationStatus?: ConfirmationStatus;
-  value: string;
-  source?: string;
-  resolutions?: Resolutions;
-}
-
-export interface RequestIntent {
-  name: string;
-  confirmationStatus?: ConfirmationStatus;
-  slots?: { [key: string]: RequestSlot };
-}
-
 export interface AlexaEntity extends Entity {
-  native: RequestSlot;
+  native: Slot;
 }
 
 export interface Request {
@@ -176,7 +162,7 @@ export interface Request {
   token?: string;
   offsetInMilliseconds?: number;
   // TODO: Use the same type
-  intent?: RequestIntent;
+  intent?: PartialWhere<Intent, 'confirmationStatus' | 'slots'>;
   status?: {
     // Connections.Response
     code: string;
