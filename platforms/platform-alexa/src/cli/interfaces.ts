@@ -22,6 +22,7 @@ export interface AlexaCliConfig extends PluginConfig {
   locales?: {
     [locale: string]: SupportedLocalesType[];
   };
+  acdlDirectory?: string;
 }
 
 export interface AlexaContext extends PluginContext {

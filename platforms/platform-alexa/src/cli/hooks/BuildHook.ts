@@ -21,12 +21,21 @@ import {
 import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 import { JovoModelData, JovoModelDataV3, NativeFileInformation } from '@jovotech/model';
 import { JovoModelAlexa } from '@jovotech/model-alexa';
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs';
+import {
+  copyFileSync,
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  statSync,
+  writeFileSync,
+} from 'fs';
 import _get from 'lodash.get';
 import _has from 'lodash.has';
 import _merge from 'lodash.merge';
 import _mergeWith from 'lodash.mergewith';
 import _set from 'lodash.set';
+import { join as joinPaths } from 'path';
 import { AlexaCli } from '..';
 import { SupportedLocales } from '../constants';
 import DefaultFiles from '../DefaultFiles.json';
@@ -183,6 +192,14 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
     // If no model files for the current locales exist, do not build interaction model.
     if (!this.$cli.project!.hasModelFiles(this.$context.locales)) {
       buildInteractionModelTask.disable();
+    }
+
+    const buildAcdlFiles: Task = new Task(
+      `${taskStatus} ACDL files`,
+      this.buildAcdlFiles.bind(this),
+    );
+    if (!this.$plugin.config.acdlDirectory) {
+      buildAcdlFiles.disable();
     }
 
     buildTask.add(projectFilesTask, buildInteractionModelTask);
@@ -423,6 +440,34 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       }
       throw new JovoCliError({ message: error.message, module: this.$plugin.name });
     }
+  }
+
+  buildAcdlFiles(): void {
+    if (!existsSync(this.$plugin.config.acdlDirectory!)) {
+      throw new JovoCliError({
+        message: `acdlDirectory does not exist at ${this.$plugin.config.acdlDirectory!}`,
+        module: this.$plugin.name,
+      });
+    }
+
+    const copyFiles = (src: string, dest: string): void => {
+      const files: string[] = readdirSync(src);
+      for (const file of files) {
+        const srcFilePath: string = joinPaths(src, file);
+        const destFilePath: string = joinPaths(dest, file);
+
+        if (statSync(srcFilePath).isDirectory()) {
+          return copyFiles(srcFilePath, destFilePath);
+        }
+
+        copyFileSync(srcFilePath, destFilePath);
+      }
+    };
+
+    copyFiles(
+      this.$plugin.config.acdlDirectory!,
+      joinPaths(this.$plugin.skillPackagePath, 'conversations'),
+    );
   }
 
   /**
