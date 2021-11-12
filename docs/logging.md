@@ -57,24 +57,7 @@ logging: {
 - `request`: Configurations for [request logging](#request-logging).
 - `response`: Configurations for [response logging](#response-logging).
 - More information about `indentation`, `style`, and `colorizeSettings` can be found in the [styling](#styling) section.
-- `tslog`: Configurations for the logging library used by Jovo. [Learn more below](#tslog).
-
-### tslog
-
-Jovo uses [tslog](https://tslog.js.org/) for a better logging experience. It is used by both the [Basic Logging](#basic-logging) as well as the [Jovo Logger](#jovo-logger).
-
-You can add tslog configurations ([learn more on their website](https://tslog.js.org/#/?id=settings)) to the `tslog` property, for example:
-
-```typescript
-logging: {
-  tslog: {
-    prettyInspectOptions: { depth: 3 },
-    prefix: [''],
-    displayDateTime: false,
-  },
-  // ...
-},
-```
+- `tslog`: Configurations for the logging library used by the [Jovo Logger](#jovo-logger).
 
 ## Basic Logging
 
@@ -193,17 +176,36 @@ logging: {
 
 Jovo has an internal `Logger` that can be used to display certain levels of logs. It is based on [tslog](https://tslog.js.org).
 
-You can import it like this:
+You can add tslog configurations ([learn more on their website](https://tslog.js.org/#/?id=settings)) to the `tslog` property, for example:
+
+```typescript
+logging: {
+  tslog: {
+    prettyInspectOptions: { depth: 3 },
+    prefix: [''],
+    displayDateTime: false,
+  },
+  // ...
+},
+```
+
+You can import the Jovo Logger like this:
 
 ```typescript
 import { Logger } from '@jovotech/framework';
 ```
 
-You can use the following features:
+It offers the following features:
 
 ```typescript
 Logger.error(new Error());
 Logger.info(string);
 Logger.warn(string);
 Logger.debug(string);
+```
+
+The log level can be set as environment variable `JOVO_LOG_LEVEL`, for example like this:
+
+```typescript
+process.env.JOVO_LOG_LEVEL = 'WARN';
 ```
