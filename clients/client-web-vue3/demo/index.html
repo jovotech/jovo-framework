@@ -24,8 +24,8 @@
       const app = Vue.createApp(App);
 
       app.use(JovoWebClientVue.default, {
-        url: 'http://localhost:3000/webhook',
-        client: {},
+        endpointUrl: 'http://localhost:3000/webhook',
+        config: {},
       });
 
       app.mount('#app');

@@ -20,9 +20,9 @@ export interface JovoWebClientVueConfig {
 
 const plugin: Plugin = {
   install: (app, config) => {
-    if (!config?.url) {
+    if (!config?.endpointUrl) {
       throw new Error(
-        `At least the 'url' option has to be set in order to use the JovoWebClientPlugin. `,
+        `At least the 'endpointUrl' option has to be set in order to use the JovoWebClientPlugin. `,
       );
     }
 
