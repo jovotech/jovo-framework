@@ -30,6 +30,8 @@ export type FilterKey<K, I> = A.Equals<K, I> extends 1 ? never : K;
 export type OmitIndex<T, I extends string | number> = {
   [K in keyof T as FilterKey<K, I>]: T[K];
 };
+// Convert keys K of T to optional elements
+export type PartialWhere<T, K extends keyof T> = Omit<T, K> & Partial<T>;
 
 export type EnumLike<T extends string> = T | `${T}`;
 
