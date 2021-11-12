@@ -260,6 +260,32 @@ The `SpeechRecognizer` also emits events based on the recording status. The tabl
 | `Stop`             | `'stop'`              | Recording was stopped.                                                                  |
 | `End`              | `'end'`               | Speech recognition has finished.                                                        |
 
+### Push to Talk
+
+You can implement a _push to talk_ experience by adding event listeners to a button, for example:
+
+```typescript
+async onMouseDown(event: MouseEvent | TouchEvent) {
+  if (!client.isInitialized) {
+    await client.initialize();
+  }
+  if (client.isRecordingInput) {
+    return;
+  }
+  if (event instanceof MouseEvent) {
+    window.addEventListener('mouseup', this.onMouseUp);
+  } else {
+    window.addEventListener('touchend', this.onMouseUp);
+  }
+  await client.startRecording();
+}
+
+private onMouseUp(event: MouseEvent | TouchEvent) {
+  window.removeEventListener('mouseup', this.onMouseUp);
+  client.stopRecording();
+}
+```
+
 ## Send a Request to Jovo
 
 After successful user input, the Jovo Web Client sends a request to the Jovo app, where the [Web Platform](https://v4.jovo.tech/marketplace/platform-web) handles the conversational logic and then returns a response.
