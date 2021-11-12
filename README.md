@@ -1,99 +1,58 @@
-# Jovo Framework
+# Jovo Framework: The React for Voice and Chat apps
 
-> [**NEWS: We just launched "Jovo for Web" with 4 starter templates**](https://www.jovo.tech/news/2020-10-29-jovo-for-web-v3-2/)
+> [**NEWS**: We just launched Jovo v4](#)
 
-[![Jovo Framework](./docs/img/jovo-header.jpg)](https://www.jovo.tech)
+[![Jovo Framework](./docs/img/github-header.png)](https://v4.jovo.tech)
 
 <p>
-<a href="https://travis-ci.org/jovotech/jovo-framework" target="_blank"><img src="https://travis-ci.org/jovotech/jovo-framework.svg?branch=master"></a>
-<a href="https://www.npmjs.com/package/jovo-framework" target="_blank"><img src="https://badge.fury.io/js/jovo-framework.svg"></a>      
+<a href="https://www.npmjs.com/package/@jovotech/framework" target="_blank"><img src="https://badge.fury.io/js/jovo-framework.svg"></a>      
 <a href="./.github/CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
 <a href="https://opencollective.com/jovo-framework" target="_blank"><img src="https://opencollective.com/jovo-framework/tiers/badge.svg"></a>
-<a href="https://twitter.com/intent/tweet?text=🔈 The Voice Layer. Build cross-platform voice apps for Alexa, Google Assistant, and more with @jovotech https://github.com/jovotech/jovo-framework/" target="_blank"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social"></a>
+<a href="https://twitter.com/intent/tweet?text=Jovo Framework: The React for Voice and Chat Apps @jovotech https://github.com/jovotech/jovo-framework/" target="_blank"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social"></a>
 </p>
 
-## The Open Source Voice Layer: Build Voice Experiences for Alexa, Google Assistant, Samsung Bixby, Web Apps, and much more
+Build conversational and multimodal experiences for the web, Alexa, Google Assistant, Messenger, Instagram, Google Business Messages, mobile apps, and more. Fully customizable and open source.
 
+```typescript
+@Component()
+export class LoveHatePizzaComponent extends BaseComponent {
+  START() {
+    return this.$send(YesNoOutput, { message: 'Do you like pizza?' });
+  }
 
-```javascript
-app.setHandler({
-    LAUNCH() {
-        return this.toIntent('HelloWorldIntent');
-    },
+  @Intents(['YesIntent'])
+  lovesPizza() {
+    return this.$send({ message: 'Yes! I love pizza, too.', listen: false });
+  }
 
-    HelloWorldIntent() {
-        this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
-    },
-
-    MyNameIsIntent() {
-        this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
-    },
-});
+  @Intents(['NoIntent'])
+  hatesPizza() {
+    return this.$send({ message: `That's OK! Not everyone likes pizza.`, listen: false });
+  }
+}
 ```
 
-The main features of the Jovo ecosystem are:
-* [**Jovo Framework**](https://www.jovo.tech): Build cross-platform apps for voice and chat
-   * Build on top of platforms like [Alexa](https://www.jovo.tech/marketplace/jovo-platform-alexa), [Google Assistant](https://www.jovo.tech/marketplace/jovo-platform-googleassistant), [Samsung Bixby](https://www.jovo.tech/marketplace/jovo-platform-bixby), and [Facebook Messenger](https://www.jovo.tech/marketplace/jovo-platform-facebookmessenger)
-   * Build voice-enabled apps for web and mobile
-   * Build voice interactions into custom hardware like Raspberry Pi
-* [**Jovo CLI**](https://www.jovo.tech/marketplace/jovo-cli): Create, build, and deploy Jovo projects (including [staging](https://www.jovo.tech/docs/staging))
-* [**Jovo Marketplace**](https://www.jovo.tech/marketplace): Large variety of integrations like ASR, NLU, databases, analytics, CMS, and TTS
-* [**Jovo Webhook**](https://www.jovo.tech/docs/webhook) and [**Jovo Debugger**](https://www.jovo.tech/marketplace/jovo-plugin-debugger) for efficient local development and debugging in the browser
-* [**Jovo Language Model**](https://www.jovo.tech/docs/model): A consolidated language model that can be converted into Alexa Interaction Models and Dialogflow Agents
+- **Cross-platform**: Works on the [web](https://v4.jovo.tech/marketplace/platform-web), voice platforms (like [Alexa](https://v4.jovo.tech/marketplace/platform-alexa) and [Google Assistant](https://v4.jovo.tech/marketplace/platform-googleassistant)), and chat platforms (like [Facebook Messenger](https://v4.jovo.tech/marketplace/platform-facebookmessenger), [Instagram](https://v4.jovo.tech/marketplace/platform-instagram), and [Google Business Messages](https://v4.jovo.tech/marketplace/platform-googlebusiness)).
+- **Fast**: A [CLI](https://v4.jovo.tech/docs/cli), local development, and browser-based debugging using the [Jovo Debugger](https://v4.jovo.tech/docs/debugger).
+- **Component-based**: Build robust experiences based on reusable components.
+- **Multimodal**: An [output template](https://v4.jovo.tech/docs/output-templates) engine that translates structured content into voice, text, and visual responses.
+- **Extensible**: Build [Framework plugins](https://v4.jovo.tech/docs/plugins), [CLI plugins](https://v4.jovo.tech/docs/cli-plugins), and leverage many integrations from the [Jovo Marketplace](https://v4.jovo.tech/marketplace).
+- **Robust**: Write tests using our [unit testing suite](https://v4.jovo.tech/docs/unit-testing).
 
-> 🚀 Join our newsletter for free courses on voice app development: www.jovo.tech/newsletter
+## Getting Started
 
-## Table of Contents
-
-* [Usage](#usage)
-* [Benefits](#benefits)
-* [Learn more](#learn-more)
-* [Contributing](#contributing)
-
----
-We're glad to be supported by respected companies and individuals in the voice-first industry. [See our Open Collective to learn more](https://opencollective.com/jovo-framework).
-
-**Gold Sponsors**
-
-<a href="https://opencollective.com/jovo-framework#section-contributors"><img src="https://opencollective.com/jovo-framework/tiers/gold-sponsors.svg?avatarHeight=50&width=600" /></a>
-
-
-**Silver Sponsors**
-
-<a href="https://opencollective.com/jovo-framework#section-contributors"><img src="https://opencollective.com/jovo-framework/tiers/silver-sponsors.svg?avatarHeight=50&width=600" /></a>
-
-
-**Bronze Sponsors**
-
-<a href="https://opencollective.com/jovo-framework#section-contributors"><img src="https://opencollective.com/jovo-framework/tiers/bronze-sponsors.svg?avatarHeight=35&width=600" /></a>
-
-
-Find all supporters in our [`BACKERS.md`](./BACKERS.md) file.
-
-> [Support Jovo on Open Collective](https://opencollective.com/jovo-framework)
-
----
-
-
-
-## Usage
-
-> Learn more in our [Quickstart Guide](https://www.jovo.tech/docs/quickstart).
+> Learn more in our [Getting Started Guide](https://v4.jovo.tech/docs/getting-started).
 
 Install the Jovo CLI:
 
 ```sh
-$ npm install -g jovo-cli
+$ npm install -g @jovotech/cli
 ```
 
-Create a new Jovo project:
+Create a new Jovo project ([find the v4 template here](https://github.com/jovotech/jovo-v4-template)):
 
 ```sh
-# Default: Create new JavaScript project
-$ jovo new <directory>
-
-# Alternative: Create new TypeScript project
-$ jovo new <directory> --language typescript
+$ jovov4 new <directory>
 ```
 
 Go into project directory and run the Jovo development server:
@@ -103,45 +62,27 @@ Go into project directory and run the Jovo development server:
 $ cd <directory>
 
 # Run local development server
-$ jovo run
+$ jovov4 run
 
 # Press "." to open the Jovo Debugger
 ```
 
+## Sponsors
 
-## Benefits
+We're glad to be supported by respected companies and individuals in the voice-first and conversational AI industry. [See our Open Collective to learn more](https://opencollective.com/jovo-framework).
 
-* Flexible: Easily extend the Jovo Framework with integrations and plugins. Learn more in the [Jovo Marketplace](https://www.jovo.tech/marketplace)
-   * [Automatic Speech Recognition (ASR)](https://www.jovo.tech/marketplace/tag/asr)
-   * [Natural Language Understanding (NLU)](https://www.jovo.tech/marketplace/tag/nlu)
-   * [Databases](https://www.jovo.tech/marketplace/tag/databases)
-   * [Monitoring & Analytics](https://www.jovo.tech/marketplace/tag/monitoring)
-   * [Content Management](https://www.jovo.tech/marketplace/tag/cms)
-   * [Text to Speech (TTS)](https://www.jovo.tech/marketplace/tag/tts)
-* Starter friendly: [Templates](https://github.com/jovotech/jovo-templates) and [community support](https://community.jovo.tech/)
-* Efficient: [Local development](https://www.jovo.tech/docs/local-development) and [staging](https://www.jovo.tech/docs/staging)
-* Modular: Reusable [conversational components](https://www.jovo.tech/docs/components)
-* Robust: [Unit testing](jovo.tech/docs/unit-testing) and [debugging](https://www.jovo.tech/docs/debugging) tools
-* You're in full control: [Host](https://www.jovo.tech/docs/hosting) your app anywhere
+**Gold Sponsors**
 
+<a href="https://opencollective.com/jovo-framework#section-contributors"><img src="https://opencollective.com/jovo-framework/tiers/gold-sponsors.svg?avatarHeight=50&width=600" /></a>
 
-## Learn more
+**Silver Sponsors**
 
-* Jovo Docs (https://www.jovo.tech/docs/)
-* Jovo Tutorials (https://www.jovo.tech/tutorials)
-   * [Build an Alexa Skill in Node.js with Jovo](https://www.jovo.tech/tutorials/alexa-skill-tutorial-nodejs)
-   * [Build a Google Action in Node.js with Jovo](https://www.jovo.tech/tutorials/google-action-tutorial-nodejs)
-   * [Build your first Samsung Bixby Capsule with Jovo](https://www.jovo.tech/tutorials/samsung-bixby-hello-world)
-   * [Build your first Twilio Autopilot IVR with Jovo](https://www.jovo.tech/tutorials/twilio-autopilot-hello-world)
-* Jovo Courses (https://www.jovo.tech/courses)
-* Jovo Youtube Channel (https://www.youtube.com/c/jovotech)
+<a href="https://opencollective.com/jovo-framework#section-contributors"><img src="https://opencollective.com/jovo-framework/tiers/silver-sponsors.svg?avatarHeight=50&width=600" /></a>
 
+**Bronze Sponsors**
 
-## Contributing
-   
-We strongly encourage everyone who wants to help the Jovo development take a look at the following resources:
-* [CONTRIBUTING.md](./.github/CONTRIBUTING.md) 
-* [Step by step process](https://www.jovo.tech/docs/contributing) 
-* Take a look at our [issues](https://github.com/jovotech/jovo-framework/issues)
-* [Support us on Open Collective](https://opencollective.com/jovo-framework)
+<a href="https://opencollective.com/jovo-framework#section-contributors"><img src="https://opencollective.com/jovo-framework/tiers/bronze-sponsors.svg?avatarHeight=35&width=600" /></a>
 
+Find all supporters in our [`BACKERS.md`](./BACKERS.md) file.
+
+> [Support Jovo on Open Collective](https://opencollective.com/jovo-framework)
