@@ -1,19 +1,20 @@
 ---
 title: 'Logging'
-excerpt: 'Learn more about the different types of logging you can do in your Jovo app.'
+excerpt: 'Learn about logging features that help you debug your Jovo apps.'
 ---
+
 # Logging
 
-Learn more about the different types of logging you can do in your Jovo app.
+Learn about logging features that help you debug your Jovo apps.
 
 ## Introduction
 
 The main logging feature provided by Jovo is [Basic Logging](#basic-logging), which logs the request and response of each interaction. This is especially relevant for debugging and support requests, for example in the [Jovo Community Forum](https://community.jovo.tech/).
 
-Most Jovo templates enable logging by default. You can find the configuration for this in the `app.ts` file:
+Most Jovo templates enable logging by default. You can find the configuration for this in the `app.ts` [app configuration](./app-config.md) file:
 
 ```typescript
-new App({
+const app = new App({
   logging: true,
   // ...
 });
@@ -21,6 +22,7 @@ new App({
 
 This default configuration will show the full request and response JSON objects in your logs. If you're developing locally, the logs are displayed in your terminal/command line. For other deployment environments, they show up in the respective log service, for example [CloudWatch](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/WhatIsCloudWatchLogs.html) on AWS.
 
+Jovo also offers an internal `Logger` that can be used for different log levels. Learn more in the [Jovo Logger](#jovo-logger) section.
 
 ## Configuration
 
@@ -31,40 +33,38 @@ new App({
   logging: {
     enabled: true,
     // ...
-  }
+  },
   // ...
 });
 ```
 
-This is the default configuration:
+Here are all configurations:
 
 ```typescript
 logging: {
   enabled: true,
-  request: false,
+  request: { /* ... */ },
+  response: { /* ... */ },
   maskValue: '[ Hidden ]',
-  requestObjects: [],
-  maskedRequestObjects: [],
-  excludedRequestObjects: [],
-  response: false,
-  maskedResponseObjects: [],
-  excludedResponseObjects: [],
-  responseObjects: [], 
   indentation: '  ',
   styling: true,
-  colorizeSettings: {
-    colors: {
-      STRING_KEY: 'white',
-      STRING_LITERAL: 'green',
-      NUMBER_LITERAL: 'yellow',
-      BRACE: 'white.bold',
-    },
-  },
+  colorizeSettings: { /* ... */ },
+  tslog: { /* ... */ },
 },
 ```
 
-Below, you can find more information about each of the configurations.
+- `enabled`: Enable [Basic Logging](#basic-logging) for both requests and responses.
+- `request`: Configurations for [request logging](#request-logging).
+- `response`: Configurations for [response logging](#response-logging).
+- More information about `indentation`, `style`, and `colorizeSettings` can be found in the [styling](#styling) section.
+- `tslog`: Configurations for the logging library used by the [Jovo Logger](#jovo-logger).
 
+## Basic Logging
+
+- [Request Logging](#request-logging)
+- [Response Logging](#response-logging)
+- [Masking](#masking)
+- [Styling](#styling)
 
 ### Request Logging
 
@@ -81,27 +81,31 @@ For some platforms, the logs of a request can get quite long if you only need ce
 
 ```typescript
 logging: {
-  requestObjects: [],
-  maskedRequestObjects: [],
-  excludedRequestObjects: [],
+  request: {
+    enabled: true,
+    objects: [],
+    maskedObjects: [],
+    excludedObjects: [],
+  },
   // ...
 },
 ```
 
-`requestObjects` can be used to only display the properties that are referenced as strings in the array. This can include nested objects. Here is an example:
+`objects` can be used to only display the properties that are referenced as strings in the array. This can include nested objects. Here is an example:
 
 ```typescript
 logging: {
-  requestObjects: [
+  request: {
+    objects: [
     'request',
     'context.System.user'
-  ],
+    ],
+  },
   // ...
 },
 ```
 
-In a similar fashion, you can also [mask objects](#masking) or completely remove them from the logs using `excludedRequestObjects`.
-
+In a similar fashion, you can also [mask objects](#masking) or completely remove them from the logs using `excludedObjects`.
 
 ### Response Logging
 
@@ -109,7 +113,7 @@ You can specifically enable and disable the logging of responses with the follow
 
 ```typescript
 logging: {
-  request: true,
+  response: true,
   // ...
 },
 ```
@@ -118,23 +122,31 @@ Similar to [request logging](#request-logging), you can use additional configura
 
 ```typescript
 logging: {
-  responseObjects: [],
-  maskedResponseObjects: [],
-  excludedResponseObjects: [],
+  response: {
+    enabled: true,
+    objects: [],
+    maskedObjects: [],
+    excludedObjects: [],
+  },
   // ...
 },
 ```
 
 ### Masking
 
-As described in the [request](#request-logging) and [response logging](#response-logging) sections, you can add masking for specific request or response objects. This is helpful for sensitive data like access tokens or private user information that won't be logged on a server or logging service like AWS Cloudwatch, etc.
+As described in the [request](#request-logging) and [response logging](#response-logging) sections, you can add masking for specific request or response objects. This is helpful for sensitive data like access tokens or private user information that shouldn't be logged on a server or logging service like AWS Cloudwatch.
 
 ```typescript
 logging: {
   maskValue: '[ Hidden ]',
-  maskedRequestObjects: [],
-  maskedResponseObjects: [],
-  // ...
+  request: {
+    maskedObjects: [],
+    // ...
+  },
+  response: {
+    maskedObjects: [],
+    // ...
+  },
 },
 ```
 
@@ -159,3 +171,46 @@ logging: {
   // ...
 },
 ```
+
+## Jovo Logger
+
+Jovo has an internal `Logger` that can be used to display certain levels of logs. It is based on [tslog](https://tslog.js.org).
+
+You can add tslog configurations ([learn more on their website](https://tslog.js.org/#/?id=settings)) to the `tslog` property, for example:
+
+```typescript
+logging: {
+  tslog: {
+    prettyInspectOptions: { depth: 3 },
+    prefix: [''],
+    displayDateTime: false,
+  },
+  // ...
+},
+```
+
+You can import the Jovo Logger like this:
+
+```typescript
+import { Logger } from '@jovotech/framework';
+```
+
+You can use the logger to log to various log levels, which can be set as environment variable `JOVO_LOG_LEVEL`, for example like this:
+
+```typescript
+process.env.JOVO_LOG_LEVEL = 'warn';
+```
+
+The logs can be done like this:
+
+```typescript
+Logger.silly(string); // JOVO_LOG_LEVEL = 'silly'
+Logger.trace(string); // JOVO_LOG_LEVEL = 'trace'
+Logger.debug(string); // JOVO_LOG_LEVEL = 'debug'
+Logger.info(string); // JOVO_LOG_LEVEL = 'info'
+Logger.warn(string); // JOVO_LOG_LEVEL = 'warn'
+Logger.error(new Error()); // JOVO_LOG_LEVEL = 'error'
+Logger.fatal(new Error()); // JOVO_LOG_LEVEL = 'fatal'
+```
+
+Learn more about log levels in the [official tslog documentation](https://tslog.js.org/#/?id=log-level).
