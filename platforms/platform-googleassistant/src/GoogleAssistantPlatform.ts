@@ -21,12 +21,13 @@ export class GoogleAssistantPlatform extends Platform<
   GoogleAssistantPlatform,
   GoogleAssistantConfig
 > {
-  outputTemplateConverterStrategy = new GoogleAssistantOutputTemplateConverterStrategy();
-  requestClass = GoogleAssistantRequest;
-  jovoClass = GoogleAssistant;
-  userClass = GoogleAssistantUser;
-  deviceClass = GoogleAssistantDevice;
-  requestBuilder = GoogleAssistantRequestBuilder;
+  readonly id: string = 'googleAssistant';
+  readonly outputTemplateConverterStrategy = new GoogleAssistantOutputTemplateConverterStrategy();
+  readonly requestClass = GoogleAssistantRequest;
+  readonly jovoClass = GoogleAssistant;
+  readonly userClass = GoogleAssistantUser;
+  readonly deviceClass = GoogleAssistantDevice;
+  readonly requestBuilder = GoogleAssistantRequestBuilder;
 
   getDefaultConfig(): GoogleAssistantConfig {
     return {};
