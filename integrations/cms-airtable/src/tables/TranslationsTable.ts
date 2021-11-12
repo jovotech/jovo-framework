@@ -84,6 +84,8 @@ export class TranslationsTable extends AirtableTable {
             locale,
             'translation',
             resources[locale]['translation'],
+            true,
+            false,
           );
         } else {
           jovo.$app.i18n.i18n.addResourceBundle(
@@ -91,6 +93,8 @@ export class TranslationsTable extends AirtableTable {
             `${key}.translation`,
             // @ts-ignore
             resources[locale][key]['translation'],
+            true,
+            false,
           );
         }
       }
