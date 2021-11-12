@@ -9,8 +9,7 @@ export abstract class DashbotAnalyticsPlugin {
     } catch (error) {
       if (error.isAxiosError) {
         throw new JovoError({
-          message: error.message,
-          details: error.response.data.errors.join('\n'),
+          message: `Request to Dashbot failed: ${error.response.data.errors.join('\n')}`,
         });
       }
 
