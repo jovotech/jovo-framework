@@ -41,7 +41,8 @@ export class LoveHatePizzaComponent extends BaseComponent {
 - **Component-based**: Build robust experiences based on reusable components.
 - **Multimodal**: An [output template](https://v4.jovo.tech/docs/output-templates) engine that translates structured content into voice, text, and visual responses.
 - **Extensible**: Build [Framework plugins](https://v4.jovo.tech/docs/plugins), [CLI plugins](https://v4.jovo.tech/docs/cli-plugins), and leverage many integrations from the [Jovo Marketplace](https://v4.jovo.tech/marketplace).
-- **Robust**: Write tests using our [unit testing suite](https://v4.jovo.tech/docs/unit-testing).
+- **Integrated**: Works with many [NLU](https://v4.jovo.tech/docs/nlu) and [CMS](https://v4.jovo.tech/docs/cms) services.
+- **Robust**: Includes [staging](https://v4.jovo.tech/docs/staging) and a [unit testing suite](https://v4.jovo.tech/docs/unit-testing).
 
 ## Getting Started
 
