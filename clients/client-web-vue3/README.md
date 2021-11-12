@@ -34,8 +34,8 @@ import Vue from 'vue';
 // ...
 
 Vue.use<JovoWebClientVueConfig>(JovoWebClientVue, {
-  url: 'http://localhost:3000/webhook',
-  client: {
+  endpointUrl: 'http://localhost:3000/webhook',
+  config: {
     // Configuration
 });
 ```
@@ -43,7 +43,7 @@ Vue.use<JovoWebClientVueConfig>(JovoWebClientVue, {
 The constructor accepts two parameters:
 
 - `endpointUrl`: For local development of your Jovo app with [Express](https://v4.jovo.tech/marketplace/server-express), you can use `http://localhost:3000/webhook`.
-- `options`: Learn more in the [vanilla JS client docs](https://v4.jovo.tech/marketplace/client-web#configuration).
+- `config`: Learn more in the [vanilla JS client docs](https://v4.jovo.tech/marketplace/client-web#configuration).
 
 ## Differences to Vanilla JS Client
 
