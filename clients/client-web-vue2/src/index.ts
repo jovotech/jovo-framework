@@ -14,18 +14,18 @@ declare module 'vue/types/vue' {
 }
 
 export interface JovoWebClientVueConfig {
-  url: string;
-  client?: InitConfig;
+  endpointUrl: string;
+  config?: InitConfig;
 }
 
 const plugin: PluginObject<JovoWebClientVueConfig> = {
   install: (vue, config) => {
-    if (!config?.url) {
+    if (!config?.endpointUrl) {
       throw new Error(
-        `At least the 'url' option has to be set in order to use the JovoWebClientPlugin. `,
+        `At least the 'endpointUrl' option has to be set in order to use the JovoWebClientPlugin. `,
       );
     }
-    const client = new Client(config.url, config.client);
+    const client = new Client(config.endpointUrl, config.config);
     // make the client reactive
     vue.prototype.$client = vue.observable(client);
   },

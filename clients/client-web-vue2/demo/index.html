@@ -18,8 +18,8 @@
     <script src="js/index.js"></script>
     <script>
       Vue.use(JovoWebClientVue.default, {
-        url: 'http://localhost:3000/webhook',
-        client: {},
+        endpointUrl: 'http://localhost:3000/webhook',
+        config: {},
       });
       var app = new Vue({
         el: '#app',

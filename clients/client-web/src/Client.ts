@@ -260,8 +260,11 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
     };
   }
 
-  async send(input: Input): Promise<ClientResponse> {
-    const request = this.createRequest(input);
+  async send(inputOrRequest: Input | ClientRequest): Promise<ClientResponse> {
+    const request: ClientRequest =
+      'version' in inputOrRequest && inputOrRequest.version
+        ? inputOrRequest
+        : this.createRequest(inputOrRequest as Input);
     const response = await this.networkTransportStrategy.send(request);
     this.emit(ClientEvent.Response, response);
     await this.handleResponse(response);
