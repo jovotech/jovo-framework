@@ -195,17 +195,22 @@ You can import the Jovo Logger like this:
 import { Logger } from '@jovotech/framework';
 ```
 
-It offers the following features:
+You can use the logger to log to various log levels, which can be set as environment variable `JOVO_LOG_LEVEL`, for example like this:
 
 ```typescript
-Logger.error(new Error());
-Logger.info(string);
-Logger.warn(string);
-Logger.debug(string);
+process.env.JOVO_LOG_LEVEL = 'warn';
 ```
 
-The log level can be set as environment variable `JOVO_LOG_LEVEL`, for example like this:
+The logs can be done like this:
 
 ```typescript
-process.env.JOVO_LOG_LEVEL = 'WARN';
+Logger.silly(string); // JOVO_LOG_LEVEL = 'silly'
+Logger.trace(string); // JOVO_LOG_LEVEL = 'trace'
+Logger.debug(string); // JOVO_LOG_LEVEL = 'debug'
+Logger.info(string); // JOVO_LOG_LEVEL = 'info'
+Logger.warn(string); // JOVO_LOG_LEVEL = 'warn'
+Logger.error(new Error()); // JOVO_LOG_LEVEL = 'error'
+Logger.fatal(new Error()); // JOVO_LOG_LEVEL = 'fatal'
 ```
+
+Learn more about log levels in the [official tslog documentation](https://tslog.js.org/#/?id=log-level).
