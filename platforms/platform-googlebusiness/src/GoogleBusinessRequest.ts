@@ -6,7 +6,6 @@ import {
   JovoRequest,
   UnknownObject,
 } from '@jovotech/framework';
-
 import { GoogleBusinessCapabilityType } from './GoogleBusinessDevice';
 import { Receipt } from './interfaces';
 

@@ -2,6 +2,7 @@
 title: 'Data'
 excerpt: 'Learn more about different types of data that can be used in a Jovo app. For example, some data might be only relevant for a specific interaction, a component, or session.'
 ---
+
 # Data
 
 There are different types of data that can be used in a Jovo app. For example, some data might be only relevant for a specific interaction, a component, or session. Other data might be needed across sessions and should be persisted using the [Jovo database integrations](./databases.md).
@@ -10,15 +11,15 @@ There are different types of data that can be used in a Jovo app. For example, s
 
 These are the types of data that are usually only stored for a short amount of time ([short-term data storage](#short-term-data-storage)):
 
-* [Request data](#request-data): Only used for this specific interaction, stored in `this.$data`.
-* [Component data](#component-data): Only used for this specific component, stored in `this.$component.data`.
-* [Session data](#session-data): Only used for this specific session, stored in `this.$session.data`.
-* [App data](#app-data): This is a special data type that keeps the data stored as long as the server is running, which can be usually for caching. Stored in `this.$app.data`.
+- [Request data](#request-data): Only used for this specific interaction, stored in `this.$data`.
+- [Component data](#component-data): Only used for this specific component, stored in `this.$component.data`.
+- [Session data](#session-data): Only used for this specific session, stored in `this.$session.data`.
+- [App data](#app-data): This is a special data type that keeps the data stored as long as the server is running, which can be usually for caching. Stored in `this.$app.data`.
 
 And here are some types of data that are typically persisted across user sessions ([long-term data storage](#long-term-data-storage)):
 
-* [User data](#user-data): User specific data stored in `this.$user.data`.
-* [History](#history): Data from previous interactions, accessible via `this.$history`.
+- [User data](#user-data): User specific data stored in `this.$user.data`.
+- [History](#history): Data from previous interactions, accessible via `this.$history`.
 
 ## Short-term Data Storage
 
@@ -36,7 +37,7 @@ this.$data.someKey = 'someValue';
 
 Sometimes, a [component](./components.md) might need to gather information that becomes irrelevant as soon as the component resolves.
 
-You can store data only for a specific component like this: 
+You can store data only for a specific component like this:
 
 ```typescript
 this.$component.data.someKey = 'someValue';
@@ -49,10 +50,10 @@ $state = [
   {
     componentPath: 'SomeComponent',
     data: {
-      someKey: 'someValue'
-    }
-  }
-]
+      someKey: 'someValue',
+    },
+  },
+];
 ```
 
 The `$state` is stored as [session data](#session-data). Once the component is removed from it, the data is removed as well.
@@ -71,8 +72,6 @@ Most platforms offer some kind of local storage that allows you to store session
 
 Other platforms (like Facebook Messenger) don't support this. For them, you need to enable `session` as `storedElement` in your [database integration](./databases.md)
 
-
-
 ### App Data
 
 > This feature is currently in implementation
@@ -84,8 +83,6 @@ this.$app.data.someKey = 'someValue';
 ```
 
 For example, this can be used for non-user-specific information that needs an API call that is not necessary to be executed at every request. By storing data in the app object, the API call only needs to be done once while the server is running (or the serverless function like AWS Lambda is warm).
-
-
 
 ## Long-term Data Storage
 
@@ -107,10 +104,10 @@ The history object contains an `items` array that is sorted by time (DESC). The 
 
 ```typescript
 // Get the history element for the most recent interaction
-this.$history.prev
+this.$history.prev;
 
 // Alternatively access it using the items array
-this.$history.items[0]
+this.$history.items[0];
 
 /* Sample result if output and input are enabled
 {
@@ -134,22 +131,22 @@ new FileDb({
     history: {
       enabled: true,
       size: 3, // Size of the this.$history array
-      
+
       // Example: Store this.$output into the history
       output: true, // this.$output, optional
-      
+
   }
 }),
 ```
 
 You can add the following [Jovo properties](./jovo-properties.md) to the history:
 
-* `request`: Stores `this.$request`
-* `input`: Stores `this.$input`
-* `output`: Stores `this.$output`
-* `response`: Stores `this.$response`
-* `state`: Stores `this.$state`
-* `entities`: Stores `this.$entities`
+- `request`: Stores `this.$request`
+- `input`: Stores `this.$input`
+- `output`: Stores `this.$output`
+- `response`: Stores `this.$response`
+- `state`: Stores `this.$state`
+- `entities`: Stores `this.$entities`
 
 You can even add your own custom data to the history. Add any property with a function that returns the data to be stored. Here is an example for a `someCustomData` property:
 
@@ -173,42 +170,42 @@ Here is an example how the history is then stored in a database:
 [
   {
     // ...
-    "history": {
-      "items": [
+    history: {
+      items: [
         {
-          "output": {
-            "message": "Yes! I love pizza, too."
+          output: {
+            message: 'Yes! I love pizza, too.',
           },
-          "input": {
-            "type": "INTENT",
-            "intent": "AMAZON.YesIntent",
+          input: {
+            type: 'INTENT',
+            intent: 'AMAZON.YesIntent',
           },
-          "state": [
+          state: [
             {
-              "componentPath": "LoveHatePizzaComponent"
-            }
+              componentPath: 'LoveHatePizzaComponent',
+            },
           ],
-          "someCustomData": "Some custom data for user amzn1.account.AM3B00000000000000000000000"
+          someCustomData: 'Some custom data for user amzn1.account.AM3B00000000000000000000000',
         },
         {
-          "output": {
-            "message": "Hello World! Do you like pizza?",
-            "listen": true
+          output: {
+            message: 'Hello World! Do you like pizza?',
+            listen: true,
           },
-          "input": {
-            "TYPE": "LAUNCH"
+          input: {
+            TYPE: 'LAUNCH',
           },
-          "state": [
+          state: [
             {
-              "componentPath": "LoveHatePizzaComponent"
-            }
+              componentPath: 'LoveHatePizzaComponent',
+            },
           ],
-          "someCustomData": "Some custom data for user amzn1.account.AM3B00000000000000000000000"
-        }
-      ]
+          someCustomData: 'Some custom data for user amzn1.account.AM3B00000000000000000000000',
+        },
+      ],
     },
-    "createdAt": "2021-06-30T06:45:40.444Z",
-    "updatedAt": "2021-06-30T06:47:44.253Z"
-  }
-]
+    createdAt: '2021-06-30T06:45:40.444Z',
+    updatedAt: '2021-06-30T06:47:44.253Z',
+  },
+];
 ```

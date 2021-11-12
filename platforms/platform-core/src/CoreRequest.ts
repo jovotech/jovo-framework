@@ -1,7 +1,7 @@
 import { Input, InputTypeLike, JovoInput, JovoRequest, UnknownObject } from '@jovotech/framework';
 
 import { CoreCapabilityType } from './CoreDevice';
-import { Context } from './interfaces';
+import { CoreRequestContext } from './interfaces';
 
 export class CoreRequest extends JovoRequest {
   version?: string;
@@ -12,7 +12,7 @@ export class CoreRequest extends JovoRequest {
   locale?: string; // e.g. de-DE, en-US
   data?: UnknownObject; // this.$request
   input?: Input;
-  context?: Context;
+  context?: CoreRequestContext;
 
   getLocale(): string | undefined {
     return this.locale;

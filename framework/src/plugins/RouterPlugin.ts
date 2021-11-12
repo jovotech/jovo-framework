@@ -1,4 +1,4 @@
-import { Intent } from '@jovotech/common';
+import { InputType, Intent } from '@jovotech/common';
 import { App } from '../App';
 import { DuplicateGlobalIntentsError } from '../errors/DuplicateGlobalIntentsError';
 import { HandleRequest } from '../HandleRequest';
@@ -44,6 +44,10 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
   }
 
   private async setRoute(jovo: Jovo): Promise<void> {
+    if (jovo.$input.type === InputType.Error) {
+      return jovo.$app.handleError(new Error(jovo.$input.text || 'Input is of type ERROR'), jovo);
+    }
+
     const mappedIntent = this.getMappedIntent(jovo.$input, jovo.$config.routing?.intentMap);
     if (mappedIntent) {
       jovo.$input.intent = mappedIntent;

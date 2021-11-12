@@ -42,7 +42,7 @@ export abstract class Extensible<
 
   use(...plugins: Plugin[]): this {
     plugins.forEach((plugin) => {
-      const name = plugin.constructor.name;
+      const name = plugin.name;
       this.plugins[name] = plugin;
       plugin.install?.(this);
     });
