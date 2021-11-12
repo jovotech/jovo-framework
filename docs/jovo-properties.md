@@ -158,6 +158,7 @@ this.$device;
 
 ### $history
 
+
 The `$history` property contains data about previous user interactions.
 
 ```typescript

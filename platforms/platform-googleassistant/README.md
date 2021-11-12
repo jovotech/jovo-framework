@@ -2,10 +2,10 @@
 title: 'Google Assistant Platform Integration'
 excerpt: 'The Google Assistant platform integration allows you to build custom Google Conversational Actions using Jovo.'
 ---
+
 # Google Assistant Platform Integration
 
 The Google Assistant [platform integration](https://v4.jovo.tech/docs/platforms) allows you to build custom Google Conversational Actions using Jovo.
-
 
 ## Introduction
 
@@ -23,6 +23,7 @@ In the Actions on Google Console, the Google Action project is configured, inclu
 If a user converses with your Action, Google Assistant sends API requests to your Action's code endpoint. The code is then responsible for returning an appropriate response. Learn more about how you can build this with the Jovo Framework in the [Google Action code](#google-action-code) section.
 
 Jovo is a framework that allows you to build apps that work across devices and platforms. However, this does not mean that you can't build highly complex Google Actions with Jovo. Any custom Google Conversational Action that can be built with the official Actions SDK can also be built with the Jovo Framework. In the [platform-specific features](#platform-specific-features) section, we're going to take a look at Google Action features in Jovo.
+
 ## Installation
 
 To create a new Google Assistant project with Jovo, we recommend installing the Jovo CLI, creating a new Jovo project, and selecting Google Assistant as platform using the CLI wizard. Learn more in our [getting started guide](https://v4.jovo.tech/docs/getting-started).
@@ -69,7 +70,7 @@ const project = new ProjectConfig({
   plugins: [
     new GoogleAssistantCli(),
     // ...
-  ]
+  ],
 });
 ```
 
@@ -79,7 +80,6 @@ After successfully installing the Jovo Google Assistant packages, you can do the
 
 - Use the Jovo CLI to [create a project in the Actions on Google Console](#actions-on-google-console-project)
 - Use the Jovo Framework to [build the Google Action code](#google-action-code)
-
 
 ## Actions on Google Console Project
 
@@ -105,12 +105,11 @@ Learn more on the following pages:
 - [Google Assistant Project Configuration](https://v4.jovo.tech/marketplace/platform-googleassistant/project-config)
 - [Google Assistant Language Model](https://v4.jovo.tech/marketplace/platform-googleassistant/model)
 
-
 ## Google Action Code
 
 The Jovo Google Assistant platform package is a [platform integration](https://v4.jovo.tech/docs/platforms) that understands the types of requests Google Assistant sends and knows how to translate output into a Google Assistant response. To learn more about the Jovo request lifecycle, take a look at the [RIDR documentation](https://v4.jovo.tech/docs/ridr-lifecycle).
 
-When a user interacts with your Action through Google Assistant, the platform turns user input (usually speech or text) into structured meaning (usually *intents* and *slots*). It then sends a request with this data to your Jovo app. [Learn more about the webhook request structure in the official Google Assistant docs](https://developers.google.com/assistant/conversational/webhooks?tool=builder#example-request).
+When a user interacts with your Action through Google Assistant, the platform turns user input (usually speech or text) into structured meaning (usually _intents_ and _slots_). It then sends a request with this data to your Jovo app. [Learn more about the webhook request structure in the official Google Assistant docs](https://developers.google.com/assistant/conversational/webhooks?tool=builder#example-request).
 
 The Jovo app then uses this request information to return output. For example, the code snippet below asks the user if they like pizza:
 
@@ -128,19 +127,18 @@ If you want to learn more about how to return the right response, take a look at
 
 The output is then translated into a response that is returned to Google Assistant. [Learn more about the response structure in the official Google Assistant docs](https://developers.google.com/assistant/conversational/webhooks?tool=builder#example-response).
 
-
 ## Platform-Specific Features
 
 You can access the Google Assistant specific object like this:
 
 ```typescript
-this.$googleAssistant
+this.$googleAssistant;
 ```
 
 You can also use this object to see if the request is coming from Google Assistant (or a different platform):
 
 ```typescript
-if(this.$googleAssistant) {
+if (this.$googleAssistant) {
   // ...
 }
 ```
@@ -149,31 +147,29 @@ if(this.$googleAssistant) {
 
 Google Conversational Actions have a few concepts that are different compared to other platforms, for example:
 
-* [Scenes](https://v4.jovo.tech/marketplace/platform-googleassistant/project-config/scenes)
-
+- [Scenes](https://v4.jovo.tech/marketplace/platform-googleassistant/project-config/scenes)
 
 ### User
 
 There are various Google Assistant specific features added to the user class that can be accessed like this:
 
 ```typescript
-this.$googleAssistant.$user
+this.$googleAssistant.$user;
 ```
 
-Google Assistant has the concept of *verified* users. Only if a user is verified (for example logged into their Google account on their mobile phone), data about the user can be stored. Learn more about the [expiration of user storage data in the official Google Assistant docs](https://developers.google.com/assistant/conversational/storage-user#expiration_of_user_storage_data).
+Google Assistant has the concept of _verified_ users. Only if a user is verified (for example logged into their Google account on their mobile phone), data about the user can be stored. Learn more about the [expiration of user storage data in the official Google Assistant docs](https://developers.google.com/assistant/conversational/storage-user#expiration_of_user_storage_data).
 
 You can check is a user is verified like this:
 
 ```typescript
-this.$googleAssistant.$user.isVerified()
+this.$googleAssistant.$user.isVerified();
 ```
 
 If a verified user interacts with the Google Action the first time, Jovo generates a user ID and store it into the `user.params._GOOGLE_ASSISTANT_USER_ID_` [user storage](https://developers.google.com/assistant/conversational/storage-user?hl=en) property. This ID will then be used to write and retrieve data using one of the [Jovo database integrations](https://v4.jovo.tech/docs/databases).
 
 Learn more about user specific methods here:
 
-* [Account Linking](https://v4.jovo.tech/marketplace/platform-googleassistant/account-linking)
-
+- [Account Linking](https://v4.jovo.tech/marketplace/platform-googleassistant/account-linking)
 
 ### Output
 
@@ -210,7 +206,7 @@ You can add response objects that should show up exactly like this in the Google
 
 ### Health Checks
 
-When your Action is live, Google sends requests they call *health checks* to test if the code keeps returning an appropriate response. [Learn more in the official Google Assistant docs](https://developers.google.com/assistant/console/health-checks).
+When your Action is live, Google sends requests they call _health checks_ to test if the code keeps returning an appropriate response. [Learn more in the official Google Assistant docs](https://developers.google.com/assistant/console/health-checks).
 
 Jovo handles the health checks for you and automatically returns a valid response in the [`before.request.start` middleware](https://v4.jovo.tech/docs/ridr-lifecycle#middlewares). Health check requests do not affect analytics or database integrations.
 
@@ -234,4 +230,4 @@ $ jovo deploy:platform googleAssistant
 
 You can also learn more about Google Assistant specific features here:
 
-* [Model](https://v4.jovo.tech/marketplace/platform-googleassistant/model)
+- [Model](https://v4.jovo.tech/marketplace/platform-googleassistant/model)

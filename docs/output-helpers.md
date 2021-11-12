@@ -15,7 +15,9 @@ The `OutputHelpers` class offers a variety of methods that help you interact wit
 import { OutputHelpers } from '@jovotech/output';
 // ...
 
-OutputHelpers.randomize([ /* ... */ ])
+OutputHelpers.randomize([
+  /* ... */
+]);
 ```
 
 ## Helpers
@@ -28,7 +30,7 @@ The generic [`message`](./output-templates.md#message) and [`reprompt`](./output
 
 ```typescript
 {
-  message: [ 'Hi!', 'Hello!', 'Hey there.']
+  message: ['Hi!', 'Hello!', 'Hey there.'];
 }
 ```
 
@@ -38,6 +40,7 @@ For other elements, you can use the `randomize` helper to add variety to your ou
 import { OutputHelpers } from '@jovotech/output';
 // ...
 
-OutputHelpers.randomize([ /* ... */ ])
+OutputHelpers.randomize([
+  /* ... */
+]);
 ```
-

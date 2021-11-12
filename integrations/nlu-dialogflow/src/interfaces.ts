@@ -1,5 +1,5 @@
 import type { AnyObject } from '@jovotech/framework';
-import type { Message } from '@jovotech/output-dialogflow';
+import type { Message } from '@jovotech/platform-dialogflow';
 
 export interface DetectIntentRequest {
   queryParams?: {

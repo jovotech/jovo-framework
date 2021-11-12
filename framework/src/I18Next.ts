@@ -1,5 +1,5 @@
 import { AnyObject, OmitIndex } from '@jovotech/common';
-import i18next, { InitOptions, Resource, TOptionsBase, TFunctionResult } from 'i18next';
+import i18next, { InitOptions, Resource, TFunctionResult, TOptionsBase } from 'i18next';
 import type { A, F, O, S, U } from 'ts-toolbelt';
 import { Plugin, PluginConfig } from './Plugin';
 
@@ -44,7 +44,7 @@ export type I18NextFullPath<
 > = S.Join<[LANGUAGE, A.Cast<NAMESPACE, string>, PATH], '.'>;
 
 // Type that returns the actual value in I18NextResources relative to the given path, language and namespace
-export type I18NextResult<
+export type I18NextValueAt<
   PATH extends string,
   LANGUAGE extends I18NextResourcesLanguageKeys | string,
   NAMESPACE extends I18NextResourcesNamespaceKeysOfLanguage<LANGUAGE> | string,
@@ -52,7 +52,7 @@ export type I18NextResult<
     NonIndexedI18NextResources,
     S.Split<I18NextFullPath<PATH, LANGUAGE, NAMESPACE>, '.'>
   >,
-> = RESULT extends undefined ? I18NextTFunctionResult : RESULT;
+> = RESULT extends undefined ? string : RESULT;
 
 // Custom init-options for i18next in case some custom properties are used in the future.
 export interface I18NextConfig extends InitOptions, PluginConfig {}
@@ -93,25 +93,20 @@ export class I18Next extends Plugin<I18NextConfig> {
     await this.i18n.init(this.config);
   }
 
-  // The first signature only allows string literals
   t<
     PATH extends string,
     LANGUAGE extends I18NextResourcesLanguageKeys | string = I18NextResourcesLanguageKeys,
     NAMESPACE extends
       | I18NextResourcesNamespaceKeysOfLanguage<LANGUAGE>
       | string = I18NextResourcesNamespaceKeysOfLanguage<LANGUAGE>,
-    LITERAL_PATH extends string = StringLiteral<PATH>,
   >(
     path:
-      | I18NextAutoPath<LITERAL_PATH, LANGUAGE, NAMESPACE>
-      | LITERAL_PATH
-      | Array<I18NextAutoPath<LITERAL_PATH, LANGUAGE, NAMESPACE> | LITERAL_PATH>,
+      | I18NextAutoPath<PATH, LANGUAGE, NAMESPACE>
+      | PATH
+      | Array<I18NextAutoPath<PATH, LANGUAGE, NAMESPACE> | PATH>,
     options?: I18NextTOptions<LANGUAGE, NAMESPACE>,
-  ): I18NextResult<LITERAL_PATH, LANGUAGE, NAMESPACE>;
-  t<RESULT extends I18NextTFunctionResult = string>(
-    path: string | string[],
-    options?: I18NextTFunctionOptions,
-  ): RESULT;
+  ): I18NextValueAt<PATH, LANGUAGE, NAMESPACE>;
+  t<FORCED_RESULT>(path: string | string[], options?: I18NextTFunctionOptions): FORCED_RESULT;
   t(path: string | string[], options?: I18NextTFunctionOptions): I18NextTFunctionResult {
     if (options?.platform) {
       if (Array.isArray(path)) {

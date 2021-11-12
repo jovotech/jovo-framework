@@ -2,12 +2,14 @@
 title: 'Core Platform'
 excerpt: 'The Jovo Core Platform is a standalone platform integration that can be used to deploy a voice and chat experiences to custom devices and hardware, including the web, mobile apps, and Raspberry Pi.'
 ---
+
 # Core Platform
 
 The Jovo Core Platform is a standalone [platform integration](https://v4.jovo.tech/docs/platforms) that can be used to deploy a voice and chat experiences to custom devices and hardware, including the web, mobile apps, and Raspberry Pi.
+
 ## Introduction
 
-![Jovo Client and Jovo Core Platform](https://github.com/jovotech/jovo-framework/raw/master/jovo-platforms/jovo-platform-core/img/jovo-client-platform-communication.png "How Jovo Core Platform communicates with clients like web apps")
+![Jovo Client and Jovo Core Platform](https://github.com/jovotech/jovo-framework/raw/master/jovo-platforms/jovo-platform-core/img/jovo-client-platform-communication.png 'How Jovo Core Platform communicates with clients like web apps')
 
 Besides integrations with major platforms like Alexa, Google Assistant, or Facebook Messenger, Jovo also enables you to connect your own clients to build fully custom conversational experiences for both voice and chat.
 
@@ -21,8 +23,8 @@ The client sends a request to the Jovo app that may contain audio, text, or othe
 
 Depending on the client, it may be necessary to add integrations to the platform to convert the input to structured data:
 
-* [Automatic Speech Recognition (ASR)](https://www.jovo.tech/marketplace/tag/asr) to turn spoken audio into transcribed text
-* [Natural Language Understanding (NLU)](https://www.jovo.tech/marketplace/tag/nlu) to turn raw text into structured input
+- [Automatic Speech Recognition (ASR)](https://www.jovo.tech/marketplace/tag/asr) to turn spoken audio into transcribed text
+- [Natural Language Understanding (NLU)](https://www.jovo.tech/marketplace/tag/nlu) to turn raw text into structured input
 
 After these integrations are added, building a Jovo app for custom clients is similar to building for platforms like Alexa and Google Assistant.
 
@@ -57,11 +59,11 @@ The Core Platform has the following default config properties:
 new CorePlatform({
   platform: 'core',
   plugins: [],
-})
+}),
 ```
 
-* `platform`: The `platform` name that you can find in the [request documentation below](#request) can be overridden with this property.
-* `plugins`: You can add plugins to this array. For example, Core Platform requires an [NLU plugin](https://v4.jovo.tech/docs/nlu) to turn raw text into structured meaning.
+- `platform`: The `platform` name that you can find in the [request documentation below](#request) can be overridden with this property.
+- `plugins`: You can add plugins to this array. For example, Core Platform requires an [NLU plugin](https://v4.jovo.tech/docs/nlu) to turn raw text into structured meaning.
 
 ## Requests and Responses
 
@@ -91,10 +93,7 @@ The request usually contains data like an audio file or raw text ([find all samp
   },
   "context": {
     "device": {
-      "capabilities": [
-        "AUDIO",
-        "SCREEN"
-      ]
+      "capabilities": ["AUDIO", "SCREEN"]
     },
     "session": {
       "id": "1e4076b8-539a-48d5-8b14-1ec3cf651b7b",
@@ -113,8 +112,6 @@ The request usually contains data like an audio file or raw text ([find all samp
 The `input` property follows the same structure as the [Jovo `$input` property](https://v4.jovo.tech/docs/input).
 
 The `device` property follows the same structure as the [Jovo `$device` property](https://v4.jovo.tech/docs/device).
-
-
 
 ### Responses
 
@@ -152,13 +149,43 @@ The `output` is added in the same structure as [Jovo output templates](https://v
 You can access the Core specific object like this:
 
 ```typescript
-this.$core
+this.$core;
 ```
 
 You can also use this object to see if the request is coming from Core (or a different platform):
 
 ```typescript
-if(this.$core) {
+if (this.$core) {
   // ...
 }
+```
+
+## Custom Platforms
+
+You can create a custom platform based on the Jovo Core Platform using the `createCustomPlatform()` method.
+
+In order to make the type system aware of the new class, some module augmentations have to be done. Here is an example how this is done in the [Jovo Web Platform](https://v4.jovo.tech/marketplace/platform-web):
+
+```typescript
+declare module '@jovotech/framework/dist/types/Extensible' {
+  interface ExtensiblePluginConfig {
+    WebPlatform?: CorePlatformConfig<'web'>;
+  }
+
+  interface ExtensiblePlugins {
+    WebPlatform?: CorePlatform<'web'>;
+  }
+}
+
+declare module '@jovotech/framework/dist/types/Jovo' {
+  interface Jovo {
+    $web?: Core;
+  }
+}
+
+// Create the custom platform class
+const webPlatform = CorePlatform.createCustomPlatform('WebPlatform', 'web');
+
+// Instantiate the class
+const webPlatform = new WebPlatform();
 ```

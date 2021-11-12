@@ -2,6 +2,7 @@
 title: 'Rasa NLU Integration'
 excerpt: 'Turn raw text into structured meaning with the Jovo Framework integration for the open source natural language understanding service Rasa NLU.'
 ---
+
 # Rasa NLU Integration
 
 Turn raw text into structured meaning with the Jovo Framework integration for the open source natural language understanding service Rasa NLU.
@@ -13,7 +14,6 @@ Turn raw text into structured meaning with the Jovo Framework integration for th
 Since it is an open source service, you can host Rasa NLU on your own servers without any external API calls. [Learn more in the official Rasa docs](https://rasa.com/docs/rasa/nlu-only).
 
 You can use the Jovo Rasa NLU integration for projects where you receive raw text input that needs to be translated into structured meaning to work with the Jovo intent structure. Platforms like the [Jovo Core Platform](https://www.jovo.tech/marketplace/jovo-platform-core) (e.g. in conjunction with the [Jovo Web Client](https://www.jovo.tech/marketplace/jovo-client-web)), [Facebook Messenger](https://www.jovo.tech/marketplace/jovo-platform-facebookmessenger), and [Google Business Messages](https://www.jovo.tech/marketplace/jovo-platform-googlebusiness) are some examples where this would work.
-
 
 ## Installation
 
@@ -84,7 +84,7 @@ new RasaNlu({
 You can access the `alternativeIntents` array like this:
 
 ```typescript
-this.$input.nlu.alternativeIntents
+this.$input.nlu.alternativeIntents;
 ```
 
 Since the `alternativeIntents` is specific to the `RasaNluData` type, you can do type casting like this:

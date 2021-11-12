@@ -2,6 +2,7 @@
 title: 'Alexa Project Configuration'
 excerpt: 'Learn how to configure your Alexa projects using the Jovo CLI.'
 ---
+
 # Alexa Project Configuration
 
 Learn how to configure your Alexa projects using the `jovo.project.js` file.
@@ -21,22 +22,26 @@ const project = new ProjectConfig({
   // ...
   plugins: [
     new AlexaCli({
-      locales: { /* ... */ },
+      locales: {
+        /* ... */
+      },
       skillId: '<yourSkillId>',
       askProfile: 'default',
-      files: { /* ... */ },
+      files: {
+        /* ... */
+      },
     }),
     // ...
-  ]
+  ],
 });
 ```
 
 The following options are currently supported:
 
-* [`locales`](#locales): Defines how the locales in the [`models` folder](https://v4.jovo.tech/docs/models) should be mapped to Alexa locales.
-* [`skillId`](#skillid): The Skill ID that the project should be deployed to.
-* [`askProfile`](#askprofile): The ASK profile that should be used for the deployment.
-* [`files`](#files): This can be used to add or override files in your Alexa `build` folder, for example to make updates to the `skill.json` file.
+- [`locales`](#locales): Defines how the locales in the [`models` folder](https://v4.jovo.tech/docs/models) should be mapped to Alexa locales.
+- [`skillId`](#skillid): The Skill ID that the project should be deployed to.
+- [`askProfile`](#askprofile): The ASK profile that should be used for the deployment.
+- [`files`](#files): This can be used to add or override files in your Alexa `build` folder, for example to make updates to the `skill.json` file.
 
 ## locales
 
@@ -49,10 +54,10 @@ The below example uses an `en` Jovo Model and creates `en-US` and `en-GB` Alexa 
 ```js
 new AlexaCli({
   locales: {
-    en: [ 'en-US', 'en-GB' ],
+    en: ['en-US', 'en-GB'],
   },
   // ...
-})
+});
 ```
 
 ## skillId
@@ -65,7 +70,7 @@ You can then copy the ID and add it to your project configuration like this:
 new AlexaCli({
   skillId: '<yourSkillId>',
   // ...
-})
+});
 ```
 
 This ensures that your project is always deployed to the right Skill.
@@ -84,8 +89,8 @@ const project = new ProjectConfig({
         new AlexaCli({
           skillId: '<devSkillId>',
           // ...
-        })
-      ]
+        }),
+      ],
       // ...
     },
     prod: {
@@ -94,11 +99,11 @@ const project = new ProjectConfig({
         new AlexaCli({
           skillId: '<prodSkillId>',
           // ...
-        })
-      ]
+        }),
+      ],
       // ...
-    }
-  }
+    },
+  },
 });
 ```
 
@@ -112,7 +117,7 @@ You can define which profile to deploy to using the `askProfile` property. This 
 new AlexaCli({
   askProfile: 'default',
   // ...
-})
+});
 ```
 
 The `askProfile` property can be especially helpful for [staging](https://v4.jovo.tech/docs/staging), where different stages deploy to different Alexa developer accounts:
@@ -129,8 +134,8 @@ const project = new ProjectConfig({
         new AlexaCli({
           askProfile: '<devAskProfile>',
           // ...
-        })
-      ]
+        }),
+      ],
       // ...
     },
     prod: {
@@ -139,11 +144,11 @@ const project = new ProjectConfig({
         new AlexaCli({
           askProfile: '<prodAskProfile>',
           // ...
-        })
-      ]
+        }),
+      ],
       // ...
-    }
-  }
+    },
+  },
 });
 ```
 
@@ -174,7 +179,7 @@ new AlexaCli({
     },
   },
   // ...
-})
+});
 ```
 
 You can add content to `skill.json` by using the same path of the file's content. For example, this is how you can add APL as supported interface:
@@ -196,11 +201,11 @@ new AlexaCli({
                     minHeight: 600,
                     maxHeight: 1279,
                     minWidth: 1280,
-                    maxWidth: 1920
+                    maxWidth: 1920,
                   },
                   // ...
-                ]
-              }
+                ],
+              },
             ],
           },
         },
@@ -208,7 +213,7 @@ new AlexaCli({
     },
   },
   // ...
-})
+});
 ```
 
 You can find all [supported APL viewports in the official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/alexa-presentation-language/apl-select-the-viewport-profiles-your-skill-supports.html#configure-the-supported-viewports-with-the-ask-cli-or-smapi).

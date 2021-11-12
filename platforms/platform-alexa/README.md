@@ -2,10 +2,10 @@
 title: 'Alexa Platform Integration'
 excerpt: 'The Amazon Alexa platform integration allows you to build custom Alexa Skills using Jovo.'
 ---
+
 # Amazon Alexa Platform Integration
 
 The Amazon Alexa [platform integration](https://v4.jovo.tech/docs/platforms) allows you to build custom Alexa Skills using Jovo.
-
 
 ## Introduction
 
@@ -22,8 +22,7 @@ In the Alexa Developer Console, the Alexa Skill project is configured, including
 
 If a user converses with your Skill, Alexa sends API requests to your Skill's code endpoint. The code is then responsible for returning an appropriate response. Learn more about how you can build this with the Jovo Framework in the [Alexa Skill code](#alexa-skill-code) section.
 
-Jovo is a framework that allows you to build apps that work across devices and platforms. However, this does not mean that you can't build highly complex Alexa Skills with Jovo. Any custom Alexa Skill that can be built with the official ASK SDK can also be built with the Jovo Framework. In the [platform-specific features](#platform-specific-features) section, we're going to take a look at building 
-
+Jovo is a framework that allows you to build apps that work across devices and platforms. However, this does not mean that you can't build highly complex Alexa Skills with Jovo. Any custom Alexa Skill that can be built with the official ASK SDK can also be built with the Jovo Framework. In the [platform-specific features](#platform-specific-features) section, we're going to take a look at building
 
 ## Installation
 
@@ -71,7 +70,7 @@ const project = new ProjectConfig({
   plugins: [
     new AlexaCli(),
     // ...
-  ]
+  ],
 });
 ```
 
@@ -89,7 +88,6 @@ After the successful installation, you can do the following:
 
 - Use the Jovo CLI to [create a project in the Alexa Developer Console](#alexa-developer-console-project)
 - Use the Jovo Framework to [build the Alexa Skill code](#alexa-skill-code)
-
 
 ## Alexa Developer Console Project
 
@@ -142,12 +140,11 @@ Learn more on the following pages:
 - [Alexa Project Configuration](https://v4.jovo.tech/marketplace/platform-alexa/project-config)
 - [Alexa Interaction Model](https://v4.jovo.tech/marketplace/platform-alexa/interaction-model)
 
-
 ## Alexa Skill Code
 
 The Jovo Alexa platform package is a [platform integration](https://v4.jovo.tech/docs/platforms) that understands the types of requests Alexa sends and knows how to translate output into an Alexa response. To learn more about the Jovo request lifecycle, take a look at the [RIDR documentation](https://v4.jovo.tech/docs/ridr-lifecycle).
 
-When a user interacts with your Skill through Alexa, the voice assistant turns user input (usually speech) into structured meaning (usually *intents* and *slots*). It then sends a request with this data to you Jovo app. [Learn more about the request structure in the official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/custom-skills/handle-requests-sent-by-alexa.html).
+When a user interacts with your Skill through Alexa, the voice assistant turns user input (usually speech) into structured meaning (usually _intents_ and _slots_). It then sends a request with this data to you Jovo app. [Learn more about the request structure in the official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/custom-skills/handle-requests-sent-by-alexa.html).
 
 The Jovo app then uses this request information to return an appropriate response that tells Alexa what to say (or display) to the user. For example, the code snippet below asks the user if they like pizza:
 
@@ -165,19 +162,18 @@ If you want to learn more about how to return the right response, take a look at
 
 The output is then translated into a response that is returned to Alexa. [Learn more about the response structure in the official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-and-response-json-reference.html#response-format).
 
-
 ## Platform-Specific Features
 
 The Alexa platform integration for Jovo supports a lot of platform-specific features. You can access the Alexa object like this:
 
 ```typescript
-this.$alexa
+this.$alexa;
 ```
 
 You can also use this object to see if the request is coming from Alexa (or a different platform):
 
 ```typescript
-if(this.$alexa) {
+if (this.$alexa) {
   // ...
 }
 ```
@@ -193,7 +189,7 @@ The following Alexa properties offer additional features:
 There are various Alexa specific features added to the [user class](https://v4.jovo.tech/docs/user) that can be accessed like this:
 
 ```typescript
-this.$alexa.$user
+this.$alexa.$user;
 ```
 
 The following features are offered by the Alexa user property:
@@ -205,7 +201,7 @@ The following features are offered by the Alexa user property:
 You can call the [Alexa Customer Profile API](https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-customer-contact-information-for-use-in-your-skill.html) to retrieve the user's email address like this:
 
 ```typescript
-await this.$alexa.$user.getEmail()
+await this.$alexa.$user.getEmail();
 ```
 
 Below is an example `getEmail` handler:
@@ -239,25 +235,23 @@ async getEmail() {
 
 If the `getEmail` call returns an error with the code `NO_USER_PERMISSION`, an `AskForPermissionsConsent` card ([learn more in the official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-customer-contact-information-for-use-in-your-skill.html#sample-response-with-permissions-card)) is added to the Alexa-specific [output](https://v4.jovo.tech/docs/output). Please note that the example adds the output to the `$send()` method for simplicity. It could also be added using output classes.
 
-
 ### Output
 
 There are various Alexa specific elements that can be added to the [output](https://v4.jovo.tech/docs/output).
 
 [Learn more in the Jovo Output documentation for Alexa](https://v4.jovo.tech/marketplace/platform-alexa/output).
 
-
 ### Entities (Slots)
 
-Alexa *slots* are called *entities* in Jovo. You can learn more in the [Jovo Model](https://v4.jovo.tech/docs/models) and the [`$entities` documentation](https://v4.jovo.tech/docs/entities).
+Alexa _slots_ are called _entities_ in Jovo. You can learn more in the [Jovo Model](https://v4.jovo.tech/docs/models) and the [`$entities` documentation](https://v4.jovo.tech/docs/entities).
 
 You can access the Alexa-specific `$entities` property like this, which allows you to get typed access to the `native` API result for each slot:
 
 ```typescript
-this.$alexa.$entities
+this.$alexa.$entities;
 
 // Example: Get native API result object for slot "name"
-this.$alexa.$entities.name.native
+this.$alexa.$entities.name.native;
 ```
 
 Learn more about the structure of the API result in the [official Alexa documentation on entity resolution](https://developer.amazon.com/en-US/docs/alexa/custom-skills/entity-resolution.html).

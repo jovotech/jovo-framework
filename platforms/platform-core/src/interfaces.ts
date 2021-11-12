@@ -12,14 +12,14 @@ export interface RequestAudioData {
   data?: Float32Array;
 }
 
-export interface Session {
+export interface CoreRequestSession {
   id: string;
   new: boolean;
   data?: JovoSession;
   lastUpdatedAt?: string; // ISO 8601 YYYY-MM-DDTHH:mm:ss.sssZ
 }
 
-export interface User {
+export interface CoreRequestUser {
   id: string;
   data?: UnknownObject;
 }
@@ -28,8 +28,8 @@ export interface Device {
   capabilities: Array<Capability | string>;
 }
 
-export interface Context {
+export interface CoreRequestContext {
   device: Device;
-  session: Session;
-  user: User;
+  session: CoreRequestSession;
+  user: CoreRequestUser;
 }
