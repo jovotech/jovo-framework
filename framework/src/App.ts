@@ -199,7 +199,7 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async handleError(e: any, jovo?: Jovo): Promise<void> {
+  async handleError(e: Error, jovo?: Jovo): Promise<void> {
     if (!this.errorListeners?.length) {
       throw e;
     }
