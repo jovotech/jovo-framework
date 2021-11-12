@@ -128,5 +128,7 @@ export class I18Next extends Plugin<I18NextConfig> {
         }
       }
     }
+
+    return this.i18n.t(path, options);
   }
 }
