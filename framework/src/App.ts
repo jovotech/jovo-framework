@@ -1,4 +1,4 @@
-import { ArrayElement } from '@jovotech/common';
+import { ArrayElement, ISettingsParam } from '@jovotech/common';
 import _merge from 'lodash.merge';
 import {
   ComponentTree,
@@ -53,9 +53,11 @@ export interface AppRoutingConfig {
   intentsToSkipUnhandled?: string[];
 }
 
+export type LoggingConfig = BasicLoggingConfig & { tslog?: ISettingsParam };
+
 export interface AppConfig extends ExtensibleConfig {
   i18n?: I18NextOptions;
-  logging?: BasicLoggingConfig | boolean;
+  logging?: LoggingConfig | boolean;
   routing?: AppRoutingConfig;
 }
 
@@ -75,9 +77,13 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
     if (typeof this.config.logging === 'boolean' && this.config.logging) {
       this.use(new BasicLogging({ request: true, response: true }));
     } else if (typeof this.config.logging === 'object') {
+      if (this.config.logging.tslog) {
+        Logger.setSettings(_merge(Logger.settings, this.config.logging.tslog));
+      }
       this.use(new BasicLogging(this.config.logging));
     }
-    this.onError((error, jovo) => {
+
+    this.onError((error) => {
       Logger.error(error);
     });
     this.use(new RouterPlugin(), new HandlerPlugin(), new OutputPlugin());

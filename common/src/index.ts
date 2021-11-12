@@ -33,4 +33,4 @@ export type OmitIndex<T, I extends string | number> = {
 
 export * from './JovoError';
 export * from './JovoLogger';
-export { ISettingsParam } from 'tslog';
+export { ISettingsParam, ILogObject } from 'tslog';
