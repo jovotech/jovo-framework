@@ -196,7 +196,7 @@ The `AudioRecorder` also emits events based on the recording status. The table b
 | Enum key          | Enum value           | Description                                                                             |
 | ----------------- | -------------------- | --------------------------------------------------------------------------------------- |
 | `Start`           | `'start'`            | Recording has started.                                                                  |
-| `Processing`      | `'processing'`       | Recording is processing.                                                                |
+| `Processing`      | `'processing'`       | Recording is in progress.                                                               |
 | `StartDetected`   | `'start-detected'`   | Speech was detected in the recording. Related to the `startDetection` configuration.    |
 | `SilenceDetected` | `'silence-detected'` | Silence was detected in the recording. Related to the `silenceDetection` configuration. |
 | `Timeout`         | `'timeout'`          | Silence exceeded the `silenceDetection.timeoutInMs` configuration.                      |
@@ -253,7 +253,7 @@ The `SpeechRecognizer` also emits events based on the recording status. The tabl
 | ------------------ | --------------------- | --------------------------------------------------------------------------------------- |
 | `Start`            | `'start'`             | Recording has started.                                                                  |
 | `StartDetected`    | `'start-detected'`    | Speech was detected in the recording. Related to the `startDetection` configuration.    |
-| `SpeechRecognized` | `'speech-recognized'` | Speech was transcribed.                                                                 |
+| `SpeechRecognized` | `'speech-recognized'` | Speech is currently transcribed.                                                        |
 | `SilenceDetected`  | `'silence-detected'`  | Silence was detected in the recording. Related to the `silenceDetection` configuration. |
 | `Timeout`          | `'timeout'`           | Silence exceeded the `silenceDetection.timeoutInMs` configuration.                      |
 | `Abort`            | `'abort'`             | Recording was cancelled.                                                                |
@@ -302,7 +302,7 @@ While the client already does the job for you for `AudioRecorder` and `SpeechRec
 import { InputType } from '@jovotech/common';
 // ...
 
-client.send({
+const response = await client.send({
   type: InputType.Text, // or 'TEXT'
   text: 'Hello World',
 });
@@ -321,7 +321,7 @@ const request = client.createRequest({
 
 // ...
 
-client.send(request);
+const response = await client.send(request);
 ```
 
 ## Handle the Response from Jovo
