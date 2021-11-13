@@ -1,6 +1,6 @@
 # Jovo Framework
 
-> [**We're working heavily on Jovo `v4`! Check out the `v4/release` branch for more information**](https://github.com/jovotech/jovo-framework/tree/v4/release)
+> [**We just launched Jovo `v4`! Learn more about migrating from `v3` here**](https://www.jovo.tech/docs/migration-from-v3)
 
 [![Jovo Framework](./docs/img/jovo-header.jpg)](https://v3.jovo.tech)
 
