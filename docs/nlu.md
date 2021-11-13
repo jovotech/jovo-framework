@@ -34,9 +34,9 @@ NLU integrations are helpful for platforms that deal with raw text. The integrat
 
 Currently, the following integrations are available with Jovo `v4`:
 
-- [Rasa NLU](https://v4.jovo.tech/marketplace/nlu-rasa)
-- [Snips NLU](https://v4.jovo.tech/marketplace/nlu-snips)
-- [NLP.js](https://v4.jovo.tech/marketplace/nlu-nlpjs)
+- [Rasa NLU](https://www.jovo.tech/marketplace/nlu-rasa)
+- [Snips NLU](https://www.jovo.tech/marketplace/nlu-snips)
+- [NLP.js](https://www.jovo.tech/marketplace/nlu-nlpjs)
 
 ## Configuration
 

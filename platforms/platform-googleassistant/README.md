@@ -5,7 +5,7 @@ excerpt: 'The Google Assistant platform integration allows you to build custom G
 
 # Google Assistant Platform Integration
 
-The Google Assistant [platform integration](https://v4.jovo.tech/docs/platforms) allows you to build custom Google Conversational Actions using Jovo.
+The Google Assistant [platform integration](https://www.jovo.tech/docs/platforms) allows you to build custom Google Conversational Actions using Jovo.
 
 ## Introduction
 
@@ -26,7 +26,7 @@ Jovo is a framework that allows you to build apps that work across devices and p
 
 ## Installation
 
-To create a new Google Assistant project with Jovo, we recommend installing the Jovo CLI, creating a new Jovo project, and selecting Google Assistant as platform using the CLI wizard. Learn more in our [getting started guide](https://v4.jovo.tech/docs/getting-started).
+To create a new Google Assistant project with Jovo, we recommend installing the Jovo CLI, creating a new Jovo project, and selecting Google Assistant as platform using the CLI wizard. Learn more in our [getting started guide](https://www.jovo.tech/docs/getting-started).
 
 ```sh
 # Install Jovo CLI globally
@@ -43,7 +43,7 @@ If you want to add Google Assistant to an existing Jovo project, you can install
 $ npm install @jovotech/platform-googleassistant
 ```
 
-Add it as plugin to your [app configuration](https://v4.jovo.tech/docs/app-config), e.g. `app.ts`:
+Add it as plugin to your [app configuration](https://www.jovo.tech/docs/app-config), e.g. `app.ts`:
 
 ```typescript
 import { App } from '@jovotech/framework';
@@ -58,7 +58,7 @@ const app = new App({
 });
 ```
 
-You can also add the CLI plugin to your [project configuration](https://v4.jovo.tech/docs/project-config) in `jovo.project.js`. [Learn more about the Google Assistant specific project configuration here](https://v4.jovo.tech/marketplace/platform-googleassistant/project-config).
+You can also add the CLI plugin to your [project configuration](https://www.jovo.tech/docs/project-config) in `jovo.project.js`. [Learn more about the Google Assistant specific project configuration here](https://www.jovo.tech/marketplace/platform-googleassistant/project-config).
 
 ```js
 const { ProjectConfig } = require('@jovotech/cli');
@@ -85,15 +85,15 @@ After successfully installing the Jovo Google Assistant packages, you can do the
 
 Jovo helps you manage your Google Action project in the [Actions on Google Console](https://console.actions.google.com/) using the Jovo CLI.
 
-You can use the [`build` command](https://v4.jovo.tech/marketplace/platform-googleassistant/cli-commands#build) to turn the [Google Assistant project configuration](https://v4.jovo.tech/marketplace/platform-googleassistant/project-config) into Google Assistant specific files.
+You can use the [`build` command](https://www.jovo.tech/marketplace/platform-googleassistant/cli-commands#build) to turn the [Google Assistant project configuration](https://www.jovo.tech/marketplace/platform-googleassistant/project-config) into Google Assistant specific files.
 
 ```sh
 $ jovo build:platform googleAssistant
 ```
 
-These files can be found in a folder called `platform.googleAssistant` in the `build` directory of your project. They include the [Google Assistant Conversational Model](https://v4.jovo.tech/marketplace/platform-googleassistant/model) that is responsible for training Google Assistant's natural language understanding service.
+These files can be found in a folder called `platform.googleAssistant` in the `build` directory of your project. They include the [Google Assistant Conversational Model](https://www.jovo.tech/marketplace/platform-googleassistant/model) that is responsible for training Google Assistant's natural language understanding service.
 
-The resulting files can then be deployed to the Actions on Google Console using the [`deploy:platform` command](https://v4.jovo.tech/marketplace/platform-googleassistant/cli-commands#deploy).
+The resulting files can then be deployed to the Actions on Google Console using the [`deploy:platform` command](https://www.jovo.tech/marketplace/platform-googleassistant/cli-commands#deploy).
 
 ```sh
 $ jovo deploy:platform googleAssistant
@@ -101,13 +101,13 @@ $ jovo deploy:platform googleAssistant
 
 Learn more on the following pages:
 
-- [Google Assistant CLI Commands](https://v4.jovo.tech/marketplace/platform-googleassistant/cli-commands)
-- [Google Assistant Project Configuration](https://v4.jovo.tech/marketplace/platform-googleassistant/project-config)
-- [Google Assistant Language Model](https://v4.jovo.tech/marketplace/platform-googleassistant/model)
+- [Google Assistant CLI Commands](https://www.jovo.tech/marketplace/platform-googleassistant/cli-commands)
+- [Google Assistant Project Configuration](https://www.jovo.tech/marketplace/platform-googleassistant/project-config)
+- [Google Assistant Language Model](https://www.jovo.tech/marketplace/platform-googleassistant/model)
 
 ## Google Action Code
 
-The Jovo Google Assistant platform package is a [platform integration](https://v4.jovo.tech/docs/platforms) that understands the types of requests Google Assistant sends and knows how to translate output into a Google Assistant response. To learn more about the Jovo request lifecycle, take a look at the [RIDR documentation](https://v4.jovo.tech/docs/ridr-lifecycle).
+The Jovo Google Assistant platform package is a [platform integration](https://www.jovo.tech/docs/platforms) that understands the types of requests Google Assistant sends and knows how to translate output into a Google Assistant response. To learn more about the Jovo request lifecycle, take a look at the [RIDR documentation](https://www.jovo.tech/docs/ridr-lifecycle).
 
 When a user interacts with your Action through Google Assistant, the platform turns user input (usually speech or text) into structured meaning (usually _intents_ and _slots_). It then sends a request with this data to your Jovo app. [Learn more about the webhook request structure in the official Google Assistant docs](https://developers.google.com/assistant/conversational/webhooks?tool=builder#example-request).
 
@@ -121,9 +121,9 @@ LAUNCH() {
 
 If you want to learn more about how to return the right response, take a look at these concepts:
 
-- [Components](https://v4.jovo.tech/docs/components)
-- [Handlers](https://v4.jovo.tech/docs/handlers)
-- [Output](https://v4.jovo.tech/docs/output)
+- [Components](https://www.jovo.tech/docs/components)
+- [Handlers](https://www.jovo.tech/docs/handlers)
+- [Output](https://www.jovo.tech/docs/output)
 
 The output is then translated into a response that is returned to Google Assistant. [Learn more about the response structure in the official Google Assistant docs](https://developers.google.com/assistant/conversational/webhooks?tool=builder#example-response).
 
@@ -147,7 +147,7 @@ if (this.$googleAssistant) {
 
 Google Conversational Actions have a few concepts that are different compared to other platforms, for example:
 
-- [Scenes](https://v4.jovo.tech/marketplace/platform-googleassistant/project-config/scenes)
+- [Scenes](https://www.jovo.tech/marketplace/platform-googleassistant/project-config/scenes)
 
 ### User
 
@@ -165,15 +165,15 @@ You can check is a user is verified like this:
 this.$googleAssistant.$user.isVerified();
 ```
 
-If a verified user interacts with the Google Action the first time, Jovo generates a user ID and store it into the `user.params._GOOGLE_ASSISTANT_USER_ID_` [user storage](https://developers.google.com/assistant/conversational/storage-user?hl=en) property. This ID will then be used to write and retrieve data using one of the [Jovo database integrations](https://v4.jovo.tech/docs/databases).
+If a verified user interacts with the Google Action the first time, Jovo generates a user ID and store it into the `user.params._GOOGLE_ASSISTANT_USER_ID_` [user storage](https://developers.google.com/assistant/conversational/storage-user?hl=en) property. This ID will then be used to write and retrieve data using one of the [Jovo database integrations](https://www.jovo.tech/docs/databases).
 
 Learn more about user specific methods here:
 
-- [Account Linking](https://v4.jovo.tech/marketplace/platform-googleassistant/account-linking)
+- [Account Linking](https://www.jovo.tech/marketplace/platform-googleassistant/account-linking)
 
 ### Output
 
-There are various Google Assistant specific elements that can be added to the [output](https://v4.jovo.tech/docs/output).
+There are various Google Assistant specific elements that can be added to the [output](https://www.jovo.tech/docs/output).
 
 For output that is only used for Google Assistant, you can add the following to the output object:
 
@@ -208,13 +208,13 @@ You can add response objects that should show up exactly like this in the Google
 
 When your Action is live, Google sends requests they call _health checks_ to test if the code keeps returning an appropriate response. [Learn more in the official Google Assistant docs](https://developers.google.com/assistant/console/health-checks).
 
-Jovo handles the health checks for you and automatically returns a valid response in the [`before.request.start` middleware](https://v4.jovo.tech/docs/ridr-lifecycle#middlewares). Health check requests do not affect analytics or database integrations.
+Jovo handles the health checks for you and automatically returns a valid response in the [`before.request.start` middleware](https://www.jovo.tech/docs/ridr-lifecycle#middlewares). Health check requests do not affect analytics or database integrations.
 
 ## Deployment
 
 You can use the Jovo CLI plugin `GoogleAssistantCli` (learn how to set it up in the [installation section](#installation)) to build and deploy the Google Assistant project to the Actions on Google console.
 
-The [`build` command](https://v4.jovo.tech/marketplace/platform-googleassistant/cli-commands#build) uses the Jovo Model and [project configuration](https://v4.jovo.tech/docs/project-config) to generate all files needed for the deployment:
+The [`build` command](https://www.jovo.tech/marketplace/platform-googleassistant/cli-commands#build) uses the Jovo Model and [project configuration](https://www.jovo.tech/docs/project-config) to generate all files needed for the deployment:
 
 ```sh
 # Build files into build/platform.googleAssistant
@@ -230,4 +230,4 @@ $ jovo deploy:platform googleAssistant
 
 You can also learn more about Google Assistant specific features here:
 
-- [Model](https://v4.jovo.tech/marketplace/platform-googleassistant/model)
+- [Model](https://www.jovo.tech/marketplace/platform-googleassistant/model)

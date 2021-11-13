@@ -11,7 +11,7 @@ Learn how to use the Alexa Skill Reminders feature with Jovo.
 
 Alexa supports the ability for users to set reminders. [Learn more in the official Alexa documentation](https://developer.amazon.com/docs/alexa/smapi/alexa-reminders-overview.html).
 
-Jovo offers methods to [add and modify reminders](#add-and-modify-reminders). For example, you can set a reminder like this in a [handler](https://v4.jovo.tech/docs/handlers):
+Jovo offers methods to [add and modify reminders](#add-and-modify-reminders). For example, you can set a reminder like this in a [handler](https://www.jovo.tech/docs/handlers):
 
 ```typescript
 async someHandler() {
@@ -76,7 +76,7 @@ You need to [add permissions to your skill manifest](#add-reminder-permissions-t
 
 To be able to use reminders in your Alexa Skill, you need to add the permission to the Skill project.
 
-While you can manually enable the permission in the Alexa developer console, we recommend to add it to the `skill.json` manifest directly using the [Alexa project config](https://v4.jovo.tech/marketplace/platform-alexa/project-config):
+While you can manually enable the permission in the Alexa developer console, we recommend to add it to the `skill.json` manifest directly using the [Alexa project config](https://www.jovo.tech/marketplace/platform-alexa/project-config):
 
 ```js
 const project = new ProjectConfig({
@@ -186,7 +186,7 @@ async remindersPermissionAccepted() {
 }
 ```
 
-Using this helper is the same as using the following [`@Handle` decorator](https://v4.jovo.tech/docs/handlers#handler-routing-and-the-handle-decorator):
+Using this helper is the same as using the following [`@Handle` decorator](https://www.jovo.tech/docs/handlers#handler-routing-and-the-handle-decorator):
 
 ```typescript
 import { Handle, Jovo } from '@jovotech/framework';

@@ -5,7 +5,7 @@ excerpt: 'The Facebook Messenger platform integration allows you to build custom
 
 # Facebook Messenger Platform Integration
 
-The Facebook Messenger [platform integration](https://v4.jovo.tech/docs/platforms) allows you to build custom Messenger bots using Jovo.
+The Facebook Messenger [platform integration](https://www.jovo.tech/docs/platforms) allows you to build custom Messenger bots using Jovo.
 
 ## Introduction
 
@@ -26,7 +26,7 @@ Jovo is a framework that allows you to build apps that work across devices and p
 
 ## Installation
 
-To create a new Facebook Messenger project with Jovo, we recommend installing the Jovo CLI, creating a new Jovo project, and selecting Facebook Messenger as platform using the CLI wizard. Learn more in our [getting started guide](https://v4.jovo.tech/docs/getting-started).
+To create a new Facebook Messenger project with Jovo, we recommend installing the Jovo CLI, creating a new Jovo project, and selecting Facebook Messenger as platform using the CLI wizard. Learn more in our [getting started guide](https://www.jovo.tech/docs/getting-started).
 
 ```sh
 # Install Jovo CLI globally
@@ -43,7 +43,7 @@ If you want to add Facebook Messenger to an existing Jovo project, you can insta
 $ npm install @jovotech/platform-facebookmessenger
 ```
 
-Add it as plugin to your [app configuration](https://v4.jovo.tech/docs/app-config), e.g. `app.ts`:
+Add it as plugin to your [app configuration](https://www.jovo.tech/docs/app-config), e.g. `app.ts`:
 
 ```typescript
 import { App } from '@jovotech/framework';
@@ -65,7 +65,7 @@ The integration needs at least a `pageAccessToken` and a `verifyToken`. Learn mo
 
 ## Configuration
 
-You can configure the Facebook Messenger platform in the [app configuration](https://v4.jovo.tech/docs/app-config), for example `app.ts`:
+You can configure the Facebook Messenger platform in the [app configuration](https://www.jovo.tech/docs/app-config), for example `app.ts`:
 
 ```typescript
 import { FacebookMessengerPlatform } from '@jovotech/platform-facebookmessenger';
@@ -101,9 +101,9 @@ Options include:
 
 ### NLU Integration
 
-Facebook Messenger requests mostly consist of raw text that need to be turned into structured data using a [natural language understanding (NLU) integration](https://v4.jovo.tech/docs/nlu).
+Facebook Messenger requests mostly consist of raw text that need to be turned into structured data using a [natural language understanding (NLU) integration](https://www.jovo.tech/docs/nlu).
 
-Here is an example how you can add an NLU integration (in this case [NLP.js](https://v4.jovo.tech/marketplace/nlu-nlpjs)) to the [app configuration](https://v4.jovo.tech/docs/app-config) in `app.ts`:
+Here is an example how you can add an NLU integration (in this case [NLP.js](https://www.jovo.tech/marketplace/nlu-nlpjs)) to the [app configuration](https://www.jovo.tech/docs/app-config) in `app.ts`:
 
 ```typescript
 import { FacebookMessengerPlatform } from '@jovotech/platform-facebookmessenger';
@@ -122,11 +122,11 @@ const app = new App({
 
 ### Session Data
 
-Facebook Messenger does not offer session storage, which is needed for features like [session data](https://v4.jovo.tech/docs/data#session-data), [component data](https://v4.jovo.tech/docs/data#component-data), and the [`$state` stack](https://v4.jovo.tech/docs/state-stack).
+Facebook Messenger does not offer session storage, which is needed for features like [session data](https://www.jovo.tech/docs/data#session-data), [component data](https://www.jovo.tech/docs/data#component-data), and the [`$state` stack](https://www.jovo.tech/docs/state-stack).
 
-To make Facebook Messenger bots work with these features, Jovo automatically enables the storage of session data to the active [database integration](https://v4.jovo.tech/docs/databases). Under the hood, it adds `session` to the [`storedElements` config](https://v4.jovo.tech/docs/databases#storedelements).
+To make Facebook Messenger bots work with these features, Jovo automatically enables the storage of session data to the active [database integration](https://www.jovo.tech/docs/databases). Under the hood, it adds `session` to the [`storedElements` config](https://www.jovo.tech/docs/databases#storedelements).
 
-Since Facebook does not have the concept of sessions, we need to define after which time a request should be seen as the start of the new session. The default is _15 minutes_ and can be modified either in the [`storedElements` config](https://v4.jovo.tech/docs/databases#storedelements) (works across platforms) or in the Facebook Messenger config:
+Since Facebook does not have the concept of sessions, we need to define after which time a request should be seen as the start of the new session. The default is _15 minutes_ and can be modified either in the [`storedElements` config](https://www.jovo.tech/docs/databases#storedelements) (works across platforms) or in the Facebook Messenger config:
 
 ```typescript
 new FacebookMessengerPlatform({
@@ -152,9 +152,9 @@ new FacebookMessengerPlatform({
 ```
 
 - `markSeen`: This adds the `mark_seen` sender action and show latest messages as read.
-- `typingIndicator`: This turns typing indicators on when a request was received (in the [`dialogue.start` middleware](https://v4.jovo.tech/docs/ridr-lifecycle#middlewares)) and turns them off when the dialogue lifecycle is completed (in the [`dialogue.end` middleware](https://v4.jovo.tech/docs/ridr-lifecycle#middlewares)).
+- `typingIndicator`: This turns typing indicators on when a request was received (in the [`dialogue.start` middleware](https://www.jovo.tech/docs/ridr-lifecycle#middlewares)) and turns them off when the dialogue lifecycle is completed (in the [`dialogue.end` middleware](https://www.jovo.tech/docs/ridr-lifecycle#middlewares)).
 
-Note: Although [Instagram](https://v4.jovo.tech/marketplace/platform-instagram) works similar compared to Facebook Messenger, it does not support sender actions at the moment.
+Note: Although [Instagram](https://www.jovo.tech/marketplace/platform-instagram) works similar compared to Facebook Messenger, it does not support sender actions at the moment.
 
 ## Platform-Specific Features
 
@@ -174,7 +174,7 @@ if (this.$facebookMessenger) {
 
 ### Output
 
-There are various Facebook Messenger specific elements that can be added to the [output](https://v4.jovo.tech/docs/output).
+There are various Facebook Messenger specific elements that can be added to the [output](https://www.jovo.tech/docs/output).
 
 For output that is only used for Facebook Messenger, you can add the following to the output object:
 
@@ -212,4 +212,4 @@ To test your Messenger bot with a Facebook page, you need to create an app in th
 You need to do two things:
 
 - Connect a page to the app, generate an access token, and add it to the [`accessToken` configuration](#configuration).
-- Add your app endpoint (for example your [Jovo Webhook URL](https://v4.jovo.tech/docs/webhook) for testing) as callback URL and add a verify token that you also specify in the [`verifyToken` configuration](#configuration). This will be used by Facebook to verify your server.
+- Add your app endpoint (for example your [Jovo Webhook URL](https://www.jovo.tech/docs/webhook) for testing) as callback URL and add a verify token that you also specify in the [`verifyToken` configuration](#configuration). This will be used by Facebook to verify your server.

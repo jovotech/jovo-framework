@@ -128,4 +128,4 @@ const app = new App({
 });
 ```
 
-You can find platform-specific output configuration properties in the respective platform output documentation, which you can find in the [Jovo Marketplace](https://v4.jovo.tech/marketplace/).
+You can find platform-specific output configuration properties in the respective platform output documentation, which you can find in the [Jovo Marketplace](https://www.jovo.tech/marketplace/).

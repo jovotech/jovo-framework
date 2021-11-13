@@ -9,9 +9,9 @@ Learn how you can customize the Jovo Debugger using the `jovo.debugger.js` confi
 
 ## Introduction
 
-The Jovo Debugger is a tool that lets you test and review your Jovo app in the browser. Learn more about how you can [connect your Jovo app to the Jovo Debugger here](https://v4.jovo.tech/docs/debugger).
+The Jovo Debugger is a tool that lets you test and review your Jovo app in the browser. Learn more about how you can [connect your Jovo app to the Jovo Debugger here](https://www.jovo.tech/docs/debugger).
 
-The Debugger configuration can be found in a file called `jovo.debugger.js`. It makes it possible to customize things such as languages and buttons and is passed to the Debugger when the [`run` command](https://v4.jovo.tech/docs/run-command) is executed.
+The Debugger configuration can be found in a file called `jovo.debugger.js`. It makes it possible to customize things such as languages and buttons and is passed to the Debugger when the [`run` command](https://www.jovo.tech/docs/run-command) is executed.
 
 Here is an example:
 
@@ -21,22 +21,22 @@ const { DebuggerConfig } = require('@jovotech/plugin-debugger');
 // ...
 
 const debuggerConfig = new DebuggerConfig({
-  locales: [ 'en' ],
+  locales: ['en'],
   buttons: [
-		{
-			label: 'LAUNCH',
-			input: {
-				type: 'LAUNCH'
-			}
-		},
-		{
-			label: 'yes',
-			input: {
-				intent: 'YesIntent'
-			}
-		},
+    {
+      label: 'LAUNCH',
+      input: {
+        type: 'LAUNCH',
+      },
+    },
+    {
+      label: 'yes',
+      input: {
+        intent: 'YesIntent',
+      },
+    },
     // ...
-  ]
+  ],
 });
 
 module.exports = debuggerConfig;
@@ -53,12 +53,12 @@ The `locales` property defines which locales can be selected in the Debugger:
 
 ```js
 const debuggerConfig = new DebuggerConfig({
-  locales: [ 'en', 'de' ],
+  locales: ['en', 'de'],
   // ...
 });
 ```
 
-This configuration only specifies which locales can be selected in the Debugger frontend. It might be possible that you need to update your app configuration to handle additional languages. Take a look at the [Debugger plugin docs](https://v4.jovo.tech/docs/debugger#nlu) to learn more.
+This configuration only specifies which locales can be selected in the Debugger frontend. It might be possible that you need to update your app configuration to handle additional languages. Take a look at the [Debugger plugin docs](https://www.jovo.tech/docs/debugger#nlu) to learn more.
 
 ## buttons
 
@@ -69,27 +69,25 @@ It's possible to either use `input` or a raw `request`:
 ```js
 const debuggerConfig = new DebuggerConfig({
   buttons: [
-
     // Button with Input
     {
       label: 'yes',
       input: {
-        intent: 'YesIntent'
-      }
+        intent: 'YesIntent',
+      },
     },
 
     // Button with Request
     {
       label: 'APL: select item',
-      request: require('./requests/apl-select-item')
+      request: require('./requests/apl-select-item'),
     },
-
-  ]
+  ],
   // ...
 });
 ```
 
-The `input` works the same as the [Jovo $input property](https://v4.jovo.tech/docs/input) and can include a `type` with additional elements like `intent` and `entities` (depending on the input type):
+The `input` works the same as the [Jovo $input property](https://www.jovo.tech/docs/input) and can include a `type` with additional elements like `intent` and `entities` (depending on the input type):
 
 ```js
 {

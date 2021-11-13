@@ -11,7 +11,7 @@ Learn more about different ways of error handling when building Jovo apps and pl
 
 Error handling allows you to catch certain errors that happen when the app is initialized or during the handler execution.
 
-You can use the [`onError()` method](#onerror) to react to those events. For example, this can be used for [logging](https://v4.jovo.tech/docs/logging) or sending notifications.
+You can use the [`onError()` method](#onerror) to react to those events. For example, this can be used for [logging](https://www.jovo.tech/docs/logging) or sending notifications.
 
 Jovo also has an error class called [`JovoError`](#jovoerror) which can be used for structured error output, for example when building Jovo plugins.
 
@@ -33,7 +33,7 @@ Currently, `onError()` catches the following events:
 - Errors happening during `App.initialize()`
 - Errors happening during `App.handle()`
 - Errors happening during handler execution (`ComponentTreeNode.executeHandler()`)
-- When a platform sends an [`ERROR` request](https://v4.jovo.tech/docs/input#error)
+- When a platform sends an [`ERROR` request](https://www.jovo.tech/docs/input#error)
 
 The `jovo` parameter is `undefined` if the error is thrown outside a handler (for example during `initialize()`).
 
@@ -58,7 +58,7 @@ app.onError((error: Error, jovo: Jovo) => {
 
 ## JovoError
 
-When building [Jovo plugins](https://v4.jovo.tech/docs/plugins) and other extensions, it's helpful to use the `JovoError` class to provide more structure information when an error occurs.
+When building [Jovo plugins](https://www.jovo.tech/docs/plugins) and other extensions, it's helpful to use the `JovoError` class to provide more structure information when an error occurs.
 
 ```typescript
 import { JovoError } from '@jovotech/common';
