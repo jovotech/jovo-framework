@@ -1,4 +1,4 @@
-# Jovo Output
+# Jovo FileDb Database Integration
 
 [![Jovo Framework](https://v4.jovo.tech/img/github-header.png)](https://v4.jovo.tech)
 
@@ -7,14 +7,14 @@
 </p>
 
 <p>
-<a href="https://www.npmjs.com/package/@jovotech/output" target="_blank"><img src="https://badge.fury.io/js/@jovotech%2Foutput.svg"></a>      
+<a href="https://www.npmjs.com/package/@jovotech/db-filedb" target="_blank"><img src="https://badge.fury.io/js/@jovotech%2Fdb-filedb.svg"></a>      
 <a href="https://opencollective.com/jovo-framework" target="_blank"><img src="https://opencollective.com/jovo-framework/tiers/badge.svg"></a>
 </p>
 
-This package is used to structured output into native platform responses for voice and chat.
+This package enables you to integrate your Jovo app with a file based database for local development.
 
 ```bash
-$ npm install @jovotech/output
+$ npm install @jovotech/db-filedb
 ```
 
-> Learn more in the docs: https://v4.jovo.tech/docs/output-templates
+> Learn more in the docs: https://v4.jovo.tech/marketplace/db-filedb
