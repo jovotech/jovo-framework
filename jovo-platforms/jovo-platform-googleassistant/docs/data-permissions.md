@@ -172,7 +172,7 @@ ON_PERMISSION() {
 ```
 [Official Documentation](https://developers.google.com/actions/assistant/helpers#user_information).
 
-[Example](https://github.com/jovotech/jovo-framework/tree/master/examples/javascript/02_googleassistant/ask-for-x)
+[Example](https://github.com/jovotech/jovo-framework/tree/v3/latest/examples/javascript/02_googleassistant/ask-for-x)
 
 
 ### Place and Location

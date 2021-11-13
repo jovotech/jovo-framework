@@ -97,7 +97,7 @@ The returned object will be an instance of `WebApp` if the current request is co
 
 In a Jovo app, each interaction goes through a [request & response cycle](https://v3.jovo.tech/docs/requests-responses), where the Jovo app receives the request from the client in a JSON format, [routes](https://v3.jovo.tech/docs/routing) through the logic, and then assembles a response that is sent back to the client.
 
-The request usually contains data like an audio file or raw text ([find all sample request JSONs here](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-web/sample-request-json/v1)):
+The request usually contains data like an audio file or raw text ([find all sample request JSONs here](https://github.com/jovotech/jovo-framework/tree/v3/latest/jovo-platforms/jovo-platform-web/sample-request-json/v1)):
 
 ```json
 {
@@ -123,7 +123,7 @@ The request usually contains data like an audio file or raw text ([find all samp
 }
 ```
 
-The response contains all the information that is needed by the client to display content ([find all sample response JSONs here](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-web/sample-response-json/v1)):
+The response contains all the information that is needed by the client to display content ([find all sample response JSONs here](https://github.com/jovotech/jovo-framework/tree/v3/latest/jovo-platforms/jovo-platform-web/sample-response-json/v1)):
 
 ```json
 {

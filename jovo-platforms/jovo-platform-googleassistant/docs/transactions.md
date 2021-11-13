@@ -265,7 +265,7 @@ Learn more about configurations for merchant-managed payments in the [official G
 
 ### Physical Goods Implementation
 
-> [You can find an example project on GitHub](https://github.com/jovotech/jovo-framework/tree/master/examples/javascript/02_googleassistant/transactions/src).
+> [You can find an example project on GitHub](https://github.com/jovotech/jovo-framework/tree/v3/latest/examples/javascript/02_googleassistant/transactions/src).
 
 There are several steps that need to be taken to create an order with your physical goods transaction:
 

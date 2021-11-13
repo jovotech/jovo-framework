@@ -62,7 +62,7 @@ Here's an example request:
 }
 ```
 
-> In the Jovo Framework repository we keep sample requests for the most common types. You can find them [here](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googleassistantconv/sample-request-json)
+> In the Jovo Framework repository we keep sample requests for the most common types. You can find them [here](https://github.com/jovotech/jovo-framework/tree/v3/latest/jovo-platforms/jovo-platform-googleassistantconv/sample-request-json)
 
 ## $request Object
 
