@@ -2,19 +2,20 @@
 title: 'Instagram Output'
 excerpt: 'Learn more about Jovo output templates for Instagram bots.'
 ---
+
 # Instagram Output
 
-Learn more about output templates for [Instagram](https://v4.jovo.tech/marketplace/platform-instagram).
+Learn more about output templates for [Instagram](https://www.jovo.tech/marketplace/platform-instagram).
 
 ## Introduction
 
-Jovo offers the ability to [create structured output](https://v4.jovo.tech/docs/output) that is then translated into native platform responses.
+Jovo offers the ability to [create structured output](https://www.jovo.tech/docs/output) that is then translated into native platform responses.
 
-This structured output is called [output template](https://v4.jovo.tech/docs/output-templates). Its root properties are generic output elements that work across platforms. [Learn more about how generic output is translated into an Instagram response below](#generic-output-elements).
+This structured output is called [output template](https://www.jovo.tech/docs/output-templates). Its root properties are generic output elements that work across platforms. [Learn more about how generic output is translated into an Instagram response below](#generic-output-elements).
 
 ```typescript
 {
-  message: `Hello world! What's your name?`
+  message: `Hello world! What's your name?`;
 }
 ```
 
@@ -31,10 +32,9 @@ You can also add platform-specific output to an output template. [Learn more abo
 }
 ```
 
-
 ## Generic Output Elements
 
-Generic output elements are in the root of the output template and work across platforms. [Learn more in the Jovo output template docs](https://v4.jovo.tech/docs/output-templates).
+Generic output elements are in the root of the output template and work across platforms. [Learn more in the Jovo output template docs](https://www.jovo.tech/docs/output-templates).
 
 Below, you can find a list of generic output elements that work with Instagram:
 
@@ -45,7 +45,7 @@ Below, you can find a list of generic output elements that work with Instagram:
 
 ### message
 
-The [generic `message` element](https://v4.jovo.tech/docs/output-templates#message)  contains the main response of your bot, which is usually displayed in a chat bubble:
+The [generic `message` element](https://www.jovo.tech/docs/output-templates#message) contains the main response of your bot, which is usually displayed in a chat bubble:
 
 ```typescript
 {
@@ -53,7 +53,7 @@ The [generic `message` element](https://v4.jovo.tech/docs/output-templates#messa
 }
 ```
 
-It is also possible to use `message` as an object which contains both a `speech` (the *spoken* text on platforms like Alexa) and a `text` (*written* text to be displayed in chat bubbles) field. In this case, Instagram uses the `text` element.
+It is also possible to use `message` as an object which contains both a `speech` (the _spoken_ text on platforms like Alexa) and a `text` (_written_ text to be displayed in chat bubbles) field. In this case, Instagram uses the `text` element.
 
 ```typescript
 {
@@ -79,14 +79,14 @@ Under the hood, Jovo translates the `message` into `message.text` as part of a c
 
 ### quickReplies
 
-The [generic `quickReplies` element](https://v4.jovo.tech/docs/output-templates#quick-replies) allows you to define small buttons that help the user answer a question faster. This concept is also called [quick replies in the Instagram Messaging documentation](https://developers.facebook.com/docs/messenger-platform/instagram/features/quick-replies).
+The [generic `quickReplies` element](https://www.jovo.tech/docs/output-templates#quick-replies) allows you to define small buttons that help the user answer a question faster. This concept is also called [quick replies in the Instagram Messaging documentation](https://developers.facebook.com/docs/messenger-platform/instagram/features/quick-replies).
 
 Quick replies can be an array of strings:
 
 ```typescript
 {
   // ...
-  quickReplies: [ 'yes', 'no' ]
+  quickReplies: ['yes', 'no'],
 }
 ```
 
@@ -98,13 +98,13 @@ Alternatively, you can use an array of objects that includes a `text` (what the 
   quickReplies: [
     {
       text: 'oh yeah',
-      value: 'yes'
+      value: 'yes',
     },
     {
       text: 'hell no',
-      value: 'no'
-    }
-  ]
+      value: 'no',
+    },
+  ];
 }
 ```
 
@@ -112,8 +112,8 @@ Under the hood, Jovo translates these into Instagram quick replies of the type `
 
 ```json
 {
-  "recipient":{
-    "id":"<IGSID>"
+  "recipient": {
+    "id": "<IGSID>"
   },
   "messaging_type": "RESPONSE",
   "message": {
@@ -133,12 +133,11 @@ Under the hood, Jovo translates these into Instagram quick replies of the type `
 }
 ```
 
-The `payload` is the value that gets passed to the [NLU integration](https://v4.jovo.tech/docs/nlu) to turn raw text into structured content. For quick replies that are passed as strings, the `title` and `payload` are the same. If the quick replies are objects, the `text` gets turned into `title` and the `value` into `payload`.
-
+The `payload` is the value that gets passed to the [NLU integration](https://www.jovo.tech/docs/nlu) to turn raw text into structured content. For quick replies that are passed as strings, the `title` and `payload` are the same. If the quick replies are objects, the `text` gets turned into `title` and the `value` into `payload`.
 
 ### card
 
-The [generic `card` element](https://v4.jovo.tech/docs/output-templates#card) can be used to send a [Instagram Messaging generic template](https://developers.facebook.com/docs/messenger-platform/instagram/features/generic-template).
+The [generic `card` element](https://www.jovo.tech/docs/output-templates#card) can be used to send a [Instagram Messaging generic template](https://developers.facebook.com/docs/messenger-platform/instagram/features/generic-template).
 
 Here is an example of a card with all properties that are supported by Instagram:
 
@@ -166,31 +165,31 @@ Under the hood, Jovo translates the `card` into the following generic template:
 
 ```json
 {
-  "recipient":{
+  "recipient": {
     "id": "<IGSID>"
   },
-  "message":{
-    "attachment":{
+  "message": {
+    "attachment": {
       "type": "template",
-      "payload":{
+      "payload": {
         "template_type": "generic",
         "elements": [
-           {
+          {
             "title": "Hello world!",
-            "image_url":"https://...",
+            "image_url": "https://...",
             "subtitle": "Welcome to the show.",
             "default_action": {
               "type": "web_url",
               "url": "https://...",
-              "webview_height_ratio": "tall",
+              "webview_height_ratio": "tall"
             },
             "buttons": [
               {
-                "type":"postback",
-                "title":"Start Chatting",
-                "payload":"DEVELOPER_DEFINED_PAYLOAD"
-              }              
-            ]      
+                "type": "postback",
+                "title": "Start Chatting",
+                "payload": "DEVELOPER_DEFINED_PAYLOAD"
+              }
+            ]
           }
         ]
       }
@@ -203,7 +202,7 @@ Learn more about this structure in the [official Instagram Messaging docs](https
 
 ### carousel
 
-A [generic `carousel` element](https://v4.jovo.tech/docs/output-templates#carousel) is a horizontally scrollable set of [`card`](#card) items. In Facebook's definition, this is called a [carousel of generic templates](https://developers.facebook.com/docs/messenger-platform/instagram/features/generic-template).
+A [generic `carousel` element](https://www.jovo.tech/docs/output-templates#carousel) is a horizontally scrollable set of [`card`](#card) items. In Facebook's definition, this is called a [carousel of generic templates](https://developers.facebook.com/docs/messenger-platform/instagram/features/generic-template).
 
 This is how a carousel can be defined:
 
@@ -231,7 +230,7 @@ The elements in an `items` array can contain all properties that are shown in th
 
 ## Instagram Output Elements
 
-It is possible to add platform-specific output elements to an output template. [Learn more in the Jovo output template documentation](https://v4.jovo.tech/docs/output-templates#platform-specific-output-elements).
+It is possible to add platform-specific output elements to an output template. [Learn more in the Jovo output template documentation](https://www.jovo.tech/docs/output-templates#platform-specific-output-elements).
 
 For Instagram, you can add output elements inside a `instagram` object:
 
@@ -277,10 +276,9 @@ import { ButtonType } from '@jovotech/platform-instagram';
 
 Not all button types supported by Facebook Messenger are supported by Instagram. Here is a table of all supported button types:
 
-| Enum key | Enum value | Links | 
-|----------|------------|-------|
-| `ButtonType.Postback` | `'postback'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/button/PostbackButton.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/buttons#postback)   |
-| `ButtonType.Url` | `'web_url'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/button/UrlButton.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/buttons#url) |
-
+| Enum key              | Enum value   | Links                                                                                                                                                                                                                             |
+| --------------------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ButtonType.Postback` | `'postback'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/button/PostbackButton.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/buttons#postback) |
+| `ButtonType.Url`      | `'web_url'`  | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/button/UrlButton.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/buttons#url)           |
 
 [Learn more about the buttons types in the official Facebook Messenger docs](https://developers.facebook.com/docs/messenger-platform/send-messages/buttons).
