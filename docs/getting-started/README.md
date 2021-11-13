@@ -19,6 +19,8 @@ Watch the video here:
 
 ## Install the Jovo CLI
 
+> Since the launch of Jovo `v4`, you can access the v3 CLI with `jovo3`. To do so, you need to update the v3 CLI to the latest version with `npm install -g jovo-cli`. Learn more here: https://www.jovo.tech/docs/migration#use-v4-and-v3-in-parallel
+
 We highly recommend using the Jovo CLI if you want to benefit from all the features coming with Jovo. You can find alternatives on our [installation page](./installation './installation').
 
 Install the Jovo CLI globally by using the following command:
@@ -30,7 +32,7 @@ $ npm install -g jovo-cli
 After successful installation, you should be able to see the Jovo CLI menu by just typing the following into your command line:
 
 ```sh
-$ jovo
+$ jovo3
 ```
 
 You can check the version number (and compare it to the [jovo-cli npm package](https://www.npmjs.com/package/jovo-cli) version) by using the following command:
