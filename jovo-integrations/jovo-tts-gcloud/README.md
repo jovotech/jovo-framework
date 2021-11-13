@@ -1,6 +1,6 @@
 # Google Cloud TTS Integration
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-tts-gcloud
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-tts-gcloud
 
 Learn how to use the Google Cloud TTS (Text to Speech) service with the Jovo Framework.
 
@@ -18,9 +18,9 @@ npm install --save jovo-tts-gcloud
 const { GCloudTts } = require('jovo-tts-gcloud');
 
 platform.use(
-	new GCloudTts({
-		credentialsFile: 'path/to/credentials'
-	})
+  new GCloudTts({
+    credentialsFile: 'path/to/credentials',
+  }),
 );
 
 // @language=typescript
@@ -30,8 +30,8 @@ platform.use(
 import { GCloudTts } from 'jovo-tts-gcloud';
 
 platform.use(
-	new GCloudTts({
-		credentialsFile: 'path/to/credentials'
-	})
+  new GCloudTts({
+    credentialsFile: 'path/to/credentials',
+  }),
 );
 ```

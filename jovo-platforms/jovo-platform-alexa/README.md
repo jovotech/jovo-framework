@@ -1,6 +1,6 @@
 # Amazon Alexa Platform Integration
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-alexa
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-alexa
 
 Learn more about Alexa specific features that can be used with the Jovo Framework.
 
@@ -47,7 +47,7 @@ app.use(new Alexa());
 
 #### Install the Jovo CLI
 
-We highly recommend using the Jovo CLI if you want to benefit from all the features coming with Jovo. You can learn more and find alternatives on our [installation page](https://www.jovo.tech/docs/installation).
+We highly recommend using the Jovo CLI if you want to benefit from all the features coming with Jovo. You can learn more and find alternatives on our [installation page](https://v3.jovo.tech/docs/installation).
 
 ```sh
 $ npm install -g jovo-cli
@@ -77,7 +77,7 @@ $ jovo3 new <directory> --language typescript
 $ jovo3 new <directory> --template alexa --language typescript
 ```
 
-This will create a new folder, download the [Jovo "Hello World" template](https://www.jovo.tech/templates/helloworld), and install all the necessary dependencies so you can get started right away.
+This will create a new folder, download the [Jovo "Hello World" template](https://v3.jovo.tech/templates/helloworld), and install all the necessary dependencies so you can get started right away.
 
 This is how a typical Jovo project looks like:
 
@@ -103,12 +103,12 @@ src/
 project.js
 ```
 
-> [Find out more about the Jovo project structure here](https://www.jovo.tech/docs/project-structure).
+> [Find out more about the Jovo project structure here](https://v3.jovo.tech/docs/project-structure).
 
 
 #### Run and Test the Code
 
-To test the logic of your code, you can use the local development server provided by Jovo, and the [Jovo Debugger](https://www.jovo.tech/marketplace/jovo-plugin-debugger). 
+To test the logic of your code, you can use the local development server provided by Jovo, and the [Jovo Debugger](https://v3.jovo.tech/marketplace/jovo-plugin-debugger). 
 
 To get started, use the following command:
 
@@ -127,17 +127,17 @@ $ npm run tsc
 $ jovo3 run
 ```
 
-This will start the development server on port `3000` and create a Jovo Webhook URL that can be used for local development. Copy this link and open it in your browser to use the [Jovo Debugger](https://www.jovo.tech/marketplace/jovo-plugin-debugger).
+This will start the development server on port `3000` and create a Jovo Webhook URL that can be used for local development. Copy this link and open it in your browser to use the [Jovo Debugger](https://v3.jovo.tech/marketplace/jovo-plugin-debugger).
 
-![Jovo Debugger](https://www.jovo.tech/img/docs/v3/jovo-debugger-helloworld.gif)
+![Jovo Debugger](https://v3.jovo.tech/img/docs/v3/jovo-debugger-helloworld.gif)
 
 In the Debugger, you can quickly test if the flow of your voice app works. For this example, click on the `LAUNCH` button, and then specify a name on the `MyNameIsIntent` button. The Debugger will create requests and run them against your local webhook.
  
-> [Find out more about requests and responses here](https://www.jovo.tech/docs/requests-responses).
+> [Find out more about requests and responses here](https://v3.jovo.tech/docs/requests-responses).
 
 ## Configuration
 
-Using the `project.js` in your project directory, you can configure your skill specifically for your needs. Using [stages](https://www.jovo.tech/docs/project-js#stages), you can also utilize different configurations for different environments.
+Using the `project.js` in your project directory, you can configure your skill specifically for your needs. Using [stages](https://v3.jovo.tech/docs/project-js#stages), you can also utilize different configurations for different environments.
 
 The following elements can be added to the `alexaSkill` object:
 
@@ -202,7 +202,7 @@ this.$alexaSkill!
 
 ## Jovo Language Model
 
-> For a general understanding of the Jovo Language Model, check out the [platform-independent docs](https://www.jovo.tech/docs/model)
+> For a general understanding of the Jovo Language Model, check out the [platform-independent docs](https://v3.jovo.tech/docs/model)
 
 When using the Jovo Language Model you can add an `alexa` object to each intent. In there you can define the intent name for Alexa specifically:
 
@@ -384,27 +384,27 @@ There are a lot of Alexa specific permissions and data that a Skill can use, suc
 * Settings
 * Skill Events
 
-> [You can find more about Alexa Permissions and Data here](https://www.jovo.tech/marketplace/jovo-platform-alexa/permissions-data).
+> [You can find more about Alexa Permissions and Data here](https://v3.jovo.tech/marketplace/jovo-platform-alexa/permissions-data).
 
 ## Alexa Skill Interfaces
 
-* [Audio Player](https://www.jovo.tech/marketplace/jovo-platform-alexa/interfaces/audio-player)
-* [Dialog](https://www.jovo.tech/marketplace/jovo-platform-alexa/interfaces/dialog)
-* [Game Engine & Gadget Controller](https://www.jovo.tech/marketplace/jovo-platform-alexa/interfaces/game-engine-gadget-controller)
-* [Proactive Events](https://www.jovo.tech/marketplace/jovo-platform-alexa/interfaces/proactive-events)
-* [Visual Output](https://www.jovo.tech/marketplace/jovo-platform-alexa/interfaces/visual-output)
+* [Audio Player](https://v3.jovo.tech/marketplace/jovo-platform-alexa/interfaces/audio-player)
+* [Dialog](https://v3.jovo.tech/marketplace/jovo-platform-alexa/interfaces/dialog)
+* [Game Engine & Gadget Controller](https://v3.jovo.tech/marketplace/jovo-platform-alexa/interfaces/game-engine-gadget-controller)
+* [Proactive Events](https://v3.jovo.tech/marketplace/jovo-platform-alexa/interfaces/proactive-events)
+* [Visual Output](https://v3.jovo.tech/marketplace/jovo-platform-alexa/interfaces/visual-output)
 
-Learn more about the different Alexa Skill Interface types here: [Alexa Skill Interfaces](https://www.jovo.tech/marketplace/jovo-platform-alexa/interfaces).
+Learn more about the different Alexa Skill Interface types here: [Alexa Skill Interfaces](https://v3.jovo.tech/marketplace/jovo-platform-alexa/interfaces).
 
 ## Monetization
 
 ### Amazon Pay
 
-Learn how to sell physical goods and services in your Alexa Skills using Amazon Pay and Jovo. Find out more here: [Amazon Pay Docs](https://www.jovo.tech/marketplace/jovo-platform-alexa/monetization/amazon-pay).
+Learn how to sell physical goods and services in your Alexa Skills using Amazon Pay and Jovo. Find out more here: [Amazon Pay Docs](https://v3.jovo.tech/marketplace/jovo-platform-alexa/monetization/amazon-pay).
 
 ### In-Skill-Purchasing (ISP)
 
-Learn how to sell digital goods in your Alexa Skills using Alexa In-Skill Purchases (ISPs). Find out more here: [Alexa ISP Docs](https://www.jovo.tech/marketplace/jovo-platform-alexa/monetization/in-skill-purchases).
+Learn how to sell digital goods in your Alexa Skills using Alexa In-Skill Purchases (ISPs). Find out more here: [Alexa ISP Docs](https://v3.jovo.tech/marketplace/jovo-platform-alexa/monetization/in-skill-purchases).
 
 ## Progressive Responses
 

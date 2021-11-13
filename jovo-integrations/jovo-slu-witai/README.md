@@ -1,6 +1,6 @@
 # Wit.ai SLU Integration
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-slu-witai
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-slu-witai
 
 Learn how to use Wit.ai as SLU (Spoken Language Understanding, which combines speech recognition and natural language understanding) integration with the Jovo Framework.
 
@@ -18,9 +18,9 @@ npm install --save jovo-slu-witai
 const { WitAiSlu } = require('jovo-slu-witai');
 
 platform.use(
-	new WitAiSlu({
-		token: 'yourToken'
-	})
+  new WitAiSlu({
+    token: 'yourToken',
+  }),
 );
 
 // @language=typescript
@@ -30,8 +30,8 @@ platform.use(
 import { WitAiSlu } from 'jovo-slu-witai';
 
 platform.use(
-	new WitAiSlu({
-		token: 'yourToken'
-	})
+  new WitAiSlu({
+    token: 'yourToken',
+  }),
 );
 ```

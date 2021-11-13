@@ -32,7 +32,7 @@ export class KeyValueTable extends DefaultTable {
         'jovo-cms-airtable',
         `The table's name has to be defined in your config.js file`,
         undefined,
-        'https://www.jovo.tech/docs/cms/airtable#configuration',
+        'https://v3.jovo.tech/docs/cms/airtable#configuration',
       );
     }
 

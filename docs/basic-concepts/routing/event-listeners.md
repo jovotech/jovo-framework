@@ -1,12 +1,12 @@
 # Event Listeners
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/routing/event-listeners
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/routing/event-listeners
 
 Learn more about how to use Event Listeners with Jovo.
 
-* [Introduction](#introduction)
-* [OnRequest](#onrequest)
-* [OnReponse](#onresponse)
+- [Introduction](#introduction)
+- [OnRequest](#onrequest)
+- [OnReponse](#onresponse)
 
 ## Introduction
 
@@ -31,21 +31,20 @@ app.setHandler({
 The `onRequest` listener gets triggered with every request your voice application gets. This can be used for certain features, like getting data that needs to be used for every request, or logging.
 
 ```javascript
-app.onRequest(function(jovo) {
-    console.log(jovo.getRequestObject());
+app.onRequest(function (jovo) {
+	console.log(jovo.getRequestObject());
 });
 ```
 
 `onRequest` is the listener equivalent to the [`'ON_REQUEST'` intent](./README.md#on_request-intent './intents#on_request-intent') in your handler.
-
 
 ## OnResponse
 
 The `onResponse` listener gets triggered with every response your voice application sends.
 
 ```javascript
-app.onResponse(function(jovo) {
-    console.log(jovo.getResponseObject());
+app.onResponse(function (jovo) {
+	console.log(jovo.getResponseObject());
 });
 ```
 

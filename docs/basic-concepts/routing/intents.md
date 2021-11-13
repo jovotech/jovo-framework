@@ -1,21 +1,21 @@
 # Intents
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/routing/intents
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/routing/intents
 
 In this section, you will learn more about how to use intents to route your users through your voice app.
 
-* [Introduction](#introduction)
-* [Standard Intents](#standard-intents)
-    * [LAUNCH](#launch)
-    * [NEW_SESSION](#new_session)
-    * [NEW_USER](#new_user)
-    * [ON_REQUEST](#on_request)
-    * [END](#end)
-    * [Unhandled](#unhandled)
-    * [ON_ERROR](#on_error)
-* [Intent Hierarchy](#intent-hierarchy)
-* [Built-in Intents](#built-in-intents)
-* [intentMap](#intentmap)
+- [Introduction](#introduction)
+- [Standard Intents](#standard-intents)
+  - [LAUNCH](#launch)
+  - [NEW_SESSION](#new_session)
+  - [NEW_USER](#new_user)
+  - [ON_REQUEST](#on_request)
+  - [END](#end)
+  - [Unhandled](#unhandled)
+  - [ON_ERROR](#on_error)
+- [Intent Hierarchy](#intent-hierarchy)
+- [Built-in Intents](#built-in-intents)
+- [intentMap](#intentmap)
 
 ## Introduction
 
@@ -29,17 +29,14 @@ Besides at least one of the the required [`LAUNCH`](#launch) or [`NEW_SESSION`](
 // src/app.js
 
 app.setHandler({
-    LAUNCH() {
-        // Triggered when people open the voice app without a specific query
-        this.tell('Hello World!');
-    },
+	LAUNCH() {
+		// Triggered when people open the voice app without a specific query
+		this.tell('Hello World!');
+	},
 
-    YourFirstIntent() {
-
-        // Do something here
-
-    },
-
+	YourFirstIntent() {
+		// Do something here
+	},
 });
 
 // @language=typescript
@@ -47,17 +44,14 @@ app.setHandler({
 // src/app.ts
 
 app.setHandler({
-    LAUNCH() {
-        // Triggered when people open the voice app without a specific query
-        this.tell('Hello World!');
-    },
+	LAUNCH() {
+		// Triggered when people open the voice app without a specific query
+		this.tell('Hello World!');
+	},
 
-    YourFirstIntent() {
-
-        // Do something here
-
-    },
-
+	YourFirstIntent() {
+		// Do something here
+	},
 });
 ```
 
@@ -67,32 +61,30 @@ For this, Jovo offers standard, built-in intents, `LAUNCH` and `END`, to make cr
 
 ```javascript
 app.setHandler({
+	LAUNCH() {
+		// Triggered when people open the voice app without a specific query
+		// e.g. the LaunchRequest (Alexa) and Default Welcome Intent (Dialogflow), etc.
+	},
 
-    LAUNCH() {
-        // Triggered when people open the voice app without a specific query
-        // e.g. the LaunchRequest (Alexa) and Default Welcome Intent (Dialogflow), etc.
-    },
+	// Add more intents here
 
-    // Add more intents here
-
-    END() {
-        // Triggered when the session ends
-        // Currently supporting AMAZON.StopIntent and reprompt timeouts
-    }
+	END() {
+		// Triggered when the session ends
+		// Currently supporting AMAZON.StopIntent and reprompt timeouts
+	},
 });
 ```
-
 
 ## Standard Intents
 
 You can learn more about Jovo standard intents in the following sections:
 
-* [LAUNCH Intent](#launch-intent)
-* [NEW_SESSION Intent](#new_session-intent)
-* [NEW_USER Intent](#new_user-intent)
-* [ON_REQUEST Intent](#on_request-intent)
-* [END Intent](#end-intent)
-* [Unhandled Intent](#unhandled)
+- [LAUNCH Intent](#launch-intent)
+- [NEW_SESSION Intent](#new_session-intent)
+- [NEW_USER Intent](#new_user-intent)
+- [ON_REQUEST Intent](#on_request-intent)
+- [END Intent](#end-intent)
+- [Unhandled Intent](#unhandled)
 
 ### LAUNCH
 
@@ -225,7 +217,6 @@ ON_REQUEST
 LAUNCH
 ```
 
-
 ### END
 
 A session could end due to various reasons. For example, a user could call "stop," there could be an error, or a timeout could occur after you asked a question and the user didn't respond. Jovo uses the standard intent `END` to match those reasons for you to "clean up" (for example, to get the reason why the session ended, or save something to the database).
@@ -251,7 +242,6 @@ END() {
  },
 ```
 
-
 ### Unhandled
 
 Sometimes, an incoming intent might not be found either inside a state or among the global intents in the `handlers` variable. For this, `Unhandled` intents can be used to match those calls:
@@ -262,7 +252,7 @@ Unhandled() {
  },
 ```
 
-> Tutorial: [How the Unhandled Intent works](https://www.jovo.tech/tutorials/unhandled-intent).
+> Tutorial: [How the Unhandled Intent works](https://v3.jovo.tech/tutorials/unhandled-intent).
 
 #### Global Unhandled Intent
 
@@ -272,16 +262,15 @@ In the below example all intents that aren't found, are automatically calling th
 
 ```javascript
 app.setHandler({
+	LAUNCH() {
+		this.tell('Hello World!');
+	},
 
-    LAUNCH() {
-        this.tell('Hello World!');
-    },
+	// Add more intents here
 
-    // Add more intents here
-
-    Unhandled() {
-        return this.toIntent('LAUNCH');
-    }
+	Unhandled() {
+		return this.toIntent('LAUNCH');
+	},
 });
 ```
 
@@ -295,41 +284,37 @@ See this example:
 
 ```javascript
 app.setHandler({
+	LAUNCH() {
+		this.$speech.addText('Do you want to play a game?');
+		this.$reprompt.addText('Please answer with yes or no.');
 
-    LAUNCH() {
-        this.$speech.addText('Do you want to play a game?');
-        this.$reprompt.addText('Please answer with yes or no.');
+		this.followUpState('PlayGameState').ask(this.$speech, this.$reprompt);
+	},
 
-        this.followUpState('PlayGameState')
-            .ask(this.$speech, this.$reprompt);
-    },
+	PlayGameState: {
+		YesIntent() {
+			// Do something
+		},
 
-    'PlayGameState': {
-        YesIntent() {
-            // Do something
-        },
+		NoIntent() {
+			// Do something
+		},
 
-        NoIntent() {
-            // Do something
-        },
+		Unhandled() {
+			this.$speech.addText('You need to answer with yes, to play a game.');
+			this.$reprompt.addText('Please answer with yes or no.');
 
-        Unhandled() {
-            this.$speech.addText('You need to answer with yes, to play a game.');
-            this.$reprompt.addText('Please answer with yes or no.');
+			this.ask(this.$speech, this.$reprompt);
+		},
+	},
 
-            this.ask(this.$speech, this.$reprompt);
-        },
-    },
-
-    // ...
-
+	// ...
 });
 ```
 
 This helps you to make sure that certain steps are really taken in the user flow.
 
 However, for some intents (for example, a `CancelIntent`), it might make sense to always route to a global intent instead of `Unhandled`. This can be done with [intentsToSkipUnhandled](#intentsToSkipUnhandled).
-
 
 #### intentsToSkipUnhandled
 
@@ -341,13 +326,9 @@ With `intentsToSkipUnhandled`, you can define intents that aren't matched to an 
 // src/config.js
 
 module.exports = {
-    
-    intentsToSkipUnhandled: [
-        'END'
-    ],
+	intentsToSkipUnhandled: ['END'],
 
-    // ...
-
+	// ...
 };
 
 // @language=typescript
@@ -355,51 +336,45 @@ module.exports = {
 // src/config.ts
 
 const config = {
-    
-    intentsToSkipUnhandled: [
-        'END'
-    ],
+	intentsToSkipUnhandled: ['END'],
 
-    // ...
-
+	// ...
 };
 ```
+
 In the below example, if a person answers the first question with "Stop," it is not going to `Unhandled`, but to the global `END`:
 
 ```javascript
 app.setHandler({
+	LAUNCH() {
+		this.$speech.addText('Do you want to play a game?');
+		this.$reprompt.addText('Please answer with yes or no.');
 
-    LAUNCH() {
-        this.$speech.addText('Do you want to play a game?');
-        this.$reprompt.addText('Please answer with yes or no.');
+		this.followUpState('PlayGameState').ask(this.$speech, this.$reprompt);
+	},
 
-        this.followUpState('PlayGameState')
-            .ask(this.$speech, this.$reprompt);
-    },
+	PlayGameState: {
+		YesIntent() {
+			// Do something
+		},
 
-    'PlayGameState': {
-        YesIntent() {
-            // Do something
-        },
+		NoIntent() {
+			// Do something
+		},
 
-        NoIntent() {
-            // Do something
-        },
+		Unhandled() {
+			this.$speech.addText('You need to answer with yes, to play a game.');
+			this.$reprompt.addText('Please answer with yes or no.');
 
-        Unhandled() {
-            this.$speech.addText('You need to answer with yes, to play a game.');
-            this.$reprompt.addText('Please answer with yes or no.');
+			this.ask(this.$speech, this.$reprompt);
+		},
+	},
 
-            this.ask(this.$speech, this.$reprompt);
-        },
-    },
+	END() {
+		// Do something
+	},
 
-    END() {
-        // Do something
-    },
-
-    // ...
-
+	// ...
 });
 ```
 
@@ -437,39 +412,36 @@ ON_ERROR() {
 },
 ```
 
-
-
 ## Intent Hierarchy
 
 Jovo intent handling works with promises. This means that the response is returned after the promise is resolved, even if no specific `tell` or `ask` is set. For certain Jovo standard intents it can happen that the handling passes through several intents without you having to use a redirect like `toIntent`.
 
 The Jovo standard intents follow this hierarchy:
-* `NEW_USER`
-* `NEW_SESSION`
-* `ON_REQUEST`
-* `LAUNCH` (or other intent that is called)
+
+- `NEW_USER`
+- `NEW_SESSION`
+- `ON_REQUEST`
+- `LAUNCH` (or other intent that is called)
 
 For example, this code:
 
 ```javascript
 app.setHandler({
+	ON_REQUEST() {
+		console.log('ON_REQUEST');
+	},
 
-    ON_REQUEST() {
-        console.log('ON_REQUEST');
-    },
+	NEW_USER() {
+		console.log('NEW_USER');
+	},
 
-    NEW_USER() {
-        console.log('NEW_USER');
-    },
+	NEW_SESSION() {
+		console.log('NEW_SESSION');
+	},
 
-    NEW_SESSION() {
-        console.log('NEW_SESSION');
-    },
-
-    LAUNCH() {
-        console.log('LAUNCH');
-    },
-
+	LAUNCH() {
+		console.log('LAUNCH');
+	},
 });
 ```
 
@@ -488,15 +460,15 @@ LAUNCH
   "sessionAttributes": {}
 }
 ```
+
 After the request has passed through all the intents and no output is set, an empty response is returned.
 
 ## Built-in Intents
 
 As mentioned above, the platforms offer different types of built-in intents.
 
-* Amazon Alexa: [Standard built-in intents](https://developer.amazon.com/docs/alexa/custom-skills/standard-built-in-intents.html)
-* Google Assistant: [Built-in Intents (Developer Preview)](https://developers.google.com/actions/discovery/built-in-intents)
-
+- Amazon Alexa: [Standard built-in intents](https://developer.amazon.com/docs/alexa/custom-skills/standard-built-in-intents.html)
+- Google Assistant: [Built-in Intents (Developer Preview)](https://developers.google.com/actions/discovery/built-in-intents)
 
 ## intentMap
 
@@ -508,13 +480,11 @@ In cases where the names of certain intents differ across platforms, Jovo offers
 // src/config.js
 
 module.exports = {
-    
-    intentMap: {
+	intentMap: {
 		'AMAZON.StopIntent': 'END',
-    },
+	},
 
-    // ...
-
+	// ...
 };
 
 // @language=typescript
@@ -522,13 +492,11 @@ module.exports = {
 // src/config.ts
 
 const config = {
-    
-    intentMap: {
+	intentMap: {
 		'AMAZON.StopIntent': 'END',
-    },
+	},
 
-    // ...
-
+	// ...
 };
 ```
 
@@ -540,13 +508,11 @@ This is useful especially for platform-specific, built-in intents. One example c
 // src/config.js
 
 module.exports = {
-    
-    intentMap: {
-        'AMAZON.HelpIntent' : 'HelpIntent'
-    },
+	intentMap: {
+		'AMAZON.HelpIntent': 'HelpIntent',
+	},
 
-    // ...
-
+	// ...
 };
 
 // @language=typescript
@@ -554,13 +520,11 @@ module.exports = {
 // src/config.ts
 
 const config = {
-    
-    intentMap: {
-        'AMAZON.HelpIntent' : 'HelpIntent'
-    },
+	intentMap: {
+		'AMAZON.HelpIntent': 'HelpIntent',
+	},
 
-    // ...
-
+	// ...
 };
 ```
 
@@ -572,14 +536,12 @@ This can also be used if you have different naming conventions on both platforms
 // src/config.js
 
 module.exports = {
-    
-    intentMap: {
-        'AMAZON.HelpIntent' : 'HelpIntent',
-        'help-intent' : 'HelpIntent'
-    },
+	intentMap: {
+		'AMAZON.HelpIntent': 'HelpIntent',
+		'help-intent': 'HelpIntent',
+	},
 
-    // ...
-
+	// ...
 };
 
 // @language=typescript
@@ -587,14 +549,12 @@ module.exports = {
 // src/config.ts
 
 const config = {
-    
-    intentMap: {
-        'AMAZON.HelpIntent' : 'HelpIntent',
-        'help-intent' : 'HelpIntent'
-    },
+	intentMap: {
+		'AMAZON.HelpIntent': 'HelpIntent',
+		'help-intent': 'HelpIntent',
+	},
 
-    // ...
-
+	// ...
 };
 ```
 

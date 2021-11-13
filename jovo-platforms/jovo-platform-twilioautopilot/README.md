@@ -1,6 +1,6 @@
 # Twilio Autopilot Platform Integration
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-twilioautopilot
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-twilioautopilot
 
 Learn more about Twilio Autopilot specific features that can be used with the Jovo Framework.
 

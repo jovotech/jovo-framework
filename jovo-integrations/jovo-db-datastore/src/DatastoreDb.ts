@@ -52,7 +52,7 @@ export class DatastoreDb implements Db {
         'jovo-db-datastore',
         undefined,
         undefined,
-        'https://www.jovo.tech/docs/databases/google-datastore',
+        'https://v3.jovo.tech/docs/databases/google-datastore',
       );
     }
 
@@ -63,7 +63,7 @@ export class DatastoreDb implements Db {
         'jovo-db-datastore',
         undefined,
         undefined,
-        'https://www.jovo.tech/docs/databases/google-datastore',
+        'https://v3.jovo.tech/docs/databases/google-datastore',
       );
     }
 
@@ -74,7 +74,7 @@ export class DatastoreDb implements Db {
         'jovo-db-datastore',
         undefined,
         undefined,
-        'https://www.jovo.tech/docs/databases/google-datastore',
+        'https://v3.jovo.tech/docs/databases/google-datastore',
       );
     }
   }

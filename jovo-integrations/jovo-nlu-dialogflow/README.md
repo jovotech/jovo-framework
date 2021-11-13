@@ -1,6 +1,6 @@
 # Dialogflow NLU Integration
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-nlu-dialogflow
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-nlu-dialogflow
 
 Learn how to use Google Dialogflow as NLU (Natural Language Understanding) integration with the Jovo Framework.
 

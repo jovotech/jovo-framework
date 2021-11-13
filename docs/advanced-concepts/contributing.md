@@ -1,19 +1,19 @@
 # Contributing to Jovo
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/contributing
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/contributing
 
 Thank you for choosing to fix bugs or add new features to the Jovo Framework! This doc will walk you through the process.
 
-* [Prepare your Workspace](#prepare-your-workspace)
-   * [Configure your App to use your Local Copy of the Jovo Framework](#configure-your-app-to-use-your-local-copy-of-the-jovo-framework)
-* [Make your Changes](#make-your-changes)
-* [Test your Changes](#test-your-changes)
-* [Share your Changes](#share-your-changes)
-* [Create a Pull-Request on GitHub](#create-a-pull-request-on-github)
-
+- [Prepare your Workspace](#prepare-your-workspace)
+  - [Configure your App to use your Local Copy of the Jovo Framework](#configure-your-app-to-use-your-local-copy-of-the-jovo-framework)
+- [Make your Changes](#make-your-changes)
+- [Test your Changes](#test-your-changes)
+- [Share your Changes](#share-your-changes)
+- [Create a Pull-Request on GitHub](#create-a-pull-request-on-github)
 
 ## Prepare your Workspace
-You'll need to make your changes in your own fork of the jovo-framework repo. 
+
+You'll need to make your changes in your own fork of the jovo-framework repo.
 If you're not familiar with forking in GitHub, this article will help you get started: https://help.github.com/en/articles/fork-a-repo
 
 > The packages that make up Jovo are all contained in a single monorepo. Jovo uses [Lerna](https://lerna.js.org/) to manage these packages.
@@ -68,6 +68,7 @@ $ git checkout -b <new-branch-name>
 Add and edit files.
 
 ## Test your Changes
+
 Run all of these commands at the top level of your jovo-framework clone.
 
 > Jovo uses [Jest](https://jestjs.io/) for unit tests and [tslint](https://palantir.github.io/tslint/) for static analysis.
@@ -83,6 +84,7 @@ Run linter:
 ```shell
 $ npm run tslint
 ```
+
 Run tests:
 
 ```shell

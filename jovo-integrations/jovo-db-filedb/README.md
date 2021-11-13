@@ -1,6 +1,6 @@
 # FileDB Local JSON Database Integration
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-db-filedb
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-db-filedb
 
 Learn more about the default database for prototyping with Jovo: A file based system that stores user specific data to a JSON file.
 
@@ -10,7 +10,7 @@ Learn more about the default database for prototyping with Jovo: A file based sy
 
 ## Introduction
 
-> Note: This database type is not supposed to be used in production. See other [database integrations](https://www.jovo.tech/docs/databases) for options when the app is live. 
+> Note: This database type is not supposed to be used in production. See other [database integrations](https://v3.jovo.tech/docs/databases) for options when the app is live. 
 
 The FileDB integration allows you to easily store user session data in a JSON file. This is especially helpful for local development and prototyping. Data will be stored to a `db.json` file that can be found in a `db` folder:
 

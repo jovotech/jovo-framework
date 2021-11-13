@@ -1,6 +1,6 @@
 # Unit Testing for Voice Apps
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/unit-testing
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/unit-testing
 
 To make sure your Alexa Skills and Google Actions are robust, we highly recommend testing. Learn how to implement unit tests for your voice apps built with Jovo.
 
@@ -26,7 +26,7 @@ The Jovo TestSuite allows you to create unit tests for your Alexa Skills and Goo
 
 ## Getting Started with the Jovo TestSuite
 
-> Use the [Jovo Unit Testing Template](https://www.jovo.tech/templates/unit-testing) to get started with some first tests.
+> Use the [Jovo Unit Testing Template](https://v3.jovo.tech/templates/unit-testing) to get started with some first tests.
 
 Here's everything you need to know to get started:
 

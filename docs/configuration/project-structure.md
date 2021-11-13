@@ -1,35 +1,35 @@
 # Project Structure
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/project-structure
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/project-structure
 
 In this section, you will learn more about the project structure of a Jovo Voice App.
 
-* [Overview](#overview)
-* [Project Files](#project-files)
-   * [project.js - Project Configuration](#projectjs---project-configuration)
-   * [models - Language Model](#models---language-model)
-   * [platforms - Platform Files](#platforms---platform-files)
-* [Source Files](#source-files)
-   * [app.js - App Logic](#appjs---app-logic)
-   * [config.js - App Config](#configjs---app-config)
-   * [index.js - Host Configuration](#indexjs---host-configuration)
-  
+- [Overview](#overview)
+- [Project Files](#project-files)
+  - [project.js - Project Configuration](#projectjs---project-configuration)
+  - [models - Language Model](#models---language-model)
+  - [platforms - Platform Files](#platforms---platform-files)
+- [Source Files](#source-files)
+  - [app.js - App Logic](#appjs---app-logic)
+  - [config.js - App Config](#configjs---app-config)
+  - [index.js - Host Configuration](#indexjs---host-configuration)
 
 ## Overview
 
 A Jovo project is divided into two main building blocks:
-* [Project Files](#project-files): Overall project related files, e.g. language models and platform project information 
-* [Source Files](#source-files): The actual code of your app. Can be found in the `src` folder
 
+- [Project Files](#project-files): Overall project related files, e.g. language models and platform project information
+- [Source Files](#source-files): The actual code of your app. Can be found in the `src` folder
 
 ## Project Files
 
 These files are in the root folder and include anything that is needed to publish a project to voice platforms like Amazon Alexa and Google Assistant.
 
 Project files include:
-* [project.js - Project Configuration](#projectjs---project-configuration)
-* [models - Language Model](#models---language-model)
-* [platforms - Platform Files](#platforms---platform-files)
+
+- [project.js - Project Configuration](#projectjs---project-configuration)
+- [models - Language Model](#models---language-model)
+- [platforms - Platform Files](#platforms---platform-files)
 
 ### project.js - Project Configuration
 
@@ -43,50 +43,50 @@ Here is the `project.js` file of the [Jovo Sample App](https://github.com/jovote
 // ------------------------------------------------------------------
 
 module.exports = {
-   alexaSkill: {
-      nlu: 'alexa',
-   },
-   googleAction: {
-      nlu: 'dialogflow',
-   },
-   endpoint: '${JOVO_WEBHOOK_URL}',
+	alexaSkill: {
+		nlu: 'alexa',
+	},
+	googleAction: {
+		nlu: 'dialogflow',
+	},
+	endpoint: '${JOVO_WEBHOOK_URL}',
 };
 ```
 
 > [Learn more about the `project.js` file here](./project-js.md './project-js').
 
-
 ### models - Language Model
-The models folder contains the [Jovo Language Model](../basic-concepts/model './model'), which can be used to create and update platform specific language models using the [Jovo CLI](../basic-concepts/cli './cli'). 
+
+The models folder contains the [Jovo Language Model](../basic-concepts/model './model'), which can be used to create and update platform specific language models using the [Jovo CLI](../basic-concepts/cli './cli').
 
 The idea is to maintain a single language model locally instead of having to go to the platform developer consoles independently.
 
 In the `models` folder, every language gets a file. For example, here's how a file `en-US.json` could look like:
 
 ```javascript
-{  
+{
     "invocation": "my test app",
-    "intents":[  
-        {  
+    "intents":[
+        {
             "name":"HelloWorldIntent",
-            "phrases":[  
+            "phrases":[
                 "hello",
                 "say hello",
                 "say hello world"
             ]
         },
-        {  
+        {
             "name":"MyNameIsIntent",
-            "phrases":[  
+            "phrases":[
                 "{name}",
                 "my name is {name}",
                 "i am {name}",
                 "you can call me {name}"
             ],
-            "inputs":[  
-                {  
+            "inputs":[
+                {
                     "name":"name",
-                    "type":{  
+                    "type":{
                         "alexa":"AMAZON.US_FIRST_NAME",
                         "dialogflow":"@sys.given-name"
                     }
@@ -96,8 +96,8 @@ In the `models` folder, every language gets a file. For example, here's how a fi
     ]
 }
 ```
-> [Learn more about the Jovo Language Model here](../basic-concepts/model './model').
 
+> [Learn more about the Jovo Language Model here](../basic-concepts/model './model').
 
 ### platforms - Platform Files
 
@@ -109,9 +109,9 @@ The `platforms` folder is created by the [Jovo CLI](../basic-concepts/cli './cli
 
 In the `src` folder, you can find the actual code of your Jovo app. This part is later deployed to [hosting](./hosting './hosting') providers like AWS Lambda.
 
-* [app.js - App Logic](#appjs---app-logic)
-* [config.js - App Config](#configjs---app-config)
-* [index.js - Host Configuration](#indexjs---host-configuration)
+- [app.js - App Logic](#appjs---app-logic)
+- [config.js - App Config](#configjs---app-config)
+- [index.js - Host Configuration](#indexjs---host-configuration)
 
 ### app.js - App Logic
 
@@ -212,7 +212,6 @@ export { app };
 
 > [You can find everything related to the `app.js` here](./app-js.md './app-js').
 
-
 ### config.js - App Config
 
 The `config.js` file stores all the logic-related configuration:
@@ -227,17 +226,17 @@ The `config.js` file stores all the logic-related configuration:
 // ------------------------------------------------------------------
 
 module.exports = {
-   logging: true,
+	logging: true,
 
-   intentMap: {
-      'AMAZON.StopIntent': 'END',
-   },
+	intentMap: {
+		'AMAZON.StopIntent': 'END',
+	},
 
-   db: {
-        FileDb: {
-            pathToFile: '../db/db.json',
-        }
-    },
+	db: {
+		FileDb: {
+			pathToFile: '../db/db.json',
+		},
+	},
 };
 
 // @language=typescript
@@ -249,17 +248,17 @@ module.exports = {
 // ------------------------------------------------------------------
 
 const config = {
-   logging: true,
+	logging: true,
 
-   intentMap: {
-      'AMAZON.StopIntent': 'END',
-   },
+	intentMap: {
+		'AMAZON.StopIntent': 'END',
+	},
 
-   db: {
-        FileDb: {
-            pathToFile: '../db/db.json',
-        }
-    },
+	db: {
+		FileDb: {
+			pathToFile: '../db/db.json',
+		},
+	},
 };
 
 export { config };
@@ -269,7 +268,7 @@ export { config };
 
 ### index.js - Host Configuration
 
-Everything related to running and hosting your voice application, either in Lambda or using a webhook (recommended for local prototyping), is dealt with in `index.js` file: 
+Everything related to running and hosting your voice application, either in Lambda or using a webhook (recommended for local prototyping), is dealt with in `index.js` file:
 
 ```javascript
 // @language=javascript
@@ -335,7 +334,6 @@ exports.handler = async (event: any, context: any, callback: Function) => {
 ```
 
 > [Learn everything related to host configuration and the `index.js` file here](./hosting './hosting').
-
 
 <!--[metadata]: {"description": "Learn more about the project structure of a Jovo Voice App for Amazon Alexa and Google Assistant",
 		        "route": "project-structure"}-->

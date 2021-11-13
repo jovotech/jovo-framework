@@ -1,6 +1,6 @@
 # Installation
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/installation
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/installation
 
 Learn about different options to install the Jovo Framework and Jovo CLI.
 
@@ -18,7 +18,7 @@ Learn about different options to install the Jovo Framework and Jovo CLI.
 
 ## Introduction
 
-Jovo is an open-source framework based on [Typescript](https://www.typescriptlang.org/) which can be used with [Node.js](https://nodejs.org/). If you run into any problems while installing it, please let us know [in the comments](https://www.jovo.tech/framework/docs/installation#comments-and-questions), [create an issue on GitHub](https://github.com/jovotech/jovo-framework-nodejs/issues), or [join our Developer Slack community](https://www.jovo.tech/slack).
+Jovo is an open-source framework based on [Typescript](https://www.typescriptlang.org/) which can be used with [Node.js](https://nodejs.org/). If you run into any problems while installing it, please let us know [in the comments](https://v3.jovo.tech/framework/docs/installation#comments-and-questions), [create an issue on GitHub](https://github.com/jovotech/jovo-framework-nodejs/issues), or [join our Developer Slack community](https://v3.jovo.tech/slack).
 
 There are several ways how you can install Jovo:
 
@@ -26,7 +26,7 @@ There are several ways how you can install Jovo:
 - Download the [jovo-framework npm package](#jovo-framework-npm-package)
 - Clone a [Jovo Sample Voice App](#jovo-sample-voice-app)
 
-> You can also find tutorials and courses here: [learn jovo](https://www.jovo.tech/learn). Happy coding!
+> You can also find tutorials and courses here: [learn jovo](https://v3.jovo.tech/learn). Happy coding!
 
 ### Jovo CLI Installation
 
@@ -115,7 +115,7 @@ Then go into the directory and install the dependencies:
 $ npm install
 ```
 
-> You can find other examples and templates here: [Jovo Template Directory](https://www.jovo.tech/templates).
+> You can find other examples and templates here: [Jovo Template Directory](https://v3.jovo.tech/templates).
 
 ## Upgrading
 

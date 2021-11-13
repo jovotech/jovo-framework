@@ -1,6 +1,6 @@
 # Project Lifecycle
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/project-lifecycle
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/project-lifecycle
 
 Learn more about the different steps of a Jovo project.
 

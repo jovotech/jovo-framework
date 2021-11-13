@@ -61,7 +61,7 @@ export class DefaultSheet implements Plugin {
           'jovo-cms-googlesheets',
           'the spreadsheetId has to be defined in your config.js file',
           undefined,
-          'https://www.jovo.tech/docs/cms/google-sheets#configuration',
+          'https://v3.jovo.tech/docs/cms/google-sheets#configuration',
         ),
       );
     }
@@ -73,7 +73,7 @@ export class DefaultSheet implements Plugin {
           'jovo-cms-googlesheets',
           'the sheet name has to be defined in your config.js file',
           undefined,
-          'https://www.jovo.tech/docs/cms/google-sheets#configuration',
+          'https://v3.jovo.tech/docs/cms/google-sheets#configuration',
         ),
       );
     }
@@ -85,7 +85,7 @@ export class DefaultSheet implements Plugin {
           'jovo-cms-googlesheets',
           'the range has to be defined in your config.js file',
           undefined,
-          'https://www.jovo.tech/docs/cms/google-sheets#configuration',
+          'https://v3.jovo.tech/docs/cms/google-sheets#configuration',
         ),
       );
     }
@@ -116,7 +116,7 @@ export class DefaultSheet implements Plugin {
         'jovo-cms-googlesheets',
         `The sheet's name has to be defined in your config.js file.`,
         undefined,
-        'https://www.jovo.tech/docs/cms/google-sheets#configuration',
+        'https://v3.jovo.tech/docs/cms/google-sheets#configuration',
       );
     }
     handleRequest.app.$cms[this.config.entity] = values;

@@ -57,7 +57,7 @@ export class MongoDb implements Db {
         'jovo-db-mongodb',
         undefined,
         undefined,
-        'https://www.jovo.tech/docs/databases/mongodb',
+        'https://v3.jovo.tech/docs/databases/mongodb',
       );
     }
 
@@ -68,7 +68,7 @@ export class MongoDb implements Db {
         'jovo-db-mongodb',
         undefined,
         undefined,
-        'https://www.jovo.tech/docs/databases/mongodb',
+        'https://v3.jovo.tech/docs/databases/mongodb',
       );
     }
 
@@ -79,7 +79,7 @@ export class MongoDb implements Db {
         'jovo-db-mongodb',
         undefined,
         undefined,
-        'https://www.jovo.tech/docs/databases/mongodb',
+        'https://v3.jovo.tech/docs/databases/mongodb',
       );
     }
 
@@ -90,7 +90,7 @@ export class MongoDb implements Db {
         'jovo-db-mongodb',
         undefined,
         undefined,
-        'https://www.jovo.tech/docs/databases/mongodb',
+        'https://v3.jovo.tech/docs/databases/mongodb',
       );
     }
   }
@@ -116,7 +116,7 @@ export class MongoDb implements Db {
         'jovo-db-mongodb',
         undefined,
         'Make sure the configuration you provided is valid.',
-        'https://www.jovo.tech/docs/databases/mongodb',
+        'https://v3.jovo.tech/docs/databases/mongodb',
       );
     }
   }
@@ -148,7 +148,7 @@ export class MongoDb implements Db {
         'jovo-db-mongodb',
         undefined,
         'Make sure the configuration you provided is valid.',
-        'https://www.jovo.tech/docs/databases/mongodb',
+        'https://v3.jovo.tech/docs/databases/mongodb',
       );
     }
   }
@@ -167,7 +167,7 @@ export class MongoDb implements Db {
         'jovo-db-mongodb',
         undefined,
         'Make sure the configuration you provided is valid.',
-        'https://www.jovo.tech/docs/databases/mongodb',
+        'https://v3.jovo.tech/docs/databases/mongodb',
       );
     }
   }

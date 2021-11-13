@@ -1,13 +1,13 @@
 # Local Development
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/local-development
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/local-development
 
 Learn more about local development of Jovo projects.
 
-* [Introduction](#introduction)
-* [Jovo Webhook](#jovo-webhook)
-* [FileDb](#filedb)
-* [Debugging](#debugging)
+- [Introduction](#introduction)
+- [Jovo Webhook](#jovo-webhook)
+- [FileDb](#filedb)
+- [Debugging](#debugging)
 
 ## Introduction
 
@@ -31,12 +31,12 @@ To allow multiple users to work on the same repository locally, the webhook URL 
 // ./project.js
 
 module.exports = {
-  // ...
-  endpoint: '${JOVO_WEBHOOK_URL}',
+	// ...
+	endpoint: '${JOVO_WEBHOOK_URL}',
 };
 ```
 
-> We provide an on-premise solution for enterprises who want to use the Jovo Webhook. [Please use contact us here](https://www.jovo.tech/on-premise-deployment).
+> We provide an on-premise solution for enterprises who want to use the Jovo Webhook. [Please use contact us here](https://v3.jovo.tech/on-premise-deployment).
 
 Find out more about the Jovo Webhook [here](../tools/webhook.md '../webhook').
 
@@ -49,18 +49,18 @@ A `db/` folder will be added to the root of your project which will include a `d
 ```js
 [
 	{
-		"userId": "someUser",
-		"userData": {
-			"data": {
-				"someKey": "someValue"
-			}
-		}
-  },
-  {
-    "userId": "otherUser"
-    // ...
-  }
-]
+		userId: 'someUser',
+		userData: {
+			data: {
+				someKey: 'someValue',
+			},
+		},
+	},
+	{
+		userId: 'otherUser',
+		// ...
+	},
+];
 ```
 
 You can find out more about the Jovo FileDb plugin [here](../integrations/databases/file-db.md '../integrations/databases/file-db).

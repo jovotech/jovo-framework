@@ -2,7 +2,7 @@
 
 > [**We're working heavily on Jovo `v4`! Check out the `v4/release` branch for more information**](https://github.com/jovotech/jovo-framework/tree/v4/release)
 
-[![Jovo Framework](./docs/img/jovo-header.jpg)](https://www.jovo.tech)
+[![Jovo Framework](./docs/img/jovo-header.jpg)](https://v3.jovo.tech)
 
 <p>
 <a href="https://travis-ci.org/jovotech/jovo-framework" target="_blank"><img src="https://travis-ci.org/jovotech/jovo-framework.svg?branch=master"></a>
@@ -32,16 +32,16 @@ app.setHandler({
 
 The main features of the Jovo ecosystem are:
 
-- [**Jovo Framework**](https://www.jovo.tech): Build cross-platform apps for voice and chat
-  - Build on top of platforms like [Alexa](https://www.jovo.tech/marketplace/jovo-platform-alexa), [Google Assistant](https://www.jovo.tech/marketplace/jovo-platform-googleassistant), [Samsung Bixby](https://www.jovo.tech/marketplace/jovo-platform-bixby), and [Facebook Messenger](https://www.jovo.tech/marketplace/jovo-platform-facebookmessenger)
+- [**Jovo Framework**](https://v3.jovo.tech): Build cross-platform apps for voice and chat
+  - Build on top of platforms like [Alexa](https://v3.jovo.tech/marketplace/jovo-platform-alexa), [Google Assistant](https://v3.jovo.tech/marketplace/jovo-platform-googleassistant), [Samsung Bixby](https://v3.jovo.tech/marketplace/jovo-platform-bixby), and [Facebook Messenger](https://v3.jovo.tech/marketplace/jovo-platform-facebookmessenger)
   - Build voice-enabled apps for web and mobile
   - Build voice interactions into custom hardware like Raspberry Pi
-- [**Jovo CLI**](https://www.jovo.tech/marketplace/jovo-cli): Create, build, and deploy Jovo projects (including [staging](https://www.jovo.tech/docs/staging))
-- [**Jovo Marketplace**](https://www.jovo.tech/marketplace): Large variety of integrations like ASR, NLU, databases, analytics, CMS, and TTS
-- [**Jovo Webhook**](https://www.jovo.tech/docs/webhook) and [**Jovo Debugger**](https://www.jovo.tech/marketplace/jovo-plugin-debugger) for efficient local development and debugging in the browser
-- [**Jovo Language Model**](https://www.jovo.tech/docs/model): A consolidated language model that can be converted into Alexa Interaction Models and Dialogflow Agents
+- [**Jovo CLI**](https://v3.jovo.tech/marketplace/jovo-cli): Create, build, and deploy Jovo projects (including [staging](https://v3.jovo.tech/docs/staging))
+- [**Jovo Marketplace**](https://v3.jovo.tech/marketplace): Large variety of integrations like ASR, NLU, databases, analytics, CMS, and TTS
+- [**Jovo Webhook**](https://v3.jovo.tech/docs/webhook) and [**Jovo Debugger**](https://v3.jovo.tech/marketplace/jovo-plugin-debugger) for efficient local development and debugging in the browser
+- [**Jovo Language Model**](https://v3.jovo.tech/docs/model): A consolidated language model that can be converted into Alexa Interaction Models and Dialogflow Agents
 
-> 🚀 Join our newsletter for free courses on voice app development: www.jovo.tech/newsletter
+> 🚀 Join our newsletter for free courses on voice app development: v3.jovo.tech/newsletter
 
 ## Table of Contents
 
@@ -74,7 +74,7 @@ Find all supporters in our [`BACKERS.md`](./BACKERS.md) file.
 
 ## Usage
 
-> Learn more in our [Quickstart Guide](https://www.jovo.tech/docs/quickstart).
+> Learn more in our [Quickstart Guide](https://v3.jovo.tech/docs/quickstart).
 
 Install the Jovo CLI:
 
@@ -106,28 +106,28 @@ $ jovo3 run
 
 ## Benefits
 
-- Flexible: Easily extend the Jovo Framework with integrations and plugins. Learn more in the [Jovo Marketplace](https://www.jovo.tech/marketplace)
-  - [Automatic Speech Recognition (ASR)](https://www.jovo.tech/marketplace/tag/asr)
-  - [Natural Language Understanding (NLU)](https://www.jovo.tech/marketplace/tag/nlu)
-  - [Databases](https://www.jovo.tech/marketplace/tag/databases)
-  - [Monitoring & Analytics](https://www.jovo.tech/marketplace/tag/monitoring)
-  - [Content Management](https://www.jovo.tech/marketplace/tag/cms)
-  - [Text to Speech (TTS)](https://www.jovo.tech/marketplace/tag/tts)
+- Flexible: Easily extend the Jovo Framework with integrations and plugins. Learn more in the [Jovo Marketplace](https://v3.jovo.tech/marketplace)
+  - [Automatic Speech Recognition (ASR)](https://v3.jovo.tech/marketplace/tag/asr)
+  - [Natural Language Understanding (NLU)](https://v3.jovo.tech/marketplace/tag/nlu)
+  - [Databases](https://v3.jovo.tech/marketplace/tag/databases)
+  - [Monitoring & Analytics](https://v3.jovo.tech/marketplace/tag/monitoring)
+  - [Content Management](https://v3.jovo.tech/marketplace/tag/cms)
+  - [Text to Speech (TTS)](https://v3.jovo.tech/marketplace/tag/tts)
 - Starter friendly: [Templates](https://github.com/jovotech/jovo-templates) and [community support](https://community.jovo.tech/)
-- Efficient: [Local development](https://www.jovo.tech/docs/local-development) and [staging](https://www.jovo.tech/docs/staging)
-- Modular: Reusable [conversational components](https://www.jovo.tech/docs/components)
-- Robust: [Unit testing](jovo.tech/docs/unit-testing) and [debugging](https://www.jovo.tech/docs/debugging) tools
-- You're in full control: [Host](https://www.jovo.tech/docs/hosting) your app anywhere
+- Efficient: [Local development](https://v3.jovo.tech/docs/local-development) and [staging](https://v3.jovo.tech/docs/staging)
+- Modular: Reusable [conversational components](https://v3.jovo.tech/docs/components)
+- Robust: [Unit testing](jovo.tech/docs/unit-testing) and [debugging](https://v3.jovo.tech/docs/debugging) tools
+- You're in full control: [Host](https://v3.jovo.tech/docs/hosting) your app anywhere
 
 ## Learn more
 
-- Jovo Docs (https://www.jovo.tech/docs/)
-- Jovo Tutorials (https://www.jovo.tech/tutorials)
-  - [Build an Alexa Skill in Node.js with Jovo](https://www.jovo.tech/tutorials/alexa-skill-tutorial-nodejs)
-  - [Build a Google Action in Node.js with Jovo](https://www.jovo.tech/tutorials/google-action-tutorial-nodejs)
-  - [Build your first Samsung Bixby Capsule with Jovo](https://www.jovo.tech/tutorials/samsung-bixby-hello-world)
-  - [Build your first Twilio Autopilot IVR with Jovo](https://www.jovo.tech/tutorials/twilio-autopilot-hello-world)
-- Jovo Courses (https://www.jovo.tech/courses)
+- Jovo Docs (https://v3.jovo.tech/docs/)
+- Jovo Tutorials (https://v3.jovo.tech/tutorials)
+  - [Build an Alexa Skill in Node.js with Jovo](https://v3.jovo.tech/tutorials/alexa-skill-tutorial-nodejs)
+  - [Build a Google Action in Node.js with Jovo](https://v3.jovo.tech/tutorials/google-action-tutorial-nodejs)
+  - [Build your first Samsung Bixby Capsule with Jovo](https://v3.jovo.tech/tutorials/samsung-bixby-hello-world)
+  - [Build your first Twilio Autopilot IVR with Jovo](https://v3.jovo.tech/tutorials/twilio-autopilot-hello-world)
+- Jovo Courses (https://v3.jovo.tech/courses)
 - Jovo Youtube Channel (https://www.youtube.com/c/jovotech)
 
 ## Contributing
@@ -135,6 +135,6 @@ $ jovo3 run
 We strongly encourage everyone who wants to help the Jovo development take a look at the following resources:
 
 - [CONTRIBUTING.md](./.github/CONTRIBUTING.md)
-- [Step by step process](https://www.jovo.tech/docs/contributing)
+- [Step by step process](https://v3.jovo.tech/docs/contributing)
 - Take a look at our [issues](https://github.com/jovotech/jovo-framework/issues)
 - [Support us on Open Collective](https://opencollective.com/jovo-framework)

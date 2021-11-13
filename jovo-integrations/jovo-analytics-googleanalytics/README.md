@@ -299,7 +299,7 @@ async LAUNCH() {
 
 #### sendTransaction()
 
-Transactions are self-explanatory. They track transactions made in your app, which can come in handy for [Alexa ISP](https://www.jovo.tech/docs/amazon-alexa/in-skill-purchases), for example. `sendTransaction()` accepts an object with the following properties: 
+Transactions are self-explanatory. They track transactions made in your app, which can come in handy for [Alexa ISP](https://v3.jovo.tech/docs/amazon-alexa/in-skill-purchases), for example. `sendTransaction()` accepts an object with the following properties: 
 
 * transactionId - Unique id for transaction and corresponding transaction items.
 * transactionRevenue - Optional. Total revenue for the current transaction.

@@ -505,7 +505,7 @@ export class JovoUser implements Plugin {
 
   /**
    * Caches the current state of the user data hashed inside the jovo object
-   * @param {HandleRequest} handleRequest https://www.jovo.tech/docs/plugins#handlerequest
+   * @param {HandleRequest} handleRequest https://v3.jovo.tech/docs/plugins#handlerequest
    * @param {object} data user data
    */
   private updateDbLastState(handleRequest: HandleRequest, data: object) {
@@ -516,7 +516,7 @@ export class JovoUser implements Plugin {
 
   /**
    *
-   * @param {HandleRequest} handleRequest https://www.jovo.tech/docs/plugins#handlerequest
+   * @param {HandleRequest} handleRequest https://v3.jovo.tech/docs/plugins#handlerequest
    * @param {object} data current user data
    */
   private userDataIsEqualToLastState(handleRequest: HandleRequest, data: object): boolean {
@@ -601,9 +601,8 @@ export class JovoUser implements Plugin {
       };
     }
 
-    const requestItem = handleRequest.jovo!.$user.$metaData.requests[
-      handleRequest.jovo!.getHandlerPath()
-    ];
+    const requestItem =
+      handleRequest.jovo!.$user.$metaData.requests[handleRequest.jovo!.getHandlerPath()];
 
     requestItem.count += 1;
     requestItem.log.push(new Date().toISOString());
@@ -749,9 +748,8 @@ export class JovoUser implements Plugin {
    */
   private updatePrevRequestState(handleRequest: HandleRequest, prevObject: ContextPrevObject) {
     if (handleRequest.jovo!.$requestSessionAttributes[SessionConstants.STATE]) {
-      prevObject.request!.state = handleRequest.jovo!.$requestSessionAttributes[
-        SessionConstants.STATE
-      ];
+      prevObject.request!.state =
+        handleRequest.jovo!.$requestSessionAttributes[SessionConstants.STATE];
     }
   }
 

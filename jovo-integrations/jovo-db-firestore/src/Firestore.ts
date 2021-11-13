@@ -89,7 +89,7 @@ export class Firestore implements Db {
         'jovo-db-firestore',
         undefined,
         'Add the collectionName to the Firestore object inside your config.js',
-        'https://www.jovo.tech/docs/databases/firestore',
+        'https://v3.jovo.tech/docs/databases/firestore',
       );
     }
 
@@ -100,7 +100,7 @@ export class Firestore implements Db {
         'jovo-db-firestore',
         undefined,
         'Add the service account credential object to the Firestore object inside your config.js',
-        'https://www.jovo.tech/docs/databases/firestore',
+        'https://v3.jovo.tech/docs/databases/firestore',
       );
     }
 
@@ -111,7 +111,7 @@ export class Firestore implements Db {
         'jovo-db-firestore',
         undefined,
         'Add the databaseURL to the Firestore object inside your config.js',
-        'https://www.jovo.tech/docs/databases/firestore',
+        'https://v3.jovo.tech/docs/databases/firestore',
       );
     }
   }

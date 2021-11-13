@@ -1,6 +1,6 @@
 # Deployment
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/deployment
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/deployment
 
 Learn more about the deployment workflow and what options you have.
 
@@ -69,7 +69,7 @@ $ jovo3 deploy --ask-profile <profileName>
 
 ### Google Action Deployment
 
-Deploying your Google Action is not as easy. First, you can't deploy your Google Action itself. You can only deploy the language model to Dialogflow and that takes a couple more steps the first time you do it. We've created a step by step tutorial for that purpose. You can find it [here](https://www.jovo.tech/tutorials/deploy-dialogflow-agent).
+Deploying your Google Action is not as easy. First, you can't deploy your Google Action itself. You can only deploy the language model to Dialogflow and that takes a couple more steps the first time you do it. We've created a step by step tutorial for that purpose. You can find it [here](https://v3.jovo.tech/tutorials/deploy-dialogflow-agent).
 
 After going through the setup process, `jovo deploy` will upload your language model to Dialogflow.
 
@@ -85,7 +85,7 @@ $ jovo3 deploy --platform googleAction
 
 For testing and running your app in production, you need to deploy the code to various [hosting providers](../configuration/hosting './hosting') Jovo offers integrations for.
 
-The most popular one is AWS Lambda since it works out of the box with Alexa Skills. Google Actions need a little bit more work because you have to set up an API Gateway and use that as the endpoint. You can find a detailed guide about it [here](https://www.jovo.tech/tutorials/host-google-action-on-lambda#create-a-lambda-function).
+The most popular one is AWS Lambda since it works out of the box with Alexa Skills. Google Actions need a little bit more work because you have to set up an API Gateway and use that as the endpoint. You can find a detailed guide about it [here](https://v3.jovo.tech/tutorials/host-google-action-on-lambda#create-a-lambda-function).
 
 Besides event-driven solutions like AWS Lambda, Google Cloud Functions, and Microsoft Azure Functions, Jovo also offers the option to deploy the ExpressJS webhook to a server or to use the NodeJS HTTP package to deploy to platforms like Google Cloud's App Engine.
 

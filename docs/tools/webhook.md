@@ -1,6 +1,6 @@
 # Jovo Webhook
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/webhook
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/webhook
 
 Learn more about the Jovo Webhook for local development of Alexa Skills and Google Actions
 
@@ -18,7 +18,7 @@ By using the [`jovo run`](./cli/run './cli/run'), a unique, anonymized link is c
 https://webhook.jovo.cloud/[your-id]
 ```
 
-You can either use this link and paste it into the respective developer platform consoles, or use the [`jovo deploy`](https://www.jovo.tech/marketplace/jovo-cli/deploy) command to upload it from the command line. Your Jovo Webhook URL is the default `endpoint` in your [`project.js`](../configuration/project-js.md './project-js') file.
+You can either use this link and paste it into the respective developer platform consoles, or use the [`jovo deploy`](https://v3.jovo.tech/marketplace/jovo-cli/deploy) command to upload it from the command line. Your Jovo Webhook URL is the default `endpoint` in your [`project.js`](../configuration/project-js.md './project-js') file.
 
 ## Getting Started
 

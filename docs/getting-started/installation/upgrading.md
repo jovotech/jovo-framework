@@ -1,6 +1,6 @@
 # Upgrading
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/installation/upgrading
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/installation/upgrading
 
 Learn how to upgrade an existing Jovo Framework app. Also, take a look at our [Installation Guide](./README.md '../installation').
 

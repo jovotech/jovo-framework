@@ -1,6 +1,6 @@
 # Routine Suggestions
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/routine-suggestions
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/routine-suggestions
 
 Learn how to use Google Action routine suggestions with Jovo.
 

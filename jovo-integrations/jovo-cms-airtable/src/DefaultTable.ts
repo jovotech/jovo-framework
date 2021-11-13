@@ -9,7 +9,7 @@ export interface AirtableTable extends PluginConfig {
   table?: string;
   type?: string;
   selectOptions?: {
-    // documentation for selectOptions here: https://www.jovo.tech/docs/cms/airtable#configuration
+    // documentation for selectOptions here: https://v3.jovo.tech/docs/cms/airtable#configuration
     fields?: string[];
     filterByFormula?: string;
     maxRecords?: number;
@@ -66,7 +66,7 @@ export class DefaultTable implements Plugin {
           'jovo-cms-airtable',
           'The table name has to be defined in your config.js file',
           undefined,
-          'https://www.jovo.tech/docs/cms/airtable#configuration',
+          'https://v3.jovo.tech/docs/cms/airtable#configuration',
         ),
       );
     }
@@ -78,7 +78,7 @@ export class DefaultTable implements Plugin {
           'jovo-cms-airtable',
           `The sheet's name has to be defined in your config.js file`,
           undefined,
-          'https://www.jovo.tech/docs/cms/airtable#configuration',
+          'https://v3.jovo.tech/docs/cms/airtable#configuration',
         ),
       );
     }

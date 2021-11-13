@@ -1,6 +1,6 @@
 # Jovo Debugger Plugin
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-plugin-debugger
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-plugin-debugger
 
 Learn how to use the Jovo Debugger for simple testing and debugging of Alexa Skills and Google Actions.
 

@@ -1,6 +1,6 @@
 # Facebook Messenger Platform Integration
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-facebookmessenger
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-facebookmessenger
 
 Learn more about the Facebook Messenger Platform and its platform-specific features that can be used with the Jovo Framework.
 
@@ -257,7 +257,7 @@ The returned object will be an instance of `MessengerBot` if the current request
 ## Output
 
 These sections provide an overview of Facebook Messenger specific features for output.
-For the basic concept, take a look here: [Docs: Basic Concepts > Output](https://www.jovo.tech/docs/output).
+For the basic concept, take a look here: [Docs: Basic Concepts > Output](https://v3.jovo.tech/docs/output).
 
 ### No Reprompts
 

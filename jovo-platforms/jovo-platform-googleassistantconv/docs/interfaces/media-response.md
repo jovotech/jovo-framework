@@ -1,6 +1,6 @@
 # Media Response
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/interfaces/media-response
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-googleassistantconv/interfaces/media-response
 
 Learn how to use the Google Action Media Response with Jovo.
 
@@ -119,7 +119,7 @@ this.tell('Enjoy the song!');
 
 If you use `this.tell()` it will be handled as a final response and you won't receive a callback regarding the media status. 
 
-`this.ask()` on the other hand will keep the session open, so you can receive the callback, but it forces you to add [Suggestion Chips](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/visual-output#suggestion-chips) to your response.
+`this.ask()` on the other hand will keep the session open, so you can receive the callback, but it forces you to add [Suggestion Chips](https://v3.jovo.tech/marketplace/jovo-platform-googleassistantconv/visual-output#suggestion-chips) to your response.
 
 
 ```javascript

@@ -35,7 +35,7 @@ export class MySQL implements Db {
         'jovo-db-mysql',
         undefined,
         'MySQL connection configuration has to be set correctly.',
-        'https://www.jovo.tech/docs/databases/mysql',
+        'https://v3.jovo.tech/docs/databases/mysql',
       );
     }
     this.pool = mysql.createPool(this.config.connection);
@@ -65,7 +65,7 @@ export class MySQL implements Db {
         'jovo-db-mysql',
         undefined,
         undefined,
-        'https://www.jovo.tech/docs/databases/mysql',
+        'https://v3.jovo.tech/docs/databases/mysql',
       );
     }
 
@@ -76,7 +76,7 @@ export class MySQL implements Db {
         'jovo-db-mysql',
         undefined,
         undefined,
-        'https://www.jovo.tech/docs/databases/mysql',
+        'https://v3.jovo.tech/docs/databases/mysql',
       );
     }
 
@@ -87,7 +87,7 @@ export class MySQL implements Db {
         'jovo-db-mysql',
         undefined,
         undefined,
-        'https://www.jovo.tech/docs/databases/mysql',
+        'https://v3.jovo.tech/docs/databases/mysql',
       );
     }
   }
@@ -248,7 +248,7 @@ export class MySQL implements Db {
             'jovo-db-mysql',
             undefined,
             undefined,
-            'https://www.jovo.tech/docs/databases/mysql',
+            'https://v3.jovo.tech/docs/databases/mysql',
           ),
         );
       }

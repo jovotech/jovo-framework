@@ -1,16 +1,15 @@
 # Conversational Components
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/components
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/components
 
-
-* [Introduction](#introduction)
-* [Component Structure](#component-structure)
-  * [handler](#handler)
-  * [config](#config)
-  * [i18n](#i18n)
-  * [index](#index)
-* [Using Conversational Components](#using-conversational-components)
-* [Developing Conversational Components](#developing-conversational-components)
+- [Introduction](#introduction)
+- [Component Structure](#component-structure)
+  - [handler](#handler)
+  - [config](#config)
+  - [i18n](#i18n)
+  - [index](#index)
+- [Using Conversational Components](#using-conversational-components)
+- [Developing Conversational Components](#developing-conversational-components)
 
 ## Introduction
 
@@ -48,26 +47,22 @@ The component's handler contains the states/intents to fulfill the incoming requ
 // handler.ts
 
 const handler: Handler = {
-    START() {
-
-    },
-    // other intents
-}
+	START() {},
+	// other intents
+};
 
 // @language=javascript
 // handler.js
 
 const handler = {
-    START() {
-
-    },
-    // other intents
-}
+	START() {},
+	// other intents
+};
 ```
 
 ### config
 
-Every component has its own default configuration, which can be overwritten by the developer. 
+Every component has its own default configuration, which can be overwritten by the developer.
 
 They provide you with a way to customize them without having to go through the handler and modifying stuff there. The possible options should be documented in each component's own README file.
 
@@ -78,34 +73,34 @@ They provide you with a way to customize them without having to go through the h
 import { ComponentConfig } from 'jovo-framework';
 
 interface SurveyConfig extends ComponentConfig {
-    numberOfQuestions: number;
+	numberOfQuestions: number;
 }
 
 const config: SurveyConfig = {
-    intentMap: {
-        'AMAZON.HelpIntent': 'HelpIntent',
-        'AMAZON.NoIntent': 'NoIntent',
-        'AMAZON.StopIntent': 'END',
-        'StopIntent': 'END',
-        'AMAZON.YesIntent': 'YesIntent'
-    },
-    numberOfQuestions: 3
+	intentMap: {
+		'AMAZON.HelpIntent': 'HelpIntent',
+		'AMAZON.NoIntent': 'NoIntent',
+		'AMAZON.StopIntent': 'END',
+		StopIntent: 'END',
+		'AMAZON.YesIntent': 'YesIntent',
+	},
+	numberOfQuestions: 3,
 };
 
-export {SurveyConfig, config as Config};
+export { SurveyConfig, config as Config };
 
 // @language=javascript
 // config.js
 
 const config = {
-    intentMap: {
-        'AMAZON.HelpIntent': 'HelpIntent',
-        'AMAZON.NoIntent': 'NoIntent',
-        'AMAZON.StopIntent': 'END',
-        'StopIntent': 'END',
-        'AMAZON.YesIntent': 'YesIntent'
-    },
-    numberOfFails: 3
+	intentMap: {
+		'AMAZON.HelpIntent': 'HelpIntent',
+		'AMAZON.NoIntent': 'NoIntent',
+		'AMAZON.StopIntent': 'END',
+		StopIntent: 'END',
+		'AMAZON.YesIntent': 'YesIntent',
+	},
+	numberOfFails: 3,
 };
 
 module.exports = config;
@@ -151,48 +146,47 @@ import { Config, SurveyConfig } from './src/config';
 import { surveyHandler } from './src/handler';
 
 export class ConductSurvey extends ComponentPlugin {
-    config: SurveyConfig = Config;
-    pathToI18n = './src/i18n/';
-    name = 'jovo-component-conduct-survey';
-    handler: Handler = {
-        [this.name]: surveyHandler
-    };
+	config: SurveyConfig = Config;
+	pathToI18n = './src/i18n/';
+	name = 'jovo-component-conduct-survey';
+	handler: Handler = {
+		[this.name]: surveyHandler,
+	};
 
-    constructor(config?: SurveyConfig) {
-        super(config);
-    }
+	constructor(config?: SurveyConfig) {
+		super(config);
+	}
 }
 
 // @language=javascript
 // index.js
 
-const {ComponentPlugin} = require('jovo-framework');
+const { ComponentPlugin } = require('jovo-framework');
 
 const componentConfig = require('./src/config');
 const componentHandler = require('./src/handler');
 
 class GetPhoneNumber extends ComponentPlugin {
-    constructor(config) {
-        super(config);
-        this.config = componentConfig;
-        this.name = 'jovo-component-get-phone-number';
-        this.pathToI18n = './src/i18n/';
-        this.handler = {
-            [this.name]: componentHandler
-        };
-    }
+	constructor(config) {
+		super(config);
+		this.config = componentConfig;
+		this.name = 'jovo-component-get-phone-number';
+		this.pathToI18n = './src/i18n/';
+		this.handler = {
+			[this.name]: componentHandler,
+		};
+	}
 }
 
-module.exports = GetPhoneNumber; 
+module.exports = GetPhoneNumber;
 ```
 
-Name | Description | Value | Required 
---- | --- | --- | ---
-`name` | Name of your component. Has to be the same as the package name | `string` | Yes
-`handler` | Contains the logic of your component, i.e. states & intents | `object` | Yes
-`config` | Contains the default configuration | `object` | Yes
-`pathToI18n` | Specifies the path to your i18n folder containing the responses used in your component | `string` | Yes
-
+| Name         | Description                                                                            | Value    | Required |
+| ------------ | -------------------------------------------------------------------------------------- | -------- | -------- |
+| `name`       | Name of your component. Has to be the same as the package name                         | `string` | Yes      |
+| `handler`    | Contains the logic of your component, i.e. states & intents                            | `object` | Yes      |
+| `config`     | Contains the default configuration                                                     | `object` | Yes      |
+| `pathToI18n` | Specifies the path to your i18n folder containing the responses used in your component | `string` | Yes      |
 
 That's the basic structure of a component.
 

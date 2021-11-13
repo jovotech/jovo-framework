@@ -1,6 +1,6 @@
 # Response
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistant/request-response/response
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-googleassistant/request-response/response
 
 ## Introduction
 
@@ -69,11 +69,11 @@ Here's an example response:
 }
 ```
 
-The main component is the output. Besides the [platform independent output](https://www.jovo.tech/docs/output), Google Assistant provides multiple other types of output. You can find out more about that in [*Interfaces*](https://www.jovo.tech/marketplace/jovo-platform-googleassistant#interfaces) section of the documentation.
+The main component is the output. Besides the [platform independent output](https://v3.jovo.tech/docs/output), Google Assistant provides multiple other types of output. You can find out more about that in [*Interfaces*](https://v3.jovo.tech/marketplace/jovo-platform-googleassistant#interfaces) section of the documentation.
 
 ## $response Object
 
-The `$response` object supports a handful of cross-platform helper methods to get/set its values. You can find them in the [general response docs](https://www.jovo.tech/docs/requests-responses/response#cross-platform-methods).
+The `$response` object supports a handful of cross-platform helper methods to get/set its values. You can find them in the [general response docs](https://v3.jovo.tech/docs/requests-responses/response#cross-platform-methods).
 
 Besides that, Google Assistant supports the following getter methods:
 

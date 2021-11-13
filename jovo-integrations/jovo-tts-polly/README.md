@@ -1,6 +1,6 @@
 # Amazon Polly TTS Integration
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-tts-polly
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-tts-polly
 
 Learn how to use the Amazon Polly TTS (Text to Speech) service with the Jovo Framework.
 
@@ -18,13 +18,13 @@ npm install --save jovo-tts-polly
 const { PollyTts } = require('jovo-tts-polly');
 
 platform.use(
-	new PollyTts({
-		credentials: {
-			region: 'yourRegion',
-			accessKeyId: 'yourAccessKeyId',
-			secretAccessKey: 'yourSecretAccessKey'
-		}
-	})
+  new PollyTts({
+    credentials: {
+      region: 'yourRegion',
+      accessKeyId: 'yourAccessKeyId',
+      secretAccessKey: 'yourSecretAccessKey',
+    },
+  }),
 );
 
 // @language=typescript
@@ -34,12 +34,12 @@ platform.use(
 import { PollyTts } from 'jovo-tts-polly';
 
 platform.use(
-	new PollyTts({
-		credentials: {
-			region: 'yourRegion',
-			accessKeyId: 'yourAccessKeyId',
-			secretAccessKey: 'yourSecretAccessKey'
-		}
-	})
+  new PollyTts({
+    credentials: {
+      region: 'yourRegion',
+      accessKeyId: 'yourAccessKeyId',
+      secretAccessKey: 'yourSecretAccessKey',
+    },
+  }),
 );
 ```

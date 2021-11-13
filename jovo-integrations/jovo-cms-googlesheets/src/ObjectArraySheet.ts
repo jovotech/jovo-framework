@@ -31,7 +31,7 @@ export class ObjectArraySheet extends DefaultSheet {
         'jovo-cms-googlesheets',
         `The sheet's name has to be defined in your config.js file.`,
         undefined,
-        'https://www.jovo.tech/docs/cms/google-sheets#configuration',
+        'https://v3.jovo.tech/docs/cms/google-sheets#configuration',
       );
     }
 

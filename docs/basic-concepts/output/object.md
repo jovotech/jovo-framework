@@ -1,13 +1,12 @@
 # Jovo Output Object
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/output/object
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/output/object
 
 Learn more about the Jovo `$output` object.
 
-* [Introduction](#introduction)
-* [Output Structure](#output-structure)
-* [Output Middleware](#output-middleware)
-
+- [Introduction](#introduction)
+- [Output Structure](#output-structure)
+- [Output Middleware](#output-middleware)
 
 ## Introduction
 
@@ -16,7 +15,7 @@ The Jovo `$output` is a consolidated JSON object that is prepared during [routin
 You can access the object like this:
 
 ```js
-this.$output
+this.$output;
 ```
 
 If you log it after calling the [`tell` method](./README.md#tell '../#tell'):
@@ -29,10 +28,10 @@ console.log(this.$output);
 The logs for the `$output` object look like this:
 
 ```js
-{ 
-  tell: { 
-    speech: 'Hello World!' 
-  } 
+{
+	tell: {
+		speech: 'Hello World!';
+	}
 }
 ```
 
@@ -100,13 +99,12 @@ this.tell('Hello World!');
 console.log(JSON.stringify(this.$output, null, 4));
 
 // Output:
-{ 
-    "tell": { 
+{
+    "tell": {
         "speech": "Hello World!"
-    } 
+    }
 }
 ```
-
 
 ## Output Structure
 
@@ -115,11 +113,11 @@ The `$output` object can contain elements for `tell`, `ask`, as well visual and 
 For example, it looks like this after `ask`:
 
 ```js
-{ 
-  ask: { 
+{
+  ask: {
     speech: 'Hello World! What\'s your name?',
-    reprompt: 'Please tell me your name.' 
-  } 
+    reprompt: 'Please tell me your name.'
+  }
 }
 ```
 
@@ -130,7 +128,6 @@ For example, it looks like this after `ask`:
 The `output` middleware is used to turn the `$output` object into a `$response` object, as shown in the [Introduction](#introduction) above.
 
 The middleware turns the cross-platform output into platform-specific JSON responses based on the platform the framework is currently interacting with. This is why the `$output` object is helpful for [Hooks](../../advanced-concepts/hooks.md '../hooks') and [Plugins](../../advanced-concepts/plugins.md '../plugins'), as they then only need to worry about the abstracted object, not any possible response JSON structure.
-
 
 <!--[metadata]: {"description": "Learn more about the Jovo $output object.",
 	            "route": "output/object"}-->

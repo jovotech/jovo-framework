@@ -1,6 +1,6 @@
 # Alexa Visual Output
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-alexa/interfaces/visual-output
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-alexa/interfaces/visual-output
 
 Learn more about how to build Alexa Skills with visual output using the Jovo Framework.
 
@@ -393,7 +393,7 @@ this.$alexaSkill!.showDisplayTemplate(listTemplate2);
 
 ## Alexa Presentation Language
 
-> Tutorial: [Using the Alexa Presentation Language (APL) with Jovo](https://www.jovo.tech/tutorials/alexa-presentation-language)
+> Tutorial: [Using the Alexa Presentation Language (APL) with Jovo](https://v3.jovo.tech/tutorials/alexa-presentation-language)
 
 With Jovo, you can also use the Alexa Presentation Language (APL). To add APL directives, use the following method:
 

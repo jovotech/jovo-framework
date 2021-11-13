@@ -1,13 +1,13 @@
 # Debugging
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/debugging
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/debugging
 
 Learn how to effectively debug your Jovo projects by learning which tools you can use and what to look out for.
 
-* [Introduction](#introduction)
-* [Jovo Debugger](#jovo-debugger)
-* [Jovo Logger](#jovo-logger)
-* [Request and Response Logs - What's Important](#request-and-response-logs--whats-important)
+- [Introduction](#introduction)
+- [Jovo Debugger](#jovo-debugger)
+- [Jovo Logger](#jovo-logger)
+- [Request and Response Logs - What's Important](#request-and-response-logs--whats-important)
 
 ## Introduction
 
@@ -19,7 +19,7 @@ The Jovo Debugger allows you to debug and quickly test your Jovo app by displayi
 
 ![Jovo Debugger](../img/jovo-debugger-basic-interaction.gif)
 
-By having the request and the current state of both session attributes and database entries in one place, you can quickly see whether your bugs are caused by unexpected states of your data. 
+By having the request and the current state of both session attributes and database entries in one place, you can quickly see whether your bugs are caused by unexpected states of your data.
 
 You can find the detailed explanation of the debugger, its features, and how to use it in the [tools section](../tools/debugger.md '../debugger').
 

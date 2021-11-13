@@ -29,7 +29,7 @@ export class JovoError extends Error {
     if (e.message.indexOf('is not a function') > -1) {
       e.hint =
         'This might be an issue with upgrading the Jovo packages. Try to run `jovo update` instead of `npm install`';
-      e.seeMore = 'https://www.jovo.tech/docs/installation/upgrading';
+      e.seeMore = 'https://v3.jovo.tech/docs/installation/upgrading';
     }
 
     if (e.module) {

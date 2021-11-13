@@ -1,6 +1,6 @@
 # Google Assistant Interfaces
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/interfaces
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-googleassistantconv/interfaces
 
 Learn more about the different types of interfaces that can be used when developing a Google Action with the Jovo Framework.
 
@@ -16,8 +16,8 @@ For different specializations of actions, the Google Assistant platform offers d
 
 Find all Google Assistant interfaces here:
 
-* [Media Response](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/interfaces/media-response)
-* [Daily Update](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/interfaces/daily-updates)
-* [Notifications](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/interfaces/notifications)
-* [Routine Suggestions](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/interfaces/routine-suggestions)
-* [Visual Output](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/interfaces/visual-output)
+* [Media Response](https://v3.jovo.tech/marketplace/jovo-platform-googleassistantconv/interfaces/media-response)
+* [Daily Update](https://v3.jovo.tech/marketplace/jovo-platform-googleassistantconv/interfaces/daily-updates)
+* [Notifications](https://v3.jovo.tech/marketplace/jovo-platform-googleassistantconv/interfaces/notifications)
+* [Routine Suggestions](https://v3.jovo.tech/marketplace/jovo-platform-googleassistantconv/interfaces/routine-suggestions)
+* [Visual Output](https://v3.jovo.tech/marketplace/jovo-platform-googleassistantconv/interfaces/visual-output)

@@ -36,7 +36,7 @@ export class Notification {
         'jovo-platform-googleassistant',
         "To authorize yourself, you have to provide your service account's clientEmail and privateKey",
         undefined,
-        'https://www.jovo.tech/docs/google-assistant/notifications#configuration',
+        'https://v3.jovo.tech/docs/google-assistant/notifications#configuration',
       );
     }
 
@@ -65,7 +65,7 @@ export class Notification {
         'jovo-platform-googleassistant',
         undefined,
         undefined,
-        'https://www.jovo.tech/docs/google-assistant/notifications#notification-object',
+        'https://v3.jovo.tech/docs/google-assistant/notifications#notification-object',
       );
     }
 
@@ -76,7 +76,7 @@ export class Notification {
         'jovo-platform-googleassistant',
         undefined,
         'Get an access token using `this.$googleAction.$notification.getAccessToken(clientEmail, privateKey)`',
-        'https://www.jovo.tech/docs/google-assistant/notifications#access-token',
+        'https://v3.jovo.tech/docs/google-assistant/notifications#access-token',
       );
     }
 

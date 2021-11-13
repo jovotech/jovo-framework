@@ -1,19 +1,19 @@
 # i18next CMS Integration
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-cms-i18next
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-cms-i18next
 
 In this section, you will learn how to build voice applications that support multiple languages.
 
-* [Introduction to i18n](#introduction-to-i18n)
-* [Configuration](#configuration)
-  * [Standard Configuration](#standard-configuration)
-  * [Alternative File Paths](#alternative-file-paths)
-  * [i18next Configuration Options](#i18next-configuration-options)
-* [Accessing the Content](#accessing-the-content)
-* [Advanced i18n Features](#advanced-i18n-features)
-  * [Randomized Output](#randomized-output)
-  * [Platform-specific Responses](#platform-specific-responses)
-* [CMS Integrations](#cms-integrations)
+- [Introduction to i18n](#introduction-to-i18n)
+- [Configuration](#configuration)
+  - [Standard Configuration](#standard-configuration)
+  - [Alternative File Paths](#alternative-file-paths)
+  - [i18next Configuration Options](#i18next-configuration-options)
+- [Accessing the Content](#accessing-the-content)
+- [Advanced i18n Features](#advanced-i18n-features)
+  - [Randomized Output](#randomized-output)
+  - [Platform-specific Responses](#platform-specific-responses)
+- [CMS Integrations](#cms-integrations)
 
 ## Introduction to i18n
 
@@ -27,7 +27,7 @@ Jovo uses a package called [i18next](https://www.npmjs.com/package/i18next) to s
 
 The easiest way to configure i18n is to use the built-in functionality that requires a separate folder for all language resources:
 
-![Jovo Folder Structure i18n](./img/folder-structure-i18n.jpg "Jovo Folder Structure i18n")
+![Jovo Folder Structure i18n](./img/folder-structure-i18n.jpg 'Jovo Folder Structure i18n')
 
 To get started, create a folder called `i18n` in `/app` and add the `languageResources` using the locale ID (e.g. `en-US.json`, `de-DE.json`, `en-GB.json`, etc.). The file structure should look like this:
 
@@ -48,10 +48,10 @@ To get started, create a folder called `i18n` in `/app` and add the `languageRes
   }
 }
 ```
+
 You can find out more about how these files are structured here: [i18next Essentials](https://www.i18next.com/essentials.html).
 
 If you follow these conventions, there is no need to additionally add anything to your app configuration.
-
 
 ### Alternative File Paths
 
@@ -65,16 +65,14 @@ For example, it could look like this:
 // src/config.js
 
 module.exports = {
-    
-    i18n: {
-        resources: {
-            'en-US': require('./path/to/files/en-US'),
-            'de-DE': require('./path/to/files/de-DE'),
-        }
-    }, 
+  i18n: {
+    resources: {
+      'en-US': require('./path/to/files/en-US'),
+      'de-DE': require('./path/to/files/de-DE'),
+    },
+  },
 
-    // ...
-
+  // ...
 };
 
 // @language=typescript
@@ -82,16 +80,14 @@ module.exports = {
 // src/config.ts
 
 const config = {
-    
-    i18n: {
-        resources: {
-            'en-US': require('./path/to/files/en-US'),
-            'de-DE': require('./path/to/files/de-DE'),
-        }
-    }, 
+  i18n: {
+    resources: {
+      'en-US': require('./path/to/files/en-US'),
+      'de-DE': require('./path/to/files/de-DE'),
+    },
+  },
 
-    // ...
-
+  // ...
 };
 ```
 
@@ -103,13 +99,11 @@ Also possible:
 // src/config.js
 
 module.exports = {
-    
-    i18n: {
-        filesDir: './path/to/files/',
-    }, 
+  i18n: {
+    filesDir: './path/to/files/',
+  },
 
-    // ...
-
+  // ...
 };
 
 // @language=typescript
@@ -117,16 +111,13 @@ module.exports = {
 // src/config.ts
 
 const config = {
-    
-    i18n: {
-        filesDir: './path/to/files/',
-    }, 
+  i18n: {
+    filesDir: './path/to/files/',
+  },
 
-    // ...
-
+  // ...
 };
 ```
-
 
 ### i18next Configuration Options
 
@@ -138,14 +129,12 @@ You can also add additional configurations that are available for i18next. Those
 // src/config.js
 
 module.exports = {
-    
-    i18n: {
-        returnNull: false,
-        fallbackLng: 'en-US',
-    }, 
+  i18n: {
+    returnNull: false,
+    fallbackLng: 'en-US',
+  },
 
-    // ...
-
+  // ...
 };
 
 // @language=typescript
@@ -153,19 +142,16 @@ module.exports = {
 // src/config.ts
 
 const config = {
-    
-    i18n: {
-        returnNull: false,
-        fallbackLng: 'en-US',
-    }, 
+  i18n: {
+    returnNull: false,
+    fallbackLng: 'en-US',
+  },
 
-    // ...
-
+  // ...
 };
 ```
 
 > You can find a list of [i18next configuration options here](https://www.i18next.com/configuration-options.html).
-
 
 ## Accessing the Content
 
@@ -179,14 +165,13 @@ Here is some example code for the languageResources object above:
 // src/app.js
 
 app.setHandler({
+  LAUNCH() {
+    this.tell(this.t('welcome'));
+  },
 
-    LAUNCH() {
-        this.tell(this.t('welcome'));
-    },
-
-    HelloWorldIntent() {
-        this.tell(this.t('welcome_with_parameter', {firstname: 'John', lastname: 'Doe'}));
-    },
+  HelloWorldIntent() {
+    this.tell(this.t('welcome_with_parameter', { firstname: 'John', lastname: 'Doe' }));
+  },
 });
 
 // @language=typescript
@@ -194,49 +179,45 @@ app.setHandler({
 // src/app.js
 
 app.setHandler({
+  LAUNCH() {
+    this.tell(this.t('welcome'));
+  },
 
-    LAUNCH() {
-        this.tell(this.t('welcome'));
-    },
-
-    HelloWorldIntent() {
-        this.tell(this.t('welcome_with_parameter', {firstname: 'John', lastname: 'Doe'}));
-    },
+  HelloWorldIntent() {
+    this.tell(this.t('welcome_with_parameter', { firstname: 'John', lastname: 'Doe' }));
+  },
 });
 ```
+
 You can also use it with ready-made speechBuilder object:
 
 ```javascript
 app.setHandler({
+  LAUNCH() {
+    this.$speech.addT('welcome');
 
-    LAUNCH() {
-        this.$speech.addT('welcome');
-
-        this.tell(this.$speech);
-    },
+    this.tell(this.$speech);
+  },
 });
-``` 
+```
 
 Or by creating a new SpeechBuilder object, like so:
 
 ```javascript
 app.setHandler({
-
-    LAUNCH() {
-        let speech = this.speechBuilder()
-          .addT('welcome');
-        this.tell(speech);
-    },
+  LAUNCH() {
+    let speech = this.speechBuilder().addT('welcome');
+    this.tell(speech);
+  },
 });
 ```
-
 
 ## Advanced i18n Features
 
 Jovo offers advanced i18n features that are specifically built for voice and conversational interfaces:
 
-* [Randomized Output](#randomized-output)
-* [Platform-specific Responses](#platform-specific-responses)
+- [Randomized Output](#randomized-output)
+- [Platform-specific Responses](#platform-specific-responses)
 
 ### Randomized Output
 
@@ -262,12 +243,11 @@ If you're then using a speechBuilder instance, it will use this array to add var
 
 ```javascript
 app.setHandler({
+  LAUNCH() {
+    this.$speech.addT('welcome');
 
-    LAUNCH() {
-        this.$speech.addT('welcome');
-
-        this.tell(this.$speech);
-    },
+    this.tell(this.$speech);
+  },
 });
 ```
 
@@ -275,11 +255,11 @@ So, without changing any of the code in your handlers, you can vary your output 
 
 ### Platform-specific Responses
 
-Since Jovo `v2.1.4`, we support platform-specific responses for i18n, as well as for CMS. This feature uses the app type (e.g. `AlexaSkill`, `GoogleAction`) as [i18n namespace](https://www.i18next.com/principles/namespaces): 
+Since Jovo `v2.1.4`, we support platform-specific responses for i18n, as well as for CMS. This feature uses the app type (e.g. `AlexaSkill`, `GoogleAction`) as [i18n namespace](https://www.i18next.com/principles/namespaces):
 
 Adding namespaces like below to your language resources allows you to have isolated output for a specified platform, without altering the default one or updarting the code logic.
 
-```javascript 
+```javascript
 {
     "translation": {
         "welcome": "Welcome.",
@@ -304,4 +284,4 @@ If you don't want any output for a specific platform, use `/`.
 
 ## CMS Integrations
 
-You can also use these i18n features with the [Jovo CMS Integrations](https://www.jovo.tech/docs/cms) like [Google Sheets](https://www.jovo.tech/marketplace/jovo-cms-googlesheets) and [Airtable](https://www.jovo.tech/marketplace/jovo-cms-airtable).
+You can also use these i18n features with the [Jovo CMS Integrations](https://v3.jovo.tech/docs/cms) like [Google Sheets](https://v3.jovo.tech/marketplace/jovo-cms-googlesheets) and [Airtable](https://v3.jovo.tech/marketplace/jovo-cms-airtable).

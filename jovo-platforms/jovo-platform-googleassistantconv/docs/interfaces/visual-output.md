@@ -1,6 +1,6 @@
 # Visual Output
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/interfaces/visual-output
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-googleassistantconv/interfaces/visual-output
 
 Learn more about how to build Google Actions with visual output using the Jovo Framework.
 

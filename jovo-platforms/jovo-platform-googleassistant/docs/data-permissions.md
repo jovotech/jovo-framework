@@ -1,6 +1,6 @@
 # User Data & Permissions
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistant/data-permissions
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-googleassistant/data-permissions
 
 Learn more about how to get access to Google Action user information.
 
@@ -314,4 +314,4 @@ this.$request!.getAccessToken();
 this.$request.getAccessToken();
 ```
 
-> For a complete walk-through, check out our tutorial: [Google Actions Account Linking](https://www.jovo.tech/tutorials/google-action-account-linking-auth0/)
+> For a complete walk-through, check out our tutorial: [Google Actions Account Linking](https://v3.jovo.tech/tutorials/google-action-account-linking-auth0/)

@@ -1,8 +1,8 @@
 # NLP.js NLU Integration
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-nlu-nlpjs
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-nlu-nlpjs
 
-Learn how to use the open source NLP.js library as [natural language understanding (NLU)](https://www.jovo.tech/marketplace/tag/nlu) integration with the Jovo Framework.
+Learn how to use the open source NLP.js library as [natural language understanding (NLU)](https://v3.jovo.tech/marketplace/tag/nlu) integration with the Jovo Framework.
 
 - [About NLP.js](#about-nlpjs)
 - [Getting Started with NLP.js and Jovo](#getting-started-with-nlpjs-and-jovo)
@@ -13,17 +13,15 @@ Learn how to use the open source NLP.js library as [natural language understandi
 
 ## About NLP.js
 
-[NLP.js](https://github.com/axa-group/nlp.js) is an open source [natural language understanding (NLU)](https://www.jovo.tech/marketplace/tag/nlu) library with features like entity extraction, sentiment analysis, and language detection.
+[NLP.js](https://github.com/axa-group/nlp.js) is an open source [natural language understanding (NLU)](https://v3.jovo.tech/marketplace/tag/nlu) library with features like entity extraction, sentiment analysis, and language detection.
 
 Being open source, you can host NLP.js on your own servers without any external API calls.
 
-
-
 ## Getting Started with NLP.js and Jovo
 
-You can use the Jovo NLP.js integration for projects where you receive raw text input that needs to be translated into structured meaning to work with the Jovo intent structure. Patforms like the [Jovo Core Platform](https://www.jovo.tech/marketplace/jovo-platform-core) (e.g. in conjunction with the [Jovo Web Client](https://www.jovo.tech/marketplace/jovo-client-web)), [Facebook Messenger](https://www.jovo.tech/marketplace/jovo-platform-facebookmessenger), and [Google Business Messages](https://www.jovo.tech/marketplace/jovo-platform-googlebusiness) are some examples where this would work.
+You can use the Jovo NLP.js integration for projects where you receive raw text input that needs to be translated into structured meaning to work with the Jovo intent structure. Patforms like the [Jovo Core Platform](https://v3.jovo.tech/marketplace/jovo-platform-core) (e.g. in conjunction with the [Jovo Web Client](https://v3.jovo.tech/marketplace/jovo-client-web)), [Facebook Messenger](https://v3.jovo.tech/marketplace/jovo-platform-facebookmessenger), and [Google Business Messages](https://v3.jovo.tech/marketplace/jovo-platform-googlebusiness) are some examples where this would work.
 
-Smaller NLP.js language models are fast to train and can even be used on serverless infrastructure like [AWS Lambda](https://www.jovo.tech/docs/hosting/aws-lambda) without having to use any additional server infrastructure. We recommend taking a close look at the execution times though, as larger models can take quite some time to build.
+Smaller NLP.js language models are fast to train and can even be used on serverless infrastructure like [AWS Lambda](https://v3.jovo.tech/docs/hosting/aws-lambda) without having to use any additional server infrastructure. We recommend taking a close look at the execution times though, as larger models can take quite some time to build.
 
 To get started, download the package:
 
@@ -33,7 +31,7 @@ $ npm install --save jovo-nlu-nlpjs
 
 As mentioned above, NLP.js works with platforms that provide raw text input. You can add the integration to the platform using the `use` method.
 
-The below example uses the [Jovo Core Platform](https://www.jovo.tech/marketplace/jovo-platform-core) as an example:
+The below example uses the [Jovo Core Platform](https://v3.jovo.tech/marketplace/jovo-platform-core) as an example:
 
 ```javascript
 // @language=javascript
@@ -56,7 +54,6 @@ corePlatform.use(new NlpjsNlu());
 
 app.use(corePlatform);
 ```
-
 
 ## Configuration
 
@@ -72,9 +69,8 @@ You can add languages to your integration like this:
 const { NlpjsNlu } = require('jovo-nlu-nlpjs');
 
 const nlpjsNlu = new NlpjsNlu({
-    languages: ['de', 'en'],
+  languages: ['de', 'en'],
 });
-
 
 // @language=typescript
 
@@ -83,7 +79,7 @@ const nlpjsNlu = new NlpjsNlu({
 import { NlpjsNlu } from 'jovo-nlu-nlpjs';
 
 const nlpjsNlu = new NlpjsNlu({
-    languages: ['de', 'en'],
+  languages: ['de', 'en'],
 });
 ```
 
@@ -105,11 +101,10 @@ You can add a callback function to train your model:
 const { NlpjsNlu } = require('jovo-nlu-nlpjs');
 
 const nlpjsNlu = new NlpjsNlu({
-    setupModelCallback: async (handleRequest, nlp) => {
-        // Do stuff
-    },
+  setupModelCallback: async (handleRequest, nlp) => {
+    // Do stuff
+  },
 });
-
 
 // @language=typescript
 
@@ -118,16 +113,14 @@ const nlpjsNlu = new NlpjsNlu({
 import { NlpjsNlu } from 'jovo-nlu-nlpjs';
 
 const nlpjsNlu = new NlpjsNlu({
-    setupModelCallback: async (handleRequest, nlp) => {
-        // Do stuff
-    },
+  setupModelCallback: async (handleRequest, nlp) => {
+    // Do stuff
+  },
 });
 ```
 
-
 ## Jovo Model
 
-You can use the [Jovo Model](https://www.jovo.tech/marketplace/jovo-model) to turn the language model files in your `models` folder into an NLP.js model. [Learn more about the NLP.js Jovo Model integration here](https://www.jovo.tech/marketplace/jovo-model/nlpjs).
+You can use the [Jovo Model](https://v3.jovo.tech/marketplace/jovo-model) to turn the language model files in your `models` folder into an NLP.js model. [Learn more about the NLP.js Jovo Model integration here](https://v3.jovo.tech/marketplace/jovo-model/nlpjs).
 
-Here is an example how to extend the Jovo Model with a [custom input type for NLP.js](https://www.jovo.tech/tutorials/lindenbaum-cognitive-voice#adding-an-nlu-service).
-
+Here is an example how to extend the Jovo Model with a [custom input type for NLP.js](https://v3.jovo.tech/tutorials/lindenbaum-cognitive-voice#adding-an-nlu-service).

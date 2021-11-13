@@ -1,6 +1,6 @@
 # Hosting
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/hosting
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/hosting
 
 In this section, you can learn more about different types of services that can be used for hosting your Alexa Skills and Google Actions.
 

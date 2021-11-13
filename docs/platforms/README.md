@@ -1,13 +1,13 @@
 # Platforms
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/platforms
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/platforms
 
 Jovo is not only about the common denominator. In this section, you will learn more about how to access features that are specific to the platforms Amazon Alexa and Google Assistant.
 
-* [Introduction to Platform Specific Features](#introduction-to-platform-specific-features)
-  * [Get Platform Type](#get-platform-type)
-* [Amazon Alexa](#amazon-alexa)
-* [Google Assistant](#google-assistant)
+- [Introduction to Platform Specific Features](#introduction-to-platform-specific-features)
+  - [Get Platform Type](#get-platform-type)
+- [Amazon Alexa](#amazon-alexa)
+- [Google Assistant](#google-assistant)
 
 ## Introduction to Platform Specific Features
 
@@ -39,22 +39,21 @@ This is going to return a type that looks like this:
 
 ```javascript
 // For Amazon Alexa
-AlexaSkill
+AlexaSkill;
 
 // For Google Assistant
-GoogleAction
+GoogleAction;
 ```
 
 You can also use the following method calls:
 
 ```javascript
 // Returns true for Alexa Skills
-this.isAlexaSkill()
+this.isAlexaSkill();
 
 // Returns true for Google Actions
-this.isGoogleAction()
+this.isGoogleAction();
 ```
-
 
 ## Amazon Alexa
 
@@ -74,14 +73,13 @@ let alexa = this.$alexaSkill!;
 
 You can find the following Alexa specific features on the page [Platform Specifics > Amazon Alexa](../05_platform-specifics/amazon-alexa './amazon-alexa'):
 
-* Alexa Audioplayer Skills
-* Dialog Mode
-* Render Templates for Echo Show
-* Shopping and To Do Lists
-* Account Linking
-* User location
-* Contact information
-
+- Alexa Audioplayer Skills
+- Dialog Mode
+- Render Templates for Echo Show
+- Shopping and To Do Lists
+- Account Linking
+- User location
+- Contact information
 
 ## Google Assistant
 
@@ -101,13 +99,10 @@ let google = this.$googleAction!;
 
 You can find the following Google Assistant specific features on the page [Platform Specifics > Google Assistant](../05_platform-specifics/google-assistant './google-assistant'):
 
-* Visual Output (Google Assistant Cards)
-* Suggestion Chips
-* User location
-* Account Linking
-
-
-
+- Visual Output (Google Assistant Cards)
+- Suggestion Chips
+- User location
+- Account Linking
 
 <!--[metadata]: {"description": "Learn how to access platform specific features for Amazon Alexa and Google Assistant",
 		"route": "platforms"}-->

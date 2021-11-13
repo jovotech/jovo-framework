@@ -1,14 +1,13 @@
 # ExpressJS Server
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/hosting/express-js
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/hosting/express-js
 
 Learn how to deploy your Alexa Skills and Google Actions to a server using our ExpressJS webhook. You can also use this webhook for local prototyping. Learn more here: [Project Lifecycle > Local Development](../../workflows/project-lifecycle.md#local-development '../project-lifecycle#local-development').
 
-* [Webhook Configuration](#webhook-configuration)
-* [Deploy to a Server](#deploy-to-a-server)
-   * [Verification](#verification)
-   * [Run Server](#run-server)
-
+- [Webhook Configuration](#webhook-configuration)
+- [Deploy to a Server](#deploy-to-a-server)
+  - [Verification](#verification)
+  - [Run Server](#run-server)
 
 ## Webhook Configuration
 
@@ -25,16 +24,16 @@ const { Webhook, ExpressJS } = require('jovo-framework');
 const { app } = require('./app.js');
 
 if (process.argv.indexOf('--webhook') > -1) {
-    const port = process.env.JOVO_PORT || 3000;
-    Webhook.jovoApp = app;
+	const port = process.env.JOVO_PORT || 3000;
+	Webhook.jovoApp = app;
 
-    Webhook.listen(port, () => {
-        console.info(`Local server listening on port ${port}.`);
-    });
+	Webhook.listen(port, () => {
+		console.info(`Local server listening on port ${port}.`);
+	});
 
-    Webhook.post('/webhook', async (req, res) => {
-        await app.handle(new ExpressJS(req, res));
-    });
+	Webhook.post('/webhook', async (req, res) => {
+		await app.handle(new ExpressJS(req, res));
+	});
 }
 
 // @language=typescript
@@ -42,19 +41,22 @@ if (process.argv.indexOf('--webhook') > -1) {
 // src/index.ts
 
 import { Webhook, ExpressJS } from 'jovo-framework';
-import  { app } from './app';
+import { app } from './app';
 
 if (process.argv.indexOf('--webhook') > -1) {
-    const port = process.env.JOVO_PORT || 3000;
-    Webhook.jovoApp = app;
+	const port = process.env.JOVO_PORT || 3000;
+	Webhook.jovoApp = app;
 
-    Webhook.listen(port, () => {
-        console.info(`Local server listening on port ${port}.`);
-    });
+	Webhook.listen(port, () => {
+		console.info(`Local server listening on port ${port}.`);
+	});
 
-    Webhook.post('/webhook', async (req: Express.Request, res: Express.Response) => {
-        await app.handle(new ExpressJS(req, res));
-    });
+	Webhook.post(
+		'/webhook',
+		async (req: Express.Request, res: Express.Response) => {
+			await app.handle(new ExpressJS(req, res));
+		}
+	);
 }
 ```
 
@@ -115,6 +117,7 @@ Webhook.post(['/webhook','/webhook_alexa'], async (req: Express.Request, res: Ex
 // Instead of this
 Webhook.post('/webhook', async (req: Express.Request, res: Express.Response) => {
 ```
+
 To make use of it, please install it like so:
 
 ```sh
@@ -123,7 +126,7 @@ $ npm install alexa-verifier-middleware
 
 You can now Access the secured version of your application at /webhook_alexa and the unsecure version at /webhook.
 
-### SSL 
+### SSL
 
 ```javascript
 // @language=javascript
@@ -133,8 +136,8 @@ const fs = require('fs');
 
 // Add this
 Webhook.ssl = {
-   key: fs.readFileSync('/path/to/cert.key'),
-   cert: fs.readFileSync('/path/to/cert.pem'),
+	key: fs.readFileSync('/path/to/cert.key'),
+	cert: fs.readFileSync('/path/to/cert.pem'),
 };
 
 // @language=typescript
@@ -144,11 +147,10 @@ import * as fs from 'fs';
 
 // Add this
 Webhook.ssl = {
-   key: fs.readFileSync('/path/to/cert.key'),
-   cert: fs.readFileSync('/path/to/cert.pem'),
+	key: fs.readFileSync('/path/to/cert.key'),
+	cert: fs.readFileSync('/path/to/cert.pem'),
 };
 ```
-
 
 ### Run Server
 
@@ -157,7 +159,6 @@ To run the server, use the following command:
 ```sh
 $ node index.js --webhook
 ```
-
 
 <!--[metadata]: {"description": "Find out how to host your Alexa Skills and Google Actions on a server with ExpressJS and the Jovo Framework.",
 		        "route": "hosting/express-js"}-->

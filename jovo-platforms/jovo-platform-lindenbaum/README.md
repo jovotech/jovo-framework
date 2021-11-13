@@ -1,6 +1,6 @@
 # Lindenbaum Platform Integration
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-lindenbaum
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-lindenbaum
 
 Learn how to build your Lindenbaum Cognitive Voice bot with the Jovo Framework.
 
@@ -13,7 +13,7 @@ Learn how to build your Lindenbaum Cognitive Voice bot with the Jovo Framework.
 
 ## Getting Started
 
-> Tutorial: [Build IVRs with Lindenbaum Cognitive Voice and Jovo](https://www.jovo.tech/tutorials/lindenbaum-cognitive-voice).
+> Tutorial: [Build IVRs with Lindenbaum Cognitive Voice and Jovo](https://v3.jovo.tech/tutorials/lindenbaum-cognitive-voice).
 
 Lindenbaum Cognitive Voice is a European platform to create voice bots that are deployable as smart IVR systems. The platform offers the possibility to choose from a wide stack of NLUs, TTS, and STT engines as well as integrations for multiple European contact center platforms. [Learn more in the official Lindenbaum API documentation](https://app.swaggerhub.com/apis/Lindenbaum-GmbH/).
 

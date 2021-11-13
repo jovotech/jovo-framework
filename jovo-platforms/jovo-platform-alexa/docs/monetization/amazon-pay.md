@@ -1,6 +1,6 @@
 # Amazon Pay
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-alexa/monetization/amazon-pay
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-alexa/monetization/amazon-pay
 
 Learn how to sell physical goods and services in your Alexa Skills using Amazon Pay and Jovo.
 

@@ -171,7 +171,7 @@ export class GoogleSheetsCMS extends BaseCmsPlugin {
         'jovo-cms-googlesheets',
         undefined,
         undefined,
-        'https://www.jovo.tech/docs/cms/google-sheets',
+        'https://v3.jovo.tech/docs/cms/google-sheets',
       );
     }
   }

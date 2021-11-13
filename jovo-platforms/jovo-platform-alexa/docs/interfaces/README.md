@@ -1,6 +1,6 @@
 # Alexa Skill Interfaces
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-alexa/interfaces
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-alexa/interfaces
 
 Learn more about the different types of interfaces that can be used when developing an Alexa Skill with the Jovo Framework.
 
@@ -19,8 +19,8 @@ You can find the interfaces in the Alexa Developer Console:
 
 Find all Alexa Skill interfaces here:
 
-* [Audio Player](https://www.jovo.tech/marketplace/jovo-platform-alexa/interfaces/audio-player)
-* [Dialog](https://www.jovo.tech/marketplace/jovo-platform-alexa/interfaces/dialog)
-* [Game Engine & Gadget Controller](https://www.jovo.tech/marketplace/jovo-platform-alexa/interfaces/game-engine-gadget-controller)
-* [Proactive Events](https://www.jovo.tech/marketplace/jovo-platform-alexa/interfaces/proactive-events)
-* [Visual Output](https://www.jovo.tech/marketplace/jovo-platform-alexa/interfaces/visual-output)
+* [Audio Player](https://v3.jovo.tech/marketplace/jovo-platform-alexa/interfaces/audio-player)
+* [Dialog](https://v3.jovo.tech/marketplace/jovo-platform-alexa/interfaces/dialog)
+* [Game Engine & Gadget Controller](https://v3.jovo.tech/marketplace/jovo-platform-alexa/interfaces/game-engine-gadget-controller)
+* [Proactive Events](https://v3.jovo.tech/marketplace/jovo-platform-alexa/interfaces/proactive-events)
+* [Visual Output](https://v3.jovo.tech/marketplace/jovo-platform-alexa/interfaces/visual-output)

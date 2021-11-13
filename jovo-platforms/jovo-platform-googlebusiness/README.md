@@ -1,20 +1,20 @@
 # Google Business Messages Platform Integration
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googlebusiness
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-googlebusiness
 
 Learn how to build your Google Business Messages bot with the Jovo Framework.
 
-* [Getting Started](#getting-started)
-* [Installation](#installation)
-* [Basics](#basics)
-  * [LAUNCH and END Intent](#launch-and-end-intent)
-* [Requests](#requests)
-  * [$request](#request)
-* [Responses](#responses)
+- [Getting Started](#getting-started)
+- [Installation](#installation)
+- [Basics](#basics)
+  - [LAUNCH and END Intent](#launch-and-end-intent)
+- [Requests](#requests)
+  - [$request](#request)
+- [Responses](#responses)
 
 ## Getting Started
 
-[Google Business Messages](https://developers.google.com/business-communications/business-messages) allows the user to chat with a business within Google Maps and Search. It is an asynchronous chat platform where businesses can either let a bot answer or a customer service worker. The platform doesn't provide a built-in NLU, so you are free to choose one of the many integrations in the [Jovo Marketplace](https://www.jovo.tech/marketplace/tag/nlu).
+[Google Business Messages](https://developers.google.com/business-communications/business-messages) allows the user to chat with a business within Google Maps and Search. It is an asynchronous chat platform where businesses can either let a bot answer or a customer service worker. The platform doesn't provide a built-in NLU, so you are free to choose one of the many integrations in the [Jovo Marketplace](https://v3.jovo.tech/marketplace/tag/nlu).
 
 ## Installation
 
@@ -24,7 +24,7 @@ Install the module:
 $ npm install jovo-platform-googlebusiness --save
 ```
 
-> Make sure, that you have a database-integration enabled because this platform needs [User-Session Data](https://www.jovo.tech/docs/data/user#session-data). 
+> Make sure, that you have a database-integration enabled because this platform needs [User-Session Data](https://v3.jovo.tech/docs/data/user#session-data).
 > You do not have to change the config because `GoogleBusiness` will enable the feature when it is installed.
 
 Import the installed module, initialize and add it to the `app` object:
@@ -35,18 +35,20 @@ Import the installed module, initialize and add it to the `app` object:
 // src/app.js
 const { GoogleBusiness } = require('jovo-platform-googlebusiness');
 
-app.use(new GoogleBusiness(
+app.use(
+  new GoogleBusiness(),
   // add NLU here
-));
+);
 
 // @language=typescript
 
 // src/app.ts
 import { GoogleBusiness } from 'jovo-platform-googlebusiness';
 
-app.use(new GoogleBusiness(
+app.use(
+  new GoogleBusiness(),
   // add NLU here
-));
+);
 ```
 
 After that, you have to add JSON key of a service account that has access to the Google Business Messages API:
@@ -82,11 +84,11 @@ All of the Google Business specific objects and functions are accessed using the
 ```js
 // @language=javascript
 
-this.$googleBusinessBot
+this.$googleBusinessBot;
 
 // @language=typescript
 
-this.$googleBusinessBot
+this.$googleBusinessBot;
 ```
 
 The object will only be defined if the incoming request is from Google Business Messages. Because of that, you should first check whether it's defined or not before accessing it:
@@ -95,13 +97,11 @@ The object will only be defined if the incoming request is from Google Business 
 // @language=javascript
 
 if (this.$googleBusinessBot) {
-
 }
 
 // @language=typescript
 
 if (this.$googleBusinessBot) {
-
 }
 ```
 
@@ -168,19 +168,19 @@ followed by the suggestion request, triggered when a user clicks on one of the p
 
 Besides the default request helpers, like `getTimestamp()`, the integration provides the following ones:
 
-Name | Description | Return Value
-:--- | :--- | :---
-`getAgent()` | returns agent's ID | string
-`getCustomAgentId()` | returns the agent's custom ID | string
-`getRequestId()` | returns the request's ID | string
-`getRawText()` | returns either the value of the `message.text` or `suggestionResponse.text` attribute | string
-`getEntryPoint()` | returns the entry point that the user clicked to initiate the conversation | either `ENTRY_POINT_UNSPECIFIED`, `PLACESHEET`, or `MAPS`
-`getPlaceId()` | returns the ID from the Google Places database for the location the user messaged. | string or undefined
-`getUserDisplayName()` | returns the user's display name | string or undefined
+| Name                   | Description                                                                           | Return Value                                              |
+| :--------------------- | :------------------------------------------------------------------------------------ | :-------------------------------------------------------- |
+| `getAgent()`           | returns agent's ID                                                                    | string                                                    |
+| `getCustomAgentId()`   | returns the agent's custom ID                                                         | string                                                    |
+| `getRequestId()`       | returns the request's ID                                                              | string                                                    |
+| `getRawText()`         | returns either the value of the `message.text` or `suggestionResponse.text` attribute | string                                                    |
+| `getEntryPoint()`      | returns the entry point that the user clicked to initiate the conversation            | either `ENTRY_POINT_UNSPECIFIED`, `PLACESHEET`, or `MAPS` |
+| `getPlaceId()`         | returns the ID from the Google Places database for the location the user messaged.    | string or undefined                                       |
+| `getUserDisplayName()` | returns the user's display name                                                       | string or undefined                                       |
 
 ## Responses
 
-Besides the generic text response using [`ask()`](https://www.jovo.tech/docs/output#ask), you can also add cards to your responses.
+Besides the generic text response using [`ask()`](https://v3.jovo.tech/docs/output#ask), you can also add cards to your responses.
 
 First, the standalone card using the `showStandaloneCard(card)` method:
 

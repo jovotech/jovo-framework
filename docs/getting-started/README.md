@@ -1,6 +1,6 @@
 # Jovo Quickstart Guide
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/quickstart
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/quickstart
 
 Learn how to quickly get started with a Jovo project.
 
@@ -55,7 +55,7 @@ $ jovo3 new <directory>
 $ jovo3 new <directory> --language typescript
 ```
 
-This will create a new folder, download the [Jovo "Hello World" template](https://www.jovo.tech/templates/helloworld), and install all the necessary dependencies so you can get started right away.
+This will create a new folder, download the [Jovo "Hello World" template](https://v3.jovo.tech/templates/helloworld), and install all the necessary dependencies so you can get started right away.
 
 This is how a typical Jovo project looks like:
 

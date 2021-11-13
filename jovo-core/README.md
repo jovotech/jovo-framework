@@ -1,9 +1,9 @@
-[![Jovo Framework](../docs/img/jovo-header.png)](https://www.jovo.tech)
+[![Jovo Framework](../docs/img/jovo-header.png)](https://v3.jovo.tech)
 
 <p align="center">The development framework for cross-platform voice apps</p>
 
 <p align="center">
-<a href="https://www.jovo.tech/docs/"><strong>Documentation</strong></a> -
+<a href="https://v3.jovo.tech/docs/"><strong>Documentation</strong></a> -
 <a href="https://github.com/jovotech/jovo-cli"><strong>CLI </strong></a> -
 <a href="https://github.com/jovotech/jovo-sample-voice-app-nodejs"><strong>Sample App </strong></a> - <a href="https://github.com/jovotech/jovo-framework/tree/master/.github/CONTRIBUTING.md"><strong>Contributing</strong></a> - <a href="https://twitter.com/jovotech"><strong>Twitter</strong></a></p>
 <br/>

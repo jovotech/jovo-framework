@@ -1,6 +1,6 @@
 # Push Notifications
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/notifications
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/notifications
 
 Learn more about how to send push notifications to your Google Action users.
 

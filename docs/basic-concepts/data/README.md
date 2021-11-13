@@ -1,15 +1,15 @@
 # Data
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/data
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/data
 
 Learn more about different data types that can be used in a Jovo project.
 
-* [Introduction](#introduction)
-* [Request Data](#request-data)
-* [Session Data](#session-data)
-* [User Data](#user-data)
-* [App Data](#app-data)
-* [Account Linking](#account-linking)
+- [Introduction](#introduction)
+- [Request Data](#request-data)
+- [Session Data](#session-data)
+- [User Data](#user-data)
+- [App Data](#app-data)
+- [Account Linking](#account-linking)
 
 ## Introduction
 
@@ -17,10 +17,10 @@ Learn more about different data types that can be used in a Jovo project.
 
 The Jovo Framework uses different concepts of data:
 
-* [Request Data](#request-data): Only stored for this specific request.
-* [Session Data](#request-data): Only stored for this session, across requests.
-* [User Data](#persisting-data): Stored in a database, across sessions.
-* [App Data](#app-data): Stored as long as the code is running.
+- [Request Data](#request-data): Only stored for this specific request.
+- [Session Data](#request-data): Only stored for this session, across requests.
+- [User Data](#persisting-data): Stored in a database, across sessions.
+- [App Data](#app-data): Stored as long as the code is running.
 
 ## Request Data
 
@@ -83,7 +83,8 @@ this.$request.getAccessToken();
 ```
 
 For more information on Account Linking, check out our blogposts:
-* [Alexa Skill Account Linking](https://www.jovo.tech/tutorials/alexa-account-linking-auth0/)
-* [Google Actions Account Linking](https://www.jovo.tech/tutorials/google-action-account-linking-auth0/)
+
+- [Alexa Skill Account Linking](https://v3.jovo.tech/tutorials/alexa-account-linking-auth0/)
+- [Google Actions Account Linking](https://v3.jovo.tech/tutorials/google-action-account-linking-auth0/)
 
 <!--[metadata]: {"description": "Learn more about different data types that can be used in a Jovo project.", "route": "data"}-->
