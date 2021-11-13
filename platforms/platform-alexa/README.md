@@ -34,7 +34,7 @@ $ npm install -g @jovotech/cli
 
 # Start new project wizard
 # In the platform step, use the space key to select Alexa
-$ jovov4 new <directory>
+$ jovo new <directory>
 ```
 
 If you want to add Alexa to an existing Jovo project, you can install the plugin like this:
@@ -96,7 +96,7 @@ Jovo helps you manage your Alexa Skill project in the [Alexa Developer Console](
 You can use the [`build` command](https://v4.jovo.tech/marketplace/platform-alexa/cli-commands#build) to turn the [Alexa project configuration](https://v4.jovo.tech/marketplace/platform-alexa/project-config) into Alexa specific files.
 
 ```sh
-$ jovov4 build:platform alexa
+$ jovo build:platform alexa
 ```
 
 These files can be found in a folder called `platform.alexa` in the `build` directory of your project. They include the [Alexa Interaction Model](https://v4.jovo.tech/marketplace/platform-alexa/model) that is responsible for training Alexa's natural language understanding service.
@@ -131,7 +131,7 @@ Since Alexa requires certain built-in intents, make sure that the files in your 
 The resulting files can then be deployed to the Alexa Developer Console using the [`deploy:platform` command](https://v4.jovo.tech/marketplace/platform-alexa/cli-commands#deploy).
 
 ```sh
-$ jovov4 deploy:platform alexa
+$ jovo deploy:platform alexa
 ```
 
 Learn more on the following pages:

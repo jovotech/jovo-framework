@@ -40,7 +40,7 @@ The Google Assistant CLI plugin hooks into the following commands:
 The Google Assistant CLI plugin hooks into the `build` command and creates a `platform.googleAssistant` folder inside the `build` directory in the root of your Jovo project. [Learn more about the `build` command here](https://v4.jovo.tech/docs/build-command).
 
 ```sh
-$ jovov4 build:platform googleAssistant
+$ jovo build:platform googleAssistant
 ```
 
 It uses [Google Assistant `jovo.project.js` configuration](./project-config.md) and files in the [`models` folder](https://v4.jovo.tech/docs/models) to create Google Assistant-specific project files that are ready for deployment.
@@ -58,7 +58,7 @@ The Google Assistant CLI plugin adds the following flags to the [`build:platform
 The Google Assistant CLI plugin hooks into the `deploy:platform` command to deploy the Google Assistant project files (which were previously generated using the [`build` command](#build)) to the Actions on Google Console. [Learn more about the `deploy:platform` command here](https://v4.jovo.tech/docs/deploy-command#deploy:platform).
 
 ```sh
-$ jovov4 deploy:platform googleAssistant
+$ jovo deploy:platform googleAssistant
 ```
 
 After successful deployment, you can open the [Google Actions Console](https://console.actions.google.com/) and see the changes there.
@@ -76,7 +76,7 @@ The Google Assistant CLI plugin adds the following flags to the [`deploy:platfor
 The Google Assistant CLI plugin hooks into the `get:platform` command to synchronize the files in your `build` directory with the project data from the [Actions on Google Console](https://console.actions.google.com/). [Learn more about the `get:platform` command here](https://v4.jovo.tech/docs/deploy-command#get:platform).
 
 ```sh
-$ jovov4 get:platform googleAssistant
+$ jovo get:platform googleAssistant
 ```
 
 This is helpful if you've made any updates to the Action's configuration (for example directory information) that you now want to add to the `jovo.project.js` file using the [`files` configuration](./project-config.md#files).

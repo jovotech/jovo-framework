@@ -40,7 +40,7 @@ The Alexa CLI plugin hooks into the following commands:
 The Alexa CLI plugin hooks into the `build` command and creates a `platform.alexa` folder inside the `build` directory in the root of your Jovo project. [Learn more about the `build` command here](https://v4.jovo.tech/docs/build-command).
 
 ```sh
-$ jovov4 build:platform alexa
+$ jovo build:platform alexa
 ```
 
 It uses the [Alexa `jovo.project.js` configuration](./project-config.md) and files in the [`models` folder](https://v4.jovo.tech/docs/models) to create Alexa-specific project files that are ready for deployment.
@@ -58,7 +58,7 @@ The Alexa CLI plugin adds the following flags to the [`build` command](https://v
 The Alexa CLI plugin hooks into the `deploy:platform` command to deploy the Alexa project files (which were previously generated using the [`build` command](#build)) to the Alexa Developer Console. [Learn more about the `deploy:platform` command here](https://v4.jovo.tech/docs/deploy-command#deploy:platform).
 
 ```sh
-$ jovov4 deploy:platform alexa
+$ jovo deploy:platform alexa
 ```
 
 After successful deployment, you can open the [Alexa Developer Console](https://developer.amazon.com/alexa/console/ask#/) and see the changes there.
@@ -74,7 +74,7 @@ The Alexa CLI plugin adds the following flags to the [`deploy:platform` command]
 The Alexa CLI plugin hooks into the `get:platform` command to synchronize the files in your `build` directory with the project data from the [Alexa Developer Console](https://developer.amazon.com/alexa/console/ask#/). [Learn more about the `get:platform` command here](https://v4.jovo.tech/docs/deploy-command#get:platform).
 
 ```sh
-$ jovov4 get:platform alexa
+$ jovo get:platform alexa
 ```
 
 This is helpful if you've made any updates to the Skill's configuration (for example updating interfaces) that you now want to add to the `jovo.project.js` file using the [`files` configuration](/.project-config.md#files).

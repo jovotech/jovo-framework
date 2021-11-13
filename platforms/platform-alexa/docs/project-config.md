@@ -155,7 +155,7 @@ const project = new ProjectConfig({
 You can also add the ASK profile as a flag in the `deploy:platform` command:
 
 ```sh
-$ jovov4 deploy:platform alexa --ask-profile default
+$ jovo deploy:platform alexa --ask-profile default
 ```
 
 The CLI decides in the following order which ASK profile should be used:

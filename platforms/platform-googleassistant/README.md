@@ -34,7 +34,7 @@ $ npm install -g @jovotech/cli
 
 # Start new project wizard
 # In the platform step, use the space key to select Google Assistant
-$ jovov4 new <directory>
+$ jovo new <directory>
 ```
 
 If you want to add Google Assistant to an existing Jovo project, you can install the plugin like this:
@@ -88,7 +88,7 @@ Jovo helps you manage your Google Action project in the [Actions on Google Conso
 You can use the [`build` command](https://v4.jovo.tech/marketplace/platform-googleassistant/cli-commands#build) to turn the [Google Assistant project configuration](https://v4.jovo.tech/marketplace/platform-googleassistant/project-config) into Google Assistant specific files.
 
 ```sh
-$ jovov4 build:platform googleAssistant
+$ jovo build:platform googleAssistant
 ```
 
 These files can be found in a folder called `platform.googleAssistant` in the `build` directory of your project. They include the [Google Assistant Conversational Model](https://v4.jovo.tech/marketplace/platform-googleassistant/model) that is responsible for training Google Assistant's natural language understanding service.
@@ -96,7 +96,7 @@ These files can be found in a folder called `platform.googleAssistant` in the `b
 The resulting files can then be deployed to the Actions on Google Console using the [`deploy:platform` command](https://v4.jovo.tech/marketplace/platform-googleassistant/cli-commands#deploy).
 
 ```sh
-$ jovov4 deploy:platform googleAssistant
+$ jovo deploy:platform googleAssistant
 ```
 
 Learn more on the following pages:

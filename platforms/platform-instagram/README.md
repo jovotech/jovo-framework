@@ -34,7 +34,7 @@ $ npm install -g @jovotech/cli
 
 # Start new project wizard
 # In the platform step, use the space key to select Instagram
-$ jovov4 new <directory>
+$ jovo new <directory>
 ```
 
 If you want to add Instagram to an existing Jovo project, you can install the plugin like this:
@@ -77,8 +77,12 @@ const app = new App({
     new InstagramPlatform({
       pageAccessToken: '<yourAccessToken>',
       verifyToken: '<yourVerifyToken>',
-      plugins: [ /* ... */ ],
-      session: { /* ... */ },
+      plugins: [
+        /* ... */
+      ],
+      session: {
+        /* ... */
+      },
     }),
     // ...
   ],
