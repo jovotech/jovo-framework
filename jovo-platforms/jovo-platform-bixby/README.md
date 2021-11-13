@@ -301,7 +301,7 @@ Last, but not least, `capsule.bxb` acts as a place for deployment configuration 
 When you start a new capsule with the intent of using the platform integration with the Jovo Framework, it is recommended to start with our Bixby Hello World Template. Not only does it come with our [Hello World Example](https://www.jovo.tech/templates/helloworld), it also includes all Jovo models required for the integration to work properly. You can download it using the following command:
 
 ```sh
-$ jovo new bixby-hello-world --template bixby
+$ jovo3 new bixby-hello-world --template bixby
 ```
 
 Usually, all models have their respective folders, such as `actions/` for actions, `primitives/` for primitives and so on. However, in our example capsule, located inside `platforms/bixby/` in the example project, you will find another folder, `models/Jovo/`. This folder contains predefined models, required for the platform integration to work properly.

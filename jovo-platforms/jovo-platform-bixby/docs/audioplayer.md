@@ -18,7 +18,7 @@ The AudioPlayer functionality can be used to stream any number of audio files, s
 If you want to start a new AudioPlayer capsule with the intent of using the platform integration with the Jovo Framework, we recommend to start with our Bixby AudioPlayer Template. It comes with a very easy setup for using the AudioPlayer functionality, as well as all the Jovo models required for the integration to work properly. You can download it using the following command:
 
 ```sh
-$ jovo new bixby-hello-world --template bixby-audioplayer
+$ jovo3 new bixby-hello-world --template bixby-audioplayer
 ```
 
 ## Prerequisites

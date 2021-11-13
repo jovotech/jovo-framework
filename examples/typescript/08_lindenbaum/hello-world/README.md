@@ -12,6 +12,5 @@
 Jovo Sample Alexa Skill with a simple "Hello World!" + asking for the user's name.
 
 ```sh
-$ jovo new <directory> --template alexa
+$ jovo3 new <directory> --template alexa
 ```
-

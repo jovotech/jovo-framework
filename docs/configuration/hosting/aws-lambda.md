@@ -70,7 +70,7 @@ You can create a ready-to-deploy `bundle.zip` file with either of the following 
 
 ```sh
 # Bundle files
-$ jovo deploy --target zip
+$ jovo3 deploy --target zip
 
 # Alternative
 $ npm run bundle
@@ -82,7 +82,7 @@ If you have a Lambda endpoint defined in your `project.js` file, the `jovo deplo
 
 ```sh
 # Deploy platform projects and source code
-$ jovo deploy
+$ jovo3 deploy
 ```
 
 ## Additional Services

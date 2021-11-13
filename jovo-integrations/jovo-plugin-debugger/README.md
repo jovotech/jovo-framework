@@ -48,7 +48,7 @@ app.use(new JovoDebugger());
 After that, use the `jovo run` command to start your development server get the link to your Jovo Webhook endpoint:
 
 ```sh
-$ jovo run
+$ jovo3 run
 ```
 
 Now, simply press the `.` key on your keyboard to open up the Debugger web page.

@@ -139,10 +139,10 @@ Then, use the Jovo CLI to deploy to the Amazon Developer Portal:
 
 ```sh
 # Build platforms folder
-$ jovo build
+$ jovo3 build
 
 # Upload to Alexa
-$ jovo deploy
+$ jovo3 deploy
 ```
 
 Alternatively, you can enable it in the Interfaces tab in the Amazon Developer Console:
@@ -473,10 +473,10 @@ Then, use the Jovo CLI to deploy to the Amazon Developer Portal:
 
 ```sh
 # Build platforms folder
-$ jovo build
+$ jovo3 build
 
 # Upload to Alexa
-$ jovo deploy
+$ jovo3 deploy
 ```
 
 You can check whether the current device supports the APL interface using the following helper method:
@@ -543,8 +543,8 @@ Then, use the Jovo CLI to deploy to the Amazon Developer Portal:
 
 ```sh
 # Build platforms folder
-$ jovo build
+$ jovo3 build
 
 # Upload to Alexa
-$ jovo deploy
+$ jovo3 deploy
 ```

@@ -44,13 +44,13 @@ After that build and deploy the files:
 
 ```sh
 # Build platform specific files for Alexa
-$ jovo build --platform alexaSkill
+$ jovo3 build --platform alexaSkill
 
 # Deploy only the Skill information for Alexa
-$ jovo deploy --platform alexaSkill --target info
+$ jovo3 deploy --platform alexaSkill --target info
 
 # Alternative: Shortcut for both commands
-$ jovo build -p alexaSkill --deploy --target info
+$ jovo3 build -p alexaSkill --deploy --target info
 ```
 
 To check whether the user granted you the permission you can use the following helper methods:

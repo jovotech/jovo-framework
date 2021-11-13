@@ -62,19 +62,19 @@ You can create a Jovo project into a new directory with the following command:
 // @language=javascript
 
 # Create default Jovo project (Alexa and Google Assistant)
-$ jovo new <directory>
+$ jovo3 new <directory>
 
 # Create Alexa-only Jovo project
-$ jovo new <directory> --template alexa
+$ jovo3 new <directory> --template alexa
 
 
 // @language=typescript
 
 # Create default Jovo project (Alexa and Google Assistant)
-$ jovo new <directory> --language typescript
+$ jovo3 new <directory> --language typescript
 
 # Create Alexa-only Jovo project
-$ jovo new <directory> --template alexa --language typescript
+$ jovo3 new <directory> --template alexa --language typescript
 ```
 
 This will create a new folder, download the [Jovo "Hello World" template](https://www.jovo.tech/templates/helloworld), and install all the necessary dependencies so you can get started right away.
@@ -116,7 +116,7 @@ To get started, use the following command:
 // @language=javascript
 
 # Run local development server
-$ jovo run
+$ jovo3 run
 
 // @language=typescript
 
@@ -124,7 +124,7 @@ $ jovo run
 $ npm run tsc
 
 # Run local development server
-$ jovo run
+$ jovo3 run
 ```
 
 This will start the development server on port `3000` and create a Jovo Webhook URL that can be used for local development. Copy this link and open it in your browser to use the [Jovo Debugger](https://www.jovo.tech/marketplace/jovo-plugin-debugger).

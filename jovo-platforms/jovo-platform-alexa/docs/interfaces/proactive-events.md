@@ -80,7 +80,7 @@ module.exports = {
 After that build and deploy the files:
 
 ```text
-$ jovo build -p alexaSkill --deploy --target info
+$ jovo3 build -p alexaSkill --deploy --target info
 ```
 
 After the deployment finished, you can find the `clientId` and `clientSecret` on the `PERMISSIONS` tab of your Skill on the Alexa Developer Console, which you will need later on:

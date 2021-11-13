@@ -7,7 +7,7 @@ AudioPlayer Skills can be used to stream long-form audio files like music or pod
 Get started by creating a new Jovo project with the [`alexa-audioplayer`](https://github.com/jovotech/jovo-templates/tree/master/alexa/audioplayer) template:
 
 ```text
-$ jovo new <directory> --template alexa-audioplayer
+$ jovo3 new <directory> --template alexa-audioplayer
 ```
 
 * [Configuration](#configuration)
@@ -50,10 +50,10 @@ This will write the necessary information into the `skill.json` and deploy it to
 
 ```sh
 # Build Alexa specific files into platforms folder
-$ jovo build
+$ jovo3 build
 
 # Deploy to Alexa Developer Console
-$ jovo deploy
+$ jovo3 deploy
 ```
 
 Alternatively, you can also go to the Alexa Developer Console and enable AudioPlayer in the interfaces tab:

@@ -83,10 +83,10 @@ Create a new Jovo project:
 
 ```sh
 # Default: Create new JavaScript project
-$ jovo new <directory>
+$ jovo3 new <directory>
 
 # Alternative: Create new TypeScript project
-$ jovo new <directory> --language typescript
+$ jovo3 new <directory> --language typescript
 ```
 
 Go into project directory and run the Jovo development server:
@@ -96,7 +96,7 @@ Go into project directory and run the Jovo development server:
 $ cd <directory>
 
 # Run local development server
-$ jovo run
+$ jovo3 run
 
 # Press "." to open the Jovo Debugger
 ```

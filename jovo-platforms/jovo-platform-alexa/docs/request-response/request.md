@@ -185,10 +185,10 @@ Don't forget to build and deploy your project after you've added the interface:
 
 ```sh
 # Build platform specific files
-$ jovo build
+$ jovo3 build
 
 # Deploy to platforms
-$ jovo deploy
+$ jovo3 deploy
 ```
 
 #### CanFulfillIntentRequest Implementation
