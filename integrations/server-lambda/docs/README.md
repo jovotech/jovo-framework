@@ -3,7 +3,7 @@ title: 'AWS Lambda Server Integration'
 excerpt: 'Host Jovo apps on AWS Lambda serverless functions.'
 ---
 
-# ExpressJS Server Integration
+# AWS Lambda Integration
 
 Host Jovo apps on AWS Lambda serverless functions.
 
@@ -28,7 +28,7 @@ $ jovov4 new: stage prod
 When it prompts you to select a server integration, choose Lambda. This will add a [`server.lambda.ts` file](https://github.com/jovotech/jovo-framework/blob/v4/release/integrations/server-lambda/boilerplate/server.lambda.ts) to your project's `src` folder, and reference it in your newly created [app stage config](https://v4.jovo.tech/docs/app-config#staging) (in this example `app.prod.ts`):
 
 ```typescript
-export * from './server.express';
+export * from './server.lambda';
 ```
 
 ## Configuration

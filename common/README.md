@@ -16,3 +16,5 @@ This package includes many interfaces and classes that are used across Jovo pack
 ```bash
 $ npm install @jovotech/common
 ```
+
+You can either use this package to import specific types, or import from `@jovotech/common` (which re-exports everything from `@jovotech/common`).
