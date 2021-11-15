@@ -1,4 +1,4 @@
-import { InputTypeLike } from '../JovoInput';
+import { InputTypeLike } from '@jovotech/common';
 import {
   createHandlerOptionDecorator,
   getValuesOfDecoratorRestParameter,

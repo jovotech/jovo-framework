@@ -1,7 +1,5 @@
 import { AnyObject } from '@jovotech/common';
 
-// TODO implement
-
 export interface Headers {
   [header: string]: string | string[] | undefined;
 }

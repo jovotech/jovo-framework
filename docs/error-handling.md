@@ -69,10 +69,10 @@ throw new JovoError({ message: 'This is a sample error.' });
 
 `JovoError` has the following properties:
 
-| Property    | Type                                                                                         | Description                                                                 |
-| ----------- | -------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| `message`   | `string`                                                                                     | Main error message. Required.                                               |
-| `details`   | `string`                                                                                     | Additional information about the error.                                     |
-| `hint`      | `string`                                                                                     | Potential steps to resolve the issue.                                       |
-| `learnMore` | `string`                                                                                     | A link where you can find more information. `Learn more here: <learnMore>`. |
-| `context`   | [`AnyObject`](https://github.com/jovotech/jovo-framework/blob/v4/latest/common/src/index.ts) | Additional data that might be helpful for debugging. Can be any object.     |
+| Property    | Type                                                                                         | Description                                                              |
+| ----------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `message`   | `string`                                                                                     | Main error message. Required.                                            |
+| `hint`      | `string`                                                                                     | Potential steps to resolve the issue.                                    |
+| `learnMore` | `string`                                                                                     | A link where you can find more information. `Learn more: <learnMore>`.   |
+| `context`   | [`AnyObject`](https://github.com/jovotech/jovo-framework/blob/v4/latest/common/src/index.ts) | Additional data that might be helpful for debugging. Can be any object.  |
+| `package`   | `string`                                                                                     | The package where the error occurred, for example `@jovotech/framework`. |

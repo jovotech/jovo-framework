@@ -1,5 +1,4 @@
 import { AnyObject, UnknownObject } from '@jovotech/common';
-import { Entity } from '@jovotech/output';
 import { Jovo } from './Jovo';
 import { PluginConfig } from './Plugin';
 
@@ -12,24 +11,6 @@ export interface ComponentData extends Data {}
 export interface SessionData extends Data {}
 
 export interface UserData extends Data {}
-
-export interface EntityMap<ENTITY_TYPE extends Entity = Entity> {
-  [key: string]: ENTITY_TYPE | undefined;
-}
-
-export interface AsrData extends UnknownObject {
-  text?: string;
-}
-
-export interface NluData extends UnknownObject {
-  intent?: string | Intent;
-  entities?: EntityMap;
-}
-
-export interface Intent {
-  name: string;
-  global?: boolean;
-}
 
 export type IntentMap = Partial<Record<string, string>>;
 
