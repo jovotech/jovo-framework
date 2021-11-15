@@ -9,7 +9,7 @@
     "bundle:dev": "npm run bundle -- \"src/app.dev.ts\"",
     "bundle:prod": "npm run bundle -- \"src/app.prod.ts\" --minify",
     "prebundle": "rimraf bundle",
-    "bundle": "esbuild --bundle --sourcemap --platform=node --outfile=bundle/index.js",
+    "bundle": "esbuild --bundle --outfile=bundle/index.js --sourcemap --minify --keep-names --platform=node --target=node14 --format=cjs  --external:aws-sdk --external:@oclif/* --external:@jovotech/cli*",
     "postbundle": "cd bundle && bestzip ../bundle.zip * && cd ..",
     "eslint": "eslint src test --fix --ext .ts",
     "test": "jest"
@@ -34,12 +34,12 @@
     "eslint": "^7.17.0",
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.1",
-    "jest": "^26.6.3",
-    "prettier": "^2.2.1",
+    "jest": "^27.3.1",
+    "prettier": "^2.4.1",
     "rimraf": "^3.0.2",
-    "ts-jest": "^26.5.4",
+    "ts-jest": "^27.0.7",
     "tsc-watch": "^4.2.9",
-    "typescript": "^4.2.3"
+    "typescript": "^4.4.4"
   },
   "repository": {
     "type": "git",

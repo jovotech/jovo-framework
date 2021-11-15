@@ -1,8 +1,11 @@
 // TODO determine whether we want to re-export axios
 import axios from 'axios';
+import { JovoLogger } from '@jovotech/common';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('source-map-support').install();
+
+export const Logger = new JovoLogger();
 
 export * from '@jovotech/common';
 
@@ -83,6 +86,7 @@ export * from './errors/ComponentNotFoundError';
 export * from './errors/DuplicateChildComponentsError';
 export * from './errors/DuplicateGlobalIntentsError';
 export * from './errors/HandlerNotFoundError';
+export * from './errors/InvalidComponentTreeBuiltError';
 export * from './errors/InvalidParentError';
 export * from './errors/MatchingRouteNotFoundError';
 export * from './errors/MatchingPlatformNotFoundError';

@@ -158,10 +158,21 @@ this.$device;
 
 ### $history
 
-The `$history` property contains data and features
+
+The `$history` property contains data about previous user interactions.
 
 ```typescript
 this.$history;
 ```
 
 [Learn more about the `$history` property here](./data.md#history).
+
+### $server
+
+The `$server` property contains data and features about the server requests and responses.
+
+```typescript
+this.$server;
+```
+
+[Learn more about the `$server` property here](./server.md).

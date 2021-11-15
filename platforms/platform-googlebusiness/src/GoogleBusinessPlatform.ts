@@ -8,18 +8,15 @@ import {
   Platform,
   StoredElementSession,
 } from '@jovotech/framework';
-
-import {
-  GoogleBusinessOutputTemplateConverterStrategy,
-  GoogleBusinessResponse,
-} from '@jovotech/output-googlebusiness';
 import { JWT, JWTInput } from 'google-auth-library';
 import { v4 as uuidV4 } from 'uuid';
 import { GoogleBusiness } from './GoogleBusiness';
 import { GoogleBusinessDevice } from './GoogleBusinessDevice';
 import { GoogleBusinessRequest } from './GoogleBusinessRequest';
 import { GoogleBusinessRequestBuilder } from './GoogleBusinessRequestBuilder';
+import { GoogleBusinessResponse } from './GoogleBusinessResponse';
 import { GoogleBusinessUser } from './GoogleBusinessUser';
+import { GoogleBusinessOutputTemplateConverterStrategy } from './output';
 
 export interface GoogleBusinessConfig extends ExtensibleConfig {
   serviceAccount: JWTInput;
@@ -38,12 +35,13 @@ export class GoogleBusinessPlatform extends Platform<
   GoogleBusinessPlatform,
   GoogleBusinessConfig
 > {
-  outputTemplateConverterStrategy = new GoogleBusinessOutputTemplateConverterStrategy();
-  requestClass = GoogleBusinessRequest;
-  jovoClass = GoogleBusiness;
-  userClass = GoogleBusinessUser;
-  deviceClass = GoogleBusinessDevice;
-  requestBuilder = GoogleBusinessRequestBuilder;
+  readonly id: string = 'googleBusiness';
+  readonly outputTemplateConverterStrategy = new GoogleBusinessOutputTemplateConverterStrategy();
+  readonly requestClass = GoogleBusinessRequest;
+  readonly jovoClass = GoogleBusiness;
+  readonly userClass = GoogleBusinessUser;
+  readonly deviceClass = GoogleBusinessDevice;
+  readonly requestBuilder = GoogleBusinessRequestBuilder;
 
   readonly jwtClient: JWT;
 

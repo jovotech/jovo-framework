@@ -14,11 +14,6 @@ import {
   StoredElementSession,
   UnknownObject,
 } from '@jovotech/framework';
-import {
-  FacebookMessengerOutputTemplateConverterStrategy,
-  FacebookMessengerResponse,
-} from '@jovotech/output-facebookmessenger';
-
 import _cloneDeep from 'lodash.clonedeep';
 import {
   DEFAULT_FACEBOOK_VERIFY_TOKEN,
@@ -29,8 +24,10 @@ import { FacebookMessenger } from './FacebookMessenger';
 import { FacebookMessengerDevice } from './FacebookMessengerDevice';
 import { FacebookMessengerRequest } from './FacebookMessengerRequest';
 import { FacebookMessengerRequestBuilder } from './FacebookMessengerRequestBuilder';
+import { FacebookMessengerResponse } from './FacebookMessengerResponse';
 import { FacebookMessengerUser } from './FacebookMessengerUser';
 import { MessengerBotEntry, SenderAction } from './interfaces';
+import { FacebookMessengerOutputTemplateConverterStrategy } from './output';
 
 export interface FacebookMessengerConfig extends ExtensibleConfig {
   version: typeof LATEST_FACEBOOK_API_VERSION | string;
@@ -52,12 +49,13 @@ export class FacebookMessengerPlatform extends Platform<
   FacebookMessengerPlatform,
   FacebookMessengerConfig
 > {
-  outputTemplateConverterStrategy = new FacebookMessengerOutputTemplateConverterStrategy();
-  requestClass = FacebookMessengerRequest;
-  jovoClass = FacebookMessenger;
-  userClass = FacebookMessengerUser;
-  deviceClass = FacebookMessengerDevice;
-  requestBuilder = FacebookMessengerRequestBuilder;
+  readonly id: string = 'facebookMessenger';
+  readonly outputTemplateConverterStrategy = new FacebookMessengerOutputTemplateConverterStrategy();
+  readonly requestClass = FacebookMessengerRequest;
+  readonly jovoClass = FacebookMessenger;
+  readonly userClass = FacebookMessengerUser;
+  readonly deviceClass = FacebookMessengerDevice;
+  readonly requestBuilder = FacebookMessengerRequestBuilder;
 
   get apiVersion(): string {
     return this.config.version || LATEST_FACEBOOK_API_VERSION;
@@ -135,8 +133,7 @@ export class FacebookMessengerPlatform extends Platform<
     if (!senderId) {
       // TODO determine if error is good here
       throw new JovoError({
-        message: 'Can not finalize response.',
-        details: 'No sender-id was found.',
+        message: 'Can not finalize response: No sender-id was found.',
         context: {
           request: jovo.$request,
         },
@@ -183,18 +180,20 @@ export class FacebookMessengerPlatform extends Platform<
           },
         });
       } else if (isFacebookMessengerRequest) {
+        const responses: FacebookMessengerResponse[] = [];
         const promises = request.entry.map((entry: MessengerBotEntry) => {
           // Set platform origin on request entry
           entry.$type = 'facebook';
           const serverCopy = _cloneDeep(server);
           // eslint-disable-next-line @typescript-eslint/no-empty-function
-          serverCopy.setResponse = async () => {};
+          serverCopy.setResponse = async (response: FacebookMessengerResponse) => {
+            responses.push(response);
+          };
           serverCopy.getRequestObject = () => entry;
           return APP_HANDLE.call(this, serverCopy);
         });
         await Promise.all(promises);
-        // TODO determine response content
-        return server.setResponse({});
+        return server.setResponse(responses);
       } else {
         return APP_HANDLE.call(this, server);
       }
@@ -219,8 +218,7 @@ export class FacebookMessengerPlatform extends Platform<
     } catch (error) {
       if (error.isAxiosError) {
         throw new JovoError({
-          message: error.message,
-          details: (error as AxiosError).response?.data?.error?.message,
+          message: `Request to Facebook API failed: ${error.response?.data?.error?.message}`,
         });
       }
 
@@ -253,7 +251,7 @@ export class FacebookMessengerPlatform extends Platform<
   }
 
   private async sendSenderAction(jovo: Jovo, senderAction: SenderAction) {
-    if (jovo.$platform.constructor.name !== 'FacebookMessengerPlatform') {
+    if (jovo.$platform.name !== 'FacebookMessengerPlatform') {
       return;
     }
 

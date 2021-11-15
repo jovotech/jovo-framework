@@ -19,6 +19,10 @@ export abstract class Plugin<CONFIG extends PluginConfig = PluginConfig> {
     this.config = config ? _merge(defaultConfig, config) : defaultConfig;
   }
 
+  get name(): string {
+    return this.constructor.name;
+  }
+
   abstract getDefaultConfig(): CONFIG;
 
   /**

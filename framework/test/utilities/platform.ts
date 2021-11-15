@@ -1,6 +1,5 @@
 import {
   NormalizedOutputTemplate,
-  OutputTemplate,
   OutputTemplateConverterStrategy,
   OutputTemplateConverterStrategyConfig,
 } from '@jovotech/output';
@@ -145,12 +144,13 @@ export class ExamplePlatform extends Platform<
   ExamplePlatformDevice,
   ExamplePlatform
 > {
-  outputTemplateConverterStrategy = new ExamplePlatformOutputConverterStrategy();
-  requestClass = ExamplePlatformRequest;
-  jovoClass = ExamplePlatformJovo;
-  userClass = ExamplePlatformUser;
-  deviceClass = ExamplePlatformDevice;
-  requestBuilder = ExamplePlatformRequestBuilder;
+  readonly id: string = 'example';
+  readonly outputTemplateConverterStrategy = new ExamplePlatformOutputConverterStrategy();
+  readonly requestClass = ExamplePlatformRequest;
+  readonly jovoClass = ExamplePlatformJovo;
+  readonly userClass = ExamplePlatformUser;
+  readonly deviceClass = ExamplePlatformDevice;
+  readonly requestBuilder = ExamplePlatformRequestBuilder;
 
   getDefaultConfig(): ExtensibleConfig {
     return {};

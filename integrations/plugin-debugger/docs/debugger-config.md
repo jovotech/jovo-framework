@@ -20,7 +20,7 @@ const { DebuggerConfig } = require('@jovotech/plugin-debugger');
 
 // ...
 
-const debugger = new DebuggerConfig({
+const debuggerConfig = new DebuggerConfig({
   locales: [ 'en' ],
   buttons: [
 		{
@@ -38,6 +38,8 @@ const debugger = new DebuggerConfig({
     // ...
   ]
 });
+
+module.exports = debuggerConfig;
 ```
 
 It includes the following properties:
@@ -50,7 +52,7 @@ It includes the following properties:
 The `locales` property defines which locales can be selected in the Debugger:
 
 ```js
-const debugger = new DebuggerConfig({
+const debuggerConfig = new DebuggerConfig({
   locales: [ 'en', 'de' ],
   // ...
 });
@@ -65,7 +67,7 @@ The `buttons` array defines which input buttons should be displayed in the Debug
 It's possible to either use `input` or a raw `request`:
 
 ```js
-const debugger = new DebuggerConfig({
+const debuggerConfig = new DebuggerConfig({
   buttons: [
 
     // Button with Input

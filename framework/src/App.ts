@@ -1,9 +1,11 @@
-import { ArrayElement } from '@jovotech/common';
+import { ArrayElement, ISettingsParam } from '@jovotech/common';
 import _merge from 'lodash.merge';
 import {
   ComponentTree,
-  I18NextOptions,
+  I18NextConfig,
   IntentMap,
+  Jovo,
+  Logger,
   Middleware,
   MiddlewareFunction,
   Plugin,
@@ -21,21 +23,6 @@ import { HandlerPlugin } from './plugins/HandlerPlugin';
 import { OutputPlugin } from './plugins/OutputPlugin';
 import { RouterPlugin } from './plugins/RouterPlugin';
 import { Server } from './Server';
-
-export interface AppRoutingConfig {
-  intentMap?: IntentMap;
-  intentsToSkipUnhandled?: string[];
-}
-
-export interface AppConfig extends ExtensibleConfig {
-  i18n?: I18NextOptions;
-  logging?: BasicLoggingConfig | boolean;
-  routing?: AppRoutingConfig;
-}
-
-export type AppInitConfig = ExtensibleInitConfig<AppConfig> & {
-  components?: Array<ComponentConstructor | ComponentDeclaration>;
-};
 
 export type Usable = Plugin | ComponentConstructor | ComponentDeclaration;
 
@@ -59,10 +46,33 @@ export const APP_MIDDLEWARES = [
 export type AppMiddleware = ArrayElement<typeof APP_MIDDLEWARES>;
 export type AppMiddlewares = AppMiddleware[];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type AppErrorListener = (error: Error, jovo?: Jovo) => any;
+
+export interface AppRoutingConfig {
+  intentMap?: IntentMap;
+  intentsToSkipUnhandled?: string[];
+}
+
+export interface AppLoggingConfig extends BasicLoggingConfig {
+  tslog?: ISettingsParam;
+}
+
+export interface AppConfig extends ExtensibleConfig {
+  i18n?: I18NextConfig;
+  logging?: AppLoggingConfig | boolean;
+  routing?: AppRoutingConfig;
+}
+
+export type AppInitConfig = ExtensibleInitConfig<AppConfig> & {
+  components?: Array<ComponentConstructor | ComponentDeclaration>;
+};
+
 export class App extends Extensible<AppConfig, AppMiddlewares> {
   readonly componentTree: ComponentTree;
   readonly i18n: I18Next;
   private initialized = false;
+  private errorListeners: AppErrorListener[] = [];
 
   constructor(config?: AppInitConfig) {
     super(config ? { ...config, components: undefined } : config);
@@ -70,13 +80,19 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
     if (typeof this.config.logging === 'boolean' && this.config.logging) {
       this.use(new BasicLogging({ request: true, response: true }));
     } else if (typeof this.config.logging === 'object') {
+      if (this.config.logging.tslog) {
+        Logger.setSettings(_merge(Logger.settings, this.config.logging.tslog));
+      }
       this.use(new BasicLogging(this.config.logging));
     }
 
+    this.onError((error) => {
+      Logger.error(error);
+    });
     this.use(new RouterPlugin(), new HandlerPlugin(), new OutputPlugin());
 
     this.componentTree = new ComponentTree(...(config?.components || []));
-    this.i18n = new I18Next(this.config.i18n || {});
+    this.i18n = new I18Next(this.config.i18n);
   }
 
   get isInitialized(): boolean {
@@ -91,6 +107,13 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
     _merge(this.config, { ...config, components: undefined, plugins: undefined });
     const usables: Usable[] = [...(config?.plugins || []), ...(config?.components || [])];
     this.use(...usables);
+  }
+
+  onError(listener: AppErrorListener): void {
+    if (this.errorListeners.includes(listener)) {
+      return;
+    }
+    this.errorListeners.push(listener);
   }
 
   initializeMiddlewareCollection(): MiddlewareCollection<AppMiddlewares> {
@@ -119,9 +142,14 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
     if (this.initialized) {
       return;
     }
-    await this.i18n.initialize();
-    await this.initializePlugins();
-    this.initialized = true;
+    try {
+      await this.componentTree.initialize();
+      await this.i18n.initialize();
+      await this.initializePlugins();
+      this.initialized = true;
+    } catch (e) {
+      return this.handleError(e);
+    }
   }
 
   use<T extends Usable[]>(...usables: T): this {
@@ -152,28 +180,44 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
   }
 
   async handle(server: Server): Promise<void> {
-    const handleRequest = new HandleRequest(this, server);
-    await handleRequest.mount();
+    try {
+      const handleRequest = new HandleRequest(this, server);
+      await handleRequest.mount();
 
-    const relatedPlatform = handleRequest.platforms.find((platform) =>
-      platform.isRequestRelated(server.getRequestObject()),
-    );
-    if (!relatedPlatform) {
-      throw new MatchingPlatformNotFoundError(server.getRequestObject());
+      const relatedPlatform = handleRequest.platforms.find((platform) =>
+        platform.isRequestRelated(server.getRequestObject()),
+      );
+      if (!relatedPlatform) {
+        throw new MatchingPlatformNotFoundError(server.getRequestObject());
+      }
+      handleRequest.platform = relatedPlatform;
+      const jovo = relatedPlatform.createJovoInstance(this, handleRequest);
+
+      // RIDR-pipeline
+      await handleRequest.middlewareCollection.run(APP_MIDDLEWARES.slice(), jovo);
+
+      await handleRequest.dismount();
+
+      // TODO determine what to do if there is not response
+      if (!jovo.$response) {
+        return;
+      }
+
+      await server.setResponse(jovo.$response);
+    } catch (e) {
+      return this.handleError(e);
     }
-    handleRequest.platform = relatedPlatform;
-    const jovo = relatedPlatform.createJovoInstance(this, handleRequest);
+  }
 
-    // RIDR-pipeline
-    await handleRequest.middlewareCollection.run(APP_MIDDLEWARES.slice(), jovo);
+  async handleError(error: unknown, jovo?: Jovo): Promise<void> {
+    const errorInstance: Error = error instanceof Error ? error : new Error(error as string);
 
-    await handleRequest.dismount();
-
-    // TODO determine what to do if there is not response
-    if (!jovo.$response) {
-      return;
+    if (!this.errorListeners?.length) {
+      throw error;
     }
 
-    await server.setResponse(jovo.$response);
+    for (const listener of this.errorListeners) {
+      await listener(errorInstance, jovo);
+    }
   }
 }

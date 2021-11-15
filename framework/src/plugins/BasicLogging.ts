@@ -3,6 +3,7 @@ import colorize from 'json-colorizer';
 import _get from 'lodash.get';
 import _set from 'lodash.set';
 import _unset from 'lodash.unset';
+
 import { HandleRequest, Jovo } from '../index';
 import { Plugin, PluginConfig } from '../Plugin';
 
@@ -22,17 +23,17 @@ declare module '../Extensible' {
   }
 }
 
+export interface RequestResponseConfig {
+  enabled: boolean;
+  objects?: string[];
+  maskedObjects?: string[];
+  excludedObjects?: string[];
+}
+
 export interface BasicLoggingConfig extends PluginConfig {
-  request?: boolean;
-  response?: boolean;
-  requestObjects?: string[];
-  responseObjects?: string[];
-  maskedRequestObjects?: string[];
-  maskedResponseObjects?: string[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  request?: RequestResponseConfig | boolean;
+  response?: RequestResponseConfig | boolean;
   maskValue?: any;
-  excludedRequestObjects?: string[];
-  excludedResponseObjects?: string[];
   styling?: boolean;
   indentation?: string;
   colorizeSettings?: {
@@ -55,15 +56,19 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
     return {
       skipTests: true,
       enabled: true,
-      request: false,
+      request: {
+        enabled: false,
+        excludedObjects: [],
+        maskedObjects: [],
+        objects: [],
+      },
+      response: {
+        enabled: false,
+        excludedObjects: [],
+        maskedObjects: [],
+        objects: [],
+      },
       maskValue: '[ Hidden ]',
-      requestObjects: [],
-      maskedRequestObjects: [],
-      excludedRequestObjects: [],
-      response: false,
-      maskedResponseObjects: [],
-      excludedResponseObjects: [],
-      responseObjects: [],
       indentation: '  ',
       styling: true,
       colorizeSettings: {
@@ -75,6 +80,28 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
         },
       },
     };
+  }
+
+  constructor(config: BasicLoggingConfig) {
+    super(config);
+
+    if (typeof config.request === 'boolean') {
+      this.config.request = {
+        objects: [],
+        maskedObjects: [],
+        excludedObjects: [],
+        enabled: config.request,
+      };
+    }
+
+    if (typeof config.response === 'boolean') {
+      this.config.request = {
+        objects: [],
+        maskedObjects: [],
+        excludedObjects: [],
+        enabled: config.response,
+      };
+    }
   }
 
   mount(parent: HandleRequest): Promise<void> | void {
@@ -95,8 +122,10 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
 
     const requestCopy = JSON.parse(JSON.stringify(jovo.$request));
 
-    if (this.config.maskedRequestObjects && this.config.maskedRequestObjects.length > 0) {
-      this.config.maskedRequestObjects.forEach((maskPath: string) => {
+    const requestConfig = this.config.request as RequestResponseConfig;
+
+    if (requestConfig.maskedObjects && requestConfig.maskedObjects.length > 0) {
+      requestConfig.maskedObjects.forEach((maskPath: string) => {
         const value = _get(requestCopy, maskPath);
         if (value) {
           let newValue = this.config.maskValue;
@@ -108,8 +137,8 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
       });
     }
 
-    if (this.config.excludedRequestObjects && this.config.excludedRequestObjects.length > 0) {
-      this.config.excludedRequestObjects.forEach((excludePath: string) => {
+    if (requestConfig.excludedObjects && requestConfig.excludedObjects.length > 0) {
+      requestConfig.excludedObjects.forEach((excludePath: string) => {
         _unset(requestCopy, excludePath);
       });
     }
@@ -119,8 +148,8 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
       console.log(chalk.bgWhite.black('\n\n >>>>> Request - ' + new Date().toISOString() + ' '));
     }
 
-    if (this.config.requestObjects && this.config.requestObjects.length > 0) {
-      this.config.requestObjects.forEach((path: string) => {
+    if (requestConfig.objects && requestConfig.objects.length > 0) {
+      requestConfig.objects.forEach((path: string) => {
         console.log(
           colorize(JSON.stringify(_get(requestCopy, path), null, this.config.indentation || 2)),
         );
@@ -144,8 +173,10 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
 
     const responseCopy = JSON.parse(JSON.stringify(jovo.$response));
 
-    if (this.config.maskedResponseObjects && this.config.maskedResponseObjects.length > 0) {
-      this.config.maskedResponseObjects.forEach((maskPath: string) => {
+    const responseConfig = this.config.response as RequestResponseConfig;
+
+    if (responseConfig.maskedObjects && responseConfig.maskedObjects.length > 0) {
+      responseConfig.maskedObjects.forEach((maskPath: string) => {
         const value = _get(responseCopy, maskPath);
         if (value) {
           let newValue = this.config.maskValue;
@@ -157,8 +188,8 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
       });
     }
 
-    if (this.config.excludedResponseObjects && this.config.excludedResponseObjects.length > 0) {
-      this.config.excludedResponseObjects.forEach((excludePath: string) => {
+    if (responseConfig.excludedObjects && responseConfig.excludedObjects.length > 0) {
+      responseConfig.excludedObjects.forEach((excludePath: string) => {
         _unset(responseCopy, excludePath);
       });
     }
@@ -172,8 +203,8 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
           'ms',
       );
     }
-    if (this.config.responseObjects && this.config.responseObjects.length > 0) {
-      this.config.responseObjects.forEach((path: string) => {
+    if (responseConfig.objects && responseConfig.objects.length > 0) {
+      responseConfig.objects.forEach((path: string) => {
         console.log(
           colorize(
             JSON.stringify(_get(responseCopy, path), null, this.config.indentation || 2),
