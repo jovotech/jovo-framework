@@ -1,61 +1,20 @@
----
-title: 'Web Platform'
-excerpt: 'The Jovo Web Platform is a standalone platform integration that can be used to deploy a voice and chat experiences to the web, including React and VueJS.'
----
+# Jovo Web Platform Integration
 
-# Web Platform
+[![Jovo Framework](https://v4.jovo.tech/img/github-header.png)](https://v4.jovo.tech)
 
-The Jovo Web Platform is a standalone [platform integration](https://v4.jovo.tech/docs/platforms) that can be used to deploy a voice and chat experiences to the web, including React and VueJS.
+<p>
+<a href="https://v4.jovo.tech" target="_blank">Website</a> -  <a href="https://v4.jovo.tech/docs" target="_blank">Docs</a> - <a href="https://v4.jovo.tech/marketplace" target="_blank">Marketplace</a> - <a href="https://github.com/jovotech/jovo-v4-template" target="_blank">Template</a>   
+</p>
 
-## Introduction
+<p>
+<a href="https://www.npmjs.com/package/@jovotech/platform-web" target="_blank"><img src="https://badge.fury.io/js/@jovotech%2Fplatform-web.svg"></a>      
+<a href="https://opencollective.com/jovo-framework" target="_blank"><img src="https://opencollective.com/jovo-framework/tiers/badge.svg"></a>
+</p>
 
-![Jovo Client and Jovo Core Platform](https://github.com/jovotech/jovo-framework/raw/master/jovo-platforms/jovo-platform-core/img/jovo-client-platform-communication.png 'How Jovo Web Platform communicates with web clients')
+This package enables you to integrate your Jovo app with the Jovo Web platform and build voice and chat experiences for the web.
 
-Besides integrations with major platforms like Alexa, Google Assistant, or Facebook Messenger, Jovo also enables you to connect your own clients to build fully custom conversational experiences for both voice and chat.
-
-The Jovo Web Platform can be connected to any web client (the "frontend" that records speech or text input and passes it to the Jovo app). You can either implement your own client or use existing [Jovo Clients](https://v4.jovo.tech/docs/clients), e.g. the [vanilla JS web client](https://v4.jovo.tech/marketplace/client-web), [Vue2](https://v4.jovo.tech/marketplace/client-web-vue2) or [Vue3 client](https://v4.jovo.tech/marketplace/client-web-vue3).
-
-The client sends a request to the Jovo app that may contain audio, text, or other input. The Jovo Web Platform then deals with this information and returns a response back to the client.
-
-## Installation
-
-You can install the plugin like this:
-
-```sh
+```bash
 $ npm install @jovotech/platform-web
 ```
 
-Add it as plugin to your [app configuration](https://v4.jovo.tech/docs/app-config), e.g. `app.ts`:
-
-```typescript
-import { App } from '@jovotech/framework';
-import { WebPlatform } from '@jovotech/platform-web';
-// ...
-
-const app = new App({
-  plugins: [
-    new WebPlatform(),
-    // ...
-  ],
-});
-```
-
-## Web Platform and Core Platform
-
-The Jovo Web Platform is a customization of the [Jovo Core Platform](https://v4.jovo.tech/marketplace/platform-core). You can find all Web Platform features in the [Core Platform docs](https://v4.jovo.tech/marketplace/client-web).
-
-## Platform-Specific Features
-
-You can access the Core specific object like this:
-
-```typescript
-this.$web;
-```
-
-You can also use this object to see if the request is coming from Core (or a different platform):
-
-```typescript
-if (this.$web) {
-  // ...
-}
-```
+> Learn more in the docs: https://v4.jovo.tech/marketplace/platform-web
