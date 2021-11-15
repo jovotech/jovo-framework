@@ -1,5 +1,5 @@
 import { Client, InitConfig } from '@jovotech/client-web';
-import { Plugin, reactive, ref } from 'vue';
+import { Plugin, reactive } from 'vue';
 
 declare global {
   interface Window {
@@ -18,6 +18,8 @@ export interface JovoWebClientVueConfig {
   client?: InitConfig;
 }
 
+export * from '@jovotech/client-web';
+
 const plugin: Plugin = {
   install: (app, config) => {
     if (!config?.endpointUrl) {
@@ -35,5 +37,3 @@ const plugin: Plugin = {
 };
 
 export default plugin;
-
-export * from '@jovotech/client-web';
