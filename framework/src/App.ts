@@ -198,13 +198,15 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async handleError(e: Error, jovo?: Jovo): Promise<void> {
+  async handleError(error: unknown, jovo?: Jovo): Promise<void> {
+    const errorInstance: Error = error instanceof Error ? error : new Error(error as string);
+
     if (!this.errorListeners?.length) {
-      throw e;
+      throw error;
     }
+
     for (const listener of this.errorListeners) {
-      await listener(e, jovo);
+      await listener(errorInstance, jovo);
     }
   }
 }
