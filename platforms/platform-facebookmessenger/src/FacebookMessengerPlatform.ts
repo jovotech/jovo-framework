@@ -49,6 +49,7 @@ export class FacebookMessengerPlatform extends Platform<
   FacebookMessengerPlatform,
   FacebookMessengerConfig
 > {
+  readonly id: string = 'facebookMessenger';
   readonly outputTemplateConverterStrategy = new FacebookMessengerOutputTemplateConverterStrategy();
   readonly requestClass = FacebookMessengerRequest;
   readonly jovoClass = FacebookMessenger;

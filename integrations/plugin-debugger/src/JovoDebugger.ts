@@ -402,6 +402,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     try {
       files = await promises.readdir(absoluteModelsPath);
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.warn(new LanguageModelDirectoryNotFoundError(absoluteModelsPath));
       return;
     }
@@ -468,6 +469,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     });
     socket.on('connect_error', (error: Error) => {
       if (!this.hasShownConnectionError) {
+        // eslint-disable-next-line no-console
         console.warn(new SocketConnectionFailedError(this.config.webhookUrl, error).message);
         this.hasShownConnectionError = true;
       }
@@ -490,6 +492,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   }
 
   private onSocketNotConnected() {
+    // eslint-disable-next-line no-console
     console.warn(new SocketNotConnectedError(this.config.webhookUrl).message);
   }
 

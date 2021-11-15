@@ -16,6 +16,7 @@ export class TestPlatform extends Platform<
   TestPlatform,
   ExtensibleConfig
 > {
+  readonly id = 'testplatform';
   readonly jovoClass = TestJovo;
   readonly requestClass = TestRequest;
   readonly outputTemplateConverterStrategy = new TestOutputConverterStrategy();

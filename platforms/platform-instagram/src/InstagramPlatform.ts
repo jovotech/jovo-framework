@@ -19,6 +19,7 @@ export interface InstagramConfig
 }
 
 export class InstagramPlatform extends FacebookMessengerPlatform {
+  readonly id: string = 'instagram';
   readonly outputTemplateConverterStrategy = new InstagramOutputTemplateConverterStrategy();
   readonly jovoClass = Instagram;
   readonly requestClass = InstagramRequest;
