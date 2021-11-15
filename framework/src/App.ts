@@ -2,7 +2,7 @@ import { ArrayElement, ISettingsParam } from '@jovotech/common';
 import _merge from 'lodash.merge';
 import {
   ComponentTree,
-  I18NextOptions,
+  I18NextConfig,
   IntentMap,
   Jovo,
   Logger,
@@ -48,16 +48,19 @@ export type AppMiddlewares = AppMiddleware[];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AppErrorListener = (error: Error, jovo?: Jovo) => any;
+
 export interface AppRoutingConfig {
   intentMap?: IntentMap;
   intentsToSkipUnhandled?: string[];
 }
 
-export type LoggingConfig = BasicLoggingConfig & { tslog?: ISettingsParam };
+export interface AppLoggingConfig extends BasicLoggingConfig {
+  tslog?: ISettingsParam;
+}
 
 export interface AppConfig extends ExtensibleConfig {
-  i18n?: I18NextOptions;
-  logging?: LoggingConfig | boolean;
+  i18n?: I18NextConfig;
+  logging?: AppLoggingConfig | boolean;
   routing?: AppRoutingConfig;
 }
 
@@ -89,7 +92,7 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
     this.use(new RouterPlugin(), new HandlerPlugin(), new OutputPlugin());
 
     this.componentTree = new ComponentTree(...(config?.components || []));
-    this.i18n = new I18Next(this.config.i18n || {});
+    this.i18n = new I18Next(this.config.i18n);
   }
 
   get isInitialized(): boolean {
@@ -206,13 +209,15 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async handleError(e: any, jovo?: Jovo): Promise<void> {
+  async handleError(error: unknown, jovo?: Jovo): Promise<void> {
+    const errorInstance: Error = error instanceof Error ? error : new Error(error as string);
+
     if (!this.errorListeners?.length) {
-      throw e;
+      throw error;
     }
+
     for (const listener of this.errorListeners) {
-      await listener(e, jovo);
+      await listener(errorInstance, jovo);
     }
   }
 }

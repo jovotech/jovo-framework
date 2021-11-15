@@ -31,7 +31,7 @@ Most Jovo templates already come with FileDb as default database integration for
 $ npm install @jovotech/db-filedb
 ```
 
-We strongly recommend to only use this database integration for local prototyping. Add it as plugin to your `app.dev.ts` file like this:
+We strongly recommend to only use this database integration for local prototyping. Add it as a plugin to your `app.dev.ts` file like this:
 
 ```typescript
 import { FileDb } from '@jovotech/db-filedb';
