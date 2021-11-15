@@ -347,6 +347,61 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       propagateStreamAsLog(process.stderr, this.socket);
       this.hasOverriddenWrite = true;
     }
+
+    // Check if the current output is being piped to somewhere.
+    if (process.stdout.isTTY) {
+      // Check if we can enable raw mode for input stream to capture raw keystrokes.
+      if (process.stdin.setRawMode) {
+        // Capture unprocessed key input.
+        process.stdin.setRawMode(true);
+        // Explicitly resume emitting data from the stream.
+        process.stdin.resume();
+        // Capture readable input as opposed to binary.
+        process.stdin.setEncoding('utf-8');
+
+        // Collect input text from input stream.
+        let inputText = '';
+        process.stdin.on('data', async (keyRaw: Buffer) => {
+          const key: string = keyRaw.toString();
+          // When dot gets pressed, try to open the debugger in browser.
+          if (key === '.') {
+            try {
+              await open('https://webhookv4.jovo.cloud/alex');
+            } catch (error) {
+              console.log('error');
+            }
+            inputText = '';
+          } else {
+            // When anything else got pressed, record it and send it on enter into the child process.
+            if (key.charCodeAt(0) === 13) {
+              // Send recorded input to child process. This is useful for restarting a nodemon process with rs, for example.
+              process.stdout.write('\n');
+              inputText = '';
+            } else if (key.charCodeAt(0) === 3) {
+              // Ctrl+C has been pressed, kill process.
+              if (process.platform === 'win32') {
+                process.stdin.pause();
+                // @ts-ignore
+                process.stdin.setRawMode(false);
+              } else {
+                process.exit();
+              }
+            } else {
+              // Record input text and write it into terminal.
+              inputText += key;
+              process.stdout.write(key);
+            }
+          }
+        });
+      } else {
+        setTimeout(() => {
+          // Log.info(
+          //   `\n${CLOUD} To open Jovo Debugger open this url in your browser:\n${debuggerUrl}\n`,
+          // );
+          console.log('asdasd');
+        }, 2500);
+      }
+    }
   }
 
   private async onDebuggerRequest(app: App, request: AnyObject): Promise<void> {
