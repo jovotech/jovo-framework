@@ -24,7 +24,7 @@ import { LangIt } from '@nlpjs/lang-it';
 import isEqual from 'fast-deep-equal/es6';
 import { promises } from 'fs';
 import { homedir } from 'os';
-import { join, resolve } from 'path';
+import { join, resolve, sep } from 'path';
 import { cwd } from 'process';
 import { connect, Socket } from 'socket.io-client';
 import { Writable } from 'stream';
@@ -43,6 +43,9 @@ import {
   StateMutatingJovoMethodKey,
 } from './interfaces';
 import { MockServer } from './MockServer';
+import open from 'open';
+import Table from 'cli-table';
+import { inspect } from 'util';
 
 export interface JovoDebuggerConfig extends PluginConfig {
   nlu: NluPlugin;
@@ -326,33 +329,30 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     };
   }
 
-  private async onDebuggingAvailable(): Promise<void> {
-    if (!this.socket) {
-      return this.onSocketNotConnected();
-    }
+  private async onConnected(): Promise<void> {
+    const color: [number, number] = inspect.colors['gray'] ?? [0, 0];
+    const grayText = (str: string) => `\u001b[${color[0]}m${str}\u001b[${color[1]}m`;
 
-    await this.emitDebuggerConfig();
-    await this.emitLanguageModelIfEnabled();
 
-    function propagateStreamAsLog(stream: Writable, socket: typeof Socket) {
-      const originalWriteFn = stream.write;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      stream.write = function (chunk: Buffer, ...args: any[]) {
-        socket.emit(JovoDebuggerEvent.AppConsoleLog, chunk.toString(), new Error().stack);
-        return originalWriteFn.call(this, chunk, ...args);
-      };
-    }
+    const webhookId = await this.retrieveLocalWebhookId();
+    const debuggerUrl = `${this.config.webhookUrl}/${webhookId}`;
 
-    if (!this.hasOverriddenWrite) {
-      propagateStreamAsLog(process.stdout, this.socket);
-      propagateStreamAsLog(process.stderr, this.socket);
-      this.hasOverriddenWrite = true;
-    }
+    const projectFolderArray = process.cwd().split(sep);
+    const projectFolder = projectFolderArray[projectFolderArray.length - 1];
+    const table = new Table({
+      head: [grayText('Project'), grayText('Server')],
+    });
+    table.push([projectFolder, `☁️ ${debuggerUrl} => 💻 localhost:3000`]);
 
+    console.log('\n' + table.toString());
     // Check if the current output is being piped to somewhere.
     if (process.stdout.isTTY) {
       // Check if we can enable raw mode for input stream to capture raw keystrokes.
       if (process.stdin.setRawMode) {
+        setTimeout(() => {
+          console.log(`\n To open Jovo Debugger in your browser, press the "." key.\n`);
+        }, 500);
+
         // Capture unprocessed key input.
         process.stdin.setRawMode(true);
         // Explicitly resume emitting data from the stream.
@@ -367,9 +367,11 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
           // When dot gets pressed, try to open the debugger in browser.
           if (key === '.') {
             try {
-              await open('https://webhookv4.jovo.cloud/alex');
+              await open(debuggerUrl);
             } catch (error) {
-              console.log('error');
+              console.log(
+                `Could not open browser. Please open debugger manually by visiting this url: ${debuggerUrl}`,
+              );
             }
             inputText = '';
           } else {
@@ -396,12 +398,35 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
         });
       } else {
         setTimeout(() => {
-          // Log.info(
-          //   `\n${CLOUD} To open Jovo Debugger open this url in your browser:\n${debuggerUrl}\n`,
-          // );
-          console.log('asdasd');
+          console.log(
+            `☁  Could not open browser. Please open debugger manually by visiting this url: ${debuggerUrl}`,
+          );
         }, 2500);
       }
+    }
+  }
+
+  private async onDebuggingAvailable(): Promise<void> {
+    if (!this.socket) {
+      return this.onSocketNotConnected();
+    }
+
+    await this.emitDebuggerConfig();
+    await this.emitLanguageModelIfEnabled();
+
+    function propagateStreamAsLog(stream: Writable, socket: typeof Socket) {
+      const originalWriteFn = stream.write;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      stream.write = function (chunk: Buffer, ...args: any[]) {
+        socket.emit(JovoDebuggerEvent.AppConsoleLog, chunk.toString(), new Error().stack);
+        return originalWriteFn.call(this, chunk, ...args);
+      };
+    }
+
+    if (!this.hasOverriddenWrite) {
+      propagateStreamAsLog(process.stdout, this.socket);
+      propagateStreamAsLog(process.stderr, this.socket);
+      this.hasOverriddenWrite = true;
     }
   }
 
@@ -521,6 +546,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     });
     socket.on('connect', () => {
       this.hasShownConnectionError = false;
+      this.onConnected();
     });
     socket.on('connect_error', (error: Error) => {
       if (!this.hasShownConnectionError) {
