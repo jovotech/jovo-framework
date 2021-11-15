@@ -1,4 +1,3 @@
-import { UnknownObject } from '@jovotech/framework';
 import {
   ArrayMaxSize,
   formatValidationErrors,
