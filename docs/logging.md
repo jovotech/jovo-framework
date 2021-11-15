@@ -174,7 +174,7 @@ logging: {
 
 ## Jovo Logger
 
-Jovo has an internal `Logger` that can be used to display certain levels of logs. It is based on [tslog](https://tslog.js.org).
+Jovo has an internal `Logger` that can be used to display certain levels of logs. It is an instance of [tslog](https://tslog.js.org) and can use any features that library provides.
 
 You can add tslog configurations ([learn more on their website](https://tslog.js.org/#/?id=settings)) to the `tslog` property, for example:
 
