@@ -2,7 +2,7 @@
   "name": "@jovotech/client-web-vue3",
   "version": "4.0.0-beta.1",
   "description": "",
-  "main": "dist/JovoWebClientVue.common.js",
+  "main": "dist/JovoWebClientVue.cjs.js",
   "module": "dist/JovoWebClientVue.esm.js",
   "browser": "dist/JovoWebClientVue.esm.js",
   "types": "dist/index.d.ts",

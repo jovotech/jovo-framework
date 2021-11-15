@@ -18,6 +18,8 @@ export interface JovoWebClientVueConfig {
   config?: InitConfig;
 }
 
+export * from '@jovotech/client-web';
+
 const plugin: PluginObject<JovoWebClientVueConfig> = {
   install: (vue, config) => {
     if (!config?.endpointUrl) {
@@ -32,5 +34,3 @@ const plugin: PluginObject<JovoWebClientVueConfig> = {
 };
 
 export default plugin;
-
-export * from '@jovotech/client-web';
