@@ -61,9 +61,30 @@ onSuccessfulConnection() {
 
 ## Default Input Types
 
+The following default input types are available:
+
+- [`LAUNCH`](#launch)
+- [`INTENT`](#intent)
+- [`TEXT`](#text)
+- [`SPEECH`](#speech)
+- [`TRANSCRIBED_SPEECH`](#transcribed_speech)
+- [`ERROR`](#error)
+- [`END`](#end)
+
+The input types are all available through the [`@jovotech/common` package](https://github.com/jovotech/jovo-framework/blob/v4/latest/common/src/Input.ts). You can import them like this:
+
+```typescript
+import { InputType } from '@jovotech/common';
+// ...
+
+{
+  type: InputType.Launch,
+}
+```
+
 ### LAUNCH
 
-A `LAUNCH` input is usually reserved for the initial interaction, the first request of a session.
+A `LAUNCH` input (`InputType.Launch`) is usually reserved for the initial interaction, the first request of a session.
 
 ```typescript
 {
@@ -81,7 +102,7 @@ LAUNCH() {
 
 ### INTENT
 
-An `INTENT` input happens when the platform already delivers NLU information like an intent and entities with the request.
+An `INTENT` input (`InputType.Intent`) happens when the platform already delivers NLU information like an intent and entities with the request.
 
 It can include just an intent:
 
@@ -108,7 +129,7 @@ It can also include entity information:
 
 ### TEXT
 
-A `TEXT` input happens when a platform sends raw text input.
+A `TEXT` input (`InputType.Text`) happens when a platform sends raw text input.
 
 ```typescript
 {
@@ -156,7 +177,7 @@ If the intent from the NLU is part of the [`intentMap` configuration](./app-conf
 
 ### SPEECH
 
-A `SPEECH` input means that the platform sent a request that contains a speech audio file that needs to get transcribed.
+A `SPEECH` input (`InputType.Speech`) means that the platform sent a request that contains a speech audio file that needs to get transcribed.
 
 ```typescript
 {
@@ -172,7 +193,7 @@ The `audio` typically includes a [Base64](https://en.wikipedia.org/wiki/Base64) 
 
 ### TRANSCRIBED_SPEECH
 
-A `TRANSCRIBED_SPEECH` input means that, although the user used speech input to interact with the platform, the speech was already transcribed by the client. This means that the input contains a `text` even though the input modality was speech.
+A `TRANSCRIBED_SPEECH` input (`InputType.TranscribedSpeech`) means that, although the user used speech input to interact with the platform, the speech was already transcribed by the client. This means that the input contains a `text` even though the input modality was speech.
 
 ```typescript
 {
@@ -185,7 +206,7 @@ This text gets turned into structured meaning by using an [NLU integration](./nl
 
 ### ERROR
 
-An `ERROR` input happens when the platform throws an error and sends an error request.
+An `ERROR` input (`InputType.Error`) happens when the platform throws an error and sends an error request.
 
 ```typescript
 {
@@ -195,7 +216,7 @@ An `ERROR` input happens when the platform throws an error and sends an error re
 
 ### END
 
-An `END` input means that the user (or platform) requested the session to be closed.
+An `END` input (`InputType.End`) means that the user (or platform) requested the session to be closed.
 
 ```typescript
 {

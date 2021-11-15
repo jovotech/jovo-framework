@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+  </head>
+  <body>
+    <div id="app">
+      <button v-if="!$client.isInitialized" @click="initialize">Initialize</button>
+      <div v-else>
+        <button @click="startRecording">Start</button>
+        <button @click="stopRecording">Stop</button>
+        <button @click="abortRecording">Abort</button>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="js/index.js"></script>
+    <script>
+      Vue.use(JovoWebClientVue.default, {
+        endpointUrl: 'http://localhost:3000/webhook',
+        config: {},
+      });
+      var app = new Vue({
+        el: '#app',
+        data: {},
+        methods: {
+          async initialize() {
+            await this.$client.initialize();
+          },
+          async startRecording() {
+            await this.$client.startRecording();
+          },
+          stopRecording() {
+            this.$client.stopRecording();
+          },
+          abortRecording() {
+            this.$client.abortRecording();
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

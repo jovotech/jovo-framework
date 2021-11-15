@@ -1,0 +1,53 @@
+{
+  "name": "@jovotech/client-web-vue2",
+  "version": "4.0.0-beta.1",
+  "description": "",
+  "main": "dist/JovoWebClientVue.common.js",
+  "module": "dist/JovoWebClientVue.esm.js",
+  "browser": "dist/JovoWebClientVue.esm.js",
+  "types": "dist/index.d.ts",
+  "unpkg": "dist/JovoWebClientVue.umd.js",
+  "jsdelivr": "dist/JovoWebClientVue.umd.js",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "tsc --emitDeclarationOnly && node scripts/build.js",
+    "start:dev": "esbuild src/index.ts --bundle --servedir=demo --outdir=demo/js --global-name=JovoWebClientVue",
+    "prettier": "prettier -w -l src test",
+    "eslint": "eslint src test --fix --ext .ts",
+    "rimraf": "rimraf dist",
+    "test": "jest --runInBand"
+  },
+  "author": "jovotech",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@jovotech/client-web": "^4.0.0-beta.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.20",
+    "@types/web": "0.0.1",
+    "@typescript-eslint/eslint-plugin": "^4.12.0",
+    "@typescript-eslint/parser": "^4.12.0",
+    "esbuild": "^0.13.8",
+    "eslint": "^7.17.0",
+    "eslint-config-prettier": "^7.1.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "jest": "^26.6.3",
+    "prettier": "^2.2.1",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^26.5.4",
+    "typescript": "^4.2.3",
+    "vue": "^2.6.14"
+  },
+  "peerDependencies": {
+    "vue": "2.*"
+  },
+  "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176",
+  "prettier": "../../.prettierrc.js",
+  "publishConfig": {
+    "access": "public"
+  }
+}

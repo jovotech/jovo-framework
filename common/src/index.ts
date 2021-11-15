@@ -31,8 +31,18 @@ export type OmitIndex<T, I extends string | number> = {
   [K in keyof T as FilterKey<K, I>]: T[K];
 };
 
+// If T is a string enum return a union type of the enum and the enum as string literal
 export type EnumLike<T extends string> = T | `${T}`;
 
+// Removes all methods of the given object
+export type PlainObjectType<T extends UnknownObject> = OmitWhere<
+  // in case the object has an  index signature it has to be removed
+  OmitIndex<OmitIndex<T, string>, number>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (...args: any[]) => any
+>;
+
+export * from './Input';
 export * from './JovoError';
 export * from './JovoLogger';
 export { ISettingsParam, ILogObject } from 'tslog';
