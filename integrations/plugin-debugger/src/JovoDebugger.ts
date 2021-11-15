@@ -333,7 +333,6 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     const color: [number, number] = inspect.colors['gray'] ?? [0, 0];
     const grayText = (str: string) => `\u001b[${color[0]}m${str}\u001b[${color[1]}m`;
 
-
     const webhookId = await this.retrieveLocalWebhookId();
     const debuggerUrl = `${this.config.webhookUrl}/${webhookId}`;
 
