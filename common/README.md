@@ -1,4 +1,4 @@
-# Jovo Amazon Alexa Integration
+# Jovo Common Package
 
 [![Jovo Framework](https://v4.jovo.tech/img/github-header.png)](https://v4.jovo.tech)
 
@@ -7,14 +7,14 @@
 </p>
 
 <p>
-<a href="https://www.npmjs.com/package/@jovotech/platform-alexa" target="_blank"><img src="https://badge.fury.io/js/@jovotech%2Fplatform-alexa.svg"></a>      
+<a href="https://www.npmjs.com/package/@jovotech/common" target="_blank"><img src="https://badge.fury.io/js/@jovotech%2Fcommon.svg"></a>      
 <a href="https://opencollective.com/jovo-framework" target="_blank"><img src="https://opencollective.com/jovo-framework/tiers/badge.svg"></a>
 </p>
 
-This package enables you to integrate your Jovo app with Amazon Alexa.
+This package includes many interfaces and classes that are used across Jovo packages.
 
 ```bash
-$ npm install @jovotech/platform-alexa
+$ npm install @jovotech/common
 ```
 
-> Learn more in the docs: https://v4.jovo.tech/marketplace/platform-alexa
+You can either use this package to import specific types, or import from `@jovotech/common` (which re-exports everything from `@jovotech/common`).

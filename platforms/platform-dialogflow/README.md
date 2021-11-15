@@ -1,4 +1,4 @@
-# Jovo Amazon Alexa Integration
+# Jovo Dialogflow Integration
 
 [![Jovo Framework](https://v4.jovo.tech/img/github-header.png)](https://v4.jovo.tech)
 
@@ -7,14 +7,12 @@
 </p>
 
 <p>
-<a href="https://www.npmjs.com/package/@jovotech/platform-alexa" target="_blank"><img src="https://badge.fury.io/js/@jovotech%2Fplatform-alexa.svg"></a>      
+<a href="https://www.npmjs.com/package/@jovotech/platform-dialogflow" target="_blank"><img src="https://badge.fury.io/js/@jovotech%2Fplatform-dialogflow.svg"></a>      
 <a href="https://opencollective.com/jovo-framework" target="_blank"><img src="https://opencollective.com/jovo-framework/tiers/badge.svg"></a>
 </p>
 
-This package enables you to integrate your Jovo app with Amazon Alexa.
+This package enables you to integrate your Jovo app with Dialogflow.
 
 ```bash
-$ npm install @jovotech/platform-alexa
+$ npm install @jovotech/platform-dialogflow
 ```
-
-> Learn more in the docs: https://v4.jovo.tech/marketplace/platform-alexa
