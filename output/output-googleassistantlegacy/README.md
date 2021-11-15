@@ -1,1 +1,0 @@
-# @jovotech/output-googleassistantlegacy

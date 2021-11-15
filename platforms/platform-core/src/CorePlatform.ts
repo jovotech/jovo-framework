@@ -1,32 +1,32 @@
 import { AnyObject, ExtensibleConfig, Platform } from '@jovotech/framework';
-import { CoreOutputTemplateConverterStrategy } from '@jovotech/output-core';
-
-import { CoreResponse } from '.';
 import { Core } from './Core';
 import { CoreDevice } from './CoreDevice';
 import { CoreRequest } from './CoreRequest';
 import { CoreRequestBuilder } from './CoreRequestBuilder';
+import { CoreResponse } from './CoreResponse';
 import { CoreUser } from './CoreUser';
+import { CoreOutputTemplateConverterStrategy } from './output';
 
-export interface CorePlatformConfig extends ExtensibleConfig {
-  platform: 'core' | string;
+export interface CorePlatformConfig<PLATFORM extends string = 'core' | string>
+  extends ExtensibleConfig {
+  platform: PLATFORM | string;
 }
 
-export class CorePlatform extends Platform<
+export class CorePlatform<PLATFORM extends string = 'core' | string> extends Platform<
   CoreRequest,
   CoreResponse,
   Core,
   CoreUser,
   CoreDevice,
-  CorePlatform,
+  CorePlatform<PLATFORM>,
   CorePlatformConfig
 > {
-  outputTemplateConverterStrategy = new CoreOutputTemplateConverterStrategy();
-  requestClass = CoreRequest;
-  jovoClass = Core;
-  userClass = CoreUser;
-  deviceClass = CoreDevice;
-  requestBuilder = CoreRequestBuilder;
+  readonly outputTemplateConverterStrategy = new CoreOutputTemplateConverterStrategy();
+  readonly requestClass = CoreRequest;
+  readonly jovoClass = Core;
+  readonly userClass = CoreUser;
+  readonly deviceClass = CoreDevice;
+  readonly requestBuilder = CoreRequestBuilder;
 
   getDefaultConfig(): CorePlatformConfig {
     return {

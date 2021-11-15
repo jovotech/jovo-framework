@@ -2,13 +2,14 @@
 title: 'Google Assistant CLI Commands'
 excerpt: 'Learn how to build and deploy Google Assistant projects using the Jovo CLI.'
 ---
+
 # Google Assistant CLI Commands
 
 Learn how to build and deploy Google Assistant projects using the Jovo CLI.
 
 ## Introduction
 
-The Google Assistant CLI plugin allows you to interact with the [Actions on Google Console](https://console.actions.google.com/) using the Jovo CLI. 
+The Google Assistant CLI plugin allows you to interact with the [Actions on Google Console](https://console.actions.google.com/) using the Jovo CLI.
 
 To use the Google Assistant CLI, add it as plugin to your `jovo.project.js` file. [Learn more about Google Assistant project configuration here](./project-config.md).
 
@@ -22,7 +23,7 @@ const project = new ProjectConfig({
   plugins: [
     new GoogleAssistantCli(),
     // ...
-  ]
+  ],
 });
 ```
 
@@ -34,11 +35,9 @@ The Google Assistant CLI plugin hooks into the following commands:
 - [`deploy`](#deploy): Deploy project files to the Actions on Google Console
 - [`get`](#get): Synchronize your local project files with the Actions on Google Console
 
-
 ## build
 
 The Google Assistant CLI plugin hooks into the `build` command and creates a `platform.googleAssistant` folder inside the `build` directory in the root of your Jovo project. [Learn more about the `build` command here](https://v4.jovo.tech/docs/build-command).
-
 
 ```sh
 $ jovov4 build:platform googleAssistant
@@ -50,10 +49,9 @@ The folder then contains several files and folders, including `actions`, `custom
 
 The Google Assistant CLI plugin adds the following flags to the [`build:platform` command](https://v4.jovo.tech/docs/build-command#build:platform):
 
-| Flag | Description | Examples |
-|---|---|---|
-| `--project-id` | Add the specified project ID to the Google Assistant project files. [Learn more about project ID configuration here](./project-config.md#projectid). | `--project-id <yourProjectId>`  |
-
+| Flag           | Description                                                                                                                                          | Examples                       |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| `--project-id` | Add the specified project ID to the Google Assistant project files. [Learn more about project ID configuration here](./project-config.md#projectid). | `--project-id <yourProjectId>` |
 
 ## deploy
 
@@ -69,10 +67,9 @@ It is possible that the deployment process results in a few warnings, for exampl
 
 The Google Assistant CLI plugin adds the following flags to the [`deploy:platform` command](https://v4.jovo.tech/docs/deploy-command#deploy:platform):
 
-| Flag | Description | Examples |
-|---|---|---|
-| `--project-id` | Deploy to the specified project ID. [Learn more about project ID configuration here](./project-config.md#projectid). | `--project-id <yourProjectId>`  |
-
+| Flag           | Description                                                                                                          | Examples                       |
+| -------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| `--project-id` | Deploy to the specified project ID. [Learn more about project ID configuration here](./project-config.md#projectid). | `--project-id <yourProjectId>` |
 
 ## get
 
@@ -86,6 +83,6 @@ This is helpful if you've made any updates to the Action's configuration (for ex
 
 The Google Assistant CLI plugin adds the following flags to the [`get:platform` command](https://v4.jovo.tech/docs/get-command#get:platform):
 
-| Flag | Description | Examples |
-|---|---|---|
-| `--project-id` | Retrieve files from the specified project ID. [Learn more about project ID configuration here](./project-config.md#projectid). | `--project-id <yourProjectId>`  |
+| Flag           | Description                                                                                                                    | Examples                       |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------ |
+| `--project-id` | Retrieve files from the specified project ID. [Learn more about project ID configuration here](./project-config.md#projectid). | `--project-id <yourProjectId>` |

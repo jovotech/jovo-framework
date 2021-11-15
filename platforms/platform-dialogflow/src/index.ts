@@ -4,3 +4,6 @@ export const DialogflowCli: typeof DialogflowCliType = process.env.JOVO_CLI_RUNT
   ? // eslint-disable-next-line @typescript-eslint/no-var-requires
     require('./cli').DialogflowCli
   : null;
+
+export * from './DialogflowResponse';
+export * from './output';

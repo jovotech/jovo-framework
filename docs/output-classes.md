@@ -15,7 +15,7 @@ Output classes are stored in a component's `output` folder. As a convention, the
 
 Each output class contains:
 
-- A [`build` method](#build-method) that returns an output template
+- A [`build()` method](#build-method) that returns an output template
 - [`options`](#output-options) that can be passed using `$send()`
 - Optionally [helper methods](#helper-methods) that can be used to build the output object
 
@@ -51,7 +51,7 @@ yourHandler() {
 
 ## Build Method
 
-The most important part of an output class is an [output template](#output-template) that is returned by a [`build` method](#build-method). This object is then translated into the appropriate platform response.
+The most important part of an output class is an [output template](#output-template) that is returned by a [`build()` method](#build-method). This object is then translated into the appropriate platform response.
 
 ```typescript
 build(): OutputTemplate | OutputTemplate[] {
@@ -61,7 +61,7 @@ build(): OutputTemplate | OutputTemplate[] {
 }
 ```
 
-Usually, you don't do more inside `build` than modifying the output object directly.
+Usually, you don't do more inside `build()` than modifying the output object directly.
 
 There are several ways how you could add further modifications. For example, you can add [helper methods](#helper-methods) like this:
 
@@ -78,7 +78,7 @@ getCarousel() {
 }
 ```
 
-There's also the possibility that there is completely distinct output depending on a few factors. For example, output could differ for voice and text based interfaces. You could modify `build` in a way that it returns different output objects:
+There's also the possibility that there is completely distinct output depending on a few factors. For example, output could differ for voice and text based interfaces. You could modify `build()` in a way that it returns different output objects:
 
 ```typescript
 build(): OutputTemplate | OutputTemplate[] {
@@ -111,7 +111,7 @@ There are two types of properties that can be passed:
 
 ### Reserved Properties
 
-Reserved properties are output elements that can be passed as options. They are automatically added to the output object and allow the `$send` method to override [generic output properties](./output-templates.md#generic-output-elements) in the output template.
+Reserved properties are output elements that can be passed as options. They are automatically added to the output object and allow the `$send()` method to override [generic output properties](./output-templates.md#generic-output-elements) in the output template.
 
 For example, a `message` can be passed right from the handler:
 

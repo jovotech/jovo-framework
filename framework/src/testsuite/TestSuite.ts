@@ -5,7 +5,6 @@ import {
   OutputTemplateConverterStrategyConfig,
   SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
-
 import { existsSync } from 'fs';
 import _cloneDeep from 'lodash.clonedeep';
 import _merge from 'lodash.merge';
@@ -43,13 +42,15 @@ export type PlatformTypes<PLATFORM extends Platform> = PLATFORM extends Platform
 /**
  * Determines whether the provided response type is of type array or not
  */
-export type PlatformResponseType<PLATFORM extends Platform, RESPONSE extends JovoResponse> =
-  PLATFORM['outputTemplateConverterStrategy'] extends SingleResponseOutputTemplateConverterStrategy<
-    RESPONSE,
-    OutputTemplateConverterStrategyConfig
-  >
-    ? RESPONSE
-    : RESPONSE | RESPONSE[];
+export type PlatformResponseType<
+  PLATFORM extends Platform,
+  RESPONSE extends JovoResponse,
+> = PLATFORM['outputTemplateConverterStrategy'] extends SingleResponseOutputTemplateConverterStrategy<
+  RESPONSE,
+  OutputTemplateConverterStrategyConfig
+>
+  ? RESPONSE
+  : RESPONSE | RESPONSE[];
 
 /**
  * Return type of TestSuite.prototype.run().
@@ -258,7 +259,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
           // implement app.middlewareCollection.once() to run handlers once per lifecycle
           return _cloneDeep(app) as App;
         } catch (error) {
-          throw new JovoError({ message: 'Failed to load app', details: error.message });
+          throw new JovoError({ message: `Failed to load app: ${error.message}` });
         }
       }
     }

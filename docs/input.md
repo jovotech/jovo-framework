@@ -2,6 +2,7 @@
 title: 'Input'
 excerpt: 'Learn more about the Jovo Input property, which includes structured user input.'
 ---
+
 # Input
 
 Learn more about the Jovo `$input` property, which includes structured user input.
@@ -40,7 +41,7 @@ This works for [default input types](#default-input-types):
 
 ```typescript
 @Handle({
-  types: 'ERROR',
+  types: ['ERROR'],
 })
 respondToError() {
   // ...
@@ -51,7 +52,7 @@ As well as [custom ones](#custom-input-types):
 
 ```typescript
 @Handle({
-  types: 'Connections.Response',
+  types: ['Connections.Response'],
 })
 onSuccessfulConnection() {
   // ...
@@ -192,7 +193,6 @@ An `ERROR` input happens when the platform throws an error and sends an error re
 }
 ```
 
-
 ### END
 
 An `END` input means that the user (or platform) requested the session to be closed.
@@ -227,7 +227,7 @@ You can map a [handler](./handlers.md) to a type like this:
 
 ```typescript
 @Handle({
-  types: 'Connections.Response',
+  types: ['Connections.Response'],
 })
 onSuccessfulConnection() {
   // ...

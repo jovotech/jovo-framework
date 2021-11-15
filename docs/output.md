@@ -50,13 +50,15 @@ return this.$send('Hello World!');
 If you want to add output elements beyond a message, you can [send an output template](#send-an-output-template):
 
 ```typescript
-return this.$send({ message: 'Hello World!', /* ... */ });
+return this.$send({ message: 'Hello World!' /* ... */ });
 ```
 
 You can also [send an output class](#send-an-output-class):
 
 ```typescript
-return this.$send(SomeOutput, { /* output options */ });
+return this.$send(SomeOutput, {
+  /* output options */
+});
 ```
 
 The `$send()` method comes with additional features like making it possible to [send multiple responses](#send-multiple-responses):
@@ -91,7 +93,7 @@ You can pass a string to the `$send()` method:
 
 ```typescript
 yourHandler() {
-  
+
   // ...
 
   return this.$send('Hello World!');
@@ -102,7 +104,7 @@ This will populate the [`message` output element](https://v4.jovo.tech/docs/outp
 
 ```typescript
 yourHandler() {
-  
+
   // ...
 
   return this.$send({ message: 'Hello World!' });

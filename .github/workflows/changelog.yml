@@ -11,7 +11,7 @@ jobs:
       - uses: hmarr/debug-action@v2
   changelog:
     # This job will only run if a PR has been merged or a tag has been created
-    if: ${{ github.base_ref == 'v4/release' && github.event.pull_request && github.event.pull_request.merged == true }}
+    if: ${{ github.base_ref == 'v4/latest' && github.event.pull_request && github.event.pull_request.merged == true }}
     runs-on: ubuntu-latest
     steps:
       - name: Checking out repository

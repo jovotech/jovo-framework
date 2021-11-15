@@ -15,6 +15,7 @@ You can configure scenes either in the [Actions Console](https://console.actions
 
 Google provides a handful of pre-configured [system scenes](https://developers.google.com/assistant/conversational/scenes#system_scenes) you can use for tasks such as [account linking](https://v4.jovo.tech/marketplace/platform-googleassistant/account-linking). For more specialized tasks, it is possible to define your own [custom scenes](#custom-scenes).
 
+
 In your Jovo app, you can delegate to a scene as well as accept requests from a scene. Learn more in the [communication between Jovo and scenes](#communication-between-jovo-and-scenes) section.
 
 ## Model Configuration
