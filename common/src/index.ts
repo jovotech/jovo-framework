@@ -46,3 +46,5 @@ export type PlainObjectType<T extends UnknownObject> = OmitWhere<
 
 export * from './Input';
 export * from './JovoError';
+export * from './JovoLogger';
+export { ISettingsParam, ILogObject } from 'tslog';

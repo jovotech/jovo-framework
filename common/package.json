@@ -23,7 +23,8 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "ts-toolbelt": "^9.6.0",
+    "ts-toolbelt": "9.5.13",
+    "tslog": "^3.2.2",
     "type-fest": "^2.5.1"
   },
   "devDependencies": {

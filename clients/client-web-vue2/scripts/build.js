@@ -13,6 +13,7 @@ const buildPromises = Object.entries(formatMap).map(([format, name]) => {
     treeShaking: false,
     format,
     globalName: format === 'iife' ? 'JovoWebClientVue' : undefined,
+    external: ['@jovotech/common'],
   });
 });
 
