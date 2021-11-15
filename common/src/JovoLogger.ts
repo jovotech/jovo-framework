@@ -65,10 +65,6 @@ export class JovoLogger extends TsLogger {
         this.style(' ' + error.name + ' ', 'bgRedBright'),
     );
 
-    if (error.code) {
-      noStyleLogger.error('\nCode: ');
-      noStyleLogger.error(error.code);
-    }
     if (error.package) {
       noStyleLogger.error('\nPackage: ');
       noStyleLogger.error(error.package);
