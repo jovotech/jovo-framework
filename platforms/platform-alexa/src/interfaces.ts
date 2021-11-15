@@ -1,5 +1,5 @@
 import { Entity, JovoSession, PartialWhere } from '@jovotech/framework';
-import { ConfirmationStatus, Intent, Resolutions, Slot } from './output';
+import { Intent, Slot } from './output';
 
 export interface Session {
   new: boolean;
