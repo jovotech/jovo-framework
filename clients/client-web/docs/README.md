@@ -299,7 +299,7 @@ The request is based on different [Jovo Input](https://v4.jovo.tech/docs/input) 
 While the client already does the job for you for `AudioRecorder` and `SpeechRecognizer` input, you can also manually send a request based on [Jovo Input](https://v4.jovo.tech/docs/input) to the Jovo app using the `send()` method:
 
 ```typescript
-import { InputType } from '@jovotech/common';
+import { InputType } from '@jovotech/client-web';
 // ...
 
 const response = await client.send({
@@ -311,7 +311,7 @@ const response = await client.send({
 If you want to make modifications before sending a request, you can also use the `createRequest()` method:
 
 ```typescript
-import { InputType } from '@jovotech/common';
+import { InputType } from '@jovotech/client-web';
 // ...
 
 const request = client.createRequest({
