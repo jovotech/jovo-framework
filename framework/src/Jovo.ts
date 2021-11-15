@@ -1,4 +1,4 @@
-import { DeepPartial, PickWhere, UnknownObject } from '@jovotech/common';
+import { DeepPartial, EntityMap, PickWhere, UnknownObject } from '@jovotech/common';
 import { JovoResponse, NormalizedOutputTemplate, OutputTemplate } from '@jovotech/output';
 import _cloneDeep from 'lodash.clonedeep';
 import _merge from 'lodash.merge';
@@ -28,7 +28,7 @@ import {
   StateStackItem,
 } from './index';
 
-import { EntityMap, RequestData } from './interfaces';
+import { RequestData } from './interfaces';
 import { JovoDevice } from './JovoDevice';
 import { JovoHistory, JovoHistoryItem, PersistableHistoryData } from './JovoHistory';
 import { JovoRequest } from './JovoRequest';

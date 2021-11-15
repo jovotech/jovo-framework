@@ -133,8 +133,7 @@ export class FacebookMessengerPlatform extends Platform<
     if (!senderId) {
       // TODO determine if error is good here
       throw new JovoError({
-        message: 'Can not finalize response.',
-        details: 'No sender-id was found.',
+        message: 'Can not finalize response: No sender-id was found.',
         context: {
           request: jovo.$request,
         },
@@ -219,8 +218,7 @@ export class FacebookMessengerPlatform extends Platform<
     } catch (error) {
       if (error.isAxiosError) {
         throw new JovoError({
-          message: error.message,
-          details: (error as AxiosError).response?.data?.error?.message,
+          message: `Request to Facebook API failed: ${error.response?.data?.error?.message}`,
         });
       }
 

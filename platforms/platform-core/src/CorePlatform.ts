@@ -60,7 +60,12 @@ export class CorePlatform<PLATFORM extends string = 'core' | string> extends Pla
     corePlatformApp: Core,
   ): CoreResponse | Promise<CoreResponse> {
     response.platform = this.config.platform;
-    response.context.session.data = corePlatformApp.$session;
+    response.context.session = {
+      ...response.context.session,
+      id: corePlatformApp.$session.id,
+      data: corePlatformApp.$session.data,
+      state: corePlatformApp.$session.state,
+    };
     return response;
   }
 }

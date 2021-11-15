@@ -1,8 +1,7 @@
-import { UnknownObject } from '@jovotech/common';
+import { InputTypeLike, Intent, UnknownObject } from '@jovotech/common';
 import { BaseComponent, ComponentConstructor } from '../BaseComponent';
 import { RegisteredPlatformName } from '../decorators/Platforms';
-import { Intent, JovoConditionFunction } from '../interfaces';
-import { InputTypeLike } from '../JovoInput';
+import { JovoConditionFunction } from '../interfaces';
 import { HandlerOptionMetadata } from './HandlerOptionMetadata';
 import { MethodDecoratorMetadata } from './MethodDecoratorMetadata';
 

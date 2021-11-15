@@ -1,7 +1,12 @@
-import { UnknownObject } from '@jovotech/common';
-import { EntityMap, JovoRequest, JovoSession } from '..';
-import { Intent } from '../interfaces';
-import { AudioInput, InputType, InputTypeLike } from '../JovoInput';
+import {
+  AudioInput,
+  EntityMap,
+  InputType,
+  InputTypeLike,
+  Intent,
+  UnknownObject,
+} from '@jovotech/common';
+import { JovoRequest, JovoSession } from '..';
 
 export class TestRequest extends JovoRequest {
   isTestRequest = true;
