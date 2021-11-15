@@ -1,6 +1,6 @@
 const esbuild = require('esbuild');
 
-const formatMap = { iife: 'umd', cjs: 'common', esm: 'esm' };
+const formatMap = { iife: 'umd', cjs: 'cjs', esm: 'esm' };
 
 const buildPromises = Object.entries(formatMap).map(([format, name]) => {
   return esbuild.build({
@@ -8,9 +8,12 @@ const buildPromises = Object.entries(formatMap).map(([format, name]) => {
     bundle: true,
     outfile: `dist/JovoWebClientVue.${name}.js`,
     minify: true,
+    keepNames: true,
     sourcemap: true,
+    treeShaking: false,
     format,
     globalName: format === 'iife' ? 'JovoWebClientVue' : undefined,
+    external: ['@jovotech/common'],
   });
 });
 

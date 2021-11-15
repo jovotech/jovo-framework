@@ -1,7 +1,7 @@
 import { AnyObject, OmitIndex } from '@jovotech/common';
 import i18next, { InitOptions, Resource, TFunctionResult, TOptionsBase } from 'i18next';
-import _merge from 'lodash.merge';
 import type { A, F, O, S, U } from 'ts-toolbelt';
+import { Plugin, PluginConfig } from './Plugin';
 
 // Make an explicit string literal out of a passed string. If T equals string return never
 export type StringLiteral<T> = T extends string ? (string extends T ? never : T) : never;
@@ -55,9 +55,9 @@ export type I18NextValueAt<
 > = RESULT extends undefined ? string : RESULT;
 
 // Custom init-options for i18next in case some custom properties are used in the future.
-export interface I18NextOptions extends InitOptions {}
+export interface I18NextConfig extends InitOptions, PluginConfig {}
 export type I18NextTFunctionResult = TFunctionResult;
-export type I18NextTFunctionOptions = TOptionsBase;
+export type I18NextTFunctionOptions = TOptionsBase & { platform?: string };
 
 // Custom t-options for i18next, needed in order to interfere passed language and namespace.
 export interface I18NextTOptions<
@@ -74,17 +74,13 @@ export interface I18NextTOptions<
     | Array<NAMESPACE | I18NextResourcesNamespaceKeysOfLanguage<LANGUAGE>>,
     string | string[]
   >;
+  platform?: string;
 }
 
-export class I18Next {
+export class I18Next extends Plugin<I18NextConfig> {
   readonly i18n = i18next;
-  readonly options: I18NextOptions;
 
-  constructor(options: I18NextOptions = {}) {
-    this.options = _merge(this.getDefaultOptions(), options);
-  }
-
-  getDefaultOptions(): I18NextOptions {
+  getDefaultConfig(): I18NextConfig {
     return {
       interpolation: {
         escapeValue: false,
@@ -94,7 +90,7 @@ export class I18Next {
   }
 
   async initialize(): Promise<void> {
-    await this.i18n.init(this.options);
+    await this.i18n.init(this.config);
   }
 
   t<
@@ -112,6 +108,22 @@ export class I18Next {
   ): I18NextValueAt<PATH, LANGUAGE, NAMESPACE>;
   t<FORCED_RESULT>(path: string | string[], options?: I18NextTFunctionOptions): FORCED_RESULT;
   t(path: string | string[], options?: I18NextTFunctionOptions): I18NextTFunctionResult {
+    if (options?.platform) {
+      if (Array.isArray(path)) {
+        for (const p of path) {
+          const platformPath = `${options.platform}:translation:${p}`;
+          if (this.i18n.exists(platformPath, options)) {
+            return this.i18n.t(platformPath, options);
+          }
+        }
+      } else {
+        const platformPath = `${options.platform}:translation:${path}`;
+        if (this.i18n.exists(platformPath, options)) {
+          return this.i18n.t(platformPath, options);
+        }
+      }
+    }
+
     return this.i18n.t(path, options);
   }
 }

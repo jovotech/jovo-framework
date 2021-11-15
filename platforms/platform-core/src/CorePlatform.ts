@@ -83,6 +83,7 @@ export class CorePlatform<PLATFORM extends string = 'core' | string> extends Pla
     return obj[className];
   }
 
+  readonly id: string = 'core';
   readonly outputTemplateConverterStrategy = new CoreOutputTemplateConverterStrategy();
   readonly requestClass = CoreRequest;
   readonly jovoClass = Core;

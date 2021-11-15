@@ -1,10 +1,11 @@
-import { ArrayElement } from '@jovotech/common';
+import { ArrayElement, ISettingsParam } from '@jovotech/common';
 import _merge from 'lodash.merge';
 import {
   ComponentTree,
-  I18NextOptions,
+  I18NextConfig,
   IntentMap,
   Jovo,
+  Logger,
   Middleware,
   MiddlewareFunction,
   Plugin,
@@ -53,9 +54,13 @@ export interface AppRoutingConfig {
   intentsToSkipUnhandled?: string[];
 }
 
+export interface AppLoggingConfig extends BasicLoggingConfig {
+  tslog?: ISettingsParam;
+}
+
 export interface AppConfig extends ExtensibleConfig {
-  i18n?: I18NextOptions;
-  logging?: BasicLoggingConfig | boolean;
+  i18n?: I18NextConfig;
+  logging?: AppLoggingConfig | boolean;
   routing?: AppRoutingConfig;
 }
 
@@ -75,13 +80,19 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
     if (typeof this.config.logging === 'boolean' && this.config.logging) {
       this.use(new BasicLogging({ request: true, response: true }));
     } else if (typeof this.config.logging === 'object') {
+      if (this.config.logging.tslog) {
+        Logger.setSettings(_merge(Logger.settings, this.config.logging.tslog));
+      }
       this.use(new BasicLogging(this.config.logging));
     }
 
+    this.onError((error) => {
+      Logger.error(error);
+    });
     this.use(new RouterPlugin(), new HandlerPlugin(), new OutputPlugin());
 
     this.componentTree = new ComponentTree(...(config?.components || []));
-    this.i18n = new I18Next(this.config.i18n || {});
+    this.i18n = new I18Next(this.config.i18n);
   }
 
   get isInitialized(): boolean {
