@@ -2,7 +2,7 @@ import { ArrayElement } from '@jovotech/common';
 import _merge from 'lodash.merge';
 import {
   ComponentTree,
-  I18NextOptions,
+  I18NextConfig,
   IntentMap,
   Jovo,
   Middleware,
@@ -22,6 +22,21 @@ import { HandlerPlugin } from './plugins/HandlerPlugin';
 import { OutputPlugin } from './plugins/OutputPlugin';
 import { RouterPlugin } from './plugins/RouterPlugin';
 import { Server } from './Server';
+
+export interface AppRoutingConfig {
+  intentMap?: IntentMap;
+  intentsToSkipUnhandled?: string[];
+}
+
+export interface AppConfig extends ExtensibleConfig {
+  i18n?: I18NextConfig;
+  logging?: BasicLoggingConfig | boolean;
+  routing?: AppRoutingConfig;
+}
+
+export type AppInitConfig = ExtensibleInitConfig<AppConfig> & {
+  components?: Array<ComponentConstructor | ComponentDeclaration>;
+};
 
 export type Usable = Plugin | ComponentConstructor | ComponentDeclaration;
 
@@ -53,16 +68,6 @@ export interface AppRoutingConfig {
   intentsToSkipUnhandled?: string[];
 }
 
-export interface AppConfig extends ExtensibleConfig {
-  i18n?: I18NextOptions;
-  logging?: BasicLoggingConfig | boolean;
-  routing?: AppRoutingConfig;
-}
-
-export type AppInitConfig = ExtensibleInitConfig<AppConfig> & {
-  components?: Array<ComponentConstructor | ComponentDeclaration>;
-};
-
 export class App extends Extensible<AppConfig, AppMiddlewares> {
   readonly componentTree: ComponentTree;
   readonly i18n: I18Next;
@@ -81,7 +86,7 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
     this.use(new RouterPlugin(), new HandlerPlugin(), new OutputPlugin());
 
     this.componentTree = new ComponentTree(...(config?.components || []));
-    this.i18n = new I18Next(this.config.i18n || {});
+    this.i18n = new I18Next(this.config.i18n);
   }
 
   get isInitialized(): boolean {
