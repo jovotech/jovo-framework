@@ -9,7 +9,7 @@ const tslogMockPlugin = {
     let path = require('path');
 
     // Intercept import paths called "tslog" and "util" so esbuild doesn't attempt
-    // to map them to a file system location. Tag them with the "tslog-ns" or "util"
+    // to map them to a file system location. Tag them with the "tslog-ns" or "util-ns"
     // namespace to reserve them for this plugin.
     build.onResolve({ filter: /^tslog$/ }, (args) => ({
       path: args.path,
