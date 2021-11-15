@@ -5,17 +5,19 @@ export interface MessengerBotEntry {
    * @link FacebookMessengerRequest#messaging
    */
   messaging: [MessagingData];
+  $type?: string;
 }
 
 export interface MessagingData {
-  sender: IdentityData;
-  recipient: IdentityData;
+  sender: RequestIdentityData;
+  recipient: RequestIdentityData;
   timestamp: number;
   message?: MessageData;
   postback?: PostbackData;
 }
 
-export interface IdentityData {
+// TODO: Use the same type
+export interface RequestIdentityData {
   id: string;
 }
 
@@ -36,3 +38,5 @@ export interface SendMessageResult {
   recipient_id: string;
   message_id: string;
 }
+
+export type SenderAction = 'mark_seen' | 'typing_on' | 'typing_off';

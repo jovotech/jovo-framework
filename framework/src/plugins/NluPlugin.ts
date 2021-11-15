@@ -1,8 +1,7 @@
+import { InputType, InputTypeLike, NluData } from '@jovotech/common';
 import { InvalidParentError } from '../errors/InvalidParentError';
 import { Extensible } from '../Extensible';
-import { NluData } from '../interfaces';
 import { Jovo } from '../Jovo';
-import { InputType, InputTypeLike } from '../JovoInput';
 import { Platform } from '../Platform';
 import { Plugin, PluginConfig } from '../Plugin';
 
@@ -29,7 +28,7 @@ export abstract class NluPlugin<
 
   mount(parent: Extensible): Promise<void> | void {
     if (!(parent instanceof Platform)) {
-      throw new InvalidParentError(this.constructor.name, 'Platform');
+      throw new InvalidParentError(this.name, 'Platform');
     }
     parent.middlewareCollection.use('interpretation.nlu', (jovo) => {
       return this.nlu(jovo);

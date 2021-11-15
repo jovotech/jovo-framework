@@ -20,9 +20,11 @@ declare module '@jovotech/framework/dist/types/Jovo' {
 registerPlatformSpecificJovoReference('$facebookMessenger', FacebookMessenger);
 
 export * from './FacebookMessenger';
+export * from './FacebookMessengerDevice';
 export * from './FacebookMessengerPlatform';
 export * from './FacebookMessengerRequest';
+export * from './FacebookMessengerResponse';
 export * from './FacebookMessengerUser';
-export type { FacebookMessengerResponse } from '@jovotech/output-facebookmessenger';
 export * from './interfaces';
 export * from './constants';
+export * from './output';

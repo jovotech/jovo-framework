@@ -2,6 +2,7 @@
 title: 'NLP.js NLU Integration'
 excerpt: 'Turn raw text into structured meaning with the Jovo Framework integration for the open source natural language understanding service NLP.js.'
 ---
+
 # NLP.js NLU Integration
 
 Turn raw text into structured meaning with the Jovo Framework integration for the open source natural language understanding service NLP.js.
@@ -91,7 +92,6 @@ Each key (in the above case `en`) represents a locale that can be found in your 
 
 You can find more information about [supported languages](https://github.com/axa-group/nlp.js/blob/master/docs/v4/language-support.md) and [available packages](https://github.com/axa-group/nlp.js/tree/master/packages) in the official NLP.js docs.
 
-
 ## Entities
 
 You can access NLP.js entities by using the `$entities` property. You can learn more in the [Jovo Model](https://v4.jovo.tech/docs/models) and the [`$entities` documentation](https://v4.jovo.tech/docs/entities).
@@ -106,7 +106,6 @@ The NLP.js entity values are translated into the following Jovo entity propertie
   native: { /* raw API response for this entity */ }
 }
 ```
-
 
 ## Jovo Model
 

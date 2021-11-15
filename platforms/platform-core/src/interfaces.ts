@@ -12,24 +12,22 @@ export interface RequestAudioData {
   data?: Float32Array;
 }
 
-export interface Session {
-  id: string;
-  new: boolean;
-  data?: JovoSession;
-  lastUpdatedAt?: string; // ISO 8601 YYYY-MM-DDTHH:mm:ss.sssZ
-}
+export interface CoreRequestSession
+  extends Pick<JovoSession, 'id' | 'data' | 'state' | 'isNew' | 'updatedAt'>,
+    UnknownObject {}
 
-export interface User {
+export interface CoreRequestUser {
   id: string;
   data?: UnknownObject;
 }
 
 export interface Device {
+  id: string;
   capabilities: Array<Capability | string>;
 }
 
-export interface Context {
+export interface CoreRequestContext {
   device: Device;
-  session: Session;
-  user: User;
+  session: CoreRequestSession;
+  user: CoreRequestUser;
 }

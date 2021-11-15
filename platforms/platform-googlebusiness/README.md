@@ -7,7 +7,6 @@ excerpt: 'The Google Business Messages platform integration allows you to build 
 
 The Google Business Messages [platform integration](https://v4.jovo.tech/docs/platforms) allows you to build custom Google Business bots using Jovo.
 
-
 ## Getting Started
 
 You can install the plugin like this:
@@ -43,8 +42,12 @@ import { GoogleBusinessPlatform } from '@jovotech/platform-googlebusiness';
 const app = new App({
   plugins: [
     new GoogleBusinessPlatform({
-      plugins: [ /* ... */ ],
-      session: { /* ... */ },
+      plugins: [
+        /* ... */
+      ],
+      session: {
+        /* ... */
+      },
     }),
     // ...
   ],
@@ -55,7 +58,6 @@ Options include:
 
 - `plugins`: For example, you need to ddd an [NLU integration](#nlu-integration) here.
 - `session`: Session specific config. Take a look at [session data](#session-data) for more information.
-
 
 ### NLU Integration
 
@@ -85,7 +87,7 @@ Google Business does not offer session storage, which is needed for features lik
 
 To make Google Business bots work with these features, Jovo automatically enables the storage of session data to the active [database integration](https://v4.jovo.tech/docs/databases). Under the hood, it adds `session` to the [`storedElements` config](https://v4.jovo.tech/docs/databases#storedelements).
 
-Since Google Business does not have the concept of sessions, we need to define after which time a request should be seen as the start of the new session. The default is *15 minutes* and can be modified either in the [`storedElements` config](https://v4.jovo.tech/docs/databases#storedelements) (works across platforms) or in the Google Business config:
+Since Google Business does not have the concept of sessions, we need to define after which time a request should be seen as the start of the new session. The default is _15 minutes_ and can be modified either in the [`storedElements` config](https://v4.jovo.tech/docs/databases#storedelements) (works across platforms) or in the Google Business config:
 
 ```typescript
 new GoogleBusinessPlatform({
@@ -96,23 +98,21 @@ new GoogleBusinessPlatform({
 });
 ```
 
-
 ## Platform-Specific Features
 
 You can access the Google Business specific object like this:
 
 ```typescript
-this.$googleBusiness
+this.$googleBusiness;
 ```
 
 You can also use this object to see if the request is coming from Google Business (or a different platform):
 
 ```typescript
-if(this.$googleBusiness) {
+if (this.$googleBusiness) {
   // ...
 }
 ```
-
 
 ### Output
 
@@ -146,4 +146,3 @@ You can add response objects that should show up exactly like this in the Google
   }
 }
 ```
-

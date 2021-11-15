@@ -1,3 +1,4 @@
+import { APIGatewayEvent, Callback, Context, Lambda } from '@jovotech/server-lambda';
 import { app } from './app';
 
 /*
@@ -10,6 +11,7 @@ import { app } from './app';
 |
 */
 
-export const handler = async (event: any, context: any, callback: Function) => {
-  await app.handle(event);
+export const handler = async (event: APIGatewayEvent, context: Context, callback: Callback) => {
+  await app.initialize();
+  await app.handle(new Lambda(event, context, callback));
 };

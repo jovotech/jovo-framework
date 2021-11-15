@@ -1,4 +1,4 @@
-import { DeepPartial, PickWhere, UnknownObject } from '@jovotech/common';
+import { DeepPartial, EntityMap, PickWhere, UnknownObject } from '@jovotech/common';
 import { JovoResponse, NormalizedOutputTemplate, OutputTemplate } from '@jovotech/output';
 import _cloneDeep from 'lodash.clonedeep';
 import _merge from 'lodash.merge';
@@ -15,7 +15,10 @@ import {
   I18NextAutoPath,
   I18NextResourcesLanguageKeys,
   I18NextResourcesNamespaceKeysOfLanguage,
+  I18NextTFunctionOptions,
+  I18NextTFunctionResult,
   I18NextTOptions,
+  I18NextValueAt,
   JovoInput,
   MetadataStorage,
   OutputConstructor,
@@ -25,7 +28,7 @@ import {
   StateStackItem,
 } from './index';
 
-import { EntityMap, RequestData } from './interfaces';
+import { RequestData } from './interfaces';
 import { JovoDevice } from './JovoDevice';
 import { JovoHistory, JovoHistoryItem, PersistableHistoryData } from './JovoHistory';
 import { JovoRequest } from './JovoRequest';
@@ -216,14 +219,10 @@ export abstract class Jovo<
       | PATH
       | Array<I18NextAutoPath<PATH, LANGUAGE, NAMESPACE> | PATH>,
     options?: I18NextTOptions<LANGUAGE, NAMESPACE>,
-  ): string {
-    if (!options) {
-      options = {};
-    }
-    if (!options.lng) {
-      options.lng = this.$request.getLocale() as LANGUAGE;
-    }
-    return this.$app.i18n.t<PATH, LANGUAGE, NAMESPACE>(path, options);
+  ): I18NextValueAt<PATH, LANGUAGE, NAMESPACE>;
+  $t<FORCED_RESULT>(path: string | string[], options?: I18NextTFunctionOptions): FORCED_RESULT;
+  $t(path: string | string[], options?: I18NextTFunctionOptions): I18NextTFunctionResult {
+    return this.$app.i18n.t(path, options);
   }
 
   async $send(outputTemplateOrMessage: OutputTemplate | OutputTemplate[] | string): Promise<void>;

@@ -1,29 +1,19 @@
-import { Constructor, JovoError, OmitWhere } from '@jovotech/common';
+import { Constructor, Input, InputType, JovoError, OmitWhere } from '@jovotech/common';
 import {
   JovoResponse,
   OutputTemplate,
   OutputTemplateConverterStrategyConfig,
   SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
-
 import { existsSync } from 'fs';
 import _cloneDeep from 'lodash.clonedeep';
 import _merge from 'lodash.merge';
 import { join as joinPaths } from 'path';
 import { PartialDeep } from 'type-fest';
 import { v4 as uuidv4 } from 'uuid';
-import {
-  App,
-  Jovo,
-  JovoRequest,
-  JovoSession,
-  Platform,
-  Plugin,
-  PluginConfig,
-  RequestBuilder,
-} from '..';
+import { App, Jovo, JovoRequest, JovoSession, Platform, Plugin, PluginConfig, RequestBuilder } from '..';
 import { HandleRequest } from '../HandleRequest';
-import { InputType, JovoInput, JovoInputObject } from '../JovoInput';
+import { JovoInput } from '../JovoInput';
 import { TestPlatform } from './TestPlatform';
 import { TestServer } from './TestServer';
 
@@ -43,13 +33,15 @@ export type PlatformTypes<PLATFORM extends Platform> = PLATFORM extends Platform
 /**
  * Determines whether the provided response type is of type array or not
  */
-export type PlatformResponseType<PLATFORM extends Platform, RESPONSE extends JovoResponse> =
-  PLATFORM['outputTemplateConverterStrategy'] extends SingleResponseOutputTemplateConverterStrategy<
-    RESPONSE,
-    OutputTemplateConverterStrategyConfig
-  >
-    ? RESPONSE
-    : RESPONSE | RESPONSE[];
+export type PlatformResponseType<
+  PLATFORM extends Platform,
+  RESPONSE extends JovoResponse,
+> = PLATFORM['outputTemplateConverterStrategy'] extends SingleResponseOutputTemplateConverterStrategy<
+  RESPONSE,
+  OutputTemplateConverterStrategyConfig
+>
+  ? RESPONSE
+  : RESPONSE | RESPONSE[];
 
 /**
  * Return type of TestSuite.prototype.run().
@@ -77,7 +69,7 @@ export type JovoRequestLike<PLATFORM extends Platform> =
   | JovoRequestObject<PLATFORM>
   | JovoRequestObject<PLATFORM>[];
 
-export type JovoInputLike = JovoInput | JovoInput[] | JovoInputObject | JovoInputObject[];
+export type JovoInputLike = JovoInput | JovoInput[] | Input | Input[];
 
 export type RequestOrInputLike<PLATFORM extends Platform> =
   | JovoRequestLike<PLATFORM>
@@ -222,6 +214,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
 
     if (!this.isRequest(this.requestOrInput)) {
       jovo.$input = this.requestOrInput;
+      jovo.$entities = jovo.getEntityMap();
     }
     _merge(jovo.$user.data, this.$user.data);
     _merge(jovo.$session, this.$session);
@@ -257,7 +250,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
           // implement app.middlewareCollection.once() to run handlers once per lifecycle
           return _cloneDeep(app) as App;
         } catch (error) {
-          throw new JovoError({ message: 'Failed to load app', details: error.message });
+          throw new JovoError({ message: `Failed to load app: ${error.message}` });
         }
       }
     }

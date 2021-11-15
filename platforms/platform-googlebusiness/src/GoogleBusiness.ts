@@ -1,11 +1,11 @@
 import { AsyncJovo, JovoError } from '@jovotech/framework';
-import { GoogleBusinessResponse } from '@jovotech/output-googlebusiness';
 import type { GaxiosResponse } from 'gaxios';
 import { JWTInput } from 'google-auth-library';
 import { GOOGLE_BUSINESS_API_BASE_URL, LATEST_GOOGLE_BUSINESS_API_VERSION } from './constants';
 import { GoogleBusinessDevice } from './GoogleBusinessDevice';
 import { GoogleBusinessPlatform } from './GoogleBusinessPlatform';
 import { GoogleBusinessRequest } from './GoogleBusinessRequest';
+import { GoogleBusinessResponse } from './GoogleBusinessResponse';
 import { GoogleBusinessUser } from './GoogleBusinessUser';
 
 export class GoogleBusiness extends AsyncJovo<
@@ -21,7 +21,7 @@ export class GoogleBusiness extends AsyncJovo<
   }
 
   get serviceAccount(): JWTInput | undefined {
-    return this.$handleRequest.plugins?.GoogleBusinessPlatform?.config?.serviceAccount;
+    return this.$config.plugin?.GoogleBusinessPlatform?.serviceAccount;
   }
 
   protected sendResponse(

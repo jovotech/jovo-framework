@@ -2,6 +2,7 @@
 title: 'Properties'
 excerpt: 'Learn more about Jovo properties, which are reserved variables that part of the Jovo object.'
 ---
+
 # Jovo Properties
 
 Jovo properties are reserved variables that part of the Jovo `this` object.
@@ -13,10 +14,10 @@ The Jovo context object (also referenced as `this`) includes many properties tha
 In the `this` context, you can access them like this:
 
 ```typescript
-this.$propertyName
+this.$propertyName;
 
 // Example: $request
-this.$request
+this.$request;
 ```
 
 The properties can be grouped into [RIDR](#ridr-properties), [input](#input), and [context properties](#context-properties).
@@ -32,7 +33,7 @@ Each of the steps result in a Jovo property: [`$request`](#request), [`$input`](
 The `$request` property contains all information about a request. It is the result of the first step of the [RIDR lifecycle](./ridr-lifecycle.md).
 
 ```typescript
-this.$request
+this.$request;
 ```
 
 ### $input
@@ -40,7 +41,7 @@ this.$request
 The `$input` property contains structured data that is derived from a request. For example, speech recognition (ASR) and natural language understanding (NLU) data. It is the result of the second step of the [RIDR lifecycle](./ridr-lifecycle.md).
 
 ```typescript
-this.$input
+this.$input;
 ```
 
 [Learn more about the `$input` property here](./input.md).
@@ -50,18 +51,17 @@ this.$input
 The `$output` array contains one or more structured output templates that are later turned into one or more native platform responses. It is the result of executing a [handler](./handlers.md) and the third step of the [RIDR lifecycle](./ridr-lifecycle.md).
 
 ```typescript
-this.$output
+this.$output;
 ```
 
 [Learn more about the `$output` array here](./output.md).
-
 
 ### $response
 
 The `$response` property contains the native response that gets sent back to the platform. It is the result of the fourth step of the [RIDR lifecycle](./ridr-lifecycle.md).
 
 ```typescript
-this.$response
+this.$response;
 ```
 
 ## Input Properties
@@ -75,7 +75,7 @@ The properties include [`$entities`](#entities) and [`$route`](#route).
 The `$entities` property contains entities as part of the [structured input](#input).
 
 ```typescript
-this.$entities
+this.$entities;
 ```
 
 ### $route
@@ -83,7 +83,7 @@ this.$entities
 The `$route` property is the result of the [routing process](./routing.md).
 
 ```typescript
-this.$route
+this.$route;
 ```
 
 [Learn more about routing here](./routing.md).
@@ -99,7 +99,7 @@ The properties include [`$data`](#data), [`$session`](#session), [`$user`](#user
 The `$data` property allows you to store data for the current request.
 
 ```typescript
-this.$data
+this.$data;
 ```
 
 [Learn more about request data here](./data.md#request-data).
@@ -109,7 +109,7 @@ this.$data
 The `$session` property contains data and features about the current session.
 
 ```typescript
-this.$session
+this.$session;
 ```
 
 One of the most used features of `$session` is to write and access session data:
@@ -125,7 +125,7 @@ this.$session.data.key = value;
 The `$state` property is the state stack that gets built as part of the [routing and state management](./routing.md).
 
 ```typescript
-this.$state
+this.$state;
 ```
 
 [Learn more about the `$state` stack here](./state-stack.md).
@@ -135,7 +135,7 @@ this.$state
 The `$user` property contains data and features about the specific user interacting with the app.
 
 ```typescript
-this.$user
+this.$user;
 ```
 
 One of the most used features of `$user` is to write and access data that is persisted in a user database:
@@ -151,20 +151,28 @@ this.$user.data.key = value;
 The `$device` property contains data and features about the specific device the user is interacting with.
 
 ```typescript
-this.$device
+this.$device;
 ```
 
 [Learn more about the `$device` property here](./device.md).
 
-
 ### $history
 
-The `$history` property contains data and features 
+
+The `$history` property contains data about previous user interactions.
 
 ```typescript
-this.$history
+this.$history;
 ```
 
 [Learn more about the `$history` property here](./data.md#history).
 
+### $server
 
+The `$server` property contains data and features about the server requests and responses.
+
+```typescript
+this.$server;
+```
+
+[Learn more about the `$server` property here](./server.md).
