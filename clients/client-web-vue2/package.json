@@ -15,7 +15,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsc --emitDeclarationOnly && node scripts/build.js",
-    "start:dev": "esbuild src/index.ts --bundle --servedir=demo --outdir=demo/js --global-name=JovoWebClientVue",
+    "start:dev": "esbuild src/index.ts --bundle --servedir=demo --outdir=demo/js --global-name=JovoWebClientVue --external:@jovotech/common",
     "prettier": "prettier -w -l src test",
     "eslint": "eslint src test --fix --ext .ts",
     "rimraf": "rimraf dist",

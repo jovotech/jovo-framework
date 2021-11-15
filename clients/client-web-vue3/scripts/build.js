@@ -11,6 +11,7 @@ const buildPromises = Object.entries(formatMap).map(([format, name]) => {
     sourcemap: true,
     format,
     globalName: format === 'iife' ? 'JovoWebClientVue' : undefined,
+    external: ['@jovotech/common'],
   });
 });
 
