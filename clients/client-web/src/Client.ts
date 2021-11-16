@@ -265,6 +265,7 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
       'version' in inputOrRequest && inputOrRequest.version
         ? inputOrRequest
         : this.createRequest(inputOrRequest as Input);
+    this.emit(ClientEvent.Request, request);
     const response = await this.networkTransportStrategy.send(request);
     this.emit(ClientEvent.Response, response);
     await this.handleResponse(response);
