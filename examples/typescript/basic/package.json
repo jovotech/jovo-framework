@@ -30,7 +30,7 @@
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
     "bestzip": "^2.1.7",
-    "esbuild": "^0.12.5",
+    "esbuild": "^0.13.8",
     "eslint": "^7.17.0",
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.1",
