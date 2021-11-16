@@ -1,17 +1,29 @@
 ---
 title: 'Installation'
-excerpt: 'Learn more about how to install Jovo, an open source framework for voice and chat apps.'
+excerpt: 'Learn how to install Jovo, the open source framework for voice and chat apps.'
 ---
 
 # Installation
 
-Jovo is an open-source framework based on [Typescript](https://www.typescriptlang.org/) which can be used with [Node.js](https://nodejs.org/). If you run into any problems while installing it, please let us know [in the Jovo forum](https://community.jovo.tech/), [create an issue on GitHub](https://github.com/jovotech/jovo-framework/issues), or [join our Developer Slack community](https://www.jovo.tech/slack).
+Learn how to install Jovo, the open source framework for voice and chat apps.
 
-Please note that this `v4` release is still experimental.
+## Introduction
 
-## Quickstart Guide
+Jovo is an open-source framework based on [TypeScript](https://www.typescriptlang.org/) which can be used with both TypeScript and JavaScript. If you run into any problems while installing it, please let us know [in the Jovo forum](https://community.jovo.tech/) or [create an issue on GitHub](https://github.com/jovotech/jovo-framework/issues).
 
-### Install the CLI
+Before getting started, make sure you have the following installed on your computer or development environment:
+
+- [Node.js](https://nodejs.org/en/download/) version `12.x` or later
+- [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) (node package manager)
+
+There are two ways how you can install Jovo:
+
+- [Install the Jovo CLI](#install-the-cli) (recommended way in our [getting started guide](https://v4.jovo.tech/docs/getting-started))
+- [Clone a sample app](#clone-a-sample-app)
+
+If you're looking to migrate to Jovo `v4` from a `v3` project, take a look at our [migration guide](./migration-from-v3.md).
+
+## Install the CLI
 
 You can install the new Jovo CLI like this:
 
@@ -22,14 +34,12 @@ $ npm install -g @jovotech/cli
 After successful installation, you should be able to see the Jovo CLI menu by typing the following into your command line:
 
 ```sh
-$ jovov4 -v
+$ jovov4
 ```
-
-**A note on versions:** For Jovo `v4`, we're moving to [organization scoped packages](https://docs.npmjs.com/creating-and-publishing-an-organization-scoped-package). Instead of e.g. `jovo-cli`, you are now installing `@jovotech/cli`. This is especially helpful for the beta phase: You will still be able to use the `jovo-cli` package with the CLI name `jovo` in parallel with the `@jovotech/cli` package and the CLI name `jovov4`.
 
 ### Create a new Project
 
-After installing the Jovo CLI, you can install the template (which can be found in [this repository](https://github.com/jovotech/jovo-v4-template)) using the `new` command:
+After installing the Jovo CLI, you can install the template ([TypeScript](https://github.com/jovotech/jovo-v4-template) or [JavaScript](https://github.com/jovotech/jovo-v4-template-js)) using the [`new` command](https://v4.jovo.tech/docs/new-command):
 
 ```sh
 $ jovov4 new <directory>
@@ -45,10 +55,31 @@ Change your working directory into your newly created project directory and run 
 # Change working directory to your previously specified directory
 $ cd <directory>
 
-# Run voice app, optionally with a --watch flag to restart on code changes.
-$ jovov4 run [-w]
+# Run the local development server
+$ jovov4 run
 ```
 
-You can now open the Jovo Debugger with the `.` key.
+You can now open the [Jovo Debugger](./debugger.md) with the `.` key.
 
-**Note:** The v4 Debugger can be reached using `webhookv4.jovo.cloud` instead of `webhook.jovo.cloud`.
+## Clone a Sample App
+
+You can find a sample project for a Jovo app on GitHub:
+
+- [TypeScript version](https://github.com/jovotech/jovo-v4-template)
+- [JavaScript version](https://github.com/jovotech/jovo-v4-template-js)
+
+You can clone it like this:
+
+```sh
+# TypeScript version
+$ git clone https://github.com/jovotech/jovo-v4-template.git
+
+# JavaScript version
+$ git clone https://github.com/jovotech/jovo-v4-template-js.git
+```
+
+Then go into the directory and install the dependencies:
+
+```sh
+$ npm install
+```
