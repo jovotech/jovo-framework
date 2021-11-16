@@ -52,6 +52,12 @@ export class CorePlatform<PLATFORM extends string = 'core' | string> extends Pla
      }
    }
 
+   declare module '@jovotech/framework/dist/types/index' {
+      interface NormalizedOutputTemplatePlatforms {
+        web?: NormalizedCoreOutputTemplate;
+      }
+   }
+
    // create the class
    const WebPlatform = CorePlatform.createCustomPlatform('WebPlatform', 'web');
    // instantiate the class
