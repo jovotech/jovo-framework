@@ -90,7 +90,7 @@ export class OutputTemplateConverter<
       : this.strategy.config.validation;
   }
 
-  private async validate<T = any>(
+  private async validate<T = unknown>(
     objOrArray: T | T[],
     targetClass: Constructor<T>,
   ): Promise<ValidationError[]> {

@@ -1,4 +1,4 @@
-import { Constructor, JovoError, OmitWhere } from '@jovotech/common';
+import { Constructor, Input, InputType, JovoError, OmitWhere } from '@jovotech/common';
 import {
   JovoResponse,
   OutputTemplate,
@@ -11,18 +11,9 @@ import _merge from 'lodash.merge';
 import { join as joinPaths } from 'path';
 import { PartialDeep } from 'type-fest';
 import { v4 as uuidv4 } from 'uuid';
-import {
-  App,
-  Jovo,
-  JovoRequest,
-  JovoSession,
-  Platform,
-  Plugin,
-  PluginConfig,
-  RequestBuilder,
-} from '..';
+import { App, Jovo, JovoRequest, JovoSession, Platform, Plugin, PluginConfig, RequestBuilder } from '..';
 import { HandleRequest } from '../HandleRequest';
-import { InputType, JovoInput, JovoInputObject } from '../JovoInput';
+import { JovoInput } from '../JovoInput';
 import { TestPlatform } from './TestPlatform';
 import { TestServer } from './TestServer';
 
@@ -78,7 +69,7 @@ export type JovoRequestLike<PLATFORM extends Platform> =
   | JovoRequestObject<PLATFORM>
   | JovoRequestObject<PLATFORM>[];
 
-export type JovoInputLike = JovoInput | JovoInput[] | JovoInputObject | JovoInputObject[];
+export type JovoInputLike = JovoInput | JovoInput[] | Input | Input[];
 
 export type RequestOrInputLike<PLATFORM extends Platform> =
   | JovoRequestLike<PLATFORM>
@@ -259,7 +250,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
           // implement app.middlewareCollection.once() to run handlers once per lifecycle
           return _cloneDeep(app) as App;
         } catch (error) {
-          throw new JovoError({ message: 'Failed to load app', details: (error as Error).message });
+          throw new JovoError({ message: `Failed to load app: ${error.message}` });
         }
       }
     }

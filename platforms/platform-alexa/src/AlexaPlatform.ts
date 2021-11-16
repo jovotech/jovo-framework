@@ -23,13 +23,14 @@ export class AlexaPlatform extends Platform<
   AlexaPlatform,
   AlexaConfig
 > {
-  outputTemplateConverterStrategy: AlexaOutputTemplateConverterStrategy =
+  readonly id: string = 'alexa';
+  readonly outputTemplateConverterStrategy: AlexaOutputTemplateConverterStrategy =
     new AlexaOutputTemplateConverterStrategy();
-  requestClass = AlexaRequest;
-  jovoClass = Alexa;
-  userClass = AlexaUser;
-  deviceClass = AlexaDevice;
-  requestBuilder = AlexaRequestBuilder;
+  readonly requestClass = AlexaRequest;
+  readonly jovoClass = Alexa;
+  readonly userClass = AlexaUser;
+  readonly deviceClass = AlexaDevice;
+  readonly requestBuilder = AlexaRequestBuilder;
 
   getDefaultConfig(): AlexaConfig {
     return {
