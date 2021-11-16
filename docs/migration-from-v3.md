@@ -13,15 +13,43 @@ With Jovo `v4`, we've completely redesigned how Jovo apps are built. Over the la
 
 In this migration guide, you will learn how to upgrade your Jovo `v3` apps to `v4`. We recommend creating a fresh Jovo `v4` project (by following our [getting started guide](./getting-started.md)) and then moving over the pieces step by step.
 
+The [TypeScript vs JavaScript](#typescript-vs-javascript) section shows the differences of using Jovo in the two programming languages.
+
 The [new concepts](#new-concepts) section introduces new important elements of building a Jovo app, especially [components](#components-vs-states), [handlers](#handlers-vs-intents), and [output](#output).
 
 The [configuration](#configuration) section highlights changes to how the [app](#app-configuration), [project (CLI)](#project-configuration), [Debugger](#debugger-configuration), and [models](#models) are configured.
 
-The [updated concepts](#updated-concepts) section includes Jovo features that are similar to `v3`, but received an upgrade or renaming, for example [unit testing](#unit-testing) and [entities](#entities-vs-inputs).
+The [updated concepts](#updated-concepts) section includes Jovo features that are similar to `v3`, but received an upgrade, for example [naming conventions](#naming-conventions), [unit testing](#unit-testing) and [entities](#entities-vs-inputs).
 
 The [use `v4` and `v3` in parallel](#use-v4-and-v3-in-parallel) section describes how you can build some projects in `v4` (using the latest CLI), while still being able to maintain older projects.
 
 The [integrations and plugins](#integrations-and-plugins) section shows a few more examples of smaller changes to existing Jovo extensions. Take a look at the [Jovo Marketplace](https://v4.jovo.tech/marketplace) to find all up to date integrations.
+
+## TypeScript vs JavaScript
+
+Jovo `v4` comes with major improvements to its underlying TypeScript architecture, using modern features that enable us to enhance the development experience with features like decorators and type inference.
+
+Although we recommend using `v4` with TypeScript, you are still able to use it with JavaScript. You can find the difference in the [TS](https://github.com/jovotech/jovo-v4-template) and [JS](https://github.com/jovotech/jovo-v4-template-js) templates.
+
+One of the main improvements in Jovo `v4` is the possibilities to use [decorators as part of handlers](./handlers.md#handler-routing-and-the-handle-decorator). This allows you to have handlers respond to more than just an intent name, making the development more powerful and structured:
+
+```typescript
+// v3
+ShowMenuIntent() {
+  // ...
+}
+
+// v4
+@Handle({
+  intents: ['ShowMenuIntent', 'YesIntent']
+  platforms: ['alexa'],
+})
+showMenu() {
+  // ...
+}
+```
+
+While decorators are a feature that is not supported by JavaScript yet, it is possible using them in Jovo `v4` JS projects. We use [Babel](https://babeljs.io/) to transpile the code into a correct JS format.
 
 ## New Concepts
 
@@ -457,8 +485,19 @@ The Jovo Model schema now comes with an improved structure, including the follow
 
 The following features have been getting an upgrade as well:
 
+- [Naming Conventions](#naming-conventions)
 - [Unit Testing](#unit-testing)
 - [Entities vs Inputs](#entities-vs-inputs)
+
+### Naming Conventions
+
+> [Learn more about Jovo properties here](./jovo-properties.md).
+
+In `v4`, we're using the following naming conventions:
+
+- Every user-facing _first-level_ method or property is prepended by a `$` sign, for example `this.$send()` or `this.$user`
+- Properties or methods of a _first-level_ property don't include a `$` anymore, for example `this.$user.data`
+- The exception is if a platform extends a Jovo property, then that property uses a `$` as well, for example `this.$alexa.$user`, but `this.$alexa.$user.data`
 
 ### Unit Testing
 
