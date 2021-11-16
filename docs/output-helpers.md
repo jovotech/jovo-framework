@@ -16,7 +16,7 @@ import { OutputHelpers } from '@jovotech/output';
 // ...
 
 OutputHelpers.randomize([
-  /* ... */
+  // ...
 ]);
 ```
 
@@ -30,7 +30,11 @@ The generic [`message`](./output-templates.md#message) and [`reprompt`](./output
 
 ```typescript
 {
-  message: ['Hi!', 'Hello!', 'Hey there.'];
+  message: [
+    'Hi!',
+    'Hello!',
+    'Hey there.',
+  ],
 }
 ```
 
@@ -41,6 +45,6 @@ import { OutputHelpers } from '@jovotech/output';
 // ...
 
 OutputHelpers.randomize([
-  /* ... */
+  // ...
 ]);
 ```
