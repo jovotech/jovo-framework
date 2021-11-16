@@ -24,7 +24,7 @@ import { LangIt } from '@nlpjs/lang-it';
 import isEqual from 'fast-deep-equal/es6';
 import { promises } from 'fs';
 import { homedir } from 'os';
-import { join, resolve } from 'path';
+import { join, resolve, sep } from 'path';
 import { cwd } from 'process';
 import { connect, Socket } from 'socket.io-client';
 import { Writable } from 'stream';
@@ -43,6 +43,9 @@ import {
   StateMutatingJovoMethodKey,
 } from './interfaces';
 import { MockServer } from './MockServer';
+import open from 'open';
+import Table from 'cli-table';
+import { inspect } from 'util';
 
 export interface JovoDebuggerConfig extends PluginConfig {
   nlu: NluPlugin;
@@ -326,6 +329,82 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     };
   }
 
+  private async onConnected(): Promise<void> {
+    const color: [number, number] = inspect.colors['gray'] ?? [0, 0];
+    const grayText = (str: string) => `\u001b[${color[0]}m${str}\u001b[${color[1]}m`;
+
+    const webhookId = await this.retrieveLocalWebhookId();
+    const debuggerUrl = `${this.config.webhookUrl}/${webhookId}`;
+
+    const projectFolderArray = process.cwd().split(sep);
+    const projectFolder = projectFolderArray[projectFolderArray.length - 1];
+    const table = new Table({
+      head: [grayText('Project'), grayText('Server')],
+    });
+    table.push([projectFolder, `☁️ ${debuggerUrl} => 💻 localhost:3000`]);
+
+    console.log('\n' + table.toString());
+    // Check if the current output is being piped to somewhere.
+    if (process.stdout.isTTY) {
+      // Check if we can enable raw mode for input stream to capture raw keystrokes.
+      if (process.stdin.setRawMode) {
+        setTimeout(() => {
+          console.log(`\n To open Jovo Debugger in your browser, press the "." key.\n`);
+        }, 500);
+
+        // Capture unprocessed key input.
+        process.stdin.setRawMode(true);
+        // Explicitly resume emitting data from the stream.
+        process.stdin.resume();
+        // Capture readable input as opposed to binary.
+        process.stdin.setEncoding('utf-8');
+
+        // Collect input text from input stream.
+        let inputText = '';
+        process.stdin.on('data', async (keyRaw: Buffer) => {
+          const key: string = keyRaw.toString();
+          // When dot gets pressed, try to open the debugger in browser.
+          if (key === '.') {
+            try {
+              await open(debuggerUrl);
+            } catch (error) {
+              console.log(
+                `Could not open browser. Please open debugger manually by visiting this url: ${debuggerUrl}`,
+              );
+            }
+            inputText = '';
+          } else {
+            // When anything else got pressed, record it and send it on enter into the child process.
+            if (key.charCodeAt(0) === 13) {
+              // Send recorded input to child process. This is useful for restarting a nodemon process with rs, for example.
+              process.stdout.write('\n');
+              inputText = '';
+            } else if (key.charCodeAt(0) === 3) {
+              // Ctrl+C has been pressed, kill process.
+              if (process.platform === 'win32') {
+                process.stdin.pause();
+                // @ts-ignore
+                process.stdin.setRawMode(false);
+              } else {
+                process.exit();
+              }
+            } else {
+              // Record input text and write it into terminal.
+              inputText += key;
+              process.stdout.write(key);
+            }
+          }
+        });
+      } else {
+        setTimeout(() => {
+          console.log(
+            `☁  Could not open browser. Please open debugger manually by visiting this url: ${debuggerUrl}`,
+          );
+        }, 2500);
+      }
+    }
+  }
+
   private async onDebuggingAvailable(): Promise<void> {
     if (!this.socket) {
       return this.onSocketNotConnected();
@@ -466,6 +545,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     });
     socket.on('connect', () => {
       this.hasShownConnectionError = false;
+      this.onConnected();
     });
     socket.on('connect_error', (error: Error) => {
       if (!this.hasShownConnectionError) {
