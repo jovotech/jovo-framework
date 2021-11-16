@@ -183,6 +183,12 @@ declare module '@jovotech/framework/dist/types/Jovo' {
   }
 }
 
+declare module '@jovotech/framework/dist/types/index' {
+  interface NormalizedOutputTemplatePlatforms {
+    web?: NormalizedCoreOutputTemplate;
+  }
+}
+
 // Create the custom platform class
 const webPlatform = CorePlatform.createCustomPlatform('WebPlatform', 'web');
 

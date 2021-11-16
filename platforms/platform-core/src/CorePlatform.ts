@@ -52,6 +52,12 @@ export class CorePlatform<PLATFORM extends string = 'core' | string> extends Pla
      }
    }
 
+   declare module '@jovotech/framework/dist/types/index' {
+      interface NormalizedOutputTemplatePlatforms {
+        web?: NormalizedCoreOutputTemplate;
+      }
+   }
+
    // create the class
    const WebPlatform = CorePlatform.createCustomPlatform('WebPlatform', 'web');
    // instantiate the class
@@ -61,10 +67,14 @@ export class CorePlatform<PLATFORM extends string = 'core' | string> extends Pla
     className: string,
     platform: PLATFORM,
     jovoReferenceKey = `$${platform}`,
-  ): new (config?: ExtensibleInitConfig<CorePlatformConfig>) => CorePlatform<PLATFORM> {
+  ): new (config?: ExtensibleInitConfig<CorePlatformConfig<PLATFORM>>) => CorePlatform<PLATFORM> {
     // Workaround to make the anonymous' class name equal to className
     const obj = {
       [className]: class extends CorePlatform<PLATFORM> {
+        constructor(config?: ExtensibleInitConfig<CorePlatformConfig<PLATFORM>>) {
+          super(config);
+          this.outputTemplateConverterStrategy.platformName = platform;
+        }
         getDefaultConfig(): CorePlatformConfig<PLATFORM> {
           return {
             ...super.getDefaultConfig(),
