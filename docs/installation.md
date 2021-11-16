@@ -56,7 +56,7 @@ Change your working directory into your newly created project directory and run 
 $ cd <directory>
 
 # Run the local development server
-$ jovov4 run [-w]
+$ jovov4 run
 ```
 
 You can now open the [Jovo Debugger](./debugger.md) with the `.` key.
