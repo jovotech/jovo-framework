@@ -8,6 +8,7 @@ import {
 import _merge from 'lodash.merge';
 import { JovoError } from './JovoError';
 import { inspect } from 'util';
+import { AnyObject } from './index';
 export class JovoLogger extends TsLogger {
   constructor(settings?: ISettingsParam) {
     super();
@@ -77,7 +78,20 @@ export class JovoLogger extends TsLogger {
 
     if (error.context) {
       noStyleLogger.error(`\n${this.style('context:', 'underline')}`);
-      noStyleLogger.error(JSON.parse(JSON.stringify(error.context)));
+
+      const removeUndefined = (obj: AnyObject) => {
+        const nObj: AnyObject = {};
+        Object.keys(obj).forEach((key) => {
+          if (obj[key] === Object(obj[key])) {
+            nObj[key] = removeUndefined(obj[key]);
+          } else if (obj[key] !== undefined) {
+            nObj[key] = obj[key];
+          }
+        });
+        return nObj;
+      };
+
+      noStyleLogger.error(removeUndefined(error.context));
     }
 
     if (error.stack) {
