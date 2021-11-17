@@ -11,7 +11,16 @@ import _merge from 'lodash.merge';
 import { join as joinPaths } from 'path';
 import { PartialDeep } from 'type-fest';
 import { v4 as uuidv4 } from 'uuid';
-import { App, Jovo, JovoRequest, JovoSession, Platform, Plugin, PluginConfig, RequestBuilder } from '..';
+import {
+  App,
+  Jovo,
+  JovoRequest,
+  JovoSession,
+  Platform,
+  Plugin,
+  PluginConfig,
+  RequestBuilder,
+} from '..';
 import { HandleRequest } from '../HandleRequest';
 import { JovoInput } from '../JovoInput';
 import { TestPlatform } from './TestPlatform';
