@@ -124,8 +124,8 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
     super();
 
     this.networkTransportStrategy =
-      config?.networkTransportStrategy instanceof HttpTransportStrategy
-        ? (config.networkTransportStrategy as HttpTransportStrategy)
+      config?.networkTransportStrategy instanceof NetworkTransportStrategy
+        ? config.networkTransportStrategy
         : new HttpTransportStrategy();
 
     const defaultConfig = Client.getDefaultConfig();
