@@ -77,7 +77,7 @@ export class JovoLogger extends TsLogger {
 
     if (error.context) {
       noStyleLogger.error(`\n${this.style('context:', 'underline')}`);
-      noStyleLogger.error(error.context);
+      noStyleLogger.error(JSON.parse(JSON.stringify(error.context)));
     }
 
     if (error.stack) {
