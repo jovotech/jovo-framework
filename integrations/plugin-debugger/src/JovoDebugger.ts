@@ -385,6 +385,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
                 process.stdin.pause();
                 // @ts-ignore
                 process.stdin.setRawMode(false);
+                process.exit();
               } else {
                 process.exit();
               }
