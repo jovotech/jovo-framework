@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/cms-googlesheets",
-  "version": "4.0.0-beta.8",
+  "version": "4.0.0-beta.9",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -28,7 +28,7 @@
     "googleapis": "^89.0.0"
   },
   "devDependencies": {
-    "@jovotech/framework": "^4.0.0-beta.10",
+    "@jovotech/framework": "^4.0.0-beta.11",
     "@types/jest": "^26.0.20",
     "@types/node": "^10.17.50",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
@@ -43,7 +43,7 @@
     "typescript": "^4.4.4"
   },
   "peerDependencies": {
-    "@jovotech/framework": "4.0.0-beta.10"
+    "@jovotech/framework": "4.0.0-beta.11"
   },
   "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176",
   "prettier": "../../.prettierrc.js",
