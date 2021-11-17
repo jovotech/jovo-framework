@@ -124,9 +124,9 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
     super();
 
     this.networkTransportStrategy =
-      config?.networkTransportStrategy instanceof HttpTransportStrategy
-        ? (config.networkTransportStrategy as HttpTransportStrategy)
-        : new HttpTransportStrategy(this.endpointUrl);
+      config?.networkTransportStrategy instanceof NetworkTransportStrategy
+        ? config.networkTransportStrategy
+        : new HttpTransportStrategy();
 
     const defaultConfig = Client.getDefaultConfig();
     this.config = config ? _defaultsDeep(config, defaultConfig) : defaultConfig;
@@ -266,7 +266,7 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
         ? inputOrRequest
         : this.createRequest(inputOrRequest as Input);
     this.emit(ClientEvent.Request, request);
-    const response = await this.networkTransportStrategy.send(request);
+    const response = await this.networkTransportStrategy.send(this.endpointUrl, request);
     this.emit(ClientEvent.Response, response);
     await this.handleResponse(response);
     return response;

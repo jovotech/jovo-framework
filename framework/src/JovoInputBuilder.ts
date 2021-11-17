@@ -9,7 +9,9 @@ export class JovoInputBuilder {
   }
 
   set<KEY extends keyof JovoInput>(key: KEY, value: JovoInput[KEY]): this {
-    this.input[key] = value;
+    if (value) {
+      this.input[key] = value;
+    }
     return this;
   }
 
@@ -17,4 +19,3 @@ export class JovoInputBuilder {
     return this.input;
   }
 }
-
