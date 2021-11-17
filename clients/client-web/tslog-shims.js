@@ -1,3 +1,0 @@
-class Logger {}
-
-export { Logger };

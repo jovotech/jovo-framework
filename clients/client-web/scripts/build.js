@@ -8,32 +8,22 @@ const tslogMockPlugin = {
     let fs = require('fs');
     let path = require('path');
 
-    // Intercept import paths called "tslog" and "util" so esbuild doesn't attempt
-    // to map them to a file system location. Tag them with the "tslog-ns" or "util-ns"
+    // Intercept import paths called "JovoLogger" so esbuild doesn't attempt
+    // to map them to a file system location. Tag them with the "JovoLogger-ns"
     // namespace to reserve them for this plugin.
-    build.onResolve({ filter: /^tslog$/ }, (args) => ({
-      path: args.path,
-      namespace: 'tslog-ns',
-    }));
-
-    build.onResolve({ filter: /^util$/ }, (args) => ({
-      path: args.path,
-      namespace: 'util-ns',
-    }));
-
-    // Load paths tagged with the "tslog-ns" and "util-ns" namespace and load related shims
-    build.onLoad({ filter: /.*/, namespace: 'tslog-ns' }, async () => {
-      const tslogShimsFile = await fs.promises.readFile(path.join(process.cwd(), 'tslog-shims.js'));
+    build.onResolve({ filter: /^[.][/]JovoLogger$/ }, (args) => {
       return {
-        contents: tslogShimsFile,
-        loader: 'js',
+        path: args.path,
+        namespace: 'JovoLogger-ns',
       };
     });
 
-    build.onLoad({ filter: /.*/, namespace: 'util-ns' }, async () => {
-      const utilShimsFile = await fs.promises.readFile(path.join(process.cwd(), 'util-shims.js'));
+    build.onLoad({ filter: /.*/, namespace: 'JovoLogger-ns' }, async () => {
+      const jovoLoggerShimsFile = await fs.promises.readFile(
+        path.join(process.cwd(), 'JovoLogger-shims.js'),
+      );
       return {
-        contents: utilShimsFile,
+        contents: jovoLoggerShimsFile,
         loader: 'js',
       };
     });
