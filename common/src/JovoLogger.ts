@@ -6,6 +6,7 @@ import {
   ILogObject,
 } from 'tslog';
 import _merge from 'lodash.merge';
+import _cloneDeep from 'lodash.clonedeep';
 import { JovoError } from './JovoError';
 import { inspect } from 'util';
 import { AnyObject } from './index';
@@ -79,19 +80,15 @@ export class JovoLogger extends TsLogger {
     if (error.context) {
       noStyleLogger.error(`\n${this.style('context:', 'underline')}`);
 
-      const removeUndefined = (obj: AnyObject) => {
-        const nObj: AnyObject = {};
-        Object.keys(obj).forEach((key) => {
-          if (obj[key] === Object(obj[key])) {
-            nObj[key] = removeUndefined(obj[key]);
-          } else if (obj[key] !== undefined) {
-            nObj[key] = obj[key];
+      const formatContext = (contextObject: AnyObject) => {
+        return Object.keys(contextObject).reduce((context, key) => {
+          if (typeof context[key] === 'undefined') {
+            delete context[key];
           }
-        });
-        return nObj;
+          return context;
+        }, _cloneDeep(contextObject));
       };
-
-      noStyleLogger.error(removeUndefined(error.context));
+      noStyleLogger.error(formatContext(error.context));
     }
 
     if (error.stack) {
