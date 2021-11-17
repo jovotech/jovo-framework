@@ -45,6 +45,11 @@ export type {
 export * from './interfaces';
 export * from './utilities';
 
+export * from './core/AudioRecordingStrategy';
+export * from './core/HttpTransportStrategy';
+export * from './core/NetworkTransportStrategy';
+export * from './core/OutputProcessor';
+export * from './core/RecordingStrategy';
 export * from './core/RepromptProcessor';
 export * from './core/SSMLProcessor';
 
