@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/plugin-debugger",
-  "version": "4.0.0-beta.10",
+  "version": "4.0.0-beta.11",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
