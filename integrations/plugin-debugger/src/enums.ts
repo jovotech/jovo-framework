@@ -10,6 +10,8 @@ export enum JovoDebuggerEvent {
   AppRequest = 'app.request',
   AppResponse = 'app.response',
 
+  ServerRequest = 'server.request',
+
   AppJovoUpdate = 'app.jovo-update',
   AppStateMutation = 'app.state-mutation',
 }

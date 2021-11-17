@@ -23,11 +23,13 @@ import { LangFr } from '@nlpjs/lang-fr';
 import { LangIt } from '@nlpjs/lang-it';
 import isEqual from 'fast-deep-equal/es6';
 import { promises } from 'fs';
+import open from 'open';
 import { homedir } from 'os';
-import { join, resolve, sep } from 'path';
+import { join, resolve } from 'path';
 import { cwd } from 'process';
 import { connect, Socket } from 'socket.io-client';
 import { Writable } from 'stream';
+import { inspect } from 'util';
 import { v4 as uuidV4 } from 'uuid';
 import { STATE_MUTATING_METHOD_KEYS } from './constants';
 import { DebuggerConfig } from './DebuggerConfig';
@@ -42,9 +44,7 @@ import {
   JovoUpdateData,
   StateMutatingJovoMethodKey,
 } from './interfaces';
-import { MockServer } from './MockServer';
-import open from 'open';
-import { inspect } from 'util';
+import { MockServer, MockServerRequest } from './MockServer';
 
 export interface JovoDebuggerConfig extends PluginConfig {
   nlu: NluPlugin;
@@ -108,8 +108,11 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     this.socket.on(JovoDebuggerEvent.DebuggingAvailable, () => {
       return this.onDebuggingAvailable();
     });
-    this.socket.on(JovoDebuggerEvent.DebuggerRequest, (request: AnyObject) => {
-      return this.onDebuggerRequest(app, request);
+    this.socket.on(JovoDebuggerEvent.DebuggerRequest, (requestData: AnyObject) => {
+      return this.onReceiveRequest(app, { data: requestData });
+    });
+    this.socket.on(JovoDebuggerEvent.ServerRequest, (request: MockServerRequest) => {
+      return this.onReceiveRequest(app, request);
     });
 
     this.patchHandleRequestToIncludeUniqueId();
@@ -425,7 +428,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     }
   }
 
-  private async onDebuggerRequest(app: App, request: AnyObject): Promise<void> {
+  private async onReceiveRequest(app: App, request: MockServerRequest): Promise<void> {
     await app.handle(new MockServer(request));
   }
 
