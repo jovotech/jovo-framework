@@ -44,7 +44,6 @@ import {
 } from './interfaces';
 import { MockServer } from './MockServer';
 import open from 'open';
-import Table from 'cli-table';
 import { inspect } from 'util';
 
 export interface JovoDebuggerConfig extends PluginConfig {
@@ -330,26 +329,22 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   }
 
   private async onConnected(): Promise<void> {
-    const color: [number, number] = inspect.colors['gray'] ?? [0, 0];
-    const grayText = (str: string) => `\u001b[${color[0]}m${str}\u001b[${color[1]}m`;
+    const color: [number, number] = inspect.colors['blue'] ?? [0, 0];
+    const blueText = (str: string) => `\u001b[${color[0]}m${str}\u001b[${color[1]}m`;
+    const underlineColor: [number, number] = inspect.colors['underline'] ?? [0, 0];
+    const underline = (str: string) =>
+      `\u001b[${underlineColor[0]}m${str}\u001b[${underlineColor[1]}m`;
 
     const webhookId = await this.retrieveLocalWebhookId();
     const debuggerUrl = `${this.config.webhookUrl}/${webhookId}`;
 
-    const projectFolderArray = process.cwd().split(sep);
-    const projectFolder = projectFolderArray[projectFolderArray.length - 1];
-    const table = new Table({
-      head: [grayText('Project'), grayText('Server')],
-    });
-    table.push([projectFolder, `☁️ ${debuggerUrl} => 💻 localhost:3000`]);
-
-    console.log('\n' + table.toString());
+    console.log('\nThis is your webhook url ☁️ ' + underline(blueText(debuggerUrl)));
     // Check if the current output is being piped to somewhere.
     if (process.stdout.isTTY) {
       // Check if we can enable raw mode for input stream to capture raw keystrokes.
       if (process.stdin.setRawMode) {
         setTimeout(() => {
-          console.log(`\n To open Jovo Debugger in your browser, press the "." key.\n`);
+          console.log(`\nTo open Jovo Debugger in your browser, press the "." key.\n`);
         }, 500);
 
         // Capture unprocessed key input.
