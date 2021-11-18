@@ -22,7 +22,7 @@ The Jovo Webhook is a quick and easy way to create a link to your local webserve
 Every client receives their very own static webhook ID in the following format:
 
 ```sh
-https://webhook.jovo.cloud/[your-id]
+https://webhookv3.jovo.cloud/[your-id]
 ```
 
 To allow multiple users to work on the same repository locally, the webhook URL doesn't have to be referenced directly in the project's configuration. Instead, you use the `${JOVO_WEBHOOK_URL}` string which will be automatically replaced by the client's webhook URL:

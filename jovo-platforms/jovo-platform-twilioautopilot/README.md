@@ -21,7 +21,7 @@ After creating your Autopilot bot, you simply have to set each task to redirect 
 {
 	"actions": [
 		{
-			"redirect": "https://webhook.jovo.cloud/63709788-169b-4d6d-981c-d6ef9700bfad"
+			"redirect": "https://webhookv3.jovo.cloud/63709788-169b-4d6d-981c-d6ef9700bfad"
 		}
 	]
 }

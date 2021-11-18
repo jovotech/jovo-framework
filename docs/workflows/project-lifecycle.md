@@ -87,7 +87,7 @@ Make sure that, with every file update, you terminate the server with `ctrl+c` a
 
 ```sh
 Local development server listening on port 3000.
-This is your webhook url: https://webhook.jovo.cloud/[your-id]
+This is your webhook url: https://webhookv3.jovo.cloud/[your-id]
 ```
 
 As you can see, a [Jovo Webhook](#jovo-webhook) URL is automatically created, which serves as a link to your local webhook and can be added as a HTTPS endpoint to the voice platforms.
@@ -107,7 +107,7 @@ The Jovo Webhook is a free service that creates a link to your local webserver. 
 By using the [`jovo run`](../tools/cli/run './cli/run'), a unique, anonymized link is created that looks like this:
 
 ```sh
-https://webhook.jovo.cloud/[your-id]
+https://webhookv3.jovo.cloud/[your-id]
 ```
 
 This link simply makes it easier for you to prototype locally by being able to see the logs in your command line, and to make fast changes without uploading your code to AWS Lambda.
