@@ -24,7 +24,7 @@ const fsreadFile = util.promisify(fs.readFile);
 const fsreaddir = util.promisify(fs.readdir);
 const fsexists = util.promisify(fs.exists);
 
-const WEBHOOK_URL = 'https://webhook.jovo.cloud';
+const WEBHOOK_URL = 'https://webhookv3.jovo.cloud';
 process.on('unhandledRejection', (reason, p) => {
   // Stack Trace
   if (reason) {
