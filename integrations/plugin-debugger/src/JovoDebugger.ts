@@ -75,7 +75,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       nlu: new NlpjsNlu({
         languageMap: getDefaultLanguageMap(),
       }),
-      webhookUrl: 'https://webhookv4.jovo.cloud',
+      webhookUrl: 'https://webhook.jovo.cloud',
       enabled:
         (process.argv.includes('--jovo-webhook') || process.argv.includes('--webhook')) &&
         !process.argv.includes('--disable-jovo-debugger'),
