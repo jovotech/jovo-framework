@@ -15,7 +15,7 @@ For example, here is a simple output that just returns a "Hello World!":
 
 ```typescript
 {
-  message: 'Hello World!';
+  message: 'Hello World!',
 }
 ```
 
@@ -68,7 +68,11 @@ A `message` can either be a `string` or have the following properties:
 
 ```typescript
 {
-  message: [ 'Hi!', 'Hello!', { speech: 'Hello listener.', text: 'Hello reader.' ]
+  message: [
+    'Hi!',
+    'Hello!',
+    { speech: 'Hello listener.', text: 'Hello reader.'
+  ],
 }
 ```
 
@@ -89,7 +93,7 @@ A `reprompt` can have the same values (`speech`, `text`) as a [`message`](#messa
 {
   reprompt: [
     'Could you tell me your name?',
-    'I missed your name, could you please repeat it?'
+    'I missed your name, could you please repeat it?',
   ],
 }
 ```
@@ -131,8 +135,8 @@ A carousel is a (usually horizontally scrollable) collection of at least 2 [card
       {
         title: 'Element 2',
         content: 'Hi there!'
-      }
-    ]
+      },
+    ],
   },
 }
 ```
@@ -150,7 +154,7 @@ Quick replies (sometimes called _suggestion chips_) are little buttons that prov
 {
   quickReplies: [
     'Berlin',
-    'NYC'
+    'NYC',
   ],
 }
 ```
@@ -215,7 +219,7 @@ It's also possible to turn `listen` into an object to tell the platform to liste
           },
           // ...
         ],
-      }
+      },
     },
   },
 }
@@ -293,7 +297,7 @@ For each platform, you can add a `nativeResponse` object that is directly transl
     alexa: {
       nativeResponse: {
         // Add elements in the same way they show up in the response JSON
-      }
+      },
     },
   },
 }
@@ -333,16 +337,16 @@ If the [`message`](#message) is an object for one of the output objects, the oth
   {
     message: {
       speech: 'This is spoken text.',
-      text: 'This is display text.'
+      text: 'This is display text.',
     },
-  }
+  },
 ]
 
 // After merging
 {
   message: {
     speech: 'Hello world! This is spoken text.',
-    text: 'Hello world! This is display text.'
+    text: 'Hello world! This is display text.',
   },
 }
 ```

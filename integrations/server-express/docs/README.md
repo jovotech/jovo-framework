@@ -17,13 +17,13 @@ For example, the [`app.dev.ts` stage](https://v4.jovo.tech/docs/app-config#stagi
 export * from './server.express';
 ```
 
-You can find the [`server.express.ts` file here](https://github.com/jovotech/jovo-framework/blob/v4/release/integrations/server-express/boilerplate/server.express.ts).
+You can find the [`server.express.ts` file here](https://github.com/jovotech/jovo-framework/blob/v4/latest/integrations/server-express/boilerplate/server.express.ts).
 
 ## Installation
 
 Create a new stage using the [`new:stage` command](https://v4.jovo.tech/docs/new-command#new-stage) as explained in the [app config documentation](https://v4.jovo.tech/docs/app-config#staging).
 
-When it prompts you to select a server integration, choose Express. This will add a [`server.express.ts` file](https://github.com/jovotech/jovo-framework/blob/v4/release/integrations/server-express/boilerplate/server.express.ts) to your project's `src` folder.
+When it prompts you to select a server integration, choose Express. This will add a [`server.express.ts` file](https://github.com/jovotech/jovo-framework/blob/v4/latest/integrations/server-express/boilerplate/server.express.ts) to your project's `src` folder.
 
 ## Run Server
 

@@ -11,10 +11,10 @@ Jovo offers a variety of server integrations that allow you to host your apps on
 
 The following server integrations are currently working with Jovo `v4`:
 
-- [ExpressJS](https://v4.jovo.tech/marketplace/server-express): Host your apps on your own server. This is also used for the local development server.
+- [Express](https://v4.jovo.tech/marketplace/server-express): Host your apps on your own server. This is also used for the local development server.
 - [AWS Lambda](https://v4.jovo.tech/marketplace/server-lambda): Host your apps on AWS Lambda serverless functions.
 
-Usually, a server is connected to an [app config stage](./app-config.md#staging). For example, the development stage in `app.dev.ts` uses [ExpressJS](https://v4.jovo.tech/marketplace/server-express), which you can see in the last line of the file:
+Usually, a server is connected to an [app config stage](./app-config.md#staging). For example, the development stage in `app.dev.ts` uses [Express](https://v4.jovo.tech/marketplace/server-express), which you can see in the last line of the file:
 
 ```typescript
 export * from './server.express';

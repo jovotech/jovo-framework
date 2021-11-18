@@ -25,7 +25,7 @@ Create a new stage using the `jovov4 new:stage` command as explained in the [app
 $ jovov4 new: stage prod
 ```
 
-When it prompts you to select a server integration, choose Lambda. This will add a [`server.lambda.ts` file](https://github.com/jovotech/jovo-framework/blob/v4/release/integrations/server-lambda/boilerplate/server.lambda.ts) to your project's `src` folder, and reference it in your newly created [app stage config](https://v4.jovo.tech/docs/app-config#staging) (in this example `app.prod.ts`):
+When it prompts you to select a server integration, choose Lambda. This will add a [`server.lambda.ts` file](https://github.com/jovotech/jovo-framework/blob/v4/latest/integrations/server-lambda/boilerplate/server.lambda.ts) to your project's `src` folder, and reference it in your newly created [app stage config](https://v4.jovo.tech/docs/app-config#staging) (in this example `app.prod.ts`):
 
 ```typescript
 export * from './server.lambda';
