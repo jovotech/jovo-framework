@@ -67,7 +67,7 @@ export class JovoLogger extends TsLogger {
     );
 
     if (error.package) {
-      noStyleLogger.error('\nPackage: ');
+      noStyleLogger.error(`\n${this.style('package:', 'underline')}`);
       noStyleLogger.error(error.package);
     }
 
