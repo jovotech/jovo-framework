@@ -2,10 +2,10 @@
 
 > [**NEWS**: We just launched Jovo v4](#)
 
-[![Jovo Framework](https://v4.jovo.tech/img/github-header.png)](https://v4.jovo.tech)
+[![Jovo Framework](https://www.jovo.tech/img/github-header.png)](https://www.jovo.tech)
 
 <p>
-<a href="https://v4.jovo.tech" target="_blank">Website</a> -  <a href="https://v4.jovo.tech/docs" target="_blank">Docs</a> - <a href="https://v4.jovo.tech/marketplace" target="_blank">Marketplace</a> - <a href="https://github.com/jovotech/jovo-v4-template" target="_blank">Template</a>   
+<a href="https://www.jovo.tech" target="_blank">Website</a> -  <a href="https://www.jovo.tech/docs" target="_blank">Docs</a> - <a href="https://www.jovo.tech/marketplace" target="_blank">Marketplace</a> - <a href="https://github.com/jovotech/jovo-v4-template" target="_blank">Template</a>   
 </p>
 
 <p>
@@ -36,17 +36,17 @@ export class LoveHatePizzaComponent extends BaseComponent {
 }
 ```
 
-- **Cross-platform**: Works on the [web](https://v4.jovo.tech/marketplace/platform-web), voice platforms (like [Alexa](https://v4.jovo.tech/marketplace/platform-alexa) and [Google Assistant](https://v4.jovo.tech/marketplace/platform-googleassistant)), and chat platforms (like [Facebook Messenger](https://v4.jovo.tech/marketplace/platform-facebookmessenger), [Instagram](https://v4.jovo.tech/marketplace/platform-instagram), and [Google Business Messages](https://v4.jovo.tech/marketplace/platform-googlebusiness)).
-- **Fast**: A [CLI](https://v4.jovo.tech/docs/cli), local development, and browser-based debugging using the [Jovo Debugger](https://v4.jovo.tech/docs/debugger).
+- **Cross-platform**: Works on the [web](https://www.jovo.tech/marketplace/platform-web), voice platforms (like [Alexa](https://www.jovo.tech/marketplace/platform-alexa) and [Google Assistant](https://www.jovo.tech/marketplace/platform-googleassistant)), and chat platforms (like [Facebook Messenger](https://www.jovo.tech/marketplace/platform-facebookmessenger), [Instagram](https://www.jovo.tech/marketplace/platform-instagram), and [Google Business Messages](https://www.jovo.tech/marketplace/platform-googlebusiness)).
+- **Fast**: A [CLI](https://www.jovo.tech/docs/cli), local development, and browser-based debugging using the [Jovo Debugger](https://www.jovo.tech/docs/debugger).
 - **Component-based**: Build robust experiences based on reusable components.
-- **Multimodal**: An [output template](https://v4.jovo.tech/docs/output-templates) engine that translates structured content into voice, text, and visual responses.
-- **Extensible**: Build [Framework plugins](https://v4.jovo.tech/docs/plugins), [CLI plugins](https://v4.jovo.tech/docs/cli-plugins), and leverage many integrations from the [Jovo Marketplace](https://v4.jovo.tech/marketplace).
-- **Integrated**: Works with many [NLU](https://v4.jovo.tech/docs/nlu) and [CMS](https://v4.jovo.tech/docs/cms) services.
-- **Robust**: Includes [staging](https://v4.jovo.tech/docs/staging) and a [unit testing suite](https://v4.jovo.tech/docs/unit-testing).
+- **Multimodal**: An [output template](https://www.jovo.tech/docs/output-templates) engine that translates structured content into voice, text, and visual responses.
+- **Extensible**: Build [Framework plugins](https://www.jovo.tech/docs/plugins), [CLI plugins](https://www.jovo.tech/docs/cli-plugins), and leverage many integrations from the [Jovo Marketplace](https://www.jovo.tech/marketplace).
+- **Integrated**: Works with many [NLU](https://www.jovo.tech/docs/nlu) and [CMS](https://www.jovo.tech/docs/cms) services.
+- **Robust**: Includes [staging](https://www.jovo.tech/docs/staging) and a [unit testing suite](https://www.jovo.tech/docs/unit-testing).
 
 ## Getting Started
 
-> Learn more in our [Getting Started Guide](https://v4.jovo.tech/docs/getting-started).
+> Learn more in our [Getting Started Guide](https://www.jovo.tech/docs/getting-started).
 
 Install the Jovo CLI:
 
@@ -57,7 +57,7 @@ $ npm install -g @jovotech/cli
 Create a new Jovo project ([find the v4 template here](https://github.com/jovotech/jovo-v4-template)):
 
 ```sh
-$ jovov4 new <directory>
+$ jovo new <directory>
 ```
 
 Go into project directory and run the Jovo development server:
@@ -67,7 +67,7 @@ Go into project directory and run the Jovo development server:
 $ cd <directory>
 
 # Run local development server
-$ jovov4 run
+$ jovo run
 
 # Press "." to open the Jovo Debugger
 ```

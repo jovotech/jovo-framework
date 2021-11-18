@@ -5,7 +5,7 @@ excerpt: 'The Jovo Core Platform is a standalone platform integration that can b
 
 # Core Platform
 
-The Jovo Core Platform is a standalone [platform integration](https://v4.jovo.tech/docs/platforms) that can be used to deploy a voice and chat experiences to custom devices and hardware, including the web, mobile apps, and Raspberry Pi.
+The Jovo Core Platform is a standalone [platform integration](https://www.jovo.tech/docs/platforms) that can be used to deploy a voice and chat experiences to custom devices and hardware, including the web, mobile apps, and Raspberry Pi.
 
 ## Introduction
 
@@ -36,7 +36,7 @@ You can install the plugin like this:
 $ npm install @jovotech/platform-core
 ```
 
-Add it as plugin to your [app configuration](https://v4.jovo.tech/docs/app-config), e.g. `app.ts`:
+Add it as plugin to your [app configuration](https://www.jovo.tech/docs/app-config), e.g. `app.ts`:
 
 ```typescript
 import { App } from '@jovotech/framework';
@@ -63,11 +63,11 @@ new CorePlatform({
 ```
 
 - `platform`: The `platform` name that you can find in the [request documentation below](#request) can be overridden with this property.
-- `plugins`: You can add plugins to this array. For example, Core Platform requires an [NLU plugin](https://v4.jovo.tech/docs/nlu) to turn raw text into structured meaning.
+- `plugins`: You can add plugins to this array. For example, Core Platform requires an [NLU plugin](https://www.jovo.tech/docs/nlu) to turn raw text into structured meaning.
 
 ## Requests and Responses
 
-In a Jovo app, each interaction goes through the [RIDR Lifecycle](https://v4.jovo.tech/docs/ridr-lifecycle) that starts with a [request](#requests) from the client and ends with a [response](#responses) back to the client.
+In a Jovo app, each interaction goes through the [RIDR Lifecycle](https://www.jovo.tech/docs/ridr-lifecycle) that starts with a [request](#requests) from the client and ends with a [response](#responses) back to the client.
 
 ### Requests
 
@@ -109,9 +109,9 @@ The request usually contains data like an audio file or raw text ([find all samp
 }
 ```
 
-The `input` property follows the same structure as the [Jovo `$input` property](https://v4.jovo.tech/docs/input).
+The `input` property follows the same structure as the [Jovo `$input` property](https://www.jovo.tech/docs/input).
 
-The `device` property follows the same structure as the [Jovo `$device` property](https://v4.jovo.tech/docs/device).
+The `device` property follows the same structure as the [Jovo `$device` property](https://www.jovo.tech/docs/device).
 
 ### Responses
 
@@ -142,7 +142,7 @@ The response contains all the information that is needed by the client to displa
 }
 ```
 
-The `output` is added in the same structure as [Jovo output templates](https://v4.jovo.tech/docs/output-templates).
+The `output` is added in the same structure as [Jovo output templates](https://www.jovo.tech/docs/output-templates).
 
 ## Platform-Specific Features
 
@@ -164,7 +164,7 @@ if (this.$core) {
 
 You can create a custom platform based on the Jovo Core Platform using the `createCustomPlatform()` method.
 
-In order to make the type system aware of the new class, some module augmentations have to be done. Here is an example how this is done in the [Jovo Web Platform](https://v4.jovo.tech/marketplace/platform-web):
+In order to make the type system aware of the new class, some module augmentations have to be done. Here is an example how this is done in the [Jovo Web Platform](https://www.jovo.tech/marketplace/platform-web):
 
 ```typescript
 declare module '@jovotech/framework/dist/types/Extensible' {

@@ -18,7 +18,7 @@ Before getting started, make sure you have the following installed on your compu
 
 There are two ways how you can install Jovo:
 
-- [Install the Jovo CLI](#install-the-cli) (recommended way in our [getting started guide](https://v4.jovo.tech/docs/getting-started))
+- [Install the Jovo CLI](#install-the-cli) (recommended way in our [getting started guide](https://www.jovo.tech/docs/getting-started))
 - [Clone a sample app](#clone-a-sample-app)
 
 If you're looking to migrate to Jovo `v4` from a `v3` project, take a look at our [migration guide](./migration-from-v3.md).
@@ -39,7 +39,7 @@ $ jovo
 
 ### Create a new Project
 
-After installing the Jovo CLI, you can install the template ([TypeScript](https://github.com/jovotech/jovo-v4-template) or [JavaScript](https://github.com/jovotech/jovo-v4-template-js)) using the [`new` command](https://v4.jovo.tech/docs/new-command):
+After installing the Jovo CLI, you can install the template ([TypeScript](https://github.com/jovotech/jovo-v4-template) or [JavaScript](https://github.com/jovotech/jovo-v4-template-js)) using the [`new` command](https://www.jovo.tech/docs/new-command):
 
 ```sh
 $ jovo new <directory>

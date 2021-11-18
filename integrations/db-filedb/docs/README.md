@@ -59,7 +59,7 @@ new FileDb({
 The following configurations can be added:
 
 - `pathToFile`: Where the database is stored. Default: `'../db/db.json'`.
-- `storedElements`: What should be stored in the database. [Learn more in the database integration documentation](https://v4.jovo.tech/docs/databases).
+- `storedElements`: What should be stored in the database. [Learn more in the database integration documentation](https://www.jovo.tech/docs/databases).
 
 Here is an example of a configuration with a `pathToFile` property:
 

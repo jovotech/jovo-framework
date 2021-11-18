@@ -41,7 +41,7 @@ $ jovo
 
 ### Create a new Project
 
-After installing the Jovo CLI, you can install the template ([TypeScript](https://github.com/jovotech/jovo-v4-template) or [JavaScript](https://github.com/jovotech/jovo-v4-template-js)) using the [`new` command](https://v4.jovo.tech/docs/new-command):
+After installing the Jovo CLI, you can install the template ([TypeScript](https://github.com/jovotech/jovo-v4-template) or [JavaScript](https://github.com/jovotech/jovo-v4-template-js)) using the [`new` command](https://www.jovo.tech/docs/new-command):
 
 ```sh
 $ jovo new <directory>
@@ -111,8 +111,6 @@ $ jovo run
 ```
 
 You can now open the Jovo Debugger with the `.` key.
-
-**Note:** The v4 Debugger can be reached using `webhookv4.jovo.cloud` instead of `webhook.jovo.cloud`.
 
 You can then use the request buttons or type input to test the flow of the app.
 

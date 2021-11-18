@@ -11,12 +11,12 @@ Build voice experiences and chatbots for the web. This frontend client brings yo
 
 ![Jovo Client and Jovo Core Platform](https://github.com/jovotech/jovo-framework/raw/master/jovo-platforms/jovo-platform-core/img/jovo-client-platform-communication.png 'How Jovo Core Platform communicates with clients like web apps')
 
-[Jovo Clients](https://v4.jovo.tech/docs/clients) help with two tasks:
+[Jovo Clients](https://www.jovo.tech/docs/clients) help with two tasks:
 
-- [Record user input](#record-user-input) (speech, text, buttons) and send it as a [request to the Jovo app](#send-a-request-to-jovo) (where the [Web Platform](https://v4.jovo.tech/marketplace/platform-web) handles the conversational logic).
+- [Record user input](#record-user-input) (speech, text, buttons) and send it as a [request to the Jovo app](#send-a-request-to-jovo) (where the [Web Platform](https://www.jovo.tech/marketplace/platform-web) handles the conversational logic).
 - [Handle the response from the Jovo app](#handle-the-response-from-jovo) and play/show output to the user.
 
-The Jovo Web Client can be used on websites and web apps. This is the vanilla JavaScript version for custom websites or frameworks and libraries like React. You can also find versions for [Vue2](https://v4.jovo.tech/marketplace/client-web-vue2) and [Vue3](https://v4.jovo.tech/marketplace/client-web-vue2).
+The Jovo Web Client can be used on websites and web apps. This is the vanilla JavaScript version for custom websites or frameworks and libraries like React. You can also find versions for [Vue2](https://www.jovo.tech/marketplace/client-web-vue2) and [Vue3](https://www.jovo.tech/marketplace/client-web-vue2).
 
 ## Installation
 
@@ -48,7 +48,7 @@ const client = new Client('http://localhost:3000/webhook', {
 
 The constructor accepts two parameters:
 
-- `endpointUrl`: For local development of your Jovo app with [Express](https://v4.jovo.tech/marketplace/server-express), you can use `http://localhost:3000/webhook`. Learn more in the [deployment](#deployment) section.
+- `endpointUrl`: For local development of your Jovo app with [Express](https://www.jovo.tech/marketplace/server-express), you can use `http://localhost:3000/webhook`. Learn more in the [deployment](#deployment) section.
 - [Configuration options](#configuration)
 
 ## Configuration
@@ -83,10 +83,10 @@ This is the default configuration for the Jovo Web Client:
 }
 ```
 
-- `version`: The version of the [Jovo Web Platform](https://v4.jovo.tech/marketplace/platform-web) request and response schemas.
+- `version`: The version of the [Jovo Web Platform](https://www.jovo.tech/marketplace/platform-web) request and response schemas.
 - `locale`: This locale is added to the request to the Jovo app. Default: `en`.
 - `platform`: The platform name that is added to the request to the Jovo app. Default: `web`.
-- `device`: Information about the device, including `capabilities`. Learn more in the [Jovo Device docs](https://v4.jovo.tech/docs/device).
+- `device`: Information about the device, including `capabilities`. Learn more in the [Jovo Device docs](https://www.jovo.tech/docs/device).
 - `input`: Learn more about the [`audioRecorder`](#audiorecorder) and [`speechRecognizer`](#webspeech-api-speechrecognizer) in the [user input section](#record-user-input).
 - `output`: Learn more about the [`audioPlayer`](#audioplayer) and [`speechSynthesizer`](#webspeech-api-speechsynthesizer) in the [handle Jovo response section](#handle-the-response-from-jovo).
 - `store`: Defines how session data is stored in the browser's local storage.
@@ -141,7 +141,7 @@ client.isInitialized;
 
 ### AudioRecorder
 
-The Jovo Web Client implements an [`AudioRecorder`](https://github.com/jovotech/jovo-framework/blob/v4/latestclients/client-web/src/standalone/AudioRecorder.ts) that records speech in an audio file and sends it to your Jovo app as [`SPEECH` input type](https://v4.jovo.tech/docs/input#speech).
+The Jovo Web Client implements an [`AudioRecorder`](https://github.com/jovotech/jovo-framework/blob/v4/latestclients/client-web/src/standalone/AudioRecorder.ts) that records speech in an audio file and sends it to your Jovo app as [`SPEECH` input type](https://www.jovo.tech/docs/input#speech).
 
 The default configuration for the `AudioRecorder` (which you can access with `client.audioRecorder`) is:
 
@@ -207,7 +207,7 @@ The `AudioRecorder` also emits events based on the recording status. The table b
 
 The [WebSpeech API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API) offers a [speech recognition service](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API) that makes it easier to turn speech audio into transcribed text right in the browser.
 
-This way, you can record speech input and send it to your Jovo app as [`TRANSCRIBED_SPEECH` input type](https://v4.jovo.tech/docs/input#transcribed_speech).
+This way, you can record speech input and send it to your Jovo app as [`TRANSCRIBED_SPEECH` input type](https://www.jovo.tech/docs/input#transcribed_speech).
 
 The default configuration for the [`SpeechRecognizer`](https://github.com/jovotech/jovo-framework/blob/v4/latestclients/client-web/src/standalone/SpeechRecognizer.ts) (which you can access with `client.speechRecognizer`) is:
 
@@ -288,15 +288,15 @@ private onMouseUp(event: MouseEvent | TouchEvent) {
 
 ## Send a Request to Jovo
 
-After successful user input, the Jovo Web Client sends a request to the Jovo app, where the [Web Platform](https://v4.jovo.tech/marketplace/platform-web) handles the conversational logic and then returns a response.
+After successful user input, the Jovo Web Client sends a request to the Jovo app, where the [Web Platform](https://www.jovo.tech/marketplace/platform-web) handles the conversational logic and then returns a response.
 
-The request is based on different [Jovo Input](https://v4.jovo.tech/docs/input) types, depending on the recording type:
+The request is based on different [Jovo Input](https://www.jovo.tech/docs/input) types, depending on the recording type:
 
-- [`TEXT` input](https://v4.jovo.tech/docs/input#text) for text (chat) messages.
-- [`SPEECH` input](https://v4.jovo.tech/docs/input#speech) for audio recordings with the [`AudioRecorder`](#audiorecorder).
-- [`TRANSCRIBED_SPEECH` input](https://v4.jovo.tech/docs/input#transcribed_speech) for text based on audio recordings with the [`SpeechRecognizer`](#speechrecognizer).
+- [`TEXT` input](https://www.jovo.tech/docs/input#text) for text (chat) messages.
+- [`SPEECH` input](https://www.jovo.tech/docs/input#speech) for audio recordings with the [`AudioRecorder`](#audiorecorder).
+- [`TRANSCRIBED_SPEECH` input](https://www.jovo.tech/docs/input#transcribed_speech) for text based on audio recordings with the [`SpeechRecognizer`](#speechrecognizer).
 
-While the client already does the job for you for `AudioRecorder` and `SpeechRecognizer` input, you can also manually send a request based on [Jovo Input](https://v4.jovo.tech/docs/input) to the Jovo app using the `send()` method:
+While the client already does the job for you for `AudioRecorder` and `SpeechRecognizer` input, you can also manually send a request based on [Jovo Input](https://www.jovo.tech/docs/input) to the Jovo app using the `send()` method:
 
 ```typescript
 import { InputType } from '@jovotech/client-web';
@@ -326,9 +326,9 @@ const response = await client.send(request);
 
 ## Handle the Response from Jovo
 
-After sending a request to the Jovo app, the client waits for the app to go through the [RIDR Lifecycle](https://v4.jovo.tech/docs/ridr-lifecycle) and return a [Web Platform response](https://v4.jovo.tech/marketplace/platform-web#responses).
+After sending a request to the Jovo app, the client waits for the app to go through the [RIDR Lifecycle](https://www.jovo.tech/docs/ridr-lifecycle) and return a [Web Platform response](https://www.jovo.tech/marketplace/platform-web#responses).
 
-This response contains an `output` property, which includes [output templates](https://v4.jovo.tech/docs/output-templates) that are used by the client to show and play a response to the user. For example, an output template could look like this:
+This response contains an `output` property, which includes [output templates](https://www.jovo.tech/docs/output-templates) that are used by the client to show and play a response to the user. For example, an output template could look like this:
 
 ```typescript
 {
@@ -388,7 +388,7 @@ client.audioPlayer.volume;
 
 ### WebSpeech API SpeechSynthesizer
 
-The [WebSpeech API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API) offers a [speech synthesis service](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis) that makes it easier to turn output [`messages`](https://v4.jovo.tech/docs/output-templates#message) and [`reprompts`](https://v4.jovo.tech/docs/output-templates#reprompt) into spoken audio right in the browser.
+The [WebSpeech API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API) offers a [speech synthesis service](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis) that makes it easier to turn output [`messages`](https://www.jovo.tech/docs/output-templates#message) and [`reprompts`](https://www.jovo.tech/docs/output-templates#reprompt) into spoken audio right in the browser.
 
 The configuration for the [`SpeechSynthesizer`](https://github.com/jovotech/jovo-framework/blob/v4/latestclients/client-web/src/standalone/SpeechSynthesizer.ts) (which you can access with `client.speechSynthesizer`) is:
 
@@ -438,7 +438,7 @@ The Web Client also implements an [`SSMLProcessor`](https://github.com/jovotech/
 
 ### Reprompts
 
-The Web Client is able to play [reprompts](https://v4.jovo.tech/docs/output-templates#reprompt) if the user doesn't respond to a prompt. This feature is currently only available for Speech Interfaces.
+The Web Client is able to play [reprompts](https://www.jovo.tech/docs/output-templates#reprompt) if the user doesn't respond to a prompt. This feature is currently only available for Speech Interfaces.
 
 Reprompts are played by the [`RepromptProcessor`](https://github.com/jovotech/jovo-framework/blob/v4/latestclients/client-web/src/core/RepromptProcessor.ts), which can be configured like this:
 
@@ -455,6 +455,6 @@ The `maxAttempts` property defines how many reprompts should be played before cl
 
 If you want to deploy your web experience to production, you need to do the following:
 
-- Deploy the Jovo app: [Learn more about server integrations here](https://v4.jovo.tech/docs/server).
+- Deploy the Jovo app: [Learn more about server integrations here](https://www.jovo.tech/docs/server).
 - Update the `endpointUrl` with your app endpoint (for example, an AWS API Gateway URL).
 - Deploy the client.

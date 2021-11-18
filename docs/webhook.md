@@ -16,7 +16,7 @@ This URL only works for local development and can't be used in production. For m
 By using the [`run` command](https://www.jovo.tech/docs/run-command), a unique, anonymous link is created that looks like this:
 
 ```
-https://webhookv4.jovo.cloud/<your-id>
+https://webhook.jovo.cloud/<your-id>
 ```
 
 This link can be used in a number of use cases:
