@@ -1,17 +1,17 @@
 # Developing Conversational Components
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/components/developing-components
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/components/developing-components
 
 Get an overview on how to develop your own Conversational Components.
 
-* [Handler](#handler)
-* [Configuration](#configuration)
-* [Models](#models)
-* [i18n](#i18n)
-* [Components using Components](#components-using-components)
-  * [Installation](#installation)
-  * [Configuration of Nested Components](#configuration-of-nested-components)
-  * [General Usage](#general-usage)
+- [Handler](#handler)
+- [Configuration](#configuration)
+- [Models](#models)
+- [i18n](#i18n)
+- [Components using Components](#components-using-components)
+  - [Installation](#installation)
+  - [Configuration of Nested Components](#configuration-of-nested-components)
+  - [General Usage](#general-usage)
 
 You're component has to have the whole package of language model, handler, configuration and i18n for people to be able to use it. We will skip, the general description of each of these blocks and go into more detail about the small stuff that's important to develop components. You can revisit the basics [here](./README.md 'components').
 
@@ -50,7 +50,7 @@ const phoneNumberHandler: Handler = {
     }
 };
 
-export {phoneNumberHandler}; 
+export {phoneNumberHandler};
 ```
 
 In the `START` intent you should check if the user has parsed existing data to your component. In the following example, the component checks whether the user has parsed an existing phone number:
@@ -83,29 +83,29 @@ const phoneNumberHandler: Handler = {
 
 At the time the component finished, or if there was an error, or the user tried to stop the app, you have to send the component's response using `sendComponentResponse(response)` function. The `response` object has to have the following interface:
 
-Name | Description | Value | Required 
---- | --- | --- | ---
-`status` | Represents the status of the component. Will be set to `SUCCESSFUL` if the component managed to collect the data without problems. Will be set to `REJECTED` if the user tried to stop the app at any point, e.g. *Alexa, stop*. Will be set `ERROR` if an error occurred at some point. | Either `SUCCESSFUL`, `REJECTED`, or `ERROR` | Yes
-`data` | An object containing the data the component was supposed to collect. The content of the object will be different for each component | `object` | Yes
-`error` | An error object, which is only present if the status is set to `ERROR` | `Error` | Yes, if there was an error
+| Name     | Description                                                                                                                                                                                                                                                                              | Value                                       | Required                   |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | -------------------------- |
+| `status` | Represents the status of the component. Will be set to `SUCCESSFUL` if the component managed to collect the data without problems. Will be set to `REJECTED` if the user tried to stop the app at any point, e.g. _Alexa, stop_. Will be set `ERROR` if an error occurred at some point. | Either `SUCCESSFUL`, `REJECTED`, or `ERROR` | Yes                        |
+| `data`   | An object containing the data the component was supposed to collect. The content of the object will be different for each component                                                                                                                                                      | `object`                                    | Yes                        |
+| `error`  | An error object, which is only present if the status is set to `ERROR`                                                                                                                                                                                                                   | `Error`                                     | Yes, if there was an error |
 
 ```js
 // @language=javascript
 const response = {
-    status: 'SUCCESSFUL',
-    data: {
-        phoneNumber: '0123456789'
-    }
+	status: 'SUCCESSFUL',
+	data: {
+		phoneNumber: '0123456789',
+	},
 };
 
 this.sendComponentResponse(response);
 
 // @language=typescript
 const response: ComponentResponse = {
-    status: 'SUCCESSFUL',
-    data: {
-        phoneNumber: '0123456789'
-    }
+	status: 'SUCCESSFUL',
+	data: {
+		phoneNumber: '0123456789',
+	},
 };
 
 this.sendComponentResponse(response);
@@ -175,34 +175,34 @@ Specify the component's default configuration in its `config.js` file. There's n
 import { ComponentConfig } from 'jovo-framework';
 
 interface SurveyConfig extends ComponentConfig {
-    numberOfQuestions: number;
+	numberOfQuestions: number;
 }
 
 const config: SurveyConfig = {
-    intentMap: {
-        'AMAZON.HelpIntent': 'HelpIntent',
-        'AMAZON.NoIntent': 'NoIntent',
-        'AMAZON.StopIntent': 'END',
-        'StopIntent': 'END',
-        'AMAZON.YesIntent': 'YesIntent'
-    },
-    numberOfQuestions: 3
+	intentMap: {
+		'AMAZON.HelpIntent': 'HelpIntent',
+		'AMAZON.NoIntent': 'NoIntent',
+		'AMAZON.StopIntent': 'END',
+		StopIntent: 'END',
+		'AMAZON.YesIntent': 'YesIntent',
+	},
+	numberOfQuestions: 3,
 };
 
-export {SurveyConfig, config as Config};
+export { SurveyConfig, config as Config };
 
 // @language=javascript
 // src/config.js
 
 const config = {
-    intentMap: {
-        'AMAZON.HelpIntent': 'HelpIntent',
-        'AMAZON.NoIntent': 'NoIntent',
-        'AMAZON.StopIntent': 'END',
-        'StopIntent': 'END',
-        'AMAZON.YesIntent': 'YesIntent'
-    },
-    numberOfQuestions: 3
+	intentMap: {
+		'AMAZON.HelpIntent': 'HelpIntent',
+		'AMAZON.NoIntent': 'NoIntent',
+		'AMAZON.StopIntent': 'END',
+		StopIntent: 'END',
+		'AMAZON.YesIntent': 'YesIntent',
+	},
+	numberOfQuestions: 3,
 };
 
 module.exports = config;
@@ -306,29 +306,29 @@ After that, you add the component to your own component by calling the `useCompo
 // index.ts
 
 export class TestComponent1 extends ComponentPlugin {
-    // ...
+	// ...
 
-    constructor(config?: PluginConfig) {
-        super(config);
-        // ...
+	constructor(config?: PluginConfig) {
+		super(config);
+		// ...
 
-        this.useComponents(new TestComponent2());
-    }
+		this.useComponents(new TestComponent2());
+	}
 }
 
 // @language=javascript
 // index.js
 
 class TestComponent1 extends ComponentPlugin {
-    constructor(config) {
-        super(config);
-        // ...
+	constructor(config) {
+		super(config);
+		// ...
 
-        this.useComponents(new TestComponent2());
-    }
+		this.useComponents(new TestComponent2());
+	}
 }
 
-module.exports = GetPhoneNumber; 
+module.exports = GetPhoneNumber;
 ```
 
 With all these set, the Jovo CLI and framework will load your component's component's files on `load` and add it to the project's active components.
@@ -427,7 +427,7 @@ The deeper the nesting of components using components, the deeper the configurat
 
 ### General Usage
 
-There's no difference here. Inside your component's handler you can simply delegate to the component, the same way you would do it in a normal Jovo project. 
+There's no difference here. Inside your component's handler you can simply delegate to the component, the same way you would do it in a normal Jovo project.
 
 <!--[metadata]: {
   "description": "Learn how to develop your own Conversational Components",

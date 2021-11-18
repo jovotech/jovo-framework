@@ -1,6 +1,6 @@
 # Echo Button and Gadget Skills
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-alexa/interfaces/game-engine-gadget-controller
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-alexa/interfaces/game-engine-gadget-controller
 
 * [GadgetController Interface](#gadgetcontroller-interface)
   * [Set Light](#set-light)
@@ -50,10 +50,10 @@ Don't forget to build and deploy your project after you've added the interface:
 
 ```sh
 # Build platform specific files
-$ jovo build
+$ jovo3 build
 
 # Deploy to platforms
-$ jovo deploy
+$ jovo3 deploy
 ```
 
 ### Set Light
@@ -223,10 +223,10 @@ Don't forget to build and deploy your project after you've added the interface:
 
 ```sh
 # Build platform specific files
-$ jovo build
+$ jovo3 build
 
 # Deploy to platforms
-$ jovo deploy
+$ jovo3 deploy
 ```
 
 ### Recognizers

@@ -1,6 +1,6 @@
 # PostgreSQL Database Integration
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-db-postgresql
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-db-postgresql
 
 Learn how to use PostgreSQL as your app's database to store user specific data.
 

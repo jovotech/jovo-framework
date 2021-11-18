@@ -1,6 +1,6 @@
 # Requests
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-alexa/request-response/request
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-alexa/request-response/request
 
 * [Introduction](#introduction)
 * [Basic Request Types](#basic-request-types)
@@ -185,10 +185,10 @@ Don't forget to build and deploy your project after you've added the interface:
 
 ```sh
 # Build platform specific files
-$ jovo build
+$ jovo3 build
 
 # Deploy to platforms
-$ jovo deploy
+$ jovo3 deploy
 ```
 
 #### CanFulfillIntentRequest Implementation
@@ -232,7 +232,7 @@ It is recommended to go over the official Amazon documentation ([here](https://d
 
 ## $request Object
 
-Besides the [cross-platform getter and setter methods](https://www.jovo.tech/docs/requests-responses/request#cross-platform-methods) the Alexa `$request` object supports the following general getter methods:
+Besides the [cross-platform getter and setter methods](https://v3.jovo.tech/docs/requests-responses/request#cross-platform-methods) the Alexa `$request` object supports the following general getter methods:
 
 ### Getters
 

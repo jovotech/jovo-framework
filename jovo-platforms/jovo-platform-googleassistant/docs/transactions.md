@@ -1,6 +1,6 @@
 # Google Transactions
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistant/transactions
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-googleassistant/transactions
 
 Learn how to sell digital and physical goods in your Google Actions by using Google Transactions.
 
@@ -265,7 +265,7 @@ Learn more about configurations for merchant-managed payments in the [official G
 
 ### Physical Goods Implementation
 
-> [You can find an example project on GitHub](https://github.com/jovotech/jovo-framework/tree/master/examples/javascript/02_googleassistant/transactions/src).
+> [You can find an example project on GitHub](https://github.com/jovotech/jovo-framework/tree/v3/latest/examples/javascript/02_googleassistant/transactions/src).
 
 There are several steps that need to be taken to create an order with your physical goods transaction:
 

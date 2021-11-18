@@ -1,6 +1,6 @@
 # Jovo Audio Converter
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/audio-converter
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/audio-converter
 
 The Jovo Audio Converter converts your MP3s into the right format for Alexa Skills and Google Actions.
 

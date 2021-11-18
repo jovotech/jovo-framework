@@ -1,6 +1,6 @@
 # Visual Output
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/visual-output
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/visual-output
 
 Learn more about how to build Google Actions with visual output using the Jovo Framework.
 
@@ -80,7 +80,7 @@ let basicCard = new BasicCard()
       height: 150
   })
   .setImageDisplay('WHITE') 
-  .addButton('Jovo website', 'https://www.jovo.tech/');
+  .addButton('Jovo website', 'https://v3.jovo.tech/');
 
 this.$googleAction.showBasicCard(basicCard);
 
@@ -104,7 +104,7 @@ let basicCard = new BasicCard()
       height: 150
   })
   .setImageDisplay('WHITE') 
-  .addButton('Jovo website', 'https://www.jovo.tech/');
+  .addButton('Jovo website', 'https://v3.jovo.tech/');
 
 this.$googleAction!.showBasicCard(basicCard);
 ```
@@ -151,7 +151,7 @@ let tableCard = new Table()
   .addRow(['row 1 item 1', 'row 1 item 2', 'row 1 item 3'], false)
   .addRow(['row 2 item 1', 'row 2 item 2', 'row 2 item 3'], true)
   .addRow(['row 3 item 3', 'row 3 item 2', 'row 3 item 3'])
-  .addButton('Jovo website', 'https://www.jovo.tech/');
+  .addButton('Jovo website', 'https://v3.jovo.tech/');
 
 this.$googleAction.showTable(tableCard);
 
@@ -177,7 +177,7 @@ let tableCard = new Table()
   .addRow(['row 1 item 1', 'row 1 item 2', 'row 1 item 3'], false)
   .addRow(['row 2 item 1', 'row 2 item 2', 'row 2 item 3'], true)
   .addRow(['row 3 item 3', 'row 3 item 2', 'row 3 item 3'])
-  .addButton('Jovo website', 'https://www.jovo.tech/');
+  .addButton('Jovo website', 'https://v3.jovo.tech/');
 
 this.$googleAction!.showTable(tableCard);
 ```
@@ -333,13 +333,13 @@ Method | Description
 
 this.$googleAction.showSuggestionChips(['Suggestion 1', 'Suggestion 2', 'Suggestion 3']);
 
-this.$googleAction.showLinkOutSuggestion('Jovo', 'https://www.jovo.tech/');
+this.$googleAction.showLinkOutSuggestion('Jovo', 'https://v3.jovo.tech/');
 
 // @language=typescript
 
 this.$googleAction!.showSuggestionChips(['Suggestion 1', 'Suggestion 2', 'Suggestion 3']);
 
-this.$googleAction!.showLinkOutSuggestion('Jovo', 'https://www.jovo.tech/');
+this.$googleAction!.showLinkOutSuggestion('Jovo', 'https://v3.jovo.tech/');
 ```
 
 [Official Documentation](https://developers.google.com/actions/assistant/responses#suggestion-chip)

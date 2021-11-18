@@ -1,6 +1,6 @@
 # Microsoft LUIS NLU Integration
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-nlu-luis
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-nlu-luis
 
 Learn how to use Microsoft LUIS as NLU (Natural Language Understanding) integration with the Jovo Framework.
 
@@ -18,11 +18,11 @@ npm install --save jovo-nlu-luis
 const { LuisNlu } = require('jovo-nlu-luis');
 
 platform.use(
-	new LuisNlu({
-		endpointKey: 'yourEndpointKey',
-		endpointRegion: 'yourEndpointRegion',
-		appId: 'yourAppid'
-	})
+  new LuisNlu({
+    endpointKey: 'yourEndpointKey',
+    endpointRegion: 'yourEndpointRegion',
+    appId: 'yourAppid',
+  }),
 );
 
 // @language=typescript
@@ -32,10 +32,10 @@ platform.use(
 import { LuisNlu } from 'jovo-nlu-luis';
 
 platform.use(
-	new LuisNlu({
-		endpointKey: 'yourEndpointKey',
-		endpointRegion: 'yourEndpointRegion',
-		appId: 'yourAppid'
-	})
+  new LuisNlu({
+    endpointKey: 'yourEndpointKey',
+    endpointRegion: 'yourEndpointRegion',
+    appId: 'yourAppid',
+  }),
 );
 ```

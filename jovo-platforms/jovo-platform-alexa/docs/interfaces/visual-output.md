@@ -1,6 +1,6 @@
 # Alexa Visual Output
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-alexa/interfaces/visual-output
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-alexa/interfaces/visual-output
 
 Learn more about how to build Alexa Skills with visual output using the Jovo Framework.
 
@@ -139,10 +139,10 @@ Then, use the Jovo CLI to deploy to the Amazon Developer Portal:
 
 ```sh
 # Build platforms folder
-$ jovo build
+$ jovo3 build
 
 # Upload to Alexa
-$ jovo deploy
+$ jovo3 deploy
 ```
 
 Alternatively, you can enable it in the Interfaces tab in the Amazon Developer Console:
@@ -393,7 +393,7 @@ this.$alexaSkill!.showDisplayTemplate(listTemplate2);
 
 ## Alexa Presentation Language
 
-> Tutorial: [Using the Alexa Presentation Language (APL) with Jovo](https://www.jovo.tech/tutorials/alexa-presentation-language)
+> Tutorial: [Using the Alexa Presentation Language (APL) with Jovo](https://v3.jovo.tech/tutorials/alexa-presentation-language)
 
 With Jovo, you can also use the Alexa Presentation Language (APL). To add APL directives, use the following method:
 
@@ -473,10 +473,10 @@ Then, use the Jovo CLI to deploy to the Amazon Developer Portal:
 
 ```sh
 # Build platforms folder
-$ jovo build
+$ jovo3 build
 
 # Upload to Alexa
-$ jovo deploy
+$ jovo3 deploy
 ```
 
 You can check whether the current device supports the APL interface using the following helper method:
@@ -543,8 +543,8 @@ Then, use the Jovo CLI to deploy to the Amazon Developer Portal:
 
 ```sh
 # Build platforms folder
-$ jovo build
+$ jovo3 build
 
 # Upload to Alexa
-$ jovo deploy
+$ jovo3 deploy
 ```

@@ -1,25 +1,24 @@
 # Routing
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/routing
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/routing
 
 In this section, you will learn more about how to use intents and states to route your users through your voice app.
 
-* [Introduction to Routing](#introduction-to-routing)
-   * [Intents](#intents)
-   * [States](#states)
-   * [Input](#input)
-* [Intent Redirects](#intent-redirects)
-   * [toIntent](#tointent)
-   * [toStateIntent](#tostateintent)
-   * [toStatelessIntent](#tostatelessintent)
-* [Advanced Routing](#advanced-routing)
-   * [Separate Handlers](#separate-handlers)
-   * [Platform Handlers](#platform-handlers) 
-   * [Event Listeners](#event-listeners)
-* [Routing Helpers](#routing-helpers)
-   * [getMappedIntentName](#getmappedintentname)
-   * [getRoute](#getroute)
-
+- [Introduction to Routing](#introduction-to-routing)
+  - [Intents](#intents)
+  - [States](#states)
+  - [Input](#input)
+- [Intent Redirects](#intent-redirects)
+  - [toIntent](#tointent)
+  - [toStateIntent](#tostateintent)
+  - [toStatelessIntent](#tostatelessintent)
+- [Advanced Routing](#advanced-routing)
+  - [Separate Handlers](#separate-handlers)
+  - [Platform Handlers](#platform-handlers)
+  - [Event Listeners](#event-listeners)
+- [Routing Helpers](#routing-helpers)
+  - [getMappedIntentName](#getmappedintentname)
+  - [getRoute](#getroute)
 
 ## Introduction to Routing
 
@@ -32,34 +31,34 @@ This is what a simple handler looks like:
 // src/app.js
 
 app.setHandler({
-    LAUNCH() {
-        return this.toIntent('HelloWorldIntent');
-    },
+	LAUNCH() {
+		return this.toIntent('HelloWorldIntent');
+	},
 
-    HelloWorldIntent() {
-        this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
-    },
+	HelloWorldIntent() {
+		this.ask("Hello World! What's your name?", 'Please tell me your name.');
+	},
 
-    MyNameIsIntent() {
-        this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
-    },
+	MyNameIsIntent() {
+		this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
+	},
 });
 
 // @language=typescript
 // src/app.ts
 
 app.setHandler({
-    LAUNCH() {
-        return this.toIntent('HelloWorldIntent');
-    },
+	LAUNCH() {
+		return this.toIntent('HelloWorldIntent');
+	},
 
-    HelloWorldIntent() {
-        this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
-    },
+	HelloWorldIntent() {
+		this.ask("Hello World! What's your name?", 'Please tell me your name.');
+	},
 
-    MyNameIsIntent() {
-        this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
-    },
+	MyNameIsIntent() {
+		this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
+	},
 });
 ```
 
@@ -67,24 +66,25 @@ The handlers make use of JavaScript Promises and `async/await`. This means the h
 
 ```javascript
 app.setHandler({
-    LAUNCH() {
-        return this.toIntent('QuoteIntent');
-    },
+	LAUNCH() {
+		return this.toIntent('QuoteIntent');
+	},
 
-    async QuoteIntent() {
-        const quote = await getRandomQuote();
+	async QuoteIntent() {
+		const quote = await getRandomQuote();
 
-        this.tell(quote);
-    },
+		this.tell(quote);
+	},
 });
 ```
 
-> Tutorial: [Make an API Call with Jovo and async/await](https://www.jovo.tech/tutorials/api-call)
+> Tutorial: [Make an API Call with Jovo and async/await](https://v3.jovo.tech/tutorials/api-call)
 
 Routing in a Jovo project consists of three key concepts:
-* [Intents](#intents)
-* [States](#states)
-* [Input](#input)
+
+- [Intents](#intents)
+- [States](#states)
+- [Input](#input)
 
 ### Intents
 
@@ -92,16 +92,14 @@ Each intent from your [Language Model](../model './model') can be added as a fun
 
 ```javascript
 app.setHandler({
+	LAUNCH() {
+		// Triggered when people open the voice app without a specific query
+		this.tell('Hello World!');
+	},
 
-    LAUNCH() {
-        // Triggered when people open the voice app without a specific query
-        this.tell('Hello World!');
-    },
-
-    YourFirstIntent() {
-        // Do something here
-    },
-
+	YourFirstIntent() {
+		// Do something here
+	},
 });
 ```
 
@@ -113,27 +111,23 @@ Jovo comes with built-in state handling that allows you to react to intents diff
 
 ```javascript
 app.setHandler({
+	LAUNCH() {
+		this.$speech.addText('Do you want to order something?');
+		this.$reprompt.addText('Please answer with yes or no.');
 
-    LAUNCH() {
-        this.$speech.addText('Do you want to order something?');
-        this.$reprompt.addText('Please answer with yes or no.');
+		this.followUpState('OrderState').ask(this.$speech, this.$reprompt);
+	},
 
-        this.followUpState('OrderState')
-            .ask(this.$speech, this.$reprompt);
-    },
-    
-    // Example: Behave differently for a 'yes' or 'no' answer inside order state
-    OrderState: {
-        
-        YesIntent() {
-           // Do something
-        },
+	// Example: Behave differently for a 'yes' or 'no' answer inside order state
+	OrderState: {
+		YesIntent() {
+			// Do something
+		},
 
-        NoIntent() {
-           // Do something
-        },
-    },
-
+		NoIntent() {
+			// Do something
+		},
+	},
 });
 ```
 
@@ -145,44 +139,41 @@ In the `MyNameIsIntent` of the example above, the user's first name is passed as
 
 ```javascript
 app.setHandler({
-
-    MyNameIsIntent() {
-        this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
-    },
-
+	MyNameIsIntent() {
+		this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
+	},
 });
 ```
 
 > [Learn more about Input here](./input.md './routing/input').
 
-
 ## Intent Redirects
 
-Jovo offers the ability to redirect incoming intents to others. For example, the  sample voice app uses this to go from `LAUNCH` to `HelloWorldIntent`:
+Jovo offers the ability to redirect incoming intents to others. For example, the sample voice app uses this to go from `LAUNCH` to `HelloWorldIntent`:
 
 ```javascript
 app.setHandler({
+	LAUNCH() {
+		return this.toIntent('HelloWorldIntent');
+	},
 
-    LAUNCH() {
-        return this.toIntent('HelloWorldIntent');
-    },
-
-    HelloWorldIntent() {
-        this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
-    },
+	HelloWorldIntent() {
+		this.ask("Hello World! What's your name?", 'Please tell me your name.');
+	},
 });
 ```
 
 You can use the following methods to redirect intents:
-* [toIntent](#tointent)
-* [toStateIntent](#tostateintent)
-* [toStatelessIntent](#tostatelessintent)
+
+- [toIntent](#tointent)
+- [toStateIntent](#tostateintent)
+- [toStatelessIntent](#tostatelessintent)
 
 > [Learn how to pass data between intents](../data './data').
 
 ### toIntent
 
-Use `toIntent` to jump into a new intent within the same request. 
+Use `toIntent` to jump into a new intent within the same request.
 
 ```javascript
 return this.toIntent(intent);
@@ -190,7 +181,6 @@ return this.toIntent(intent);
 // Go to PizzaIntent
 return this.toIntent('PizzaIntent');
 ```
-
 
 ### toStateIntent
 
@@ -205,7 +195,6 @@ return this.toStateIntent(state, intent);
 return this.toStateIntent('OnboardingState', 'PizzaIntent');
 ```
 
-
 ### toStatelessIntent
 
 If you're inside a state and want to go to a global intent, you can use `toStatelessIntent` to do exactly this:
@@ -219,24 +208,21 @@ return this.toStatelessIntent('PizzaIntent');
 
 > Note: Calling this method will remove the current state from the response.
 
-
 ## Advanced Routing
 
 As explained in the introduction above, routing is usually done with `handlers`, which can be added with the `app.setHandler` method in the `src/app.js` file:
 
 ```javascript
 app.setHandler({
-    
-    // Add intents and states here
-
+	// Add intents and states here
 });
 ```
 
 For complex projects that include many intents and states, this can get quite complicated quickly. In this section, additional routing methods are explained:
 
-* [Separate Handlers](#separate-handlers)
-* [Platform Handlers](#platform-handlers) 
-* [Event Listeners](#event-listeners)
+- [Separate Handlers](#separate-handlers)
+- [Platform Handlers](#platform-handlers)
+- [Event Listeners](#event-listeners)
 
 ### Separate Handlers
 
@@ -250,15 +236,15 @@ This allows you to have the handlers separated into different files (as modules)
 
 ```javascript
 app.setHandler(
-    require('./handlers/stateless'),
+	require('./handlers/stateless'),
 
-    // Option 1: Require full object
-    require('./handlers/firstState'),
+	// Option 1: Require full object
+	require('./handlers/firstState'),
 
-    // Option 2: Require inside state object
-    {
-        'SecondState': require('./handlers/secondState'),
-    }
+	// Option 2: Require inside state object
+	{
+		SecondState: require('./handlers/secondState'),
+	}
 );
 ```
 
@@ -266,17 +252,15 @@ The `stateless.js` file could look like this:
 
 ```javascript
 module.exports = {
-    LAUNCH() {
-        this.followUpState('FirstState')
-            .ask('Do you want to get started?');
-    },
+	LAUNCH() {
+		this.followUpState('FirstState').ask('Do you want to get started?');
+	},
 
-    Unhandled() {
-        this.toIntent('LAUNCH');
-    },
+	Unhandled() {
+		this.toIntent('LAUNCH');
+	},
 };
 ```
-
 
 ### Platform Handlers
 
@@ -286,21 +270,21 @@ Here is an example that offers different output for the two platforms:
 
 ```javascript
 const handlers = {
-    LAUNCH() {
-        return this.toIntent('HelloWorldIntent');
-    },
+	LAUNCH() {
+		return this.toIntent('HelloWorldIntent');
+	},
 };
 
 const alexaHandlers = {
-    HelloWorldIntent() {
-        this.tell('Hello Alexa User.');
-    },
+	HelloWorldIntent() {
+		this.tell('Hello Alexa User.');
+	},
 };
 
 const googleAssistantHandlers = {
-    HelloWorldIntent() {
-        this.tell('Hello Google User.');
-    },
+	HelloWorldIntent() {
+		this.tell('Hello Google User.');
+	},
 };
 
 app.setHandler(handlers);
@@ -309,7 +293,6 @@ app.setPlatformHandler('GoogleAssistant', googleAssistantHandlers);
 ```
 
 It is important to note that the first parameter of `setPlatformHandler` has to be the name of an installed platform, otherwise an error will be thrown.
-
 
 ### Event Listeners
 
@@ -323,17 +306,16 @@ app.onRequest(function(jovo) {
 
 > [Find out more about Event Listeners here](./event-listeners.md './routing/event-listeners').
 
-
 ## Routing Helpers
 
 Most information that is necessary for routing can be accessed through the [Jovo `$request` object](../requests-responses/request.md './requests-responses/request'). The Jovo context object (`this`) offers some additional helpful methods.
 
 ### getMappedIntentName
 
-While `this.$request.getIntentName()` only makes it possible to access the intent name as it can be found in the request, this method allows you to access the intent *after* the mapping (see: [intentMap](./intents.md#intentMap './routing/intents#intentMap')) is done:
+While `this.$request.getIntentName()` only makes it possible to access the intent name as it can be found in the request, this method allows you to access the intent _after_ the mapping (see: [intentMap](./intents.md#intentMap './routing/intents#intentMap')) is done:
 
 ```javascript
-this.getMappedIntentName()
+this.getMappedIntentName();
 ```
 
 ### getRoute
@@ -341,7 +323,7 @@ this.getMappedIntentName()
 This method allows you to access additional information about the whole routing:
 
 ```javascript
-this.getRoute()
+this.getRoute();
 ```
 
 <!--[metadata]: { "description": "Learn how to route through your voice app logic with Jovo.", "route": "routing" }-->

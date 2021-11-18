@@ -1,6 +1,6 @@
 # Requests & Responses
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/request-response
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-googleassistantconv/request-response
 
 Learn more about the Google Action request and response lifecycle.
 
@@ -12,7 +12,7 @@ Learn more about the Google Action request and response lifecycle.
 
 A typical interaction between a user and your Google Conversational Action consists of a request (what the user wants) and a response (what the action replies).
 
-Learn more in the Jovo Docs: [Basic Concepts > Request & Response Lifecycle](https://www.jovo.tech/docs/requests-responses).
+Learn more in the Jovo Docs: [Basic Concepts > Request & Response Lifecycle](https://v3.jovo.tech/docs/requests-responses).
 
 
 ## Request

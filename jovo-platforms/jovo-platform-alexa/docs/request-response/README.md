@@ -1,6 +1,6 @@
 # Requests & Responses
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-alexa/request-response
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-alexa/request-response
 
 Learn more about the Alexa Skill request and response lifecycle.
 
@@ -12,7 +12,7 @@ Learn more about the Alexa Skill request and response lifecycle.
 
 A typical interaction between a user and your Alexa Skill consists of a request (what the user wants) and a response (what the Skill replies).
 
-Learn more in the Jovo Docs: [Basic Concepts > Request & Response Lifecycle](https://www.jovo.tech/docs/requests-responses).
+Learn more in the Jovo Docs: [Basic Concepts > Request & Response Lifecycle](https://v3.jovo.tech/docs/requests-responses).
 
 
 ## Request

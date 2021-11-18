@@ -336,7 +336,7 @@ export class DynamoDb implements Db {
         Log.info('Table configuration:');
         Log.info(JSON.stringify(newTableParams, null, '\t'));
 
-        Log.info('More Info: >> https://www.jovo.tech/docs/databases/dynamodb');
+        Log.info('More Info: >> https://v3.jovo.tech/docs/databases/dynamodb');
         Log.info(Log.header());
 
         this.isCreating = true;

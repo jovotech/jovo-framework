@@ -334,7 +334,7 @@ export class GoogleAction extends Jovo {
   }
 
   /**
-   * @deprecated See https://github.com/jovotech/jovo-framework/tree/master/examples/typescript/02_googleassistantconv/account-linking
+   * @deprecated See https://github.com/jovotech/jovo-framework/tree/v3/latest/examples/typescript/02_googleassistantconv/account-linking
    */
   showAccountLinkingCard(): this {
     throw new Error('Not supported in Google Assistant Conversational Actions. ');

@@ -1,6 +1,6 @@
 # Amazon DynamoDB Database Integration
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-db-dynamodb
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-db-dynamodb
 
 Learn how to store user specific data of your Alexa Skills and Google Actions to AWS DynamoDB.
 
@@ -10,13 +10,13 @@ Learn how to store user specific data of your Alexa Skills and Google Actions to
 * [Provisioned throughput](#provisioned-throughput)
 * [Troubleshooting](#troubleshooting)
 
-> Tutorial: [Add DynamoDB to Store User Data](https://www.jovo.tech/tutorials/add-dynamodb-database)
+> Tutorial: [Add DynamoDB to Store User Data](https://v3.jovo.tech/tutorials/add-dynamodb-database)
 
 ## Introduction
 
 The DynamoDB integration allows you to store user session data in the NoSQL service running on AWS. This integration is especially convenient if you're running your voice app on AWS Lambda. You can find the official documentation about DynamoDB here: [aws.amazon.com/dynamodb](https://aws.amazon.com/dynamodb/).
 
-> [Learn more about hosting your application on AWS Lambda](https://www.jovo.tech/docs/hosting/aws-lambda).
+> [Learn more about hosting your application on AWS Lambda](https://v3.jovo.tech/docs/hosting/aws-lambda).
 
 ## Configuration
 

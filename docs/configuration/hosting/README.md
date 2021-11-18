@@ -1,6 +1,6 @@
 # Hosting
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/hosting
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/hosting
 
 In this section, you can learn more about different types of services that can be used for hosting your Alexa Skills and Google Actions.
 
@@ -10,12 +10,11 @@ In this section, you can learn more about different types of services that can b
   - [Available Integrations](#Available-Integrations)
   - [Code Example](#Code-Example)
 
-
 ## Introduction
 
 Jovo comes with off-the-shelf host integrations that make it easier for you to deploy your voice app to the provider of your choice. The hosting providers can be configured in the `index.js` file.
 
-Jovo currently supports an [ExpressJS Webhook](./express-js.md './hosting/express-js') (which we recommend for local prototyping), [AWS Lambda](./aws-lambda.md './hosting/aws-lambda'), [Google Cloud Functions](./google-cloud-functions.md './hosting/google-cloud-functions') and [Azure Functions](./azure-functions.md './hosting/azure-functions'). 
+Jovo currently supports an [ExpressJS Webhook](./express-js.md './hosting/express-js') (which we recommend for local prototyping), [AWS Lambda](./aws-lambda.md './hosting/aws-lambda'), [Google Cloud Functions](./google-cloud-functions.md './hosting/google-cloud-functions') and [Azure Functions](./azure-functions.md './hosting/azure-functions').
 
 ## Deployment
 
@@ -23,7 +22,7 @@ You can create a ready-to-deploy `bundle.zip` file with either of the following 
 
 ```sh
 # Bundle files
-$ jovo deploy --target zip
+$ jovo3 deploy --target zip
 
 # Alternative
 $ npm run bundle
@@ -32,7 +31,6 @@ $ npm run bundle
 This will copy the `src` files into a `bundle` folder, run a production-only npm install, and then zip it.
 
 You can then use this file and upload it to the hosting provider of your choice.
-
 
 ## Available Integrations
 
@@ -66,21 +64,21 @@ const { app } = require('./app.js');
 
 // ExpressJS (Jovo Webhook)
 if (process.argv.indexOf('--webhook') > -1) {
-  const port = process.env.JOVO_PORT || 3000;
-  Webhook.jovoApp = app;
+	const port = process.env.JOVO_PORT || 3000;
+	Webhook.jovoApp = app;
 
-  Webhook.listen(port, () => {
-    console.info(`Local server listening on port ${port}.`);
-  });
+	Webhook.listen(port, () => {
+		console.info(`Local server listening on port ${port}.`);
+	});
 
-  Webhook.post('/webhook', async (req, res) => {
-    await app.handle(new ExpressJS(req, res));
-  });
+	Webhook.post('/webhook', async (req, res) => {
+		await app.handle(new ExpressJS(req, res));
+	});
 }
 
 // AWS Lambda
 exports.handler = async (event, context, callback) => {
-  await app.handle(new Lambda(event, context, callback));
+	await app.handle(new Lambda(event, context, callback));
 };
 
 // @language=typescript
@@ -96,21 +94,24 @@ import { app } from './app';
 
 // ExpressJS (Jovo Webhook)
 if (process.argv.indexOf('--webhook') > -1) {
-  const port = process.env.JOVO_PORT || 3000;
-  Webhook.jovoApp = app;
+	const port = process.env.JOVO_PORT || 3000;
+	Webhook.jovoApp = app;
 
-  Webhook.listen(port, () => {
-    console.info(`Local server listening on port ${port}.`);
-  });
+	Webhook.listen(port, () => {
+		console.info(`Local server listening on port ${port}.`);
+	});
 
-  Webhook.post('/webhook', async (req: Express.Request, res: Express.Response) => {
-    await app.handle(new ExpressJS(req, res));
-  });
+	Webhook.post(
+		'/webhook',
+		async (req: Express.Request, res: Express.Response) => {
+			await app.handle(new ExpressJS(req, res));
+		}
+	);
 }
 
 // AWS Lambda
 export const handler = async (event: any, context: any, callback: Function) => {
-  await app.handle(new Lambda(event, context, callback));
+	await app.handle(new Lambda(event, context, callback));
 };
 ```
 

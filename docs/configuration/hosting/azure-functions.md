@@ -1,15 +1,15 @@
 # Azure Functions
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/hosting/azure-functions
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/hosting/azure-functions
 
 [Azure Functions](https://azure.microsoft.com/en-us/services/functions/) is a serverless compute service by Microsoft. Find the [official documentation here](https://docs.microsoft.com/en-us/azure/azure-functions/).
 
-* [Function Configuration](#function-configuration)
-* [Running the Function Locally](#running-the-function-locally)
-* [Deploying to Azure](#deploying-to-azure)
-* [Data Persistence](#data-persistence)
+- [Function Configuration](#function-configuration)
+- [Running the Function Locally](#running-the-function-locally)
+- [Deploying to Azure](#deploying-to-azure)
+- [Data Persistence](#data-persistence)
 
-> Tutorial: [Deploy to Azure](https://www.jovo.tech/tutorials/deploy-to-azure)
+> Tutorial: [Deploy to Azure](https://v3.jovo.tech/tutorials/deploy-to-azure)
 
 ## Function Configuration
 
@@ -26,7 +26,7 @@ const { AzureFunction } = require('jovo-framework');
 const { app } = require('./app/app.js');
 
 module.exports = async (context, req) => {
-    await app.handle(new AzureFunction(context, req));
+	await app.handle(new AzureFunction(context, req));
 };
 
 // @language=typescript
@@ -37,7 +37,7 @@ import { AzureFunction } from 'jovo-framework';
 import { app } from './app';
 
 const azure = async (context: any, req: any) => {
-    await app.handle(new AzureFunction(context, req));
+	await app.handle(new AzureFunction(context, req));
 };
 
 export { azure };
@@ -47,7 +47,7 @@ Second, create a new file called `host.json` in the same directory as your `inde
 
 ```json
 {
-  "version": "2.0"
+	"version": "2.0"
 }
 ```
 
@@ -55,21 +55,21 @@ Finally, create a new file called `function.json` in a subdirectory named `webho
 
 ```json
 {
-  "scriptFile": "../index.js",
-  "disabled": false,
-  "bindings": [
-    {
-      "type": "httpTrigger",
-      "webHookType": "genericJson",
-      "direction": "in",
-      "name": "req"
-    },
-    {
-      "type": "http",
-      "direction": "out",
-      "name": "res"
-    }
-  ]
+	"scriptFile": "../index.js",
+	"disabled": false,
+	"bindings": [
+		{
+			"type": "httpTrigger",
+			"webHookType": "genericJson",
+			"direction": "in",
+			"name": "req"
+		},
+		{
+			"type": "http",
+			"direction": "out",
+			"name": "res"
+		}
+	]
 }
 ```
 
@@ -102,9 +102,8 @@ That's it! When initially setting up your function app in the Azure Portal befor
 
 ## Data Persistence
 
-The [FileDB](../../integrations/databases/file-db.md '../databases/file-db') database integration is strongly discouraged on Azure Functions. It also doesn't work at all when you use [Run From Package](https://docs.microsoft.com/en-us/azure/azure-functions/run-functions-from-deployment-package), which makes the file system read-only (and greatly speeds up the deployment and cold start of your function). 
+The [FileDB](../../integrations/databases/file-db.md '../databases/file-db') database integration is strongly discouraged on Azure Functions. It also doesn't work at all when you use [Run From Package](https://docs.microsoft.com/en-us/azure/azure-functions/run-functions-from-deployment-package), which makes the file system read-only (and greatly speeds up the deployment and cold start of your function).
 
 It is encouraged to switch to [Azure CosmosDB](../../integrations/databases/cosmosdb.md '../databases/cosmosdb') or to simply not use any database integration at all. You can do the latter by setting `user: { implicitSave: false }` on your Jovo config object.
-
 
 <!--[metadata]: {"description": "Deploy your Alexa Skills and Google Actions on Azure Functions with the Jovo Framework", "route": "hosting/azure-functions"}-->

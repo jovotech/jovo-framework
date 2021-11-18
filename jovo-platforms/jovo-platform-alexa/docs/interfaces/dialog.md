@@ -1,6 +1,6 @@
 # Dialog Interface
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-alexa/interfaces/dialog
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-alexa/interfaces/dialog
 
 The Amazon Alexa Dialog Interface helps you manage multi-turn conversations with your user to gather the information needed to for your intent.
 Here is the [official documentation by Amazon](https://developer.amazon.com/docs/custom-skills/dialog-interface-reference.html).

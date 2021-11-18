@@ -1,6 +1,6 @@
 # Request
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistant/request-response/request
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-googleassistant/request-response/request
 
 * [Introduction](#introduction)
 * [$request Object](#request-object)
@@ -114,12 +114,12 @@ Here's an example request:
 }
 ```
 
-> In the Jovo Framework repository we keep sample requests for the most common types. You can find them [here](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-dialogflow/sample-request-json/v2/google)
+> In the Jovo Framework repository we keep sample requests for the most common types. You can find them [here](https://github.com/jovotech/jovo-framework/tree/v3/latest/jovo-platforms/jovo-platform-dialogflow/sample-request-json/v2/google)
 
 
 ## $request Object
 
-Besides the [cross-platform getter and setter methods](https://www.jovo.tech/docs/requests-responses/request#cross-platform-methods) the Google Assistant `$request` object supports the following general helper methods:
+Besides the [cross-platform getter and setter methods](https://v3.jovo.tech/docs/requests-responses/request#cross-platform-methods) the Google Assistant `$request` object supports the following general helper methods:
 
 Name | Description | Return Value
 :--- | :--- | :---

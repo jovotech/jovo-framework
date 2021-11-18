@@ -39,7 +39,7 @@ export class PostgreSQL implements Db {
         ErrorCode.ERR_PLUGIN,
         'jovo-db-postgresql',
         'PostgreSQL connection configuration has to be set correctly.',
-        'https://www.jovo.tech/marketplace/jovo-db-postgresql#installation',
+        'https://v3.jovo.tech/marketplace/jovo-db-postgresql#installation',
       );
     }
 
@@ -134,7 +134,7 @@ export class PostgreSQL implements Db {
         'jovo-db-postgresql',
         undefined,
         undefined,
-        'https://www.jovo.tech/marketplace/jovo-db-postgresql#installation',
+        'https://v3.jovo.tech/marketplace/jovo-db-postgresql#installation',
       );
     }
 
@@ -145,7 +145,7 @@ export class PostgreSQL implements Db {
         'jovo-db-postgresql',
         undefined,
         undefined,
-        'https://www.jovo.tech/marketplace/jovo-db-postgresql#installation',
+        'https://v3.jovo.tech/marketplace/jovo-db-postgresql#installation',
       );
     }
 
@@ -156,7 +156,7 @@ export class PostgreSQL implements Db {
         'jovo-db-postgresql',
         undefined,
         undefined,
-        'https://www.jovo.tech/marketplace/jovo-db-postgresql#installation',
+        'https://v3.jovo.tech/marketplace/jovo-db-postgresql#installation',
       );
     }
   }

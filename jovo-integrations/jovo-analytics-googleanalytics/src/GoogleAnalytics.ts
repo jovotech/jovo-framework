@@ -104,7 +104,7 @@ export class GoogleAnalytics implements Analytics {
         'jovo-analytics-googleanalytics',
         '',
         'You can find your tracking id in Google Analytics by clicking: Admin -> Property Settings -> Tracking Id',
-        'https://www.jovo.tech/docs/analytics/googleanalytics',
+        'https://v3.jovo.tech/docs/analytics/googleanalytics',
       );
     }
 
@@ -222,7 +222,7 @@ export class GoogleAnalytics implements Analytics {
         'jovo-analytics-googleanalytics',
         `Missing ${customTypeToCheck}: ${missingEntriesInConfig}`,
         'All custom dimension and metrics set by system can be found on our documentation.',
-        'https://www.jovo.tech/docs/analytics/googleanalytics',
+        'https://v3.jovo.tech/docs/analytics/googleanalytics',
       );
     }
   }
@@ -247,7 +247,7 @@ export class GoogleAnalytics implements Analytics {
         `Multiple time used  ${customTypeToCheck} values: ${duplicates.toString()}`,
         `Alter your config to make sure that each custom ${customTypeToCheck} is mapped to a unique value. 
         Index numbers for your google analytics project can be found on your analytics website under "settings" -> "custom definitions".`,
-        'https://www.jovo.tech/docs/analytics/googleanalytics',
+        'https://v3.jovo.tech/docs/analytics/googleanalytics',
       );
     }
   }

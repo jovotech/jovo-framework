@@ -1,6 +1,6 @@
 # Media Response API
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/media-response
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/media-response
 
 Learn how to use the Google Action Media Response with Jovo.
 
@@ -69,7 +69,7 @@ this.tell('Enjoy the song!');
 
 If you use `tell()` it will be handled as a [final response](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#finalresponse) and you won't receive a callback that the audio playback is completed. 
 
-The `ask()` method on the other hand will keep the session open so you can receive the callback, but it forces you to add [Suggestion Chips](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/visual-output#suggestion-chips) to your response.
+The `ask()` method on the other hand will keep the session open so you can receive the callback, but it forces you to add [Suggestion Chips](https://v3.jovo.tech/marketplace/jovo-platform-googleassistant/visual-output#suggestion-chips) to your response.
 
 
 ```javascript

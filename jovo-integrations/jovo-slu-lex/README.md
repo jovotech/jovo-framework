@@ -1,6 +1,6 @@
 # Amazon Lex SLU Integration
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-slu-lex
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-slu-lex
 
 Learn how to use Amazon Lex as SLU (Spoken Language Understanding, which combines speech recognition and natural language understanding) integration with the Jovo Framework.
 
@@ -17,13 +17,13 @@ npm install --save jovo-slu-lex
 const { LexSlu } = require('jovo-slu-lex');
 
 platform.use(
-	new LexSlu({
-		credentials: {
-			region: 'yourRegion',
-			secretAccessKey: 'yourSecretAccessKey',
-			accessKeyId: 'yourAccessKeyId'
-		}
-	})
+  new LexSlu({
+    credentials: {
+      region: 'yourRegion',
+      secretAccessKey: 'yourSecretAccessKey',
+      accessKeyId: 'yourAccessKeyId',
+    },
+  }),
 );
 
 // @language=typescript
@@ -32,12 +32,12 @@ platform.use(
 import { LexSlu } from 'jovo-slu-lex';
 
 platform.use(
-	new LexSlu({
-		credentials: {
-			region: 'yourRegion',
-			secretAccessKey: 'yourSecretAccessKey',
-			accessKeyId: 'yourAccessKeyId'
-		}
-	})
+  new LexSlu({
+    credentials: {
+      region: 'yourRegion',
+      secretAccessKey: 'yourSecretAccessKey',
+      accessKeyId: 'yourAccessKeyId',
+    },
+  }),
 );
 ```

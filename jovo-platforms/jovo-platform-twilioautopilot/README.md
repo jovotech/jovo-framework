@@ -1,6 +1,6 @@
 # Twilio Autopilot Platform Integration
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-twilioautopilot
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-twilioautopilot
 
 Learn more about Twilio Autopilot specific features that can be used with the Jovo Framework.
 
@@ -21,7 +21,7 @@ After creating your Autopilot bot, you simply have to set each task to redirect 
 {
 	"actions": [
 		{
-			"redirect": "https://webhook.jovo.cloud/63709788-169b-4d6d-981c-d6ef9700bfad"
+			"redirect": "https://webhookv3.jovo.cloud/63709788-169b-4d6d-981c-d6ef9700bfad"
 		}
 	]
 }

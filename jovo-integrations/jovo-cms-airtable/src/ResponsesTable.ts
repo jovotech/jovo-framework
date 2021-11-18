@@ -61,7 +61,7 @@ export class ResponsesTable extends DefaultTable {
         'jovo-cms-airtable',
         `The sheet's name has to be defined in your config.js file`,
         undefined,
-        'https://www.jovo.tech/docs/cms/airtable#configuration',
+        'https://v3.jovo.tech/docs/cms/airtable#configuration',
       );
     }
 

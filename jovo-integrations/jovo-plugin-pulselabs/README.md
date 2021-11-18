@@ -1,6 +1,6 @@
 # Jovo PulseLabs Plugin
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-plugin-pulselabs
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-plugin-pulselabs
 
 * [Installation](#installation)
 * [Configuration](#configuration)

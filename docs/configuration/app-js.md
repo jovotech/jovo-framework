@@ -1,20 +1,19 @@
 # app.js - App Initialization and Logic
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/app-js
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/app-js
 
 Learn how to use the app.js file of the Jovo Framework.
 
-* [Overview](#overview)
-* [App Initialization](#available-configurations)
-* [App Logic](#app-logic)
-
+- [Overview](#overview)
+- [App Initialization](#available-configurations)
+- [App Logic](#app-logic)
 
 ## Overview
 
 The `app.js` file is the heart of your voice app's logic, and consists of the following two main components:
 
-* [App Initialization](#available-configurations)
-* [App Logic](#app-logic)
+- [App Initialization](#available-configurations)
+- [App Logic](#app-logic)
 
 ```javascript
 // @language=javascript
@@ -159,7 +158,6 @@ app.use(
 
 With the `use` command, you can register any additional plugins. The configuration can then be done in the [`config.js` file](./config-js.md './config-js').
 
-
 ## App Logic
 
 The app logic section is where the [routing](../basic-concepts/routing './routing') is happening. Small projects may also contain [data](../basic-concepts/data './data') operations and [output](../basic-concepts/output './output'). For larger projects, we recommend keeping the `app.js` organized and splitting up the logic into different files and modules.
@@ -172,17 +170,17 @@ The app logic section is where the [routing](../basic-concepts/routing './routin
 // ------------------------------------------------------------------
 
 app.setHandler({
-    LAUNCH() {
-        return this.toIntent('HelloWorldIntent');
-    },
+	LAUNCH() {
+		return this.toIntent('HelloWorldIntent');
+	},
 
-    HelloWorldIntent() {
-        this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
-    },
+	HelloWorldIntent() {
+		this.ask("Hello World! What's your name?", 'Please tell me your name.');
+	},
 
-    MyNameIsIntent() {
-        this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
-    },
+	MyNameIsIntent() {
+		this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
+	},
 });
 
 // @language=typescript
@@ -192,22 +190,21 @@ app.setHandler({
 // ------------------------------------------------------------------
 
 app.setHandler({
-    LAUNCH() {
-        return this.toIntent('HelloWorldIntent');
-    },
+	LAUNCH() {
+		return this.toIntent('HelloWorldIntent');
+	},
 
-    HelloWorldIntent() {
-        this.ask('Hello World! What\'s your name?', 'Please tell me your name.');
-    },
+	HelloWorldIntent() {
+		this.ask("Hello World! What's your name?", 'Please tell me your name.');
+	},
 
-    MyNameIsIntent() {
-        this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
-    },
+	MyNameIsIntent() {
+		this.tell('Hey ' + this.$inputs.name.value + ', nice to meet you!');
+	},
 });
 ```
 
 > [Learn more about Routing here](../basic-concepts/routing './routing').
-
 
 <!--[metadata]: {"description": "Learn how to use the app.js file of the Jovo Framework for Amazon Alexa Skills and Apps for Google Assistant",
 		        "route": "app-js"}-->

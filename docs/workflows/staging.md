@@ -1,17 +1,16 @@
 # Staging
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/staging
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/staging
 
 Learn more about the Jovo framework's staging feature.
 
-* [Introduction](#introduction)
-* [Project Configuration Stages](#project-configuration-stages)
-* [App Configuration Stages](#app-configuration-stages)
+- [Introduction](#introduction)
+- [Project Configuration Stages](#project-configuration-stages)
+- [App Configuration Stages](#app-configuration-stages)
 
 ## Introduction
 
 Staging allows you to define separate deployment configurations (`project.js`) and app configurations (`config.js`) for each of your stages, usually local development, qa, and production.
-
 
 ## Project Configuration Stages
 
@@ -50,7 +49,7 @@ module.exports = {
 The defined stages can be referenced with the Jovo CLI while building the platforms files or deploying the project using the `--stage` option:
 
 ```shell
-$ jovo build -p alexaSkill --stage test --deploy
+$ jovo3 build -p alexaSkill --stage test --deploy
 ```
 
 ## App Configuration Stages
@@ -59,7 +58,7 @@ The app configuration stages are not defined in the same file as the project con
 
 The stage configs can have the same attributes as the default `config.js` file. For a detailed explanation of each property check the app configuration documentation [here](../configuration/config-js.md '../config-js').
 
-The current active stage config will overwrite the default configs (`config.js`) properties. 
+The current active stage config will overwrite the default configs (`config.js`) properties.
 
 ```javascript
 // @language=javascript
@@ -67,30 +66,25 @@ The current active stage config will overwrite the default configs (`config.js`)
 // src/config.js, default config
 
 module.exports = {
-    
-    db: {
-        FileDb: {
-            pathToFile: '../db/db.json',
-        },
-    },
+	db: {
+		FileDb: {
+			pathToFile: '../db/db.json',
+		},
+	},
 
-    // ...
-
+	// ...
 };
-
 
 // config.prod.js, config overrides for NODE_ENV=prod
 
 module.exports = {
-    
-    db: {
-        DynamoDb: {
-            tableName: 'yourTableName',
-        },
-    },
+	db: {
+		DynamoDb: {
+			tableName: 'yourTableName',
+		},
+	},
 
-    // ...
-
+	// ...
 };
 
 // @language=typescript
@@ -98,30 +92,25 @@ module.exports = {
 // src/config.ts, default config
 
 const config = {
-    
-    db: {
-        FileDb: {
-            pathToFile: '../db/db.json',
-        },
-    },
+	db: {
+		FileDb: {
+			pathToFile: '../db/db.json',
+		},
+	},
 
-    // ...
-
+	// ...
 };
-
 
 // config.prod.ts, config overrides for NODE_ENV=prod
 
 const config = {
-    
-    db: {
-        DynamoDb: {
-            tableName: 'yourTableName',
-        },
-    },
+	db: {
+		DynamoDb: {
+			tableName: 'yourTableName',
+		},
+	},
 
-    // ...
-
+	// ...
 };
 ```
 
@@ -134,6 +123,5 @@ process.env.STAGE = 'prod';
 On cloud services like AWS Lambda you have to use the built-in environment variable tools:
 
 ![AWS Lambda Environment Variable](../img/staging-env-lambda.png)
-
 
 <!--[metadata]: {"description": "Learn how to use staging effectively with your Jovo projects.", "route": "staging"}-->

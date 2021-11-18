@@ -1,6 +1,6 @@
 # AWS Lambda
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/hosting/aws-lambda
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/hosting/aws-lambda
 
 [AWS Lambda](https://aws.amazon.com/lambda/) is a serverless hosting solution by Amazon Web Services. Find the [official documentation here](http://docs.aws.amazon.com/lambda/latest/dg/welcome.html).
 
@@ -22,7 +22,7 @@
 
 - [API Gateway](https://aws.amazon.com/api-gateway/): Lets you create an API to proxy requests to your Lambda function. Learn more about the setup [here](#api-gateway).
 - [CloudWatch](https://aws.amazon.com/cloudwatch/): Collects monitoring data in the form of logs and metrics.
-- [DynamoDb](https://aws.amazon.com/dynamodb/): Database integration, allowing you to store user data in a NoSQL environment. Learn more about DynamoDb [here](https://www.jovo.tech/marketplace/jovo-db-dynamodb).
+- [DynamoDb](https://aws.amazon.com/dynamodb/): Database integration, allowing you to store user data in a NoSQL environment. Learn more about DynamoDb [here](https://v3.jovo.tech/marketplace/jovo-db-dynamodb).
 - [S3](https://aws.amazon.com/s3/): Storage service, allowing you to store any amount of data in buckets.
 
 ## Lambda Configuration
@@ -61,8 +61,8 @@ exports.handler = async (event: any, context: any, callback: Function) => {
 
 While for Alexa, the process of hosting a Skill on Lambda is straightforward, for a Google Action there are additional steps that need to be taken to create an API Gateway. To learn more about how to run your voice app on Lambda, please take a look at our step-by-step tutorials:
 
-- [Run your Alexa Skill on Lambda](https://www.jovo.tech/tutorials/alexa-skill-tutorial-nodejs/#aws-lambda)
-- [Run your Google Action on Lambda with an API Gateway](https://www.jovo.tech/tutorials/host-google-action-on-lambda)
+- [Run your Alexa Skill on Lambda](https://v3.jovo.tech/tutorials/alexa-skill-tutorial-nodejs/#aws-lambda)
+- [Run your Google Action on Lambda with an API Gateway](https://v3.jovo.tech/tutorials/host-google-action-on-lambda)
 
 ### Uploading Code
 
@@ -70,7 +70,7 @@ You can create a ready-to-deploy `bundle.zip` file with either of the following 
 
 ```sh
 # Bundle files
-$ jovo deploy --target zip
+$ jovo3 deploy --target zip
 
 # Alternative
 $ npm run bundle
@@ -82,14 +82,14 @@ If you have a Lambda endpoint defined in your `project.js` file, the `jovo deplo
 
 ```sh
 # Deploy platform projects and source code
-$ jovo deploy
+$ jovo3 deploy
 ```
 
 ## Additional Services
 
 ### DynamoDb
 
-> Tutorial: [Add DynamoDB to Store User Data](https://www.jovo.tech/tutorials/add-dynamodb-database)
+> Tutorial: [Add DynamoDB to Store User Data](https://v3.jovo.tech/tutorials/add-dynamodb-database)
 
 The [FileDb](../../integrations/databases/file-db.md '../databases/file-db') database integration does not work on AWS Lambda. It is encouraged to switch to [DynamoDB](../../integrations/databases/dynamodb.md '../databases/dynamodb') before uploading to Lambda.
 

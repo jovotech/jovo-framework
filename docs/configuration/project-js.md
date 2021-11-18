@@ -1,21 +1,20 @@
 # project.js - Project Configuration
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/project-js
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/project-js
 
 The `project.js` is an essential file that stores a lot of important project information that is used for deployment.
 
-* [Introduction](#introduction)
-* [Platforms](#platforms)
-   * [alexaSkill](#alexaskill)
-   * [googleAction](#googleaction)
-   * [nlu](#nlu)
-* [Language Model](#language-model)
-   * [Override the Invocation Name](#override-the-invocation-name)
-   * [Add Intents and Inputs](#add-intents-and-inputs)
-* [Deployment](#deployment)
-   * [Stages](#stages)
-   * [Host](#host)
-
+- [Introduction](#introduction)
+- [Platforms](#platforms)
+  - [alexaSkill](#alexaskill)
+  - [googleAction](#googleaction)
+  - [nlu](#nlu)
+- [Language Model](#language-model)
+  - [Override the Invocation Name](#override-the-invocation-name)
+  - [Add Intents and Inputs](#add-intents-and-inputs)
+- [Deployment](#deployment)
+  - [Stages](#stages)
+  - [Host](#host)
 
 ## Introduction
 
@@ -23,16 +22,15 @@ The `project.js` is used by many features of Jovo, for example to build platform
 
 Here is a list of all elements that can be added to the `project.js`:
 
-Category | Name | Description
-:--- | :--- | :---
-[Platforms](#platforms) | [`alexaSkill`](#alexaSkill) | Alexa Skill project config
- | | [`googleAction`](#googleAction) | Google Action project config
- | | [`nlu`](#nlu) | Includes natural language understanding tools like `dialogflow`
-[Deployment](#deployment) | `endpoint` | Endpoint for the voice platforms to reach your app. Default: Jovo Webhook.
- | | `host` | Deployment information (e.g. if hosted on Lambda, but endpoint is API Gateway)
- | | [`stages`](#stages) | Different deployment stages  
- | | `defaultStage` | Default stage to use if not defined differently in the environment variables
-
+| Category                  | Name                            | Description                                                                    |
+| :------------------------ | :------------------------------ | :----------------------------------------------------------------------------- |
+| [Platforms](#platforms)   | [`alexaSkill`](#alexaSkill)     | Alexa Skill project config                                                     |
+|                           | [`googleAction`](#googleAction) | Google Action project config                                                   |
+|                           | [`nlu`](#nlu)                   | Includes natural language understanding tools like `dialogflow`                |
+| [Deployment](#deployment) | `endpoint`                      | Endpoint for the voice platforms to reach your app. Default: Jovo Webhook.     |
+|                           | `host`                          | Deployment information (e.g. if hosted on Lambda, but endpoint is API Gateway) |
+|                           | [`stages`](#stages)             | Different deployment stages                                                    |
+|                           | `defaultStage`                  | Default stage to use if not defined differently in the environment variables   |
 
 This is what the default `project.js` looks like:
 
@@ -46,10 +44,10 @@ module.exports = {
 		nlu: 'alexa',
 	},
 	googleAction: {
-		nlu:  'dialogflow',
+		nlu: 'dialogflow',
 	},
 	endpoint: '${JOVO_WEBHOOK_URL}',
-}
+};
 ```
 
 As you can see above, an `endpoint` is automatically added to the file with your unique Jovo Webhook endpoint.
@@ -73,11 +71,11 @@ The [introduction](#introduction) already shows how a freshly created `project.j
 
 ### alexaSkill
 
-> [Find out more about configuration for your Alexa skill here.](https://www.jovo.tech/marketplace/jovo-platform-alexa/#configuration)
+> [Find out more about configuration for your Alexa skill here.](https://v3.jovo.tech/marketplace/jovo-platform-alexa/#configuration)
 
 ### googleAction
 
-> [Find out more about configuration for your Google Action here.](https://www.jovo.tech/marketplace/jovo-platform-googleassistant/#configuration)
+> [Find out more about configuration for your Google Action here.](https://v3.jovo.tech/marketplace/jovo-platform-googleassistant/#configuration)
 
 ### nlu
 
@@ -112,13 +110,12 @@ alexaSkill: {
 
 In the above example, the object specifies the following process for the [`jovo build` command](../basic-concepts/cli/build './cli/build'):
 
-* Access an existing Jovo Language Model file `en.json` in the `/models` folder
-* Convert it into an Alexa Interaction Model `en-US.json` in the `/platforms/alexaSkill/models` folder
-
+- Access an existing Jovo Language Model file `en.json` in the `/models` folder
+- Convert it into an Alexa Interaction Model `en-US.json` in the `/platforms/alexaSkill/models` folder
 
 ## Language Model
 
-In the `project.js`, you can also add or override specific elements of your language model in the `models` folder. 
+In the `project.js`, you can also add or override specific elements of your language model in the `models` folder.
 
 > [Learn more about the Jovo Language Model here](../basic-concepts/model './model').
 
@@ -136,12 +133,11 @@ languageModel: {
 }
 ```
 
-*NOTE*: Currently, the invocation name can only be specified in the `models` folder for Alexa Skills. For Google Actions, you need to change them in the Actions on Google Console.
-
+_NOTE_: Currently, the invocation name can only be specified in the `models` folder for Alexa Skills. For Google Actions, you need to change them in the Actions on Google Console.
 
 ### Add Intents and Inputs
 
-You can also add whole intents and inputs and any element that you can find in your e.g. `en-US.json` in the Jovo `models` folder. 
+You can also add whole intents and inputs and any element that you can find in your e.g. `en-US.json` in the Jovo `models` folder.
 
 For example, you can add an intent to specific stages like so:
 
@@ -162,7 +158,6 @@ languageModel: {
 }
 ```
 
-
 ## Deployment
 
 ### Stages
@@ -173,10 +168,10 @@ Jovo allows you to define multiple staging environments like `dev`, `test`, and 
 {
     stages: {
         dev: {
-            
+
         },
         test: {
-            
+
         },
         prod: {
 
@@ -198,20 +193,19 @@ The elements inside a stage are merged into the elements outside the stage with 
 }
 ```
 
-> For an overview of staging examples, take a look at our [Staging Examples](https://www.jovo.tech/tutorials/staging-examples).
+> For an overview of staging examples, take a look at our [Staging Examples](https://v3.jovo.tech/tutorials/staging-examples).
 
 A stage is active when one of the following is true (by default, only the elements outside the `stages` are used):
 
-* The default stage is set with `defaultStage: '<your-stage>'`
-* The stage is set in the environment variables with `STAGE=<stage>`
-
+- The default stage is set with `defaultStage: '<your-stage>'`
+- The stage is set in the environment variables with `STAGE=<stage>`
 
 ### Host
 
-Sometimes (for example, if you are using an API Gateway), your `endpoint` might differ from the destination where the code is located (the `host`). 
+Sometimes (for example, if you are using an API Gateway), your `endpoint` might differ from the destination where the code is located (the `host`).
 
 You can add a `host` object to specify where the code is hosted. Right now, `lambda` is supported to deploy your code to AWS Lambda. This is how you can set it up:
- 
+
 ```javascript
 host: {
     lambda: {
@@ -222,6 +216,5 @@ host: {
 ```
 
 Note: If you're only building an Alexa Skill, there is no need to specify a host with the same information that is already in the `endpoint`. This is mostly important if you also want to host your Google Action on AWS Lambda and make it accessible through an API Gateway.
-
 
 <!--[metadata]: {"description": "The project.js is an essential file that stores a lot of important information that is used by the Jovo app and the Jovo CLI.", "route": "project-js"}-->

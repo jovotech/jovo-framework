@@ -412,7 +412,7 @@ export class Handler implements Plugin {
           'jovo-framework',
           `The component to which you want to delegate to, doesn't exist`,
           `Components are initialized using app.useComponents(...components)`,
-          'https://www.jovo.tech/docs/advanced-concepts/components',
+          'https://v3.jovo.tech/docs/advanced-concepts/components',
         );
       }
       if (!this.$session.$data[SessionConstants.COMPONENT]) {
@@ -484,9 +484,8 @@ export class Handler implements Plugin {
      * @param {ComponentResponse} response
      */
     Jovo.prototype.sendComponentResponse = function (response: ComponentResponse): Promise<void> {
-      const componentSessionStack: Array<[string, ComponentSessionData]> = this.$session.$data[
-        SessionConstants.COMPONENT
-      ];
+      const componentSessionStack: Array<[string, ComponentSessionData]> =
+        this.$session.$data[SessionConstants.COMPONENT];
       const activeComponentSessionData: [string, ComponentSessionData] =
         componentSessionStack[componentSessionStack.length - 1];
       const activeComponent = this.$components[activeComponentSessionData[0]];

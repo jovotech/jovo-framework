@@ -1,6 +1,6 @@
 # Using Node.js built-in http package
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/hosting/http-host
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/hosting/http-host
 
 [Node.js built-in http package](https://nodejs.org/api/http.html)
 
@@ -63,7 +63,6 @@ http.createServer(async (req, res) => {
 When you want to deploy your code to a webserver other than AWS Lambda, you need to verify that Alexa Skill requests are actually coming from Amazon. Otherwise [you will not pass the Alexa Certification for your Skill.](https://developer.amazon.com/docs/custom-skills/handle-requests-sent-by-alexa.html).
 
 These can be implemented using the [Alexa-verifier](https://www.npmjs.com/package/alexa-verifier) package.
-
 
 <!--[metadata]: {"description": "Deploy your Google Actions and Alexa Skills to any server with the Jovo Framework using the Node.js built-in http package",
 		        "route": "hosting/http-host"}-->

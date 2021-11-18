@@ -1,6 +1,6 @@
 # AWS Lex Platform V1
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-lex
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-lex
 
 Learn more about the AWS Lex Platform, which can be used to build a chatbot.
 AWS Lex can be use with AWS connect to build a callbot.
@@ -96,7 +96,7 @@ On each Intent, replace fulfillmentActivity value by
 * For [built-in Lex Intents](https://docs.aws.amazon.com/lex/latest/dg/howitworks-builtins-intents.html) , 
 On each built-in intent, You have to add the attribute parentIntentSignature with the name of the built-in intent.
 The name of the intent with built-in name (CancelIntent/FallbackIntent/HelpIntent/PauseIntent/RepeatIntent/ResumeIntent/StartOverIntent/StopIntent) have to be rename.
-A quick solution is to prefix your intent with a custom value and use [intentMap] (https://www.jovo.tech/docs/routing/intents#intentmap)
+A quick solution is to prefix your intent with a custom value and use [intentMap] (https://v3.jovo.tech/docs/routing/intents#intentmap)
 
 Exemple if you have a CancelIntent, you should obtain: 
 ```

@@ -1,6 +1,6 @@
 # Push Notifications
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/interfaces/notifications
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-googleassistantconv/interfaces/notifications
 
 Learn more about how to send push notifications to your Google Action users.
 
@@ -13,7 +13,7 @@ Learn more about how to send push notifications to your Google Action users.
 
 ## Introduction
 
-The Push Notifications feature allows you to send user's notifications, which, if tapped, triggers a predefined intent of your Google Action. To send a push notification, you need to setup the Actions API and configure [scenes](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/concepts/scenes) to handle the individual steps of configuring push notifications.
+The Push Notifications feature allows you to send user's notifications, which, if tapped, triggers a predefined intent of your Google Action. To send a push notification, you need to setup the Actions API and configure [scenes](https://v3.jovo.tech/marketplace/jovo-platform-googleassistantconv/concepts/scenes) to handle the individual steps of configuring push notifications.
 
 ## Configuration
 
@@ -29,7 +29,7 @@ After you gave your account an appropriate name, choose the Role `Project > Owne
 
 ### Scenes
 
-To implement Push Notifications in your voice application, we recommend using [scenes](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv/concepts/scenes) to handle the setup.
+To implement Push Notifications in your voice application, we recommend using [scenes](https://v3.jovo.tech/marketplace/jovo-platform-googleassistantconv/concepts/scenes) to handle the setup.
 
 There are multiple ways of setting up the scenes necessary, we recommend creating them inside your model file to deploy them directly to the Google Conversational Actions Console.
 

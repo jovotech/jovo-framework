@@ -1,6 +1,6 @@
 # Microsoft Azure Speech to Text Integration
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-asr-azure
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-asr-azure
 
 Learn how to use the Microsoft Azure Speech to Text service as ASR (automatic speech recognition) integration with the Jovo Framework.
 
@@ -18,11 +18,11 @@ npm install --save jovo-asr-azure
 const { AzureAsr } = require('jovo-asr-azure');
 
 platform.use(
-	new AzureAsr({
-		endpointKey: 'yourEndpointKey',
-		endpointRegion: 'yourEndpointRegion',
-		language: 'en-US'
-	})
+  new AzureAsr({
+    endpointKey: 'yourEndpointKey',
+    endpointRegion: 'yourEndpointRegion',
+    language: 'en-US',
+  }),
 );
 
 // @language=typescript
@@ -32,10 +32,10 @@ platform.use(
 import { AzureAsr } from 'jovo-asr-azure';
 
 platform.use(
-	new AzureAsr({
-		endpointKey: 'yourEndpointKey',
-		endpointRegion: 'yourEndpointRegion',
-		language: 'en-US'
-	})
+  new AzureAsr({
+    endpointKey: 'yourEndpointKey',
+    endpointRegion: 'yourEndpointRegion',
+    language: 'en-US',
+  }),
 );
 ```

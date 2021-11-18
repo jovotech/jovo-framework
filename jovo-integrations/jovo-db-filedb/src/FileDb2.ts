@@ -67,7 +67,7 @@ export class FileDb2 implements Db {
         'jovo-db-filedb',
         'config.path has a falsy value',
         undefined,
-        'https://www.jovo.tech/docs/databases/file-db',
+        'https://v3.jovo.tech/docs/databases/file-db',
       );
     }
   }

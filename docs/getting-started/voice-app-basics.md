@@ -1,15 +1,14 @@
 # Voice App Basics
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/voice-app-basics
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/voice-app-basics
 
 This section provides an overview of how voice applications work, and the differences between voice platforms. Currently, Jovo supports [Amazon Alexa](#amazon-alexa) and [Google Assistant](#google-assistant).
 
-* [How Voice Apps Work](#how-voice-apps-work)
-  * [Natural Language Lingo](#natural-language-lingo)
-* [Voice Platforms](#voice-platforms)
-  * [Amazon Alexa](#amazon-alexa)
-  * [Google Assistant](#google-assistant)
-
+- [How Voice Apps Work](#how-voice-apps-work)
+  - [Natural Language Lingo](#natural-language-lingo)
+- [Voice Platforms](#voice-platforms)
+  - [Amazon Alexa](#amazon-alexa)
+  - [Google Assistant](#google-assistant)
 
 ## How Voice Apps Work
 
@@ -47,44 +46,43 @@ This element has different wordings on various NLP platforms. It describes a spe
 
 Find more detailed information here: [App Logic > Data](../04_app-logic/02_data './data').
 
-
 ## Platforms
 
 The Jovo framework currently supports Amazon Alexa, Google Assistant, Samsung Bixby, Facebook Messenger, Twilio Autopilot, Dialogflow, and even your own web client. In this section, you can learn more about what you need to set up on the respective Developer Consoles in order to make your voice apps work.
 
 ### Amazon Alexa
 
-> See also: Beginner Tutorial: [Build an Alexa Skill in Node.js with Jovo](https://www.jovo.tech/blog/alexa-skill-tutorial-nodejs/).
+> See also: Beginner Tutorial: [Build an Alexa Skill in Node.js with Jovo](https://v3.jovo.tech/blog/alexa-skill-tutorial-nodejs/).
 
 On the Amazon Echo product suite or other devices that support Amazon Alexa, users can access so-called Skills by asking the device something like this:
 
 ```javascript
 // Standard invocation
-'Alexa, open Pizza Temple.'
-'Alexa, start Pizza Temple.'
+'Alexa, open Pizza Temple.';
+'Alexa, start Pizza Temple.';
 
 // Deep invocation
-'Alexa, ask Pizza Temple to find me a restaurant.'
+'Alexa, ask Pizza Temple to find me a restaurant.';
 ```
 
 In order to build a skill for Amazon Alexa, you need to create an account on the Amazon Developer Portal. You can find an [official step-by-step guide by Amazon here](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/registering-and-managing-alexa-skills-in-the-developer-portal).
 
 ### Google Assistant
 
-> See also: Beginner Tutorial: [Build a Google Action in Node.js with Jovo](https://www.jovo.tech/blog/google-action-tutorial-nodejs/).
+> See also: Beginner Tutorial: [Build a Google Action in Node.js with Jovo](https://v3.jovo.tech/blog/google-action-tutorial-nodejs/).
 
 ![Google Home, Google Assistant, and Google Actions](../img/google-home-google-assistant.png)
 
-On Google Home, users converse with the Google Assistant. Apps for the Assistant are called Actions on Google (however, they're now in the process of switching to just calling them Apps). 
+On Google Home, users converse with the Google Assistant. Apps for the Assistant are called Actions on Google (however, they're now in the process of switching to just calling them Apps).
 
 They can be accessed like this:
 
 ```javascript
 // Standard invocation
-'OK Google, talk to Pizza Temple.'
+'OK Google, talk to Pizza Temple.';
 
 // Deep invocation
-'OK Google, tell Pizza Temple to find me a restaurant.'
+'OK Google, tell Pizza Temple to find me a restaurant.';
 ```
 
 Here is the official Google resource: [Invocation and Discovery](https://developers.google.com/actions/discovery/).
@@ -95,12 +93,11 @@ Here are some helpful guides to get started with Google Actions: [Overview](http
 
 ### Samsung Bixby
 
-> See also: Beginner Tutorial: [How to use Samsung Bixby with the Jovo Framework](https://www.jovo.tech/tutorials/bixby).
+> See also: Beginner Tutorial: [How to use Samsung Bixby with the Jovo Framework](https://v3.jovo.tech/tutorials/bixby).
 
 Apps for Samsung's Bixby are called Capsules. While Bixby shares many basic development concepts with Alexa and Google Assistant, Bixby Capsules follow a declarative driven development process.
 
 You can find out more about in our [Bixby documentation](../platforms/samsung-bixby/README.md './samsung-bixby').
-
 
 <!--[metadata]: {"description": "Learn the essentials of voice apps like Amazon Alexa and Google Assistant on Google Home.",
 		"route": "voice-app-basics"}-->

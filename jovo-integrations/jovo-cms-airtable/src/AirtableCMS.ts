@@ -162,7 +162,7 @@ interface LoadOptions {
   table: string;
   order?: string[];
   selectOptions?: {
-    // documentation for selectOptions here: https://www.jovo.tech/docs/cms/airtable#configuration
+    // documentation for selectOptions here: https://v3.jovo.tech/docs/cms/airtable#configuration
     fields?: string[];
     filterByFormula?: string;
     maxRecords?: number;

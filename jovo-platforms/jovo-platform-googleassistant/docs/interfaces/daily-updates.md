@@ -1,6 +1,6 @@
 # Daily Updates
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/daily-updates
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-googleassistant/interfaces/daily-updates
 
 Learn how to use Google Action's daily updates with Jovo.
 

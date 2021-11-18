@@ -1,6 +1,6 @@
 # Microsoft Azure TTS Integration
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-tts-azure
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-tts-azure
 
 Learn how to use the Microsoft Azure TTS (Text to Speech) service with the Jovo Framework.
 
@@ -18,11 +18,11 @@ npm install --save jovo-tts-azure
 const { AzureTts } = require('jovo-tts-azure');
 
 platform.use(
-	new AzureTts({
-		endpointKey: 'yourEndpointKey',
-		endpointRegion: 'yourEndpointRegion',
-		locale: 'en-US'
-	})
+  new AzureTts({
+    endpointKey: 'yourEndpointKey',
+    endpointRegion: 'yourEndpointRegion',
+    locale: 'en-US',
+  }),
 );
 
 // @language=typescript
@@ -32,10 +32,10 @@ platform.use(
 import { AzureTts } from 'jovo-tts-azure';
 
 platform.use(
-	new AzureTts({
-		endpointKey: 'yourEndpointKey',
-		endpointRegion: 'yourEndpointRegion',
-		locale: 'en-US'
-	})
+  new AzureTts({
+    endpointKey: 'yourEndpointKey',
+    endpointRegion: 'yourEndpointRegion',
+    locale: 'en-US',
+  }),
 );
 ```

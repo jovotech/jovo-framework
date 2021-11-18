@@ -1,14 +1,14 @@
 # Tools
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/docs/
+> To view this page on the Jovo website, visit https://v3.jovo.tech/docs/
 
 Find about all the tools that extend the capabilities of the Jovo framework and make voice app development in general easier.
 
-* [Jovo CLI](#jovo-cli)
-* [Jovo Webhook](#jovo-webhook)
-* [Jovo Debugger](#jovo-debugger)
-* [Jovo Chrome Extension](#jovo-chrome-extension)
-* [Jovo Audio Converter](#jovo-audio-converter)
+- [Jovo CLI](#jovo-cli)
+- [Jovo Webhook](#jovo-webhook)
+- [Jovo Debugger](#jovo-debugger)
+- [Jovo Chrome Extension](#jovo-chrome-extension)
+- [Jovo Audio Converter](#jovo-audio-converter)
 
 ## Jovo CLI
 
@@ -29,7 +29,6 @@ Speed up Alexa Skill testing in the Alexa Skill Console with some quality of lif
 ## Jovo Audio Converter
 
 Convert your MP3s into the right format for Alexa Skills and Google Actions. Learn more about it here [here](./audio-converter.md './audio-converter').
-
 
 <!--[metadata]: {"description": "Find about all the tools that extend the capabilities of the Jovo framework and make voice app development in general easier.",
 "route": "tools" }-->

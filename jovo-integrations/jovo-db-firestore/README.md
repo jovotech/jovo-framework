@@ -1,6 +1,6 @@
 # Google Firestore Database Integration
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-db-firestore
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-db-firestore
 
 Learn how to store user specific data of your Alexa Skills and Google Actions to Google Cloud Firestore.
 
@@ -8,13 +8,13 @@ Learn how to store user specific data of your Alexa Skills and Google Actions to
 * [Configuration](#configuration)
 * [Using Firestore outside Google Cloud](#using-firestore-outside-google-cloud)
 
-> Tutorial: [Deploy to Google Cloud](https://www.jovo.tech/tutorials/deploy-to-google-cloud)
+> Tutorial: [Deploy to Google Cloud](https://v3.jovo.tech/tutorials/deploy-to-google-cloud)
 
 ## Introduction
 
 The Firestore integration allows you to store user session data in the NoSQL service running on Google Firebase. This integration is especially convenient if you're running your voice app on Google Cloud Functions. You can find the official documentation about Firestore here: [firebase.google.com/docs/firestore](https://firebase.google.com/docs/firestore/).
 
-> [Learn more about hosting your application on Google Cloud Functions](https://www.jovo.tech/docs/hosting/google-cloud-functions).
+> [Learn more about hosting your application on Google Cloud Functions](https://v3.jovo.tech/docs/hosting/google-cloud-functions).
 
 ## Configuration
 

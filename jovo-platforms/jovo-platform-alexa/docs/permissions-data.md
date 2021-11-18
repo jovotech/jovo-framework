@@ -1,6 +1,6 @@
 # User Data and Permissions
 
-> To view this page on the Jovo website, visit https://www.jovo.tech/marketplace/jovo-platform-alexa/permissions-data
+> To view this page on the Jovo website, visit https://v3.jovo.tech/marketplace/jovo-platform-alexa/permissions-data
 
 Learn more about how to get access to Alexa Skill user information, permissions, and other data.
 
@@ -1622,4 +1622,4 @@ ON_EVENT: {
 
 #### Proactive Subscription Changed
 
-Find a detailed description of the `Proactive Subscription Changed` event [here](https://www.jovo.tech/marketplace/jovo-platform-alexa#skill-event---proactivesubscriptionchanged).
+Find a detailed description of the `Proactive Subscription Changed` event [here](https://v3.jovo.tech/marketplace/jovo-platform-alexa#skill-event---proactivesubscriptionchanged).
