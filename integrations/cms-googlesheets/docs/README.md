@@ -5,7 +5,7 @@ excerpt: 'The GoogleSheets Jovo integration lets you manage your content in Goog
 
 # GoogleSheets CMS Integration
 
-This [CMS integration](https://v4.jovo.tech/docs/cms) lets you manage your content in Google Spreadsheets.
+This [CMS integration](https://www.jovo.tech/docs/cms) lets you manage your content in Google Spreadsheets.
 
 ## Introduction
 
@@ -21,7 +21,7 @@ It's possible to use pre-defined sheet types (like [translations](#translationss
 
 ## Installation
 
-As first step, create a Google Spreadsheet with at least one sheet. Most projects usually contain a [`translations` sheet](#translationssheet) for [i18n](https://v4.jovo.tech/docs/i18n). You can get started by copying our [sample spreadsheet](https://docs.google.com/spreadsheets/d/1YxNwxpZB32DBN0WI8SbcO828i1mutFriTgvjkw4UnW8/edit?usp=sharing).
+As first step, create a Google Spreadsheet with at least one sheet. Most projects usually contain a [`translations` sheet](#translationssheet) for [i18n](https://www.jovo.tech/docs/i18n). You can get started by copying our [sample spreadsheet](https://docs.google.com/spreadsheets/d/1YxNwxpZB32DBN0WI8SbcO828i1mutFriTgvjkw4UnW8/edit?usp=sharing).
 
 Install the plugin like this:
 
@@ -29,7 +29,7 @@ Install the plugin like this:
 $ npm install @jovotech/cms-googlesheets
 ```
 
-Add it as a plugin to your [app configuration](https://v4.jovo.tech/docs/app-config), for example `app.ts`:
+Add it as a plugin to your [app configuration](https://www.jovo.tech/docs/app-config), for example `app.ts`:
 
 ```typescript
 import { GoogleSheetsCms, TranslationsSheet } from '@jovotech/cms-googlesheets';
@@ -170,7 +170,7 @@ You can also learn more about creating your own [custom sheet types](#custom-she
 
 ### TranslationsSheet
 
-This sheet type makes use of the Jovo [i18n](https://v4.jovo.tech/docs/i18n) and allows you to store translation strings in a Google spreadsheet.
+This sheet type makes use of the Jovo [i18n](https://www.jovo.tech/docs/i18n) and allows you to store translation strings in a Google spreadsheet.
 
 ```typescript
 import { GoogleSheetsCms, TranslationsSheet } from '@jovotech/cms-googlesheets';
@@ -203,7 +203,7 @@ By using this sheet type, you can access translation strings like this:
 this.$t('welcome');
 ```
 
-You can also add [platform specific translations](https://v4.jovo.tech/docs/i18n#platform-specific-translations) by appending a `:` colon followed by the platform name (in camel case) to the locale:
+You can also add [platform specific translations](https://www.jovo.tech/docs/i18n#platform-specific-translations) by appending a `:` colon followed by the platform name (in camel case) to the locale:
 
 | key     | en           | en:alexa          |
 | :------ | :----------- | :---------------- |

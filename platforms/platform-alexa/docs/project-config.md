@@ -11,7 +11,7 @@ Learn how to configure your Alexa projects using the `jovo.project.js` file.
 
 The Alexa project configuration defines how the Alexa CLI plugin builds and deploys Alexa project files using the Jovo CLI. [Learn more about all Alexa CLI commands here](./cli-commands.md).
 
-You can add the Alexa plugin for the Jovo CLI and its configurations to your [project configuration](https://v4.jovo.tech/docs/project-config) in `jovo.project.js`:
+You can add the Alexa plugin for the Jovo CLI and its configurations to your [project configuration](https://www.jovo.tech/docs/project-config) in `jovo.project.js`:
 
 ```js
 const { ProjectConfig } = require('@jovotech/cli');
@@ -38,14 +38,14 @@ const project = new ProjectConfig({
 
 The following options are currently supported:
 
-- [`locales`](#locales): Defines how the locales in the [`models` folder](https://v4.jovo.tech/docs/models) should be mapped to Alexa locales.
+- [`locales`](#locales): Defines how the locales in the [`models` folder](https://www.jovo.tech/docs/models) should be mapped to Alexa locales.
 - [`skillId`](#skillid): The Skill ID that the project should be deployed to.
 - [`askProfile`](#askprofile): The ASK profile that should be used for the deployment.
 - [`files`](#files): This can be used to add or override files in your Alexa `build` folder, for example to make updates to the `skill.json` file.
 
 ## locales
 
-During the [`build` command](./cli-commands.md#build), the Jovo Model files in the [`models` folder](https://v4.jovo.tech/docs/models) get turned into Alexa Interaction Models in the `build` folder.
+During the [`build` command](./cli-commands.md#build), the Jovo Model files in the [`models` folder](https://www.jovo.tech/docs/models) get turned into Alexa Interaction Models in the `build` folder.
 
 The `models` folder can include files for generic languages (like `en`) as well as localized ones (like `en-US`). If you use files like `en.json`, you need to add a mapping to the `locales` configuration to make sure they're translated into locales supported by Alexa (see the [official Alexa documentation for supported locales](https://developer.amazon.com/en-US/docs/alexa/custom-skills/develop-skills-in-multiple-languages.html)).
 
@@ -75,7 +75,7 @@ new AlexaCli({
 
 This ensures that your project is always deployed to the right Skill.
 
-The `skillId` property can be especially helpful for [staging](https://v4.jovo.tech/docs/staging), where different stages deploy to different Skills:
+The `skillId` property can be especially helpful for [staging](https://www.jovo.tech/docs/staging), where different stages deploy to different Skills:
 
 ```js
 const project = new ProjectConfig({
@@ -120,7 +120,7 @@ new AlexaCli({
 });
 ```
 
-The `askProfile` property can be especially helpful for [staging](https://v4.jovo.tech/docs/staging), where different stages deploy to different Alexa developer accounts:
+The `askProfile` property can be especially helpful for [staging](https://www.jovo.tech/docs/staging), where different stages deploy to different Alexa developer accounts:
 
 ```js
 const project = new ProjectConfig({
@@ -155,7 +155,7 @@ const project = new ProjectConfig({
 You can also add the ASK profile as a flag in the `deploy:platform` command:
 
 ```sh
-$ jovov4 deploy:platform alexa --ask-profile default
+$ jovo deploy:platform alexa --ask-profile default
 ```
 
 The CLI decides in the following order which ASK profile should be used:
@@ -167,7 +167,7 @@ The CLI decides in the following order which ASK profile should be used:
 
 ## files
 
-You can use the [Jovo CLI File Builder](https://v4.jovo.tech/docs/project-config#file-builder) to add or override files in a path of the Alexa folder in the `build` directory.
+You can use the [Jovo CLI File Builder](https://www.jovo.tech/docs/project-config#file-builder) to add or override files in a path of the Alexa folder in the `build` directory.
 
 For example, you can make changes to the `skill.json` file like this:
 

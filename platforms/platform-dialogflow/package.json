@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/platform-dialogflow",
-  "version": "4.0.0-beta.12",
+  "version": "4.0.0",
   "private": true,
   "description": "",
   "main": "dist/cjs/index.js",
@@ -24,16 +24,16 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/cli-command-build": "^4.0.0-beta.4",
-    "@jovotech/cli-command-deploy": "^4.0.0-beta.4",
-    "@jovotech/cli-command-get": "^4.0.0-beta.4",
-    "@jovotech/cli-command-new": "^4.0.0-beta.4",
-    "@jovotech/cli-core": "^4.0.0-beta.4",
+    "@jovotech/cli-command-build": "^4.0.0",
+    "@jovotech/cli-command-deploy": "^4.0.0",
+    "@jovotech/cli-command-get": "^4.0.0",
+    "@jovotech/cli-command-new": "^4.0.0",
+    "@jovotech/cli-core": "^4.0.0",
     "@jovotech/filebuilder": "^0.0.1",
-    "@jovotech/framework": "^4.0.0-beta.11",
-    "@jovotech/model": "^4.0.0-beta.3",
-    "@jovotech/model-dialogflow": "^4.0.0-beta.3",
-    "@jovotech/model-google": "^4.0.0-beta.3",
+    "@jovotech/framework": "^4.0.0",
+    "@jovotech/model": "^4.0.0",
+    "@jovotech/model-dialogflow": "^4.0.0",
+    "@jovotech/model-google": "^4.0.0",
     "adm-zip": "^0.5.5",
     "axios": "^0.21.1",
     "global-dirs": "^3.0.0",
@@ -45,7 +45,7 @@
     "lodash.uniq": "^4.5.0"
   },
   "devDependencies": {
-    "@jovotech/output": "^4.0.0-beta.10",
+    "@jovotech/output": "^4.0.0",
     "@types/adm-zip": "^0.4.34",
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.has": "^4.5.6",
@@ -55,6 +55,7 @@
     "@types/node": "^10.17.50",
     "@types/prompts": "^2.0.10",
     "@types/tv4": "^1.2.29",
+    "@types/which": "^2.0.1",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
     "eslint": "^7.17.0",
@@ -66,11 +67,11 @@
     "rimraf": "^3.0.2",
     "symlink-dir": "^4.1.0",
     "ts-jest": "^27.0.7",
-    "typescript": "^4.4.4"
+    "typescript": "~4.4.4"
   },
   "peerDependencies": {
-    "@jovotech/framework": "4.0.0-beta.11",
-    "@jovotech/output": "4.0.0-beta.10"
+    "@jovotech/framework": "4.0.0",
+    "@jovotech/output": "4.0.0"
   },
   "browser": {
     "@jovotech/cli-command-build": false,

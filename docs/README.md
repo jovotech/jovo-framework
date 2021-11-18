@@ -36,15 +36,15 @@ $ npm install -g @jovotech/cli
 After successful installation, you should be able to see the Jovo CLI menu by typing the following into your command line:
 
 ```sh
-$ jovov4
+$ jovo
 ```
 
 ### Create a new Project
 
-After installing the Jovo CLI, you can install the template ([TypeScript](https://github.com/jovotech/jovo-v4-template) or [JavaScript](https://github.com/jovotech/jovo-v4-template-js)) using the [`new` command](https://v4.jovo.tech/docs/new-command):
+After installing the Jovo CLI, you can install the template ([TypeScript](https://github.com/jovotech/jovo-v4-template) or [JavaScript](https://github.com/jovotech/jovo-v4-template-js)) using the [`new` command](https://www.jovo.tech/docs/new-command):
 
 ```sh
-$ jovov4 new <directory>
+$ jovo new <directory>
 ```
 
 This will download the template into a new `<directory>` folder and install all necessary dependencies.
@@ -107,12 +107,10 @@ hatesPizza() {
 You can test the app code by running the local development server from the project directory:
 
 ```sh
-$ jovov4 run
+$ jovo run
 ```
 
 You can now open the Jovo Debugger with the `.` key.
-
-**Note:** The v4 Debugger can be reached using `webhookv4.jovo.cloud` instead of `webhook.jovo.cloud`.
 
 You can then use the request buttons or type input to test the flow of the app.
 

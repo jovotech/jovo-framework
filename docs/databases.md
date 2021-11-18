@@ -78,7 +78,7 @@ new FileDb({
 
 #### session
 
-Platforms like [Facebook Messenger](https://v4.jovo.tech/marketplace/platform-facebookmessenger) or [Google Business Messages](https://v4.jovo.tech/marketplace/platform-googlebusiness) don't support session storage. This is why all [session data](./data.md#session-data) needs to be persisted in a database.
+Platforms like [Facebook Messenger](https://www.jovo.tech/marketplace/platform-facebookmessenger) or [Google Business Messages](https://www.jovo.tech/marketplace/platform-googlebusiness) don't support session storage. This is why all [session data](./data.md#session-data) needs to be persisted in a database.
 
 ```typescript
 new FileDb({

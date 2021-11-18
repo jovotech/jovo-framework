@@ -75,7 +75,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       nlu: new NlpjsNlu({
         languageMap: getDefaultLanguageMap(),
       }),
-      webhookUrl: 'https://webhookv4.jovo.cloud',
+      webhookUrl: 'https://webhook.jovo.cloud',
       enabled:
         (process.argv.includes('--jovo-webhook') || process.argv.includes('--webhook')) &&
         !process.argv.includes('--disable-jovo-debugger'),
@@ -557,7 +557,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   }
 
   private async retrieveLocalWebhookId(): Promise<string> {
-    const homeConfigPath = resolve(homedir(), '.jovo/configv4');
+    const homeConfigPath = resolve(homedir(), '.jovo/config');
     try {
       const homeConfigBuffer = await promises.readFile(homeConfigPath);
       const homeConfigData = JSON.parse(homeConfigBuffer.toString());

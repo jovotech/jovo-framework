@@ -11,12 +11,12 @@ Build voice experiences and chatbots for the web. This frontend client brings yo
 
 ![Jovo Client and Jovo Core Platform](https://github.com/jovotech/jovo-framework/raw/master/jovo-platforms/jovo-platform-core/img/jovo-client-platform-communication.png 'How Jovo Core Platform communicates with clients like web apps')
 
-[Jovo Clients](https://v4.jovo.tech/docs/clients) help with two tasks:
+[Jovo Clients](https://www.jovo.tech/docs/clients) help with two tasks:
 
-- [Record user input](#record-user-input) (speech, text, buttons) and send it as a [request to the Jovo app](#send-a-request-to-jovo) (where the [Web Platform](https://v4.jovo.tech/marketplace/platform-web) handles the conversational logic).
+- [Record user input](#record-user-input) (speech, text, buttons) and send it as a [request to the Jovo app](#send-a-request-to-jovo) (where the [Web Platform](https://www.jovo.tech/marketplace/platform-web) handles the conversational logic).
 - [Handle the response from the Jovo app](#handle-the-response-from-jovo) and play/show output to the user.
 
-The Jovo Web Client can be used on websites and web apps. This is the version for clients build with the popular framework Vue.js, version 3. You can also find a version for [Vue2](https://v4.jovo.tech/marketplace/client-web-vue2) and a [vanilla JavaScript client](https://v4.jovo.tech/marketplace/client-web).
+The Jovo Web Client can be used on websites and web apps. This is the version for clients build with the popular framework Vue.js, version 3. You can also find a version for [Vue2](https://www.jovo.tech/marketplace/client-web-vue2) and a [vanilla JavaScript client](https://www.jovo.tech/marketplace/client-web).
 
 ## Installation
 
@@ -42,12 +42,12 @@ Vue.use<JovoWebClientVueConfig>(JovoWebClientVue, {
 
 The constructor accepts two parameters:
 
-- `endpointUrl`: For local development of your Jovo app with [Express](https://v4.jovo.tech/marketplace/server-express), you can use `http://localhost:3000/webhook`.
-- `config`: Learn more in the [vanilla JS client docs](https://v4.jovo.tech/marketplace/client-web#configuration).
+- `endpointUrl`: For local development of your Jovo app with [Express](https://www.jovo.tech/marketplace/server-express), you can use `http://localhost:3000/webhook`.
+- `config`: Learn more in the [vanilla JS client docs](https://www.jovo.tech/marketplace/client-web#configuration).
 
 ## Differences to Vanilla JS Client
 
-> The Vue client offers the same features as the [vanilla JavaScript client](https://v4.jovo.tech/marketplace/client-web). You can find all features and configurations in [its documentation](https://v4.jovo.tech/marketplace/client-web).
+> The Vue client offers the same features as the [vanilla JavaScript client](https://www.jovo.tech/marketplace/client-web). You can find all features and configurations in [its documentation](https://www.jovo.tech/marketplace/client-web).
 
 The Vue client enhances the experience by adding a `$client` property to your Vue app, which makes it possible to reference it across all Vue components.
 

@@ -9,7 +9,7 @@ Turn raw text into structured meaning with the Jovo Framework integration for th
 
 ## Introduction
 
-[Snips NLU](https://github.com/snipsco/snips-nlu) is an open source [natural language understanding (NLU)](https://v4.jovo.tech/docs/nlu) library.
+[Snips NLU](https://github.com/snipsco/snips-nlu) is an open source [natural language understanding (NLU)](https://www.jovo.tech/docs/nlu) library.
 
 Since it is an open source service, you can host Snips NLU on your own servers without any external API calls. You can learn how to set up a server in the [official Snips NLU documentation](https://snips-nlu.readthedocs.io/en/latest/).
 
@@ -62,7 +62,7 @@ new SnipsNlu({
 
 ## Entities
 
-You can access Snips slots by using the `$entities` property. You can learn more in the [Jovo Model](https://v4.jovo.tech/docs/models) and the [`$entities` documentation](https://v4.jovo.tech/docs/entities).
+You can access Snips slots by using the `$entities` property. You can learn more in the [Jovo Model](https://www.jovo.tech/docs/models) and the [`$entities` documentation](https://www.jovo.tech/docs/entities).
 
 The Snips slot values are translated into the following Jovo entity properties:
 
@@ -79,9 +79,9 @@ You can learn more about the Snips slot format in the [official Snips documentat
 
 ## Dynamic Entities
 
-It is possible to set up Snips NLU to work with [dynamic entities](https://v4.jovo.tech/docs/entities#dynamic-entities).
+It is possible to set up Snips NLU to work with [dynamic entities](https://www.jovo.tech/docs/entities#dynamic-entities).
 
-The Jovo Snips NLU integration automatically parses the entities that are added to the `listen` object of the [output template](https://v4.jovo.tech/docs/output-templates), and sends them to the Snips NLU server along with the session ID.
+The Jovo Snips NLU integration automatically parses the entities that are added to the `listen` object of the [output template](https://www.jovo.tech/docs/output-templates), and sends them to the Snips NLU server along with the session ID.
 
 The Snips NLU server then trains an updated model just for the intents that use the `entities` from `listen`.
 

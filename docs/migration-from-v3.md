@@ -23,7 +23,7 @@ The [updated concepts](#updated-concepts) section includes Jovo features that ar
 
 The [use `v4` and `v3` in parallel](#use-v4-and-v3-in-parallel) section describes how you can build some projects in `v4` (using the latest CLI), while still being able to maintain older projects.
 
-The [integrations and plugins](#integrations-and-plugins) section shows a few more examples of smaller changes to existing Jovo extensions. Take a look at the [Jovo Marketplace](https://v4.jovo.tech/marketplace) to find all up to date integrations.
+The [integrations and plugins](#integrations-and-plugins) section shows a few more examples of smaller changes to existing Jovo extensions. Take a look at the [Jovo Marketplace](https://www.jovo.tech/marketplace) to find all up to date integrations.
 
 ## TypeScript vs JavaScript
 
@@ -64,7 +64,7 @@ There are quite a few concepts that make Jovo `v4` more powerful, including:
 
 > [Learn more about components here](./components.md).
 
-A Jovo component is an isolated part of your app that handles a specific task. Here is an example component with a `START` handler (the entry point when another component [redirects](https://v4.jovo.tech/docs/handlers#redirect-to-components) or [delegates](https://v4.jovo.tech/docs/handlers#delegate-to-components) to it):
+A Jovo component is an isolated part of your app that handles a specific task. Here is an example component with a `START` handler (the entry point when another component [redirects](https://www.jovo.tech/docs/handlers#redirect-to-components) or [delegates](https://www.jovo.tech/docs/handlers#delegate-to-components) to it):
 
 ```typescript
 // src/components/YourComponent.ts
@@ -79,7 +79,7 @@ class YourComponent extends BaseComponent {
 }
 ```
 
-Compared to Jovo `v3`, a component can be seen as a state, but instead of using `followUpState` to determine the state of the _next_ request, we use [redirects](https://v4.jovo.tech/docs/handlers#redirect-to-components) or [delegates](https://v4.jovo.tech/docs/handlers#delegate-to-components) to enter a component in the _current_ request:
+Compared to Jovo `v3`, a component can be seen as a state, but instead of using `followUpState` to determine the state of the _next_ request, we use [redirects](https://www.jovo.tech/docs/handlers#redirect-to-components) or [delegates](https://www.jovo.tech/docs/handlers#delegate-to-components) to enter a component in the _current_ request:
 
 ```typescript
 // v3
@@ -268,9 +268,9 @@ return this.$send('Do you like pizza?');
 
 > [Learn more about Jovo Input here](./input.md).
 
-Jovo uses a new concept of structured input as part of the [RIDR Lifecycle](./ridr-lifecycle.md): The _interpretation_ step turns all request data into structured meaning, which is then used by the [routing](#routing) and other services like the [Jovo Debugger](https://v4.jovo.tech/docs/debugger) or [unit testing](#unit-testing).
+Jovo uses a new concept of structured input as part of the [RIDR Lifecycle](./ridr-lifecycle.md): The _interpretation_ step turns all request data into structured meaning, which is then used by the [routing](#routing) and other services like the [Jovo Debugger](https://www.jovo.tech/docs/debugger) or [unit testing](#unit-testing).
 
-For platforms like [Alexa](https://v4.jovo.tech/marketplace/platform-alexa) (that already send [NLU](./nlu.md) data with the request), the `$input` may look like this:
+For platforms like [Alexa](https://www.jovo.tech/marketplace/platform-alexa) (that already send [NLU](./nlu.md) data with the request), the `$input` may look like this:
 
 ```typescript
 {
@@ -279,7 +279,7 @@ For platforms like [Alexa](https://v4.jovo.tech/marketplace/platform-alexa) (tha
 }
 ```
 
-Some other integrations (like our [Web Client](https://v4.jovo.tech/marketplace/client-web)) might only send raw text:
+Some other integrations (like our [Web Client](https://www.jovo.tech/marketplace/client-web)) might only send raw text:
 
 ```typescript
 {
@@ -323,7 +323,7 @@ In `v3`, the app configuration could be found in a `config.js` file. In `v4`, we
 There are specific configuration files for each stage (learn more in the [staging](./staging.md) docs):
 
 - `app.ts`: Default configurations for all stages
-- `app.dev.ts`: Configurations for local development, including [Jovo Debugger](https://v4.jovo.tech/docs/debugger) and [FileDb](https://v4.jovo.tech/marketplace/db-filedb)
+- `app.dev.ts`: Configurations for local development, including [Jovo Debugger](https://www.jovo.tech/docs/debugger) and [FileDb](https://www.jovo.tech/marketplace/db-filedb)
 
 This is what it looks like in `app.ts`:
 
@@ -365,11 +365,11 @@ const app = new App({
 
 ### Project Configuration
 
-> [Learn more about project configuration here](https://v4.jovo.tech/docs/project-config).
+> [Learn more about project configuration here](https://www.jovo.tech/docs/project-config).
 
 The project configuration (previously `project.js`) can now be found in a file called `jovo.project.js` in the root of your Jovo project.
 
-Similar to the [app configuration](#app-configuration), the project config now accepts classes in a `plugins` array. Here is an [example for Alexa](https://v4.jovo.tech/marketplace/platform-alexa/project-config):
+Similar to the [app configuration](#app-configuration), the project config now accepts classes in a `plugins` array. Here is an [example for Alexa](https://www.jovo.tech/marketplace/platform-alexa/project-config):
 
 ```js
 const { ProjectConfig } = require('@jovotech/cli');
@@ -396,9 +396,9 @@ const project = new ProjectConfig({
 
 ### Debugger Configuration
 
-> [Learn more about Debugger configuration here](https://v4.jovo.tech/docs/debugger-config).
+> [Learn more about Debugger configuration here](https://www.jovo.tech/docs/debugger-config).
 
-The new [Jovo Debugger](https://v4.jovo.tech/docs/debugger) comes with lots of new features, including a new configuration file which can be found in `jovo.debugger.js` in the root of your Jovo project.
+The new [Jovo Debugger](https://www.jovo.tech/docs/debugger) comes with lots of new features, including a new configuration file which can be found in `jovo.debugger.js` in the root of your Jovo project.
 
 In this file, you can add buttons that you can use in the Debugger frontend. It's possible to use buttons for both individual requests as well as sequences.
 
@@ -580,6 +580,17 @@ $ npm install -g jovo-cli
 $ jovo3
 ```
 
+We also updated the Debugger webhook URLs:
+
+- `v4`: `webhook.jovo.cloud`
+- `v3`: `webhookv3.jovo.cloud`
+
+Make sure to update your Jovo `v3` project to use the latest version that works with the updated Debugger URL:
+
+```sh
+$ jovo3 update
+```
+
 ## Integrations and Plugins
 
 - [Platforms](#platforms)
@@ -594,7 +605,7 @@ $ jovo3
 
 As mentioned in the [app configuration](#app-configuration) section, platforms are now added to the `plugins` array of the `app` constructor.
 
-Platform classes are now also appended by `Platform`. Here is an example for [Alexa](https://v4.jovo.tech/marketplace/platform-alexa):
+Platform classes are now also appended by `Platform`. Here is an example for [Alexa](https://www.jovo.tech/marketplace/platform-alexa):
 
 ```typescript
 // v3
@@ -632,7 +643,7 @@ await this.$messengerBot.showText({
 }
 ```
 
-Here is an [example for Alexa APL](https://v4.jovo.tech/marketplace/platform-alexa/output#native-response):
+Here is an [example for Alexa APL](https://www.jovo.tech/marketplace/platform-alexa/output#native-response):
 
 ```typescript
 // v3 handler
@@ -668,7 +679,7 @@ this.$alexaSkill.addDirective({
 
 > [Learn more about CMS integrations here](./cms.md).
 
-- Improved configuration, take a look at [Google Sheets](https://v4.jovo.tech/marketplace/cms-googlesheets) and [Airtable](https://v4.jovo.tech/marketplace/cms-airtable)
+- Improved configuration, take a look at [Google Sheets](https://www.jovo.tech/marketplace/cms-googlesheets) and [Airtable](https://www.jovo.tech/marketplace/cms-airtable)
 - `responses` are now called `translations`
 
 ### Databases
@@ -680,7 +691,7 @@ this.$alexaSkill.addDirective({
 
 ### Analytics
 
-- [Dashbot analytics](https://v4.jovo.tech/marketplace/analytics-dashbot) now has a different configuration: The plugin is added to each platform that it is supposed to track
+- [Dashbot analytics](https://www.jovo.tech/marketplace/analytics-dashbot) now has a different configuration: The plugin is added to each platform that it is supposed to track
 
 ### Plugins
 
