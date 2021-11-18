@@ -1,6 +1,6 @@
 {
   "name": "jovo-client-web-vue",
-  "version": "3.5.3",
+  "version": "3.6.0",
   "main": "dist/index.common.js",
   "browser": "dist/index.umd.js",
   "types": "dist/index.d.ts",
@@ -14,7 +14,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "jovo-client-web": "^3.5.3"
+    "jovo-client-web": "^3.6.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",

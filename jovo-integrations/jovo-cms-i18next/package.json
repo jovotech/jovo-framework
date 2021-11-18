@@ -1,6 +1,6 @@
 {
   "name": "jovo-cms-i18next",
-  "version": "3.5.1",
+  "version": "3.6.0",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -16,7 +16,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "i18next": "^19.0.2",
-    "jovo-core": "^3.5.1",
+    "jovo-core": "^3.6.0",
     "lodash.merge": "^4.6.2"
   },
   "devDependencies": {

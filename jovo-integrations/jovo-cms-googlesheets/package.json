@@ -1,6 +1,6 @@
 {
   "name": "jovo-cms-googlesheets",
-  "version": "3.5.2",
+  "version": "3.6.0",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -17,7 +17,7 @@
   "dependencies": {
     "googleapis": "^42.0.0",
     "i18next": "^19.0.2",
-    "jovo-core": "^3.5.1",
+    "jovo-core": "^3.6.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",

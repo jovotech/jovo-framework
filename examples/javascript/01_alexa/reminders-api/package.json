@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-alexa-reminders-api",
-  "version": "3.5.5",
+  "version": "3.6.0",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -13,7 +13,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-framework": "^3.5.2",
-    "jovo-platform-alexa": "^3.5.5"
+    "jovo-framework": "^3.6.0",
+    "jovo-platform-alexa": "^3.6.0"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "jovo-core",
-  "version": "3.5.1",
+  "version": "3.6.0",
   "description": "jovo-core",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",

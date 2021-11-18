@@ -1,6 +1,6 @@
 {
   "name": "jovo-client-web",
-  "version": "3.5.3",
+  "version": "3.6.0",
   "description": " ",
   "main": "dist/index.common.js",
   "browser": "dist/index.umd.js",
@@ -20,7 +20,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "detect-browser": "^5.2.0",
-    "jovo-platform-web": "^3.5.3",
+    "jovo-platform-web": "^3.6.0",
     "lodash.defaultsdeep": "^4.6.1",
     "lodash.get": "^4.4.2",
     "lodash.set": "^4.3.2",

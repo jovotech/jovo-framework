@@ -1,6 +1,6 @@
 {
   "name": "jovo-nlu-nlpjs",
-  "version": "3.5.1",
+  "version": "3.6.0",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -21,7 +21,7 @@
     "@nlpjs/logger": "^4.8.4",
     "@nlpjs/ner": "^4.9.3",
     "@nlpjs/nlp": "^4.9.3",
-    "jovo-core": "^3.5.1",
+    "jovo-core": "^3.6.0",
     "jovo-model": "^0.1.14",
     "jovo-model-nlpjs": "^0.1.1-alpha.0"
   },

@@ -1,6 +1,6 @@
 {
   "name": "jovo-analytics-onedash",
-  "version": "3.5.1",
+  "version": "3.6.0",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
   "scripts": {
@@ -19,7 +19,7 @@
   "license": "Apache-2.0",
   "description": "",
   "dependencies": {
-    "jovo-core": "^3.5.1",
+    "jovo-core": "^3.6.0",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",
     "lodash.set": "^4.3.2"

@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-ts-googleassistant-transactions-physicalgoods",
-  "version": "3.5.4",
+  "version": "3.6.0",
   "private": true,
   "description": "",
   "main": "dist/src/index",
@@ -17,10 +17,10 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-db-filedb": "^3.5.1",
-    "jovo-framework": "^3.5.2",
-    "jovo-platform-googleassistant": "^3.5.4",
-    "jovo-plugin-debugger": "^3.5.1"
+    "jovo-db-filedb": "^3.6.0",
+    "jovo-framework": "^3.6.0",
+    "jovo-platform-googleassistant": "^3.6.0",
+    "jovo-plugin-debugger": "^3.6.0"
   },
   "devDependencies": {
     "@types/express": "^4.16.0",

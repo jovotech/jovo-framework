@@ -1,6 +1,6 @@
 {
   "name": "jovo-slu-lex",
-  "version": "3.5.1",
+  "version": "3.6.0",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -17,7 +17,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "aws-sdk": "^2.477.0",
-    "jovo-core": "^3.5.1"
+    "jovo-core": "^3.6.0"
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1",

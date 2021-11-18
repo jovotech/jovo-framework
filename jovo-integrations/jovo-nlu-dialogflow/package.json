@@ -1,6 +1,6 @@
 {
   "name": "jovo-nlu-dialogflow",
-  "version": "3.5.1",
+  "version": "3.6.0",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -17,7 +17,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "google-auth-library": "^5.5.1",
-    "jovo-core": "^3.5.1",
+    "jovo-core": "^3.6.0",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",
     "lodash.set": "^4.3.2"
