@@ -13,7 +13,7 @@ export class CoreOutputTemplateConverterStrategy extends OutputTemplateConverter
   OutputTemplateConverterStrategyConfig
 > {
   responseClass = CoreResponse;
-  platformName = 'core' as const;
+  platformName: 'core' | string = 'core';
 
   toResponse(output: NormalizedOutputTemplate | NormalizedOutputTemplate[]): CoreResponse {
     output = Array.isArray(output) ? output : [output];

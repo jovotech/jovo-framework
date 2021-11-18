@@ -1,4 +1,4 @@
-import { Intent } from '../interfaces';
+import { Intent } from '@jovotech/common';
 import {
   createHandlerOptionDecorator,
   getValuesOfDecoratorRestParameter,

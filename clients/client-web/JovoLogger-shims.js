@@ -1,0 +1,2 @@
+class JovoLogger {}
+export { JovoLogger };

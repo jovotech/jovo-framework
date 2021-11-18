@@ -1,148 +1,20 @@
----
-title: 'Google Business Messages Platform Integration'
-excerpt: 'The Google Business Messages platform integration allows you to build custom Google Business Bots using Jovo.'
----
+# Jovo Google Business Messages Integration
 
-# Google Business Messages Platform Integration
+[![Jovo Framework](https://v4.jovo.tech/img/github-header.png)](https://v4.jovo.tech)
 
-The Google Business Messages [platform integration](https://www.jovo.tech/docs/platforms) allows you to build custom Google Business bots using Jovo.
+<p>
+<a href="https://www.jovo.tech" target="_blank">Website</a> -  <a href="https://www.jovo.tech/docs" target="_blank">Docs</a> - <a href="https://www.jovo.tech/marketplace" target="_blank">Marketplace</a> - <a href="https://github.com/jovotech/jovo-v4-template" target="_blank">Template</a>   
+</p>
 
-## Getting Started
+<p>
+<a href="https://www.npmjs.com/package/@jovotech/platform-googlebusiness" target="_blank"><img src="https://badge.fury.io/js/@jovotech%2Fplatform-googlebusiness.svg"></a>      
+<a href="https://opencollective.com/jovo-framework" target="_blank"><img src="https://opencollective.com/jovo-framework/tiers/badge.svg"></a>
+</p>
 
-You can install the plugin like this:
+This package enables you to integrate your Jovo app with Google Business Messages.
 
-```sh
+```bash
 $ npm install @jovotech/platform-googlebusiness
 ```
 
-Add it as plugin to your [app configuration](https://www.jovo.tech/docs/app-config), e.g. `app.ts`:
-
-```typescript
-import { App } from '@jovotech/framework';
-import { GoogleBusinessPlatform } from '@jovotech/platform-googlebusiness';
-// ...
-
-const app = new App({
-  plugins: [
-    new GoogleBusinessPlatform(),
-    // ...
-  ],
-});
-```
-
-## Configuration
-
-You can configure the Google Business platform in the [app configuration](https://www.jovo.tech/docs/app-config), for example `app.ts`:
-
-```typescript
-import { GoogleBusinessPlatform } from '@jovotech/platform-googlebusiness';
-
-// ...
-
-const app = new App({
-  plugins: [
-    new GoogleBusinessPlatform({
-      plugins: [
-        /* ... */
-      ],
-      session: {
-        /* ... */
-      },
-    }),
-    // ...
-  ],
-});
-```
-
-Options include:
-
-- `plugins`: For example, you need to ddd an [NLU integration](#nlu-integration) here.
-- `session`: Session specific config. Take a look at [session data](#session-data) for more information.
-
-### NLU Integration
-
-Google Business requests mostly consist of raw text that need to be turned into structured data using an [natural language understanding (NLU) integration](https://www.jovo.tech/docs/nlu).
-
-Here is an example how you can add an NLU integration (in this case [NLP.js](https://www.jovo.tech/marketplace/nlu-nlpjs)) to the [app configuration](https://www.jovo.tech/docs/app-config) in `app.ts`:
-
-```typescript
-import { GoogleBusinessPlatform } from '@jovotech/platform-googlebusiness';
-import { NlpjsNlu } from '@jovotech/nlu-nlpjs';
-
-// ...
-
-const app = new App({
-  plugins: [
-    new GoogleBusinessPlatform({
-      plugins: [new NlpjsNlu()],
-    }),
-    // ...
-  ],
-});
-```
-
-### Session Data
-
-Google Business does not offer session storage, which is needed for features like [session data](https://www.jovo.tech/docs/data#session-data), [component data](https://www.jovo.tech/docs/data#component-data), and the [`$state` stack](https://www.jovo.tech/docs/state-stack).
-
-To make Google Business bots work with these features, Jovo automatically enables the storage of session data to the active [database integration](https://www.jovo.tech/docs/databases). Under the hood, it adds `session` to the [`storedElements` config](https://www.jovo.tech/docs/databases#storedelements).
-
-Since Google Business does not have the concept of sessions, we need to define after which time a request should be seen as the start of the new session. The default is _15 minutes_ and can be modified either in the [`storedElements` config](https://www.jovo.tech/docs/databases#storedelements) (works across platforms) or in the Google Business config:
-
-```typescript
-new GoogleBusinessPlatform({
-  // ...
-  session: {
-    expiresAfterSeconds: 900,
-  },
-});
-```
-
-## Platform-Specific Features
-
-You can access the Google Business specific object like this:
-
-```typescript
-this.$googleBusiness;
-```
-
-You can also use this object to see if the request is coming from Google Business (or a different platform):
-
-```typescript
-if (this.$googleBusiness) {
-  // ...
-}
-```
-
-### Output
-
-There are various Google Business specific elements that can be added to the [output](https://www.jovo.tech/docs/output).
-
-For output that is only used for Google Business, you can add the following to the output object:
-
-```typescript
-{
-  // ...
-  platforms: {
-    googleBusiness: {
-      // ...
-    }
-  }
-}
-```
-
-You can add response objects that should show up exactly like this in the Google Business response object using the `nativeResponse` object:
-
-```typescript
-{
-  // ...
-  platforms: {
-    googleBusiness: {
-      nativeResponse: {
-        // ...
-      }
-      // ...
-    }
-  }
-}
-```
+> Learn more in the docs: https://www.jovo.tech/marketplace/platform-googlebusiness

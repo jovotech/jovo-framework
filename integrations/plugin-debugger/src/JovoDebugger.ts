@@ -23,11 +23,13 @@ import { LangFr } from '@nlpjs/lang-fr';
 import { LangIt } from '@nlpjs/lang-it';
 import isEqual from 'fast-deep-equal/es6';
 import { promises } from 'fs';
+import open from 'open';
 import { homedir } from 'os';
 import { join, resolve } from 'path';
 import { cwd } from 'process';
 import { connect, Socket } from 'socket.io-client';
 import { Writable } from 'stream';
+import { inspect } from 'util';
 import { v4 as uuidV4 } from 'uuid';
 import { STATE_MUTATING_METHOD_KEYS } from './constants';
 import { DebuggerConfig } from './DebuggerConfig';
@@ -42,7 +44,7 @@ import {
   JovoUpdateData,
   StateMutatingJovoMethodKey,
 } from './interfaces';
-import { MockServer } from './MockServer';
+import { MockServer, MockServerRequest } from './MockServer';
 
 export interface JovoDebuggerConfig extends PluginConfig {
   nlu: NluPlugin;
@@ -106,8 +108,11 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     this.socket.on(JovoDebuggerEvent.DebuggingAvailable, () => {
       return this.onDebuggingAvailable();
     });
-    this.socket.on(JovoDebuggerEvent.DebuggerRequest, (request: AnyObject) => {
-      return this.onDebuggerRequest(app, request);
+    this.socket.on(JovoDebuggerEvent.DebuggerRequest, (requestData: AnyObject) => {
+      return this.onReceiveRequest(app, { data: requestData });
+    });
+    this.socket.on(JovoDebuggerEvent.ServerRequest, (request: MockServerRequest) => {
+      return this.onReceiveRequest(app, request);
     });
 
     this.patchHandleRequestToIncludeUniqueId();
@@ -326,6 +331,79 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     };
   }
 
+  private async onConnected(): Promise<void> {
+    const color: [number, number] = inspect.colors['blue'] ?? [0, 0];
+    const blueText = (str: string) => `\u001b[${color[0]}m${str}\u001b[${color[1]}m`;
+    const underlineColor: [number, number] = inspect.colors['underline'] ?? [0, 0];
+    const underline = (str: string) =>
+      `\u001b[${underlineColor[0]}m${str}\u001b[${underlineColor[1]}m`;
+
+    const webhookId = await this.retrieveLocalWebhookId();
+    const debuggerUrl = `${this.config.webhookUrl}/${webhookId}`;
+
+    console.log('\nThis is your webhook url ☁️ ' + underline(blueText(debuggerUrl)));
+    // Check if the current output is being piped to somewhere.
+    if (process.stdout.isTTY) {
+      // Check if we can enable raw mode for input stream to capture raw keystrokes.
+      if (process.stdin.setRawMode) {
+        setTimeout(() => {
+          console.log(`\nTo open Jovo Debugger in your browser, press the "." key.\n`);
+        }, 500);
+
+        // Capture unprocessed key input.
+        process.stdin.setRawMode(true);
+        // Explicitly resume emitting data from the stream.
+        process.stdin.resume();
+        // Capture readable input as opposed to binary.
+        process.stdin.setEncoding('utf-8');
+
+        // Collect input text from input stream.
+        let inputText = '';
+        process.stdin.on('data', async (keyRaw: Buffer) => {
+          const key: string = keyRaw.toString();
+          // When dot gets pressed, try to open the debugger in browser.
+          if (key === '.') {
+            try {
+              await open(debuggerUrl);
+            } catch (error) {
+              console.log(
+                `Could not open browser. Please open debugger manually by visiting this url: ${debuggerUrl}`,
+              );
+            }
+            inputText = '';
+          } else {
+            // When anything else got pressed, record it and send it on enter into the child process.
+            if (key.charCodeAt(0) === 13) {
+              // Send recorded input to child process. This is useful for restarting a nodemon process with rs, for example.
+              process.stdout.write('\n');
+              inputText = '';
+            } else if (key.charCodeAt(0) === 3) {
+              // Ctrl+C has been pressed, kill process.
+              if (process.platform === 'win32') {
+                process.stdin.pause();
+                // @ts-ignore
+                process.stdin.setRawMode(false);
+                process.exit();
+              } else {
+                process.exit();
+              }
+            } else {
+              // Record input text and write it into terminal.
+              inputText += key;
+              process.stdout.write(key);
+            }
+          }
+        });
+      } else {
+        setTimeout(() => {
+          console.log(
+            `☁  Could not open browser. Please open debugger manually by visiting this url: ${debuggerUrl}`,
+          );
+        }, 2500);
+      }
+    }
+  }
+
   private async onDebuggingAvailable(): Promise<void> {
     if (!this.socket) {
       return this.onSocketNotConnected();
@@ -350,7 +428,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     }
   }
 
-  private async onDebuggerRequest(app: App, request: AnyObject): Promise<void> {
+  private async onReceiveRequest(app: App, request: MockServerRequest): Promise<void> {
     await app.handle(new MockServer(request));
   }
 
@@ -402,6 +480,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     try {
       files = await promises.readdir(absoluteModelsPath);
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.warn(new LanguageModelDirectoryNotFoundError(absoluteModelsPath));
       return;
     }
@@ -465,9 +544,11 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     });
     socket.on('connect', () => {
       this.hasShownConnectionError = false;
+      this.onConnected();
     });
     socket.on('connect_error', (error: Error) => {
       if (!this.hasShownConnectionError) {
+        // eslint-disable-next-line no-console
         console.warn(new SocketConnectionFailedError(this.config.webhookUrl, error).message);
         this.hasShownConnectionError = true;
       }
@@ -490,6 +571,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   }
 
   private onSocketNotConnected() {
+    // eslint-disable-next-line no-console
     console.warn(new SocketNotConnectedError(this.config.webhookUrl).message);
   }
 

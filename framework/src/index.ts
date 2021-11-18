@@ -1,8 +1,11 @@
 // TODO determine whether we want to re-export axios
 import axios from 'axios';
+import { JovoLogger } from '@jovotech/common';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('source-map-support').install();
+
+export const Logger = new JovoLogger();
 
 export * from '@jovotech/common';
 

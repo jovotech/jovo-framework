@@ -1,37 +1,20 @@
----
-title: 'ExpressJS Server Integration'
-excerpt: 'Host Jovo apps on your own server using ExpressJS.'
----
+# Jovo Express Integration
 
-# ExpressJS Server Integration
+[![Jovo Framework](https://v4.jovo.tech/img/github-header.png)](https://v4.jovo.tech)
 
-Host Jovo apps on your own server using ExpressJS.
+<p>
+<a href="https://www.jovo.tech" target="_blank">Website</a> -  <a href="https://www.jovo.tech/docs" target="_blank">Docs</a> - <a href="https://www.jovo.tech/marketplace" target="_blank">Marketplace</a> - <a href="https://github.com/jovotech/jovo-v4-template" target="_blank">Template</a>   
+</p>
 
-## Introduction
+<p>
+<a href="https://www.npmjs.com/package/@jovotech/server-express" target="_blank"><img src="https://badge.fury.io/js/@jovotech%2Fserver-express.svg"></a>      
+<a href="https://opencollective.com/jovo-framework" target="_blank"><img src="https://opencollective.com/jovo-framework/tiers/badge.svg"></a>
+</p>
 
-This [server integration](https://www.jovo.tech/docs/server) allows you to host yor Jovo apps on your own server. [Learn more about ExpressJS in their official documentation](https://expressjs.com/).
+This package enables you to host your Jovo app on a server using Express.
 
-For example, the [`app.dev.ts` stage](https://www.jovo.tech/docs/app-config#staging) uses ExpressJS as a local development server. The server is referenced in the last line of `app.dev.ts`:
-
-```typescript
-export * from './server.lambda';
+```bash
+$ npm install @jovotech/server-express
 ```
 
-You can find the [`server.express.ts` file here](https://github.com/jovotech/jovo-framework/blob/v4/release/integrations/server-express/boilerplate/server.express.ts).
-
-## Installation
-
-Create a new stage using the [`new:stage` command](https://www.jovo.tech/docs/new-command#new-stage) as explained in the [app config documentation](https://www.jovo.tech/docs/app-config#staging).
-
-When it prompts you to select a server integration, choose ExpressJS. This will add a [`server.express.ts` file](https://github.com/jovotech/jovo-framework/blob/v4/release/integrations/server-express/boilerplate/server.express.ts) to your project's `src` folder.
-
-## Run Server
-
-If you're not using the [Jovo Webhook](https://www.jovo.tech/docs/webhook) with the [`run` command](https://www.jovo.tech/docs/run-command) to start the server, you can use the following npm script:
-
-```sh
-$ npm run start:<stage>
-
-# Example
-$ npm run start:dev
-```
+> Learn more in the docs: https://v4.jovo.tech/marketplace/server-express

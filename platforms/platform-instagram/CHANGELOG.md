@@ -1,5 +1,45 @@
 # Changelog
 
+## [@jovotech/platform-instagram@4.0.0-beta.1](https://github.com/jovotech/jovo-framework/compare/v3.5...@jovotech/platform-instagram@4.0.0-beta.1)
+
+> 2 November 2021
+
+- :bug: Set entities manually [`#1090`](https://github.com/jovotech/jovo-framework/pull/1090)
+- :sparkles: Add Instagram platform integration [`#1069`](https://github.com/jovotech/jovo-framework/pull/1069)
+- :sparkles: Add Dashbot Analytics integration [`#1076`](https://github.com/jovotech/jovo-framework/pull/1076)
+- ✨ Platform handles (Alexa Reminders) [`#1071`](https://github.com/jovotech/jovo-framework/pull/1071)
+- ✨ Skip health checks [`#1068`](https://github.com/jovotech/jovo-framework/pull/1068)
+- :sparkles: Introduce Instagram [`#40`](https://github.com/jovotech/jovo-framework/pull/40)
+- :rewind: Reverse d10b5c3 [`#1065`](https://github.com/jovotech/jovo-framework/pull/1065)
+- :bug: Resolve project path correctly [`#1062`](https://github.com/jovotech/jovo-framework/pull/1062)
+- 🐛🏷️ Fix invalid typing of `InputTypeLike` [`#1064`](https://github.com/jovotech/jovo-framework/pull/1064)
+- :bookmark: Publish [`#1063`](https://github.com/jovotech/jovo-framework/pull/1063)
+- :recycle: Refactor CLI Plugins [`#1046`](https://github.com/jovotech/jovo-framework/pull/1046)
+- :sparkles: Add system intents to model [`#1056`](https://github.com/jovotech/jovo-framework/pull/1056)
+- :ambulance: Apply TestSuite hotfixes [`#1052`](https://github.com/jovotech/jovo-framework/pull/1052)
+- :bookmark: Publish [`#1045`](https://github.com/jovotech/jovo-framework/pull/1045)
+- ✨ Introduce TestSuite [`#1033`](https://github.com/jovotech/jovo-framework/pull/1033)
+- 🐛 Add global intents to actions.yml [`#1032`](https://github.com/jovotech/jovo-framework/pull/1032)
+- ✨ Add hasSessionEnded() to JovoResponse [`#29`](https://github.com/jovotech/jovo-framework/pull/29)
+- 🐛 Fix copying resources [`#1021`](https://github.com/jovotech/jovo-framework/pull/1021)
+- ✨ Improve model validation [`#1020`](https://github.com/jovotech/jovo-framework/pull/1020)
+- ✨ Add accessToken property to JovoUser [`#1027`](https://github.com/jovotech/jovo-framework/pull/1027)
+- Async Model [`#996`](https://github.com/jovotech/jovo-framework/pull/996)
+- 🚚 Only use $ for direct properties of `Jovo` [`#986`](https://github.com/jovotech/jovo-framework/pull/986)
+- :recycle: Update CorePlatform response [`#16`](https://github.com/jovotech/jovo-framework/pull/16)
+- Improve type for device capabilities [`#985`](https://github.com/jovotech/jovo-framework/pull/985)
+- ✨ Alexa reminders  [`#972`](https://github.com/jovotech/jovo-framework/pull/972)
+- ✨ Implement this.$device (wip) [`#966`](https://github.com/jovotech/jovo-framework/pull/966)
+- 🚚 Rename platform resources [`#962`](https://github.com/jovotech/jovo-framework/pull/962)
+- ✨ Implement Alexa Customer Profile API [`#970`](https://github.com/jovotech/jovo-framework/pull/970)
+- ✨ Implement Alexa Customer Profile API [`#969`](https://github.com/jovotech/jovo-framework/pull/969)
+- ✨ Initial DynamoDb implementation (wip) [`#953`](https://github.com/jovotech/jovo-framework/pull/953)
+- ✨ Introduce plugin-specific context [`#939`](https://github.com/jovotech/jovo-framework/pull/939)
+- ⬆️ Update dependencies [`#936`](https://github.com/jovotech/jovo-framework/pull/936)
+- ✨ Add Dialogflow CLI Plugin [`#928`](https://github.com/jovotech/jovo-framework/pull/928)
+- 🚚 Abstract JovoCli class, pass instance to plugins [`#926`](https://github.com/jovotech/jovo-framework/pull/926)
+- ✨ Add CLI plugins for Alexa and Google Assistant [`#925`](https://github.com/jovotech/jovo-framework/pull/925)
+
 ## [v3.5](https://github.com/jovotech/jovo-framework/compare/v3.3...v3.5)
 
 > 22 February 2021

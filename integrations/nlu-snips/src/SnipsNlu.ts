@@ -223,9 +223,11 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
       return response.data;
     } catch (error) {
       if (error.isAxiosError) {
+        const errorDescription = error.response?.data?.description;
         throw new JovoError({
-          message: `SnipsNlu returned a server error (${error.response?.status || error.code})`,
-          details: error.response?.data?.description,
+          message: `Request to SnipsNlu failed${
+            errorDescription ? `: ${errorDescription}` : '.'
+          }  `,
           name: error.response?.data?.name,
         });
       }

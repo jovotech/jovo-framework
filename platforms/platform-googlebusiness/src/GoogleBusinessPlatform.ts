@@ -35,12 +35,13 @@ export class GoogleBusinessPlatform extends Platform<
   GoogleBusinessPlatform,
   GoogleBusinessConfig
 > {
-  outputTemplateConverterStrategy = new GoogleBusinessOutputTemplateConverterStrategy();
-  requestClass = GoogleBusinessRequest;
-  jovoClass = GoogleBusiness;
-  userClass = GoogleBusinessUser;
-  deviceClass = GoogleBusinessDevice;
-  requestBuilder = GoogleBusinessRequestBuilder;
+  readonly id: string = 'googleBusiness';
+  readonly outputTemplateConverterStrategy = new GoogleBusinessOutputTemplateConverterStrategy();
+  readonly requestClass = GoogleBusinessRequest;
+  readonly jovoClass = GoogleBusiness;
+  readonly userClass = GoogleBusinessUser;
+  readonly deviceClass = GoogleBusinessDevice;
+  readonly requestBuilder = GoogleBusinessRequestBuilder;
 
   readonly jwtClient: JWT;
 
