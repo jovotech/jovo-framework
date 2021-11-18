@@ -342,65 +342,54 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     const debuggerUrl = `${this.config.webhookUrl}/${webhookId}`;
 
     console.log('\nThis is your webhook url ☁️ ' + underline(blueText(debuggerUrl)));
-    // Check if the current output is being piped to somewhere.
-    if (process.stdout.isTTY) {
-      // Check if we can enable raw mode for input stream to capture raw keystrokes.
-      if (process.stdin.setRawMode) {
-        setTimeout(() => {
-          console.log(`\nTo open Jovo Debugger in your browser, press the "." key.\n`);
-        }, 500);
 
-        // Capture unprocessed key input.
-        process.stdin.setRawMode(true);
-        // Explicitly resume emitting data from the stream.
-        process.stdin.resume();
-        // Capture readable input as opposed to binary.
-        process.stdin.setEncoding('utf-8');
+    // Check if we can enable raw mode for input stream to capture raw keystrokes
+    if (process.stdin.isTTY && process.stdin.setRawMode) {
+      setTimeout(() => {
+        console.log(`\nTo open Jovo Debugger in your browser, press the "." key.\n`);
+      }, 500);
 
-        // Collect input text from input stream.
-        let inputText = '';
-        process.stdin.on('data', async (keyRaw: Buffer) => {
-          const key: string = keyRaw.toString();
-          // When dot gets pressed, try to open the debugger in browser.
-          if (key === '.') {
-            try {
-              await open(debuggerUrl);
-            } catch (error) {
-              console.log(
-                `Could not open browser. Please open debugger manually by visiting this url: ${debuggerUrl}`,
-              );
-            }
-            inputText = '';
-          } else {
-            // When anything else got pressed, record it and send it on enter into the child process.
-            if (key.charCodeAt(0) === 13) {
-              // Send recorded input to child process. This is useful for restarting a nodemon process with rs, for example.
-              process.stdout.write('\n');
-              inputText = '';
-            } else if (key.charCodeAt(0) === 3) {
-              // Ctrl+C has been pressed, kill process.
-              if (process.platform === 'win32') {
-                process.stdin.pause();
-                // @ts-ignore
-                process.stdin.setRawMode(false);
-                process.exit();
-              } else {
-                process.exit();
-              }
-            } else {
-              // Record input text and write it into terminal.
-              inputText += key;
-              process.stdout.write(key);
-            }
+      // Capture unprocessed key input.
+      process.stdin.setRawMode(true);
+      // Explicitly resume emitting data from the stream.
+      process.stdin.resume();
+      // Capture readable input as opposed to binary.
+      process.stdin.setEncoding('utf-8');
+
+      // Collect input text from input stream.
+      process.stdin.on('data', async (keyRaw: Buffer) => {
+        const key: string = keyRaw.toString();
+        // When dot gets pressed, try to open the debugger in browser.
+        if (key === '.') {
+          try {
+            await open(debuggerUrl);
+          } catch (error) {
+            console.log(
+              `Could not open browser. Please open debugger manually by visiting this url: ${debuggerUrl}`,
+            );
           }
-        });
-      } else {
-        setTimeout(() => {
-          console.log(
-            `☁  Could not open browser. Please open debugger manually by visiting this url: ${debuggerUrl}`,
-          );
-        }, 2500);
-      }
+        } else {
+          if (key.charCodeAt(0) === 3) {
+            // Ctrl+C has been pressed, kill process.
+            if (process.platform === 'win32') {
+              process.stdin.pause();
+              process.stdin.setRawMode?.(false);
+              process.exit();
+            } else {
+              process.exit();
+            }
+          } else {
+            // Record input text and write it into terminal.
+            process.stdout.write(key);
+          }
+        }
+      });
+    } else {
+      setTimeout(() => {
+        console.log(
+          `☁  Could not open browser. Please open debugger manually by visiting this url: ${debuggerUrl}`,
+        );
+      }, 2500);
     }
   }
 
