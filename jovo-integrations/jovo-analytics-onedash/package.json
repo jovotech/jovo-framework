@@ -57,5 +57,6 @@
   },
   "files": [
     "dist/src/**/*"
-  ]
+  ],
+  "gitHead": "70a7a560ca0b0e1b33e7a3df9f865bfac091f9a9"
 }
