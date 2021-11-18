@@ -1,6 +1,6 @@
 # Jovo Framework: The React for Voice and Chat Apps
 
-> [**NEWS**: We just launched Jovo v4](#)
+> [**NEWS**: We just launched Jovo v4](https://www.jovo.tech/news/jovo-v4)
 
 [![Jovo Framework](https://www.jovo.tech/img/github-header.png)](https://www.jovo.tech)
 
