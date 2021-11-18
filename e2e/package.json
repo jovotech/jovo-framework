@@ -11,8 +11,8 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/framework": "^4.0.0-beta.3",
-    "@jovotech/platform-alexa": "^4.0.0-beta.5"
+    "@jovotech/framework": "^4.0.0",
+    "@jovotech/platform-alexa": "^4.0.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",

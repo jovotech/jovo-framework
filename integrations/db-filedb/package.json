@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/db-filedb",
-  "version": "4.0.0-beta.11",
+  "version": "4.0.0",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -23,7 +23,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@aws-sdk/client-lambda": "^3.8.1",
-    "@jovotech/framework": "^4.0.0-beta.11",
+    "@jovotech/framework": "^4.0.0",
     "@types/jest": "^26.0.20",
     "@types/node": "^10.17.50",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
@@ -38,7 +38,7 @@
     "typescript": "^4.4.4"
   },
   "peerDependencies": {
-    "@jovotech/framework": "4.0.0-beta.11"
+    "@jovotech/framework": "4.0.0"
   },
   "gitHead": "9c310ac282a2e19bb9d3f269badd99e2a01dd71b",
   "prettier": "../../.prettierrc.js",
