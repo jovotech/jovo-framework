@@ -449,13 +449,21 @@ export interface Session {
   typeOverrides?: TypeOverride[];
   languageCode?: string;
 }
+
 export interface Home {
   params: Params;
 }
 
 export interface Device {
   capabilities: Capability[];
+  currentLocation?: CurrentLocation;
 }
+
+export interface CurrentLocation {
+  coordinates?: LatLng,
+  postalAddress?: PostalAddress
+}
+
 export interface Expected {
   speech: string[];
   languageCode: string;
@@ -609,8 +617,8 @@ export interface Merchant {
 }
 
 export interface LatLng {
-  latitude: number;
-  longitude: number;
+  latitude?: number;
+  longitude?: number;
 }
 export interface Location {
   coordinates?: LatLng;
