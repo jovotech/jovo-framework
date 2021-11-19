@@ -16,6 +16,7 @@ export class FileDb extends DbPlugin<FileDbConfig> {
   getDefaultConfig(): FileDbConfig {
     return {
       ...super.getDefaultConfig(),
+      skipTests: true,
       pathToFile: '../db/db.json',
     };
   }

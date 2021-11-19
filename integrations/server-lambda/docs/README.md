@@ -9,9 +9,9 @@ Host Jovo apps on AWS Lambda serverless functions.
 
 ## Introduction
 
-This [server integration](https://v4.jovo.tech/docs/server) allows you to host yor Jovo apps on [AWS Lambda](https://aws.amazon.com/lambda/), a serverless hosting solution by Amazon Web Services. [Find the official documentation here](http://docs.aws.amazon.com/lambda/latest/dg/welcome.html).
+This [server integration](https://www.jovo.tech/docs/server) allows you to host yor Jovo apps on [AWS Lambda](https://aws.amazon.com/lambda/), a serverless hosting solution by Amazon Web Services. [Find the official documentation here](http://docs.aws.amazon.com/lambda/latest/dg/welcome.html).
 
-While the [Jovo Webhook](https://v4.jovo.tech/docs/webhook) is usually called for local development, many teams use AWS Lambda to host their Jovo apps for testing and production stages. [Learn more about staging here](https://v4.jovo.tech/docs/staging). The [installation section](#installation) explains how to create a new stage that can be used for Lambda deployment.
+While the [Jovo Webhook](https://www.jovo.tech/docs/webhook) is usually called for local development, many teams use AWS Lambda to host their Jovo apps for testing and production stages. [Learn more about staging here](https://www.jovo.tech/docs/staging). The [installation section](#installation) explains how to create a new stage that can be used for Lambda deployment.
 
 Lambda functions can be connected to various AWS services, for example [DynamoDB](#dynamodb) for storing user data. Learn more about setting up these integrations in the [configuration section](#configuration).
 
@@ -19,13 +19,13 @@ The [deployment section](#deployment) offers more information about loading up y
 
 ## Installation
 
-Create a new stage using the `jovov4 new:stage` command as explained in the [app config documentation](https://v4.jovo.tech/docs/app-config#staging), for example:
+Create a new stage using the `jovov4 new:stage` command as explained in the [app config documentation](https://www.jovo.tech/docs/app-config#staging), for example:
 
 ```sh
-$ jovov4 new: stage prod
+$ jovo new: stage prod
 ```
 
-When it prompts you to select a server integration, choose Lambda. This will add a [`server.lambda.ts` file](https://github.com/jovotech/jovo-framework/blob/v4/release/integrations/server-lambda/boilerplate/server.lambda.ts) to your project's `src` folder, and reference it in your newly created [app stage config](https://v4.jovo.tech/docs/app-config#staging) (in this example `app.prod.ts`):
+When it prompts you to select a server integration, choose Lambda. This will add a [`server.lambda.ts` file](https://github.com/jovotech/jovo-framework/blob/v4/latest/integrations/server-lambda/boilerplate/server.lambda.ts) to your project's `src` folder, and reference it in your newly created [app stage config](https://www.jovo.tech/docs/app-config#staging) (in this example `app.prod.ts`):
 
 ```typescript
 export * from './server.lambda';
@@ -40,9 +40,9 @@ Learn more about setting up the following services and configurations:
 
 ### DynamoDB
 
-The [FileDb](https://v4.jovo.tech/marketplace/db-filedb) that is used as database for local development can't be used on AWS Lambda. To make your app work with all [data types](https://v4.jovo.tech/docs/data), setting up a [database integration](https://v4.jovo.tech/docs/databases) is necessary.
+The [FileDb](https://www.jovo.tech/marketplace/db-filedb) that is used as database for local development can't be used on AWS Lambda. To make your app work with all [data types](https://www.jovo.tech/docs/data), setting up a [database integration](https://www.jovo.tech/docs/databases) is necessary.
 
-DynamoDB is the recommended database for Jovo apps hosted on AWS Lambda. [Learn more in the DynamoDB integration docs](https://v4.jovo.tech/marketplace/db-dynamodb).
+DynamoDB is the recommended database for Jovo apps hosted on AWS Lambda. [Learn more in the DynamoDB integration docs](https://www.jovo.tech/marketplace/db-dynamodb).
 
 ### API Gateway
 
@@ -91,7 +91,7 @@ Save this configuration, then deploy your API once again for the changes to be t
 You can deploy your Jovo app to AWS Lambda in two ways:
 
 - Create a bundle zip file using `npm run bundle:<stage>` and upload it manually in the AWS Lambda console.
-- Use a CLI integration like [Serverless](https://v4.jovo.tech/marketplace/target-serverless) to handle the deployment with the [`deploy:code` command](https://v4.jovo.tech/docs/deploy-command#deploy-code).
+- Use a CLI integration like [Serverless](https://www.jovo.tech/marketplace/target-serverless) to handle the deployment with the [`deploy:code` command](https://www.jovo.tech/docs/deploy-command#deploy-code).
 
 ## Troubleshooting
 

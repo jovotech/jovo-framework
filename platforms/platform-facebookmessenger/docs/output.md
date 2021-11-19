@@ -2,19 +2,20 @@
 title: 'Facebook Messenger Output'
 excerpt: 'Learn more about Jovo output templates for Facebook Messenger.'
 ---
+
 # Facebook Messenger Output
 
-Learn more about output templates for [Facebook Messenger](https://v4.jovo.tech/marketplace/platform-facebookmessenger).
+Learn more about output templates for [Facebook Messenger](https://www.jovo.tech/marketplace/platform-facebookmessenger).
 
 ## Introduction
 
-Jovo offers the ability to [create structured output](https://v4.jovo.tech/docs/output) that is then translated into native platform responses.
+Jovo offers the ability to [create structured output](https://www.jovo.tech/docs/output) that is then translated into native platform responses.
 
-This structured output is called [output template](https://v4.jovo.tech/docs/output-templates). Its root properties are generic output elements that work across platforms. [Learn more about how generic output is translated into a Facebook Messenger response below](#generic-output-elements).
+This structured output is called [output template](https://www.jovo.tech/docs/output-templates). Its root properties are generic output elements that work across platforms. [Learn more about how generic output is translated into a Facebook Messenger response below](#generic-output-elements).
 
 ```typescript
 {
-  message: `Hello world! What's your name?`
+  message: `Hello world! What's your name?`;
 }
 ```
 
@@ -31,10 +32,9 @@ You can also add platform-specific output to an output template. [Learn more abo
 }
 ```
 
-
 ## Generic Output Elements
 
-Generic output elements are in the root of the output template and work across platforms. [Learn more in the Jovo output template docs](https://v4.jovo.tech/docs/output-templates).
+Generic output elements are in the root of the output template and work across platforms. [Learn more in the Jovo output template docs](https://www.jovo.tech/docs/output-templates).
 
 Below, you can find a list of generic output elements that work with Facebook Messenger:
 
@@ -45,7 +45,7 @@ Below, you can find a list of generic output elements that work with Facebook Me
 
 ### message
 
-The [generic `message` element](https://v4.jovo.tech/docs/output-templates#message)  contains the main response of your bot, which is usually displayed in a chat bubble:
+The [generic `message` element](https://www.jovo.tech/docs/output-templates#message) contains the main response of your bot, which is usually displayed in a chat bubble:
 
 ```typescript
 {
@@ -53,7 +53,7 @@ The [generic `message` element](https://v4.jovo.tech/docs/output-templates#messa
 }
 ```
 
-It is also possible to use `message` as an object which contains both a `speech` (the *spoken* text on platforms like Alexa) and a `text` (*written* text to be displayed in chat bubbles) field. In this case, Facebook Messenger uses the `text` element.
+It is also possible to use `message` as an object which contains both a `speech` (the _spoken_ text on platforms like Alexa) and a `text` (_written_ text to be displayed in chat bubbles) field. In this case, Facebook Messenger uses the `text` element.
 
 ```typescript
 {
@@ -79,14 +79,14 @@ Under the hood, Jovo translates the `message` into `message.text` as part of a c
 
 ### quickReplies
 
-The [generic `quickReplies` element](https://v4.jovo.tech/docs/output-templates#quick-replies) allows you to define small buttons that help the user answer a question faster. This concept is also called [quick replies in the Facebook Messenger documentation](https://developers.facebook.com/docs/messenger-platform/send-messages/quick-replies).
+The [generic `quickReplies` element](https://www.jovo.tech/docs/output-templates#quick-replies) allows you to define small buttons that help the user answer a question faster. This concept is also called [quick replies in the Facebook Messenger documentation](https://developers.facebook.com/docs/messenger-platform/send-messages/quick-replies).
 
 Quick replies can be an array of strings:
 
 ```typescript
 {
   // ...
-  quickReplies: [ 'yes', 'no' ]
+  quickReplies: ['yes', 'no'];
 }
 ```
 
@@ -98,13 +98,13 @@ Alternatively, you can use an array of objects that includes a `text` (what the 
   quickReplies: [
     {
       text: 'oh yeah',
-      value: 'yes'
+      value: 'yes',
     },
     {
       text: 'hell no',
-      value: 'no'
-    }
-  ]
+      value: 'no',
+    },
+  ];
 }
 ```
 
@@ -112,8 +112,8 @@ Under the hood, Jovo translates these into Facebook Messenger quick replies of t
 
 ```json
 {
-  "recipient":{
-    "id":"<PSID>"
+  "recipient": {
+    "id": "<PSID>"
   },
   "messaging_type": "RESPONSE",
   "message": {
@@ -133,14 +133,13 @@ Under the hood, Jovo translates these into Facebook Messenger quick replies of t
 }
 ```
 
-The `payload` is the value that gets passed to the [NLU integration](https://v4.jovo.tech/docs/nlu) to turn raw text into structured content. For quick replies that are passed as strings, the `title` and `payload` are the same. If the quick replies are objects, the `text` gets turned into `title` and the `value` into `payload`.
+The `payload` is the value that gets passed to the [NLU integration](https://www.jovo.tech/docs/nlu) to turn raw text into structured content. For quick replies that are passed as strings, the `title` and `payload` are the same. If the quick replies are objects, the `text` gets turned into `title` and the `value` into `payload`.
 
 For other quick reply content types, see [`nativeQuickReplies`](#nativequickreplies) below.
 
-
 ### card
 
-The [generic `card` element](https://v4.jovo.tech/docs/output-templates#card) can be used to send a [Facebook Messenger generic template](https://developers.facebook.com/docs/messenger-platform/send-messages/template/generic). [Learn more about other templates below](#template).
+The [generic `card` element](https://www.jovo.tech/docs/output-templates#card) can be used to send a [Facebook Messenger generic template](https://developers.facebook.com/docs/messenger-platform/send-messages/template/generic). [Learn more about other templates below](#template).
 
 Here is an example of a card with all properties that are supported by Facebook Messenger:
 
@@ -168,31 +167,31 @@ Under the hood, Jovo translates the `card` into the following generic template:
 
 ```json
 {
-  "recipient":{
+  "recipient": {
     "id": "<PSID>"
   },
-  "message":{
-    "attachment":{
+  "message": {
+    "attachment": {
       "type": "template",
-      "payload":{
+      "payload": {
         "template_type": "generic",
         "elements": [
-           {
+          {
             "title": "Hello world!",
-            "image_url":"https://...",
+            "image_url": "https://...",
             "subtitle": "Welcome to the show.",
             "default_action": {
               "type": "web_url",
               "url": "https://...",
-              "webview_height_ratio": "tall",
+              "webview_height_ratio": "tall"
             },
             "buttons": [
               {
-                "type":"postback",
-                "title":"Start Chatting",
-                "payload":"DEVELOPER_DEFINED_PAYLOAD"
-              }              
-            ]      
+                "type": "postback",
+                "title": "Start Chatting",
+                "payload": "DEVELOPER_DEFINED_PAYLOAD"
+              }
+            ]
           }
         ]
       }
@@ -205,7 +204,7 @@ Learn more about this structure in the [official API reference by Facebook](http
 
 ### carousel
 
-A [generic `carousel` element](https://v4.jovo.tech/docs/output-templates#carousel) is a horizontally scrollable set of [`card`](#card) items. In Facebook's definition, this is called a [carousel of generic templates](https://developers.facebook.com/docs/messenger-platform/send-messages/template/generic#carousel).
+A [generic `carousel` element](https://www.jovo.tech/docs/output-templates#carousel) is a horizontally scrollable set of [`card`](#card) items. In Facebook's definition, this is called a [carousel of generic templates](https://developers.facebook.com/docs/messenger-platform/send-messages/template/generic#carousel).
 
 This is how a carousel can be defined:
 
@@ -233,7 +232,7 @@ The elements in an `items` array can contain all properties that are shown in th
 
 ## Facebook Messenger Output Elements
 
-It is possible to add platform-specific output elements to an output template. [Learn more in the Jovo output template documentation](https://v4.jovo.tech/docs/output-templates#platform-specific-output-elements).
+It is possible to add platform-specific output elements to an output template. [Learn more in the Jovo output template documentation](https://www.jovo.tech/docs/output-templates#platform-specific-output-elements).
 
 For Facebook Messenger, you can add output elements inside a `facebookMessenger` object:
 
@@ -273,9 +272,9 @@ import { QuickReplyContentType } from '@jovotech/platform-facebookmessenger';
     facebookMessenger: {
       nativeQuickReplies: [
         {
-          content_type: QuickReplyContentType.UserPhoneNumber // or 'user_phone_number'
-        }
-      ]
+          content_type: QuickReplyContentType.UserPhoneNumber, // or 'user_phone_number'
+        },
+      ];
     }
   }
 }
@@ -283,11 +282,11 @@ import { QuickReplyContentType } from '@jovotech/platform-facebookmessenger';
 
 The following quick reply types are supported:
 
-| Enum key | Enum value | Links | 
-|----------|------------|-------|
-| `QuickReplyContentType.Text` | `'text'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/quick-reply/TextQuickReply.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/quick-replies#text)   |
+| Enum key                                | Enum value            | Links                                                                                                                                                                                                                                                |
+| --------------------------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `QuickReplyContentType.Text`            | `'text'`              | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/quick-reply/TextQuickReply.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/quick-replies#text)             |
 | `QuickReplyContentType.UserPhoneNumber` | `'user_phone_number'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/quick-reply/UserPhoneNumberQuickReply.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/quick-replies#phone) |
-| `QuickReplyContentType.UserEmail`  | `'user_email'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/quick-reply/UserEmailQuickReply.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/quick-replies#email) |
+| `QuickReplyContentType.UserEmail`       | `'user_email'`        | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/quick-reply/UserEmailQuickReply.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/quick-replies#email)       |
 
 ### template
 
@@ -306,9 +305,9 @@ import { TemplateType } from '@jovotech/platform-facebookmessenger';
     facebookMessenger: {
       template: [
         {
-          template_type: TemplateType.Receipt // or 'receipt'
-        }
-      ]
+          template_type: TemplateType.Receipt, // or 'receipt'
+        },
+      ];
     }
   }
 }
@@ -331,8 +330,8 @@ import { TemplateType } from '@jovotech/platform-facebookmessenger';
           recipient_name: 'Some Name',
           order_number: '2021100123',
           // ...
-        }
-      ]
+        },
+      ];
     }
   }
 }
@@ -340,13 +339,12 @@ import { TemplateType } from '@jovotech/platform-facebookmessenger';
 
 Here is a table of all supported template types:
 
-| Enum key | Enum value | Links | 
-|----------|------------|-------|
-| `TemplateType.Generic` | `'generic'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/template/GenericTemplate.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/template/generic)   |
+| Enum key               | Enum value  | Links                                                                                                                                                                                                                                |
+| ---------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `TemplateType.Generic` | `'generic'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/template/GenericTemplate.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/template/generic) |
 | `TemplateType.Receipt` | `'receipt'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/template/ReceiptTemplate.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/template/receipt) |
-| `TemplateType.Button`  | `'button'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/template/ButtonTemplate.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/template/button) |
-| `TemplateType.Media`  | `'media'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/template/MediaTemplate.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/template/media) |
-
+| `TemplateType.Button`  | `'button'`  | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/template/ButtonTemplate.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/template/button)   |
+| `TemplateType.Media`   | `'media'`   | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/template/MediaTemplate.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/template/media)     |
 
 A template gets translated into the following:
 
@@ -394,14 +392,13 @@ import { ButtonType } from '@jovotech/platform-facebookmessenger';
 
 Here is a table of all supported button types:
 
-| Enum key | Enum value | Links | 
-|----------|------------|-------|
-| `ButtonType.Postback` | `'postback'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/button/PostbackButton.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/buttons#postback)   |
-| `ButtonType.Url` | `'web_url'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/button/UrlButton.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/buttons#url) |
-| `ButtonType.Call`  | `'phone_number'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/button/CallButton.ts), [Official Docs](hhttps://developers.facebook.com/docs/messenger-platform/send-messages/buttons#call) |
-| `ButtonType.LogIn`  | `'account_link'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/button/LogInButton.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/buttons#login) |
-| `ButtonType.LogOut`  | `'account_unlink'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/button/LogOutButton.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/buttons#logout) |
-| `ButtonType.GamePlay`  | `'game_play'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/button/GamePlayButton.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/buttons#game_play) |
-
+| Enum key              | Enum value         | Links                                                                                                                                                                                                                              |
+| --------------------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ButtonType.Postback` | `'postback'`       | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/button/PostbackButton.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/buttons#postback)  |
+| `ButtonType.Url`      | `'web_url'`        | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/button/UrlButton.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/buttons#url)            |
+| `ButtonType.Call`     | `'phone_number'`   | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/button/CallButton.ts), [Official Docs](hhttps://developers.facebook.com/docs/messenger-platform/send-messages/buttons#call)         |
+| `ButtonType.LogIn`    | `'account_link'`   | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/button/LogInButton.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/buttons#login)        |
+| `ButtonType.LogOut`   | `'account_unlink'` | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/button/LogOutButton.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/buttons#logout)      |
+| `ButtonType.GamePlay` | `'game_play'`      | [Code](https://github.com/jovotech/jovo-output/blob/master/output-facebookmessenger/src/models/button/GamePlayButton.ts), [Official Docs](https://developers.facebook.com/docs/messenger-platform/send-messages/buttons#game_play) |
 
 [Learn more about all buttons types in the official Facebook Messenger docs](https://developers.facebook.com/docs/messenger-platform/send-messages/buttons)

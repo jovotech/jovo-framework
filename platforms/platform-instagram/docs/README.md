@@ -5,11 +5,11 @@ excerpt: 'The Instagram platform integration allows you to build custom Instagra
 
 # Instagram Platform Integration
 
-The Instagram [platform integration](https://v4.jovo.tech/docs/platforms) allows you to build custom Messenger bots using Jovo.
+The Instagram [platform integration](https://www.jovo.tech/docs/platforms) allows you to build custom Messenger bots using Jovo.
 
 ## Introduction
 
-Apps for managing Instagram direct messages (DMs) are called Instagram messaging apps, and also referred to as bots. They work similar to [Facebook Messenger bots](https://v4.jovo.tech/marketplace/platform-facebookmessenger). You can find a general introduction into building those apps in the [official Instagram Messaging documentation](https://developers.facebook.com/docs/messenger-platform/instagram).
+Apps for managing Instagram direct messages (DMs) are called Instagram messaging apps, and also referred to as bots. They work similar to [Facebook Messenger bots](https://www.jovo.tech/marketplace/platform-facebookmessenger). You can find a general introduction into building those apps in the [official Instagram Messaging documentation](https://developers.facebook.com/docs/messenger-platform/instagram).
 
 In the [installation](#installation) section, we're going to set up a Jovo project that works with Instagram.
 
@@ -26,7 +26,7 @@ Jovo is a framework that allows you to build apps that work across devices and p
 
 ## Installation
 
-To create a new Instagram project with Jovo, we recommend installing the Jovo CLI, creating a new Jovo project, and selecting Instagram as platform using the CLI wizard. Learn more in our [getting started guide](https://v4.jovo.tech/docs/getting-started).
+To create a new Instagram project with Jovo, we recommend installing the Jovo CLI, creating a new Jovo project, and selecting Instagram as platform using the CLI wizard. Learn more in our [getting started guide](https://www.jovo.tech/docs/getting-started).
 
 ```sh
 # Install Jovo CLI globally
@@ -34,7 +34,7 @@ $ npm install -g @jovotech/cli
 
 # Start new project wizard
 # In the platform step, use the space key to select Instagram
-$ jovov4 new <directory>
+$ jovo new <directory>
 ```
 
 If you want to add Instagram to an existing Jovo project, you can install the plugin like this:
@@ -43,7 +43,7 @@ If you want to add Instagram to an existing Jovo project, you can install the pl
 $ npm install @jovotech/platform-instagram
 ```
 
-Add it as plugin to your [app configuration](https://v4.jovo.tech/docs/app-config), e.g. `app.ts`:
+Add it as plugin to your [app configuration](https://www.jovo.tech/docs/app-config), e.g. `app.ts`:
 
 ```typescript
 import { App } from '@jovotech/framework';
@@ -65,7 +65,7 @@ The integration needs at least a `pageAccessToken` and a `verifyToken`. Learn mo
 
 ## Configuration
 
-You can configure the Instagram platform in the [app configuration](https://v4.jovo.tech/docs/app-config), for example `app.ts`:
+You can configure the Instagram platform in the [app configuration](https://www.jovo.tech/docs/app-config), for example `app.ts`:
 
 ```typescript
 import { InstagramPlatform } from '@jovotech/platform-instagram';
@@ -94,9 +94,9 @@ Options include:
 
 ### NLU Integration
 
-Instagram requests mostly consist of raw text that need to be turned into structured data using an [natural language understanding (NLU) integration](https://v4.jovo.tech/docs/nlu).
+Instagram requests mostly consist of raw text that need to be turned into structured data using an [natural language understanding (NLU) integration](https://www.jovo.tech/docs/nlu).
 
-Here is an example how you can add an NLU integration (in this case [NLP.js](https://v4.jovo.tech/marketplace/nlu-nlpjs)) to the [app configuration](https://v4.jovo.tech/docs/app-config) in `app.ts`:
+Here is an example how you can add an NLU integration (in this case [NLP.js](https://www.jovo.tech/marketplace/nlu-nlpjs)) to the [app configuration](https://www.jovo.tech/docs/app-config) in `app.ts`:
 
 ```typescript
 import { InstagramPlatform } from '@jovotech/platform-instagram';
@@ -116,11 +116,11 @@ const app = new App({
 
 ### Session Data
 
-Instagram does not offer session storage, which is needed for features like [session data](https://v4.jovo.tech/docs/data#session-data), [component data](https://v4.jovo.tech/docs/data#component-data), and the [`$state` stack](https://v4.jovo.tech/docs/state-stack).
+Instagram does not offer session storage, which is needed for features like [session data](https://www.jovo.tech/docs/data#session-data), [component data](https://www.jovo.tech/docs/data#component-data), and the [`$state` stack](https://www.jovo.tech/docs/state-stack).
 
-To make Instagram bots work with these features, Jovo automatically enables the storage of session data to the active [database integration](https://v4.jovo.tech/docs/databases). Under the hood, it adds `session` to the [`storedElements` config](https://v4.jovo.tech/docs/databases#storedelements).
+To make Instagram bots work with these features, Jovo automatically enables the storage of session data to the active [database integration](https://www.jovo.tech/docs/databases). Under the hood, it adds `session` to the [`storedElements` config](https://www.jovo.tech/docs/databases#storedelements).
 
-Since Instagram does not have the concept of sessions, we need to define after which time a request should be seen as the start of the new session. The default is _15 minutes_ and can be modified either in the [`storedElements` config](https://v4.jovo.tech/docs/databases#storedelements) (works across platforms) or in the Instagram config:
+Since Instagram does not have the concept of sessions, we need to define after which time a request should be seen as the start of the new session. The default is _15 minutes_ and can be modified either in the [`storedElements` config](https://www.jovo.tech/docs/databases#storedelements) (works across platforms) or in the Instagram config:
 
 ```typescript
 new Instagram({
@@ -148,7 +148,7 @@ if (this.$instagram) {
 
 ### Output
 
-There are various Instagram specific elements that can be added to the [output](https://v4.jovo.tech/docs/output).
+There are various Instagram specific elements that can be added to the [output](https://www.jovo.tech/docs/output).
 
 For output that is only used for Instagram, you can add the following to the output object:
 
@@ -186,6 +186,6 @@ To test your Instagram messaging bot with an Instagram account, you need to crea
 You need to do two things:
 
 - Connect a page to the app, generate an access token, and add it to the [`accessToken` configuration](#configuration).
-- Add your app endpoint (for example your [Jovo Webhook URL](https://v4.jovo.tech/docs/webhook) for testing) as callback URL and add a verify token that you also specify in the [`verifyToken` configuration](#configuration). This will be used by Facebook to verify your server.
+- Add your app endpoint (for example your [Jovo Webhook URL](https://www.jovo.tech/docs/webhook) for testing) as callback URL and add a verify token that you also specify in the [`verifyToken` configuration](#configuration). This will be used by Facebook to verify your server.
 
 If your Facebook app is in developer mode, Facebook will only send requests to your webhook for users who have a tester role (or upwards). Make sure that your Instagram account is connected to your Facebook page for the testing to work.

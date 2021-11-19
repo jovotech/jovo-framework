@@ -23,11 +23,13 @@ import { LangFr } from '@nlpjs/lang-fr';
 import { LangIt } from '@nlpjs/lang-it';
 import isEqual from 'fast-deep-equal/es6';
 import { promises } from 'fs';
+import open from 'open';
 import { homedir } from 'os';
-import { join, resolve, sep } from 'path';
+import { join, resolve } from 'path';
 import { cwd } from 'process';
 import { connect, Socket } from 'socket.io-client';
 import { Writable } from 'stream';
+import { inspect } from 'util';
 import { v4 as uuidV4 } from 'uuid';
 import { STATE_MUTATING_METHOD_KEYS } from './constants';
 import { DebuggerConfig } from './DebuggerConfig';
@@ -42,10 +44,7 @@ import {
   JovoUpdateData,
   StateMutatingJovoMethodKey,
 } from './interfaces';
-import { MockServer } from './MockServer';
-import open from 'open';
-import Table from 'cli-table';
-import { inspect } from 'util';
+import { MockServer, MockServerRequest } from './MockServer';
 
 export interface JovoDebuggerConfig extends PluginConfig {
   nlu: NluPlugin;
@@ -76,7 +75,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       nlu: new NlpjsNlu({
         languageMap: getDefaultLanguageMap(),
       }),
-      webhookUrl: 'https://webhookv4.jovo.cloud',
+      webhookUrl: 'https://webhook.jovo.cloud',
       enabled:
         (process.argv.includes('--jovo-webhook') || process.argv.includes('--webhook')) &&
         !process.argv.includes('--disable-jovo-debugger'),
@@ -109,8 +108,11 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     this.socket.on(JovoDebuggerEvent.DebuggingAvailable, () => {
       return this.onDebuggingAvailable();
     });
-    this.socket.on(JovoDebuggerEvent.DebuggerRequest, (request: AnyObject) => {
-      return this.onDebuggerRequest(app, request);
+    this.socket.on(JovoDebuggerEvent.DebuggerRequest, (requestData: AnyObject) => {
+      return this.onReceiveRequest(app, { data: requestData });
+    });
+    this.socket.on(JovoDebuggerEvent.ServerRequest, (request: MockServerRequest) => {
+      return this.onReceiveRequest(app, request);
     });
 
     this.patchHandleRequestToIncludeUniqueId();
@@ -330,26 +332,22 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   }
 
   private async onConnected(): Promise<void> {
-    const color: [number, number] = inspect.colors['gray'] ?? [0, 0];
-    const grayText = (str: string) => `\u001b[${color[0]}m${str}\u001b[${color[1]}m`;
+    const color: [number, number] = inspect.colors['blue'] ?? [0, 0];
+    const blueText = (str: string) => `\u001b[${color[0]}m${str}\u001b[${color[1]}m`;
+    const underlineColor: [number, number] = inspect.colors['underline'] ?? [0, 0];
+    const underline = (str: string) =>
+      `\u001b[${underlineColor[0]}m${str}\u001b[${underlineColor[1]}m`;
 
     const webhookId = await this.retrieveLocalWebhookId();
     const debuggerUrl = `${this.config.webhookUrl}/${webhookId}`;
 
-    const projectFolderArray = process.cwd().split(sep);
-    const projectFolder = projectFolderArray[projectFolderArray.length - 1];
-    const table = new Table({
-      head: [grayText('Project'), grayText('Server')],
-    });
-    table.push([projectFolder, `☁️ ${debuggerUrl} => 💻 localhost:3000`]);
-
-    console.log('\n' + table.toString());
+    console.log('\nThis is your webhook url ☁️ ' + underline(blueText(debuggerUrl)));
     // Check if the current output is being piped to somewhere.
     if (process.stdout.isTTY) {
       // Check if we can enable raw mode for input stream to capture raw keystrokes.
       if (process.stdin.setRawMode) {
         setTimeout(() => {
-          console.log(`\n To open Jovo Debugger in your browser, press the "." key.\n`);
+          console.log(`\nTo open Jovo Debugger in your browser, press the "." key.\n`);
         }, 500);
 
         // Capture unprocessed key input.
@@ -385,6 +383,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
                 process.stdin.pause();
                 // @ts-ignore
                 process.stdin.setRawMode(false);
+                process.exit();
               } else {
                 process.exit();
               }
@@ -429,7 +428,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     }
   }
 
-  private async onDebuggerRequest(app: App, request: AnyObject): Promise<void> {
+  private async onReceiveRequest(app: App, request: MockServerRequest): Promise<void> {
     await app.handle(new MockServer(request));
   }
 
@@ -558,7 +557,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   }
 
   private async retrieveLocalWebhookId(): Promise<string> {
-    const homeConfigPath = resolve(homedir(), '.jovo/configv4');
+    const homeConfigPath = resolve(homedir(), '.jovo/config');
     try {
       const homeConfigBuffer = await promises.readFile(homeConfigPath);
       const homeConfigData = JSON.parse(homeConfigBuffer.toString());

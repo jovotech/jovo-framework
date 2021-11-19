@@ -9,18 +9,17 @@ Learn how to use scenes when building Google Conversational Actions with Jovo.
 
 ## Introduction
 
-Scenes are a concept of Google Conversational Actions that are similar to [Jovo Components](https://v4.jovo.tech/docs/components). They are configurable building blocks or flows that are responsible for specific tasks. You can learn more in the [official documentation by Google](https://developers.google.com/assistant/conversational/scenes).
+Scenes are a concept of Google Conversational Actions that are similar to [Jovo Components](https://www.jovo.tech/docs/components). They are configurable building blocks or flows that are responsible for specific tasks. You can learn more in the [official documentation by Google](https://developers.google.com/assistant/conversational/scenes).
 
-You can configure scenes either in the [Actions Console](https://console.actions.google.com/) or in your [Jovo Model](https://v4.jovo.tech/docs/models). [Learn more about model configuration below](#model-configuration).
+You can configure scenes either in the [Actions Console](https://console.actions.google.com/) or in your [Jovo Model](https://www.jovo.tech/docs/models). [Learn more about model configuration below](#model-configuration).
 
-Google provides a handful of pre-configured [system scenes](https://developers.google.com/assistant/conversational/scenes#system_scenes) you can use for tasks such as [account linking](https://v4.jovo.tech/marketplace/platform-googleassistant/account-linking). For more specialized tasks, it is possible to define your own [custom scenes](#custom-scenes).
-
+Google provides a handful of pre-configured [system scenes](https://developers.google.com/assistant/conversational/scenes#system_scenes) you can use for tasks such as [account linking](https://www.jovo.tech/marketplace/platform-googleassistant/account-linking). For more specialized tasks, it is possible to define your own [custom scenes](#custom-scenes).
 
 In your Jovo app, you can delegate to a scene as well as accept requests from a scene. Learn more in the [communication between Jovo and scenes](#communication-between-jovo-and-scenes) section.
 
 ## Model Configuration
 
-We recommend adding scenes to the [Jovo Model](https://v4.jovo.tech/marketplace/platform-googleassistant/model) files of your project. Here is an example scene `MyCustomScene` that is added to the `googleAssistant` specific element of the model:
+We recommend adding scenes to the [Jovo Model](https://www.jovo.tech/marketplace/platform-googleassistant/model) files of your project. Here is an example scene `MyCustomScene` that is added to the `googleAssistant` specific element of the model:
 
 ```javascript
 "googleAssistant": {
@@ -246,9 +245,9 @@ Once your transition criteria have been met, you can define a transition to cont
 
 ## Communication Between Jovo and Scenes
 
-You can transition to a scene from your Jovo handlers by adding a scene property to your [Google Assistant output](https://v4.jovo.tech/marketplace/platform-googleassistant/output).
+You can transition to a scene from your Jovo handlers by adding a scene property to your [Google Assistant output](https://www.jovo.tech/marketplace/platform-googleassistant/output).
 
-You can either do this in [`nativeResponse` using `scene.next`](https://v4.jovo.tech/marketplace/platform-googleassistant/output#next-scene) or use the `NextSceneOutput` class:
+You can either do this in [`nativeResponse` using `scene.next`](https://www.jovo.tech/marketplace/platform-googleassistant/output#next-scene) or use the `NextSceneOutput` class:
 
 ```typescript
 import { NextSceneOutput } from '@jovotech/platform-googleassistant';

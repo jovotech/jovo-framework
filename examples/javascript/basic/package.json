@@ -17,12 +17,12 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/db-filedb": "^4.0.0-beta.9",
-    "@jovotech/framework": "^4.0.0-beta.9",
-    "@jovotech/platform-alexa": "^4.0.0-beta.11",
-    "@jovotech/plugin-debugger": "^4.0.0-beta.9",
-    "@jovotech/server-express": "^4.0.0-beta.9",
-    "@jovotech/server-lambda": "^4.0.0-beta.9"
+    "@jovotech/db-filedb": "^4.0.0",
+    "@jovotech/framework": "^4.0.0",
+    "@jovotech/platform-alexa": "^4.0.0",
+    "@jovotech/plugin-debugger": "^4.0.0",
+    "@jovotech/server-express": "^4.0.0",
+    "@jovotech/server-lambda": "^4.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.5",

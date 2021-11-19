@@ -5,7 +5,7 @@ excerpt: 'Learn more about Jovo output templates for Alexa.'
 
 # Google Assistant Language Model
 
-Learn more about how to configure a Google Assistant language model using the [Jovo Model](https://v4.jovo.tech/docs/models).
+Learn more about how to configure a Google Assistant language model using the [Jovo Model](https://www.jovo.tech/docs/models).
 
 ## Introduction
 
@@ -80,7 +80,7 @@ The Jovo CLI automatically creates an entry for the Jovo Webhook and registers i
 
 ### Scenes
 
-You can also add scenes to the Jovo model. [Learn more here](https://v4.jovo.tech/marketplace/platform-googleassistant/model).
+You can also add scenes to the Jovo model. [Learn more here](https://www.jovo.tech/marketplace/platform-googleassistant/model).
 
 ```json
 "googleAssistant": {

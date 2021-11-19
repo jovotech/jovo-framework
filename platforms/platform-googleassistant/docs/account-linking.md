@@ -26,7 +26,7 @@ To implement Google Sign-In, you need to [configure account linking scenes](#con
 
 You can use the Google Assistant concept of [scenes](./scenes.md) to implement an account linking flow. [The official Google documentation](https://developers.google.com/assistant/identity/google-sign-in) also includes a step by step guide to set up scenes for account linking.
 
-There are multiple ways of setting up these scenes. We recommend creating them inside your [model](https://v4.jovo.tech/marketplace/platform-googleassistant/model) to deploy them directly to the Google Conversational Actions Console.
+There are multiple ways of setting up these scenes. We recommend creating them inside your [model](https://www.jovo.tech/marketplace/platform-googleassistant/model) to deploy them directly to the Google Conversational Actions Console.
 
 Below are two example scenes called `SignIn` and `SignIn_AccountLinking`. It doesn't matter how you name the first one, but it's important that the latter one is name `<SceneName>_AccountLinking`.
 
@@ -104,7 +104,7 @@ Below are two example scenes called `SignIn` and `SignIn_AccountLinking`. It doe
 
 The `SignIn` scene transitions to the `SignIn_AccountLinking` scene if the user is verified (eligible to do account linking).
 
-After adding the scenes, you can use the `build` and `deploy` commands to update the Action in the developer console. [Learn more about how to use the Google Assistant CLI integration](https://v4.jovo.tech/marketplace/platform-googleassistant/project-config).
+After adding the scenes, you can use the `build` and `deploy` commands to update the Action in the developer console. [Learn more about how to use the Google Assistant CLI integration](https://www.jovo.tech/marketplace/platform-googleassistant/project-config).
 
 ### Enable Account Linking in the Actions Console
 
@@ -127,7 +127,7 @@ this.$googleAssistant.$user.isAccountLinked();
 this.$googleAssistant.$user.isVerified();
 ```
 
-To trigger account linking, you can instruct your Google Action to handle the next conversation step with the specified scene in the output ([see the docs for Google Assistant output](https://v4.jovo.tech/marketplace/platform-googleassistant/output)):
+To trigger account linking, you can instruct your Google Action to handle the next conversation step with the specified scene in the output ([see the docs for Google Assistant output](https://www.jovo.tech/marketplace/platform-googleassistant/output)):
 
 ```typescript
 {
@@ -148,7 +148,7 @@ To trigger account linking, you can instruct your Google Action to handle the ne
 }
 ```
 
-After the user has gone through account linking, you receive a request of the type `ON_SIGN_IN` to notify you about the result. You can create a handler for this request by using the [`types` property](https://v4.jovo.tech/docs/handlers#types):
+After the user has gone through account linking, you receive a request of the type `ON_SIGN_IN` to notify you about the result. You can create a handler for this request by using the [`types` property](https://www.jovo.tech/docs/handlers#types):
 
 ```typescript
 @Types('ON_SIGN_IN')

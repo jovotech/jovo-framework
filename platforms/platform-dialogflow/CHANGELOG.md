@@ -1,5 +1,41 @@
 # Changelog
 
+## [@jovotech/platform-dialogflow@4.0.0-beta.10](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-dialogflow@4.0.0-beta.8...@jovotech/platform-dialogflow@4.0.0-beta.10)
+
+> 2 November 2021
+
+- :bug: Set entities manually [`#1090`](https://github.com/jovotech/jovo-framework/pull/1090)
+- :sparkles: Add Instagram platform integration [`#1069`](https://github.com/jovotech/jovo-framework/pull/1069)
+- :sparkles: Add Dashbot Analytics integration [`#1076`](https://github.com/jovotech/jovo-framework/pull/1076)
+- ✨ Platform handles (Alexa Reminders) [`#1071`](https://github.com/jovotech/jovo-framework/pull/1071)
+- ✨ Skip health checks [`#1068`](https://github.com/jovotech/jovo-framework/pull/1068)
+- :sparkles: Introduce Instagram [`#40`](https://github.com/jovotech/jovo-framework/pull/40)
+- :bookmark: Publish [`#1063`](https://github.com/jovotech/jovo-framework/pull/1063)
+- :bookmark: Publish [`#1045`](https://github.com/jovotech/jovo-framework/pull/1045)
+- ✨ Add hasSessionEnded() to JovoResponse [`#29`](https://github.com/jovotech/jovo-framework/pull/29)
+- :recycle: Update CorePlatform response [`#16`](https://github.com/jovotech/jovo-framework/pull/16)
+
+## [@jovotech/platform-dialogflow@4.0.0-beta.8](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-dialogflow@4.0.0-beta.7...@jovotech/platform-dialogflow@4.0.0-beta.8)
+
+> 8 October 2021
+
+- :rewind: Reverse d10b5c3 [`#1065`](https://github.com/jovotech/jovo-framework/pull/1065)
+- :bug: Resolve project path correctly [`#1062`](https://github.com/jovotech/jovo-framework/pull/1062)
+- 🐛🏷️ Fix invalid typing of `InputTypeLike` [`#1064`](https://github.com/jovotech/jovo-framework/pull/1064)
+
+## [@jovotech/platform-dialogflow@4.0.0-beta.7](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-dialogflow@4.0.0-beta.3...@jovotech/platform-dialogflow@4.0.0-beta.7)
+
+> 5 October 2021
+
+- :recycle: Refactor CLI Plugins [`#1046`](https://github.com/jovotech/jovo-framework/pull/1046)
+- :sparkles: Add system intents to model [`#1056`](https://github.com/jovotech/jovo-framework/pull/1056)
+- :ambulance: Apply TestSuite hotfixes [`#1052`](https://github.com/jovotech/jovo-framework/pull/1052)
+- ✨ Introduce TestSuite [`#1033`](https://github.com/jovotech/jovo-framework/pull/1033)
+- 🐛 Add global intents to actions.yml [`#1032`](https://github.com/jovotech/jovo-framework/pull/1032)
+- 🐛 Fix copying resources [`#1021`](https://github.com/jovotech/jovo-framework/pull/1021)
+- ✨ Improve model validation [`#1020`](https://github.com/jovotech/jovo-framework/pull/1020)
+- ✨ Add accessToken property to JovoUser [`#1027`](https://github.com/jovotech/jovo-framework/pull/1027)
+
 ## [@jovotech/platform-dialogflow@4.0.0-beta.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-dialogflow@4.0.0-beta.2...@jovotech/platform-dialogflow@4.0.0-beta.3)
 
 > 31 August 2021

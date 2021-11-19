@@ -18,18 +18,22 @@ export interface JovoWebClientVueConfig {
   config?: InitConfig;
 }
 
+export type PluginConfig = JovoWebClientVueConfig | Client;
+
 export * from '@jovotech/client-web';
 
-const plugin: PluginObject<JovoWebClientVueConfig> = {
-  install: (vue, config) => {
-    if (!config?.endpointUrl) {
-      throw new Error(
-        `At least the 'endpointUrl' option has to be set in order to use the JovoWebClientPlugin. `,
-      );
+const plugin: PluginObject<PluginConfig> = {
+  install: (vue, configOrClient) => {
+    if (!(configOrClient instanceof Client)) {
+      if (!configOrClient?.endpointUrl) {
+        throw new Error(
+          `At least the 'endpointUrl' option has to be set in order to use the JovoWebClientPlugin. `,
+        );
+      }
+      configOrClient = new Client(configOrClient.endpointUrl, configOrClient.config);
     }
-    const client = new Client(config.endpointUrl, config.config);
     // make the client reactive
-    vue.prototype.$client = vue.observable(client);
+    vue.prototype.$client = vue.observable(configOrClient);
   },
 };
 

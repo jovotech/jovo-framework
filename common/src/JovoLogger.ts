@@ -6,8 +6,10 @@ import {
   ILogObject,
 } from 'tslog';
 import _merge from 'lodash.merge';
+import _cloneDeep from 'lodash.clonedeep';
 import { JovoError } from './JovoError';
 import { inspect } from 'util';
+import { AnyObject } from './index';
 export class JovoLogger extends TsLogger {
   constructor(settings?: ISettingsParam) {
     super();
@@ -66,7 +68,7 @@ export class JovoLogger extends TsLogger {
     );
 
     if (error.package) {
-      noStyleLogger.error('\nPackage: ');
+      noStyleLogger.error(`\n${this.style('package:', 'underline')}`);
       noStyleLogger.error(error.package);
     }
 
@@ -77,7 +79,16 @@ export class JovoLogger extends TsLogger {
 
     if (error.context) {
       noStyleLogger.error(`\n${this.style('context:', 'underline')}`);
-      noStyleLogger.error(error.context);
+
+      const formatContext = (contextObject: AnyObject) => {
+        return Object.keys(contextObject).reduce((context, key) => {
+          if (typeof context[key] === 'undefined') {
+            delete context[key];
+          }
+          return context;
+        }, _cloneDeep(contextObject));
+      };
+      noStyleLogger.error(formatContext(error.context));
     }
 
     if (error.stack) {

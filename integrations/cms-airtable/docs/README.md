@@ -5,7 +5,7 @@ excerpt: 'The Airtable Jovo integration lets you manage your voice and chatbot c
 
 # Airtable CMS Integration
 
-This [CMS integration](https://v4.jovo.tech/docs/cms) lets you manage your content in Airtable.
+This [CMS integration](https://www.jovo.tech/docs/cms) lets you manage your content in Airtable.
 
 ## Introduction
 
@@ -23,7 +23,7 @@ It's possible to use pre-defined table types (like [translations](#TranslationsT
 
 ## Installation
 
-As first step, create an Airtable base with at least one table. Most projects usually contain a [`translations` table](#translationstable) for [i18n](https://v4.jovo.tech/docs/i18n). You can get started by copying our [sample base](https://airtable.com/shrkniYL5az4MbrXh).
+As first step, create an Airtable base with at least one table. Most projects usually contain a [`translations` table](#translationstable) for [i18n](https://www.jovo.tech/docs/i18n). You can get started by copying our [sample base](https://airtable.com/shrkniYL5az4MbrXh).
 
 Install the plugin like this:
 
@@ -31,7 +31,7 @@ Install the plugin like this:
 $ npm install @jovotech/cms-airtable
 ```
 
-Add it as a plugin to your [app configuration](https://v4.jovo.tech/docs/app-config), for example `app.ts`:
+Add it as a plugin to your [app configuration](https://www.jovo.tech/docs/app-config), for example `app.ts`:
 
 ```typescript
 import { AirtableCms, TranslationsTable } from '@jovotech/cms-airtable';
@@ -169,7 +169,7 @@ You can also learn more about creating your own [custom table types](#custom-tab
 
 ### TranslationsTable
 
-This table type makes use of the Jovo [i18n](https://v4.jovo.tech/docs/i18n) and allows you to store translation strings in an Airtable table.
+This table type makes use of the Jovo [i18n](https://www.jovo.tech/docs/i18n) and allows you to store translation strings in an Airtable table.
 
 ```typescript
 import { AirtableCms, TranslationsTable } from '@jovotech/cms-airtable';
@@ -202,7 +202,7 @@ By using this table type, you can access translation strings like this:
 this.$t('welcome');
 ```
 
-You can also add [platform specific translations](https://v4.jovo.tech/docs/i18n#platform-specific-translations) by appending a `:` colon followed by the platform name (in camel case) to the locale:
+You can also add [platform specific translations](https://www.jovo.tech/docs/i18n#platform-specific-translations) by appending a `:` colon followed by the platform name (in camel case) to the locale:
 
 | key     | en           | en:alexa          |
 | :------ | :----------- | :---------------- |

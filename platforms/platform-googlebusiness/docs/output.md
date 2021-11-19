@@ -2,19 +2,20 @@
 title: 'Google Business Messages Output'
 excerpt: 'Learn more about Jovo output templates for Google Business Messages.'
 ---
+
 # Google Business Messages Output
 
-Learn more about output templates for [Google Business Messages](https://v4.jovo.tech/marketplace/platform-googlebusiness).
+Learn more about output templates for [Google Business Messages](https://www.jovo.tech/marketplace/platform-googlebusiness).
 
 ## Introduction
 
-Jovo offers the ability to [create structured output](https://v4.jovo.tech/docs/output) that is then translated into native platform responses.
+Jovo offers the ability to [create structured output](https://www.jovo.tech/docs/output) that is then translated into native platform responses.
 
-This structured output is called [output template](https://v4.jovo.tech/docs/output-templates). Its root properties are generic output elements that work across platforms. [Learn more about how generic output is translated into a Google Business Messages response below](#generic-output-elements).
+This structured output is called [output template](https://www.jovo.tech/docs/output-templates). Its root properties are generic output elements that work across platforms. [Learn more about how generic output is translated into a Google Business Messages response below](#generic-output-elements).
 
 ```typescript
 {
-  message: `Hello world! What's your name?`
+  message: `Hello world! What's your name?`,
 }
 ```
 
@@ -31,10 +32,9 @@ You can also add platform-specific output to an output template. [Learn more abo
 }
 ```
 
-
 ## Generic Output Elements
 
-Generic output elements are in the root of the output template and work across platforms. [Learn more in the Jovo output template docs](https://v4.jovo.tech/docs/output-templates).
+Generic output elements are in the root of the output template and work across platforms. [Learn more in the Jovo output template docs](https://www.jovo.tech/docs/output-templates).
 
 Below, you can find a list of generic output elements that work with Google Business Messages:
 
@@ -45,7 +45,7 @@ Below, you can find a list of generic output elements that work with Google Busi
 
 ### message
 
-The [generic `message` element](https://v4.jovo.tech/docs/output-templates#message) contains the main response of your bot, which is usually displayed in a chat bubble:
+The [generic `message` element](https://www.jovo.tech/docs/output-templates#message) contains the main response of your bot, which is usually displayed in a chat bubble:
 
 ```typescript
 {
@@ -57,12 +57,12 @@ Under the hood, Jovo translates the `message` into a text message ([see the offi
 
 ```json
 {
-  "text": "Hello world!",
+  "text": "Hello world!"
   // ...
 }
 ```
 
-It is also possible to use `message` as an object which contains both a `speech` (the *spoken* text on platforms like Alexa) and a `text` (*written* text to be displayed in chat bubbles). In this case, Google Business Messages uses the `text` element.
+It is also possible to use `message` as an object which contains both a `speech` (the _spoken_ text on platforms like Alexa) and a `text` (_written_ text to be displayed in chat bubbles). In this case, Google Business Messages uses the `text` element.
 
 ```typescript
 {
@@ -75,14 +75,14 @@ It is also possible to use `message` as an object which contains both a `speech`
 
 ### quickReplies
 
-The [generic `quickReplies` element](https://v4.jovo.tech/docs/output-templates#quick-replies) allows you to define small buttons that help the user answer a question faster. This concept is called [suggested replies in the Google Business Messages documentation](https://developers.google.com/business-communications/business-messages/guides/build/send#suggested_replies).
+The [generic `quickReplies` element](https://www.jovo.tech/docs/output-templates#quick-replies) allows you to define small buttons that help the user answer a question faster. This concept is called [suggested replies in the Google Business Messages documentation](https://developers.google.com/business-communications/business-messages/guides/build/send#suggested_replies).
 
 Quick replies can be an array of strings:
 
 ```typescript
 {
   // ...
-  quickReplies: [ 'yes', 'no' ]
+  quickReplies: ['yes', 'no'],
 }
 ```
 
@@ -94,13 +94,13 @@ Alternatively, you can use an array of objects that includes a `text` (what the 
   quickReplies: [
     {
       text: 'oh yeah',
-      value: 'yes'
+      value: 'yes',
     },
     {
       text: 'hell no',
-      value: 'no'
-    }
-  ]
+      value: 'no',
+    },
+  ],
 }
 ```
 
@@ -112,26 +112,25 @@ Under the hood, Jovo translates these into Google Business Messages suggested re
     {
       "reply": {
         "text": "oh yeah",
-        "postbackData": "yes",
+        "postbackData": "yes"
       }
     },
     {
       "reply": {
         "text": "hell no",
-        "postbackData": "no",
+        "postbackData": "no"
       }
     }
-  ],
+  ]
   // ...
 }
 ```
 
-The `postbackData` is the value that gets passed to the [NLU integration](https://v4.jovo.tech/docs/nlu) to turn raw text into structured content. For quick replies that are passed as strings, the `text` and `postbackData` are the same. If the quick replies are objects, the `text` is used as `text` and the `value` as `postbackData`.
-
+The `postbackData` is the value that gets passed to the [NLU integration](https://www.jovo.tech/docs/nlu) to turn raw text into structured content. For quick replies that are passed as strings, the `text` and `postbackData` are the same. If the quick replies are objects, the `text` is used as `text` and the `value` as `postbackData`.
 
 ### card
 
-The [generic `card` element](https://v4.jovo.tech/docs/output-templates#card) can be used to send a [Google Business Messages rich card](https://developers.google.com/business-communications/business-messages/guides/build/send#rich-cards).
+The [generic `card` element](https://www.jovo.tech/docs/output-templates#card) can be used to send a [Google Business Messages rich card](https://developers.google.com/business-communications/business-messages/guides/build/send#rich-cards).
 
 Here is an example of a card with all properties that are supported by Google Business Messages:
 
@@ -163,7 +162,7 @@ Under the hood, Jovo translates the `card` into the following rich card:
         "description": "Sent with Business Messages.",
         "media": {
           "height": "MEDIUM",
-          "contentInfo":{
+          "contentInfo": {
             "altText": "The image displays a...",
             "fileUrl": "https://..."
           }
@@ -180,11 +179,9 @@ Since Google Business Message rich cards don't offer a subtitle, either the `con
 
 If no `imageAlt` is provided, the `title` is being used.
 
-
-
 ### carousel
 
-A [generic `carousel` element](https://v4.jovo.tech/docs/output-templates#carousel) is a horizontally scrollable set of [`card`](#card) items. In Google Business Messages' definition, this is called a [rich card carousel](https://developers.google.com/business-communications/business-messages/guides/build/send#rich-card-carousels).
+A [generic `carousel` element](https://www.jovo.tech/docs/output-templates#carousel) is a horizontally scrollable set of [`card`](#card) items. In Google Business Messages' definition, this is called a [rich card carousel](https://developers.google.com/business-communications/business-messages/guides/build/send#rich-card-carousels).
 
 This is how a carousel can be defined:
 
@@ -234,7 +231,7 @@ Under the hood, Jovo translates the `carousel` into the following rich card caro
         },
         {
           "title": "Hi there!",
-          "description": "This is element 2.",
+          "description": "This is element 2."
           // ...
         }
       ]
@@ -246,7 +243,7 @@ Under the hood, Jovo translates the `carousel` into the following rich card caro
 
 ## Google Business Messages Output Elements
 
-It is possible to add platform-specific output elements to an output template. [Learn more in the Jovo output template documentation](https://v4.jovo.tech/docs/output-templates#platform-specific-output-elements).
+It is possible to add platform-specific output elements to an output template. [Learn more in the Jovo output template documentation](https://www.jovo.tech/docs/output-templates#platform-specific-output-elements).
 
 For Google Business Messages, you can add output elements inside a `googleBusiness` object:
 
@@ -290,14 +287,14 @@ Under the hood, Jovo adds the `fallback` to the response like this:
 
 ```json
 {
-  "fallback": "Hello world!",
+  "fallback": "Hello world!"
   // ...
 }
 ```
 
 ### suggestions
 
-In the sections above, we've come across `suggestions` already. For example, [`quickReplies`](#quickreplies) are turned into *suggested replies* and [cards](#card) may also contain `suggestions`. Overall, a *suggestion* can be seen as a helpful prompt that guides a user in leaving a certain input or taking certain actions. 
+In the sections above, we've come across `suggestions` already. For example, [`quickReplies`](#quickreplies) are turned into _suggested replies_ and [cards](#card) may also contain `suggestions`. Overall, a _suggestion_ can be seen as a helpful prompt that guides a user in leaving a certain input or taking certain actions.
 
 Google Business Messages offers different types of `suggestions` that can either be added to an element like [`card`](#card) or to the overall message like this:
 
@@ -309,7 +306,7 @@ Google Business Messages offers different types of `suggestions` that can either
       // ...
       suggestions: [
         // ...
-      ]
+      ];
     }
   }
 }
@@ -349,22 +346,21 @@ The `image` properties are added to the response like this:
 {
   "image": {
     "contentInfo": {
-        "fileUrl": "https://...",
-        "thumbnailUrl": "https://...",
-        "altText": "An image that shows a...",
-        "forceRefresh": false
-      }
-  },
+      "fileUrl": "https://...",
+      "thumbnailUrl": "https://...",
+      "altText": "An image that shows a...",
+      "forceRefresh": false
+    }
+  }
   // ...
 }
 ```
 
 Learn more about the properties in the [official API reference](https://developers.google.com/business-communications/business-messages/reference/rest/v1/conversations.messages#contentinfo).
 
-
 ### nativeResponse
 
-The [`nativeResponse` property](https://v4.jovo.tech/docs/output-templates#native-response) allows you to add native elements exactly how they would be added to the Google Business message JSON.
+The [`nativeResponse` property](https://www.jovo.tech/docs/output-templates#native-response) allows you to add native elements exactly how they would be added to the Google Business message JSON.
 
 ```typescript
 {

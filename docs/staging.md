@@ -20,17 +20,17 @@ The [app configuration](./app-config.md) is usually spread across multiple files
 - `app.ts`: Default configurations
 - `app.<stage>.ts`: Stage-specific configurations
 
-For example, new Jovo templates come with an `app.ts` for all default configurations that should work across stages (platform integrations, components, ...) and an `app.dev.ts` file that comes with specific configuration for local development ([FileDb](https://v4.jovo.tech/marketplace/db-filedb), [ExpressJS server](https://v4.jovo.tech/marketplace/server-express) and the [Jovo Debugger](https://v4.jovo.tech/docs/debugger)).
+For example, new Jovo templates come with an `app.ts` for all default configurations that should work across stages (platform integrations, components, ...) and an `app.dev.ts` file that comes with specific configuration for local development ([FileDb](https://www.jovo.tech/marketplace/db-filedb), [Express server](https://www.jovo.tech/marketplace/server-express) and the [Jovo Debugger](https://www.jovo.tech/docs/debugger)).
 
 Stage-specific configurations get merged into the default `app.ts` config.
 
-You can create a new stage file using the [`new:stage` command](https://v4.jovo.tech/docs/new-command#new-stage):
+You can create a new stage file using the [`new:stage` command](https://www.jovo.tech/docs/new-command#new-stage):
 
 ```sh
-$ jovov4 new:stage <stage>
+$ jovo new:stage <stage>
 
 # Example that creates a new app.prod.ts file
-$ jovov4 new:stage prod
+$ jovo new:stage prod
 ```
 
 This command also lets you specify which [server integration](./server.md) should be used for that stage.
