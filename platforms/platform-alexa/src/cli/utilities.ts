@@ -125,3 +125,34 @@ export function getAskError(method: string, stderr: string): JovoCliError {
 
   return new JovoCliError({ message: stderr, module });
 }
+
+export function getFilesIn(root: string, sub: string = '', files: string[] = []): string[] {
+  const src: string = joinPaths(root, sub);
+  const entries: string[] = readdirSync(src);
+  for (const entry of entries) {
+    const subFilePath: string = joinPaths(sub, entry);
+
+    if (statSync(joinPaths(root, subFilePath)).isDirectory()) {
+      getFilesIn(root, subFilePath, files);
+    } else {
+      files.push(subFilePath);
+    }
+  }
+
+  return files;
+}
+
+export function copyFiles(src: string, dest: string): void {
+  const files: string[] = getFilesIn(src);
+
+  for (const file of files) {
+    const directory: string = dirname(file);
+    const destDirectory: string = joinPaths(dest, directory);
+
+    if (!existsSync(destDirectory)) {
+      mkdirSync(destDirectory, { recursive: true });
+    }
+    
+    copyFileSync(joinPaths(src, file), joinPaths(dest, file));
+  }
+}

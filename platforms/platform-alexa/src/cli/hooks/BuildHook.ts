@@ -187,15 +187,28 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       buildInteractionModelTask.disable();
     }
 
-    const buildAcdlFiles: Task = new Task(
-      `${taskStatus} ACDL files`,
-      this.buildAcdlFiles.bind(this),
+    const buildConversationFilesTask: Task = new Task(
+      `${taskStatus} Alexa Conversations files`,
+      this.buildConversationsFiles.bind(this),
     );
-    if (!this.$plugin.config.acdlDirectory) {
-      buildAcdlFiles.disable();
+    if (!this.$context.alexa.isACSkill) {
+      buildConversationFilesTask.disable();
     }
 
-    buildTask.add(projectFilesTask, buildInteractionModelTask);
+    const buildResponseFilesTask: Task = new Task(
+      `${taskStatus} response files`,
+      this.buildResponseFiles.bind(this),
+    );
+    if (!this.$plugin.config.responses) {
+      buildResponseFilesTask.disable();
+    }
+
+    buildTask.add(
+      projectFilesTask,
+      buildInteractionModelTask,
+      buildConversationFilesTask,
+      buildResponseFilesTask,
+    );
 
     await buildTask.run();
   }
@@ -324,10 +337,31 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       });
     }
 
+    // Create entries for Alexa Conversations
+    const conversationsPath: string =
+      'skill-package/["skill.json"].manifest.apis.custom.dialogManagement';
+    console.log(this.$context);
+    if (this.$context.alexa.isACSkill && !_has(projectFiles, conversationsPath)) {
+      _set(projectFiles, conversationsPath, {
+        sessionStartDelegationStrategy: {
+          target: 'AMAZON.Conversations',
+        },
+        dialogManagers: [
+          {
+            type: 'AMAZON.Conversations',
+          },
+        ],
+      });
+    }
+
     // Create ask profile entry
     const askProfilePath = `["ask-resources.json"].profiles.${this.$context.alexa.askProfile}`;
     if (!_has(projectFiles, askProfilePath)) {
-      _set(projectFiles, askProfilePath, {});
+      _set(projectFiles, askProfilePath, {
+        skillMetadata: {
+          src: './skill-package',
+        },
+      });
     }
 
     const skillId: string | undefined = this.$plugin.config.skillId;
@@ -435,32 +469,38 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
     }
   }
 
-  buildAcdlFiles(): void {
-    if (!existsSync(this.$plugin.config.acdlDirectory!)) {
+  buildConversationsFiles(): void {
+    if (!this.$plugin.config.conversations?.directory) {
+      throw new JovoCliError({ message: 'conversations.directory has to be set' });
+    }
+
+    if (!existsSync(this.$plugin.config.conversations!.directory)) {
       throw new JovoCliError({
-        message: `acdlDirectory does not exist at ${this.$plugin.config.acdlDirectory!}`,
+        message: `Directory for Conversations does not exist at ${
+          this.$plugin.config.conversations!.directory
+        }`,
         module: this.$plugin.name,
       });
     }
 
-    const copyFiles = (src: string, dest: string): void => {
-      const files: string[] = readdirSync(src);
-      for (const file of files) {
-        const srcFilePath: string = joinPaths(src, file);
-        const destFilePath: string = joinPaths(dest, file);
+    copyFiles(this.$plugin.config.conversations!.directory, this.$plugin.conversationsDirectory);
+  }
 
-        if (statSync(srcFilePath).isDirectory()) {
-          return copyFiles(srcFilePath, destFilePath);
-        }
+  buildResponseFiles(): void {
+    if (!this.$plugin.config.responses?.directory) {
+      throw new JovoCliError({ message: 'responses.directory has to be set' });
+    }
 
-        copyFileSync(srcFilePath, destFilePath);
-      }
-    };
+    if (!existsSync(this.$plugin.config.responses?.directory)) {
+      throw new JovoCliError({
+        message: `Directory for responses does not exist at ${
+          this.$plugin.config.conversations!.directory
+        }`,
+        module: this.$plugin.name,
+      });
+    }
 
-    copyFiles(
-      this.$plugin.config.acdlDirectory!,
-      joinPaths(this.$plugin.skillPackagePath, 'conversations'),
-    );
+    copyFiles(this.$plugin.config.responses?.directory, this.$plugin.responseDirectory);
   }
 
   /**

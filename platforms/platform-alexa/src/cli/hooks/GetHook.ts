@@ -114,10 +114,12 @@ export class GetHook extends AlexaHook<BuildPlatformEvents | GetPlatformEvents> 
       let skills: AskSkillList = { skills: [] };
       const getSkillListTask: Task = new Task(
         `${MAGNIFYING_GLASS} Getting a list of all your skills`,
-        async () => {
-          skills = await smapi.listSkills(this.$context.alexa.askProfile);
-        },
       );
+
+      const searchTask: Task = new Task('Searching', async () => {
+        skills = await smapi.listSkills(this.$context.alexa.askProfile);
+      });
+      getSkillListTask.add(searchTask);
 
       await getSkillListTask.run();
       const list = prepareSkillList(skills);
