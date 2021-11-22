@@ -22,13 +22,22 @@ export interface AlexaCliConfig extends PluginConfig {
   locales?: {
     [locale: string]: SupportedLocalesType[];
   };
-  acdlDirectory?: string;
+  conversations?: {
+    enabled: boolean;
+    directory?: string;
+    skipValidation?: boolean;
+  };
+  responses?: {
+    enabled: boolean;
+    directory?: string;
+  };
 }
 
 export interface AlexaContext extends PluginContext {
   alexa: {
     skillId?: string;
     askProfile?: string;
+    isACSkill?: boolean;
   };
 }
 

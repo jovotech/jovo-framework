@@ -1,6 +1,8 @@
-import { execAsync, getRawString, JovoCliError } from '@jovotech/cli-core';
+import { execAsync, getRawString, JovoCliError, Log } from '@jovotech/cli-core';
 import chalk from 'chalk';
+import { copyFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'fs';
 import _get from 'lodash.get';
+import { basename, dirname, join as joinPaths } from 'path';
 import { AskSkillList } from './interfaces';
 
 export * from './constants';
@@ -10,10 +12,8 @@ export * from './interfaces';
  * Checks if ask cli is installed.
  */
 export async function checkForAskCli(): Promise<void> {
-  const cmd = `ask --version`;
-
   try {
-    const { stdout } = await execAsync(cmd);
+    const { stdout } = await execAsync('ask --version');
     const majorVersion: string = stdout![0];
     if (parseInt(majorVersion) < 2) {
       throw new JovoCliError({

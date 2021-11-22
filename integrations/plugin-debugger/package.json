@@ -38,7 +38,7 @@
     "@jovotech/framework": "^4.0.0",
     "@types/cli-table": "^0.3.0",
     "@types/jest": "^26.0.20",
-    "@types/node": "^10.17.50",
+    "@types/node": "^16.11.9",
     "@types/socket.io-client": "^1.4.36",
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.12.0",

@@ -1,25 +1,39 @@
 import type { DeployPlatformContext, DeployPlatformEvents } from '@jovotech/cli-command-deploy';
 import {
+  chalk,
+  execAsync,
   flags,
   getResolvedLocales,
   InstallContext,
   JovoCliError,
+  Log,
   printAskProfile,
   printStage,
   ROCKET,
   Task,
 } from '@jovotech/cli-core';
-import { existsSync } from 'fs';
+import { existsSync, readdirSync, statSync } from 'fs';
 import _get from 'lodash.get';
 import { AlexaCli } from '..';
 import * as smapi from '../smapi';
-import { AlexaContext, checkForAskCli, SupportedLocales } from '../utilities';
+import { AlexaContext, checkForAskCli, getFilesIn, SupportedLocales } from '../utilities';
 import { AlexaHook } from './AlexaHook';
+import {
+  bundleProject,
+  loadProject,
+  loadProjectConfig,
+  ParseError,
+  validateProject,
+} from '@alexa/acdl';
+import { join as joinPaths } from 'path';
+import AdmZip from 'adm-zip';
+import { axios, UnknownObject } from '@jovotech/framework';
 
 export interface DeployPlatformContextAlexa extends AlexaContext, DeployPlatformContext {
   flags: DeployPlatformContext['flags'] & { 'ask-profile'?: string; 'skill-id'?: string };
   alexa: AlexaContext['alexa'] & {
     skillCreated?: boolean;
+    isACSkill?: boolean;
   };
 }
 
@@ -35,6 +49,7 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
         checkForAskCli,
         this.updatePluginContext.bind(this),
         this.checkForPlatformsFolder.bind(this),
+        this.updatePluginContext.bind(this),
       ],
       'deploy:platform': [this.deploy.bind(this)],
     };
@@ -79,6 +94,9 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
       (await this.getAskProfile());
 
     this.$context.alexa.skillId = this.$context.flags['skill-id'] || this.getSkillId();
+    // TODO: this.$plugin.config.convertsations.enabled enough?
+    this.$context.alexa.isACSkill =
+      this.$plugin.config.conversations?.enabled && existsSync(this.$plugin.conversationsDirectory);
   }
 
   /**
@@ -102,89 +120,86 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
       `${ROCKET} Deploying Alexa Skill ${printStage(this.$cli.project!.stage)}`,
     );
 
-    if (!this.$context.alexa.skillId) {
-      // Create skill, if it doesn't exist already.
-      const createSkillTask: Task = new Task(
-        `Creating Alexa Skill project ${printAskProfile(this.$context.alexa.askProfile)}`,
-        async () => {
-          const skillId: string = await smapi.createSkill(
-            this.$plugin.skillJsonPath,
-            this.$context.alexa.askProfile,
-          );
-          this.$context.alexa.skillId = skillId;
-          this.$context.alexa.skillCreated = true;
+    const zipPath: string = this.$context.alexa.isACSkill
+      ? this.$plugin.skillPackagePath
+      : joinPaths(this.$plugin.platformPath, 'build', 'skill-package');
 
-          this.setSkillId(skillId);
-
-          await smapi.updateAccountLinkingInformation(
-            skillId,
-            this.$plugin.accountLinkingPath,
-            'development',
-            this.$context.alexa.askProfile,
-          );
-          await smapi.getSkillStatus(skillId, this.$context.alexa.askProfile);
-
-          const skillInfo = this.getSkillInformation();
-
-          return [`Skill Name: ${skillInfo.name}`, `Skill ID: ${skillInfo.skillId}`];
-        },
+    if (this.$context.alexa.isACSkill) {
+      const projectConfig = await loadProjectConfig(
+        this.$plugin.platformPath,
+        this.$context.alexa.askProfile,
       );
+      const project = await loadProject(projectConfig);
 
-      deployTask.add(createSkillTask);
-    } else {
-      const updateSkillTask: Task = new Task(
-        `Updating Alexa Skill project ${printAskProfile(this.$context.alexa.askProfile)}`,
-        async () => {
-          await smapi.updateSkill(
-            this.$context.alexa.skillId!,
-            this.$plugin.skillJsonPath,
-            this.$context.alexa.askProfile,
-          );
-          await smapi.updateAccountLinkingInformation(
-            this.$context.alexa.skillId!,
-            this.$plugin.accountLinkingPath,
-            'development',
-            this.$context.alexa.askProfile,
-          );
-          await smapi.getSkillStatus(this.$context.alexa.skillId!, this.$context.alexa.askProfile);
+      if (!this.$plugin.config.conversations?.skipValidation) {
+        const errors: ParseError[] = validateProject(project, true);
 
-          const skillInfo = this.getSkillInformation();
+        if (errors.length) {
+          throw new JovoCliError({
+            message: 'Validation failed for Alexa Conversations',
+            module: this.$plugin.name,
+            hint: errors.reduce((errorString: string, error: ParseError) => {
+              return [
+                errorString,
+                Log.info(chalk.dim(`[${error.code.code}]`), {
+                  dry: true,
+                  newLine: false,
+                }),
+                Log.info(error.message, { dry: true }),
+                error.uri
+                  ? Log.info(chalk.dim(error.uri), { dry: true, newLine: false })
+                  : undefined,
+                error.loc
+                  ? Log.info(chalk.dim(`(line ${error.loc.begin.line})`), {
+                      dry: true,
+                      newLine: false,
+                    })
+                  : undefined,
+              ].join(' ');
+            }, ''),
+          });
+        }
+      }
 
-          return [`Skill Name: ${skillInfo.name}`, `Skill ID: ${skillInfo.skillId}`];
-        },
-      );
-      deployTask.add(updateSkillTask);
+      await bundleProject(project);
     }
 
-    const resolvedLocales: string[] = this.$context.locales.reduce(
-      (locales: string[], locale: string) => {
-        locales.push(...getResolvedLocales(locale, SupportedLocales, this.$plugin.config.locales));
-        return locales;
-      },
-      [],
-    );
-    // ToDo: Improve providing a unique set of resolved locales.
-    const locales: string[] = Array.from(new Set(resolvedLocales));
+    // Compress skill package
+    const zip: AdmZip = new AdmZip();
 
-    const deployInteractionModelTask: Task = new Task('Deploying Interaction Model', async () => {
-      for (const locale of locales) {
-        const localeTask: Task = new Task(locale, async () => {
-          await smapi.updateInteractionModel(
-            this.$context.alexa.skillId!,
-            locale,
-            this.$plugin.getModelPath(locale),
-            'development',
-            this.$context.alexa.askProfile,
-          );
-          await smapi.getSkillStatus(this.$context.alexa.skillId!);
-        });
-
-        localeTask.indent(4);
-        await localeTask.run();
+    for (const entry of readdirSync(zipPath)) {
+      const path: string = joinPaths(zipPath, entry);
+      if (statSync(path).isDirectory()) {
+        zip.addLocalFolder(path);
+      } else {
+        zip.addLocalFile(path);
       }
-    });
+    }
 
-    deployTask.add(deployInteractionModelTask);
+    try {
+      const uploadUrl: string = await smapi.createNewUploadUrl();
+      await axios({ url: uploadUrl, method: 'PUT', data: zip.toBuffer() });
+
+      const importUrl: string = this.$context.alexa.skillId
+        ? await smapi.importSkillPackage(
+            uploadUrl,
+            this.$context.alexa.skillId,
+            this.$context.alexa.askProfile,
+          )
+        : await smapi.createSkillPackage(uploadUrl, this.$context.alexa.askProfile);
+
+      // Check import
+      const { stdout: importStatus } = await execAsync(
+        `ask smapi get-import-status --import-id ${importUrl}`,
+      );
+      const skillId = JSON.parse(importStatus!).skill.skillId;
+      this.$context.alexa.skillId = skillId;
+      this.setSkillId(skillId);
+    } catch (error) {
+      console.log(error);
+    }
+
+    // return [`Skill Name: ${skillInfo.name}`, `Skill ID: ${skillInfo.skillId}`];
 
     if (this.$context.alexa.skillCreated) {
       const enableTestingTask: Task = new Task('Enabling skill for testing', async () => {

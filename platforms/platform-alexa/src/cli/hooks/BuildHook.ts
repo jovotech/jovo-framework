@@ -21,25 +21,17 @@ import {
 import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 import { JovoModelData, JovoModelDataV3, NativeFileInformation } from '@jovotech/model';
 import { JovoModelAlexa } from '@jovotech/model-alexa';
-import {
-  copyFileSync,
-  existsSync,
-  mkdirSync,
-  readdirSync,
-  readFileSync,
-  statSync,
-  writeFileSync,
-} from 'fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs';
 import _get from 'lodash.get';
 import _has from 'lodash.has';
 import _merge from 'lodash.merge';
 import _mergeWith from 'lodash.mergewith';
 import _set from 'lodash.set';
-import { join as joinPaths } from 'path';
 import { AlexaCli } from '..';
 import { SupportedLocales } from '../constants';
 import DefaultFiles from '../DefaultFiles.json';
 import { AlexaContext, SupportedLocalesType } from '../interfaces';
+import { copyFiles } from '../utilities';
 import { AlexaHook } from './AlexaHook';
 
 export interface AlexaBuildPlatformContext extends AlexaContext, BuildPlatformContext {
@@ -88,6 +80,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
 
     this.$context.alexa.askProfile =
       this.$context.flags['ask-profile'] || this.$plugin.config.askProfile || 'default';
+    this.$context.alexa.isACSkill = this.$plugin.config.conversations?.enabled;
   }
 
   /**
