@@ -1,12 +1,10 @@
+import { ParseError } from '@alexa/acdl';
 import { execAsync, getRawString, JovoCliError, Log } from '@jovotech/cli-core';
 import chalk from 'chalk';
 import { copyFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'fs';
 import _get from 'lodash.get';
-import { basename, dirname, join as joinPaths } from 'path';
+import { dirname, join as joinPaths } from 'path';
 import { AskSkillList } from './interfaces';
-
-export * from './constants';
-export * from './interfaces';
 
 /**
  * Checks if ask cli is installed.
@@ -61,6 +59,31 @@ export function prepareSkillList(
     });
   }
   return choices;
+}
+
+export function getACValidationErrorHint(errors: ParseError[]): string {
+  return errors.reduce((output: string, error: ParseError) => {
+    return [
+      Log.info(output, { dry: true }),
+      Log.info(chalk.dim(`[${error.code.code}]`), {
+        dry: true,
+        newLine: false,
+      }),
+      Log.info(error.message, { dry: true, newLine: false }),
+      error.uri
+        ? Log.info(chalk.dim(`in ${error.uri.split('/').pop()!}`), {
+            dry: true,
+            newLine: false,
+          })
+        : undefined,
+      error.loc
+        ? Log.info(chalk.dim(`(l. ${error.loc.begin.line})`), {
+            dry: true,
+            newLine: false,
+          })
+        : undefined,
+    ].join(' ');
+  }, '');
 }
 
 export function getAskError(method: string, stderr: string): JovoCliError {
@@ -126,33 +149,20 @@ export function getAskError(method: string, stderr: string): JovoCliError {
   return new JovoCliError({ message: stderr, module });
 }
 
-export function getFilesIn(root: string, sub: string = '', files: string[] = []): string[] {
-  const src: string = joinPaths(root, sub);
-  const entries: string[] = readdirSync(src);
-  for (const entry of entries) {
-    const subFilePath: string = joinPaths(sub, entry);
-
-    if (statSync(joinPaths(root, subFilePath)).isDirectory()) {
-      getFilesIn(root, subFilePath, files);
-    } else {
-      files.push(subFilePath);
-    }
-  }
-
-  return files;
-}
-
 export function copyFiles(src: string, dest: string): void {
-  const files: string[] = getFilesIn(src);
+  for (const file of readdirSync(src)) {
+    const srcFile: string = joinPaths(src, file);
 
-  for (const file of files) {
-    const directory: string = dirname(file);
-    const destDirectory: string = joinPaths(dest, directory);
+    if (statSync(srcFile).isDirectory()) {
+      const destDirectory: string = joinPaths(dest, file);
 
-    if (!existsSync(destDirectory)) {
-      mkdirSync(destDirectory, { recursive: true });
+      if (!existsSync(destDirectory)) {
+        mkdirSync(destDirectory, { recursive: true });
+      }
+
+      copyFiles(srcFile, destDirectory);
+    } else {
+      copyFileSync(srcFile, dest);
     }
-    
-    copyFileSync(joinPaths(src, file), joinPaths(dest, file));
   }
 }

@@ -56,3 +56,29 @@ export interface AskResources {
   askcliResourcesVersion: string;
   profiles: Record<string, AskProfile>;
 }
+
+export interface ImportMessage {
+  message: string;
+}
+
+export interface ImportResource {
+  action: string;
+  info: ImportMessage[];
+  name: string;
+  status: string;
+}
+
+export interface ImportStatus {
+  skill: {
+    eTag: string;
+    resources: ImportResource[];
+    skillId: string;
+  };
+  status: string;
+  warnings: ImportMessage[];
+}
+
+export interface ImportResponse {
+  body: UnknownObject;
+  headers: { key: string; value: string }[];
+}

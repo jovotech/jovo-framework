@@ -1,25 +1,23 @@
 import { execAsync } from '@jovotech/cli-core';
-import { ImportResponse, ImportStatus } from '../interfaces';
+import { UnknownObject } from '@jovotech/framework';
+import { ImportStatus } from '../interfaces';
 import { getAskError } from '../utilities';
 
 export async function createNewUploadUrl(): Promise<string> {
   try {
     const { stdout } = await execAsync('ask smapi create-upload-url');
-    const { uploadUrl } = JSON.parse(stdout!);
+    const uploadUrl: string = JSON.parse(stdout!);
     return uploadUrl;
   } catch (error) {
     throw getAskError('smapiCreateUploadUrl', error.stderr);
   }
 }
 
-export async function createSkillPackage(
-  location: string,
-  askProfile?: string,
-): Promise<string | undefined> {
+export async function createSkillPackage(location: string, askProfile?: string): Promise<string> {
   const cmd: string[] = [
     'ask smapi create-skill-package',
     '--full-response',
-    `--location "${location}"`,
+    `--location ${location}`,
   ];
 
   if (askProfile) {
@@ -27,7 +25,7 @@ export async function createSkillPackage(
   }
 
   try {
-    const { stdout } = await execAsync(cmd);
+    const { stdout } = await execAsync(cmd.join(' '));
     return parseImportUrl(JSON.parse(stdout!));
   } catch (error) {
     throw getAskError('smapiCreateSkillPackage', error.stderr);
@@ -38,11 +36,11 @@ export async function importSkillPackage(
   location: string,
   skillId: string,
   askProfile?: string,
-): Promise<string | undefined> {
+): Promise<string> {
   const cmd: string[] = [
     'ask smapi import-skill-package',
     '--full-response',
-    `--location "${location}"`,
+    `--location ${location}`,
     `-s ${skillId}`,
   ];
 
@@ -51,26 +49,31 @@ export async function importSkillPackage(
   }
 
   try {
-    const { stdout } = await execAsync(cmd);
+    const { stdout } = await execAsync(cmd.join(' '));
     return parseImportUrl(JSON.parse(stdout!));
   } catch (error) {
     throw getAskError('smapiImportSkillPackage', error.stderr);
   }
 }
 
-function parseImportUrl({ headers }: ImportResponse): string | undefined {
+function parseImportUrl({ headers }: UnknownObject): string {
   // Try to parse the import url from command result
-  return headers
-    .find((header) => header.key === 'location')
-    ?.value.split('/')
-    .pop();
+  // TODO: Test & Typings
+  return (
+    // @ts-ignore
+    headers
+      // @ts-ignore
+      .find((header) => header.key === 'location')
+      .value.split('/')
+      .pop()
+  );
 }
 
 export async function getImportStatus(importId: string): Promise<ImportStatus> {
-  const cmd: string[] = ['ask smapi get-import-status', `--import-id "${importId}"`];
+  const cmd: string[] = ['ask smapi get-import-status', `--import-id ${importId}`];
 
   try {
-    const { stdout } = await execAsync(cmd);
+    const { stdout } = await execAsync(cmd.join(' '));
     return JSON.parse(stdout!);
   } catch (error) {
     throw getAskError('smapiGetImportStatus', error.stderr);

@@ -1,23 +1,3 @@
-import type { DeployPlatformContext, DeployPlatformEvents } from '@jovotech/cli-command-deploy';
-import {
-  chalk,
-  execAsync,
-  flags,
-  getResolvedLocales,
-  InstallContext,
-  JovoCliError,
-  Log,
-  printAskProfile,
-  printStage,
-  ROCKET,
-  Task,
-} from '@jovotech/cli-core';
-import { existsSync, readdirSync, statSync } from 'fs';
-import _get from 'lodash.get';
-import { AlexaCli } from '..';
-import * as smapi from '../smapi';
-import { AlexaContext, checkForAskCli, getFilesIn, SupportedLocales } from '../utilities';
-import { AlexaHook } from './AlexaHook';
 import {
   bundleProject,
   loadProject,
@@ -25,9 +5,30 @@ import {
   ParseError,
   validateProject,
 } from '@alexa/acdl';
-import { join as joinPaths } from 'path';
+import type { DeployPlatformContext, DeployPlatformEvents } from '@jovotech/cli-command-deploy';
+import {
+  chalk,
+  execAsync,
+  flags,
+  InstallContext,
+  JovoCliError,
+  Log,
+  printStage,
+  ROCKET,
+  Task,
+  wait,
+} from '@jovotech/cli-core';
+import { axios } from '@jovotech/framework';
 import AdmZip from 'adm-zip';
-import { axios, UnknownObject } from '@jovotech/framework';
+import { existsSync, readdirSync, statSync } from 'fs';
+import _get from 'lodash.get';
+import { join as joinPaths } from 'path';
+import { AlexaCli } from '..';
+import { AlexaContext, ImportStatus } from '../interfaces';
+import * as smapi from '../smapi';
+import { getImportStatus } from '../smapi';
+import { checkForAskCli, getACValidationErrorHint } from '../utilities';
+import { AlexaHook } from './AlexaHook';
 
 export interface DeployPlatformContextAlexa extends AlexaContext, DeployPlatformContext {
   flags: DeployPlatformContext['flags'] & { 'ask-profile'?: string; 'skill-id'?: string };
@@ -83,12 +84,8 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
   /**
    * Updates the current plugin context with platform-specific values.
    */
-    super.updatePluginContext();
-
   async updatePluginContext(): Promise<void> {
-    if (!this.$context.alexa) {
-      this.$context.alexa = {};
-    }
+    super.updatePluginContext();
 
     this.$context.alexa.askProfile =
       this.$context.flags['ask-profile'] ||
@@ -122,6 +119,9 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
       `${ROCKET} Deploying Alexa Skill ${printStage(this.$cli.project!.stage)}`,
     );
 
+    // Deployment is done by compressing the skill-package and importing it into the developer console.
+    // Depending on whether the current skill uses Alexa Conversations or not, the location of the
+    // skill package changes.
     const zipPath: string = this.$context.alexa.isACSkill
       ? this.$plugin.skillPackagePath
       : joinPaths(this.$plugin.platformPath, 'build', 'skill-package');
@@ -190,11 +190,16 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
           )
         : await smapi.createSkillPackage(uploadUrl, this.$context.alexa.askProfile);
 
+      if (!importUrl) {
+        throw new JovoCliError({
+          message: 'Something went wrong while importing your skill package',
+          hint: 'Try importing your skill package manually using the ASK CLI and copy the resulting skill ID into your project configuration',
+        });
+      }
+
       // Check import
-      const { stdout: importStatus } = await execAsync(
-        `ask smapi get-import-status --import-id ${importUrl}`,
-      );
-      const skillId = JSON.parse(importStatus!).skill.skillId;
+      const status: ImportStatus = await getImportStatus(importUrl);
+      const skillId = status.skill.skillId;
       this.$context.alexa.skillId = skillId;
       this.setSkillId(skillId);
     } catch (error) {
