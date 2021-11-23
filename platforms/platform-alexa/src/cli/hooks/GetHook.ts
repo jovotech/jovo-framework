@@ -14,8 +14,9 @@ import {
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import _get from 'lodash.get';
 import { AlexaCli } from '..';
+import { AlexaContext, AskSkillList } from '../interfaces';
 import * as smapi from '../smapi';
-import { AlexaContext, AskSkillList, checkForAskCli, prepareSkillList } from '../utilities';
+import { checkForAskCli, prepareSkillList } from '../utilities';
 import { AlexaHook } from './AlexaHook';
 
 export interface GetContextAlexa extends AlexaContext, GetPlatformContext {

@@ -145,10 +145,10 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
   }
 
   /**
-   * Checks, if --clean has been set and deletes the platform folder accordingly.
+   * Checks if --clean has been set and deletes the platform folder accordingly
    */
   checkForCleanBuild(): void {
-    // If --clean has been set, delete the respective platform folders before building.
+    // If --clean has been set, delete the respective platform folders before building
     if (this.$context.flags.clean) {
       deleteFolderRecursive(this.$plugin.platformPath);
     }
@@ -336,9 +336,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
     }
 
     // Create entries for Alexa Conversations
-    const conversationsPath: string =
-      'skill-package/["skill.json"].manifest.apis.custom.dialogManagement';
-    console.log(this.$context);
+    const conversationsPath = 'skill-package/["skill.json"].manifest.apis.custom.dialogManagement';
     if (this.$context.alexa.isACSkill && !_has(projectFiles, conversationsPath)) {
       _set(projectFiles, conversationsPath, {
         sessionStartDelegationStrategy: {
@@ -474,14 +472,14 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
 
     if (!existsSync(this.$plugin.config.conversations!.directory)) {
       throw new JovoCliError({
-        message: `Directory for Conversations does not exist at ${
+        message: `Directory for conversations does not exist at ${
           this.$plugin.config.conversations!.directory
         }`,
         module: this.$plugin.name,
       });
     }
 
-    copyFiles(this.$plugin.config.conversations!.directory, this.$plugin.conversationsDirectory);
+    copyFiles(this.$plugin.config.conversations.directory, this.$plugin.conversationsDirectory);
   }
 
   buildResponseFiles(): void {
@@ -498,7 +496,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       });
     }
 
-    copyFiles(this.$plugin.config.responses?.directory, this.$plugin.responseDirectory);
+    copyFiles(this.$plugin.config.responses.directory, this.$plugin.responseDirectory);
   }
 
   /**

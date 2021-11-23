@@ -134,55 +134,48 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
       const project = await loadProject(projectConfig);
 
       if (!this.$plugin.config.conversations?.skipValidation) {
-        const errors: ParseError[] = validateProject(project, true);
+        const validationTask: Task = new Task('Validating ACDL files', async () => {
+          const errors: ParseError[] = validateProject(project, true);
 
-        if (errors.length) {
-          throw new JovoCliError({
-            message: 'Validation failed for Alexa Conversations',
-            module: this.$plugin.name,
-            hint: errors.reduce((errorString: string, error: ParseError) => {
-              return [
-                errorString,
-                Log.info(chalk.dim(`[${error.code.code}]`), {
-                  dry: true,
-                  newLine: false,
-                }),
-                Log.info(error.message, { dry: true }),
-                error.uri
-                  ? Log.info(chalk.dim(error.uri), { dry: true, newLine: false })
-                  : undefined,
-                error.loc
-                  ? Log.info(chalk.dim(`(line ${error.loc.begin.line})`), {
-                      dry: true,
-                      newLine: false,
-                    })
-                  : undefined,
-              ].join(' ');
-            }, ''),
-          });
+          if (errors.length) {
+            throw new JovoCliError({
+              message: 'Validation failed for Alexa Conversations',
+              module: this.$plugin.name,
+              hint: getACValidationErrorHint(errors),
+            });
+          }
+
+          await wait(500);
+        });
+
+        deployTask.add(validationTask);
+      }
+
+      const compileTask: Task = new Task('Compiling ACDL files', async () => {
+        await bundleProject(project);
+        await wait(1000);
+      });
+
+      deployTask.add(compileTask);
+    }
+
+    const uploadTask: Task = new Task('Uploading skill package', async () => {
+      // Compress skill package
+      const zip: AdmZip = new AdmZip();
+
+      for (const entry of readdirSync(zipPath)) {
+        const path: string = joinPaths(zipPath, entry);
+        if (statSync(path).isDirectory()) {
+          zip.addLocalFolder(path);
+        } else {
+          zip.addLocalFile(path);
         }
       }
 
-      await bundleProject(project);
-    }
-
-    // Compress skill package
-    const zip: AdmZip = new AdmZip();
-
-    for (const entry of readdirSync(zipPath)) {
-      const path: string = joinPaths(zipPath, entry);
-      if (statSync(path).isDirectory()) {
-        zip.addLocalFolder(path);
-      } else {
-        zip.addLocalFile(path);
-      }
-    }
-
-    try {
       const uploadUrl: string = await smapi.createNewUploadUrl();
       await axios({ url: uploadUrl, method: 'PUT', data: zip.toBuffer() });
 
-      const importUrl: string = this.$context.alexa.skillId
+      const importUrl: string | undefined = this.$context.alexa.skillId
         ? await smapi.importSkillPackage(
             uploadUrl,
             this.$context.alexa.skillId,
@@ -202,11 +195,11 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
       const skillId = status.skill.skillId;
       this.$context.alexa.skillId = skillId;
       this.setSkillId(skillId);
-    } catch (error) {
-      console.log(error);
-    }
 
-    // return [`Skill Name: ${skillInfo.name}`, `Skill ID: ${skillInfo.skillId}`];
+      return `Skill ID: ${skillId}`;
+    });
+
+    deployTask.add(uploadTask);
 
     if (this.$context.alexa.skillCreated) {
       const enableTestingTask: Task = new Task('Enabling skill for testing', async () => {
@@ -221,6 +214,8 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
 
     await deployTask.run();
   }
+
+  async bundleProject(): Promise<void> {}
 
   /**
    * Returns Alexa Skill ID from .ask/config.

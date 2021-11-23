@@ -1,5 +1,6 @@
 import { execAsync, JovoCliError, wait } from '@jovotech/cli-core';
-import { AskSkillList, getAskError } from '../utilities';
+import { AskSkillList } from '../interfaces';
+import { getAskError } from '../utilities';
 
 export async function getSkillInformation(
   skillId: string,
