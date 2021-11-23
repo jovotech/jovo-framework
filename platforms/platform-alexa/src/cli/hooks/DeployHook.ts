@@ -83,6 +83,8 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
   /**
    * Updates the current plugin context with platform-specific values.
    */
+    super.updatePluginContext();
+
   async updatePluginContext(): Promise<void> {
     if (!this.$context.alexa) {
       this.$context.alexa = {};

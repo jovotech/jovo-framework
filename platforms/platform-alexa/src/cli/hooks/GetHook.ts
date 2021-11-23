@@ -69,9 +69,7 @@ export class GetHook extends AlexaHook<BuildPlatformEvents | GetPlatformEvents> 
    * Updates the current plugin context with platform-specific values.
    */
   async updatePluginContext(): Promise<void> {
-    if (!this.$context.alexa) {
-      this.$context.alexa = {};
-    }
+    super.updatePluginContext();
 
     this.$context.alexa.askProfile =
       this.$context.flags['ask-profile'] ||
