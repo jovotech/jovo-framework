@@ -15,6 +15,7 @@ import {
   Jovo,
   PersistableSessionData,
   PersistableUserData,
+  OmitOptional,
   UnknownObject,
 } from '@jovotech/framework';
 
@@ -51,6 +52,14 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
         createTableOnInit: true,
         readCapacityUnits: 2,
         writeCapacityUnits: 2,
+      },
+    };
+  }
+
+  getRequiredConfig(): OmitOptional<DynamoDbConfig> {
+    return {
+      table: {
+        name: '<YOUR-TABLE-NAME>',
       },
     };
   }
