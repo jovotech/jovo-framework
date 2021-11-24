@@ -351,7 +351,9 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
     }
 
     // Create ask profile entry
-    const askProfilePath = `["ask-resources.json"].profiles.${this.$context.alexa.askProfile}`;
+    const askProfilePath = `["ask-resources.json"].profiles.${
+      this.$context.alexa.askProfile || 'default'
+    }`;
     if (!_has(projectFiles, askProfilePath)) {
       _set(projectFiles, askProfilePath, {
         skillMetadata: {
