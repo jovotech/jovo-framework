@@ -215,8 +215,6 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
     await deployTask.run();
   }
 
-  async bundleProject(): Promise<void> {}
-
   /**
    * Returns Alexa Skill ID from .ask/config.
    */

@@ -2,9 +2,11 @@ import type { BuildPlatformEvents } from '@jovotech/cli-command-build';
 import type { GetPlatformContext, GetPlatformEvents } from '@jovotech/cli-command-get';
 import {
   ANSWER_CANCEL,
+  deleteFolderRecursive,
   DOWNLOAD,
   flags,
   InstallContext,
+  Log,
   MAGNIFYING_GLASS,
   printAskProfile,
   promptListForProjectId,
@@ -34,6 +36,7 @@ export class GetHook extends AlexaHook<BuildPlatformEvents | GetPlatformEvents> 
         this.checkForPlatform.bind(this),
         checkForAskCli,
         this.updatePluginContext.bind(this),
+        this.checkForCleanGet.bind(this),
         this.checkForExistingPlatformFiles.bind(this),
       ],
       'get:platform': [this.get.bind(this)],
@@ -89,14 +92,25 @@ export class GetHook extends AlexaHook<BuildPlatformEvents | GetPlatformEvents> 
   }
 
   /**
+   * Checks if --clean has been set and deletes the platform folder accordingly
+   */
+  checkForCleanGet(): void {
+    // If --clean has been set, delete the respective platform folders before building
+    if (this.$context.flags.clean) {
+      deleteFolderRecursive(this.$plugin.platformPath);
+    }
+  }
+
+  /**
    * Checks if platform-specific files already exist and prompts for overwriting them.
    */
   async checkForExistingPlatformFiles(): Promise<void> {
-    if (!this.$context.flags.clean && existsSync(this.$plugin.platformPath)) {
+    if (existsSync(this.$plugin.platformPath)) {
       const answer = await promptOverwrite('Found existing Alexa project files. How to proceed?');
       if (answer.overwrite === ANSWER_CANCEL) {
         this.uninstall();
       }
+      Log.spacer();
     }
   }
 
@@ -121,10 +135,12 @@ export class GetHook extends AlexaHook<BuildPlatformEvents | GetPlatformEvents> 
       getSkillListTask.add(searchTask);
 
       await getSkillListTask.run();
+      Log.spacer();
       const list = prepareSkillList(skills);
 
       try {
         const answer = await promptListForProjectId(list);
+        Log.spacer();
 
         this.$context.alexa.skillId = answer.projectId;
       } catch (error) {

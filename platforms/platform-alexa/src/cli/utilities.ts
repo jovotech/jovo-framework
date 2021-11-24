@@ -150,19 +150,18 @@ export function getAskError(method: string, stderr: string): JovoCliError {
 }
 
 export function copyFiles(src: string, dest: string): void {
+  if (!existsSync(dest)) {
+    mkdirSync(dest, { recursive: true });
+  }
+
   for (const file of readdirSync(src)) {
     const srcFile: string = joinPaths(src, file);
+    const destFile: string = joinPaths(dest, file);
 
     if (statSync(srcFile).isDirectory()) {
-      const destDirectory: string = joinPaths(dest, file);
-
-      if (!existsSync(destDirectory)) {
-        mkdirSync(destDirectory, { recursive: true });
-      }
-
-      copyFiles(srcFile, destDirectory);
+      copyFiles(srcFile, destFile);
     } else {
-      copyFileSync(srcFile, dest);
+      copyFileSync(srcFile, destFile);
     }
   }
 }
