@@ -1,4 +1,4 @@
-import { DeepPartial, UnknownObject } from '@jovotech/common';
+import { DeepPartial, OmitOptional, UnknownObject } from '@jovotech/common';
 import _merge from 'lodash.merge';
 import { Extensible } from './Extensible';
 
@@ -24,6 +24,10 @@ export abstract class Plugin<CONFIG extends PluginConfig = PluginConfig> {
   }
 
   abstract getDefaultConfig(): CONFIG;
+
+  getRequiredConfig(): OmitOptional<CONFIG> {
+    return {} as OmitOptional<CONFIG>;
+  }
 
   /**
    * Lifecycle Hook: Called when the plugin is installed via `use`.
