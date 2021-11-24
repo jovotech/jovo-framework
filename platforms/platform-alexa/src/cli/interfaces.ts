@@ -73,18 +73,21 @@ export interface ImportMessage {
 
 export interface ImportResource {
   action: string;
-  info: ImportMessage[];
+  info?: ImportMessage[];
   name: string;
   status: string;
+  errors: [SkillStatusError];
 }
+
+export type SkillStatus = 'SUCCEEDED' | 'FAILED' | 'IN_PROGRESS';
 
 export interface ImportStatus {
   skill: {
     eTag: string;
-    resources: ImportResource[];
+    resources: [ImportResource];
     skillId: string;
   };
-  status: string;
+  status: SkillStatus;
   warnings: ImportMessage[];
 }
 
