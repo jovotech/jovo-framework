@@ -1,37 +1,27 @@
-import { execAsync } from '@jovotech/cli-core';
 import { ImportResponse, ImportStatus } from '../interfaces';
-import { getAskError } from '../utilities';
+import { execAskCommand } from '../utilities';
 
-export async function createNewUploadUrl(): Promise<string> {
-  try {
-    const { stdout } = await execAsync('ask smapi create-upload-url');
-    const { uploadUrl } = JSON.parse(stdout!);
-    return uploadUrl;
-  } catch (error) {
-    throw getAskError('smapiCreateUploadUrl', error.stderr);
-  }
+export async function createNewUploadUrl(askProfile?: string): Promise<string> {
+  const { stdout } = await execAskCommand(
+    'smapiCreateUploadUrl',
+    'ask smapi create-upload-url',
+    askProfile,
+  );
+  const { uploadUrl } = JSON.parse(stdout!);
+  return uploadUrl;
 }
 
 export async function createSkillPackage(
   location: string,
   askProfile?: string,
 ): Promise<string | undefined> {
-  const cmd: string[] = [
-    'ask smapi create-skill-package',
-    '--full-response',
-    `--location "${location}"`,
-  ];
+  const { stdout } = await execAskCommand(
+    'smapiCreateSkillPackage',
+    ['ask smapi create-skill-package', '--full-response', `--location "${location}"`],
+    askProfile,
+  );
 
-  if (askProfile) {
-    cmd.push(`-p ${askProfile}`);
-  }
-
-  try {
-    const { stdout } = await execAsync(cmd);
-    return parseImportUrl(JSON.parse(stdout!));
-  } catch (error) {
-    throw getAskError('smapiCreateSkillPackage', error.stderr);
-  }
+  return parseImportUrl(JSON.parse(stdout!));
 }
 
 export async function importSkillPackage(
@@ -39,23 +29,40 @@ export async function importSkillPackage(
   skillId: string,
   askProfile?: string,
 ): Promise<string | undefined> {
-  const cmd: string[] = [
-    'ask smapi import-skill-package',
-    '--full-response',
-    `--location "${location}"`,
-    `-s ${skillId}`,
-  ];
+  const { stdout } = await execAskCommand(
+    'smapiImportSkillPackage',
+    [
+      'ask smapi import-skill-package',
+      '--full-response',
+      `--location "${location}"`,
+      `-s ${skillId}`,
+    ],
+    askProfile,
+  );
 
-  if (askProfile) {
-    cmd.push(`-p ${askProfile}`);
-  }
+  return parseImportUrl(JSON.parse(stdout!));
+}
 
-  try {
-    const { stdout } = await execAsync(cmd);
-    return parseImportUrl(JSON.parse(stdout!));
-  } catch (error) {
-    throw getAskError('smapiImportSkillPackage', error.stderr);
-  }
+export async function exportSkillPackage(
+  skillId: string,
+  stage: string,
+  cwd: string,
+  askProfile?: string,
+): Promise<void> {
+  await execAskCommand(
+    'smapiExportPackage',
+    ['ask smapi export-package', `-s ${skillId}`, `-g ${stage}`],
+    askProfile,
+    { cwd },
+  );
+}
+
+export async function getImportStatus(importId: string): Promise<ImportStatus> {
+  const { stdout } = await execAskCommand('smapiGetImportStatus', [
+    'ask smapi get-import-status',
+    `--import-id "${importId}"`,
+  ]);
+  return JSON.parse(stdout!);
 }
 
 function parseImportUrl({ headers }: ImportResponse): string | undefined {
@@ -64,15 +71,4 @@ function parseImportUrl({ headers }: ImportResponse): string | undefined {
     .find((header) => header.key === 'location')
     ?.value.split('/')
     .pop();
-}
-
-export async function getImportStatus(importId: string): Promise<ImportStatus> {
-  const cmd: string[] = ['ask smapi get-import-status', `--import-id "${importId}"`];
-
-  try {
-    const { stdout } = await execAsync(cmd);
-    return JSON.parse(stdout!);
-  } catch (error) {
-    throw getAskError('smapiGetImportStatus', error.stderr);
-  }
 }

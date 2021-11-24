@@ -1,10 +1,18 @@
 import { ParseError } from '@alexa/acdl';
-import { execAsync, getRawString, JovoCliError, Log } from '@jovotech/cli-core';
+import {
+  execAsync,
+  ExecResponse,
+  getRawString,
+  JovoCliError,
+  Log,
+  prompt,
+} from '@jovotech/cli-core';
 import chalk from 'chalk';
+import { ExecOptions } from 'child_process';
 import { copyFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'fs';
 import _get from 'lodash.get';
 import { dirname, join as joinPaths } from 'path';
-import { AskSkillList } from './interfaces';
+import { AskSkillChoice, AskSkillList } from './interfaces';
 
 /**
  * Checks if ask cli is installed.
@@ -39,15 +47,14 @@ export async function checkForAskCli(): Promise<void> {
  * Generates a choice list out of an ASK skill list.
  * @param askSkillList - List of Alexa Skills returned by the ASK CLI.
  */
-export function prepareSkillList(
-  askSkillList: AskSkillList,
-): Array<{ title: string; value: string }> {
-  const choices: Array<{ title: string; value: string }> = [];
+export function prepareSkillList(askSkillList: AskSkillList): AskSkillChoice[] {
+  const choices: AskSkillChoice[] = [];
+
   for (const item of askSkillList.skills) {
     const key: string = Object.keys(item.nameByLocale)[0];
     let message: string = item.nameByLocale[key];
 
-    const stage: string = item.stage === 'development' ? 'dev' : (item.stage as string);
+    const stage: string = item.stage === 'development' ? 'dev' : item.stage;
     message +=
       ` ${stage === 'live' ? chalk.green(stage) : chalk.blue(stage)} ` +
       `- ${item.lastUpdated.substr(0, 10)}` +
@@ -55,7 +62,10 @@ export function prepareSkillList(
 
     choices.push({
       title: message,
-      value: item.skillId,
+      value: {
+        skillId: item.skillId,
+        stage: item.stage,
+      },
     });
   }
   return choices;
@@ -141,7 +151,7 @@ export function getAskError(method: string, stderr: string): JovoCliError {
       return new JovoCliError({
         message: `ASK CLI is unable to find your ${match[2]} at ${match[1]}.`,
         module,
-        hint: "If this error persists, try rebuilding your platform folder with 'jovo build'.",
+        hint: 'If this error persists, try rebuilding your platform folder using "jovo build:platform alexa".',
       });
     }
   }
@@ -164,4 +174,50 @@ export function copyFiles(src: string, dest: string): void {
       copyFileSync(srcFile, destFile);
     }
   }
+}
+
+export async function execAskCommand(
+  id: string,
+  cmd: string | string[],
+  askProfile?: string,
+  execOptions?: ExecOptions,
+): Promise<ExecResponse> {
+  if (!Array.isArray(cmd)) {
+    cmd = [cmd];
+  }
+
+  if (askProfile) {
+    cmd.push(`-p ${askProfile}`);
+  }
+
+  try {
+    return await execAsync(cmd, execOptions);
+  } catch (error) {
+    throw getAskError(id, error.stderr || error.message);
+  }
+}
+
+/**
+ * Prompt for a project, depending on provided choices.
+ * @param choices - Array of choices (projects) to choose from.
+ */
+export async function promptListForAlexaSkill(choices: AskSkillChoice[]): Promise<{
+  skill: {
+    skillId: string;
+    stage: string;
+  };
+}> {
+  return await prompt(
+    {
+      name: 'skill',
+      type: 'select',
+      message: 'Select your project:',
+      choices,
+    },
+    {
+      onCancel() {
+        process.exit();
+      },
+    },
+  );
 }
