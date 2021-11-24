@@ -191,7 +191,15 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
       this.$context.alexa.importId = importId;
 
       // Check import
-      const status: ImportStatus = await getImportStatus(importUrl);
+      const status: ImportStatus = await smapi.getImportStatus(importId);
+
+      if (status.status === 'FAILED') {
+        throw new JovoCliError({
+          message: 'Skill package import failed',
+          hint: status.skill.resources[0].errors[0].message,
+        });
+      }
+
       const skillId = status.skill.skillId;
       this.$context.alexa.skillId = skillId;
       this.setSkillId(skillId);

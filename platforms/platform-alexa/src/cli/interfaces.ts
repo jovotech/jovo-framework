@@ -6,12 +6,20 @@ import { SupportedLocales } from './constants';
 export interface AskSkillList {
   skills: {
     skillId: string;
-    stage: string | undefined;
+    stage: string;
     nameByLocale: {
       [key: string]: string;
     };
     lastUpdated: string;
   }[];
+}
+
+export interface AskSkillChoice {
+  title: string;
+  value: {
+    skillId: string;
+    stage: string;
+  };
 }
 
 export type SupportedLocalesType = typeof SupportedLocales[number];
@@ -36,6 +44,8 @@ export interface AlexaCliConfig extends PluginConfig {
 export interface AlexaContext extends PluginContext {
   alexa: {
     skillId?: string;
+    skillStage?: string;
+    importId?: string;
     askProfile?: string;
     isACSkill?: boolean;
   };
@@ -81,4 +91,20 @@ export interface ImportStatus {
 export interface ImportResponse {
   body: UnknownObject;
   headers: { key: string; value: string }[];
+}
+
+export interface SkillStatusError {
+  message: string;
+  validationDetails?: UnknownObject;
+}
+
+export interface SkillStatusResponse {
+  manifest?: {
+    eTag: string;
+    lastUpdateRequest: {
+      errors?: SkillStatusError[];
+      status: SkillStatus;
+    };
+  };
+  interactionModel?: UnknownObject;
 }
