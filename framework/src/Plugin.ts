@@ -1,5 +1,4 @@
-import { DeepPartial, OmitOptional, UnknownObject } from '@jovotech/common';
-import _merge from 'lodash.merge';
+import { Configurable, UnknownObject } from '@jovotech/common';
 import { Extensible } from './Extensible';
 
 export interface PluginConfig extends UnknownObject {
@@ -7,27 +6,10 @@ export interface PluginConfig extends UnknownObject {
   skipTests?: boolean;
 }
 
-export abstract class Plugin<CONFIG extends PluginConfig = PluginConfig> {
+export abstract class Plugin<
+  CONFIG extends PluginConfig = PluginConfig,
+> extends Configurable<CONFIG> {
   [key: string]: unknown;
-
-  readonly config: CONFIG;
-  readonly initConfig?: DeepPartial<CONFIG>;
-
-  constructor(config?: DeepPartial<CONFIG>) {
-    this.initConfig = config;
-    const defaultConfig = this.getDefaultConfig();
-    this.config = config ? _merge(defaultConfig, config) : defaultConfig;
-  }
-
-  get name(): string {
-    return this.constructor.name;
-  }
-
-  abstract getDefaultConfig(): CONFIG;
-
-  getRequiredConfig(): OmitOptional<CONFIG> {
-    return {} as OmitOptional<CONFIG>;
-  }
 
   /**
    * Lifecycle Hook: Called when the plugin is installed via `use`.
