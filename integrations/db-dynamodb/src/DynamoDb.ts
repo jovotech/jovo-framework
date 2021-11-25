@@ -6,7 +6,7 @@ import {
   GetItemCommand,
   PutItemCommand,
 } from '@aws-sdk/client-dynamodb';
-import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
+import { marshall, marshallOptions, unmarshall } from '@aws-sdk/util-dynamodb';
 import {
   DbItem,
   DbPlugin,
@@ -28,6 +28,7 @@ export interface DynamoDbConfig extends DbPluginConfig {
   };
   libraryConfig?: {
     dynamoDbClient?: DynamoDBClientConfig;
+    marshall?: marshallOptions;
   };
 }
 
@@ -51,6 +52,12 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
         createTableOnInit: true,
         readCapacityUnits: 2,
         writeCapacityUnits: 2,
+      },
+      libraryConfig: {
+        marshall: {
+          removeUndefinedValues: true,
+          convertClassInstanceToMap: true,
+        },
       },
     };
   }
@@ -152,7 +159,7 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
     await this.client.send(
       new PutItemCommand({
         TableName: params.TableName,
-        Item: marshall(item, { removeUndefinedValues: true }),
+        Item: marshall(item, this.config.libraryConfig?.marshall),
       }),
     );
   }
