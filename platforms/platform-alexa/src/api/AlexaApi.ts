@@ -26,11 +26,14 @@ export interface AlexaApiErrorOptions extends JovoErrorOptions {
 }
 
 export class AlexaApiError extends JovoError {
+  code: AlexaApiErrorCode;
+
   constructor(options: AlexaApiErrorOptions) {
     super({
       ...options,
       message: `Request to Alexa API failed: ${options.message}`,
     });
+    this.code = options.code;
   }
 }
 
