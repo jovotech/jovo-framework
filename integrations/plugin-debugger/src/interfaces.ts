@@ -8,7 +8,7 @@ export type StateMutatingJovoMethodKey = ArrayElement<typeof STATE_MUTATING_METH
 
 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 export interface JovoDebuggerPayload<DATA extends any = any> {
-  requestId: number | string;
+  requestId?: number | string;
   data: DATA;
 }
 
