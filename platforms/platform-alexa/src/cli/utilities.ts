@@ -1,4 +1,4 @@
-import { execAsync, getRawString, JovoCliError } from '@jovotech/cli-core';
+import { execAsync, getRawString, isJovoCliError, JovoCliError } from '@jovotech/cli-core';
 import chalk from 'chalk';
 import _get from 'lodash.get';
 import { AskSkillList } from './interfaces';
@@ -23,17 +23,16 @@ export async function checkForAskCli(): Promise<void> {
       });
     }
   } catch (error) {
-    if (error instanceof JovoCliError) {
-      throw error;
+    if (!isJovoCliError(error)) {
+      throw new JovoCliError({
+        message: 'Jovo CLI requires ASK CLI',
+        module: 'AlexaCli',
+        hint: 'Install the ASK CLI with "npm install ask-cli -g".',
+        learnMore:
+          'Read more here: https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html',
+      });
     }
-
-    throw new JovoCliError({
-      message: 'Jovo CLI requires ASK CLI',
-      module: 'AlexaCli',
-      hint: 'Install the ASK CLI with "npm install ask-cli -g".',
-      learnMore:
-        'Read more here: https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html',
-    });
+    throw error;
   }
 }
 
