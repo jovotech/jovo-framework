@@ -112,7 +112,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
                 ? 'Alexa does not support generic locales, please specify locales in your project configuration.'
                 : '',
             learnMore:
-              'For more information on multiple language support: https://developer.amazon.com/en-US/docs/alexa/custom-skills/develop-skills-in-multiple-languages.html',
+              'For more information on multiple language support: https://www.jovo.tech/marketplace/platform-alexa/project-config#locales',
           });
         }
       }
