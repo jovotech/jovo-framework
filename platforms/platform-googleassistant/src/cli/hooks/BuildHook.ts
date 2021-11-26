@@ -414,12 +414,11 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
     const copyResourcesTask: Task = new Task(
       `Copying resources from ${this.$plugin.config.resourcesDirectory!}`,
       () => {
-        const resourcesDirectory = 'resources';
         const src: string = joinPaths(
           this.$cli.projectPath,
           this.$plugin.config.resourcesDirectory!,
         );
-        const dest: string = joinPaths(this.$plugin.platformPath, resourcesDirectory);
+        const dest: string = joinPaths(this.$plugin.platformPath, 'resources');
         // Delete existing resources folder before copying data
         removeSync(dest);
         copySync(src, dest);
