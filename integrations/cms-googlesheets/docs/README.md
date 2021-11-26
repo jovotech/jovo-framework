@@ -63,14 +63,14 @@ The following configurations can be added:
 ```typescript
 new GoogleSheetsCms({
   caching: true,
-  credentialsFile: './credentials.json',
+  serviceAccount: { /* ... */},
   spreadsheetId: '<YOUR-SPREADSHEET-ID>',
   sheets: { /* ... */ },
 }),
 ```
 
 - [`caching`](#caching): Determines whether to cache spreadsheet data for faster response times. `true` by default.
-- [`credentialsFile`](#credentialsfile): Path to your credentials from your configured service account.
+- [`serviceAccount`](#serviceAccount): Your service account file.
 - [`spreadsheetId`](#spreadsheetid): Unique spreadsheet ID.
 - [`sheets`](#sheets): Configurations for your different sheets.
 
@@ -84,7 +84,7 @@ new GoogleSheetsCms({
 });
 ```
 
-### credentialsFile
+### serviceAccount
 
 To work with the GoogleSheets CMS integration, you need to create a service account with the Google Sheets API enabled and create security credentials:
 
@@ -93,11 +93,20 @@ To work with the GoogleSheets CMS integration, you need to create a service acco
 - After that, select _Credentials_ and create credentials, specifically a _Service Account_
 - Create a service account and then create and download a key under _Manage Keys_
 
-Place this file in your project (relative to the `src` folder) and reference the path to it with the `credentialsFile` property. The default value is `./credentials.json`.
+Place this file in your project (relative to the `src` folder) and import it in your app configuration.
 
 ```typescript
-new GoogleSheetsCms({
-  credentialsFile: 'path/to/credentials.json',
+import ServiceAccount from './serviceAccount.json';
+// ...
+
+const app = new App({
+  plugins: [
+    new GoogleSheetsCms({
+      serviceAccount: ServiceAccount,
+      // ...
+    }),
+    // ...
+  ],
 });
 ```
 
