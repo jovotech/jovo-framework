@@ -1,16 +1,13 @@
 import _merge from 'lodash.merge';
-import { AnyObject, DeepPartial, OmitOptional } from '.';
-
-export type ConfigurableInitConfig<T, K extends keyof OmitOptional<T> = never> = DeepPartial<T> &
-  Pick<OmitOptional<T>, K>;
+import { AnyObject, DeepPartial } from '.';
 
 export abstract class Configurable<CONFIG extends AnyObject = AnyObject> {
   readonly config: CONFIG;
   readonly initConfig?: DeepPartial<CONFIG>;
 
-  constructor(config?: ConfigurableInitConfig<CONFIG>) {
+  constructor(config?: DeepPartial<CONFIG>) {
     this.initConfig = config;
-    const defaultConfig: CONFIG = this.getDefaultConfig();
+    const defaultConfig = this.getDefaultConfig();
     this.config = config ? _merge(defaultConfig, config) : defaultConfig;
   }
 

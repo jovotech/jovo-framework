@@ -43,7 +43,7 @@ export type OmitIndex<T, I extends string | number> = {
 export type PartialWhere<T, K extends keyof T> = Omit<T, K> & Partial<T>;
 
 // Returns all elements of T that are non-optional. Works with nested objects.
-// If an entry is assignable to a weak type, it will be omitted from the object.
+// If an entry T[K] is assignable to a weak type, it will be omitted from the object.
 export type OmitOptional<
   T,
   O extends OmitIndex<T, string | number> = OmitIndex<T, string | number>,
@@ -56,6 +56,10 @@ export type OmitOptional<
     ? OmitOptional<O[K]>
     : Pick<O, K>;
 };
+
+// TODO: Make this work for nested objects
+export type RequiredWhere<T, K extends keyof OmitOptional<T>> = DeepPartial<T> &
+  Pick<OmitOptional<T>, K>;
 
 // If T is a string enum return a union type of the enum and the enum as string literal
 export type EnumLike<T extends string> = T | `${T}`;
