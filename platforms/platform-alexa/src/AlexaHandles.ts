@@ -19,4 +19,12 @@ export class AlexaHandles {
           : true),
     };
   }
+
+  static onDialogInvoked(): HandleOptions {
+    return {
+      global: true,
+      types: ['Dialog.API.Invoked'],
+      platforms: ['alexa'],
+    };
+  }
 }
