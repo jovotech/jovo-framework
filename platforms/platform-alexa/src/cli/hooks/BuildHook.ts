@@ -340,7 +340,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
     if (this.$context.alexa.isACSkill && !_has(projectFiles, conversationsPath)) {
       _set(projectFiles, conversationsPath, {
         sessionStartDelegationStrategy: {
-          target: 'AMAZON.Conversations',
+          target: 'skill',
         },
         dialogManagers: [
           {
