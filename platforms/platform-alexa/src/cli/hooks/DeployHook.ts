@@ -19,13 +19,12 @@ import {
 } from '@jovotech/cli-core';
 import { axios } from '@jovotech/framework';
 import AdmZip from 'adm-zip';
-import { existsSync, readdirSync, statSync } from 'fs';
+import { existsSync } from 'fs';
 import _get from 'lodash.get';
 import { join as joinPaths } from 'path';
 import { AlexaCli } from '..';
-import { AlexaContext, ImportStatus, SkillStatusError } from '../interfaces';
+import { AlexaContext, ImportStatus } from '../interfaces';
 import * as smapi from '../smapi';
-import { getImportStatus } from '../smapi';
 import { checkForAskCli, getACValidationErrorHint } from '../utilities';
 import { AlexaHook } from './AlexaHook';
 
@@ -149,7 +148,7 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
       }
 
       const compileTask: Task = new Task('Compiling ACDL files', async () => {
-        await bundleProject(project);
+        await bundleProject(project, { outDir: joinPaths(this.$plugin.skillPackagePath, 'build') });
         await wait(1000);
       });
 
@@ -161,13 +160,12 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
       // Depending on whether the current skill uses Alexa Conversations or not, the location of the
       // skill package changes.
       const zipPath: string = this.$context.alexa.isACSkill
-        ? joinPaths(this.$plugin.platformPath, 'build', 'skill-package')
+        ? joinPaths(this.$plugin.skillPackagePath, 'build', 'skill-package')
         : this.$plugin.skillPackagePath;
 
       // Compress skill package
       const zip: AdmZip = new AdmZip();
       zip.addLocalFolder(zipPath);
-      console.log(JSON.stringify(zip.getEntries(), null, 2));
 
       const uploadUrl: string = await smapi.createNewUploadUrl(this.$context.alexa.askProfile);
       await axios({ url: uploadUrl, method: 'PUT', data: zip.toBuffer() });
