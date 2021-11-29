@@ -197,7 +197,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       `${taskStatus} response files`,
       this.buildResponseFiles.bind(this),
     );
-    if (!this.$plugin.config.responses) {
+    if (!this.$plugin.config.responses?.enabled) {
       buildResponseFilesTask.disable();
     }
 
