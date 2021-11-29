@@ -1,6 +1,5 @@
 import { decompileProject, loadProject, loadProjectConfig } from '@alexa/acdl';
 import type { BuildPlatformEvents } from '@jovotech/cli-command-build';
-import DefaultFiles from '../DefaultFiles.json';
 import type { GetPlatformContext, GetPlatformEvents } from '@jovotech/cli-command-get';
 import {
   ANSWER_CANCEL,
@@ -8,7 +7,6 @@ import {
   DOWNLOAD,
   flags,
   InstallContext,
-  JovoCliError,
   Log,
   MAGNIFYING_GLASS,
   printAskProfile,
@@ -19,6 +17,7 @@ import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import _get from 'lodash.get';
 import _set from 'lodash.set';
 import { AlexaCli } from '..';
+import DefaultFiles from '../DefaultFiles.json';
 import { AlexaContext, AskResources, AskSkillList } from '../interfaces';
 import * as smapi from '../smapi';
 import { checkForAskCli, prepareSkillList, promptListForAlexaSkill } from '../utilities';

@@ -1,3 +1,4 @@
+import { JovoCliError, wait } from '@jovotech/cli-core';
 import { ImportResponse, ImportStatus } from '../interfaces';
 import { execAskCommand } from '../utilities';
 
@@ -57,12 +58,30 @@ export async function exportSkillPackage(
   );
 }
 
-export async function getImportStatus(importId: string): Promise<ImportStatus> {
+export async function getImportStatus(importId: string, isAsync = false): Promise<ImportStatus> {
   const { stdout } = await execAskCommand('smapiGetImportStatus', [
     'ask smapi get-import-status',
     `--import-id "${importId}"`,
   ]);
-  return JSON.parse(stdout!);
+
+  const status: ImportStatus = JSON.parse(stdout!);
+
+  // If --async is passed, return the status and exit, otherwise wait until the import has finished
+  if (isAsync) {
+    return status;
+  }
+
+  if (status.status === 'IN_PROGRESS') {
+    await wait(500);
+    return await getImportStatus(importId);
+  } else if (status.status === 'FAILED') {
+    throw new JovoCliError({
+      message: 'Errors occured while importing your skill package',
+      hint: status.skill.resources[0].errors[0].message,
+    });
+  }
+
+  return status;
 }
 
 function parseImportUrl({ headers }: ImportResponse): string | undefined {

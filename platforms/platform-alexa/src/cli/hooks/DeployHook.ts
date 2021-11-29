@@ -188,16 +188,8 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
 
       this.$context.alexa.importId = importId;
 
-      // Check import
-      const status: ImportStatus = await smapi.getImportStatus(importId);
-
-      if (status.status === 'FAILED') {
-        throw new JovoCliError({
-          message: 'Skill package import failed',
-          hint: status.skill.resources[0].errors[0].message,
-        });
-      }
-
+      // Check import status
+      const status: ImportStatus = await smapi.getImportStatus(importId, this.$context.flags.async);
       const skillId = status.skill.skillId;
       this.$context.alexa.skillId = skillId;
       this.setSkillId(skillId);
@@ -207,20 +199,18 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
 
     deployTask.add(uploadTask);
 
-    const validateUploadTask: Task = new Task(
-      'Validating upload',
-      async () => {
+    if (!this.$context.flags.async) {
+      const validateUploadTask: Task = new Task('Validating upload', async () => {
         await smapi.getSkillStatus(this.$context.alexa.skillId!, this.$context.alexa.askProfile);
         await smapi.enableSkill(
           this.$context.alexa.skillId!,
           'development',
           this.$context.alexa.askProfile,
         );
-      },
-      { enabled: !this.$context.flags.async },
-    );
+      });
+      deployTask.add(validateUploadTask);
+    }
 
-    deployTask.add(validateUploadTask);
     await deployTask.run();
 
     if (this.$context.flags.async) {

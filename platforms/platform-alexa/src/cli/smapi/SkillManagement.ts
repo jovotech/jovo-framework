@@ -1,5 +1,5 @@
-import { execAsync, JovoCliError, Log, wait } from '@jovotech/cli-core';
-import { AskSkillList, SkillStatusResponse, SkillStatusError } from '../interfaces';
+import { JovoCliError, wait } from '@jovotech/cli-core';
+import { AskSkillList, SkillStatusError, SkillStatusResponse } from '../interfaces';
 import { execAskCommand } from '../utilities';
 
 export async function listSkills(askProfile?: string): Promise<AskSkillList> {

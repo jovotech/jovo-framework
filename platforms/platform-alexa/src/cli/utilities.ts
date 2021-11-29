@@ -11,7 +11,7 @@ import chalk from 'chalk';
 import { ExecOptions } from 'child_process';
 import { copyFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'fs';
 import _get from 'lodash.get';
-import { dirname, join as joinPaths } from 'path';
+import { join as joinPaths } from 'path';
 import { AskSkillChoice, AskSkillList } from './interfaces';
 
 /**
@@ -191,7 +191,7 @@ export async function execAskCommand(
   }
 
   try {
-    return await execAsync(cmd, execOptions);
+    return await execAsync(cmd.join(' '), execOptions);
   } catch (error) {
     throw getAskError(id, error.stderr || error.message);
   }

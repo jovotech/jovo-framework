@@ -71,15 +71,15 @@ export interface ImportMessage {
   message: string;
 }
 
+export type SkillStatus = 'SUCCEEDED' | 'FAILED' | 'IN_PROGRESS';
+
 export interface ImportResource {
   action: string;
   info?: ImportMessage[];
   name: string;
-  status: string;
+  status: SkillStatus;
   errors: [SkillStatusError];
 }
-
-export type SkillStatus = 'SUCCEEDED' | 'FAILED' | 'IN_PROGRESS';
 
 export interface ImportStatus {
   skill: {
