@@ -14,9 +14,11 @@ export interface JovoDebuggerPayload<DATA extends any = any> {
 
 export interface JovoUpdateData<KEY extends keyof Jovo | string = keyof Jovo | string> {
   key: KEY;
+  path: KEY extends keyof Jovo ? KEY : string;
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   value: KEY extends keyof Jovo ? Jovo[KEY] : any;
-  path: KEY extends keyof Jovo ? KEY : string;
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  previousValue?: KEY extends keyof Jovo ? Jovo[KEY] | undefined : any;
 }
 
 export interface JovoStateMutationData<
