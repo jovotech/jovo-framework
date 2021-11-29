@@ -203,7 +203,8 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
         return;
       }
 
-      await server.setResponse(jovo.$response);
+      // use handleRequest.server instead of server in order to allow a request-related server instance to be used
+      await handleRequest.server.setResponse(jovo.$response);
     } catch (e) {
       return this.handleError(e);
     }
