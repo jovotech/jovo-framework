@@ -29,7 +29,7 @@ export async function checkForAskCli(): Promise<void> {
         module: 'AlexaCli',
         hint: 'Install the ASK CLI with "npm install ask-cli -g".',
         learnMore:
-          'Read more here: https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html',
+          'https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html',
       });
     }
     throw error;
