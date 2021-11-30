@@ -18,6 +18,8 @@ export interface InstagramConfig
   [key: string]: unknown;
 }
 
+export type InstagramInitConfig = ExtensibleInitConfig<InstagramConfig, 'pageAccessToken'>;
+
 export class InstagramPlatform extends FacebookMessengerPlatform {
   readonly id: string = 'instagram';
   readonly outputTemplateConverterStrategy = new InstagramOutputTemplateConverterStrategy();
@@ -28,7 +30,7 @@ export class InstagramPlatform extends FacebookMessengerPlatform {
 
   // Overwrite the constructor to apply typings from InstagramConfig,
   // since we can't pass the type in the generic parameters
-  constructor(config?: ExtensibleInitConfig<InstagramConfig>) {
+  constructor(config: InstagramInitConfig) {
     super(config);
   }
 
