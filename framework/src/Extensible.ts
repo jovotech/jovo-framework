@@ -1,4 +1,4 @@
-import { DeepPartial } from '@jovotech/common';
+import { DeepPartial, OmitOptional, RequiredWhere } from '@jovotech/common';
 import _merge from 'lodash.merge';
 import { MiddlewareCollection } from './MiddlewareCollection';
 import { Plugin, PluginConfig } from './Plugin';
@@ -16,11 +16,13 @@ export interface ExtensibleConfig extends PluginConfig {
   plugin?: ExtensiblePluginConfig;
 }
 
-export type ExtensibleInitConfig<CONFIG extends ExtensibleConfig = ExtensibleConfig> =
-  DeepPartial<CONFIG> & {
-    plugin?: never;
-    plugins?: Plugin[];
-  };
+export type ExtensibleInitConfig<
+  CONFIG extends ExtensibleConfig = ExtensibleConfig,
+  K extends keyof OmitOptional<CONFIG> = never,
+> = RequiredWhere<CONFIG, K> & {
+  plugin?: never;
+  plugins?: Plugin[];
+};
 
 export abstract class Extensible<
   CONFIG extends ExtensibleConfig = ExtensibleConfig,
