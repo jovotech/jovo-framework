@@ -72,7 +72,7 @@ showMenu() {
 
 The `@Handle` includes two types of properties:
 
-- [Routing properties](#routing-properties): The router first looks if the handler matches a specific route, e.g. [`intents`](#intents) or [`types](#types).
+- [Routing properties](#routing-properties): The router first looks if the handler matches a specific route, e.g. [`intents`](#intents) or [`types`](#types).
 - [Condition properties](#condition-properties): After that, it is evaluated if there are additional conditions that have to be fulfilled, e.g. [`platforms`](#platforms).
 
 ### Routing Properties
