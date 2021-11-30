@@ -1,27 +1,54 @@
-import { JovoCliPlugin, PluginHook, PluginType } from '@jovotech/cli-core';
+import type { NewContext } from '@jovotech/cli-command-new';
+import {
+  JovoCliPlugin,
+  Log,
+  PluginHook,
+  PluginType,
+  promptSupportedLocales,
+} from '@jovotech/cli-core';
 import { join as joinPaths } from 'path';
+import { SupportedLocales } from './constants';
 import { BuildHook } from './hooks/BuildHook';
 import { DeployHook } from './hooks/DeployHook';
 import { GetHook } from './hooks/GetHook';
 import { NewHook } from './hooks/NewHook';
-import { AlexaCliConfig } from './interfaces';
+import { AlexaCliConfig, SupportedLocalesType } from './interfaces';
 
-export class AlexaCli extends JovoCliPlugin {
+export class AlexaCli extends JovoCliPlugin<AlexaCliConfig> {
   readonly id: string = 'alexa';
   readonly type: PluginType = 'platform';
-  readonly config!: AlexaCliConfig;
   readonly platformDirectory: string = 'platform.alexa';
 
-  constructor(config: AlexaCliConfig) {
-    super(config);
+  async getInitConfig(): Promise<AlexaCliConfig> {
+    const initConfig: AlexaCliConfig = {};
+    // Check for invalid locales and provide a default locale map.
+    for (const locale of (this.$context as NewContext).locales) {
+      if (!SupportedLocales.includes(locale as SupportedLocalesType)) {
+        // Prompt user for alternative locale.
+        Log.spacer();
+        const { locales } = await promptSupportedLocales(
+          locale,
+          'Alexa',
+          SupportedLocales as unknown as string[],
+        );
+
+        if (!locales.length) {
+          continue;
+        }
+
+        if (!initConfig.locales) {
+          initConfig.locales = {};
+        }
+
+        initConfig.locales[locale] = locales as SupportedLocalesType[];
+      }
+    }
+
+    return initConfig;
   }
 
   getHooks(): typeof PluginHook[] {
     return [BuildHook, GetHook, DeployHook, NewHook];
-  }
-
-  get name(): string {
-    return this.constructor.name;
   }
 
   /**

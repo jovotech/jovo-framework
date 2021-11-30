@@ -1,3 +1,4 @@
+import { RequiredWhere } from '@jovotech/framework';
 import { AnyObject, ExtensibleConfig, HandleRequest, Jovo, Platform } from '@jovotech/framework';
 import { Alexa } from './Alexa';
 import { AlexaDevice } from './AlexaDevice';
@@ -36,6 +37,15 @@ export class AlexaPlatform extends Platform<
     return {
       output: {
         genericOutputToApl: true,
+      },
+    };
+  }
+
+  getInitConfig(): RequiredWhere<AlexaConfig, 'intentMap'> {
+    return {
+      intentMap: {
+        'AMAZON.StopIntent': 'END',
+        'AMAZON.CancelIntent': 'END',
       },
     };
   }
