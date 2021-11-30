@@ -1,4 +1,10 @@
-import { AnalyticsPlugin, AnalyticsPluginConfig, Jovo, Platform } from '@jovotech/framework';
+import {
+  AnalyticsPlugin,
+  AnalyticsPluginConfig,
+  Jovo,
+  RequiredWhere,
+  Platform,
+} from '@jovotech/framework';
 import { URL } from 'url';
 import { DashbotAlexa } from './plugins/DashbotAlexa';
 import { DashbotAnalyticsPlugin } from './plugins/DashbotAnalyticsPlugin';
@@ -35,6 +41,12 @@ export class DashbotAnalytics extends AnalyticsPlugin<DashbotAnalyticsConfig> {
   }
 
   getDefaultConfig(): DashbotAnalyticsConfig {
+    return {
+      ...this.getInitConfig(),
+    };
+  }
+
+  getInitConfig(): RequiredWhere<DashbotAnalyticsConfig, 'apiKey'> {
     return {
       apiKey: '<YOUR-API-KEY>',
     };
