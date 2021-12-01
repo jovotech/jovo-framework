@@ -1,5 +1,5 @@
-export * from './ApiResponse';
-export * from './DialogDelegateRequest';
+export * from './ApiResponseOutput';
+export * from './DialogDelegateRequestOutput';
 export * from './AskForPermissionOutput';
 export * from './AskForTimersPermissionOutput';
 export * from './AskForPermissionConsentCardOutput';
