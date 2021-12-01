@@ -1,5 +1,6 @@
 import { PluginConfig, PluginContext } from '@jovotech/cli-core';
 import { UnknownObject } from '@jovotech/framework';
+import { ConversationsTarget } from '../interfaces';
 
 import { SupportedLocales } from './constants';
 
@@ -34,6 +35,7 @@ export interface AlexaCliConfig extends PluginConfig {
     enabled: boolean;
     directory?: string;
     skipValidation?: boolean;
+    sessionStartDelegationStrategyTarget?: ConversationsTarget;
   };
   responses?: {
     enabled: boolean;

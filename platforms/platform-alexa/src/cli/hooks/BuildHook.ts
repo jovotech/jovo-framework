@@ -340,7 +340,8 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
     if (this.$context.alexa.isACSkill && !_has(projectFiles, conversationsPath)) {
       _set(projectFiles, conversationsPath, {
         sessionStartDelegationStrategy: {
-          target: 'skill',
+          target:
+            this.$plugin.config.conversations?.sessionStartDelegationStrategyTarget || 'skill',
         },
         dialogManagers: [
           {
@@ -469,7 +470,9 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
 
   buildConversationsFiles(): void {
     if (!this.$plugin.config.conversations?.directory) {
-      throw new JovoCliError({ message: 'conversations.directory has to be set' });
+      throw new JovoCliError({
+        message: 'conversations.directory has to be set in your project configuration',
+      });
     }
 
     if (!existsSync(this.$plugin.config.conversations!.directory)) {
