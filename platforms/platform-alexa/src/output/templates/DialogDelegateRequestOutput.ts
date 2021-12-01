@@ -1,6 +1,5 @@
 import { BaseOutput, Output, OutputOptions, OutputTemplate } from '@jovotech/framework';
-
-export type Target = 'AMAZON.Conversations' | 'skill';
+import { ConversationsTarget } from '../../interfaces';
 
 export interface UpdatedRequestSlot {
   name: string;
@@ -12,19 +11,19 @@ export interface UpdatedRequestData {
   slots: Record<string, UpdatedRequestSlot>;
 }
 
-export interface UpdatedRequest<TARGET extends Target> {
-  type: TARGET extends 'AMAZON.Conversations' ? 'Dialog.InputRequest' : 'IntentRequest';
-  intent: TARGET extends 'AMAZON.Conversations' ? never : UpdatedRequestData;
-  input: TARGET extends 'AMAZON.Conversations' ? UpdatedRequestData : never;
+export interface UpdatedRequest {
+  type: 'Dialog.InputRequest' | 'IntentRequest';
+  intent?: UpdatedRequestData;
+  input?: UpdatedRequestData;
 }
 
-export interface DialogDelegateRequestOptions<TARGET extends Target> extends OutputOptions {
-  target: TARGET;
-  updatedRequest: UpdatedRequest<TARGET>;
+export interface DialogDelegateRequestOutputOptions extends OutputOptions {
+  target: ConversationsTarget;
+  updatedRequest?: UpdatedRequest;
 }
 
 @Output()
-export class DialogDelegateRequest extends BaseOutput<DialogDelegateRequestOptions> {
+export class DialogDelegateRequestOutput extends BaseOutput<DialogDelegateRequestOutputOptions> {
   build(): OutputTemplate | OutputTemplate[] {
     return {
       platforms: {

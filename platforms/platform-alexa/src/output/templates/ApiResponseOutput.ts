@@ -1,13 +1,14 @@
 import { BaseOutput, Output, OutputOptions, OutputTemplate } from '@jovotech/framework';
 
-export interface ApiResponseOptions extends OutputOptions {
+export interface ApiResponseOutputOptions extends OutputOptions {
   apiResponse: Record<string, string | number | boolean>;
 }
 
 @Output()
-export class ApiResponse extends BaseOutput<ApiResponseOptions> {
+export class ApiResponseOutput extends BaseOutput<ApiResponseOutputOptions> {
   build(): OutputTemplate | OutputTemplate[] {
     return {
+      listen: this.options.listen,
       platforms: {
         alexa: {
           nativeResponse: {
