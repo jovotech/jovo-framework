@@ -4,11 +4,11 @@ import {
   AxiosResponse,
   DeepPartial,
   EntityMap,
+  InterpretationPluginConfig,
   Jovo,
   NluData,
   NluPlugin,
 } from '@jovotech/framework';
-import { InterpretationPluginConfig } from '@jovotech/framework/src';
 
 import { RasaEntity, RasaIntent, RasaResponse } from './interfaces';
 

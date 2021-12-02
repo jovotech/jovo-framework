@@ -4,13 +4,13 @@ import {
   AxiosResponse,
   DynamicEntitiesMode,
   Extensible,
+  InterpretationPluginConfig,
   Jovo,
   JovoError,
   JovoRequest,
   NluData,
   NluPlugin,
 } from '@jovotech/framework';
-import { InterpretationPluginConfig } from '@jovotech/framework/src';
 
 import { EntityType, IntentEntityType, JovoModelData } from '@jovotech/model';
 import { join as joinPaths, resolve } from 'path';
