@@ -7,12 +7,12 @@ import {
   Jovo,
   NluData,
   NluPlugin,
-  NluPluginConfig,
 } from '@jovotech/framework';
+import { InterpretationPluginConfig } from '@jovotech/framework/src';
 
 import { RasaEntity, RasaIntent, RasaResponse } from './interfaces';
 
-export interface RasaNluConfig extends NluPluginConfig {
+export interface RasaNluConfig extends InterpretationPluginConfig {
   serverUrl: string;
   serverPath: string;
   //activate alternative intent classifications in $input.nlu
@@ -41,7 +41,7 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
     };
   }
 
-  async process(jovo: Jovo, text: string): Promise<RasaNluData | undefined> {
+  async processText(jovo: Jovo, text: string): Promise<RasaNluData | undefined> {
     try {
       const rasaResponse = await this.sendTextToRasaServer(text);
 

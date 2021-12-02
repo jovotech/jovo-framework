@@ -26,7 +26,7 @@ class DebuggerTestServer extends TestServer {
 
 class DebuggerTestNluPlugin extends NluPlugin {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async process(jovo: Jovo, text: string): Promise<NluData | undefined> {
+  async processText(jovo: Jovo, text: string): Promise<NluData | undefined> {
     return;
   }
 }

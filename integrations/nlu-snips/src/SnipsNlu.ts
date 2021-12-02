@@ -10,11 +10,27 @@ import {
   NluData,
   NluPlugin,
 } from '@jovotech/framework';
+import { InterpretationPluginConfig } from '@jovotech/framework/src';
 
 import { EntityType, IntentEntityType, JovoModelData } from '@jovotech/model';
 import { join as joinPaths, resolve } from 'path';
 import { v4 as uuidV4 } from 'uuid';
-import { SnipsNluConfig, SnipsNluResponse } from './interfaces';
+import { SnipsNluResponse } from './interfaces';
+
+export interface SnipsNluConfig extends InterpretationPluginConfig {
+  // TODO: Better naming?
+  serverUrl: string;
+  serverPath: string;
+  engineId: string;
+  fallbackLanguage: string;
+  dynamicEntities?: {
+    enabled: boolean;
+    serverPath: string;
+    modelsDirectory?: string;
+    models?: Record<string, JovoModelData>;
+    passModels?: boolean;
+  };
+}
 
 export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
   mount(parent: Extensible): Promise<void> | void {
@@ -41,7 +57,7 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
     };
   }
 
-  async process(jovo: Jovo, text: string): Promise<NluData | undefined> {
+  async processText(jovo: Jovo, text: string): Promise<NluData | undefined> {
     if (!jovo.$session.id) {
       throw new JovoError({
         message: `Can not send request to Snips-NLU. Session-ID is missing.`,
