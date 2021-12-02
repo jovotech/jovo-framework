@@ -327,6 +327,18 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
 
         return true;
       },
+      deleteProperty: (target: T, key: keyof T): boolean => {
+        const stringKey = key.toString();
+        const copy = _cloneDeep(target);
+        delete copy[key];
+        this.emitUpdate(handleRequest.debuggerRequestId, {
+          key: stringKey,
+          value: copy,
+          previousValue: target,
+          path: currentPath,
+        });
+        return true;
+      },
     };
   }
 
