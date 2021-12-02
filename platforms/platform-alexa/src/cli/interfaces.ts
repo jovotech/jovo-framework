@@ -35,11 +35,10 @@ export interface AlexaCliConfig extends PluginConfig {
     enabled: boolean;
     directory?: string;
     skipValidation?: boolean;
-    sessionStartDelegationStrategyTarget?: ConversationsTarget;
-  };
-  responses?: {
-    enabled: boolean;
-    directory?: string;
+    sessionStartDelegationStrategy?: {
+      target: ConversationsTarget;
+    };
+    responsesDirectory?: string;
   };
 }
 

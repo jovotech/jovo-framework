@@ -198,7 +198,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       `${taskStatus} response files`,
       this.buildResponseFiles.bind(this),
     );
-    if (!this.$plugin.config.responses?.enabled) {
+    if (!this.$plugin.config.conversations?.responsesDirectory) {
       buildResponseFilesTask.disable();
     }
 
@@ -326,13 +326,16 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
     }
 
     if (
-      this.$plugin.config.responses?.enabled &&
-      existsSync(this.$plugin.responseDirectory) &&
-      this.$plugin.config.responses?.directory
+      this.$plugin.config.conversations?.responsesDirectory &&
+      existsSync(this.$plugin.responseDirectory)
     ) {
       const copyResponseFilesTask: Task = new Task(
-        `Copying Response files into ${this.$plugin.config.responses.directory}`,
-        () => copyFiles(this.$plugin.responseDirectory, this.$plugin.config.responses!.directory!),
+        `Copying Response files into ${this.$plugin.config.conversations.responsesDirectory}`,
+        () =>
+          copyFiles(
+            this.$plugin.responseDirectory,
+            this.$plugin.config.conversations!.responsesDirectory!,
+          ),
       );
       reverseBuildTask.add(copyResponseFilesTask);
     }
@@ -372,7 +375,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       _set(projectFiles, conversationsPath, {
         sessionStartDelegationStrategy: {
           target:
-            this.$plugin.config.conversations?.sessionStartDelegationStrategyTarget || 'skill',
+            this.$plugin.config.conversations?.sessionStartDelegationStrategy?.target || 'skill',
         },
         dialogManagers: [
           {
@@ -522,11 +525,11 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
   }
 
   buildResponseFiles(): void {
-    if (!this.$plugin.config.responses?.directory) {
+    if (!this.$plugin.config.conversations?.responsesDirectory) {
       throw new JovoCliError({ message: 'responses.directory has to be set' });
     }
 
-    if (!existsSync(this.$plugin.config.responses?.directory)) {
+    if (!existsSync(this.$plugin.config.conversations.responsesDirectory)) {
       throw new JovoCliError({
         message: `Directory for responses does not exist at ${
           this.$plugin.config.conversations!.directory
@@ -535,7 +538,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       });
     }
 
-    copyFiles(this.$plugin.config.responses.directory, this.$plugin.responseDirectory);
+    copyFiles(this.$plugin.config.conversations.responsesDirectory, this.$plugin.responseDirectory);
   }
 
   /**

@@ -1,5 +1,4 @@
 import { decompileProject, loadProject, loadProjectConfig } from '@alexa/acdl';
-import { join as joinPaths } from 'path';
 import type { BuildPlatformEvents } from '@jovotech/cli-command-build';
 import type { GetPlatformContext, GetPlatformEvents } from '@jovotech/cli-command-get';
 import {
@@ -185,7 +184,7 @@ export class GetHook extends AlexaHook<BuildPlatformEvents | GetPlatformEvents> 
     });
     getTask.add(exportTask);
 
-    if (this.$context.alexa.isACSkill) {
+    if (this.$context.alexa.isACSkill && existsSync(this.$plugin.conversationsDirectory)) {
       const decompileTask: Task = new Task('Decompiling ACDL files', async () => {
         if (!existsSync(this.$plugin.conversationsDirectory)) {
           return;
