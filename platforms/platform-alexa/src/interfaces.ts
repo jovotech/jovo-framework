@@ -1,4 +1,4 @@
-import { Entity, JovoSession, PartialWhere } from '@jovotech/framework';
+import { Entity, EnumLike, JovoSession, PartialWhere } from '@jovotech/framework';
 import { Intent, Slot } from './output';
 
 export interface Session {
@@ -152,6 +152,14 @@ export interface AlexaEntity extends Entity {
   native: Slot;
 }
 
+export enum PurchaseResult {
+  Accepted = 'ACCEPTED',
+  Declined = 'DECLINED',
+  AlreadyPurchased = 'ALREADY_PURCHASED',
+  Error = 'ERROR',
+}
+export type PurchaseResultLike = EnumLike<PurchaseResult> | string;
+
 export interface Request {
   type: string;
   requestId: string;
@@ -171,7 +179,7 @@ export interface Request {
   name?: string; // Connections.Response
   payload?: {
     // Connections.Response
-    purchaseResult?: string;
+    purchaseResult?: PurchaseResultLike;
     productId?: string;
     isCardThrown?: boolean;
     permissionScope?: string;

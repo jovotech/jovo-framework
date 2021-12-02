@@ -58,6 +58,9 @@ export * from './templates/AskForPermissionConsentCardOutput';
 export * from './templates/AskForPermissionOutput';
 export * from './templates/AskForRemindersPermissionOutput';
 export * from './templates/AskForTimersPermissionOutput';
+export * from './templates/IspBuyOutput';
+export * from './templates/IspCancelOutput';
+export * from './templates/IspUpsellOutput';
 
 export * from './constants';
 
