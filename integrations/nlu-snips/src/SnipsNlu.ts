@@ -92,7 +92,7 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
       };
     }
 
-    return nluData;
+    return nluData?.intent ? nluData : undefined;
   }
 
   /**
