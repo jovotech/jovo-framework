@@ -66,7 +66,7 @@ export class AudioUtilities {
     return Buffer.from(view.buffer);
   }
 
-  private static floatTo16BitPCM(view: DataView, offset: number, val: any) {
+  private static floatTo16BitPCM(view: DataView, offset: number, val: Float32Array) {
     for (let i = 0; i < val.length; i++, offset += 2) {
       const s = Math.max(-1, Math.min(1, val[i]));
       view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
