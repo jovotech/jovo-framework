@@ -383,19 +383,22 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
     }
 
     // Create ask profile entry
-    const askProfilePath = `["ask-resources.json"].profiles.${
+    const askResourcesPath = `["ask-resources.json"].profiles.${
       this.$context.alexa.askProfile || 'default'
     }`;
-    if (!_has(projectFiles, askProfilePath)) {
-      _set(projectFiles, askProfilePath, {
+    if (!_has(projectFiles, askResourcesPath)) {
+      _set(projectFiles, askResourcesPath, {
         skillMetadata: {
           src: './skill-package',
         },
       });
     }
 
+    const askConfigPath = `[".ask/"].["ask-states.json"].profiles.${
+      this.$context.alexa.askProfile || 'default'
+    }`;
     const skillId: string | undefined = this.$plugin.config.skillId;
-    const skillIdPath = `${askProfilePath}.skillId`;
+    const skillIdPath = `${askConfigPath}.skillId`;
     // Check whether skill id has already been set.
     if (skillId && !_has(projectFiles, skillIdPath)) {
       _set(projectFiles, skillIdPath, skillId);
