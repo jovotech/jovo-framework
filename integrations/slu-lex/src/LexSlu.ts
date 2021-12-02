@@ -98,8 +98,10 @@ export class LexSlu extends SluPlugin<LexSluConfig> {
     const transcriptBuffer = Buffer.from(response.inputTranscript, 'base64');
     // gzip -> string
     const textBuffer = await asyncGunzip(transcriptBuffer);
+    // The string of textBuffer will always contain double quotes, therefore we can parse it with JSON to get rid of it.
+    const parsedText = JSON.parse(textBuffer.toString());
     return {
-      text: textBuffer.toString(),
+      text: parsedText,
     };
   }
 
