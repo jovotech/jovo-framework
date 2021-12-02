@@ -3,6 +3,7 @@ import {
   ANSWER_BACKUP,
   ANSWER_CANCEL,
   deleteFolderRecursive,
+  DISK,
   flags,
   getResolvedLocales,
   InstallContext,
@@ -220,6 +221,8 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       return;
     }
 
+    this.updatePluginContext();
+
     // Get locales to reverse build from.
     // If --locale is not specified, reverse build from every locale available in the platform folder.
     const selectedLocales: string[] = [];
@@ -272,7 +275,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       }
       if (answer.overwrite === ANSWER_BACKUP) {
         // Backup old files.
-        const backupTask: Task = new Task('Creating backups');
+        const backupTask: Task = new Task(`${DISK} Creating backups`);
         for (const locale of Object.values(buildLocaleMap)) {
           const localeTask: Task = new Task(locale, () => this.$cli.project!.backupModel(locale));
           backupTask.add(localeTask);
@@ -280,7 +283,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
         await backupTask.run();
       }
     }
-    const reverseBuildTask: Task = new Task(`${REVERSE_ARROWS} Reversing model files`);
+    const reverseBuildTask: Task = new Task(`${REVERSE_ARROWS} Reversing Alexa files`);
     for (const [platformLocale, modelLocale] of Object.entries(buildLocaleMap)) {
       const taskDetails: string = platformLocale === modelLocale ? '' : `(${modelLocale})`;
       const localeTask: Task = new Task(`${platformLocale} ${taskDetails}`, async () => {
@@ -304,6 +307,34 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
         await wait(500);
       });
       reverseBuildTask.add(localeTask);
+    }
+
+    if (
+      this.$context.alexa.isACSkill &&
+      existsSync(this.$plugin.conversationsDirectory) &&
+      this.$plugin.config.conversations?.directory
+    ) {
+      const copyAcdlFilesTask: Task = new Task(
+        `Copying Alexa Conversations files into ${this.$plugin.config.conversations.directory}`,
+        () =>
+          copyFiles(
+            this.$plugin.conversationsDirectory,
+            this.$plugin.config.conversations!.directory!,
+          ),
+      );
+      reverseBuildTask.add(copyAcdlFilesTask);
+    }
+
+    if (
+      this.$plugin.config.responses?.enabled &&
+      existsSync(this.$plugin.responseDirectory) &&
+      this.$plugin.config.responses?.directory
+    ) {
+      const copyResponseFilesTask: Task = new Task(
+        `Copying Response files into ${this.$plugin.config.responses.directory}`,
+        () => copyFiles(this.$plugin.responseDirectory, this.$plugin.config.responses!.directory!),
+      );
+      reverseBuildTask.add(copyResponseFilesTask);
     }
     await reverseBuildTask.run();
   }
