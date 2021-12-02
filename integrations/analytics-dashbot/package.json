@@ -21,10 +21,7 @@
   },
   "author": "jovotech",
   "license": "Apache-2.0",
-  "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.18.0",
-    "@aws-sdk/util-dynamodb": "^3.18.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@jovotech/framework": "^4.0.0",
     "@types/jest": "^26.0.20",

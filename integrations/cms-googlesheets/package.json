@@ -22,8 +22,6 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.18.0",
-    "@aws-sdk/util-dynamodb": "^3.18.0",
     "google-auth-library": "^7.10.1",
     "googleapis": "^89.0.0"
   },
