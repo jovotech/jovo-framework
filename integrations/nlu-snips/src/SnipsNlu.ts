@@ -18,7 +18,6 @@ import { v4 as uuidV4 } from 'uuid';
 import { SnipsNluResponse } from './interfaces';
 
 export interface SnipsNluConfig extends InterpretationPluginConfig {
-  // TODO: Better naming?
   serverUrl: string;
   serverPath: string;
   engineId: string;
