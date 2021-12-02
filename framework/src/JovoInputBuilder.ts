@@ -1,4 +1,5 @@
-import { DEFAULT_INPUT_TYPE, InputTypeLike, JovoInput } from './JovoInput';
+import { InputTypeLike } from '@jovotech/common';
+import { DEFAULT_INPUT_TYPE, JovoInput } from './JovoInput';
 
 export class JovoInputBuilder {
   private readonly input: JovoInput;
@@ -8,7 +9,9 @@ export class JovoInputBuilder {
   }
 
   set<KEY extends keyof JovoInput>(key: KEY, value: JovoInput[KEY]): this {
-    this.input[key] = value;
+    if (value) {
+      this.input[key] = value;
+    }
     return this;
   }
 

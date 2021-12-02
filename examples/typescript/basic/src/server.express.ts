@@ -1,4 +1,4 @@
-import { ExpressJs, Webhook, Request, Response } from '@jovotech/server-express';
+import { ExpressJs, Request, Response, Webhook } from '@jovotech/server-express';
 import { app } from './app';
 
 /*
@@ -14,6 +14,10 @@ import { app } from './app';
 const port = process.env.JOVO_PORT || 3000;
 
 (async () => {
+  if (process.env.NODE_ENV === 'test' || process.env.JEST_WORKER_ID) {
+    return;
+  }
+
   await app.initialize();
 
   Webhook.listen(port, () => {

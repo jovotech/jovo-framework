@@ -1,5 +1,5 @@
+import { APIGatewayEvent, Callback, Context, Lambda } from '@jovotech/server-lambda';
 import { app } from './app';
-import { Lambda, Context, Callback, APIGatewayEvent } from '@jovotech/server-lambda';
 
 /*
 |--------------------------------------------------------------------------

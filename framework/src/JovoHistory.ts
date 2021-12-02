@@ -1,6 +1,6 @@
+import { EntityMap, UnknownObject } from '@jovotech/common';
 import { JovoResponse, OutputTemplate } from '@jovotech/output';
-import { JovoInput, JovoRequest, UnknownObject } from './index';
-import { EntityMap } from './interfaces';
+import { JovoInput, JovoRequest } from './index';
 import { JovoSession } from './JovoSession';
 
 export interface JovoHistoryItem extends UnknownObject {

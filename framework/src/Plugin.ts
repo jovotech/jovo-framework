@@ -1,5 +1,5 @@
+import { DeepPartial, UnknownObject } from '@jovotech/common';
 import _merge from 'lodash.merge';
-import { DeepPartial, UnknownObject } from '.';
 import { Extensible } from './Extensible';
 
 export interface PluginConfig extends UnknownObject {
@@ -17,6 +17,10 @@ export abstract class Plugin<CONFIG extends PluginConfig = PluginConfig> {
     this.initConfig = config;
     const defaultConfig = this.getDefaultConfig();
     this.config = config ? _merge(defaultConfig, config) : defaultConfig;
+  }
+
+  get name(): string {
+    return this.constructor.name;
   }
 
   abstract getDefaultConfig(): CONFIG;

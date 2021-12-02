@@ -1,5 +1,6 @@
+import { UnknownObject } from '@jovotech/common';
 import _merge from 'lodash.merge';
-import { RequestBuilder, TestPlatform, UnknownObject } from '..';
+import { RequestBuilder, TestPlatform } from '..';
 import { TestRequest } from './TestRequest';
 
 export class TestRequestBuilder extends RequestBuilder<TestPlatform> {

@@ -1,4 +1,5 @@
-import { JovoResponse, OutputTemplate } from '@jovotech/output';
+import { DeepPartial, EntityMap, PickWhere, UnknownObject } from '@jovotech/common';
+import { JovoResponse, NormalizedOutputTemplate, OutputTemplate } from '@jovotech/output';
 import _cloneDeep from 'lodash.clonedeep';
 import _merge from 'lodash.merge';
 import _set from 'lodash.set';
@@ -11,22 +12,23 @@ import {
   ComponentConstructor,
   ComponentData,
   DbPluginStoredElementsConfig,
-  DeepPartial,
   I18NextAutoPath,
   I18NextResourcesLanguageKeys,
   I18NextResourcesNamespaceKeysOfLanguage,
+  I18NextTFunctionOptions,
+  I18NextTFunctionResult,
   I18NextTOptions,
+  I18NextValueAt,
   JovoInput,
   MetadataStorage,
   OutputConstructor,
   PersistableSessionData,
   PersistableUserData,
-  PickWhere,
   Server,
   StateStackItem,
-  UnknownObject,
 } from './index';
-import { EntityMap, RequestData } from './interfaces';
+
+import { RequestData } from './interfaces';
 import { JovoDevice } from './JovoDevice';
 import { JovoHistory, JovoHistoryItem, PersistableHistoryData } from './JovoHistory';
 import { JovoRequest } from './JovoRequest';
@@ -81,11 +83,7 @@ export function registerPlatformSpecificJovoReference<
 >(key: KEY, jovoClass: JovoConstructor<REQUEST, RESPONSE, JOVO, USER, DEVICE, PLATFORM>): void {
   Object.defineProperty(Jovo.prototype, key, {
     get(): Jovo[KEY] | undefined {
-      return this instanceof jovoClass
-        ? this
-        : this.jovo instanceof jovoClass
-        ? this.jovo
-        : undefined;
+      return this instanceof jovoClass ? this : undefined;
     },
   });
 }
@@ -113,6 +111,8 @@ export abstract class Jovo<
   $session: JovoSession;
   $user: USER;
 
+  $cms: UnknownObject;
+
   constructor(
     readonly $app: App,
     readonly $handleRequest: HandleRequest,
@@ -129,6 +129,8 @@ export abstract class Jovo<
     this.$history = new JovoHistory();
     this.$session = this.getSession();
     this.$user = this.$platform.createUserInstance(this as unknown as JOVO);
+
+    this.$cms = {};
   }
 
   get $config(): AppConfig {
@@ -221,14 +223,22 @@ export abstract class Jovo<
       | PATH
       | Array<I18NextAutoPath<PATH, LANGUAGE, NAMESPACE> | PATH>,
     options?: I18NextTOptions<LANGUAGE, NAMESPACE>,
-  ): string {
+  ): I18NextValueAt<PATH, LANGUAGE, NAMESPACE>;
+  $t<FORCED_RESULT>(path: string | string[], options?: I18NextTFunctionOptions): FORCED_RESULT;
+  $t(path: string | string[], options?: I18NextTFunctionOptions): I18NextTFunctionResult {
     if (!options) {
       options = {};
     }
+
     if (!options.lng) {
-      options.lng = this.$request.getLocale() as LANGUAGE;
+      options.lng = this.$request.getLocale();
     }
-    return this.$app.i18n.t<PATH, LANGUAGE, NAMESPACE>(path, options);
+
+    if (!options.platform) {
+      options.platform = this.$platform.id;
+    }
+
+    return this.$app.i18n.t(path, options);
   }
 
   async $send(outputTemplateOrMessage: OutputTemplate | OutputTemplate[] | string): Promise<void>;
@@ -249,7 +259,7 @@ export abstract class Jovo<
       const outputInstance = new outputConstructorOrTemplateOrMessage(this, options);
       const output = await outputInstance.build();
       // overwrite reserved properties of the built object i.e. message
-      OutputTemplate.getKeys().forEach((key) => {
+      NormalizedOutputTemplate.getKeys().forEach((key) => {
         if (options?.[key]) {
           if (Array.isArray(output)) {
             output[output.length - 1][key] =
@@ -283,7 +293,10 @@ export abstract class Jovo<
       keyof BaseComponent
     >,
   >(constructor: ComponentConstructor<COMPONENT>, handler?: HANDLER): Promise<void>;
-  async $redirect(componentName: string, handler?: string): Promise<void>;
+  async $redirect(
+    constructorOrName: ComponentConstructor | string,
+    handler?: string,
+  ): Promise<void>;
   async $redirect(
     constructorOrName: ComponentConstructor | string,
     handler?: string,
@@ -314,7 +327,7 @@ export abstract class Jovo<
     this.$handleRequest.activeComponentNode = componentNode;
     // execute the component's handler
     await componentNode.executeHandler({
-      jovo: this.jovoReference,
+      jovo: this.getJovoReference(),
       handler,
     });
   }
@@ -323,7 +336,10 @@ export abstract class Jovo<
     constructor: ComponentConstructor<COMPONENT>,
     options: DelegateOptions<ComponentConfig<COMPONENT>>,
   ): Promise<void>;
-  async $delegate(componentName: string, options: DelegateOptions): Promise<void>;
+  async $delegate(
+    constructorOrName: ComponentConstructor | string,
+    options: DelegateOptions,
+  ): Promise<void>;
   async $delegate(
     constructorOrName: ComponentConstructor | string,
     options: DelegateOptions,
@@ -385,7 +401,7 @@ export abstract class Jovo<
     this.$handleRequest.activeComponentNode = componentNode;
     // execute the component's handler
     await componentNode.executeHandler({
-      jovo: this.jovoReference,
+      jovo: this.getJovoReference(),
     });
   }
 
@@ -417,7 +433,7 @@ export abstract class Jovo<
     this.$handleRequest.activeComponentNode = previousComponentNode;
     // execute the component's handler
     await previousComponentNode.executeHandler({
-      jovo: this.jovoReference,
+      jovo: this.getJovoReference(),
       handler: resolvedHandler,
       callArgs: eventArgs,
     });
@@ -474,7 +490,7 @@ export abstract class Jovo<
     };
   }
 
-  private get jovoReference(): Jovo {
+  protected getJovoReference(): Jovo {
     return (this as { jovo?: Jovo })?.jovo || (this as unknown as Jovo);
   }
 }

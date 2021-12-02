@@ -1,8 +1,9 @@
+import { Constructor } from '@jovotech/common';
 import {
+  NormalizedOutputTemplate,
   OutputTemplateConverterStrategyConfig,
   SingleResponseOutputTemplateConverterStrategy,
 } from '@jovotech/output';
-import { Constructor, OutputTemplate } from '..';
 import { TestResponse } from './TestResponse';
 
 export class TestOutputConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<
@@ -12,12 +13,12 @@ export class TestOutputConverterStrategy extends SingleResponseOutputTemplateCon
   readonly responseClass: Constructor<TestResponse> = TestResponse;
   readonly platformName: string = 'testPlatform';
 
-  protected sanitizeOutput(output: OutputTemplate): OutputTemplate {
+  protected sanitizeOutput(output: NormalizedOutputTemplate): NormalizedOutputTemplate {
     return output;
   }
 
-  toResponse(output: OutputTemplate): TestResponse {
-    const response: TestResponse = this.prepareResponse({
+  toResponse(output: NormalizedOutputTemplate): TestResponse {
+    const response: TestResponse = this.normalizeResponse({
       isTestResponse: true,
     });
 
@@ -28,7 +29,7 @@ export class TestOutputConverterStrategy extends SingleResponseOutputTemplateCon
     return response;
   }
 
-  fromResponse(): OutputTemplate {
+  fromResponse(): NormalizedOutputTemplate {
     return {};
   }
 }

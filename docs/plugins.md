@@ -2,6 +2,7 @@
 title: 'Plugins'
 excerpt: 'Learn how you can build your own plugins to customize and extend the Jovo Framework.'
 ---
+
 # Plugins
 
 Learn how you can build your own plugins to customize and extend the Jovo Framework. For lightweight plugins, take a look at [hooks](./hooks.md).
@@ -22,6 +23,7 @@ We recommend first taking a look at the [get started with Jovo plugins](#get-sta
 ## Get Started with Jovo Plugins
 
 This section provides a first overview of Jovo plugins. First we're going to take a look at the [basic plugin structure](#basic-plugin-structure), then at potential [plugin configurations](#plugin-configuration). After that, we're going to [add the plugin to our Jovo app](#add-a-plugin-to-the-jovo-app).
+
 ### Basic Plugin Structure
 
 Here is an example of a basic plugin called `SomePlugin`:
@@ -66,7 +68,7 @@ If your plugin needs configuration (for example API keys), you can pass a generi
 For `SomePlugin` it could look like this:
 
 ```typescript
-import { PluginConfig, /* ... */ } from '@jovotech/framework';
+import { PluginConfig /* ... */ } from '@jovotech/framework';
 
 // ...
 
@@ -111,7 +113,7 @@ const app = new App({
   plugins: [
     new SomePlugin(),
     // ...
-  ]
+  ],
   // ...
 });
 ```
@@ -127,7 +129,7 @@ If your plugin uses [configuration](#plugin-configuration), you can add it to th
 ```typescript
 new SomePlugin({
   someConfig: 'someValue',
-})
+});
 ```
 
 ## Advanced Jovo Plugins
@@ -137,6 +139,7 @@ After getting an initial understanding of how to create and add a plugin from th
 First, we're going to take a look at the [plugin lifecycle](#plugin-lifecycle) and how [plugin mounting](#plugin-mounting) works. We'll also learn more about parent and child plugins using the [Extensible structure](#jovo-extensible-structure).
 
 If you want to dive even deeper, take a look at the [`Plugin` class here](https://github.com/jovotech/jovo-framework/blob/v4dev/framework/src/Plugin.ts).
+
 ### Plugin Lifecycle
 
 In the [basic plugin structure section](#basic-plugin-structure), we used the `mount` method to define which middlewares should be used for this plugin:
@@ -160,12 +163,12 @@ export class SomePlugin extends Plugin {
 
 It's also possible to use other methods for this, which we call plugin lifecycle hooks. Below is a table of all available methods:
 
-| Name       | Trigger                                                                      | Use Case                                                             | Notes                    |
-| ---------- | ---------------------------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------ |
-| `install`    | When the plugin is installed via `use` (once)                                         | Installing other plugins as well as modifying `App`                  | Can only be synchronous. |
-| `initialize` | When `App.initialize` is called (once)                                          | Time-consuming actions like API-calls that only need to be done once | Can be asynchronous.     |
+| Name         | Trigger                                                                           | Use Case                                                             | Notes                    |
+| ------------ | --------------------------------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------ |
+| `install`    | When the plugin is installed via `use` (once)                                     | Installing other plugins as well as modifying `App`                  | Can only be synchronous. |
+| `initialize` | When `App.initialize` is called (once)                                            | Time-consuming actions like API-calls that only need to be done once | Can be asynchronous.     |
 | `mount`      | When plugins are [mounted](#plugin-mounting) onto `HandleRequest` (every request) | Registering middleware-functions                                     | Can be asynchronous.     |
-| `dismount`   | After the [RIDR Lifecycle](./ridr-lifecycle.md) (every request)                                     | Cleanup                                                              | Can be asynchronous.     |
+| `dismount`   | After the [RIDR Lifecycle](./ridr-lifecycle.md) (every request)                   | Cleanup                                                              | Can be asynchronous.     |
 
 It's important to note that the `install` and `initialize` plugin lifecycle hooks don't have access to `HandleRequest`, since they happen when the app gets started, before the request gets handled. Learn more in the [plugin mounting](#plugin-mounting) section below.
 
@@ -190,8 +193,7 @@ export class SomePlugin extends Plugin {
 
 For more details about signatures, take a look at the [`Plugin` class here](https://github.com/jovotech/jovo-framework/blob/v4dev/framework/src/Plugin.ts).
 
-
-### Plugin Mounting 
+### Plugin Mounting
 
 On every request, the mounting takes place, which consists of the following steps:
 
@@ -229,12 +231,10 @@ import { SomePlugin } from './plugins/SomePlugin';
 const app = new App({
   plugins: [
     new SomeExtensiblePlugin({
-      plugins: [
-        new SomePlugin(),
-      ],
+      plugins: [new SomePlugin()],
     }),
     // ...
-  ]
+  ],
   // ...
 });
 ```

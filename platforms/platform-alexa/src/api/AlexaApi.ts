@@ -6,6 +6,7 @@ import {
   JovoErrorOptions,
   Method,
 } from '@jovotech/framework';
+
 import { URL } from 'url';
 
 export enum AlexaApiErrorCode {
@@ -26,7 +27,10 @@ export interface AlexaApiErrorOptions extends JovoErrorOptions {
 
 export class AlexaApiError extends JovoError {
   constructor(options: AlexaApiErrorOptions) {
-    super(options);
+    super({
+      ...options,
+      message: `Request to Alexa API failed: ${options.message}`,
+    });
   }
 }
 

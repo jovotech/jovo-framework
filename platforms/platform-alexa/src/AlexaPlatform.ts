@@ -1,11 +1,12 @@
 import { AnyObject, ExtensibleConfig, HandleRequest, Jovo, Platform } from '@jovotech/framework';
-import { AlexaOutputTemplateConverterStrategy, AlexaResponse } from '@jovotech/output-alexa';
 import { Alexa } from './Alexa';
 import { AlexaDevice } from './AlexaDevice';
 import { AlexaRequest } from './AlexaRequest';
 import { AlexaRequestBuilder } from './AlexaRequestBuilder';
+import { AlexaResponse } from './AlexaResponse';
 import { AlexaUser } from './AlexaUser';
 import { SUPPORTED_APL_ARGUMENT_TYPES } from './constants';
+import { AlexaOutputTemplateConverterStrategy } from './output';
 
 export interface AlexaConfig extends ExtensibleConfig {
   output: {
@@ -22,13 +23,14 @@ export class AlexaPlatform extends Platform<
   AlexaPlatform,
   AlexaConfig
 > {
-  outputTemplateConverterStrategy: AlexaOutputTemplateConverterStrategy =
+  readonly id: string = 'alexa';
+  readonly outputTemplateConverterStrategy: AlexaOutputTemplateConverterStrategy =
     new AlexaOutputTemplateConverterStrategy();
-  requestClass = AlexaRequest;
-  jovoClass = Alexa;
-  userClass = AlexaUser;
-  deviceClass = AlexaDevice;
-  requestBuilder = AlexaRequestBuilder;
+  readonly requestClass = AlexaRequest;
+  readonly jovoClass = Alexa;
+  readonly userClass = AlexaUser;
+  readonly deviceClass = AlexaDevice;
+  readonly requestBuilder = AlexaRequestBuilder;
 
   getDefaultConfig(): AlexaConfig {
     return {

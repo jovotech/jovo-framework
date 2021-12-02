@@ -1,7 +1,13 @@
 import { AnyObject, Headers, QueryParams, Server } from '@jovotech/framework';
 
+export interface MockServerRequest {
+  data: AnyObject;
+  headers?: Headers;
+  params?: QueryParams;
+}
+
 export class MockServer extends Server {
-  constructor(readonly req: AnyObject) {
+  constructor(readonly req: MockServerRequest) {
     super();
   }
 
@@ -9,15 +15,15 @@ export class MockServer extends Server {
   fail(error: Error): void {}
 
   getQueryParams(): QueryParams {
-    return {};
+    return this.req.params || {};
   }
 
-  getRequestHeaders(): Headers {
-    return {};
+  getNativeRequestHeaders(): Headers {
+    return this.req.headers || {};
   }
 
   getRequestObject(): Record<string, string> {
-    return this.req;
+    return this.req.data;
   }
 
   hasWriteFileAccess(): boolean {

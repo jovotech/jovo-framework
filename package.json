@@ -8,7 +8,7 @@
     "setup:cli": "lerna run setup:cli && npm run setup:dev",
     "bootstrap": "lerna bootstrap --hoist --no-ci --nohoist=@babel/* --nohoist=babel-*",
     "clean": "lerna clean",
-    "build": "lerna exec npm run build --ignore @jovotech/examples-* --ignore @jovotech/client-* --ignore @jovotech/e2e",
+    "build": "lerna exec npm run build --ignore @jovotech/examples-* --ignore @jovotech/e2e",
     "prettier": "lerna exec npm run prettier --ignore @jovotech/examples-*",
     "eslint": "lerna exec npm run eslint --ignore @jovotech/examples-* --ignore @jovotech/e2e",
     "rimraf": "lerna exec npm run rimraf --ignore @jovotech/examples-*",
@@ -16,7 +16,7 @@
     "version": "node scripts/update-peer-dependencies.js",
     "preparePublish": "npm run bootstrap && npm run rimraf && npm run prettier && npm run eslint && npm run build && npm run test",
     "updateVersions": "lerna version --no-push",
-    "publishPackages": "lerna publish from-package --no-push",
+    "publishPackages": "lerna publish from-package",
     "doPublish": "npm run updateVersions && npm run publishPackages"
   },
   "author": "jovotech",
@@ -25,14 +25,17 @@
     "@types/jest": "^26.0.20",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
+    "esbuild": "^0.13.8",
     "eslint": "^7.17.0",
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.1",
-    "jest": "^26.6.3",
+    "jest": "^27.3.1",
     "lerna": "^4.0.0",
-    "prettier": "^2.2.1",
+    "prettier": "^2.4.1",
     "rimraf": "^3.0.2",
-    "ts-jest": "^26.5.4",
-    "typescript": "^4.2.3"
-  }
+    "ts-jest": "^27.0.7",
+    "ts-toolbelt": "9.5.13",
+    "typescript": "~4.4.4"
+  },
+  "dependencies": {}
 }

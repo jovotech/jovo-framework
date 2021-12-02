@@ -2,6 +2,7 @@
 title: 'Google Assistant Account Linking'
 excerpt: 'Learn how to use account linking with Google Conversational Actions and Jovo.'
 ---
+
 # Google Assistant Account Linking
 
 Learn how to use account linking with Google Conversational Actions and Jovo.
@@ -12,21 +13,20 @@ Account linking enables you to connect your Google Action to other systems. In t
 
 There are several types of account linking that are supported for Google Conversational Actions:
 
-* [Google Sign-In](#google-sign-in) to get access to the user's Google profile
-* oAuth account linking to connect the user to a external system
-
+- [Google Sign-In](#google-sign-in) to get access to the user's Google profile
+- oAuth account linking to connect the user to a external system
 
 ## Google Sign-In
 
 Google Sign-In offers a streamlined process to connect a user's Google profile to their Google Action user ID. This can even be done via voice. Learn more about Google Sign-In [in the official Google Assistant docs](https://developers.google.com/assistant/identity/google-sign-in).
 
-To implement Google Sign-In, you need to [configure account linking scenes](#configure-account-linking-scenes), [enable account linking in the Actions Console](#enable-account-linking-in-the-actions-console), and then [trigger account linking from the conversational experience](#trigger-account-linking-flow). After successful linking, you can [access the Google profile](#access-the-google-account-profile). 
+To implement Google Sign-In, you need to [configure account linking scenes](#configure-account-linking-scenes), [enable account linking in the Actions Console](#enable-account-linking-in-the-actions-console), and then [trigger account linking from the conversational experience](#trigger-account-linking-flow). After successful linking, you can [access the Google profile](#access-the-google-account-profile).
 
 ### Configure Account Linking Scenes
 
 You can use the Google Assistant concept of [scenes](./scenes.md) to implement an account linking flow. [The official Google documentation](https://developers.google.com/assistant/identity/google-sign-in) also includes a step by step guide to set up scenes for account linking.
 
-There are multiple ways of setting up these scenes. We recommend creating them inside your [model](https://v4.jovo.tech/marketplace/platform-googleassistant/model) to deploy them directly to the Google Conversational Actions Console.
+There are multiple ways of setting up these scenes. We recommend creating them inside your [model](https://www.jovo.tech/marketplace/platform-googleassistant/model) to deploy them directly to the Google Conversational Actions Console.
 
 Below are two example scenes called `SignIn` and `SignIn_AccountLinking`. It doesn't matter how you name the first one, but it's important that the latter one is name `<SceneName>_AccountLinking`.
 
@@ -104,7 +104,7 @@ Below are two example scenes called `SignIn` and `SignIn_AccountLinking`. It doe
 
 The `SignIn` scene transitions to the `SignIn_AccountLinking` scene if the user is verified (eligible to do account linking).
 
-After adding the scenes, you can use the `build` and `deploy` commands to update the Action in the developer console. [Learn more about how to use the Google Assistant CLI integration](https://v4.jovo.tech/marketplace/platform-googleassistant/project-config).
+After adding the scenes, you can use the `build` and `deploy` commands to update the Action in the developer console. [Learn more about how to use the Google Assistant CLI integration](https://www.jovo.tech/marketplace/platform-googleassistant/project-config).
 
 ### Enable Account Linking in the Actions Console
 
@@ -112,8 +112,8 @@ In addition to setting up scenes, you need to enable account linking in the [Goo
 
 You can find account linking in the "Develop" section. Enable it and select the following:
 
-* Account creation: Select `yes`
-* Linking type: Select `Google Sign in`
+- Account creation: Select `yes`
+- Linking type: Select `Google Sign in`
 
 ### Trigger Account Linking Flow
 
@@ -121,13 +121,13 @@ You can use the following helper methods in your handlers to check if account li
 
 ```typescript
 // Is the account linked?
-this.$googleAssistant.$user.isAccountLinked()
+this.$googleAssistant.$user.isAccountLinked();
 
 // Account linking is only possible for verified users, not for guests
-this.$googleAssistant.$user.isVerified()
+this.$googleAssistant.$user.isVerified();
 ```
 
-To trigger account linking, you can instruct your Google Action to handle the next conversation step with the specified scene in the output ([see the docs for Google Assistant output](https://v4.jovo.tech/marketplace/platform-googleassistant/output)):
+To trigger account linking, you can instruct your Google Action to handle the next conversation step with the specified scene in the output ([see the docs for Google Assistant output](https://www.jovo.tech/marketplace/platform-googleassistant/output)):
 
 ```typescript
 {
@@ -148,7 +148,7 @@ To trigger account linking, you can instruct your Google Action to handle the ne
 }
 ```
 
-After the user has gone through account linking, you receive a request of the type `ON_SIGN_IN` to notify you about the result. You can create a handler for this request by using the [`types` property](https://v4.jovo.tech/docs/handlers#types):
+After the user has gone through account linking, you receive a request of the type `ON_SIGN_IN` to notify you about the result. You can create a handler for this request by using the [`types` property](https://www.jovo.tech/docs/handlers#types):
 
 ```typescript
 @Types('ON_SIGN_IN')
@@ -157,7 +157,6 @@ userSignedIn() {
     // ...
 }
 ```
-
 
 ### Access the Google Account Profile
 
@@ -182,9 +181,9 @@ async userSignedIn() {
 
 The profile (of the type `GoogleAccountProfile`) includes the following properties:
 
-* `email`: A string of their email address
-* `email_verified`: A boolean that determines if the email is verified
-* `picture`: A string with a URL to their profile picture
-* `name`: A string with their full name
-* `given_name`: A string with their given name
-* `family_name`: A string with their family name
+- `email`: A string of their email address
+- `email_verified`: A boolean that determines if the email is verified
+- `picture`: A string with a URL to their profile picture
+- `name`: A string with their full name
+- `given_name`: A string with their given name
+- `family_name`: A string with their family name

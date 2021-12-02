@@ -1,4 +1,5 @@
-import { getValuesOfDecoratorRestParameter, OmitIndex, OutputTemplatePlatforms } from '../index';
+import { OmitIndex } from '@jovotech/common';
+import { getValuesOfDecoratorRestParameter, OutputTemplatePlatforms } from '../index';
 import { createHandlerOptionDecorator } from '../metadata/HandlerOptionMetadata';
 
 export type RegisteredPlatformName = Exclude<

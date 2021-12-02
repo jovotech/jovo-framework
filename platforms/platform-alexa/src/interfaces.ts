@@ -1,4 +1,5 @@
-import { Entity, JovoSession } from '@jovotech/framework';
+import { Entity, JovoSession, PartialWhere } from '@jovotech/framework';
+import { Intent, Slot } from './output';
 
 export interface Session {
   new: boolean;
@@ -147,49 +148,6 @@ export interface Application {
   applicationId: string;
 }
 
-export type ConfirmationStatus = 'NONE' | 'CONFIRMED' | 'DENIED';
-
-export interface Slot {
-  name: string;
-  confirmationStatus?: ConfirmationStatus;
-  value: string;
-  source?: string;
-  resolutions?: Resolutions;
-}
-
-export interface Resolutions {
-  resolutionsPerAuthority: AuthorityResolution[];
-}
-
-export type AuthorityResolutionStatusCode =
-  | 'ER_SUCCESS_MATCH'
-  | 'ER_SUCCESS_NO_MATCH'
-  | 'ER_ERROR_TIMEOUT'
-  | 'ER_ERROR_EXCEPTION';
-
-export interface AuthorityResolution {
-  authority: string;
-  status: {
-    code: AuthorityResolutionStatusCode;
-  };
-  values: AuthorityResolutionValueItem[];
-}
-
-export interface AuthorityResolutionValueItem {
-  value: AuthorityResolutionValue;
-}
-
-export interface AuthorityResolutionValue {
-  name: string;
-  id?: string;
-}
-
-export interface Intent {
-  name: string;
-  confirmationStatus?: ConfirmationStatus;
-  slots?: { [key: string]: Slot };
-}
-
 export interface AlexaEntity extends Entity {
   native: Slot;
 }
@@ -203,7 +161,8 @@ export interface Request {
   arguments?: any[];
   token?: string;
   offsetInMilliseconds?: number;
-  intent?: Intent;
+  // TODO: Use the same type
+  intent?: PartialWhere<Intent, 'confirmationStatus' | 'slots'>;
   status?: {
     // Connections.Response
     code: string;

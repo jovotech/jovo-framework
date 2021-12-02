@@ -1,5 +1,5 @@
 import {
-  OutputTemplate,
+  NormalizedOutputTemplate,
   OutputTemplateConverterStrategy,
   OutputTemplateConverterStrategyConfig,
 } from '@jovotech/output';
@@ -118,13 +118,13 @@ export class ExamplePlatformOutputConverterStrategy extends OutputTemplateConver
   responseClass = ExamplePlatformResponse;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  fromResponse(response: ExamplePlatformResponse): OutputTemplate {
+  fromResponse(response: ExamplePlatformResponse): NormalizedOutputTemplate {
     return {};
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  toResponse(output: OutputTemplate): ExamplePlatformResponse {
-    return this.prepareResponse({}) as ExamplePlatformResponse;
+  toResponse(output: NormalizedOutputTemplate): ExamplePlatformResponse {
+    return this.normalizeResponse({}) as ExamplePlatformResponse;
   }
 }
 
@@ -144,12 +144,13 @@ export class ExamplePlatform extends Platform<
   ExamplePlatformDevice,
   ExamplePlatform
 > {
-  outputTemplateConverterStrategy = new ExamplePlatformOutputConverterStrategy();
-  requestClass = ExamplePlatformRequest;
-  jovoClass = ExamplePlatformJovo;
-  userClass = ExamplePlatformUser;
-  deviceClass = ExamplePlatformDevice;
-  requestBuilder = ExamplePlatformRequestBuilder;
+  readonly id: string = 'example';
+  readonly outputTemplateConverterStrategy = new ExamplePlatformOutputConverterStrategy();
+  readonly requestClass = ExamplePlatformRequest;
+  readonly jovoClass = ExamplePlatformJovo;
+  readonly userClass = ExamplePlatformUser;
+  readonly deviceClass = ExamplePlatformDevice;
+  readonly requestBuilder = ExamplePlatformRequestBuilder;
 
   getDefaultConfig(): ExtensibleConfig {
     return {};

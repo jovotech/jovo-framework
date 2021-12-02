@@ -2,6 +2,7 @@
 title: 'Google Assistant Project Configuration'
 excerpt: 'Learn how to configure your Google Assistant projects using the Jovo CLI.'
 ---
+
 # Google Assistant Project Configuration
 
 Learn how to configure your Google Assistant projects using the `jovo.project.js` file.
@@ -10,7 +11,7 @@ Learn how to configure your Google Assistant projects using the `jovo.project.js
 
 The Google Assistant project configuration defines how the Google Assistant CLI plugin builds and deploys Google Assistant project files using the Jovo CLI. [Learn more about all Google Assistant CLI commands here](./cli-commands.md).
 
-You can add the Google Assistant plugin for the Jovo CLI and its configurations to your [project configuration](https://v4.jovo.tech/docs/project-config) in `jovo.project.js`:
+You can add the Google Assistant plugin for the Jovo CLI and its configurations to your [project configuration](https://www.jovo.tech/docs/project-config) in `jovo.project.js`:
 
 ```js
 const { ProjectConfig } = require('@jovotech/cli');
@@ -22,21 +23,25 @@ const project = new ProjectConfig({
   plugins: [
     new GoogleAssistantCli({
       projectId: '<yourProjectId>',
-      locales: { /* ... */ },
+      locales: {
+        /* ... */
+      },
       resourcesDirectory: 'resources',
-      files: { /* ... */ },
+      files: {
+        /* ... */
+      },
     }),
     // ...
-  ]
+  ],
 });
 ```
 
 The following options are currently supported:
 
-* [`projectId`](#projectid) (required): The Google Action project ID that the project should be deployed to.
-* [`locales`](#locales): Defines how the locales in the [`models` folder](https://v4.jovo.tech/docs/models) should be mapped to Google Assistant locales.
-* [`resourcesDirectory`](#resourcesdirectory): The folder where resources are maintained.
-* [`files`](#files): This can be used to add or override files in your Google Assistant `build` folder.
+- [`projectId`](#projectid) (required): The Google Action project ID that the project should be deployed to.
+- [`locales`](#locales): Defines how the locales in the [`models` folder](https://www.jovo.tech/docs/models) should be mapped to Google Assistant locales.
+- [`resourcesDirectory`](#resourcesdirectory): The folder where resources are maintained.
+- [`files`](#files): This can be used to add or override files in your Google Assistant `build` folder.
 
 ## projectId
 
@@ -50,12 +55,12 @@ You can then head to the project settings (they can be found by clicking the thr
 new GoogleAssistantCli({
   projectId: '<yourProjectId>',
   // ...
-})
+});
 ```
 
 This ensures that your project is always deployed to the right Google Action project.
 
-The `projectId` property can be especially helpful for [staging](https://v4.jovo.tech/docs/staging), where different stages deploy to different Actions:
+The `projectId` property can be especially helpful for [staging](https://www.jovo.tech/docs/staging), where different stages deploy to different Actions:
 
 ```js
 const project = new ProjectConfig({
@@ -69,8 +74,8 @@ const project = new ProjectConfig({
         new GoogleAssistantCli({
           projectId: '<devProjectId>',
           // ...
-        })
-      ]
+        }),
+      ],
       // ...
     },
     prod: {
@@ -79,31 +84,31 @@ const project = new ProjectConfig({
         new GoogleAssistantCli({
           projectId: '<prodProjectId>',
           // ...
-        })
-      ]
+        }),
+      ],
       // ...
-    }
-  }
+    },
+  },
 });
 ```
 
 ## locales
 
-During the [`build` command](./cli-commands.md#build), the Jovo Model files in the [`models` folder](https://v4.jovo.tech/docs/models) get turned into Google Assistant conversation models in the `build` folder.
+During the [`build` command](./cli-commands.md#build), the Jovo Model files in the [`models` folder](https://www.jovo.tech/docs/models) get turned into Google Assistant conversation models in the `build` folder.
 
 The `models` folder can include files for generic languages (like `en`) as well as localized ones (like `en-US`). Google Assistant requires you to use generic locales like `en`. Additionally, you can add localized ones like `en-US`. See the [official Google Assistant documentation for supported locales](https://developers.google.com/assistant/console/languages-locales?hl=en)).
 
-If you only want to go with generic models like `en` and for example have an `en.json` Jovo Model, there is nothing you need to configure. However, if you use files like `en-US.json`, you need to add a mapping to the `locales` configuration to make sure that an `en` model is added to the Google Action as well. 
+If you only want to go with generic models like `en` and for example have an `en.json` Jovo Model, there is nothing you need to configure. However, if you use files like `en-US.json`, you need to add a mapping to the `locales` configuration to make sure that an `en` model is added to the Google Action as well.
 
 The below example uses an `en-US` Jovo Model and creates `en` and `en-US` Google Action models:
 
 ```js
 new GoogleAssistantCli({
   locales: {
-    'en-US': [ 'en', 'en-US' ],
+    'en-US': ['en', 'en-US'],
   },
   // ...
-})
+});
 ```
 
 ## resourcesDirectory
@@ -115,7 +120,7 @@ To enable this feature, you need to set the `resourcesDirectory` option in the G
 ```js
 new GoogleAssistantCli({
   resourcesDirectory: 'resources',
-})
+});
 ```
 
 In the example above, the directory is called `resources` in the root of your Jovo project.
@@ -124,7 +129,7 @@ During the [`build` command](./cli-commands.md#build), the files from the specif
 
 ## files
 
-You can use the [Jovo CLI File Builder](https://v4.jovo.tech/docs/project-config#file-builder) to add or override files in a path of the Google Assistant folder in the `build` directory.
+You can use the [Jovo CLI File Builder](https://www.jovo.tech/docs/project-config#file-builder) to add or override files in a path of the Google Assistant folder in the `build` directory.
 
 For example, you can make changes to the `settings.yaml` file like this:
 
@@ -138,7 +143,7 @@ new GoogleAssistantCli({
     },
   },
   // ...
-})
+});
 ```
 
 The JSON content will be turned into YAML content to fit the `settings.yaml` file structure.

@@ -1,8 +1,8 @@
 import { EntityMap, Jovo } from '@jovotech/framework';
-import { AlexaResponse } from '@jovotech/output-alexa';
 import { AlexaDevice } from './AlexaDevice';
 import { AlexaPlatform } from './AlexaPlatform';
 import { AlexaRequest } from './AlexaRequest';
+import { AlexaResponse } from './AlexaResponse';
 import { AlexaUser } from './AlexaUser';
 import { AlexaEntity } from './interfaces';
 

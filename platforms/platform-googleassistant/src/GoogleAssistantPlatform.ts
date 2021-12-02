@@ -1,8 +1,4 @@
 import { AnyObject, App, ExtensibleConfig, Jovo, Platform } from '@jovotech/framework';
-import {
-  GoogleAssistantOutputTemplateConverterStrategy,
-  GoogleAssistantResponse,
-} from '@jovotech/output-googleassistant';
 import _mergeWith from 'lodash.mergewith';
 import { v4 as uuidV4 } from 'uuid';
 import { GoogleAssistant } from './GoogleAssistant';
@@ -10,7 +6,9 @@ import { GoogleAssistantDevice } from './GoogleAssistantDevice';
 import { GoogleAssistantRepromptComponent } from './GoogleAssistantRepromptComponent';
 import { GoogleAssistantRequest } from './GoogleAssistantRequest';
 import { GoogleAssistantRequestBuilder } from './GoogleAssistantRequestBuilder';
+import { GoogleAssistantResponse } from './GoogleAssistantResponse';
 import { GoogleAssistantUser } from './GoogleAssistantUser';
+import { GoogleAssistantOutputTemplateConverterStrategy } from './output';
 
 export interface GoogleAssistantConfig extends ExtensibleConfig {}
 
@@ -23,12 +21,13 @@ export class GoogleAssistantPlatform extends Platform<
   GoogleAssistantPlatform,
   GoogleAssistantConfig
 > {
-  outputTemplateConverterStrategy = new GoogleAssistantOutputTemplateConverterStrategy();
-  requestClass = GoogleAssistantRequest;
-  jovoClass = GoogleAssistant;
-  userClass = GoogleAssistantUser;
-  deviceClass = GoogleAssistantDevice;
-  requestBuilder = GoogleAssistantRequestBuilder;
+  readonly id: string = 'googleAssistant';
+  readonly outputTemplateConverterStrategy = new GoogleAssistantOutputTemplateConverterStrategy();
+  readonly requestClass = GoogleAssistantRequest;
+  readonly jovoClass = GoogleAssistant;
+  readonly userClass = GoogleAssistantUser;
+  readonly deviceClass = GoogleAssistantDevice;
+  readonly requestBuilder = GoogleAssistantRequestBuilder;
 
   getDefaultConfig(): GoogleAssistantConfig {
     return {};

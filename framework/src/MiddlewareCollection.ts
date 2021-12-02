@@ -1,4 +1,5 @@
-import { ArrayElement, Jovo } from './index';
+import { ArrayElement } from '@jovotech/common';
+import { Jovo } from './index';
 import { Middleware, MiddlewareFunction } from './Middleware';
 
 export type PossibleMiddlewareNames<MIDDLEWARES extends string[]> = PossibleMiddlewareName<

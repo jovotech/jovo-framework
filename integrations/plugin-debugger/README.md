@@ -1,40 +1,20 @@
----
-title: 'Jovo Debugger'
-excerpt: 'The Jovo Debugger allows you to test and debug your Jovo app by displaying the most important information about each interaction in one place.'
----
 # Jovo Debugger
 
-Learn more about the Jovo debugging environment.
+[![Jovo Framework](https://www.jovo.tech/img/github-header.png)](https://www.jovo.tech)
 
-## Introduction
+<p>
+<a href="https://www.jovo.tech" target="_blank">Website</a> -  <a href="https://www.jovo.tech/docs" target="_blank">Docs</a> - <a href="https://www.jovo.tech/marketplace" target="_blank">Marketplace</a> - <a href="https://github.com/jovotech/jovo-v4-template" target="_blank">Template</a>   
+</p>
 
-The Jovo Debugger allows you to test and debug your Jovo app by displaying the most important information about each interaction in one place. 
+<p>
+<a href="https://www.npmjs.com/package/@jovotech/plugin-debugger" target="_blank"><img src="https://badge.fury.io/js/@jovotech%2Fplugin-debugger.svg"></a>      
+<a href="https://opencollective.com/jovo-framework" target="_blank"><img src="https://opencollective.com/jovo-framework/tiers/badge.svg"></a>
+</p>
 
-The Debugger contains both an interaction and a lifecycle view. The interaction view shows all input and output in a chat-like interface. The lifecycle allows you to see how data changes throughout a request lifecycle.
+This package enables you to integrate your Jovo app with the Jovo Debugger.
 
-The Debugger can be used in the browser, where messages can be sent to your Jovo Webhook right from the tool itself. Additionally, it also displays any requests that go through the Jovo Webhook server, even if you're testing on a device like an Echo Dot.
-
-## Installation
-
-Most Jovo projects already have the Debugger plugin added to the development stage at `app.dev.ts`. [Learn more about staging here](https://v4.jovo.tech/docs/staging).
-
-If it is not already added to the project, you can install the Debugger plugin like this:
-
-```sh
+```bash
 $ npm install @jovotech/plugin-debugger
 ```
 
-The Debugger can only be used for local development, so we recommend adding it to the `app.dev.ts` [app configuration](https://v4.jovo.tech/docs/app-config):
-
-```typescript
-import { JovoDebugger } from '@jovotech/plugin-debugger';
-
-// ...
-
-app.configure({
-  plugins: [
-    new JovoDebugger(),
-    // ...
-  ],
-});
-```
+> Learn more in the docs: https://www.jovo.tech/docs/debugger

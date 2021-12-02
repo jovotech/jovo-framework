@@ -1,8 +1,8 @@
 import { axios, JovoError, JovoUser } from '@jovotech/framework';
-import { AccountLinkingStatus, UserVerificationStatus } from '@jovotech/output-googleassistant';
+import _set from 'lodash.set';
 import { GoogleAssistant } from './GoogleAssistant';
 import { GoogleAccountProfile } from './interfaces';
-import _set from 'lodash.set';
+import { AccountLinkingStatus, UserVerificationStatus } from './output';
 
 export class GoogleAssistantUser extends JovoUser<GoogleAssistant> {
   get id(): string | undefined {

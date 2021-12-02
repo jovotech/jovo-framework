@@ -2,6 +2,7 @@
 title: 'Database Integrations'
 excerpt: 'Jovo offers a variety of integrations that allow you to store elements like user data, session data, and an interaction history in a database.'
 ---
+
 # Database Integrations
 
 Jovo offers a variety of integrations that allow you to store elements like user data, session data, and a user's interaction history in a database. [Learn more about the different data types here](./data.md).
@@ -10,8 +11,8 @@ Jovo offers a variety of integrations that allow you to store elements like user
 
 The following database integrations are currently working with Jovo `v4`:
 
-* `FileDb`: File-based system for local prototyping. Added to the `app.dev` stage by default.
-* `DynamoDb`: NoSQL database by AWS, typically used together with AWS Lambda.
+- `FileDb`: File-based system for local prototyping. Added to the `app.dev` stage by default.
+- `DynamoDb`: NoSQL database by AWS, typically used together with AWS Lambda.
 
 ## Configuration
 
@@ -36,8 +37,7 @@ By default, a database integration stores data like this:
 {
   "id": "someUserId",
   "user": {
-    "data": {
-      }
+    "data": {}
   },
   "createdAt": "2021-06-30T05:50:04.034Z",
   "updatedAt": "2021-06-30T05:50:04.095Z"
@@ -45,9 +45,10 @@ By default, a database integration stores data like this:
 ```
 
 It includes:
-* A user `id` to identify the current user. This is either taken from the platform (e.g. an Alexa Skill user ID) or created internally by Jovo.
-* A `user` object that stores [user data](./data.md#user-data).
-* Timestamps `createdAt` and `updatedAt` that help debug users in large datasets.
+
+- A user `id` to identify the current user. This is either taken from the platform (e.g. an Alexa Skill user ID) or created internally by Jovo.
+- A `user` object that stores [user data](./data.md#user-data).
+- Timestamps `createdAt` and `updatedAt` that help debug users in large datasets.
 
 ### storedElements
 
@@ -68,17 +69,16 @@ new FileDb({
 }),
 ```
 
-* `user`: Persist user data across sessions using `this.$user.data`. Enabled by default.
-* [`session`](#session): Persist session data across interactions using `this.$session.data`. This is necessary for some platforms (like Facebook Messenger) that don't allow for session storage.
-* `history`: Persist an interaction history and define which elements (e.g. `nlu` or `output`) data you want to store from previous requests and responses.
-* `createdAt` and `updatedAt`: These timestamps are enabled by default.
+- `user`: Persist user data across sessions using `this.$user.data`. Enabled by default.
+- [`session`](#session): Persist session data across interactions using `this.$session.data`. This is necessary for some platforms (like Facebook Messenger) that don't allow for session storage.
+- `history`: Persist an interaction history and define which elements (e.g. `nlu` or `output`) data you want to store from previous requests and responses.
+- `createdAt` and `updatedAt`: These timestamps are enabled by default.
 
 [Learn more about the different data types here](./data.md).
 
-
 #### session
 
-Platforms like [Facebook Messenger](https://v4.jovo.tech/marketplace/platform-facebookmessenger) or [Google Business Messages](https://v4.jovo.tech/marketplace/platform-googlebusiness) don't support session storage. This is why all [session data](./data.md#session-data) needs to be persisted in a database.
+Platforms like [Facebook Messenger](https://www.jovo.tech/marketplace/platform-facebookmessenger) or [Google Business Messages](https://www.jovo.tech/marketplace/platform-googlebusiness) don't support session storage. This is why all [session data](./data.md#session-data) needs to be persisted in a database.
 
 ```typescript
 new FileDb({
@@ -90,7 +90,7 @@ new FileDb({
 }),
 ```
 
-For platforms that do not have the concept of sessions, we need to define after which time a request should be seen as the start of the new session. The default is *15 minutes* and can be modified with the `expiresAfterSeconds` option:
+For platforms that do not have the concept of sessions, we need to define after which time a request should be seen as the start of the new session. The default is _15 minutes_ and can be modified with the `expiresAfterSeconds` option:
 
 ```typescript
 new FileDb({

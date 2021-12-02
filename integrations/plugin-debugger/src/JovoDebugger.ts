@@ -1,140 +1,118 @@
 import {
   AnyObject,
   App,
-  DeepPartial,
+  BuiltInHandler,
+  ComponentTreeNode,
   Extensible,
-  ExtensibleInitConfig,
   HandleRequest,
   InvalidParentError,
   Jovo,
-  JovoError,
   JovoRequest,
+  NluPlugin,
   Platform,
   Plugin,
   PluginConfig,
   UnknownObject,
 } from '@jovotech/framework';
-import { NlpjsNlu, NlpjsNluInitConfig } from '@jovotech/nlu-nlpjs';
-import { CorePlatform, CorePlatformConfig } from '@jovotech/platform-core';
+import { NlpjsNlu } from '@jovotech/nlu-nlpjs';
+import { CorePlatform } from '@jovotech/platform-core';
+import { LangDe } from '@nlpjs/lang-de';
 import { LangEn } from '@nlpjs/lang-en';
+import { LangEs } from '@nlpjs/lang-es';
+import { LangFr } from '@nlpjs/lang-fr';
+import { LangIt } from '@nlpjs/lang-it';
 import isEqual from 'fast-deep-equal/es6';
 import { promises } from 'fs';
-import { join } from 'path';
+import open from 'open';
+import { homedir } from 'os';
+import { join, resolve } from 'path';
 import { cwd } from 'process';
 import { connect, Socket } from 'socket.io-client';
 import { Writable } from 'stream';
+import { inspect } from 'util';
 import { v4 as uuidV4 } from 'uuid';
-import { MockServer } from './MockServer';
-
-export enum JovoDebuggerEvent {
-  DebuggingAvailable = 'debugging.available',
-  DebuggingUnavailable = 'debugging.unavailable',
-
-  DebuggerRequest = 'debugger.request',
-  DebuggerLanguageModelRequest = 'debugger.language-model-request',
-
-  AppLanguageModelResponse = 'app.language-model-response',
-  AppDebuggerConfigResponse = 'app.debugger-config-response',
-  AppConsoleLog = 'app.console-log',
-  AppRequest = 'app.request',
-  AppResponse = 'app.response',
-
-  AppJovoUpdate = 'app.jovo-update',
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export interface JovoDebuggerPayload<DATA extends any = any> {
-  requestId: number | string;
-  data: DATA;
-}
-
-export interface JovoUpdateData<KEY extends keyof Jovo | string = keyof Jovo | string> {
-  key: KEY;
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  value: KEY extends keyof Jovo ? Jovo[KEY] : any;
-  path: KEY extends keyof Jovo ? KEY : string;
-}
+import { STATE_MUTATING_METHOD_KEYS } from './constants';
+import { DebuggerConfig } from './DebuggerConfig';
+import { JovoDebuggerEvent } from './enums';
+import { LanguageModelDirectoryNotFoundError } from './errors/LanguageModelDirectoryNotFoundError';
+import { SocketConnectionFailedError } from './errors/SocketConnectionFailedError';
+import { SocketNotConnectedError } from './errors/SocketNotConnectedError';
+import { WebhookIdNotFoundError } from './errors/WebhookIdNotFoundError';
+import {
+  JovoDebuggerPayload,
+  JovoStateMutationData,
+  JovoUpdateData,
+  StateMutatingJovoMethodKey,
+} from './interfaces';
+import { MockServer, MockServerRequest } from './MockServer';
 
 export interface JovoDebuggerConfig extends PluginConfig {
-  corePlatform: ExtensibleInitConfig<CorePlatformConfig>;
-  nlpjsNlu: NlpjsNluInitConfig;
+  nlu: NluPlugin;
   webhookUrl: string;
-  languageModelEnabled: boolean;
-  languageModelPath: string;
-  debuggerJsonPath: string;
+  debuggerConfigPath: string;
+  modelsPath: string;
   ignoredProperties: Array<keyof Jovo | string>;
 }
 
-export type JovoDebuggerInitConfig = DeepPartial<JovoDebuggerConfig> &
-  Partial<Pick<JovoDebuggerConfig, 'nlpjsNlu'>>;
+export function getDefaultLanguageMap(): UnknownObject {
+  return {
+    de: LangDe,
+    en: LangEn,
+    es: LangEs,
+    fr: LangFr,
+    it: LangIt,
+  };
+}
 
 export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   socket?: typeof Socket;
   hasOverriddenWrite = false;
+  hasShownConnectionError = false;
 
-  constructor(config?: JovoDebuggerInitConfig) {
-    super(config);
-  }
-
-  // TODO check default config
   getDefaultConfig(): JovoDebuggerConfig {
     return {
       skipTests: true,
-      corePlatform: {},
-      nlpjsNlu: {
-        languageMap: {
-          en: LangEn,
-        },
-      },
-      webhookUrl: 'https://webhookv4.jovo.cloud',
+      nlu: new NlpjsNlu({
+        languageMap: getDefaultLanguageMap(),
+      }),
+      webhookUrl: 'https://webhook.jovo.cloud',
       enabled:
         (process.argv.includes('--jovo-webhook') || process.argv.includes('--webhook')) &&
         !process.argv.includes('--disable-jovo-debugger'),
-      languageModelEnabled: true,
-      languageModelPath: './models',
-      debuggerJsonPath: './debugger.json',
+      debuggerConfigPath: './jovo.debugger.js',
+      modelsPath: './models',
       ignoredProperties: ['$app', '$handleRequest', '$platform'],
     };
   }
 
   install(parent: Extensible): void {
     if (!(parent instanceof App)) {
-      // TODO: implement error
-      throw new InvalidParentError(this.constructor.name, App);
+      throw new InvalidParentError(this.name, App);
     }
-
-    // TODO: determine handling of edge-cases
     this.installDebuggerPlatform(parent);
   }
 
   private installDebuggerPlatform(app: App) {
     app.use(
       new CorePlatform({
-        ...this.config.corePlatform,
         platform: 'jovo-debugger',
-        plugins: [new NlpjsNlu(this.config.nlpjsNlu)],
+        plugins: [this.config.nlu],
       }),
     );
   }
 
   async initialize(app: App): Promise<void> {
-    // TODO make request if launch options passed
     if (this.config.enabled === false) return;
 
-    await this.connectToWebhook();
-    if (!this.socket) {
-      // TODO: implement error
-      throw new Error();
-    }
-
+    this.socket = await this.connectToWebhook();
     this.socket.on(JovoDebuggerEvent.DebuggingAvailable, () => {
       return this.onDebuggingAvailable();
     });
-    this.socket.on(JovoDebuggerEvent.DebuggerLanguageModelRequest, () => {
-      return this.onDebuggerLanguageModelRequest();
+    this.socket.on(JovoDebuggerEvent.DebuggerRequest, (requestData: AnyObject) => {
+      return this.onReceiveRequest(app, { data: requestData });
     });
-    this.socket.on(JovoDebuggerEvent.DebuggerRequest, (request: AnyObject) => {
-      return this.onDebuggerRequest(app, request);
+    this.socket.on(JovoDebuggerEvent.ServerRequest, (request: MockServerRequest) => {
+      return this.onReceiveRequest(app, request);
     });
 
     this.patchHandleRequestToIncludeUniqueId();
@@ -151,9 +129,25 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     });
   }
 
-  // TODO: maybe find a better solution although this might work well because it is independent of the RIDR-pipeline
-  // -> future changes are less likely to cause breaking changes here
+  emitUpdate(requestId: string | number, data: JovoUpdateData): void {
+    const payload: JovoDebuggerPayload<JovoUpdateData> = {
+      requestId,
+      data,
+    };
+    this.socket?.emit(JovoDebuggerEvent.AppJovoUpdate, payload);
+  }
+
+  emitStateMutation(requestId: string | number, data: JovoStateMutationData): void {
+    const payload: JovoDebuggerPayload<JovoStateMutationData> = {
+      requestId,
+      data,
+    };
+    this.socket?.emit(JovoDebuggerEvent.AppStateMutation, payload);
+  }
+
   private patchHandleRequestToIncludeUniqueId() {
+    // this cannot be done in a middleware-hook because the debuggerRequestId is required when initializing the jovo instance
+    // and that happens before the middlewares are executed
     const mount = HandleRequest.prototype.mount;
     HandleRequest.prototype.mount = function () {
       this.debuggerRequestId = uuidV4();
@@ -164,77 +158,116 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   private patchPlatformsToCreateJovoAsProxy(platforms: ReadonlyArray<Platform>) {
     platforms.forEach((platform) => {
       const createJovoFn = platform.createJovoInstance;
+      // overwrite createJovoInstance to create a proxy and propagate all initial changes
       platform.createJovoInstance = (app, handleRequest) => {
         const jovo = createJovoFn.call(platform, app, handleRequest);
         // propagate initial values, might not be required, TBD
         for (const key in jovo) {
+          const value = jovo[key as keyof Jovo];
           const isEmptyObject =
-            typeof jovo[key as keyof Jovo] === 'object' &&
-            !Array.isArray(jovo[key as keyof Jovo]) &&
-            !Object.keys(jovo[key as keyof Jovo] || {}).length;
-          const isEmptyArray =
-            Array.isArray(jovo[key as keyof Jovo]) &&
-            !((jovo[key as keyof Jovo] as unknown[]) || []).length;
+            typeof value === 'object' && !Array.isArray(value) && !Object.keys(value || {}).length;
+          const isEmptyArray = Array.isArray(value) && !((value as unknown[]) || []).length;
+
           if (
             !jovo.hasOwnProperty(key) ||
             this.config.ignoredProperties.includes(key) ||
-            !jovo[key as keyof Jovo] ||
+            !value ||
             isEmptyObject ||
             isEmptyArray
           ) {
             continue;
           }
-          const payload: JovoDebuggerPayload<JovoUpdateData> = {
-            requestId: handleRequest.debuggerRequestId,
-            data: {
-              key,
-              value: jovo[key as keyof Jovo],
-              path: key,
-            },
-          };
-          this.socket?.emit(JovoDebuggerEvent.AppJovoUpdate, payload);
+          this.emitUpdate(handleRequest.debuggerRequestId, {
+            key,
+            value,
+            path: key,
+          });
         }
-        return new Proxy(jovo, this.createProxyHandler(handleRequest));
+        return new Proxy(jovo, this.createObjectProxyHandler(handleRequest));
       };
     });
   }
 
-  private createProxyHandler<T extends AnyObject>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private createObjectProxyHandler<T extends Record<string | number | symbol, any>>(
     handleRequest: HandleRequest,
-    path = '',
+    currentPath = '',
   ): ProxyHandler<T> {
+    function getCompletePropertyPath(key: string, path?: string): string {
+      return path ? [path, key].join('.') : key;
+    }
+
+    // class Foo { bar: string} -> new Proxy(new Foo(), { get() {...}})
+
     return {
-      get: (target, key: string) => {
+      get: (target, key: keyof T) => {
+        const stringKey = key.toString();
+        // make __isProxy return true for all proxies with this handler
+        if (stringKey === '__isProxy') {
+          return true;
+        }
+        // provide a reference to the original target of the proxy
+        if (stringKey === '__target') {
+          return target;
+        }
+
+        const value = target[key];
+        const completePropertyPath = getCompletePropertyPath(stringKey, currentPath);
+
+        // if the value is a function and a state mutating method
         if (
-          typeof target[key] === 'object' &&
-          target[key] !== null &&
-          !(target[key] instanceof Date) &&
-          // TODO: determine if this has side-effects
-          !this.config.ignoredProperties.includes(key)
+          typeof value === 'function' &&
+          Array.from<string>(STATE_MUTATING_METHOD_KEYS).includes(stringKey)
         ) {
           return new Proxy(
             target[key],
-            this.createProxyHandler(handleRequest, path ? [path, key].join('.') : key),
+            this.createStateMutationProxyHandler(
+              handleRequest,
+              stringKey as StateMutatingJovoMethodKey,
+            ),
           );
-        } else {
-          return target[key];
         }
+
+        const isSupportedObject =
+          value &&
+          typeof value === 'object' &&
+          !((value as AnyObject) instanceof Date) &&
+          !((value as AnyObject) instanceof Jovo);
+
+        const shouldCreateProxy =
+          value && !value.__isProxy && !this.config.ignoredProperties.includes(stringKey);
+
+        // if the value is a supported object and not ignored, nor a proxy already
+        if (isSupportedObject && shouldCreateProxy) {
+          // create the proxy for the value
+          const proxy = new Proxy(
+            value,
+            this.createObjectProxyHandler(handleRequest, completePropertyPath),
+          );
+
+          // check if the property is writable, if it's not, return the proxy
+          const propertyDescriptor = Object.getOwnPropertyDescriptor(target, key);
+          if (!propertyDescriptor?.writable) {
+            return proxy;
+          }
+
+          // otherwise overwrite the property and set it to the proxy
+          target[key as keyof T] = proxy;
+        }
+
+        return target[key];
       },
-      set: (target, key: string, value: unknown): boolean => {
-        // TODO determine whether empty values should be emitted, in the initial emit, they're omitted.
-        const previousValue = (target as UnknownObject)[key];
-        (target as UnknownObject)[key] = value;
+      set: (target, key: keyof T, value: T[keyof T]): boolean => {
+        const previousValue = target[key];
+        target[key as keyof T] = value;
         // only emit changes
         if (!isEqual(previousValue, value)) {
-          const payload: JovoDebuggerPayload<JovoUpdateData> = {
-            requestId: handleRequest.debuggerRequestId,
-            data: {
-              key,
-              value,
-              path: path ? [path, key].join('.') : key,
-            },
-          };
-          this.socket?.emit(JovoDebuggerEvent.AppJovoUpdate, payload);
+          const stringKey = key.toString();
+          this.emitUpdate(handleRequest.debuggerRequestId, {
+            key: stringKey,
+            value,
+            path: getCompletePropertyPath(stringKey, currentPath),
+          });
         }
 
         return true;
@@ -242,13 +275,143 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     };
   }
 
-  private onDebuggingAvailable(): void {
+  private createStateMutationProxyHandler<KEY extends StateMutatingJovoMethodKey>(
+    handleRequest: HandleRequest,
+    key: KEY,
+  ): ProxyHandler<Jovo[KEY]> {
+    return {
+      apply: (target: Jovo[KEY], thisArg: Jovo, argArray: Parameters<Jovo[KEY]>): unknown => {
+        const mutationData = this.getStateMutationData(handleRequest, key, thisArg, argArray);
+        if (mutationData) {
+          this.emitStateMutation(handleRequest.debuggerRequestId, mutationData);
+        }
+        return (target as (...args: unknown[]) => unknown).apply(thisArg, argArray);
+      },
+    };
+  }
+
+  private getStateMutationData<KEY extends StateMutatingJovoMethodKey>(
+    handleRequest: HandleRequest,
+    key: KEY,
+    jovo: Jovo,
+    args: Parameters<Jovo[KEY]>,
+  ): JovoStateMutationData<KEY> | undefined {
+    let node: ComponentTreeNode | undefined;
+    let handler: string = BuiltInHandler.Start;
+    if (key === '$redirect' || key === '$delegate') {
+      const componentName = typeof args[0] === 'function' ? args[0].name : args[0];
+      node = handleRequest.componentTree.getNodeRelativeTo(
+        componentName,
+        handleRequest.activeComponentNode?.path,
+      );
+      handler = args[1] as string;
+    } else if (key === '$resolve') {
+      if (!jovo.$state) {
+        return;
+      }
+      const currentStateStackItem = jovo.$state[jovo.$state.length - 1];
+      const previousStateStackItem = jovo.$state[jovo.$state.length - 2];
+      // make sure the state-stack exists and it long enough
+      if (!currentStateStackItem?.resolve || !previousStateStackItem) {
+        return;
+      }
+      const previousComponentPath = previousStateStackItem.component.split('.');
+      node = handleRequest.componentTree.getNodeAt(previousComponentPath);
+      handler = currentStateStackItem.resolve[args[0] as string];
+    }
+    if (!node) {
+      return;
+    }
+    return {
+      key,
+      to: {
+        path: node.path.join('.'),
+        handler,
+      },
+    };
+  }
+
+  private async onConnected(): Promise<void> {
+    const color: [number, number] = inspect.colors['blue'] ?? [0, 0];
+    const blueText = (str: string) => `\u001b[${color[0]}m${str}\u001b[${color[1]}m`;
+    const underlineColor: [number, number] = inspect.colors['underline'] ?? [0, 0];
+    const underline = (str: string) =>
+      `\u001b[${underlineColor[0]}m${str}\u001b[${underlineColor[1]}m`;
+
+    const webhookId = await this.retrieveLocalWebhookId();
+    const debuggerUrl = `${this.config.webhookUrl}/${webhookId}`;
+
+    console.log('\nThis is your webhook url ☁️ ' + underline(blueText(debuggerUrl)));
+    // Check if the current output is being piped to somewhere.
+    if (process.stdout.isTTY) {
+      // Check if we can enable raw mode for input stream to capture raw keystrokes.
+      if (process.stdin.setRawMode) {
+        setTimeout(() => {
+          console.log(`\nTo open Jovo Debugger in your browser, press the "." key.\n`);
+        }, 500);
+
+        // Capture unprocessed key input.
+        process.stdin.setRawMode(true);
+        // Explicitly resume emitting data from the stream.
+        process.stdin.resume();
+        // Capture readable input as opposed to binary.
+        process.stdin.setEncoding('utf-8');
+
+        // Collect input text from input stream.
+        let inputText = '';
+        process.stdin.on('data', async (keyRaw: Buffer) => {
+          const key: string = keyRaw.toString();
+          // When dot gets pressed, try to open the debugger in browser.
+          if (key === '.') {
+            try {
+              await open(debuggerUrl);
+            } catch (error) {
+              console.log(
+                `Could not open browser. Please open debugger manually by visiting this url: ${debuggerUrl}`,
+              );
+            }
+            inputText = '';
+          } else {
+            // When anything else got pressed, record it and send it on enter into the child process.
+            if (key.charCodeAt(0) === 13) {
+              // Send recorded input to child process. This is useful for restarting a nodemon process with rs, for example.
+              process.stdout.write('\n');
+              inputText = '';
+            } else if (key.charCodeAt(0) === 3) {
+              // Ctrl+C has been pressed, kill process.
+              if (process.platform === 'win32') {
+                process.stdin.pause();
+                // @ts-ignore
+                process.stdin.setRawMode(false);
+                process.exit();
+              } else {
+                process.exit();
+              }
+            } else {
+              // Record input text and write it into terminal.
+              inputText += key;
+              process.stdout.write(key);
+            }
+          }
+        });
+      } else {
+        setTimeout(() => {
+          console.log(
+            `☁  Could not open browser. Please open debugger manually by visiting this url: ${debuggerUrl}`,
+          );
+        }, 2500);
+      }
+    }
+  }
+
+  private async onDebuggingAvailable(): Promise<void> {
     if (!this.socket) {
-      // TODO: implement error
-      throw new Error();
+      return this.onSocketNotConnected();
     }
 
-    // TODO: check if there is a better way and this is desired
+    await this.emitDebuggerConfig();
+    await this.emitLanguageModelIfEnabled();
+
     function propagateStreamAsLog(stream: Writable, socket: typeof Socket) {
       const originalWriteFn = stream.write;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -265,37 +428,61 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     }
   }
 
-  private async onDebuggerLanguageModelRequest(): Promise<void> {
-    if (!this.config.languageModelEnabled) return;
-    if (!this.config.languageModelPath || !this.config.debuggerJsonPath) {
-      // TODO: determine what to do (warning or error or nothing)
+  private async onReceiveRequest(app: App, request: MockServerRequest): Promise<void> {
+    await app.handle(new MockServer(request));
+  }
+
+  private onRequest(jovo: Jovo): void {
+    if (!this.socket) {
+      return this.onSocketNotConnected();
+    }
+    const payload: JovoDebuggerPayload<JovoRequest> = {
+      requestId: jovo.$handleRequest.debuggerRequestId,
+      data: jovo.$request,
+    };
+    this.socket.emit(JovoDebuggerEvent.AppRequest, payload);
+  }
+
+  private onResponse(jovo: Jovo): void {
+    if (!this.socket) {
+      return this.onSocketNotConnected();
+    }
+    const payload: JovoDebuggerPayload = {
+      requestId: jovo.$handleRequest.debuggerRequestId,
+      data: jovo.$response,
+    };
+    this.socket.emit(JovoDebuggerEvent.AppResponse, payload);
+  }
+
+  private async emitLanguageModelIfEnabled(): Promise<void> {
+    if (!this.config.modelsPath) {
       return;
     }
     if (!this.socket) {
-      // eslint-disable-next-line no-console
-      console.warn('Can not emit language-model: Socket is not available.');
-      return;
+      return this.onSocketNotConnected();
     }
-    // look for language-models
     try {
-      const languageModel = await this.getLanguageModel();
+      const languageModel = await this.loadLanguageModel();
+      if (!languageModel) {
+        return;
+      }
       this.socket.emit(JovoDebuggerEvent.AppLanguageModelResponse, languageModel);
     } catch (e) {
-      // eslint-disable-next-line no-console
-      console.warn('Can not emit language-model: Could not retrieve language-model.');
+      return;
     }
-    // TODO implement sending debuggerConfig if that is required
   }
 
-  private async getLanguageModel(): Promise<AnyObject> {
+  // Return the language models found at the configured location
+  private async loadLanguageModel(): Promise<AnyObject | undefined> {
     const languageModel: AnyObject = {};
-    const absoluteModelsPath = join(cwd(), this.config.languageModelPath);
+    const absoluteModelsPath = resolve(cwd(), this.config.modelsPath);
     let files: string[] = [];
     try {
       files = await promises.readdir(absoluteModelsPath);
     } catch (e) {
-      // TODO implement error handling
-      throw new JovoError({ message: `Couldn't find models-directory at ${absoluteModelsPath}` });
+      // eslint-disable-next-line no-console
+      console.warn(new LanguageModelDirectoryNotFoundError(absoluteModelsPath));
+      return;
     }
     const isValidFileRegex = /^.*([.]js(?:on)?)$/;
     for (let i = 0, len = files.length; i < len; i++) {
@@ -314,77 +501,84 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
           console.error(e);
         }
       } else {
-        languageModel[locale] = require(absoluteModelsPath);
+        languageModel[locale] = this.requireUncached(absoluteModelsPath);
       }
     }
     return languageModel;
   }
 
-  private async onDebuggerRequest(app: App, request: AnyObject): Promise<void> {
-    await app.handle(new MockServer(request));
-  }
-
-  private onRequest(jovo: Jovo) {
-    if (!this.socket) {
-      // TODO: implement error
-      throw new Error();
+  private async emitDebuggerConfig(): Promise<void> {
+    if (!this.config.debuggerConfigPath) {
+      return;
     }
-    const payload: JovoDebuggerPayload<JovoRequest> = {
-      requestId: jovo.$handleRequest.debuggerRequestId,
-      data: jovo.$request,
-    };
-    this.socket.emit(JovoDebuggerEvent.AppRequest, payload);
-  }
-
-  private onResponse(jovo: Jovo) {
     if (!this.socket) {
-      // TODO: implement error
-      throw new Error();
+      return this.onSocketNotConnected();
     }
-    const payload: JovoDebuggerPayload = {
-      requestId: jovo.$handleRequest.debuggerRequestId,
-      data: jovo.$response,
-    };
-    this.socket.emit(JovoDebuggerEvent.AppResponse, payload);
+    try {
+      const debuggerConfig = await this.loadDebuggerConfig();
+      this.socket.emit(JovoDebuggerEvent.AppDebuggerConfigResponse, debuggerConfig);
+    } catch (e) {
+      return;
+    }
   }
 
-  private async connectToWebhook() {
+  // Return the debugger config at the configured location or return a default config.
+  private async loadDebuggerConfig(): Promise<DebuggerConfig> {
+    try {
+      const absoluteDebuggerConfigPath = resolve(cwd(), this.config.debuggerConfigPath);
+      return this.requireUncached(absoluteDebuggerConfigPath);
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.info('Error occurred while loading debugger-config, using default config.');
+      return new DebuggerConfig();
+    }
+  }
+
+  private async connectToWebhook(): Promise<typeof Socket> {
     const webhookId = await this.retrieveLocalWebhookId();
-    this.socket = connect(this.config.webhookUrl, {
+    const socket = connect(this.config.webhookUrl, {
       query: {
         id: webhookId,
         type: 'app',
       },
     });
-    this.socket.on('connect_error', (error: Error) => {
-      // TODO: improve handling
-      // eslint-disable-next-line no-console
-      console.error(error);
+    socket.on('connect', () => {
+      this.hasShownConnectionError = false;
+      this.onConnected();
     });
+    socket.on('connect_error', (error: Error) => {
+      if (!this.hasShownConnectionError) {
+        // eslint-disable-next-line no-console
+        console.warn(new SocketConnectionFailedError(this.config.webhookUrl, error).message);
+        this.hasShownConnectionError = true;
+      }
+    });
+    return socket;
   }
 
   private async retrieveLocalWebhookId(): Promise<string> {
+    const homeConfigPath = resolve(homedir(), '.jovo/config');
     try {
-      const homeConfigPath = join(this.getUserHomePath(), '.jovo/configv4');
       const homeConfigBuffer = await promises.readFile(homeConfigPath);
       const homeConfigData = JSON.parse(homeConfigBuffer.toString());
       if (homeConfigData?.webhook?.uuid) {
         return homeConfigData.webhook.uuid;
       }
-      // TODO implement error
-      throw new Error('Could not find webhook-id');
+      throw new Error();
     } catch (e) {
-      // TODO implement error
-      throw new Error('Could not find webhook-id');
+      throw new WebhookIdNotFoundError(homeConfigPath);
     }
   }
 
-  private getUserHomePath(): string {
-    const path = process.env[process.platform === 'win32' ? 'USERPROFILE' : 'HOME'];
-    if (!path) {
-      // TODO implement error
-      throw new Error();
-    }
-    return path;
+  private onSocketNotConnected() {
+    // eslint-disable-next-line no-console
+    console.warn(new SocketNotConnectedError(this.config.webhookUrl).message);
+  }
+
+  // Require the module and clear cache if there is any
+  // This is useful for being able to use changed js-files
+  private requireUncached(module: string) {
+    delete require.cache[require.resolve(module)];
+    return require(module);
   }
 }

@@ -1,7 +1,10 @@
 {
   "packages": [
     "e2e",
+    "common",
     "framework",
+    "output",
+    "clients/**",
     "platforms/**",
     "integrations/**",
     "examples/**"
