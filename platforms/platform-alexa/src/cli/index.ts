@@ -12,12 +12,41 @@ import { BuildHook } from './hooks/BuildHook';
 import { DeployHook } from './hooks/DeployHook';
 import { GetHook } from './hooks/GetHook';
 import { NewHook } from './hooks/NewHook';
-import { AlexaCliConfig, SupportedLocalesType } from './interfaces';
+import { AlexaCliConfig, AlexaConversationsConfig, SupportedLocalesType } from './interfaces';
+
+export type AlexaCliInitConfig = AlexaCliConfig | { conversations: boolean };
 
 export class AlexaCli extends JovoCliPlugin<AlexaCliConfig> {
   readonly id: string = 'alexa';
   readonly type: PluginType = 'platform';
   readonly platformDirectory: string = 'platform.alexa';
+
+  constructor(config?: AlexaCliInitConfig) {
+    super(config as AlexaCliConfig);
+
+    // Convert boolean value of this.config.conversations to object to handle it unified across hooks
+    if (typeof this.config.conversations === 'boolean') {
+      const { conversations: defaultConversationsConfig } = this.getDefaultConfig();
+      this.config.conversations = {
+        ...(defaultConversationsConfig as AlexaConversationsConfig),
+        enabled: this.config.conversations,
+      };
+    }
+  }
+
+  getDefaultConfig(): AlexaCliConfig {
+    return {
+      conversations: {
+        enabled: false,
+        directory: 'resources/alexa/conversations',
+        sessionStartDelegationStrategy: {
+          target: 'skill',
+        },
+        acdlDirectory: 'acdl',
+        responsesDirectory: 'responses',
+      },
+    };
+  }
 
   async getInitConfig(): Promise<AlexaCliConfig> {
     const initConfig: AlexaCliConfig = {};

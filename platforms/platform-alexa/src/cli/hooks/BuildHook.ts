@@ -28,6 +28,7 @@ import _has from 'lodash.has';
 import _merge from 'lodash.merge';
 import _mergeWith from 'lodash.mergewith';
 import _set from 'lodash.set';
+import { join as joinPaths } from 'path';
 import { AlexaCli } from '..';
 import { SupportedLocales } from '../constants';
 import DefaultFiles from '../DefaultFiles.json';
@@ -79,7 +80,6 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
 
     this.$context.alexa.askProfile =
       this.$context.flags['ask-profile'] || this.$plugin.config.askProfile || 'default';
-    this.$context.alexa.isACSkill = this.$plugin.config.conversations?.enabled;
   }
 
   /**
@@ -188,18 +188,14 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
     const buildConversationFilesTask: Task = new Task(
       `${taskStatus} Alexa Conversations files`,
       this.buildConversationsFiles.bind(this),
+      { enabled: this.$context.alexa.isACSkill },
     );
-    if (!this.$context.alexa.isACSkill) {
-      buildConversationFilesTask.disable();
-    }
 
     const buildResponseFilesTask: Task = new Task(
       `${taskStatus} response files`,
       this.buildResponseFiles.bind(this),
+      { enabled: this.$context.alexa.isACSkill },
     );
-    if (!this.$plugin.config.conversations?.responsesDirectory) {
-      buildResponseFilesTask.disable();
-    }
 
     buildTask.add(
       projectFilesTask,
@@ -373,8 +369,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
     if (this.$context.alexa.isACSkill && !_has(projectFiles, conversationsPath)) {
       _set(projectFiles, conversationsPath, {
         sessionStartDelegationStrategy: {
-          target:
-            this.$plugin.config.conversations?.sessionStartDelegationStrategy?.target || 'skill',
+          target: this.$plugin.config.conversations?.sessionStartDelegationStrategy?.target,
         },
         dialogManagers: [
           {
@@ -505,39 +500,37 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
   }
 
   buildConversationsFiles(): void {
-    if (!this.$plugin.config.conversations?.directory) {
-      throw new JovoCliError({
-        message: 'conversations.directory has to be set in your project configuration',
-      });
-    }
+    const src: string = joinPaths(
+      this.$plugin.config.conversations!.directory!,
+      this.$plugin.config.conversations!.acdlDirectory!,
+    );
 
-    if (!existsSync(this.$plugin.config.conversations!.directory)) {
+    if (!existsSync(src)) {
       throw new JovoCliError({
-        message: `Directory for conversations does not exist at ${
-          this.$plugin.config.conversations!.directory
-        }`,
+        message: `Directory for Alexa Conversations files does not exist at ${src}`,
         module: this.$plugin.name,
+        hint: `Try creating your .acdl files in ${src} or specify the directory of your choice in the project configuration`,
       });
     }
 
-    copyFiles(this.$plugin.config.conversations.directory, this.$plugin.conversationsDirectory);
+    copyFiles(src, this.$plugin.conversationsDirectory);
   }
 
   buildResponseFiles(): void {
-    if (!this.$plugin.config.conversations?.responsesDirectory) {
-      throw new JovoCliError({ message: 'responses.directory has to be set' });
-    }
+    const src: string = joinPaths(
+      this.$plugin.config.conversations!.directory!,
+      this.$plugin.config.conversations!.responsesDirectory!,
+    );
 
-    if (!existsSync(this.$plugin.config.conversations.responsesDirectory)) {
+    if (!existsSync(src)) {
       throw new JovoCliError({
-        message: `Directory for responses does not exist at ${
-          this.$plugin.config.conversations!.directory
-        }`,
+        message: `Directory for Alexa response files does not exist at ${src}`,
         module: this.$plugin.name,
+        hint: `Try creating your APL-A response files in ${src} or specify the directory of your choice in the project configuration`,
       });
     }
 
-    copyFiles(this.$plugin.config.conversations.responsesDirectory, this.$plugin.responseDirectory);
+    copyFiles(src, this.$plugin.conversationsDirectory);
   }
 
   /**

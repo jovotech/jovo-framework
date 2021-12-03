@@ -25,21 +25,24 @@ export interface AskSkillChoice {
 
 export type SupportedLocalesType = typeof SupportedLocales[number];
 
+export interface AlexaConversationsConfig {
+  enabled: boolean;
+  directory?: string;
+  skipValidation?: boolean;
+  sessionStartDelegationStrategy?: {
+    target: ConversationsTarget;
+  };
+  acdlDirectory?: string;
+  responsesDirectory?: string;
+}
+
 export interface AlexaCliConfig extends PluginConfig {
   askProfile?: string;
   skillId?: string;
   locales?: {
     [locale: string]: SupportedLocalesType[];
   };
-  conversations?: {
-    enabled: boolean;
-    directory?: string;
-    skipValidation?: boolean;
-    sessionStartDelegationStrategy?: {
-      target: ConversationsTarget;
-    };
-    responsesDirectory?: string;
-  };
+  conversations?: AlexaConversationsConfig;
 }
 
 export interface AlexaContext extends PluginContext {
