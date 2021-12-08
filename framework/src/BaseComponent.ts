@@ -1,17 +1,16 @@
-import { UnknownObject } from '@jovotech/common';
+import { DeepPartial, UnknownObject } from '@jovotech/common';
 import { ComponentData, JovoComponentInfo } from './index';
 import { Jovo } from './Jovo';
 import { JovoProxy } from './JovoProxy';
 import { ComponentOptions } from './metadata/ComponentMetadata';
 
-export type ComponentConstructor<COMPONENT extends BaseComponent = BaseComponent> = new (
-  jovo: Jovo,
-  options?: ComponentOptions<COMPONENT>,
-  ...args: unknown[]
-) => COMPONENT;
-
 export type ComponentConfig<COMPONENT extends BaseComponent = BaseComponent> =
   COMPONENT['$component']['config'];
+
+export type ComponentConstructor<COMPONENT extends BaseComponent = BaseComponent> = new (
+  jovo: Jovo,
+  config?: DeepPartial<ComponentConfig<COMPONENT>>,
+) => COMPONENT;
 
 export class ComponentDeclaration<
   COMPONENT_CONSTRUCTOR extends ComponentConstructor = ComponentConstructor,
@@ -26,7 +25,14 @@ export abstract class BaseComponent<
   DATA extends ComponentData = ComponentData,
   CONFIG extends UnknownObject = UnknownObject,
 > extends JovoProxy {
+  constructor(jovo: Jovo, readonly initConfig?: DeepPartial<CONFIG>) {
+    super(jovo);
+  }
+
   get $component(): JovoComponentInfo<DATA, CONFIG> {
-    return this.$component as { data: DATA; config: CONFIG | undefined };
+    return {
+      data: this.jovo.$component.data as DATA,
+      config: { ...this.initConfig, ...(this.jovo.$component.config || {}) } as CONFIG,
+    };
   }
 }
