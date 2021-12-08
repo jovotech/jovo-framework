@@ -216,6 +216,25 @@ By default, you don't need to define `slots` as part of the `updatedRequest` pro
 
 ### Accept Requests from Alexa Conversations
 
-Alexa Conversations can also hand off to your Alexa Skill by sending a `DialogDelegateRequest` to your app endpoint. [Learn more in the official Alexa docs](https://developer.amazon.com/docs/alexa/conversations/hand-off-dialog-management.html#hand-off-to-skill).
+Alexa Conversations can also hand off to your Alexa Skill. To do this, you need to send a `DialogDelegateRequest` similar to the delegation to [Alexa Conversations](#delegate-to-alexa-conversations). [Learn more in the official Alexa docs](https://developer.amazon.com/docs/alexa/conversations/hand-off-dialog-management.html#hand-off-to-skill).
 
-The `intent` and `slots` information will be automatically added to the [Jovo `$input`](https://www.jovo.tech/docs/input) and can be used by your app code as if you were interacting with "normal" intent requests.
+
+```typescript
+import { DialogDelegateRequestOutput } from '@jovotech/platform-alexa'; 
+// ...
+
+someHandler() {
+  // ...
+
+  return this.$send(DialogDelegateRequestOutput, {
+    target: 'skill',
+    updatedRequest: {
+      type: 'IntentRequest',
+      intent: {
+        name: 'SomeIntent',
+    }
+  });
+}
+```
+
+By default, you don't need to define `slots` as part of the `updatedRequest` property. The entities stored in [`$entities`](https://www.jovo.tech/marketplace/platform-alexa#entities-slots-) will be automatically added in the background. You can still pass them in the same way it's done in the [official Alexa documentation](https://developer.amazon.com/en-US/docs/alexa/conversations/hand-off-dialog-management.html#hand-off-to-skill).
