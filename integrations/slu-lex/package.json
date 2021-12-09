@@ -1,7 +1,7 @@
 {
-  "name": "@jovotech/analytics-dashbot",
+  "name": "@jovotech/slu-lex",
   "version": "4.0.0",
-  "description": "",
+  "description": "Lex SLU Integration",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
   "es2015": "dist/esm2015/index.js",
@@ -21,7 +21,10 @@
   },
   "author": "jovotech",
   "license": "Apache-2.0",
-  "dependencies": {},
+  "dependencies": {
+    "@jovotech/model": "^4.0.0",
+    "@aws-sdk/client-lex-runtime-v2": "^3.43.0"
+  },
   "devDependencies": {
     "@jovotech/framework": "^4.0.0",
     "@types/jest": "^26.0.20",

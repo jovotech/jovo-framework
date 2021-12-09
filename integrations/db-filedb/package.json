@@ -22,7 +22,6 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@aws-sdk/client-lambda": "^3.8.1",
     "@jovotech/framework": "^4.0.0",
     "@types/jest": "^26.0.20",
     "@types/node": "^12.20.37",

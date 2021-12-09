@@ -60,7 +60,7 @@ const app = new App({
 
 Along with integration specific options (which can be found in each integration's documentation), there are also features that are configured the same way across all NLU integrations.
 
-The default configuration for each database integration is:
+The default configuration for each NLU integration is:
 
 ```typescript
 new NlpjsNlu({

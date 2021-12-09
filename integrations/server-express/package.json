@@ -26,7 +26,6 @@
     "express": "^4.17.1"
   },
   "devDependencies": {
-    "@aws-sdk/types": "^3.6.1",
     "@jovotech/framework": "^4.0.0",
     "@types/jest": "^26.0.20",
     "@types/node": "^12.20.37",

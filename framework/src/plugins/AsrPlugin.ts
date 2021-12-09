@@ -1,19 +1,16 @@
 import { InputType } from '@jovotech/common';
 import { InterpretationPlugin, InterpretationPluginConfig } from './InterpretationPlugin';
 
-// alias for backwards compatibility, could be replaced by an interface and extended later
-export type NluPluginConfig = InterpretationPluginConfig;
 
-export abstract class NluPlugin<
+export abstract class AsrPlugin<
   CONFIG extends InterpretationPluginConfig = InterpretationPluginConfig,
 > extends InterpretationPlugin<CONFIG> {
-  targetSampleRate = undefined;
-  processAudio = undefined;
+  processText = undefined;
 
   getDefaultConfig(): CONFIG {
     return {
       input: {
-        supportedTypes: [InputType.Text, InputType.TranscribedSpeech, InputType.Speech],
+        supportedTypes: [InputType.Speech],
       },
     } as CONFIG;
   }
