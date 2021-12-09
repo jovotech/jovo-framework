@@ -2,10 +2,10 @@ import {
   AnyObject,
   DbPlugin,
   Extensible,
-  ExtensibleConfig,
   ExtensibleInitConfig,
   Jovo,
   Platform,
+  PlatformConfig,
   StoredElementSession,
 } from '@jovotech/framework';
 import { JWT, JWTInput } from 'google-auth-library';
@@ -18,7 +18,7 @@ import { GoogleBusinessResponse } from './GoogleBusinessResponse';
 import { GoogleBusinessUser } from './GoogleBusinessUser';
 import { GoogleBusinessOutputTemplateConverterStrategy } from './output';
 
-export interface GoogleBusinessConfig extends ExtensibleConfig {
+export interface GoogleBusinessConfig extends PlatformConfig {
   serviceAccount: JWTInput;
   session?: StoredElementSession & { enabled?: never };
 }

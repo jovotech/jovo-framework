@@ -1,9 +1,9 @@
 import {
   AnyObject,
-  ExtensibleConfig,
   ExtensibleInitConfig,
   Jovo,
   Platform,
+  PlatformConfig,
   registerPlatformSpecificJovoReference,
 } from '@jovotech/framework';
 import { Core } from './Core';
@@ -15,7 +15,7 @@ import { CoreUser } from './CoreUser';
 import { CoreOutputTemplateConverterStrategy } from './output';
 
 export interface CorePlatformConfig<PLATFORM extends string = 'core' | string>
-  extends ExtensibleConfig {
+  extends PlatformConfig {
   platform: PLATFORM | string;
 }
 
