@@ -9,7 +9,7 @@ Learn how to implement Alexa in-skill purchasing (ISP) with Jovo.
 
 ## Introduction
 
-Alexa Skill developers can make money through in-skill purchasing. It allows you to sell items either through one-time purchases or subscriptions. Learn more in the [official Alexa docs](https://developer.amazon.com/docs/alexa/in-skill-purchase/isp-overview.html).
+Alexa Skill developers can make money through in-skill purchasing. It allows you to sell items either through one-time purchases, consumables, or subscriptions. Learn more in the [official Alexa docs](https://developer.amazon.com/docs/alexa/in-skill-purchase/isp-overview.html).
 
 While the official Alexa documentation is a great starting point showing you how to create ISP products in the Alexa Developer Console, this documentation shows you how to add support for ISP to your Skill code built with Jovo. The [official Alexa documentation on adding ISP to a Skill](https://developer.amazon.com/docs/alexa/in-skill-purchase/add-isps-to-a-skill.html) can also be helpful here.
 
