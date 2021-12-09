@@ -1,4 +1,4 @@
-import { AnyObject, ExtensibleConfig, HandleRequest, Jovo, Platform } from '@jovotech/framework';
+import { AnyObject, HandleRequest, Jovo, Platform, PlatformConfig } from '@jovotech/framework';
 import { Alexa } from './Alexa';
 import { AlexaDevice } from './AlexaDevice';
 import { AlexaRequest } from './AlexaRequest';
@@ -8,7 +8,7 @@ import { AlexaUser } from './AlexaUser';
 import { SUPPORTED_APL_ARGUMENT_TYPES } from './constants';
 import { AlexaOutputTemplateConverterStrategy } from './output';
 
-export interface AlexaConfig extends ExtensibleConfig {
+export interface AlexaConfig extends PlatformConfig {
   output: {
     genericOutputToApl: boolean;
   };
@@ -34,6 +34,10 @@ export class AlexaPlatform extends Platform<
 
   getDefaultConfig(): AlexaConfig {
     return {
+      intentMap: {
+        'AMAZON.StopIntent': 'END',
+        'AMAZON.CancelIntent': 'END',
+      },
       output: {
         genericOutputToApl: true,
       },

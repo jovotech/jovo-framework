@@ -1,4 +1,4 @@
-import { ExtensibleConfig, Platform } from '..';
+import { ExtensibleConfig, Platform, PlatformConfig } from '..';
 import { TestDevice } from './TestDevice';
 import { TestJovo } from './TestJovo';
 import { TestOutputConverterStrategy } from './TestOutputConverterStrategy';
@@ -14,7 +14,7 @@ export class TestPlatform extends Platform<
   TestUser,
   TestDevice,
   TestPlatform,
-  ExtensibleConfig
+  PlatformConfig
 > {
   readonly id = 'testplatform';
   readonly jovoClass = TestJovo;
