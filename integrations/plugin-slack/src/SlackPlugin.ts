@@ -29,6 +29,8 @@ export interface SlackPluginConfig extends PluginConfig {
   webhookUrl: string;
   channel: string;
   fields: SlackFieldMap;
+
+  logErrors: boolean;
   transformError?: (error: Error, jovo?: Jovo) => IncomingWebhookSendArguments | undefined;
 }
 
@@ -47,6 +49,7 @@ export class SlackPlugin extends Plugin<SlackPluginConfig> {
     return {
       webhookUrl: '',
       channel: '',
+      logErrors: true,
       fields: {
         locale: false,
         platform: true,
@@ -80,6 +83,9 @@ export class SlackPlugin extends Plugin<SlackPluginConfig> {
   }
 
   onError = (error: Error, jovo?: Jovo): void => {
+    if (!this.config.logErrors) {
+      return;
+    }
     this.sendError(error, jovo)
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       .then(() => {})
