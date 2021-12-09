@@ -9,7 +9,7 @@ import {
   Plugin,
   PluginConfig,
 } from '@jovotech/framework';
-import { IncomingWebhook, IncomingWebhookResult, IncomingWebhookSendArguments } from '@slack/webhook';
+import { IncomingWebhook, IncomingWebhookSendArguments } from '@slack/webhook';
 import { JovoSlack } from './JovoSlack';
 
 export type SlackBlock = ArrayElement<Exclude<IncomingWebhookSendArguments['blocks'], undefined>>;
@@ -89,21 +89,24 @@ export class SlackPlugin extends Plugin<SlackPluginConfig> {
     if (!this.config.logErrors) {
       return;
     }
-    this.sendError(error, jovo)
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      .then(() => {})
-      // eslint-disable-next-line no-console
-      .catch((e) => console.warn(e));
+    this.sendError(error, jovo);
   };
 
-  async sendError(error: Error, jovo?: Jovo): Promise<IncomingWebhookResult | undefined> {
+  sendError(error: Error, jovo?: Jovo): void {
     const sendArgs = this.getErrorMessage(error, jovo);
     if (!sendArgs) return;
     return this.sendMessage(sendArgs);
   }
 
-  sendMessage(message: string | IncomingWebhookSendArguments): Promise<IncomingWebhookResult> {
-    return this.client.send(message);
+  sendMessage(message: string | IncomingWebhookSendArguments): void {
+    this.client
+      .send(message)
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      .then(() => {})
+      .catch((e) => {
+        // eslint-disable-next-line no-console
+        console.warn(e);
+      });
   }
 
   getErrorMessage(error: Error, jovo?: Jovo): string | IncomingWebhookSendArguments | undefined {

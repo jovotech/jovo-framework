@@ -1,5 +1,5 @@
 import { Jovo } from '@jovotech/framework';
-import { IncomingWebhookResult, IncomingWebhookSendArguments } from '@slack/webhook';
+import { IncomingWebhookSendArguments } from '@slack/webhook';
 import { SlackPlugin, SlackPluginConfig } from './SlackPlugin';
 
 export class JovoSlack {
@@ -9,11 +9,11 @@ export class JovoSlack {
     return this.slackPlugin.config;
   }
 
-  sendError(error: Error, jovo?: Jovo): Promise<IncomingWebhookResult | undefined> {
+  sendError(error: Error, jovo?: Jovo): void {
     return this.slackPlugin.sendError(error, jovo);
   }
 
-  sendMessage(message: string | IncomingWebhookSendArguments): Promise<IncomingWebhookResult> {
+  sendMessage(message: string | IncomingWebhookSendArguments): void {
     return this.slackPlugin.sendMessage(message);
   }
 }
