@@ -1,3 +1,4 @@
+import { JovoSlack } from './JovoSlack';
 import { SlackPlugin, SlackPluginConfig } from './SlackPlugin';
 
 declare module '@jovotech/framework/dist/types/Extensible' {
@@ -7,6 +8,12 @@ declare module '@jovotech/framework/dist/types/Extensible' {
 
   interface ExtensiblePlugins {
     SlackPlugin?: SlackPlugin;
+  }
+}
+
+declare module '@jovotech/framework/dist/types/Jovo' {
+  interface Jovo {
+    slack: JovoSlack;
   }
 }
 
