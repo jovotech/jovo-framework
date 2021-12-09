@@ -184,7 +184,7 @@ export class GetHook extends AlexaHook<BuildPlatformEvents | GetPlatformEvents> 
     });
     getTask.add(exportTask);
 
-    if (this.$context.alexa.isACSkill && existsSync(this.$plugin.conversationsDirectory)) {
+    if (this.$context.alexa.isACSkill) {
       const decompileTask: Task = new Task('Decompiling ACDL files', async () => {
         if (!existsSync(this.$plugin.conversationsDirectory)) {
           return;
