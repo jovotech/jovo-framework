@@ -8,6 +8,7 @@ import {
   getResolvedLocales,
   InstallContext,
   JovoCliError,
+  Log,
   mergeArrayCustomizer,
   OK_HAND,
   printHighlight,
