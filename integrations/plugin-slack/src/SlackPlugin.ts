@@ -25,13 +25,20 @@ export interface SlackFieldMap {
   userId: boolean;
 }
 
+export type SlackCustomBlocksFunction = (jovo: Jovo) => SlackBlock[];
+
+export type SlackTransformErrorFunction = (
+  error: Error,
+  jovo?: Jovo,
+) => string | IncomingWebhookSendArguments | undefined;
+
 export interface SlackPluginConfig extends PluginConfig {
   webhookUrl: string;
   channel: string;
-  fields: SlackFieldMap;
-
   logErrors: boolean;
-  transformError?: (error: Error, jovo?: Jovo) => string | IncomingWebhookSendArguments | undefined;
+  fields: SlackFieldMap;
+  customBlocks?: SlackCustomBlocksFunction;
+  transformError?: SlackTransformErrorFunction;
 }
 
 export type SlackPluginInitConfig = DeepPartial<SlackPluginConfig> &
@@ -154,6 +161,13 @@ export class SlackPlugin extends Plugin<SlackPluginConfig> {
     const cloudWatchBlock = this.getCloudWatchBlock(jovo);
     if (cloudWatchBlock) {
       blocks.push(cloudWatchBlock);
+    }
+
+    if (this.config.customBlocks) {
+      const customBlocks = this.config.customBlocks(jovo);
+      if (customBlocks?.length) {
+        blocks.push(...customBlocks);
+      }
     }
 
     return blocks;
