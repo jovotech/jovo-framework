@@ -73,7 +73,7 @@ export class SlackPlugin extends Plugin<SlackPluginConfig> {
       throw new InvalidParentError(this.name, HandleRequest);
     }
     parent.middlewareCollection.use('before.request.start', (jovo) => {
-      jovo.slack = new JovoSlack(this);
+      jovo.$slack = new JovoSlack(this);
     });
     parent.app.onError(this.onError);
   }
