@@ -42,4 +42,14 @@ export class AlexaHandles {
       },
     };
   }
+  
+  static onDialogApiInvoked(name?: string): HandleOptions {
+    return {
+      global: true,
+      types: ['Dialog.API.Invoked'],
+      platforms: ['alexa'],
+      if: (jovo: Jovo) =>
+        name ? (jovo.$request as AlexaRequest).request?.apiRequest?.name === name : true,
+    };
+  };
 }

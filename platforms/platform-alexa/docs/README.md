@@ -52,11 +52,19 @@ import { AlexaPlatform } from '@jovotech/platform-alexa';
 
 const app = new App({
   plugins: [
-    new AlexaPlatform(),
+    new AlexaPlatform({
+      intentMap: {
+        'AMAZON.StopIntent': 'END',
+        'AMAZON.CancelIntent': 'END',
+      },
+      // ...
+    }),
     // ...
   ],
 });
 ```
+
+The Alexa platform comes with its own `intentMap` that gets merged into the [global `intentMap`](https://www.jovo.tech/docs/app-config#intentmap). This maps incoming Alexa intents to Jovo intents or handlers.
 
 You can also add the CLI plugin to your [project configuration](https://www.jovo.tech/docs/project-config) in `jovo.project.js`. [Learn more about the Alexa-specific project configuration here](https://www.jovo.tech/marketplace/platform-alexa/project-config).
 

@@ -6,7 +6,7 @@ import {
   GetItemCommand,
   PutItemCommand,
 } from '@aws-sdk/client-dynamodb';
-import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
+import { marshall, marshallOptions, unmarshall } from '@aws-sdk/util-dynamodb';
 import {
   DbItem,
   DbPlugin,
@@ -15,6 +15,7 @@ import {
   Jovo,
   PersistableSessionData,
   PersistableUserData,
+  RequiredOnlyWhere,
   UnknownObject,
 } from '@jovotech/framework';
 
@@ -28,8 +29,11 @@ export interface DynamoDbConfig extends DbPluginConfig {
   };
   libraryConfig?: {
     dynamoDbClient?: DynamoDBClientConfig;
+    marshall?: marshallOptions;
   };
 }
+
+export type DynamoDbInitConfig = RequiredOnlyWhere<DynamoDbConfig, 'table'>;
 
 export interface DynamoDbItem {
   id: string;
@@ -42,22 +46,32 @@ export interface DynamoDbItem {
 export class DynamoDb extends DbPlugin<DynamoDbConfig> {
   client: DynamoDBClient;
 
+  constructor(config: DynamoDbInitConfig) {
+    super(config);
+    this.client = new DynamoDBClient(this.config.libraryConfig?.dynamoDbClient || {});
+  }
+
   getDefaultConfig(): DynamoDbConfig {
     return {
       ...super.getDefaultConfig(),
       table: {
-        name: '',
+        name: '<YOUR-TABLE-NAME>',
         primaryKeyColumn: 'userId',
         createTableOnInit: true,
         readCapacityUnits: 2,
         writeCapacityUnits: 2,
       },
+      libraryConfig: {
+        marshall: {
+          removeUndefinedValues: true,
+          convertClassInstanceToMap: true,
+        },
+      },
     };
   }
 
-  constructor(config: DynamoDbConfig) {
-    super(config);
-    this.client = new DynamoDBClient(this.config.libraryConfig?.dynamoDbClient || {});
+  getInitConfig(): DynamoDbInitConfig {
+    return { table: { name: '<YOUR-TABLE-NAME>' } };
   }
 
   mount(parent: HandleRequest): Promise<void> | void {
@@ -152,7 +166,7 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
     await this.client.send(
       new PutItemCommand({
         TableName: params.TableName,
-        Item: marshall(item, { removeUndefinedValues: true }),
+        Item: marshall(item, this.config.libraryConfig?.marshall),
       }),
     );
   }

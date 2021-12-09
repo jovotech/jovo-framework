@@ -1,3 +1,4 @@
+import { RequiredOnlyWhere } from '@jovotech/framework';
 import { AnyObject, ExtensibleConfig, HandleRequest, Jovo, Platform } from '@jovotech/framework';
 import { Alexa } from './Alexa';
 import { AlexaDevice } from './AlexaDevice';
@@ -12,6 +13,7 @@ export interface AlexaConfig extends ExtensibleConfig {
   output: {
     genericOutputToApl: boolean;
   };
+  intentMap: Record<string, string>;
 }
 
 export class AlexaPlatform extends Platform<
@@ -37,11 +39,25 @@ export class AlexaPlatform extends Platform<
       output: {
         genericOutputToApl: true,
       },
+      intentMap: {
+        'AMAZON.StopIntent': 'END',
+        'AMAZON.CancelIntent': 'END',
+      },
+    };
+  }
+
+  getInitConfig(): RequiredOnlyWhere<AlexaConfig, 'intentMap'> {
+    return {
+      intentMap: {
+        'AMAZON.StopIntent': 'END',
+        'AMAZON.CancelIntent': 'END',
+      },
     };
   }
 
   mount(parent: HandleRequest): void {
     super.mount(parent);
+
     this.middlewareCollection.use('request.start', (jovo) => {
       return this.onRequestStart(jovo);
     });
