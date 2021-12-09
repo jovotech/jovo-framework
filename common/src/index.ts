@@ -1,4 +1,4 @@
-import type { A } from 'ts-toolbelt';
+import type { A, L, S } from 'ts-toolbelt';
 import { PartialDeep } from 'type-fest';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -44,7 +44,7 @@ export type PartialWhere<T, K extends keyof T> = Omit<T, K> & Partial<T>;
 
 // Returns all elements of T that are non-optional. Works with nested objects.
 // If an entry T[K] is assignable to a weak type, it will be omitted from the object.
-export type OmitOptional<
+export type RequiredOnly<
   T,
   O extends OmitIndex<T, string | number> = OmitIndex<T, string | number>,
 > = {
@@ -53,13 +53,24 @@ export type OmitOptional<
     : K]: Partial<UnknownObject> extends Pick<O, K>
     ? never
     : Pick<O, K> extends UnknownObject
-    ? OmitOptional<O[K]>
+    ? RequiredOnly<O[K]>
     : Pick<O, K>;
 };
 
-// TODO: Make this work for nested objects
-export type RequiredWhere<T, K extends keyof OmitOptional<T>> = DeepPartial<T> &
-  Pick<OmitOptional<T>, K>;
+export type FirstKey<K extends string> = Shift<S.Split<K, '.'>>;
+
+export type Shift<S extends L.List> = S extends readonly [infer P, ...unknown[]] ? P : never;
+
+export type KeyOf<T, K> = K extends keyof T ? K : never;
+
+export type RequiredOnlyWhere<T, K extends string> = L.Length<S.Split<K, '.'>> extends 1
+  ? PartialDeep<T> & { [KEY in keyof T as KEY extends K ? KEY : never]: T[KEY] }
+  : PartialDeep<T> & {
+      [KEY in keyof T as KEY extends FirstKey<K> ? KEY : never]: RequiredOnlyWhere<
+        T[KEY],
+        S.Join<L.Omit<S.Split<K, '.'>, 0>>
+      >;
+    };
 
 // If T is a string enum return a union type of the enum and the enum as string literal
 export type EnumLike<T extends string> = T | `${T}`;
