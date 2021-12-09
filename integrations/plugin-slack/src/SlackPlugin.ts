@@ -9,11 +9,7 @@ import {
   Plugin,
   PluginConfig,
 } from '@jovotech/framework';
-import {
-  IncomingWebhook,
-  IncomingWebhookResult,
-  IncomingWebhookSendArguments,
-} from '@slack/webhook';
+import { IncomingWebhook, IncomingWebhookResult, IncomingWebhookSendArguments } from '@slack/webhook';
 import { JovoSlack } from './JovoSlack';
 
 export type SlackBlock = ArrayElement<Exclude<IncomingWebhookSendArguments['blocks'], undefined>>;
@@ -101,7 +97,7 @@ export class SlackPlugin extends Plugin<SlackPluginConfig> {
   };
 
   async sendError(error: Error, jovo?: Jovo): Promise<IncomingWebhookResult | undefined> {
-    const sendArgs = this.getErrorSendArguments(error, jovo);
+    const sendArgs = this.getErrorMessage(error, jovo);
     if (!sendArgs) return;
     return this.sendMessage(sendArgs);
   }
@@ -110,10 +106,7 @@ export class SlackPlugin extends Plugin<SlackPluginConfig> {
     return this.client.send(message);
   }
 
-  private getErrorSendArguments(
-    error: Error,
-    jovo?: Jovo,
-  ): string | IncomingWebhookSendArguments | undefined {
+  getErrorMessage(error: Error, jovo?: Jovo): string | IncomingWebhookSendArguments | undefined {
     if (this.config.transformError) {
       return this.config.transformError(error, jovo);
     }
