@@ -10,7 +10,7 @@ export enum IspRequestType {
   Cancel = 'Cancel',
 }
 
-export type IspRequestLike = EnumLike<IspRequestType> | string;
+export type IspRequestTypeLike = EnumLike<IspRequestType> | string;
 
 export class AlexaHandles {
   static onPermission(status: PermissionStatus, type?: PermissionType): HandleOptions {
@@ -28,7 +28,7 @@ export class AlexaHandles {
     };
   }
 
-  static onIsp(type: IspRequestLike, purchaseResult?: PurchaseResultLike): HandleOptions {
+  static onIsp(type: IspRequestTypeLike, purchaseResult?: PurchaseResultLike): HandleOptions {
     return {
       global: true,
       types: ['Connections.Response'],
