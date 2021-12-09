@@ -17,6 +17,14 @@ export abstract class AlexaHook<EVENTS extends Events = DefaultEvents> extends P
   $plugin!: AlexaCli;
   $context!: AlexaContext;
 
+  updatePluginContext(): void {
+    if (!this.$context.alexa) {
+      this.$context.alexa = {};
+    }
+
+    this.$context.alexa.isACSkill = this.$plugin.config.conversations?.enabled;
+  }
+
   /**
    * Saves Alexa Skill ID to .ask/config.
    * @param skillId
