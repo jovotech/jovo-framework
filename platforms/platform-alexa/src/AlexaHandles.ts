@@ -1,6 +1,6 @@
-import { EnumLike, HandleOptions, InputType, Jovo } from '@jovotech/framework';
+import { EnumLike, HandleOptions, Jovo } from '@jovotech/framework';
 import { AlexaRequest } from './AlexaRequest';
-import { PermissionStatus, PurchaseResult, PurchaseResultLike } from './interfaces';
+import { PermissionStatus, PurchaseResultLike } from './interfaces';
 
 export type PermissionType = 'timers' | 'reminders';
 
