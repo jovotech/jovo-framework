@@ -5,6 +5,8 @@ import {
   JovoError,
   JovoErrorOptions,
   Method,
+  UnknownObject,
+  Headers,
 } from '@jovotech/framework';
 
 import { URL } from 'url';
@@ -42,7 +44,9 @@ export interface AlexaApiOptions extends AxiosRequestConfig {
   path: string;
   permissionToken: string;
   method?: Method;
+  headers?: Headers;
   data?: unknown;
+  params?: UnknownObject;
 }
 
 /**
@@ -61,7 +65,9 @@ export async function sendApiRequest<RESPONSE>(
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${options.permissionToken}`,
+      ...options.headers,
     },
+    params: options.params,
   };
   return await axios(config);
 }
