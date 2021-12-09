@@ -1,5 +1,6 @@
 import {
   App,
+  ArrayElement,
   DeepPartial,
   Extensible,
   HandleRequest,
@@ -13,13 +14,22 @@ import {
   IncomingWebhookResult,
   IncomingWebhookSendArguments,
 } from '@slack/webhook';
+import { JovoSlack } from './JovoSlack';
 
-// TODO implement customization of the error / notifications in general
-// Allow disabling of error propagation
+export type SlackBlock = ArrayElement<Exclude<IncomingWebhookSendArguments['blocks'], undefined>>;
+
+export interface SlackFieldMap {
+  locale: boolean;
+  platform: boolean;
+  state: boolean;
+  userId: boolean;
+}
+
 export interface SlackPluginConfig extends PluginConfig {
   webhookUrl: string;
   channel: string;
-  transformError?: (error: Error, jovo?: Jovo) => IncomingWebhookSendArguments;
+  fields: SlackFieldMap;
+  transformError?: (error: Error, jovo?: Jovo) => IncomingWebhookSendArguments | undefined;
 }
 
 export type SlackPluginInitConfig = DeepPartial<SlackPluginConfig> &
@@ -37,6 +47,12 @@ export class SlackPlugin extends Plugin<SlackPluginConfig> {
     return {
       webhookUrl: '',
       channel: '',
+      fields: {
+        locale: false,
+        platform: true,
+        state: false,
+        userId: false,
+      },
     };
   }
 
@@ -50,6 +66,9 @@ export class SlackPlugin extends Plugin<SlackPluginConfig> {
     if (!(parent instanceof HandleRequest)) {
       throw new InvalidParentError(this.name, HandleRequest);
     }
+    parent.middlewareCollection.use('before.request.start', (jovo) => {
+      jovo.slack = new JovoSlack(this);
+    });
     parent.app.onError(this.onError);
   }
 
@@ -68,39 +87,135 @@ export class SlackPlugin extends Plugin<SlackPluginConfig> {
       .catch((e) => console.warn(e));
   };
 
-  sendError(error: Error, jovo?: Jovo): Promise<IncomingWebhookResult> {
-    return this.sendNotification(this.getErrorSendArguments(error, jovo));
+  async sendError(error: Error, jovo?: Jovo): Promise<IncomingWebhookResult | undefined> {
+    const sendArgs = this.getErrorSendArguments(error, jovo);
+    if (!sendArgs) return;
+    return this.sendNotification(sendArgs);
   }
 
   sendNotification(message: string | IncomingWebhookSendArguments): Promise<IncomingWebhookResult> {
     return this.client.send(message);
   }
 
-  private getErrorSendArguments(error: Error, jovo?: Jovo): IncomingWebhookSendArguments {
+  private getErrorSendArguments(
+    error: Error,
+    jovo?: Jovo,
+  ): IncomingWebhookSendArguments | undefined {
     if (this.config.transformError) {
       return this.config.transformError(error, jovo);
     }
-    // TODO implement default filling
+
     return {
       channel: this.config.channel,
-      attachments: [
+      blocks: [
         {
-          fallback: 'An error has occurred.',
-          color: '#ff0000',
-          pretext: '',
-          author_name: '',
-          author_link: '',
-          author_icon: '',
-          title: 'An error has occurred.',
-          title_link: '',
-          text: error.message,
-          image_url: '',
-          thumb_url: '',
-          footer: 'Jovo Slack Plugin',
-          footer_icon: '',
-          fields: [],
+          type: 'header',
+          text: {
+            type: 'plain_text',
+            text: '🔴 An error occurred',
+            emoji: true,
+          },
         },
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: `*Error message*\n${error.message}${
+              error.stack ? `\n\n*Error stack*\n \`\`\`${error.stack}\`\`\`` : ''
+            }`,
+          },
+        },
+        ...this.getBlocksFromFieldMap(jovo),
       ],
     };
+  }
+
+  getBlocksFromFieldMap(jovo?: Jovo): SlackBlock[] {
+    if (!jovo) return [];
+    const blocks = Object.entries(this.config.fields).reduce(
+      (blocks: SlackBlock[], [key, enabled]) => {
+        if (enabled) {
+          const block = this.getBlockFor(key as keyof SlackFieldMap, jovo);
+          if (block) {
+            blocks.push(block);
+          }
+        }
+        return blocks;
+      },
+      [],
+    );
+
+    const cloudWatchBlock = this.getCloudWatchBlock(jovo);
+    if (cloudWatchBlock) {
+      blocks.push(cloudWatchBlock);
+    }
+
+    return blocks;
+  }
+
+  getBlockFor(key: keyof SlackFieldMap, jovo: Jovo): SlackBlock | undefined {
+    if (key === 'locale') {
+      return {
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: `*Locale*\n${jovo.$request.getLocale() || 'undefined'}`,
+        },
+      };
+    }
+    if (key === 'platform') {
+      return {
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: `*Platform*\n${jovo.$platform.name}`,
+        },
+      };
+    }
+    if (key === 'state') {
+      return {
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: `*State*\n \`\`\`${
+            jovo.$state ? JSON.stringify(jovo.$state, undefined, 2) : 'undefined'
+          }\`\`\``,
+        },
+      };
+    }
+    if (key === 'userId') {
+      return {
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: `*User ID*\n${jovo.$user.id || 'undefined'}`,
+        },
+      };
+    }
+  }
+
+  getCloudWatchBlock(jovo: Jovo): SlackBlock | undefined {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const context = (jovo.$server as any).context;
+    if (context?.awsRequestId) {
+      const region = context.invokedFunctionArn.split(':')[3]; // e.g. arn:aws:lambda:eu-west-1:820261819571:function:testName
+      const baseUrl = `https://${region}.console.aws.amazon.com/cloudwatch/home?region=${region}#logsV2:log-groups/log-group/`;
+      const logGroup = `${context.logGroupName.replace(/\//g, '$252F')}/log-events/`;
+      const logStream = `${context
+        .logStreamName!.replace('$', '$2524')
+        .replace('[', '$255B')
+        .replace(']', '$255D')
+        .replace(/\//g, '$252F')}`;
+      const filterPattern = `$3FfilterPattern$3D$2522${context.awsRequestId}$2522`; // $2522 -> "
+      const cloudWatchUrl = baseUrl + logGroup + logStream + filterPattern;
+
+      return {
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: `*Cloudwatch URL*\n<${cloudWatchUrl}|Cloudwatch Log URL>`,
+        },
+      };
+    }
   }
 }
