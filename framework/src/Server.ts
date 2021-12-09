@@ -40,7 +40,7 @@ export abstract class Server {
   /**
      Calls fail method of server
      **/
-  abstract fail(error: Error): void;
+  abstract fail(error: Error): Promise<void> | void;
 
   /**
    Returns request headers
