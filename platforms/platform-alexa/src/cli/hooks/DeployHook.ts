@@ -10,6 +10,7 @@ import {
   chalk,
   flags,
   InstallContext,
+  isJovoCliError,
   JovoCliError,
   Log,
   printStage,
@@ -239,10 +240,10 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
         return skillId;
       }
     } catch (error) {
-      if (error instanceof JovoCliError) {
-        throw error;
+      if (!isJovoCliError(error)) {
+        throw new JovoCliError({ message: error.message, module: this.$plugin.name });
       }
-      throw new JovoCliError({ message: error.message, module: this.$plugin.name });
+      throw error;
     }
   }
 

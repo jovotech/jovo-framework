@@ -16,3 +16,5 @@ This package enables you to integrate your Jovo app with Dialogflow as natural l
 ```bash
 $ npm install @jovotech/nlu-dialogflow
 ```
+
+> Learn more in the docs: https://www.jovo.tech/marketplace/nlu-dialogflow

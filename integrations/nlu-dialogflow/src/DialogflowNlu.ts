@@ -1,5 +1,6 @@
 import {
   DeepPartial,
+  EntityMap,
   Jovo,
   JovoError,
   NluData,
@@ -53,9 +54,30 @@ export class DialogflowNlu extends NluPlugin<DialogflowNluConfig> {
         },
         jovo.$session.id,
       );
-      return dialogflowResponse?.data?.queryResult?.intent?.displayName
-        ? { intent: { name: dialogflowResponse.data.queryResult.intent.displayName } }
-        : undefined;
+
+      const nluData: NluData = {};
+      const displayName = dialogflowResponse.data.queryResult.intent.displayName;
+      if (displayName) {
+        nluData.intent = { name: displayName };
+      }
+
+      const parameters = dialogflowResponse.data.queryResult.parameters;
+      const parameterEntries = Object.entries(parameters);
+      nluData.entities = parameterEntries.reduce(
+        (entityMap: EntityMap, [entityName, entityData]) => {
+          const resolved = typeof entityData === 'string' ? entityData : entityData.toString();
+          entityMap[entityName] = {
+            id: resolved,
+            resolved,
+            value: text,
+            native: entityData,
+          };
+          return entityMap;
+        },
+        {},
+      );
+
+      return nluData.intent ? nluData : undefined;
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error('Error while retrieving nlu-data from Dialogflow.', e);

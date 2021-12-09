@@ -3,6 +3,7 @@ import {
   execAsync,
   ExecResponse,
   getRawString,
+  isJovoCliError,
   JovoCliError,
   Log,
   prompt,
@@ -29,17 +30,16 @@ export async function checkForAskCli(): Promise<void> {
       });
     }
   } catch (error) {
-    if (error instanceof JovoCliError) {
-      throw error;
+    if (!isJovoCliError(error)) {
+      throw new JovoCliError({
+        message: 'Jovo CLI requires ASK CLI',
+        module: 'AlexaCli',
+        hint: 'Install the ASK CLI with "npm install ask-cli -g".',
+        learnMore:
+          'https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html',
+      });
     }
-
-    throw new JovoCliError({
-      message: 'Jovo CLI requires ASK CLI',
-      module: 'AlexaCli',
-      hint: 'Install the ASK CLI with "npm install ask-cli -g".',
-      learnMore:
-        'Read more here: https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html',
-    });
+    throw error;
   }
 }
 
