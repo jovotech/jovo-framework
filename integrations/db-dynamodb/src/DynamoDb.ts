@@ -15,7 +15,7 @@ import {
   Jovo,
   PersistableSessionData,
   PersistableUserData,
-  RequiredWhere,
+  RequiredOnlyWhere,
   UnknownObject,
 } from '@jovotech/framework';
 
@@ -32,7 +32,7 @@ export interface DynamoDbConfig extends DbPluginConfig {
   };
 }
 
-export type DynamoDbInitConfig = RequiredWhere<DynamoDbConfig, 'table'>;
+export type DynamoDbInitConfig = RequiredOnlyWhere<DynamoDbConfig, 'table'>;
 
 export interface DynamoDbItem {
   id: string;

@@ -1,4 +1,4 @@
-import { DeepPartial, OmitOptional, RequiredWhere } from '@jovotech/common';
+import { DeepPartial, RequiredOnly, RequiredOnlyWhere } from '@jovotech/common';
 import _merge from 'lodash.merge';
 import { MiddlewareCollection } from './MiddlewareCollection';
 import { Plugin, PluginConfig } from './Plugin';
@@ -18,8 +18,8 @@ export interface ExtensibleConfig extends PluginConfig {
 
 export type ExtensibleInitConfig<
   CONFIG extends ExtensibleConfig = ExtensibleConfig,
-  K extends keyof OmitOptional<CONFIG> = never,
-> = RequiredWhere<CONFIG, K> & {
+  K extends string = never,
+> = RequiredOnlyWhere<CONFIG, K> & {
   plugin?: never;
   plugins?: Plugin[];
 };

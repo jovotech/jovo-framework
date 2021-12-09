@@ -5,6 +5,7 @@ import {
   PluginHook,
   PluginType,
   promptSupportedLocales,
+  RequiredOnlyWhere,
 } from '@jovotech/cli-core';
 import { join as joinPaths } from 'path';
 import { SupportedLocales } from './constants';
@@ -14,7 +15,9 @@ import { GetHook } from './hooks/GetHook';
 import { NewHook } from './hooks/NewHook';
 import { AlexaCliConfig, AlexaConversationsConfig, SupportedLocalesType } from './interfaces';
 
-export type AlexaCliInitConfig = AlexaCliConfig | { conversations: boolean };
+export type AlexaCliInitConfig =
+  | RequiredOnlyWhere<AlexaCliConfig, 'conversations.enabled'>
+  | { conversations: boolean };
 
 export class AlexaCli extends JovoCliPlugin<AlexaCliConfig> {
   readonly id: string = 'alexa';

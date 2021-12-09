@@ -1,4 +1,4 @@
-import { App, Jovo, JovoError, Plugin, PluginConfig, RequiredWhere } from '@jovotech/framework';
+import { App, Jovo, JovoError, Plugin, PluginConfig, RequiredOnlyWhere } from '@jovotech/framework';
 import { JWT, JWTInput } from 'google-auth-library';
 import { google, sheets_v4 } from 'googleapis';
 import { GoogleSheetsCmsSheet } from './sheets/GoogleSheetsCmsSheet';
@@ -10,7 +10,7 @@ export interface GoogleSheetsCmsConfig extends PluginConfig {
   sheets: Record<string, GoogleSheetsCmsSheet>;
 }
 
-export type GoogleSheetsCmsInitConfig = RequiredWhere<
+export type GoogleSheetsCmsInitConfig = RequiredOnlyWhere<
   GoogleSheetsCmsConfig,
   'serviceAccount' | 'spreadsheetId'
 >;

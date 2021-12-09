@@ -5,7 +5,7 @@ import {
   PluginHook,
   PluginType,
   promptSupportedLocales,
-  RequiredWhere,
+  RequiredOnlyWhere,
 } from '@jovotech/cli-core';
 import { join as joinPaths } from 'path';
 import { BuildHook } from './hooks/BuildHook';
@@ -13,7 +13,7 @@ import { DeployHook } from './hooks/DeployHook';
 import { GetHook } from './hooks/GetHook';
 import { GoogleCliConfig, SupportedLocales, SupportedLocalesType } from './utilities';
 
-export type GoogleCliInitConfig = RequiredWhere<GoogleCliConfig, 'projectId'>;
+export type GoogleCliInitConfig = RequiredOnlyWhere<GoogleCliConfig, 'projectId'>;
 
 export class GoogleAssistantCli extends JovoCliPlugin<GoogleCliConfig> {
   readonly id: string = 'googleAssistant';
