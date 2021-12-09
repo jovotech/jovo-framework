@@ -52,6 +52,7 @@ The Alexa CLI plugin adds the following flags to the [`build` command](https://w
 | Flag            | Description                                                                                                                                     | Examples                |
 | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `--ask-profile` | Add the specified ASK profile to the `ask-states.json` file. [Learn more about ASK profile configuration here](./project-config.md#askprofile). | `--ask-profile default` |
+| `--async`       | Deploys the skill asynchronously. You can check the status of the upload using the ASK CLI.                                                     | `--async`               |
 
 ## deploy
 
