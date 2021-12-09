@@ -4,13 +4,13 @@ import { PermissionStatus, PurchaseResultLike } from './interfaces';
 
 export type PermissionType = 'timers' | 'reminders';
 
-export enum IspRequestType {
+export enum IspType {
   Upsell = 'Upsell',
   Buy = 'Buy',
   Cancel = 'Cancel',
 }
 
-export type IspRequestTypeLike = EnumLike<IspRequestType> | string;
+export type IspTypeLike = EnumLike<IspType> | string;
 
 export class AlexaHandles {
   static onPermission(status: PermissionStatus, type?: PermissionType): HandleOptions {
@@ -28,7 +28,7 @@ export class AlexaHandles {
     };
   }
 
-  static onIsp(type: IspRequestTypeLike, purchaseResult?: PurchaseResultLike): HandleOptions {
+  static onIsp(type: IspTypeLike, purchaseResult?: PurchaseResultLike): HandleOptions {
     return {
       global: true,
       types: ['Connections.Response'],
@@ -42,7 +42,7 @@ export class AlexaHandles {
       },
     };
   }
-  
+
   static onDialogApiInvoked(name?: string): HandleOptions {
     return {
       global: true,
@@ -51,5 +51,5 @@ export class AlexaHandles {
       if: (jovo: Jovo) =>
         name ? (jovo.$request as AlexaRequest).request?.apiRequest?.name === name : true,
     };
-  };
+  }
 }
