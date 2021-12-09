@@ -103,10 +103,10 @@ export class SlackPlugin extends Plugin<SlackPluginConfig> {
   async sendError(error: Error, jovo?: Jovo): Promise<IncomingWebhookResult | undefined> {
     const sendArgs = this.getErrorSendArguments(error, jovo);
     if (!sendArgs) return;
-    return this.sendNotification(sendArgs);
+    return this.sendMessage(sendArgs);
   }
 
-  sendNotification(message: string | IncomingWebhookSendArguments): Promise<IncomingWebhookResult> {
+  sendMessage(message: string | IncomingWebhookSendArguments): Promise<IncomingWebhookResult> {
     return this.client.send(message);
   }
 

@@ -13,7 +13,7 @@ export class JovoSlack {
     return this.slackPlugin.sendError(error, jovo);
   }
 
-  sendNotification(message: string | IncomingWebhookSendArguments): Promise<IncomingWebhookResult> {
-    return this.slackPlugin.sendNotification(message);
+  sendMessage(message: string | IncomingWebhookSendArguments): Promise<IncomingWebhookResult> {
+    return this.slackPlugin.sendMessage(message);
   }
 }
