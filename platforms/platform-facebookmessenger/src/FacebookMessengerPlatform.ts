@@ -4,6 +4,7 @@ import {
   axios,
   AxiosResponse,
   Extensible,
+  ExtensibleInitConfig,
   HandleRequest,
   Jovo,
   JovoError,
@@ -39,6 +40,11 @@ export interface FacebookMessengerConfig extends PlatformConfig {
   session?: StoredElementSession & { enabled?: never };
 }
 
+export type FacebookMessengerInitConfig = ExtensibleInitConfig<
+  FacebookMessengerConfig,
+  'pageAccessToken'
+>;
+
 export class FacebookMessengerPlatform extends Platform<
   FacebookMessengerRequest,
   FacebookMessengerResponse,
@@ -68,6 +74,10 @@ export class FacebookMessengerPlatform extends Platform<
     return `${FACEBOOK_API_BASE_URL}/${this.apiVersion}/me/messages?access_token=${this.pageAccessToken}`;
   }
 
+  constructor(config: FacebookMessengerInitConfig) {
+    super(config);
+  }
+
   async initialize(parent: Extensible): Promise<void> {
     if (super.initialize) {
       await super.initialize(parent);
@@ -91,13 +101,19 @@ export class FacebookMessengerPlatform extends Platform<
 
   getDefaultConfig(): FacebookMessengerConfig {
     return {
+      ...this.getInitConfig(),
       verifyToken: DEFAULT_FACEBOOK_VERIFY_TOKEN,
-      pageAccessToken: '',
       version: LATEST_FACEBOOK_API_VERSION,
       senderActions: {
         markSeen: true,
         typingIndicator: true,
       },
+    };
+  }
+
+  getInitConfig(): FacebookMessengerInitConfig {
+    return {
+      pageAccessToken: '<YOUR-PAGE-ACCESS-TOKEN>',
     };
   }
 

@@ -20,11 +20,9 @@ import { GoogleBusinessOutputTemplateConverterStrategy } from './output';
 
 export interface GoogleBusinessConfig extends PlatformConfig {
   serviceAccount: JWTInput;
-
   session?: StoredElementSession & { enabled?: never };
 }
-export type GoogleBusinessInitConfig = ExtensibleInitConfig<GoogleBusinessConfig> &
-  Pick<GoogleBusinessConfig, 'serviceAccount'>;
+export type GoogleBusinessInitConfig = ExtensibleInitConfig<GoogleBusinessConfig, 'serviceAccount'>;
 
 export class GoogleBusinessPlatform extends Platform<
   GoogleBusinessRequest,
@@ -55,6 +53,12 @@ export class GoogleBusinessPlatform extends Platform<
   }
 
   getDefaultConfig(): GoogleBusinessConfig {
+    return {
+      ...this.getInitConfig(),
+    };
+  }
+
+  getInitConfig(): GoogleBusinessInitConfig {
     return {
       serviceAccount: {},
     };

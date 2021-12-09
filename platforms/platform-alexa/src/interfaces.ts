@@ -1,4 +1,4 @@
-import { Entity, JovoSession, PartialWhere } from '@jovotech/framework';
+import { Entity, JovoSession, PartialWhere, UnknownObject } from '@jovotech/framework';
 import { Intent, Slot } from './output';
 
 export interface Session {
@@ -193,4 +193,12 @@ export interface Request {
   eventCreationTime?: string; // AlexaSkillEvent.*
   eventPublishingTime?: string; // AlexaSkillEvent.*
   dialogState?: string;
+  apiRequest?: {
+    name: string;
+    arguments: Record<string, string>;
+    slots: Record<string, Slot>;
+  };
 }
+
+// Defines a target for Alexa Conversations
+export type ConversationsTarget = 'AMAZON.Conversations' | 'skill';
