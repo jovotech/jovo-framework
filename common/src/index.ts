@@ -66,10 +66,8 @@ export type RequiredOnlyWhere<T, K extends string> = L.Length<S.Split<K, '.'>> e
 export type EnumLike<T extends string> = T | `${T}`;
 
 // Removes all methods and the index signature of the given object
-export type PlainObjectType<T extends UnknownObject> = OmitWhere<
-  OmitIndex<T, string | number>,
-  (...args: unknown[]) => unknown
->;
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type PlainObjectType<T> = OmitWhere<OmitIndex<T, string | number>, Function>;
 
 export { ILogObject, ISettingsParam } from 'tslog';
 export * from './Configurable';
