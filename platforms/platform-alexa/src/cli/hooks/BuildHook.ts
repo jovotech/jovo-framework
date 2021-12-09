@@ -6,6 +6,7 @@ import {
   flags,
   getResolvedLocales,
   InstallContext,
+  isJovoCliError,
   JovoCliError,
   mergeArrayCustomizer,
   OK_HAND,
@@ -418,10 +419,10 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
         );
       }
     } catch (error) {
-      if (error instanceof JovoCliError) {
-        throw error;
+      if (!isJovoCliError(error)) {
+        throw new JovoCliError({ message: error.message, module: this.$plugin.name });
       }
-      throw new JovoCliError({ message: error.message, module: this.$plugin.name });
+      throw error;
     }
   }
 

@@ -3,6 +3,7 @@ import {
   flags,
   getResolvedLocales,
   InstallContext,
+  isJovoCliError,
   JovoCliError,
   printAskProfile,
   printStage,
@@ -211,11 +212,11 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
       if (skillId && skillId.length > 0) {
         return skillId;
       }
-    } catch (err) {
-      if (err instanceof JovoCliError) {
-        throw err;
+    } catch (error) {
+      if (!isJovoCliError(error)) {
+        throw new JovoCliError({ message: error.message, module: this.$plugin.name });
       }
-      throw new JovoCliError({ message: err.message, module: this.$plugin.name });
+      throw error;
     }
   }
 
