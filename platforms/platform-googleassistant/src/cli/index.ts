@@ -29,7 +29,7 @@ export class GoogleAssistantCli extends JovoCliPlugin<GoogleCliConfig> {
   }
 
   getDefaultConfig(): GoogleCliConfig {
-    return { projectId: '<YOUR-PROJECT-ID>' };
+    return { projectId: '<YOUR-PROJECT-ID>', resourcesDirectory: joinPaths('resources', this.id) };
   }
 
   async getInitConfig(): Promise<GoogleCliInitConfig> {

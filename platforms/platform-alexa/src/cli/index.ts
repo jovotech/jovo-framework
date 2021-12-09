@@ -41,7 +41,7 @@ export class AlexaCli extends JovoCliPlugin<AlexaCliConfig> {
     return {
       conversations: {
         enabled: false,
-        directory: 'resources/alexa/conversations',
+        directory: joinPaths('resources', this.id, 'conversations'),
         sessionStartDelegationStrategy: {
           target: 'skill',
         },
