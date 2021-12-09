@@ -15,6 +15,7 @@ import {
   Jovo,
   NluData,
   ParsedAudioInput,
+  RequiredOnlyWhere,
   SluPlugin,
 } from '@jovotech/framework';
 import { gunzip, InputType as GunzipBuffer } from 'zlib';
@@ -72,6 +73,17 @@ export class LexSlu extends SluPlugin<LexSluConfig> {
       fallbackLocale: 'en_US',
       asr: true,
       nlu: true,
+    };
+  }
+
+  getInitConfig(): RequiredOnlyWhere<LexSluConfig, 'credentials' | 'region' | 'bot'> {
+    return {
+      bot: { id: '', aliasId: '' },
+      region: '',
+      credentials: {
+        accessKeyId: '',
+        secretAccessKey: '',
+      },
     };
   }
 
