@@ -17,4 +17,4 @@ This package enables you to integrate your Jovo app with Slack.
 $ npm install @jovotech/plugin-slack
 ```
 
-> Learn more in the docs: https://www.jovo.tech/docs/slack
+> Learn more in the docs: https://www.jovo.tech/marketplace/plugin-slack
