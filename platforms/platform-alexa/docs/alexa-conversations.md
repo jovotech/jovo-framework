@@ -22,7 +22,7 @@ Usually, an Alexa Conversations project follows a hybrid approach:
 - Some tasks (for example slot filling) are done by Alexa Conversations
 - Other tasks (where you need full control and deterministic code) are handled by your app code
 
-The [delegation section](#delegation) introduces different ways for your app code accept requests from and delegate requests to Alexa Conversations.
+The [delegation section](#delegation) introduces different ways for your app code to accept requests from and delegate requests to Alexa Conversations.
 
 ## Configuration
 
@@ -32,7 +32,7 @@ You can enable Alexa Conversations for your project in your [`jovo.project.js` A
 new AlexaCli({
   conversations: true,
   // ...
-})
+});
 ```
 
 By setting `conversations` to `true`, the following default configuration will be used. You can also turn the `conversations` option into an object for more granular configuration:
@@ -49,19 +49,17 @@ new AlexaCli({
     },
   },
   // ...
-})
+});
 ```
 
 - `directory`: This is the directory that contains the AC configuration files that should be deployed to the Alexa Developer Console. Learn more in the [manage files section](#manage-files).
 - `acdlDirectory`: The folder for ACDL files inside the `directory`. Default: `acdl`, which means that the files are stored in a `resources/alexa/conversations/acdl` folder.
 - `responsesDirectory`: The folder for response files inside the `directory`. Default: `responses`, which means that the files are stored in a `resources/alexa/conversations/responses` folder.
-- `sessionStartDelegationStrategy`:  The `target` means where a new session should be directed to,either thhe `skill` (your app code) or `AMAZON.Conversations`. Default: `skill`.
-
-
+- `sessionStartDelegationStrategy`: The `target` means where a new session should be directed to,either the `skill` (your app code) or `AMAZON.Conversations`. Default: `skill`.
 
 ## Manage Files
 
-The Jovo integration for Alexa Conversations allows you to store the following files in your Jovo project and them deploy them to the Alexa Developer Console using the Jovo CLI:
+The Jovo integration for Alexa Conversations allows you to store the following files in your Jovo project and then deploy them to the Alexa Developer Console using the Jovo CLI:
 
 - [ACDL](https://developer.amazon.com/docs/alexa/conversations/acdl-files.html): Alexa Conversations Description Language (ACDL) files can be stored in a folder called `resources/alexa/conversations/acdl` in the root of your Jovo project.
 - [Responses](https://developer.amazon.com/docs/alexa/conversations/acdl-response-prompt-files.html): Response prompt files can be stored in a folder called `resources/alexa/conversations/responses` in the root of your Jovo project.
@@ -74,7 +72,7 @@ $ jovo build:platform alexa
 
 As a convention, the Jovo `build` folder should not be pushed to e.g. your Git repository. The `jovo.project.js` can be seen as a single source of truth that generates the contents of the `build` folder. For additional files like ACDL files (or maybe outsourcing some of the `jovo.project.js` contents into separate files), we recommend sticking to the `resources/alexa` folder convention.
 
-The [`deploy` command](./cli-commands.md#deploy) uploads the contents of the Alexa project in the `build` folder to the Alexa Developer Console. Before doing that, it converts the ACDL files into a JSON format.
+The [`deploy` command](./cli-commands.md#deploy) uploads the contents of the Alexa project in the `build` folder to the Alexa Developer Console. Before doing that, it compiles the ACDL files into JSON.
 
 ```sh
 $ jovo deploy:platform alexa
@@ -86,7 +84,7 @@ Learn more about all [Alexa CLI commands here](./cli-commands.md).
 
 With Alexa Conversations, you can define APIs that respond to `Dialog.API.Invoked` requests. Learn more in the [official Alexa docs](https://developer.amazon.com/docs/alexa/conversations/handle-api-calls.html).
 
-You can have a [handler](https://www.jovo.tech/docs/handlers) accept a request like this by using the `onDialogApiInvoked` helper that can be used inside the [`@Handle` decorator](https://www.jovo.tech/docs/handlers#handler-routing-and-the-handle-decorator). 
+You can have a [handler](https://www.jovo.tech/docs/handlers) accept a request like this by using the `onDialogApiInvoked` helper that can be used inside the [`@Handle` decorator](https://www.jovo.tech/docs/handlers#handler-routing-and-the-handle-decorator).
 
 ```typescript
 import { AlexaHandles } from '@jovotech/platform-alexa';
@@ -110,11 +108,15 @@ Under the hood, the object used by `@Handle` looks like this:
 }
 ```
 
-You can then send a response by using the `ApiResponseOutput` [output class](https://www.jovo.tech/docs/output-classes) for this, for example:
+You can then choose between sending an API response back for Alexa Conversations to operate on, or delegate control back to your handler.
+
+### Send an API response
+
+You can send an API response by using the `ApiResponseOutput` [output class](https://www.jovo.tech/docs/output-classes), for example:
 
 ```typescript
-import { AlexaHandles } from '@jovotech/platform-alexa';
-import { ApiResponseOutput } from '@jovotech/platform-alexa'; 
+import { AlexaHandles, ApiResponseOutput } from '@jovotech/platform-alexa';
+
 // ...
 
 @Handle(AlexaHandles.onDialogApiInvoked('yourApiName'))
@@ -153,6 +155,10 @@ Under the hood, it looks like this:
 
 The [`listen` property](./output.md#listen) needs to be set to indicate that the session should stay open or be closed. Learn more in the [official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/conversations/handle-api-calls.html#ending-the-skill-session).
 
+### Send a DialogDelegateRequest
+
+You can also choose to delegate the conversational flow back to your handler. Learn more in the [Accept Requests from Alexa Conversations section](#accept-requests-from-alexa-conversations).
+
 ## Delegation
 
 There are multiple ways how your app code can communicate with Alexa Conversations:
@@ -169,7 +175,7 @@ To delegate to Alexa Conversations, you have to send a [Dialog Delegate Request]
 In your handler, you can use the `DialogDelegateRequestOutput` [output class](https://www.jovo.tech/docs/output-classes) for this, for example:
 
 ```typescript
-import { DialogDelegateRequestOutput } from '@jovotech/platform-alexa'; 
+import { DialogDelegateRequestOutput } from '@jovotech/platform-alexa';
 // ...
 
 someHandler() {
@@ -211,16 +217,14 @@ Under the hood, it looks like this:
 }
 ```
 
-By default, you don't need to define `slots` as part of the `updatedRequest` property. The entities stored in [`$entities`](https://www.jovo.tech/marketplace/platform-alexa#entities-slots-) will be automatically added in the background. You can still pass them in the same way it's done in the [official Alexa documentation](https://developer.amazon.com/docs/alexa/conversations/hand-off-dialog-management.html#hand-off-to-alexa-conversations).
-
+By default, you don't need to define `slots` as part of the `updatedRequest` property. The entities stored in [`$entities`](https://www.jovo.tech/marketplace/platform-alexa#entities-slots-) will be automatically added in the background. If you want to customize this behaviour, you can still pass them in the same way it's done in the [official Alexa documentation](https://developer.amazon.com/docs/alexa/conversations/hand-off-dialog-management.html#hand-off-to-alexa-conversations).
 
 ### Accept Requests from Alexa Conversations
 
 Alexa Conversations can also hand off to your Alexa Skill. To do this, you need to send a `DialogDelegateRequest` similar to the delegation to [Alexa Conversations](#delegate-to-alexa-conversations). [Learn more in the official Alexa docs](https://developer.amazon.com/docs/alexa/conversations/hand-off-dialog-management.html#hand-off-to-skill).
 
-
 ```typescript
-import { DialogDelegateRequestOutput } from '@jovotech/platform-alexa'; 
+import { DialogDelegateRequestOutput } from '@jovotech/platform-alexa';
 // ...
 
 someHandler() {
@@ -238,3 +242,4 @@ someHandler() {
 ```
 
 By default, you don't need to define `slots` as part of the `updatedRequest` property. The entities stored in [`$entities`](https://www.jovo.tech/marketplace/platform-alexa#entities-slots-) will be automatically added in the background. You can still pass them in the same way it's done in the [official Alexa documentation](https://developer.amazon.com/en-US/docs/alexa/conversations/hand-off-dialog-management.html#hand-off-to-skill).
+
