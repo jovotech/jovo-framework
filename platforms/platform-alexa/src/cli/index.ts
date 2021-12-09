@@ -90,6 +90,10 @@ export class AlexaCli extends JovoCliPlugin<AlexaCliConfig> {
     return joinPaths(this.$cli.project!.getBuildPath(), this.platformDirectory);
   }
 
+  get resourcesDirectory(): string {
+    return joinPaths('resources', this.id);
+  }
+
   /**
    * The path to Alexa skill package folder
    */

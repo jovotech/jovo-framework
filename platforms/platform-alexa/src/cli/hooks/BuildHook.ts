@@ -23,6 +23,7 @@ import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 import { JovoModelData, JovoModelDataV3, NativeFileInformation } from '@jovotech/model';
 import { JovoModelAlexa } from '@jovotech/model-alexa';
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs';
+import { copySync, moveSync } from 'fs-extra';
 import _get from 'lodash.get';
 import _has from 'lodash.has';
 import _merge from 'lodash.merge';
@@ -33,7 +34,6 @@ import { AlexaCli } from '..';
 import { SupportedLocales } from '../constants';
 import DefaultFiles from '../DefaultFiles.json';
 import { AlexaContext, SupportedLocalesType } from '../interfaces';
-import { copyFiles } from '../utilities';
 import { AlexaHook } from './AlexaHook';
 
 export interface AlexaBuildPlatformContext extends AlexaContext, BuildPlatformContext {
@@ -262,22 +262,51 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       }
     }
 
-    // If Jovo model files for the current locales exist, ask whether to back them up or not.
-    if (this.$cli.project!.hasModelFiles(Object.values(buildLocaleMap))) {
+    // If Jovo model files for the current locales or resource files exist, ask whether to back them up or not.
+    if (
+      this.$cli.project!.hasModelFiles(Object.values(buildLocaleMap)) ||
+      (this.$context.alexa.isACSkill && existsSync(this.$plugin.resourcesDirectory))
+    ) {
       const answer = await promptOverwriteReverseBuild();
       if (answer.overwrite === ANSWER_CANCEL) {
         return;
       }
       if (answer.overwrite === ANSWER_BACKUP) {
+        Log.spacer();
         // Backup old files.
         const backupTask: Task = new Task(`${DISK} Creating backups`);
-        for (const locale of Object.values(buildLocaleMap)) {
-          const localeTask: Task = new Task(locale, () => this.$cli.project!.backupModel(locale));
-          backupTask.add(localeTask);
+        const date: string = new Date().toISOString();
+
+        if (existsSync(this.$cli.project!.getModelsDirectory())) {
+          const modelsBackupDirectory = `${this.$cli.project!.getModelsDirectory()}.${date}`;
+          const modelTask: Task = new Task(
+            `${this.$cli.project!.getModelsDirectory()} -> ${modelsBackupDirectory}`,
+            () => {
+              moveSync(this.$cli.project!.getModelsDirectory(), modelsBackupDirectory, {
+                overwrite: true,
+              });
+            },
+          );
+          backupTask.add(modelTask);
         }
+
+        if (existsSync(this.$plugin.resourcesDirectory)) {
+          const resourcesBackupDirectory = `${this.$plugin.resourcesDirectory}.${date}`;
+          const resourcesTask: Task = new Task(
+            `${this.$plugin.resourcesDirectory} -> ${resourcesBackupDirectory}`,
+            () => {
+              moveSync(this.$plugin.resourcesDirectory, resourcesBackupDirectory, {
+                overwrite: true,
+              });
+            },
+          );
+          backupTask.add(resourcesTask);
+        }
+
         await backupTask.run();
       }
     }
+
     const reverseBuildTask: Task = new Task(`${REVERSE_ARROWS} Reversing Alexa files`);
     for (const [platformLocale, modelLocale] of Object.entries(buildLocaleMap)) {
       const taskDetails: string = platformLocale === modelLocale ? '' : `(${modelLocale})`;
@@ -304,36 +333,40 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       reverseBuildTask.add(localeTask);
     }
 
-    if (
-      this.$context.alexa.isACSkill &&
-      existsSync(this.$plugin.conversationsDirectory) &&
-      this.$plugin.config.conversations?.directory
-    ) {
-      const copyAcdlFilesTask: Task = new Task(
-        `Copying Alexa Conversations files into ${this.$plugin.config.conversations.directory}`,
-        () =>
-          copyFiles(
-            this.$plugin.conversationsDirectory,
-            this.$plugin.config.conversations!.directory!,
-          ),
-      );
-      reverseBuildTask.add(copyAcdlFilesTask);
+    if (this.$context.alexa.isACSkill && this.$plugin.config.conversations?.directory) {
+      if (
+        this.$plugin.config.conversations?.acdlDirectory &&
+        existsSync(this.$plugin.conversationsDirectory)
+      ) {
+        const acdlPath: string = joinPaths(
+          this.$plugin.config.conversations.directory,
+          this.$plugin.config.conversations.acdlDirectory,
+        );
+
+        const copyAcdlFilesTask: Task = new Task(
+          `Copying Alexa Conversations files into ${acdlPath}`,
+          () => copySync(this.$plugin.conversationsDirectory, acdlPath),
+        );
+        reverseBuildTask.add(copyAcdlFilesTask);
+      }
+
+      if (
+        this.$plugin.config.conversations?.responsesDirectory &&
+        existsSync(this.$plugin.responseDirectory)
+      ) {
+        const responsesPath: string = joinPaths(
+          this.$plugin.config.conversations.directory,
+          this.$plugin.config.conversations.responsesDirectory,
+        );
+
+        const copyResponseFilesTask: Task = new Task(
+          `Copying Response files into ${responsesPath}`,
+          () => copySync(this.$plugin.responseDirectory, responsesPath),
+        );
+        reverseBuildTask.add(copyResponseFilesTask);
+      }
     }
 
-    if (
-      this.$plugin.config.conversations?.responsesDirectory &&
-      existsSync(this.$plugin.responseDirectory)
-    ) {
-      const copyResponseFilesTask: Task = new Task(
-        `Copying Response files into ${this.$plugin.config.conversations.responsesDirectory}`,
-        () =>
-          copyFiles(
-            this.$plugin.responseDirectory,
-            this.$plugin.config.conversations!.responsesDirectory!,
-          ),
-      );
-      reverseBuildTask.add(copyResponseFilesTask);
-    }
     await reverseBuildTask.run();
   }
 
@@ -513,7 +546,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       });
     }
 
-    copyFiles(src, this.$plugin.conversationsDirectory);
+    copySync(src, this.$plugin.conversationsDirectory);
   }
 
   buildResponseFiles(): void {
@@ -530,7 +563,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       });
     }
 
-    copyFiles(src, this.$plugin.conversationsDirectory);
+    copySync(src, this.$plugin.conversationsDirectory);
   }
 
   /**
