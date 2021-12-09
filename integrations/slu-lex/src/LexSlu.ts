@@ -151,8 +151,10 @@ export class LexSlu extends SluPlugin<LexSluConfig> {
           if (!slot.value) {
             return entities;
           }
+          const resolved = slot.value.resolvedValues?.[0] || slot.value.interpretedValue;
           entities[name] = {
-            resolved: slot.value.resolvedValues?.[0] || slot.value.interpretedValue,
+            id: resolved,
+            resolved,
             value: slot.value.originalValue || slot.value.interpretedValue,
             native: slot,
           };
