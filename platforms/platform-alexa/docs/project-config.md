@@ -23,13 +23,16 @@ const project = new ProjectConfig({
   plugins: [
     new AlexaCli({
       locales: {
-        /* ... */
+        // ...
       },
       skillId: '<yourSkillId>',
       askProfile: 'default',
       files: {
-        /* ... */
+        // ...
       },
+      conversations: {
+        // ...
+      }
     }),
     // ...
   ],
@@ -42,6 +45,7 @@ The following options are currently supported:
 - [`skillId`](#skillid): The Skill ID that the project should be deployed to.
 - [`askProfile`](#askprofile): The ASK profile that should be used for the deployment.
 - [`files`](#files): This can be used to add or override files in your Alexa `build` folder, for example to make updates to the `skill.json` file.
+- [`conversations`](#conversations): This includes configurations for [Alexa Conversations](./alexa-conversations.md).
 
 ## locales
 
