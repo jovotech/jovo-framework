@@ -41,17 +41,10 @@ export type PartialWhere<T, K extends keyof T> = Omit<T, K> & Partial<T>;
 
 // Returns all elements of T that are non-optional. Works with nested objects.
 // If an entry T[K] is assignable to a weak type, it will be omitted from the object.
-export type RequiredOnly<
-  T,
-  O extends OmitIndex<T, string | number> = OmitIndex<T, string | number>,
-> = {
-  [K in keyof O as Partial<UnknownObject> extends Pick<O, K>
+export type RequiredOnly<T> = {
+  [K in keyof OmitIndex<T> as UnknownObject extends Pick<OmitIndex<T>, K>
     ? never
-    : K]: Partial<UnknownObject> extends Pick<O, K>
-    ? never
-    : Pick<O, K> extends UnknownObject
-    ? RequiredOnly<O[K]>
-    : Pick<O, K>;
+    : K]: OmitIndex<T>[K] extends UnknownObject ? RequiredOnly<OmitIndex<T>[K]> : OmitIndex<T>[K];
 };
 
 export type FirstKey<K extends string> = Shift<S.Split<K, '.'>>;
