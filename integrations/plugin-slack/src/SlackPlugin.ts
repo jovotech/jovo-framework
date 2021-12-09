@@ -31,7 +31,7 @@ export interface SlackPluginConfig extends PluginConfig {
   fields: SlackFieldMap;
 
   logErrors: boolean;
-  transformError?: (error: Error, jovo?: Jovo) => IncomingWebhookSendArguments | undefined;
+  transformError?: (error: Error, jovo?: Jovo) => string | IncomingWebhookSendArguments | undefined;
 }
 
 export type SlackPluginInitConfig = DeepPartial<SlackPluginConfig> &
@@ -106,7 +106,7 @@ export class SlackPlugin extends Plugin<SlackPluginConfig> {
   private getErrorSendArguments(
     error: Error,
     jovo?: Jovo,
-  ): IncomingWebhookSendArguments | undefined {
+  ): string | IncomingWebhookSendArguments | undefined {
     if (this.config.transformError) {
       return this.config.transformError(error, jovo);
     }
