@@ -4,13 +4,13 @@ import { PermissionStatus, PurchaseResultLike } from './interfaces';
 
 export type PermissionType = 'timers' | 'reminders';
 
-export enum IspRequest {
+export enum IspRequestType {
   Upsell = 'Upsell',
   Buy = 'Buy',
   Cancel = 'Cancel',
 }
 
-export type IspRequestLike = EnumLike<IspRequest> | string;
+export type IspRequestLike = EnumLike<IspRequestType> | string;
 
 export class AlexaHandles {
   static onPermission(status: PermissionStatus, type?: PermissionType): HandleOptions {
