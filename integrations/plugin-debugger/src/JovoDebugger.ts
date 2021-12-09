@@ -468,8 +468,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function propagateStreamAsLog(stream: Writable, socket: typeof Socket) {
       const originalWriteFn = stream.write;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      stream.write = function (chunk: Buffer, ...args: any[]) {
+      stream.write = function (chunk: Buffer, ...args: unknown[]) {
         socket.emit(JovoDebuggerEvent.AppConsoleLog, chunk.toString(), new Error().stack);
         return originalWriteFn.call(this, chunk, ...args);
       };

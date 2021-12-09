@@ -25,11 +25,10 @@ Platforms usually come with two plugin types and their configurations: [App plug
 
 ### App Configuration
 
-You can add a platform integration to the `plugins` array of the [app configuration](./app-config.md). The naming convention is an appended `Platform` after the platform's name. Here is an example for `AlexaPlatform`:
+You can add a platform integration to the `plugins` array of the [app configuration](./app-config.md). The naming convention is an appended `Platform` after the platform's name. Here is an example for [Alexa](https://www.jovo.tech/marketplace/platform-alexa):
 
 ```typescript
 import { AlexaPlatform } from '@jovotech/platform-alexa';
-
 // ...
 
 const app = new App({
@@ -42,7 +41,27 @@ const app = new App({
 });
 ```
 
-You can find the specific configuration for each platform integration in its respective documentation.
+You can find the specific configuration for each platform integration in its respective documentation, which you can find in the [Jovo Marketplace](https://www.jovo.tech/marketplace).
+
+Additionally to the platform specific config, each platform can also have its own `intentMap` that gets merged into the [global `intentMap`](https://www.jovo.tech/docs/app-config#intentmap), for example:
+
+```typescript
+import { AlexaPlatform } from '@jovotech/platform-alexa';
+// ...
+
+const app = new App({
+  plugins: [
+    new AlexaPlatform({
+      intentMap: {
+        'AMAZON.StopIntent': 'END',
+        'AMAZON.CancelIntent': 'END',
+      },
+      // ...
+    }),
+  ],
+  // ...
+});
+```
 
 ### Project Configuration
 

@@ -15,6 +15,7 @@ import {
   Jovo,
   PersistableSessionData,
   PersistableUserData,
+  RequiredOnlyWhere,
   UnknownObject,
 } from '@jovotech/framework';
 
@@ -32,6 +33,8 @@ export interface DynamoDbConfig extends DbPluginConfig {
   };
 }
 
+export type DynamoDbInitConfig = RequiredOnlyWhere<DynamoDbConfig, 'table'>;
+
 export interface DynamoDbItem {
   id: string;
   user?: PersistableUserData;
@@ -43,11 +46,16 @@ export interface DynamoDbItem {
 export class DynamoDb extends DbPlugin<DynamoDbConfig> {
   client: DynamoDBClient;
 
+  constructor(config: DynamoDbInitConfig) {
+    super(config);
+    this.client = new DynamoDBClient(this.config.libraryConfig?.dynamoDbClient || {});
+  }
+
   getDefaultConfig(): DynamoDbConfig {
     return {
       ...super.getDefaultConfig(),
       table: {
-        name: '',
+        name: '<YOUR-TABLE-NAME>',
         primaryKeyColumn: 'userId',
         createTableOnInit: true,
         readCapacityUnits: 2,
@@ -62,9 +70,8 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
     };
   }
 
-  constructor(config: DynamoDbConfig) {
-    super(config);
-    this.client = new DynamoDBClient(this.config.libraryConfig?.dynamoDbClient || {});
+  getInitConfig(): DynamoDbInitConfig {
+    return { table: { name: '<YOUR-TABLE-NAME>' } };
   }
 
   mount(parent: HandleRequest): Promise<void> | void {
