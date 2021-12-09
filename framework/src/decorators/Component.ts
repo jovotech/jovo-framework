@@ -1,14 +1,14 @@
 import { BaseComponent, ComponentConstructor } from '../BaseComponent';
 import { BuiltInHandler } from '../enums';
 import { DuplicateChildComponentsError } from '../errors/DuplicateChildComponentsError';
-import { ComponentMetadata, ComponentOptions } from '../metadata/ComponentMetadata';
+import { ComponentMetadata, ComponentOptionsOf } from '../metadata/ComponentMetadata';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
 import { HandlerOptionMetadata } from '../metadata/HandlerOptionMetadata';
 import { MetadataStorage } from '../metadata/MetadataStorage';
 import { getMethodKeys } from '../utilities';
 
 export function Component<COMPONENT extends BaseComponent = BaseComponent>(
-  options?: ComponentOptions<COMPONENT>,
+  options?: ComponentOptionsOf<COMPONENT>,
 ): (target: ComponentConstructor<COMPONENT>) => void {
   return function (target) {
     if (options?.components) {
