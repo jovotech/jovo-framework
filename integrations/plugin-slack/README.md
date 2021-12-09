@@ -7,7 +7,7 @@
 </p>
 
 <p>
-<a href="https://www.npmjs.com/package/@jovotech/plugin-debugger" target="_blank"><img src="https://badge.fury.io/js/@jovotech%2Fplugin-debugger.svg"></a>      
+<a href="https://www.npmjs.com/package/@jovotech/plugin-slack" target="_blank"><img src="https://badge.fury.io/js/@jovotech%2Fplugin-slack.svg"></a>      
 <a href="https://opencollective.com/jovo-framework" target="_blank"><img src="https://opencollective.com/jovo-framework/tiers/badge.svg"></a>
 </p>
 
