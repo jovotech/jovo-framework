@@ -222,7 +222,7 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
       Log.info(
         chalk.dim(`$ ask smapi get-import-status --import-id ${this.$context.alexa.importId}`),
         {
-          indent: 2,
+          indentation: 2,
         },
       );
     }
