@@ -91,8 +91,7 @@ export class TranslationsTable extends AirtableTable {
           jovo.$app.i18n.i18n.addResourceBundle(
             locale,
             `${key}.translation`,
-            // @ts-ignore
-            resources[locale][key]['translation'],
+            (resources[locale][key] as Resources)['translation'],
             true,
             false,
           );

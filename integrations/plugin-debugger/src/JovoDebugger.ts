@@ -31,7 +31,6 @@ import { homedir } from 'os';
 import { join, resolve } from 'path';
 import { cwd } from 'process';
 import { connect, Socket } from 'socket.io-client';
-import { Writable } from 'stream';
 import { inspect } from 'util';
 import { v4 as uuidV4 } from 'uuid';
 import { STATE_MUTATING_METHOD_KEYS } from './constants';
@@ -464,15 +463,6 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
 
     await this.emitDebuggerConfig();
     await this.emitLanguageModelIfEnabled();
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    function propagateStreamAsLog(stream: Writable, socket: typeof Socket) {
-      const originalWriteFn = stream.write;
-      stream.write = function (chunk: Buffer, ...args: unknown[]) {
-        socket.emit(JovoDebuggerEvent.AppConsoleLog, chunk.toString(), new Error().stack);
-        return originalWriteFn.call(this, chunk, ...args);
-      };
-    }
 
     if (!this.hasOverriddenWrite) {
       // disable logging events for now because they are not shown anyways

@@ -424,7 +424,7 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
           removeSync(dest);
           copySync(src, dest);
         },
-        { indent: 2 },
+        { indentation: 2 },
       );
 
       await copyResourcesTask.run();

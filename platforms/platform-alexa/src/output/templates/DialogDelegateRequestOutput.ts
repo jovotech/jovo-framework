@@ -1,5 +1,4 @@
 import { BaseOutput, Output, OutputOptions, OutputTemplate } from '@jovotech/framework';
-import { ConversationsTarget } from '../../interfaces';
 
 export interface UpdatedRequestSlot {
   name: string;

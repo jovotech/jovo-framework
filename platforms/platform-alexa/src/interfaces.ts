@@ -1,5 +1,4 @@
-import { Entity, EnumLike, JovoSession, PartialWhere, UnknownObject } from '@jovotech/framework';
-
+import { Entity, EnumLike, JovoSession, PartialWhere } from '@jovotech/framework';
 import { Intent, Slot } from './output';
 
 export interface Session {
