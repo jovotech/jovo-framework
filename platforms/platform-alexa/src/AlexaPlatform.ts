@@ -1,4 +1,11 @@
-import { AnyObject, HandleRequest, Jovo, Platform, PlatformConfig, RequiredOnlyWhere } from '@jovotech/framework';
+import {
+  AnyObject,
+  HandleRequest,
+  Jovo,
+  Platform,
+  PlatformConfig,
+  RequiredOnlyWhere,
+} from '@jovotech/framework';
 import { Alexa } from './Alexa';
 import { AlexaDevice } from './AlexaDevice';
 import { AlexaRequest } from './AlexaRequest';
@@ -41,10 +48,6 @@ export class AlexaPlatform extends Platform<
       },
       output: {
         genericOutputToApl: true,
-      },
-      intentMap: {
-        'AMAZON.StopIntent': 'END',
-        'AMAZON.CancelIntent': 'END',
       },
     };
   }
