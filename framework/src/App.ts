@@ -116,6 +116,17 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
     this.errorListeners.push(listener);
   }
 
+  addErrorListener(listener: AppErrorListener): void {
+    return this.onError(listener);
+  }
+
+  removeErrorListener(listener: AppErrorListener): void {
+    const index = this.errorListeners.indexOf(listener);
+    if (index >= 0) {
+      this.errorListeners.splice(index, 1);
+    }
+  }
+
   initializeMiddlewareCollection(): MiddlewareCollection<AppMiddlewares> {
     return new MiddlewareCollection(...APP_MIDDLEWARES);
   }
@@ -206,7 +217,8 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
       // use handleRequest.server instead of server in order to allow a request-related server instance to be used
       await handleRequest.server.setResponse(jovo.$response);
     } catch (e) {
-      return this.handleError(e);
+      await this.handleError(e);
+      return server.fail(e);
     }
   }
 

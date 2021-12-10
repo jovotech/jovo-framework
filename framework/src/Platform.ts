@@ -7,6 +7,7 @@ import {
   AppMiddlewares,
   DbPlugin,
   HandleRequest,
+  IntentMap,
   InvalidParentError,
   Jovo,
   JovoConstructor,
@@ -23,6 +24,10 @@ import { MiddlewareCollection } from './MiddlewareCollection';
 
 export type PlatformMiddlewares = AppMiddlewares;
 
+export interface PlatformConfig extends ExtensibleConfig {
+  intentMap?: IntentMap;
+}
+
 export abstract class Platform<
   REQUEST extends JovoRequest = JovoRequest,
   RESPONSE extends JovoResponse = JovoResponse,
@@ -32,7 +37,7 @@ export abstract class Platform<
   DEVICE extends JovoDevice<JOVO> = JovoDevice<JOVO>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   PLATFORM extends Platform<REQUEST, RESPONSE, JOVO, USER, DEVICE, PLATFORM, CONFIG> = any,
-  CONFIG extends ExtensibleConfig = ExtensibleConfig,
+  CONFIG extends PlatformConfig = PlatformConfig,
 > extends Extensible<CONFIG, PlatformMiddlewares> {
   abstract readonly id: string;
   abstract readonly requestClass: Constructor<REQUEST>;

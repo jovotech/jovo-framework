@@ -1,5 +1,4 @@
-import { SnipsNluConfig } from './interfaces';
-import { SnipsNlu } from './SnipsNlu';
+import { SnipsNlu, SnipsNluConfig } from './SnipsNlu';
 
 declare module '@jovotech/framework/dist/types/Extensible' {
   interface ExtensiblePluginConfig {

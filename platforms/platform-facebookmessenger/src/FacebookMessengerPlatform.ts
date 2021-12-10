@@ -4,12 +4,12 @@ import {
   axios,
   AxiosResponse,
   Extensible,
-  ExtensibleConfig,
   ExtensibleInitConfig,
   HandleRequest,
   Jovo,
   JovoError,
   Platform,
+  PlatformConfig,
   Server,
   StoredElementSession,
   UnknownObject,
@@ -29,7 +29,7 @@ import { FacebookMessengerUser } from './FacebookMessengerUser';
 import { MessengerBotEntry, SenderAction } from './interfaces';
 import { FacebookMessengerOutputTemplateConverterStrategy } from './output';
 
-export interface FacebookMessengerConfig extends ExtensibleConfig {
+export interface FacebookMessengerConfig extends PlatformConfig {
   version: typeof LATEST_FACEBOOK_API_VERSION | string;
   verifyToken: string;
   pageAccessToken: string;

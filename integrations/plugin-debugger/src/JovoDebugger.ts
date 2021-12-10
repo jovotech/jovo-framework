@@ -13,6 +13,7 @@ import {
   Plugin,
   PluginConfig,
   Server,
+  SluPlugin,
   UnknownObject,
 } from '@jovotech/framework';
 import { NlpjsNlu } from '@jovotech/nlu-nlpjs';
@@ -53,7 +54,7 @@ type AugmentedServer = Server & {
 };
 
 export interface JovoDebuggerConfig extends PluginConfig {
-  nlu: NluPlugin;
+  nlu: NluPlugin | SluPlugin;
   webhookUrl: string;
   debuggerConfigPath: string;
   modelsPath: string;
