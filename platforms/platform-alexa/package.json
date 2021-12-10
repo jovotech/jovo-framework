@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/platform-alexa",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
