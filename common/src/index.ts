@@ -32,9 +32,14 @@ export type OmitWhere<T, U> = {
 export type FilterKey<K, I> = A.Equals<K, I> extends 1 ? never : K;
 
 // Omit index signature of T if it equals index-signature I.
-export type OmitIndex<T, I extends string | number | symbol = string | number | symbol> = {
-  [K in keyof T as FilterKey<K, I>]: T[K];
+export type OmitIndex<T> = {
+  [K in keyof T as FilterKey<K, IndexSignature<T>>]: T[K];
 };
+
+// Returns the index signature of T
+export type IndexSignature<T> = {
+  [K in keyof T]: K extends infer P ? P : never;
+}[keyof T];
 
 // Convert keys K of T to optional elements
 export type PartialWhere<T, K extends keyof T> = Omit<T, K> & Partial<T>;
@@ -72,7 +77,7 @@ export type EnumLike<T extends string> = T | `${T}`;
 
 // Removes all methods and the index signature of the given object
 // eslint-disable-next-line @typescript-eslint/ban-types
-export type PlainObjectType<T> = OmitWhere<OmitIndex<T, string | number>, Function>;
+export type PlainObjectType<T> = OmitWhere<T, Function>;
 
 export { ILogObject, ISettingsParam } from 'tslog';
 export * from './Configurable';
