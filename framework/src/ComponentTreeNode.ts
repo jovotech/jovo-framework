@@ -68,7 +68,7 @@ export class ComponentTreeNode<COMPONENT extends BaseComponent = BaseComponent> 
   }: ExecuteHandlerOptions<COMPONENT, HANDLER, ARGS>): Promise<void> {
     const componentInstance = new (this.metadata.target as ComponentConstructor<COMPONENT>)(
       jovo,
-      this.metadata.options?.config,
+      this.metadata.options,
     );
     try {
       if (!componentInstance[handler as keyof COMPONENT]) {
