@@ -41,7 +41,8 @@ export class AlexaCli extends JovoCliPlugin<AlexaCliConfig> {
     return {
       conversations: {
         enabled: false,
-        directory: joinPaths('resources', this.id, 'conversations'),
+        // ! Since getDefaultConfig() is called before this.id is assigned, we need to set it manually
+        directory: joinPaths('resources', 'alexa', 'conversations'),
         sessionStartDelegationStrategy: {
           target: 'skill',
         },
