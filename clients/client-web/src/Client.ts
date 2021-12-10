@@ -208,8 +208,8 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
    * Should be called synchronously in a click-handler!
    */
   async initialize(): Promise<void> {
-    await this.audioPlayer.initialize();
-    await this.audioRecorder.initialize();
+    this.audioPlayer.initialize();
+    this.audioRecorder.initialize();
     this.initialized = true;
   }
 
