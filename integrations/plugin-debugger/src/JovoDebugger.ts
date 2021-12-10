@@ -464,15 +464,6 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     await this.emitDebuggerConfig();
     await this.emitLanguageModelIfEnabled();
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    function propagateStreamAsLog(stream: Writable, socket: typeof Socket) {
-      const originalWriteFn = stream.write;
-      stream.write = function (chunk: Buffer, ...args: unknown[]) {
-        socket.emit(JovoDebuggerEvent.AppConsoleLog, chunk.toString(), new Error().stack);
-        return originalWriteFn.call(this, chunk, ...args);
-      };
-    }
-
     if (!this.hasOverriddenWrite) {
       // disable logging events for now because they are not shown anyways
       // propagateStreamAsLog(process.stdout, this.socket);
