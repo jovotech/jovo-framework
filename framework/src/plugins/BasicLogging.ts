@@ -33,7 +33,7 @@ export interface RequestResponseConfig {
 export interface BasicLoggingConfig extends PluginConfig {
   request?: RequestResponseConfig | boolean;
   response?: RequestResponseConfig | boolean;
-  maskValue?: any;
+  maskValue?: unknown;
   styling?: boolean;
   indentation?: string;
   colorizeSettings?: {

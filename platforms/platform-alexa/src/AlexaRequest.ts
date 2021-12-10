@@ -11,12 +11,7 @@ import {
 import { AlexaCapability, AlexaCapabilityType } from './AlexaDevice';
 import { DYNAMIC_ENTITY_MATCHES_PREFIX, STATIC_ENTITY_MATCHES_PREFIX } from './constants';
 import { AlexaEntity, Context, Request, Session } from './interfaces';
-import {
-  ResolutionPerAuthority,
-  ResolutionPerAuthorityStatusCode,
-  Slot,
-  UpdatedRequestSlot,
-} from './output';
+import { ResolutionPerAuthority, ResolutionPerAuthorityStatusCode, Slot } from './output';
 
 export const ALEXA_REQUEST_TYPE_TO_INPUT_TYPE_MAP: Record<string, InputTypeLike> = {
   'LaunchRequest': InputType.Launch,
