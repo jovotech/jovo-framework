@@ -51,7 +51,7 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
           confidence: rasaResponse.data.intent.confidence,
         },
         alternativeIntents: this.mapAlternativeIntents(rasaResponse.data.intent_ranking),
-        entities: this.getRasaEntitiesFromResponse(rasaResponse.data),
+        entities: this.getEntityMapFromResponse(rasaResponse.data),
       };
     } catch (e) {
       // eslint-disable-next-line no-console
@@ -76,7 +76,7 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
       .slice(0, this.config.alternativeIntents.maxAlternatives);
   }
 
-  private getRasaEntitiesFromResponse(response: RasaResponse): EntityMap {
+  private getEntityMapFromResponse(response: RasaResponse): EntityMap {
     return response.entities.reduce((entityMap: EntityMap, entity) => {
       let entityName = entity.entity;
       // roles can distinguish entities of the same type e.g. departure and destination in
