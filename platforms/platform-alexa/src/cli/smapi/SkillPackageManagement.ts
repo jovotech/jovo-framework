@@ -58,11 +58,16 @@ export async function exportSkillPackage(
   );
 }
 
-export async function getImportStatus(importId: string, isAsync = false): Promise<ImportStatus> {
-  const { stdout } = await execAskCommand('smapiGetImportStatus', [
-    'ask smapi get-import-status',
-    `--import-id "${importId}"`,
-  ]);
+export async function getImportStatus(
+  importId: string,
+  askProfile?: string,
+  isAsync = false,
+): Promise<ImportStatus> {
+  const { stdout } = await execAskCommand(
+    'smapiGetImportStatus',
+    ['ask smapi get-import-status', `--import-id "${importId}"`],
+    askProfile,
+  );
 
   const status: ImportStatus = JSON.parse(stdout!);
 
