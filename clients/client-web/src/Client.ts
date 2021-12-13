@@ -208,8 +208,8 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
    * Should be called synchronously in a click-handler!
    */
   async initialize(): Promise<void> {
-    await this.audioPlayer.initialize();
-    await this.audioRecorder.initialize();
+    this.audioPlayer.initialize();
+    this.audioRecorder.initialize();
     this.initialized = true;
   }
 
@@ -282,7 +282,8 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
       this.store.resetSession();
     } else {
       this.store.sessionData.isNew = false;
-      this.store.sessionData.state = response.context.session.state;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      this.store.sessionData.state = response.context.session.state as any[];
       this.store.sessionData.data = response.context.session.data;
       this.store.sessionData.updatedAt = new Date();
     }

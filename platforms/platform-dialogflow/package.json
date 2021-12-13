@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/platform-dialogflow",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "private": true,
   "description": "",
   "main": "dist/cjs/index.js",
@@ -30,7 +30,7 @@
     "@jovotech/cli-command-new": "^4.0.0",
     "@jovotech/cli-core": "^4.0.0",
     "@jovotech/filebuilder": "^0.0.1",
-    "@jovotech/framework": "^4.0.0",
+    "@jovotech/framework": "^4.0.1",
     "@jovotech/model": "^4.0.0",
     "@jovotech/model-dialogflow": "^4.0.0",
     "@jovotech/model-google": "^4.0.0",
@@ -45,14 +45,14 @@
     "lodash.uniq": "^4.5.0"
   },
   "devDependencies": {
-    "@jovotech/output": "^4.0.0",
+    "@jovotech/output": "^4.0.1",
     "@types/adm-zip": "^0.4.34",
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.has": "^4.5.6",
     "@types/lodash.merge": "^4.6.6",
     "@types/lodash.mergewith": "^4.6.6",
     "@types/lodash.uniq": "^4.5.6",
-    "@types/node": "^10.17.50",
+    "@types/node": "^12.20.37",
     "@types/prompts": "^2.0.10",
     "@types/tv4": "^1.2.29",
     "@types/which": "^2.0.1",
@@ -70,8 +70,8 @@
     "typescript": "~4.4.4"
   },
   "peerDependencies": {
-    "@jovotech/framework": "4.0.0",
-    "@jovotech/output": "4.0.0"
+    "@jovotech/framework": "4.0.1",
+    "@jovotech/output": "4.0.1"
   },
   "browser": {
     "@jovotech/cli-command-build": false,

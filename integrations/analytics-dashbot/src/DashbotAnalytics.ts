@@ -1,4 +1,10 @@
-import { AnalyticsPlugin, AnalyticsPluginConfig, Jovo, Platform } from '@jovotech/framework';
+import {
+  AnalyticsPlugin,
+  AnalyticsPluginConfig,
+  Jovo,
+  RequiredOnlyWhere,
+  Platform,
+} from '@jovotech/framework';
 import { URL } from 'url';
 import { DashbotAlexa } from './plugins/DashbotAlexa';
 import { DashbotAnalyticsPlugin } from './plugins/DashbotAnalyticsPlugin';
@@ -12,6 +18,8 @@ export interface DashbotAnalyticsConfig extends AnalyticsPluginConfig {
   enabled?: boolean;
 }
 
+export type DashbotAnalyticsInitConfig = RequiredOnlyWhere<DashbotAnalyticsConfig, 'apiKey'>;
+
 export class DashbotAnalytics extends AnalyticsPlugin<DashbotAnalyticsConfig> {
   // Since DashbotUniversal tracks for every platform, it needs to sit at the last position
   // in this.plugins, so a platform-specific plugin can be found, but still disabled.
@@ -22,6 +30,10 @@ export class DashbotAnalytics extends AnalyticsPlugin<DashbotAnalyticsConfig> {
     DashbotUniversal,
   ];
   private initializedPlugin!: DashbotAnalyticsPlugin;
+
+  constructor(config: DashbotAnalyticsInitConfig) {
+    super(config);
+  }
 
   mount(parent: Platform): void {
     const HandlingPlugin = this.plugins.find((Plugin) => Plugin.prototype.canHandle(parent));
@@ -35,6 +47,12 @@ export class DashbotAnalytics extends AnalyticsPlugin<DashbotAnalyticsConfig> {
   }
 
   getDefaultConfig(): DashbotAnalyticsConfig {
+    return {
+      ...this.getInitConfig(),
+    };
+  }
+
+  getInitConfig(): DashbotAnalyticsInitConfig {
     return {
       apiKey: '<YOUR-API-KEY>',
     };

@@ -20,10 +20,6 @@ export class DialogflowCli extends JovoCliPlugin {
     return [BuildHook, DeployHook, GetHook];
   }
 
-  get name(): string {
-    return this.constructor.name;
-  }
-
   get platformPath(): string {
     return joinPaths(this.$cli.project!.getBuildPath(), this.platformDirectory);
   }

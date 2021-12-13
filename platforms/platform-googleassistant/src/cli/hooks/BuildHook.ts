@@ -409,28 +409,24 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
 
     FileBuilder.buildDirectory(projectFiles, this.$plugin.platformPath);
 
-    // Copies across any resources so they can be used in the project settings manifest.
-    // Docs:  https://developers.google.com/assistant/conversational/build/projects?hl=en&tool=sdk#add_resources
-    const copyResourcesTask: Task = new Task(
-      `Copying resources from ${this.$plugin.config.resourcesDirectory!}`,
-      () => {
-        const resourcesDirectory = 'resources';
-        const src: string = joinPaths(
-          this.$cli.projectPath,
-          this.$plugin.config.resourcesDirectory!,
-        );
-        const dest: string = joinPaths(this.$plugin.platformPath, resourcesDirectory);
-        // Delete existing resources folder before copying data
-        removeSync(dest);
-        copySync(src, dest);
-      },
-    );
-    copyResourcesTask.indent(2);
+    if (existsSync(this.$plugin.config.resourcesDirectory)) {
+      // Copies across any resources so they can be used in the project settings manifest.
+      // Docs:  https://developers.google.com/assistant/conversational/build/projects?hl=en&tool=sdk#add_resources
+      const copyResourcesTask: Task = new Task(
+        `Copying resources from ${this.$plugin.config.resourcesDirectory!}`,
+        () => {
+          const src: string = joinPaths(
+            this.$cli.projectPath,
+            this.$plugin.config.resourcesDirectory!,
+          );
+          const dest: string = joinPaths(this.$plugin.platformPath, 'resources');
+          // Delete existing resources folder before copying data
+          removeSync(dest);
+          copySync(src, dest);
+        },
+        { indentation: 2 },
+      );
 
-    if (
-      this.$plugin.config.resourcesDirectory &&
-      existsSync(this.$plugin.config.resourcesDirectory)
-    ) {
       await copyResourcesTask.run();
     }
   }

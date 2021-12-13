@@ -5,6 +5,8 @@ import {
   JovoError,
   JovoErrorOptions,
   Method,
+  UnknownObject,
+  Headers,
 } from '@jovotech/framework';
 
 import { URL } from 'url';
@@ -26,11 +28,14 @@ export interface AlexaApiErrorOptions extends JovoErrorOptions {
 }
 
 export class AlexaApiError extends JovoError {
+  code: AlexaApiErrorCode;
+
   constructor(options: AlexaApiErrorOptions) {
     super({
       ...options,
       message: `Request to Alexa API failed: ${options.message}`,
     });
+    this.code = options.code;
   }
 }
 
@@ -39,7 +44,9 @@ export interface AlexaApiOptions extends AxiosRequestConfig {
   path: string;
   permissionToken: string;
   method?: Method;
+  headers?: Headers;
   data?: unknown;
+  params?: UnknownObject;
 }
 
 /**
@@ -58,7 +65,9 @@ export async function sendApiRequest<RESPONSE>(
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${options.permissionToken}`,
+      ...options.headers,
     },
+    params: options.params,
   };
   return await axios(config);
 }
