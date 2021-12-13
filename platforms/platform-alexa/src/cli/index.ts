@@ -20,10 +20,6 @@ export type AlexaCliInitConfig =
   | { conversations: boolean };
 
 export class AlexaCli extends JovoCliPlugin<AlexaCliConfig> {
-  readonly id: string = 'alexa';
-  readonly type: PluginType = 'platform';
-  readonly platformDirectory: string = 'platform.alexa';
-
   constructor(config?: AlexaCliInitConfig) {
     super(config as AlexaCliConfig);
 
@@ -35,6 +31,18 @@ export class AlexaCli extends JovoCliPlugin<AlexaCliConfig> {
         enabled: this.config.conversations,
       };
     }
+  }
+
+  get id(): string {
+    return 'alexa';
+  }
+
+  get type(): PluginType {
+    return 'platform';
+  }
+
+  get platformDirectory(): string {
+    return `${this.type}.${this.id}`;
   }
 
   getDefaultConfig(): AlexaCliConfig {
