@@ -188,7 +188,6 @@ export async function getReminder(
   throw new Error('Unexpected error.');
 }
 
-// TODO: needs to be refactored after completion of all Alexa APIs
 export function handleReminderApiErrors(error: AxiosError): Error | void {
   if (error.isAxiosError) {
     const { message, code } = error.response?.data;

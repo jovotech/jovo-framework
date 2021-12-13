@@ -67,7 +67,6 @@ export class HandlerMetadata<
           typeof valueToMergeIn === 'function' &&
           typeof this.options[key] === 'function'
         ) {
-          // TODO: check if this is necessary: it is experimental
           const currentFunction = this.options[key] as (
             ...args: unknown[]
           ) => unknown | Promise<unknown>;

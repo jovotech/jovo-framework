@@ -98,7 +98,6 @@ export class OutputTemplateConverter<
     const getInstance = (item: T) => plainToClass(targetClass, item) as unknown as object;
     if (Array.isArray(objOrArray)) {
       const errorMatrix = await Promise.all(objOrArray.map((item) => validate(getInstance(item))));
-      // TODO: maybe modify key or something to indicate better which item was invalid
       return errorMatrix.reduce((acc, curr) => {
         acc.push(...curr);
         return acc;

@@ -15,7 +15,6 @@ import { QUICK_REPLIES_MAX_SIZE, QUICK_REPLY_MAX_LENGTH, TEXT_MAX_LENGTH } from 
 import { EntityOverrideMode, EntityOverrideModeLike, SessionEntityType } from './models';
 import { convertMessageToDialogflowText } from './utilities';
 
-// TODO CHECK: Theoretically, multiple messages are supported in the response, in the future this could be refactored for that.
 export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<
   DialogflowResponse,
   OutputTemplateConverterStrategyConfig

@@ -127,7 +127,7 @@ export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleRespo
     }
 
     if (output.platforms?.googleBusiness?.nativeResponse) {
-      // TODO determine what to do with nativeResponse!
+      // TODO determine what to do with nativeResponse! => discuss with team
     }
 
     const quickReplies = output.quickReplies;
@@ -151,7 +151,7 @@ export class GoogleBusinessOutputTemplateConverterStrategy extends MultipleRespo
     }
 
     const fallback = output.platforms?.googleBusiness?.fallback;
-    // TODO fully determine whether this should be applied to all responses
+    // TODO fully determine whether this should be applied to all responses => discuss with team
     if (fallback) {
       responses.forEach((response) => {
         response.fallback = fallback;

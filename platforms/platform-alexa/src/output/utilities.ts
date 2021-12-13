@@ -61,7 +61,6 @@ export function augmentModelPrototypes(): void {
     };
     if (this.imageUrl) {
       card.image = {
-        // TODO: determine whether large should always be set
         largeImageUrl: this.imageUrl,
       };
     }

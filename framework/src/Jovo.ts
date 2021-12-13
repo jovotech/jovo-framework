@@ -185,7 +185,7 @@ export abstract class Jovo<
         if (deserializedStateConfig) {
           // deserialize all found Output-constructors
           forEachDeep(deserializedStateConfig, (value, path) => {
-            // TODO: check restriction
+            // TODO: add comment
             if (
               typeof value === 'object' &&
               value.type === 'output' &&
@@ -196,7 +196,6 @@ export abstract class Jovo<
                 value.name,
               );
               if (!outputMetadata) {
-                // TODO determine what to do!
                 return;
               }
               _set(deserializedStateConfig, path, outputMetadata.target);
@@ -381,7 +380,6 @@ export abstract class Jovo<
         if (value?.prototype instanceof BaseOutput) {
           const outputMetadata = MetadataStorage.getInstance().getOutputMetadata(value);
           if (!outputMetadata) {
-            // TODO determine what to do!
             return;
           }
           _set(serializableConfig, path, { type: 'output', name: outputMetadata.name });

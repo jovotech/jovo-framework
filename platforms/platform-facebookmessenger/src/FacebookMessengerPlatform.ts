@@ -146,7 +146,6 @@ export class FacebookMessengerPlatform extends Platform<
     | FacebookMessengerResponse {
     const senderId: string | undefined = jovo.$user.id;
     if (!senderId) {
-      // TODO determine if error is good here
       throw new JovoError({
         message: 'Can not finalize response: No sender-id was found.',
         context: {
@@ -228,7 +227,6 @@ export class FacebookMessengerPlatform extends Platform<
       });
     }
     try {
-      // TODO: AttachmentMessage-support
       return await axios.post<RESPONSE>(this.endpoint, data);
     } catch (error) {
       if (error.isAxiosError) {

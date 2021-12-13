@@ -22,7 +22,6 @@ export class GoogleAssistantUser extends JovoUser<GoogleAssistant> {
     return this.jovo.$request.user?.verificationStatus === UserVerificationStatus.Verified;
   }
 
-  // TODO: determine whether a method or setter is better
   setId(id: string | undefined): void {
     _set(this.jovo.$request, 'user.params._GOOGLE_ASSISTANT_USER_ID_', id);
   }
@@ -35,8 +34,8 @@ export class GoogleAssistantUser extends JovoUser<GoogleAssistant> {
       throw new JovoError({
         message: 'No valid authorization token found.',
         hint: 'Make sure the authorization flow was completed.',
-        // TODO: Docs link
-        learnMore: '',
+        learnMore:
+          'https://www.jovo.tech/marketplace/platform-googleassistant/account-linking#access-the-google-account-profile',
       });
     }
 

@@ -143,7 +143,6 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
     this.store = new Store(this.config.store);
     this.store.load();
 
-    // TODO determine whether the block below should be handled by the library or by the consumer instead (might be bad for use-cases with sockets for example)
     this.on(ClientEvent.Request, () => {
       if (this.audioRecorder.isRecording) {
         this.audioRecorder.abort();

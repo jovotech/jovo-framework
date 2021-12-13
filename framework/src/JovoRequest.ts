@@ -44,7 +44,6 @@ export abstract class JovoRequest {
     return !sessionId && !sessionData && typeof isNewSession === 'undefined'
       ? undefined
       : {
-          // TODO determine whether data should be emptied when session is new
           ...(isNewSession ? {} : sessionData || {}),
           id: sessionId,
           isNew: isNewSession,

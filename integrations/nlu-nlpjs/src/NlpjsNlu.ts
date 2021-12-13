@@ -53,7 +53,6 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
     super(config);
   }
 
-  // TODO fully determine default config
   getDefaultConfig(): NlpjsNluConfig {
     return {
       ...super.getDefaultConfig(),
@@ -68,7 +67,7 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
     this.nlpjs = new Nlp({
       languages: Object.keys(this.config.languageMap),
       autoLoad: this.config.useModel,
-      // TODO: add condition to check if writing is even possible
+      // TODO: add condition to check if writing is even possible => implement hasFileWriteAccess in Server
       autoSave: this.config.useModel,
       modelFileName: this.config.preTrainedModelFilePath,
       nlu: {
@@ -115,7 +114,7 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
             name: nlpResult.intent,
           },
           entities,
-          raw: nlpResult, // TODO: temporary property
+          raw: nlpResult, // TODO: temporary property => add "native" property to NluData
         }
       : undefined;
   }

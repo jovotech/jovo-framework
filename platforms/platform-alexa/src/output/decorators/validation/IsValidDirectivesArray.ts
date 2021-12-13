@@ -20,10 +20,6 @@ export function IsValidDirectivesArray(options?: ValidationOptions): PropertyDec
             return false;
           }
 
-          // TODO add validations:
-          // - No APL-directives and Dialog.Delegate
-          // - No Alexa.Presentation.APL.ExecuteCommands directive and Dialog.ElicitSlot | Dialog.ConfirmSlot | Dialog.ConfirmIntent
-
           if (
             value.some(directiveCallback('AudioPlayer.Play')) &&
             value.some(directiveCallback('VideoApp.Launch'))

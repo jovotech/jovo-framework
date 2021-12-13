@@ -77,7 +77,7 @@ export class CoreRequest extends JovoRequest {
 
   setUserId(userId: string): void {
     if (!this.context) {
-      // TODO: What to do here?
+      // TODO: What to do here? => set this.context in constructor
       return;
     }
 

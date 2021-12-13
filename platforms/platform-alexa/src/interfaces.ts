@@ -7,7 +7,7 @@ export interface Session {
   application: Application;
   attributes: JovoSession;
   user: User;
-  person: Person;
+  person: Person; // TODO: make optional
 }
 
 export interface Context {

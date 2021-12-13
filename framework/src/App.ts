@@ -209,7 +209,7 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
 
       await handleRequest.dismount();
 
-      // TODO determine what to do if there is not response
+      // TODO determine what to do if there is not response => throw error
       if (!jovo.$response) {
         return;
       }

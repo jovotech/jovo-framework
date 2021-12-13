@@ -22,7 +22,6 @@ export async function checkForGactionsCli(): Promise<void> {
  * @param errorMessage - Error message.
  */
 export function getGactionsError(errorMessage: string): JovoCliError {
-  // ToDo: Check for different errors.
   if (errorMessage.includes('command requires authentication')) {
     return new JovoCliError({
       message: 'Missing authentication.',

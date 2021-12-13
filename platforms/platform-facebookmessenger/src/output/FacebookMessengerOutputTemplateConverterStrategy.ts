@@ -132,7 +132,7 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
     }
 
     if (platformOutput?.nativeResponse) {
-      // TODO determine what to do with nativeResponse
+      // TODO determine what to do with nativeResponse => discuss with team
     }
 
     const quickReplies = output.quickReplies;
