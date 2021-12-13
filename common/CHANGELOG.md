@@ -1,5 +1,40 @@
 # Changelog
 
+## [@jovotech/common@4.0.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/common@4.0.0...@jovotech/common@4.0.1)
+
+> 10 December 2021
+
+- :label: Fix some typings [`#1151`](https://github.com/jovotech/jovo-framework/pull/1151)
+- :bug: Fix Task config property [`#1152`](https://github.com/jovotech/jovo-framework/pull/1152)
+- ✨ Initial Alexa ISP helpers [`#1145`](https://github.com/jovotech/jovo-framework/pull/1145)
+- :sparkles: Introduce getInitConfig() [`#1144`](https://github.com/jovotech/jovo-framework/pull/1144)
+- :sparkles: Introduce Alexa Conversations [`#1140`](https://github.com/jovotech/jovo-framework/pull/1140)
+- :sparkles: Implement isJovoCliError [`#1141`](https://github.com/jovotech/jovo-framework/pull/1141)
+
+## [@jovotech/common@4.0.0](https://github.com/jovotech/jovo-framework/compare/@jovotech/common@4.0.0-beta.4...@jovotech/common@4.0.0)
+
+> 18 November 2021
+
+- :recycle: Add `skipTests: true` to FileDb default config [`#1121`](https://github.com/jovotech/jovo-framework/pull/1121)
+- 🐛 Fix headline style in JovoLogger [`#1120`](https://github.com/jovotech/jovo-framework/pull/1120)
+
+## [@jovotech/common@4.0.0-beta.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/common@4.0.0-beta.2...@jovotech/common@4.0.0-beta.4)
+
+> 17 November 2021
+
+- Remove table view on `jovo run` + undefined properties in logger [`#1118`](https://github.com/jovotech/jovo-framework/pull/1118)
+- Fix process.stdin handling  [`#1116`](https://github.com/jovotech/jovo-framework/pull/1116)
+- ✨ Move JovoDebugger code from CLI to plugin [`#1111`](https://github.com/jovotech/jovo-framework/pull/1111)
+- ✨ Add pretty logging [`#1103`](https://github.com/jovotech/jovo-framework/pull/1103)
+- :sparkles: Introduce CMS integrations [`#1089`](https://github.com/jovotech/jovo-framework/pull/1089)
+- :label: Fix typings [`#1105`](https://github.com/jovotech/jovo-framework/pull/1105)
+- :sparkles: Introduce JavaScript Boilerplates [`#1109`](https://github.com/jovotech/jovo-framework/pull/1109)
+- :sparkles: Add NextScene output, onScene GoogleAssistantHandle [`#1088`](https://github.com/jovotech/jovo-framework/pull/1088)
+- :recycle: Adjust Jovo Debugger plugin [`#1093`](https://github.com/jovotech/jovo-framework/pull/1093)
+- **Breaking change:** :recycle: :boom:  Standardize request headers [`#1080`](https://github.com/jovotech/jovo-framework/pull/1080)
+- :bookmark: Publish [`#1092`](https://github.com/jovotech/jovo-framework/pull/1092)
+- :bookmark: Publish [`#1067`](https://github.com/jovotech/jovo-framework/pull/1067)
+
 ## [@jovotech/common@4.0.0-beta.2](https://github.com/jovotech/jovo-framework/compare/v3.5...@jovotech/common@4.0.0-beta.2)
 
 > 2 November 2021
