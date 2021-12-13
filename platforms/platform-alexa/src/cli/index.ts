@@ -7,7 +7,8 @@ import {
   promptSupportedLocales,
   RequiredOnlyWhere,
 } from '@jovotech/cli-core';
-import { join as joinPaths } from 'path';
+import { writeFileSync } from 'fs';
+import { join as joinPaths, resolve } from 'path';
 import { SupportedLocales } from './constants';
 import { BuildHook } from './hooks/BuildHook';
 import { DeployHook } from './hooks/DeployHook';
@@ -62,6 +63,17 @@ export class AlexaCli extends JovoCliPlugin<AlexaCliConfig> {
 
   async getInitConfig(): Promise<AlexaCliConfig> {
     const initConfig: AlexaCliConfig = {};
+
+    // Since this.getInitConfig() is called when this plugin is added to a new
+    // Jovo project, we can add external bundle dependencies here
+    const packageJsonPath: string = resolve(
+      joinPaths(this.$cli.projectPath, (this.$context as NewContext).projectName, 'package.json'),
+    );
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const packageJson = require(packageJsonPath);
+    packageJson.scripts.bundle = `${packageJson.scripts.bundle} --external:@alexa/*`;
+    writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
+
     // Check for invalid locales and provide a default locale map.
     for (const locale of (this.$context as NewContext).locales) {
       if (!SupportedLocales.includes(locale as SupportedLocalesType)) {
