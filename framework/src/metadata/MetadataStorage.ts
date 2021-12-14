@@ -34,7 +34,7 @@ export class MetadataStorage {
   addComponentMetadata<COMPONENT extends BaseComponent>(
     metadata: ComponentMetadata<COMPONENT>,
   ): void {
-    // TODO: determine what to do if a component like that already exists => add warning
+    // TODO: determine what to do if a component like that already exists => add warning @m-ripper
     // for now, just skip (first only counts)
     if (this.getComponentMetadata(metadata.target)) {
       return;

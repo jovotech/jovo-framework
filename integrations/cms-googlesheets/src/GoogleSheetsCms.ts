@@ -70,7 +70,7 @@ export class GoogleSheetsCms extends Plugin<GoogleSheetsCmsConfig> {
           range: `${sheetName}!${sheet.config.range}`,
           spreadsheetId,
         });
-        // TODO: Data can be undefined?
+        // TODO: Data can be undefined? => investigate, add check @rubenaeg
         const parsed = sheet.parse(response.data.values!, jovo);
         jovo.$cms[sheetName] = parsed;
       } catch (error) {

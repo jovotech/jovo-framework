@@ -605,7 +605,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       const localeRegex = /(.*)\.(?:[^.]+)$/;
       const match = localeRegex.exec(file);
 
-      // ToDo: Test!
+      // ToDo: Test! => investigate @rubenaeg
       if (!match) {
         return file;
       }

@@ -7,7 +7,7 @@ export interface Session {
   application: Application;
   attributes: JovoSession;
   user: User;
-  person: Person; // TODO: make optional
+  person: Person; // TODO:  => make optional @aswetlow
 }
 
 export interface Context {
@@ -169,7 +169,6 @@ export interface Request {
   arguments?: any[];
   token?: string;
   offsetInMilliseconds?: number;
-  // TODO: Use the same type
   intent?: PartialWhere<Intent, 'confirmationStatus' | 'slots'>;
   status?: {
     // Connections.Response

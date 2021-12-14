@@ -18,7 +18,7 @@ export function buildDuplicateGlobalIntentsErrorMessage(
   return `Duplicate global intent names detected:${separator}${duplicateEntriesText}.`;
 }
 
-// TODO improve to also display path of the components that cause the error
+// TODO improve to also display path of the components that cause the error => add context @m-ripper
 export class DuplicateGlobalIntentsError extends JovoError {
   constructor(entries: [string, HandlerMetadata[]][]) {
     super({

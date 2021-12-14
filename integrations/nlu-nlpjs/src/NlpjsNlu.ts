@@ -67,7 +67,7 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
     this.nlpjs = new Nlp({
       languages: Object.keys(this.config.languageMap),
       autoLoad: this.config.useModel,
-      // TODO: add condition to check if writing is even possible => implement hasFileWriteAccess in Server
+      // TODO: add condition to check if writing is even possible => implement hasFileWriteAccess in Server @aswetlow
       autoSave: this.config.useModel,
       modelFileName: this.config.preTrainedModelFilePath,
       nlu: {
@@ -79,7 +79,7 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
       this.nlpjs?.use(languagePackage);
     });
 
-    // TODO: register fs if write-access is available
+    // TODO: register fs if write-access is available => implement hasFileWriteAccess in Server @aswetlow
 
     if (this.config.setupModelCallback) {
       await this.config.setupModelCallback(parent as Platform, this.nlpjs!);
@@ -114,7 +114,7 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
             name: nlpResult.intent,
           },
           entities,
-          raw: nlpResult, // TODO: temporary property => add "native" property to NluData
+          raw: nlpResult, // TODO: temporary property => add "native" property to NluData, discuss in team @m-ripper
         }
       : undefined;
   }

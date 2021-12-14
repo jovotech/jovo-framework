@@ -1,6 +1,6 @@
 import { JovoError } from '@jovotech/common';
 
-// TODO: improve
+// TODO: improve => add context @m-ripper
 export class ComponentNotFoundError extends JovoError {
   constructor(componentPath: string[]) {
     super({

@@ -255,7 +255,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
             continue;
           }
 
-          // TODO: Instead of cloning the entire app, it'd be sufficient to
+          // TODO: Instead of cloning the entire app, it'd be sufficient to => investigate further @rubenaeg
           // implement app.middlewareCollection.once() to run handlers once per lifecycle
           return _cloneDeep(app) as App;
         } catch (error) {

@@ -185,7 +185,7 @@ export abstract class Jovo<
         if (deserializedStateConfig) {
           // deserialize all found Output-constructors
           forEachDeep(deserializedStateConfig, (value, path) => {
-            // TODO: add comment
+            // TODO: => add comment @m-ripper
             if (
               typeof value === 'object' &&
               value.type === 'output' &&
@@ -403,7 +403,7 @@ export abstract class Jovo<
     });
   }
 
-  // TODO determine whether an error should be thrown if $resolve is called from a context outside a delegation
+  // TODO determine whether an error should be thrown if $resolve is called from a context outside a delegation => discuss in team
   async $resolve<ARGS extends unknown[]>(eventName: string, ...eventArgs: ARGS): Promise<void> {
     if (!this.$state) {
       return;

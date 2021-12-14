@@ -1,6 +1,6 @@
 import { JovoError } from '@jovotech/common';
 
-// TODO: improve
+// TODO: improve => add context @m-ripper
 export class HandlerNotFoundError extends JovoError {
   constructor(className: string, handler: string) {
     super({

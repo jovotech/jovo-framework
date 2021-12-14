@@ -1,6 +1,6 @@
 import { Constructor, JovoError } from '@jovotech/common';
 
-// TODO: improve
+// TODO: improve => add context @m-ripper
 export class InvalidParentError extends JovoError {
   constructor(pluginName: string, assumedParentType: Constructor | string) {
     super({

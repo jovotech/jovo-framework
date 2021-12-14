@@ -158,7 +158,7 @@ export class AlexaRequest extends JovoRequest {
 
   setUserId(userId: string): void {
     if (!this.session) {
-      // TODO: What to do here? => init this.session?
+      // TODO: What to do here? => init this.session? @m-ripper
       return;
     }
 

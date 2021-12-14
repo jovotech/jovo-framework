@@ -166,7 +166,6 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
       ) as SupportedLocalesType[];
 
       if (locales.length === 0) {
-        // ToDo: Throw error?
         return;
       }
 

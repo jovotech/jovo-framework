@@ -590,7 +590,6 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
     const { invocation } = await this.getJovoModel(locale);
 
     if (typeof invocation === 'object') {
-      // ToDo: Test!
       const platformInvocation: string = invocation[this.$plugin.id];
 
       if (!platformInvocation) {

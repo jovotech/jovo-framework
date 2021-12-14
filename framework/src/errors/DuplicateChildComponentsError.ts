@@ -1,6 +1,6 @@
 import { JovoError } from '@jovotech/common';
 
-// TODO improve
+// TODO improve => add context @m-ripper
 export class DuplicateChildComponentsError extends JovoError {
   constructor(componentName: string, parentName: string) {
     super({

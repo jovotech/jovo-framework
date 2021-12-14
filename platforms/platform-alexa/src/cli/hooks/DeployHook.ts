@@ -97,7 +97,6 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
       (await this.getAskProfile());
 
     this.$context.alexa.skillId = this.$context.flags['skill-id'] || this.getSkillId();
-    // TODO: this.$plugin.config.convertsations.enabled enough?
     this.$context.alexa.isACSkill =
       this.$plugin.config.conversations?.enabled && existsSync(this.$plugin.conversationsDirectory);
   }
@@ -182,7 +181,7 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
       if (!importId) {
         throw new JovoCliError({
           message: 'Something went wrong while importing your skill package',
-          // TODO: Command!
+          // TODO: Command! => investigate, what to do next @rubenaeg
           hint: 'Try importing your skill package manually using the ASK CLI and copy the resulting skill ID into your project configuration',
         });
       }
