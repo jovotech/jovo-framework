@@ -90,8 +90,8 @@ You can have a [handler](https://www.jovo.tech/docs/handlers) accept a request l
 import { AlexaHandles } from '@jovotech/platform-alexa';
 // ...
 
-@Handle(AlexaHandles.onDialogApiInvoked('yourApiName'))
-yourApiName() {
+@Handle(AlexaHandles.onDialogApiInvoked('<yourApiName>'))
+handleApiRequest() { // Name this method however you like
   // ...
 }
 ```
@@ -119,8 +119,8 @@ import { AlexaHandles, ApiResponseOutput } from '@jovotech/platform-alexa';
 
 // ...
 
-@Handle(AlexaHandles.onDialogApiInvoked('yourApiName'))
-yourApiName() {
+@Handle(AlexaHandles.onDialogApiInvoked('<yourApiName>'))
+handleApiRequest() { // Name this method however you like
   // ...
 
   return this.$send(ApiResponseOutput, {
