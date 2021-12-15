@@ -32,7 +32,6 @@ import _merge from 'lodash.merge';
 import _mergeWith from 'lodash.mergewith';
 import _set from 'lodash.set';
 import { join as joinPaths } from 'path';
-import { AlexaCli } from '..';
 import { SupportedLocales } from '../constants';
 import DefaultFiles from '../DefaultFiles.json';
 import { AlexaContext, SupportedLocalesType } from '../interfaces';
@@ -43,7 +42,6 @@ export interface AlexaBuildPlatformContext extends AlexaContext, BuildPlatformCo
 }
 
 export class BuildHook extends AlexaHook<BuildPlatformEvents> {
-  $plugin!: AlexaCli;
   $context!: AlexaBuildPlatformContext;
 
   install(): void {
@@ -125,7 +123,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
    * Validates Jovo models with platform-specific validators.
    */
   async validateModels(): Promise<void> {
-    // Validate Jovo model.
+    // Validate Jovo model
     const validationTask: Task = new Task(`${OK_HAND} Validating Alexa model files`);
 
     for (const locale of this.$context.locales) {
@@ -565,7 +563,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       });
     }
 
-    copySync(src, this.$plugin.conversationsDirectory);
+    copySync(src, this.$plugin.responseDirectory);
   }
 
   /**
