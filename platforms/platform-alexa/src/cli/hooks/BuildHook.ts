@@ -573,6 +573,15 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
     const endpoint =
       _get(this.$plugin.config, 'options.endpoint') ||
       this.$cli.project!.config.getParameter('endpoint');
+
+    if (!endpoint) {
+      throw new JovoCliError({
+        message: 'endpoint has to be set',
+        hint: 'Try setting your endpoint in the project configuration',
+        learnMore: 'https://www.jovo.tech/docs/project-config#endpoint',
+      });
+    }
+
     return this.$cli.resolveEndpoint(endpoint);
   }
 
