@@ -83,7 +83,9 @@ It includes the following properties:
 
 ### nlu
 
-The `nlu` property defines which [NLU integration](https://www.jovo.tech/docs/nlu) should be used in case the Debugger sends raw text. This usually happens if you type text into the Debugger input field.
+> **Important**: Text input in the Debugger does not support built-in entity types like `AMAZON.City` if you are using the default configuration, which uses [NLP.js](https://www.jovo.tech/marketplace/nlu-nlpjs) as NLU.
+
+The `nlu` property defines which [NLU integration](https://www.jovo.tech/docs/nlu) should be used in case the Debugger sends raw text. This usually happens if you type text into the Debugger input field. This raw text is then sent to your Jovo app where it is then turned into structured meaning by using an NLU integration. Depending on which NLU integration you use, there are certain limitations to what types of input can be managed by the Debugger text field.
 
 By default, the Debugger uses [NLP.js as NLU integration](https://www.jovo.tech/marketplace/nlu-nlpjs) with the following default config:
 
@@ -170,7 +172,6 @@ You can customize the Debugger frontend using the `jovo.debugger.js` file in the
 
 ```js
 const { DebuggerConfig } = require('@jovotech/plugin-debugger');
-
 // ...
 
 const debugger = new DebuggerConfig({
