@@ -82,7 +82,11 @@ export async function getImportStatus(
   } else if (status.status === 'FAILED') {
     throw new JovoCliError({
       message: 'Errors occured while importing your skill package',
-      hint: status.skill.resources[0].errors[0].message,
+      hint: status.skill.resources.length
+        ? status.skill.resources[0].errors.length
+          ? status.skill.resources[0].errors[0].message
+          : JSON.stringify(status.skill.resources, null, 2)
+        : JSON.stringify(status.skill.resources, null, 2),
     });
   }
 
