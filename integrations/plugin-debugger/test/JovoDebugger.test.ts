@@ -33,7 +33,7 @@ class DebuggerTestNluPlugin extends NluPlugin {
 }
 
 const coreRequest: PlainObjectType<CoreRequest> = {
-  version: '4.0-beta',
+  version: '4.0',
   platform: 'jovo-debugger',
   id: '7bd31461-0211-4c92-b642-69a978c2f18c',
   timestamp: '2020-11-23T12:35:36.368Z',
