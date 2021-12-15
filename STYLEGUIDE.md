@@ -11,7 +11,7 @@
 To make sure that there are no collisions with naming rules by other platforms we recommend avoiding blanks and special characters in project names.
 
 #### Components
-Components can be named es you like. However, we recommend using a comprehensible name with the `Component` suffix.
+Components can be named as you like. However, we recommend using a comprehensible name with the `Component` suffix.
 A component handling `yes` or `no` questions would be named `YesNoComponent`.
 
 #### Handler names in components
