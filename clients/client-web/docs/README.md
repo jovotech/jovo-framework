@@ -57,7 +57,7 @@ This is the default configuration for the Jovo Web Client:
 
 ```typescript
 {
-	version: '4.0-beta',
+	version: '4.0',
 	locale: 'en',
 	platform: 'web',
 	device: {
