@@ -150,7 +150,7 @@ export class GetHook extends AlexaHook<BuildPlatformEvents | GetPlatformEvents> 
         `${MAGNIFYING_GLASS} Getting a list of all your skills`,
       );
 
-      const searchTask: Task = new Task('Fetching', async () => {
+      const searchTask: Task = new Task('Searching', async () => {
         skills = await smapi.listSkills(this.$context.alexa.askProfile);
       });
       getSkillListTask.add(searchTask);
