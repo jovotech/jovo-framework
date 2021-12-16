@@ -75,6 +75,8 @@ The Alexa CLI plugin adds the following flags to the [`deploy:platform` command]
 | Flag            | Description                                                                                                                   | Examples                |
 | --------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `--ask-profile` | Deploy to using the specified ASK profile. [Learn more about ASK profile configuration here](./project-config.md#askprofile). | `--ask-profile default` |
+| `--async` | Don't wait for the model building process to be finished. Recommended for [Alexa Conversations](./alexa-conversations.md#manage-files). |  |
+| `--skip-validation` | Skip the validation step of the [Alexa Conversations](./alexa-conversations.md#manage-files) ACDL compiler. |  |
 
 ### deploy:code 
 
@@ -91,7 +93,6 @@ If you run into problems while bundling the code, make sure that the `bundle` sc
 ```
 
 The reason for this is that `esbuild` can't resolve `vscode`, a dependency used in `@alexa/acdl`, which is used for the [Alexa Conversations integration](./alexa-conversations.md).
-
 
 
 ## get

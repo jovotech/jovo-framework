@@ -57,6 +57,7 @@ export class AlexaCli extends JovoCliPlugin<AlexaCliConfig> {
         },
         acdlDirectory: 'acdl',
         responsesDirectory: 'responses',
+        skipValidation: false,
       },
     };
   }
