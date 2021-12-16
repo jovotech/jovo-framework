@@ -1,13 +1,13 @@
 # Changelog
 
-## [@jovotech/server-express@4.0.0](https://github.com/jovotech/jovo-framework/compare/@jovotech/server-express@4.0.0-beta.11...@jovotech/server-express@4.0.0)
+## [@jovotech/client-web-vue2@4.0.0](https://github.com/jovotech/jovo-framework/compare/@jovotech/client-web-vue2@4.0.0-beta.3...@jovotech/client-web-vue2@4.0.0)
 
 > 18 November 2021
 
 - :recycle: Add `skipTests: true` to FileDb default config [`#1121`](https://github.com/jovotech/jovo-framework/pull/1121)
 - 🐛 Fix headline style in JovoLogger [`#1120`](https://github.com/jovotech/jovo-framework/pull/1120)
 
-## [@jovotech/server-express@4.0.0-beta.11](https://github.com/jovotech/jovo-framework/compare/@jovotech/server-express@4.0.0-beta.9...@jovotech/server-express@4.0.0-beta.11)
+## [@jovotech/client-web-vue2@4.0.0-beta.3](https://github.com/jovotech/jovo-framework/compare/v3.5...@jovotech/client-web-vue2@4.0.0-beta.3)
 
 > 17 November 2021
 
@@ -22,63 +22,30 @@
 - :recycle: Adjust Jovo Debugger plugin [`#1093`](https://github.com/jovotech/jovo-framework/pull/1093)
 - **Breaking change:** :recycle: :boom:  Standardize request headers [`#1080`](https://github.com/jovotech/jovo-framework/pull/1080)
 - :bookmark: Publish [`#1092`](https://github.com/jovotech/jovo-framework/pull/1092)
-- :bookmark: Publish [`#1067`](https://github.com/jovotech/jovo-framework/pull/1067)
-
-## [@jovotech/server-express@4.0.0-beta.9](https://github.com/jovotech/jovo-framework/compare/@jovotech/server-express@4.0.0-beta.7...@jovotech/server-express@4.0.0-beta.9)
-
-> 2 November 2021
-
 - :bug: Set entities manually [`#1090`](https://github.com/jovotech/jovo-framework/pull/1090)
 - :sparkles: Add Instagram platform integration [`#1069`](https://github.com/jovotech/jovo-framework/pull/1069)
 - :sparkles: Add Dashbot Analytics integration [`#1076`](https://github.com/jovotech/jovo-framework/pull/1076)
 - ✨ Platform handles (Alexa Reminders) [`#1071`](https://github.com/jovotech/jovo-framework/pull/1071)
 - ✨ Skip health checks [`#1068`](https://github.com/jovotech/jovo-framework/pull/1068)
 - :sparkles: Introduce Instagram [`#40`](https://github.com/jovotech/jovo-framework/pull/40)
-- :bookmark: Publish [`#1063`](https://github.com/jovotech/jovo-framework/pull/1063)
-- :bookmark: Publish [`#1045`](https://github.com/jovotech/jovo-framework/pull/1045)
-- ✨ Add hasSessionEnded() to JovoResponse [`#29`](https://github.com/jovotech/jovo-framework/pull/29)
-- :recycle: Update CorePlatform response [`#16`](https://github.com/jovotech/jovo-framework/pull/16)
-
-## [@jovotech/server-express@4.0.0-beta.7](https://github.com/jovotech/jovo-framework/compare/@jovotech/server-express@4.0.0-beta.6...@jovotech/server-express@4.0.0-beta.7)
-
-> 8 October 2021
-
+- :bookmark: Publish [`#1067`](https://github.com/jovotech/jovo-framework/pull/1067)
 - :rewind: Reverse d10b5c3 [`#1065`](https://github.com/jovotech/jovo-framework/pull/1065)
 - :bug: Resolve project path correctly [`#1062`](https://github.com/jovotech/jovo-framework/pull/1062)
 - 🐛🏷️ Fix invalid typing of `InputTypeLike` [`#1064`](https://github.com/jovotech/jovo-framework/pull/1064)
-
-## [@jovotech/server-express@4.0.0-beta.6](https://github.com/jovotech/jovo-framework/compare/@jovotech/server-express@4.0.0-beta.3...@jovotech/server-express@4.0.0-beta.6)
-
-> 5 October 2021
-
+- :bookmark: Publish [`#1063`](https://github.com/jovotech/jovo-framework/pull/1063)
 - :recycle: Refactor CLI Plugins [`#1046`](https://github.com/jovotech/jovo-framework/pull/1046)
 - :sparkles: Add system intents to model [`#1056`](https://github.com/jovotech/jovo-framework/pull/1056)
 - :ambulance: Apply TestSuite hotfixes [`#1052`](https://github.com/jovotech/jovo-framework/pull/1052)
+- :bookmark: Publish [`#1045`](https://github.com/jovotech/jovo-framework/pull/1045)
 - ✨ Introduce TestSuite [`#1033`](https://github.com/jovotech/jovo-framework/pull/1033)
 - 🐛 Add global intents to actions.yml [`#1032`](https://github.com/jovotech/jovo-framework/pull/1032)
+- ✨ Add hasSessionEnded() to JovoResponse [`#29`](https://github.com/jovotech/jovo-framework/pull/29)
 - 🐛 Fix copying resources [`#1021`](https://github.com/jovotech/jovo-framework/pull/1021)
 - ✨ Improve model validation [`#1020`](https://github.com/jovotech/jovo-framework/pull/1020)
 - ✨ Add accessToken property to JovoUser [`#1027`](https://github.com/jovotech/jovo-framework/pull/1027)
-
-## [@jovotech/server-express@4.0.0-beta.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/server-express@4.0.0-beta.2...@jovotech/server-express@4.0.0-beta.3)
-
-> 10 September 2021
-
-## [@jovotech/server-express@4.0.0-beta.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/server-express@4.0.0-beta.1...@jovotech/server-express@4.0.0-beta.2)
-
-> 31 August 2021
-
 - Async Model [`#996`](https://github.com/jovotech/jovo-framework/pull/996)
-
-## [@jovotech/server-express@4.0.0-beta.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/server-express@4.0.0-beta.0...@jovotech/server-express@4.0.0-beta.1)
-
-> 24 August 2021
-
-## [@jovotech/server-express@4.0.0-beta.0](https://github.com/jovotech/jovo-framework/compare/v3.5...@jovotech/server-express@4.0.0-beta.0)
-
-> 19 August 2021
-
 - 🚚 Only use $ for direct properties of `Jovo` [`#986`](https://github.com/jovotech/jovo-framework/pull/986)
+- :recycle: Update CorePlatform response [`#16`](https://github.com/jovotech/jovo-framework/pull/16)
 - Improve type for device capabilities [`#985`](https://github.com/jovotech/jovo-framework/pull/985)
 - ✨ Alexa reminders  [`#972`](https://github.com/jovotech/jovo-framework/pull/972)
 - ✨ Implement this.$device (wip) [`#966`](https://github.com/jovotech/jovo-framework/pull/966)

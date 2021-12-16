@@ -1,5 +1,29 @@
 # Changelog
 
+## [@jovotech/framework@4.0.0](https://github.com/jovotech/jovo-framework/compare/@jovotech/framework@4.0.0-beta.11...@jovotech/framework@4.0.0)
+
+> 18 November 2021
+
+- :recycle: Add `skipTests: true` to FileDb default config [`#1121`](https://github.com/jovotech/jovo-framework/pull/1121)
+- 🐛 Fix headline style in JovoLogger [`#1120`](https://github.com/jovotech/jovo-framework/pull/1120)
+
+## [@jovotech/framework@4.0.0-beta.11](https://github.com/jovotech/jovo-framework/compare/@jovotech/framework@4.0.0-beta.9...@jovotech/framework@4.0.0-beta.11)
+
+> 17 November 2021
+
+- Remove table view on `jovo run` + undefined properties in logger [`#1118`](https://github.com/jovotech/jovo-framework/pull/1118)
+- Fix process.stdin handling  [`#1116`](https://github.com/jovotech/jovo-framework/pull/1116)
+- ✨ Move JovoDebugger code from CLI to plugin [`#1111`](https://github.com/jovotech/jovo-framework/pull/1111)
+- ✨ Add pretty logging [`#1103`](https://github.com/jovotech/jovo-framework/pull/1103)
+- :sparkles: Introduce CMS integrations [`#1089`](https://github.com/jovotech/jovo-framework/pull/1089)
+- :label: Fix typings [`#1105`](https://github.com/jovotech/jovo-framework/pull/1105)
+- :sparkles: Introduce JavaScript Boilerplates [`#1109`](https://github.com/jovotech/jovo-framework/pull/1109)
+- :sparkles: Add NextScene output, onScene GoogleAssistantHandle [`#1088`](https://github.com/jovotech/jovo-framework/pull/1088)
+- :recycle: Adjust Jovo Debugger plugin [`#1093`](https://github.com/jovotech/jovo-framework/pull/1093)
+- **Breaking change:** :recycle: :boom:  Standardize request headers [`#1080`](https://github.com/jovotech/jovo-framework/pull/1080)
+- :bookmark: Publish [`#1092`](https://github.com/jovotech/jovo-framework/pull/1092)
+- :bookmark: Publish [`#1067`](https://github.com/jovotech/jovo-framework/pull/1067)
+
 ## [@jovotech/framework@4.0.0-beta.9](https://github.com/jovotech/jovo-framework/compare/@jovotech/framework@4.0.0-beta.7...@jovotech/framework@4.0.0-beta.9)
 
 > 2 November 2021
