@@ -191,6 +191,8 @@ The following Alexa properties offer additional features:
 - [User](#user)
 - [Output](#output)
 - [Entities (Slots)](#entities-slots-)
+- [ISP](#isp)
+- [Alexa Conversations](#alexa-conversations)
 
 ### User
 
@@ -263,3 +265,16 @@ this.$alexa.$entities.name.native;
 ```
 
 Learn more about the structure of the API result in the [official Alexa documentation on entity resolution](https://developer.amazon.com/en-US/docs/alexa/custom-skills/entity-resolution.html).
+
+
+### ISP
+
+Jovo offers an integration with in-skill purchasing (ISP) which allows you to make money by selling digital goods and services through your Alexa Skill.
+
+[Learn more in the Jovo ISP documentation for Alexa](https://www.jovo.tech/marketplace/platform-alexa/isp).
+
+### Alexa Conversations
+
+You can build Alexa Skills with Jovo that make use of the Alexa Conversations dialogue management engine.
+
+[Learn more in the Jovo Alexa Conversations documentation](https://www.jovo.tech/marketplace/platform-alexa/alexa-conversations).

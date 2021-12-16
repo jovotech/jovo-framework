@@ -32,6 +32,7 @@ export interface NlpJsEntity {
   option: string;
   sourceText: string;
   utteranceText: string;
+  alias?: string;
 }
 
 export type SetupModelFunction = (parent: Platform, nlp: Nlp) => void | Promise<void>;
@@ -98,7 +99,8 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
 
     const entities = (nlpResult?.entities || []).reduce(
       (entityMap: EntityMap, entity: NlpJsEntity) => {
-        entityMap[entity.entity] = {
+        const entityName = entity.alias || entity.entity;
+        entityMap[entityName] = {
           id: entity.option,
           resolved: entity.option,
           value: entity.utteranceText,

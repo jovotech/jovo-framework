@@ -32,7 +32,6 @@ import _merge from 'lodash.merge';
 import _mergeWith from 'lodash.mergewith';
 import _set from 'lodash.set';
 import { join as joinPaths } from 'path';
-import { AlexaCli } from '..';
 import { SupportedLocales } from '../constants';
 import DefaultFiles from '../DefaultFiles.json';
 import { AlexaContext, SupportedLocalesType } from '../interfaces';
@@ -43,7 +42,6 @@ export interface AlexaBuildPlatformContext extends AlexaContext, BuildPlatformCo
 }
 
 export class BuildHook extends AlexaHook<BuildPlatformEvents> {
-  $plugin!: AlexaCli;
   $context!: AlexaBuildPlatformContext;
 
   install(): void {
@@ -125,7 +123,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
    * Validates Jovo models with platform-specific validators.
    */
   async validateModels(): Promise<void> {
-    // Validate Jovo model.
+    // Validate Jovo model
     const validationTask: Task = new Task(`${OK_HAND} Validating Alexa model files`);
 
     for (const locale of this.$context.locales) {
@@ -157,51 +155,42 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
   }
 
   async build(): Promise<void> {
-    const taskStatus: string = this.$cli.project!.hasPlatform(this.$plugin.platformDirectory)
-      ? 'Updating'
-      : 'Creating';
+    const buildPath = `Path: ./${joinPaths(
+      this.$cli.project!.getBuildDirectory(),
+      this.$plugin.platformDirectory,
+    )}`;
 
-    const buildTaskTitle =
-      `${STATION} ${taskStatus} Alexa Skill project files${printStage(
-        this.$cli.project!.stage,
-      )}\n` +
-      printSubHeadline(
-        `Path: ./${this.$cli.project!.getBuildDirectory()}/${this.$plugin.platformDirectory}`,
-      );
+    const buildTaskTitle = `${STATION} Building Alexa Skill files${printStage(
+      this.$cli.project!.stage,
+    )}\n${printSubHeadline(buildPath)}`;
 
     // Define main build task.
     const buildTask: Task = new Task(buildTaskTitle);
 
     // Update or create Alexa project files, depending on whether it has already been built or not.
-    const projectFilesTask: Task = new Task(
-      `${taskStatus} project files`,
-      this.createAlexaProjectFiles.bind(this),
-    );
+    const projectFilesTask: Task = new Task(`Project files`, this.buildProjectFiles.bind(this));
 
-    const buildInteractionModelTask: Task = new Task(
-      `${taskStatus} interaction model`,
-      this.createInteractionModel.bind(this),
+    const interactionModelTask: Task = new Task(
+      `Interaction model`,
+      this.buildInteractionModel.bind(this),
+      { enabled: this.$cli.project!.hasModelFiles(this.$context.locales) },
     );
-    // If no model files for the current locales exist, do not build interaction model.
-    if (!this.$cli.project!.hasModelFiles(this.$context.locales)) {
-      buildInteractionModelTask.disable();
-    }
 
     const buildConversationFilesTask: Task = new Task(
-      `${taskStatus} Alexa Conversations files`,
+      `Alexa Conversations files`,
       this.buildConversationsFiles.bind(this),
       { enabled: this.$context.alexa.isACSkill },
     );
 
     const buildResponseFilesTask: Task = new Task(
-      `${taskStatus} response files`,
+      `Response files`,
       this.buildResponseFiles.bind(this),
       { enabled: this.$context.alexa.isACSkill },
     );
 
     buildTask.add(
       projectFilesTask,
-      buildInteractionModelTask,
+      interactionModelTask,
       buildConversationFilesTask,
       buildResponseFilesTask,
     );
@@ -375,7 +364,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
   /**
    * Builds the Alexa skill manifest.
    */
-  createAlexaProjectFiles(): void {
+  buildProjectFiles(): void {
     const files: FileObject = FileBuilder.normalizeFileObject(
       _get(this.$plugin.config, 'files', {}),
     );
@@ -389,7 +378,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
     const endpoint: string = this.getPluginEndpoint();
     const endpointPath = 'skill-package/["skill.json"].manifest.apis.custom.endpoint';
     // If a global endpoint is given and one is not already specified, set the global one.
-    if (endpoint && !_has(projectFiles, endpointPath)) {
+    if (!_has(projectFiles, endpointPath)) {
       // If endpoint is of type ARN, omit the Wildcard certificate.
       const certificate: string | null = !endpoint.startsWith('arn') ? 'Wildcard' : null;
       // Create basic HTTPS endpoint from Wildcard SSL.
@@ -415,9 +404,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
     }
 
     // Create ask profile entry
-    const askResourcesPath = `["ask-resources.json"].profiles.${
-      this.$context.alexa.askProfile || 'default'
-    }`;
+    const askResourcesPath = `["ask-resources.json"].profiles.${this.$context.alexa.askProfile}`;
     if (!_has(projectFiles, askResourcesPath)) {
       _set(projectFiles, askResourcesPath, {
         skillMetadata: {
@@ -426,9 +413,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       });
     }
 
-    const askConfigPath = `[".ask/"].["ask-states.json"].profiles.${
-      this.$context.alexa.askProfile || 'default'
-    }`;
+    const askConfigPath = `[".ask/"].["ask-states.json"].profiles.${this.$context.alexa.askProfile}`;
     const skillId: string | undefined = this.$plugin.config.skillId;
     const skillIdPath = `${askConfigPath}.skillId`;
     // Check whether skill id has already been set.
@@ -473,7 +458,9 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
   /**
    * Creates and returns tasks for each locale to build the interaction model for Alexa.
    */
-  async createInteractionModel(): Promise<void> {
+  async buildInteractionModel(): Promise<string[]> {
+    const output: string[] = [];
+
     for (const locale of this.$context.locales) {
       const resolvedLocales: string[] = getResolvedLocales(
         locale,
@@ -485,13 +472,12 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       const taskDetails: string =
         resolvedLocalesOutput === locale ? '' : `(${resolvedLocalesOutput})`;
 
-      const localeTask: Task = new Task(`${locale} ${taskDetails}`, async () => {
-        await this.buildLanguageModel(locale, resolvedLocales);
-        await wait(500);
-      });
-      localeTask.indent(4);
-      await localeTask.run();
+      await this.buildLanguageModel(locale, resolvedLocales);
+      await wait(500);
+      output.push(`${locale} ${taskDetails}`);
     }
+
+    return output;
   }
 
   /**
@@ -565,7 +551,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       });
     }
 
-    copySync(src, this.$plugin.conversationsDirectory);
+    copySync(src, this.$plugin.responseDirectory);
   }
 
   /**
@@ -575,6 +561,15 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
     const endpoint =
       _get(this.$plugin.config, 'options.endpoint') ||
       this.$cli.project!.config.getParameter('endpoint');
+
+    if (!endpoint) {
+      throw new JovoCliError({
+        message: 'endpoint has to be set',
+        hint: 'Try setting your endpoint in the project configuration',
+        learnMore: 'https://www.jovo.tech/docs/project-config#endpoint',
+      });
+    }
+
     return this.$cli.resolveEndpoint(endpoint);
   }
 
