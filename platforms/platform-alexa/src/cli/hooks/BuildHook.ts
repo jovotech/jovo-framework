@@ -586,8 +586,6 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
    * Returns all locales for the current platform.
    */
   getPlatformLocales(): string[] {
-    const files: string[] = readdirSync(this.$plugin.modelsPath);
-
     if (!existsSync(this.$plugin.modelsPath)) {
       throw new JovoCliError({
         message: 'Could not find Alexa language models',
@@ -595,12 +593,14 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
         hint: 'Please validate that you configured the "buildDirectory" or "stage" correctly',
       });
     }
+
+    const files: string[] = readdirSync(this.$plugin.modelsPath);
+
     // Map each file to it's identifier, without file extension.
     return files.map((file: string) => {
       const localeRegex = /(.*)\.(?:[^.]+)$/;
       const match = localeRegex.exec(file);
 
-      // ToDo: Test!
       if (!match) {
         return file;
       }

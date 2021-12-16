@@ -18,6 +18,7 @@ export abstract class AlexaHook<EVENTS extends Events = DefaultEvents> extends P
   $context!: AlexaContext;
 
   updatePluginContext(): void {
+    console.log('updatePluginContext called');
     if (!this.$context.alexa) {
       this.$context.alexa = {};
     }
