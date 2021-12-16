@@ -58,9 +58,6 @@ export type FirstKey<K extends string> = Shift<S.Split<K, '.'>>;
 // Returns the first element of S
 export type Shift<S extends L.List> = S extends readonly [infer P, ...unknown[]] ? P : never;
 
-// Returns K if it's a key of T, useful for assisting type inference
-export type KeyOf<T, K> = K extends keyof T ? K : never;
-
 // Returns all elements of T where only properties specified in K are required.
 // K accepts keys of T, and also allows nested properties delimited by a '.', e.g. 'nested.key'.
 export type RequiredOnlyWhere<T, K extends string> = L.Length<S.Split<K, '.'>> extends 1
