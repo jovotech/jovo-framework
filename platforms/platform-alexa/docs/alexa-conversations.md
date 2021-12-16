@@ -74,7 +74,7 @@ $ jovo build:platform alexa
 
 As a convention, the Jovo `build` folder should not be pushed to e.g. your Git repository. The `jovo.project.js` can be seen as a single source of truth that generates the contents of the `build` folder. For additional files like ACDL files (or maybe outsourcing some of the `jovo.project.js` contents into separate files), we recommend sticking to the `resources/alexa` folder convention.
 
-It is, however, also possible to work from the `build/platform.alexa` folder and managee the files there.
+It is, however, also possible to work from the `build/platform.alexa` folder and manage the files there.
 
 The [`deploy` command](./cli-commands.md#deploy) uploads the contents of the Alexa project in the `build` folder to the Alexa Developer Console. Before doing that, it compiles the ACDL files into JSON. Since the building of the Alexa Conversations model can take a while during deployment, we recommend adding the `--async` flag.
 
