@@ -34,6 +34,7 @@ export interface DeployPlatformContextAlexa extends AlexaContext, DeployPlatform
     'ask-profile'?: string;
     'skill-id'?: string;
     'async'?: boolean;
+    'skip-validation'?: boolean;
   };
   alexa: AlexaContext['alexa'] & {
     skillCreated?: boolean;
@@ -73,6 +74,9 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
     });
     context.flags['skill-id'] = flags.string({ char: 's', description: 'Alexa skill ID' });
     context.flags.async = flags.boolean({ description: 'Deploys Alexa skill asynchronously' });
+    context.flags['skip-validation'] = flags.boolean({
+      description: 'Skips validation of Alexa Conversations files',
+    });
   }
 
   /**
@@ -130,7 +134,10 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
       );
       const project = await loadProject(projectConfig);
 
-      if (!this.$plugin.config.conversations?.skipValidation) {
+      if (
+        !this.$context.flags['skip-validation'] &&
+        !this.$plugin.config.conversations?.skipValidation
+      ) {
         const validationTask: Task = new Task('Validating ACDL files', async () => {
           const errors: ParseError[] = validateProject(project, true);
 
