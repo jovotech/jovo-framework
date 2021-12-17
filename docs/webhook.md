@@ -41,7 +41,7 @@ Tip: If you keep the [Jovo Debugger](#jovo-debugger) open, it will display the i
 If you deploy your projects using the [Jovo CLI](https://www.jovo.tech/docs/cli), you can set the `endpoint` property to your Jovo Webhook URL in the [project configuration](./project-config.md). The `${JOVO_WEBHOOK_URL}` literal gets replaced with the actual URL during the [`build` command](https://www.jovo.tech/docs/build-command):
 
 ```js
-const { ProjectConfig } = require('@jovotech/cli');
+const { ProjectConfig } = require('@jovotech/cli-core');
 // ...
 
 const project = new ProjectConfig({

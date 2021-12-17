@@ -1,4 +1,4 @@
-const { ProjectConfig } = require('@jovotech/cli');
+const { ProjectConfig } = require('@jovotech/cli-core');
 
 /*
   |--------------------------------------------------------------------------
