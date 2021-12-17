@@ -16,13 +16,15 @@ export interface Session {
   person: Person;
 }
 
+export type AudioplayerActivity = 'PLAYING' | 'PAUSED' | 'FINISHED' | 'BUFFER_UNDERRUN' | 'IDLE';
+
 export interface Context {
   System: System;
   Viewport?: Viewport;
   AudioPlayer: {
     token: string;
     offsetInMilliseconds: number;
-    playerActivity: string;
+    playerActivity: AudioplayerActivity;
   };
   Geolocation?: Geolocation;
 }
