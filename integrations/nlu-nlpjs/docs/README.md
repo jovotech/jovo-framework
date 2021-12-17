@@ -15,7 +15,7 @@ Since it is an open source service, you can host NLP.js on your own servers with
 
 You can use the Jovo NLP.js integration for projects where you receive raw text input that needs to be translated into structured meaning to work with the Jovo intent structure. Learn more in the [NLU integration docs](https://www.jovo.tech/docs/nlu).
 
-Smaller NLP.js language models are fast to train and can even be used on serverless infrastructure like [AWS Lambda](https://www.jovo.tech/docs/hosting/aws-lambda) without having to use any additional server infrastructure. We recommend taking a close look at the execution times though, as larger models can take quite some time to build.
+Smaller NLP.js language models are fast to train and can even be used on serverless infrastructure like [AWS Lambda](https://www.jovo.tech/marketplace/server-lambda) without having to use any additional server infrastructure. We recommend taking a close look at the execution times though, as larger models can take quite some time to build.
 
 ## Installation
 
@@ -25,7 +25,7 @@ You can install the plugin like this:
 $ npm install @jovotech/nlu-nlpjs
 ```
 
-NLU plugins can be added to Jovo platform integrations. Here is an example how it can be added to the Jovo Core Platform in `app.ts`:
+NLU plugins can be added to Jovo platform integrations. Here is an example how it can be added to the [Jovo Core Platform](https://www.jovo.tech/marketplace/server-lambda) in your `app.ts` [app configuration](https://www.jovo.tech/marketplace/platform-core):
 
 ```typescript
 import { CorePlatform } from '@jovotech/platform-core';
@@ -109,4 +109,11 @@ The NLP.js entity values are translated into the following Jovo entity propertie
 
 ## Jovo Model
 
-You can use the [Jovo Model](https://www.jovo.tech/marketplace/jovo-model) to turn the language model files in your `models` folder into an NLP.js model. [Learn more about the NLP.js Jovo Model integration here](https://www.jovo.tech/marketplace/nlu-nlpjs/model).
+You can use the [Jovo Model](https://www.jovo.tech/docs/models) to turn the language model files in your `models` folder into an NLP.js model. [Learn more about the NLP.js Jovo Model integration here](https://www.jovo.tech/marketplace/nlu-nlpjs/model).
+
+
+## Limitations
+
+NLP.js does not support multiple entities of the same type in the same phrase, for example `fly from {fromCity} to {toCity}`. In that example, it is possible that the input `fly from Berlin to Amsterdam` is mapped to two `toCity` entities.
+
+If you need to use a pattern like this, we recommend taking a look at other NLU integrations like [Snips NLU](https://www.jovo.tech/marketplace/nlu-snips).

@@ -1,5 +1,5 @@
 import { JovoCliPlugin, PluginType } from '@jovotech/cli-core';
-import { AlexaCliConfig } from '../../src/cli/utilities';
+import { AlexaCliConfig } from '../../src/cli/interfaces';
 
 export class Plugin extends JovoCliPlugin {
   readonly id: string = 'testPlugin';

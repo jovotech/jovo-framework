@@ -1,4 +1,4 @@
-import { Entity, JovoSession, PartialWhere } from '@jovotech/framework';
+import { Entity, EnumLike, JovoSession, PartialWhere } from '@jovotech/framework';
 import { Intent, Slot } from './output';
 
 export interface Session {
@@ -152,6 +152,14 @@ export interface AlexaEntity extends Entity {
   native: Slot;
 }
 
+export enum PurchaseResult {
+  Accepted = 'ACCEPTED',
+  Declined = 'DECLINED',
+  AlreadyPurchased = 'ALREADY_PURCHASED',
+  Error = 'ERROR',
+}
+export type PurchaseResultLike = EnumLike<PurchaseResult> | string;
+
 export interface Request {
   type: string;
   requestId: string;
@@ -171,7 +179,7 @@ export interface Request {
   name?: string; // Connections.Response
   payload?: {
     // Connections.Response
-    purchaseResult?: string;
+    purchaseResult?: PurchaseResultLike;
     productId?: string;
     isCardThrown?: boolean;
     permissionScope?: string;
@@ -193,4 +201,12 @@ export interface Request {
   eventCreationTime?: string; // AlexaSkillEvent.*
   eventPublishingTime?: string; // AlexaSkillEvent.*
   dialogState?: string;
+  apiRequest?: {
+    name: string;
+    arguments: Record<string, string>;
+    slots: Record<string, Slot>;
+  };
 }
+
+// Defines a target for Alexa Conversations
+export type ConversationsTarget = 'AMAZON.Conversations' | 'skill';

@@ -1,109 +1,47 @@
-import { execAsync, JovoCliError, wait } from '@jovotech/cli-core';
-import { AskSkillList, getAskError } from '../utilities';
-
-export async function getSkillInformation(
-  skillId: string,
-  stage: string,
-  askProfile?: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): Promise<any> {
-  const cmd: string =
-    'ask smapi get-skill-manifest ' +
-    `-s ${skillId} ` +
-    `-g ${stage} ` +
-    `${askProfile ? `-p ${askProfile}` : ''}`;
-
-  try {
-    const { stdout } = await execAsync(cmd);
-    return JSON.parse(stdout!);
-  } catch (error) {
-    const errorMessage: string = error.stderr || error.message;
-    throw getAskError('smapiGetSkillInformation', errorMessage);
-  }
-}
+import { JovoCliError, wait } from '@jovotech/cli-core';
+import { AskSkillList, SkillStatusError, SkillStatusResponse } from '../interfaces';
+import { execAskCommand } from '../utilities';
 
 export async function listSkills(askProfile?: string): Promise<AskSkillList> {
-  const cmd = `ask smapi list-skills-for-vendor ${askProfile ? `-p ${askProfile}` : ''}`;
-
-  try {
-    const { stdout } = await execAsync(cmd);
-    return JSON.parse(stdout!) as AskSkillList;
-  } catch (error) {
-    const errorMessage: string = error.stderr || error.message;
-    throw getAskError('smapiListSkills', errorMessage);
-  }
-}
-
-/**
- * Creates a new skill for the given ASK profile.
- */
-export async function createSkill(skillJsonPath: string, askProfile?: string): Promise<string> {
-  const cmd: string =
-    'ask smapi create-skill-for-vendor ' +
-    `${askProfile ? `-p ${askProfile} ` : ''}` +
-    ` --manifest "file:${skillJsonPath}"`;
-  try {
-    const { stdout } = await execAsync(cmd);
-    const { skillId } = JSON.parse(stdout!);
-    return skillId;
-  } catch (error) {
-    // Since the ask CLI writes warnings into stderr, check if the error includes a warning.
-    throw getAskError('smapiCreateSkill', error.stderr);
-  }
-}
-
-export async function updateSkill(
-  skillId: string,
-  skillJsonPath: string,
-  askProfile?: string,
-): Promise<void> {
-  try {
-    const cmd: string =
-      'ask smapi update-skill-manifest ' +
-      `-s ${skillId} ` +
-      `-g development ` +
-      `${askProfile ? `-p ${askProfile}` : ''} ` +
-      `--manifest "file:${skillJsonPath}"`;
-
-    await execAsync(cmd);
-  } catch (error) {
-    // Since the ask CLI writes warnings into stderr, check if the error includes a warning.
-    throw getAskError('smapiUpdateSkill', error.stderr);
-  }
+  const { stdout } = await execAskCommand(
+    'smapiListSkillsForVendor',
+    'ask smapi list-skills-for-vendor',
+    askProfile,
+  );
+  return JSON.parse(stdout!) as AskSkillList;
 }
 
 export async function getSkillStatus(skillId: string, askProfile?: string): Promise<void> {
-  const cmd = `ask smapi get-skill-status -s ${skillId} ${askProfile ? `-p ${askProfile}` : ''}`;
+  const cmd: string[] = ['ask smapi get-skill-status', `-s ${skillId}`];
 
-  try {
-    const { stdout } = await execAsync(cmd);
-    const response = JSON.parse(stdout!);
+  const { stdout } = await execAskCommand('smapiGetSkillStatus', cmd, askProfile);
+  const response: SkillStatusResponse = JSON.parse(stdout!);
 
-    if (response.manifest) {
-      const status: string = response.manifest.lastUpdateRequest.status;
+  if (response.manifest) {
+    const { status, errors } = response.manifest.lastUpdateRequest;
 
+    if (status === 'IN_PROGRESS') {
+      await wait(500);
+      await getSkillStatus(skillId, askProfile);
+    } else if (status === 'FAILED') {
+      throw new JovoCliError({
+        message: 'Errors occured while validating your skill package',
+        hint: errors!.reduce((output: string, error: SkillStatusError) => {
+          return output + error.message;
+        }, ''),
+      });
+    }
+  }
+
+  if (response.interactionModel) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const values: any[] = Object.values(response.interactionModel);
+    for (const model of values) {
+      const status = model.lastUpdateRequest.status;
       if (status === 'IN_PROGRESS') {
-        await wait(500);
+        await wait(1000);
         await getSkillStatus(skillId, askProfile);
       }
     }
-
-    if (response.interactionModel) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const values: any[] = Object.values(response.interactionModel);
-      for (const model of values) {
-        const status = model.lastUpdateRequest.status;
-        if (status === 'IN_PROGRESS') {
-          await wait(500);
-          await getSkillStatus(skillId, askProfile);
-        }
-      }
-    }
-  } catch (error) {
-    if (error instanceof JovoCliError) {
-      throw error;
-    }
-    const errorMessage: string = error.stderror || error.message;
-    throw getAskError('smapiGetSkillStatus', errorMessage);
   }
 }

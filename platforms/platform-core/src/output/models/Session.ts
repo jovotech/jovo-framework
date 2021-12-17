@@ -10,7 +10,7 @@ export class Session {
 
   @IsOptional()
   @IsArray()
-  state?: any[];
+  state?: unknown[];
 
   @IsBoolean()
   end!: boolean;

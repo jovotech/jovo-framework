@@ -33,7 +33,7 @@ export interface RequestResponseConfig {
 export interface BasicLoggingConfig extends PluginConfig {
   request?: RequestResponseConfig | boolean;
   response?: RequestResponseConfig | boolean;
-  maskValue?: any;
+  maskValue?: unknown;
   styling?: boolean;
   indentation?: string;
   colorizeSettings?: {
@@ -129,7 +129,7 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
         const value = _get(requestCopy, maskPath);
         if (value) {
           let newValue = this.config.maskValue;
-          if (typeof newValue === 'function') {
+          if (typeof this.config.maskValue === 'function') {
             newValue = this.config.maskValue(value);
           }
           _set(requestCopy, maskPath, newValue);
@@ -180,7 +180,7 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
         const value = _get(responseCopy, maskPath);
         if (value) {
           let newValue = this.config.maskValue;
-          if (typeof newValue === 'function') {
+          if (typeof this.config.maskValue === 'function') {
             newValue = this.config.maskValue(value);
           }
           _set(responseCopy, maskPath, newValue);

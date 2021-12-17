@@ -11,7 +11,7 @@ import {
 import { AlexaCapability, AlexaCapabilityType } from './AlexaDevice';
 import { DYNAMIC_ENTITY_MATCHES_PREFIX, STATIC_ENTITY_MATCHES_PREFIX } from './constants';
 import { AlexaEntity, Context, Request, Session } from './interfaces';
-import { ResolutionPerAuthority, ResolutionPerAuthorityStatusCode } from './output';
+import { ResolutionPerAuthority, ResolutionPerAuthorityStatusCode, Slot } from './output';
 
 export const ALEXA_REQUEST_TYPE_TO_INPUT_TYPE_MAP: Record<string, InputTypeLike> = {
   'LaunchRequest': InputType.Launch,
@@ -47,8 +47,15 @@ export class AlexaRequest extends JovoRequest {
   }
 
   getEntities(): EntityMap<AlexaEntity> | undefined {
-    const slots = this.request?.intent?.slots;
-    if (!slots) return;
+    const slots: Record<string, Slot> = {
+      ...(this.request?.intent?.slots || {}),
+      ...(this.request?.apiRequest?.slots || {}),
+    };
+
+    if (!Object.keys(slots).length) {
+      return;
+    }
+
     return Object.keys(slots).reduce((entityMap: EntityMap<AlexaEntity>, slotKey: string) => {
       const entity: AlexaEntity = {
         native: slots[slotKey],
@@ -87,13 +94,14 @@ export class AlexaRequest extends JovoRequest {
     return this.getEntityResolutions(slotKey, DYNAMIC_ENTITY_MATCHES_PREFIX);
   }
 
-  private getEntityResolutions(slotKey: string, startsWith: string): ResolutionPerAuthority[] {
-    return (
-      this.request?.intent?.slots?.[slotKey]?.resolutions?.resolutionsPerAuthority || []
-    ).filter(
+  private getEntityResolutions(slotKey: string, prefix: string): ResolutionPerAuthority[] {
+    return [
+      ...(this.request?.intent?.slots?.[slotKey]?.resolutions?.resolutionsPerAuthority || []),
+      ...(this.request?.apiRequest?.slots?.[slotKey]?.resolutions?.resolutionsPerAuthority || []),
+    ].filter(
       (authorityResolution) =>
         authorityResolution.status.code === ResolutionPerAuthorityStatusCode.SuccessMatch &&
-        authorityResolution.authority.startsWith(startsWith),
+        authorityResolution.authority.startsWith(prefix),
     );
   }
 

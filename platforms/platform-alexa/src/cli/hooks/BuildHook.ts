@@ -3,10 +3,13 @@ import {
   ANSWER_BACKUP,
   ANSWER_CANCEL,
   deleteFolderRecursive,
+  DISK,
   flags,
   getResolvedLocales,
   InstallContext,
+  isJovoCliError,
   JovoCliError,
+  Log,
   mergeArrayCustomizer,
   OK_HAND,
   printHighlight,
@@ -22,12 +25,13 @@ import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 import { JovoModelData, JovoModelDataV3, NativeFileInformation } from '@jovotech/model';
 import { JovoModelAlexa } from '@jovotech/model-alexa';
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs';
+import { copySync, moveSync } from 'fs-extra';
 import _get from 'lodash.get';
 import _has from 'lodash.has';
 import _merge from 'lodash.merge';
 import _mergeWith from 'lodash.mergewith';
 import _set from 'lodash.set';
-import { AlexaCli } from '..';
+import { join as joinPaths } from 'path';
 import { SupportedLocales } from '../constants';
 import DefaultFiles from '../DefaultFiles.json';
 import { AlexaContext, SupportedLocalesType } from '../interfaces';
@@ -38,7 +42,6 @@ export interface AlexaBuildPlatformContext extends AlexaContext, BuildPlatformCo
 }
 
 export class BuildHook extends AlexaHook<BuildPlatformEvents> {
-  $plugin!: AlexaCli;
   $context!: AlexaBuildPlatformContext;
 
   install(): void {
@@ -72,10 +75,8 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
   /**
    * Updates the current plugin context with platform-specific values.
    */
-  async updatePluginContext(): Promise<void> {
-    if (!this.$context.alexa) {
-      this.$context.alexa = {};
-    }
+  updatePluginContext(): void {
+    super.updatePluginContext();
 
     this.$context.alexa.askProfile =
       this.$context.flags['ask-profile'] || this.$plugin.config.askProfile || 'default';
@@ -111,8 +112,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
               resolvedLocale.length === 2
                 ? 'Alexa does not support generic locales, please specify locales in your project configuration.'
                 : '',
-            learnMore:
-              'For more information on multiple language support: https://developer.amazon.com/en-US/docs/alexa/custom-skills/develop-skills-in-multiple-languages.html',
+            learnMore: 'https://www.jovo.tech/marketplace/platform-alexa/project-config#locales',
           });
         }
       }
@@ -123,7 +123,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
    * Validates Jovo models with platform-specific validators.
    */
   async validateModels(): Promise<void> {
-    // Validate Jovo model.
+    // Validate Jovo model
     const validationTask: Task = new Task(`${OK_HAND} Validating Alexa model files`);
 
     for (const locale of this.$context.locales) {
@@ -145,47 +145,55 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
   }
 
   /**
-   * Checks, if --clean has been set and deletes the platform folder accordingly.
+   * Checks if --clean has been set and deletes the platform folder accordingly
    */
   checkForCleanBuild(): void {
-    // If --clean has been set, delete the respective platform folders before building.
+    // If --clean has been set, delete the respective platform folders before building
     if (this.$context.flags.clean) {
       deleteFolderRecursive(this.$plugin.platformPath);
     }
   }
 
   async build(): Promise<void> {
-    const taskStatus: string = this.$cli.project!.hasPlatform(this.$plugin.platformDirectory)
-      ? 'Updating'
-      : 'Creating';
+    const buildPath = `Path: ./${joinPaths(
+      this.$cli.project!.getBuildDirectory(),
+      this.$plugin.platformDirectory,
+    )}`;
 
-    const buildTaskTitle =
-      `${STATION} ${taskStatus} Alexa Skill project files${printStage(
-        this.$cli.project!.stage,
-      )}\n` +
-      printSubHeadline(
-        `Path: ./${this.$cli.project!.getBuildDirectory()}/${this.$plugin.platformDirectory}`,
-      );
+    const buildTaskTitle = `${STATION} Building Alexa Skill files${printStage(
+      this.$cli.project!.stage,
+    )}\n${printSubHeadline(buildPath)}`;
 
     // Define main build task.
     const buildTask: Task = new Task(buildTaskTitle);
 
     // Update or create Alexa project files, depending on whether it has already been built or not.
-    const projectFilesTask: Task = new Task(
-      `${taskStatus} project files`,
-      this.createAlexaProjectFiles.bind(this),
+    const projectFilesTask: Task = new Task(`Project files`, this.buildProjectFiles.bind(this));
+
+    const interactionModelTask: Task = new Task(
+      `Interaction model`,
+      this.buildInteractionModel.bind(this),
+      { enabled: this.$cli.project!.hasModelFiles(this.$context.locales) },
     );
 
-    const buildInteractionModelTask: Task = new Task(
-      `${taskStatus} interaction model`,
-      this.createInteractionModel.bind(this),
+    const buildConversationFilesTask: Task = new Task(
+      `Alexa Conversations files`,
+      this.buildConversationsFiles.bind(this),
+      { enabled: this.$context.alexa.isACSkill },
     );
-    // If no model files for the current locales exist, do not build interaction model.
-    if (!this.$cli.project!.hasModelFiles(this.$context.locales)) {
-      buildInteractionModelTask.disable();
-    }
 
-    buildTask.add(projectFilesTask, buildInteractionModelTask);
+    const buildResponseFilesTask: Task = new Task(
+      `Response files`,
+      this.buildResponseFiles.bind(this),
+      { enabled: this.$context.alexa.isACSkill },
+    );
+
+    buildTask.add(
+      projectFilesTask,
+      interactionModelTask,
+      buildConversationFilesTask,
+      buildResponseFilesTask,
+    );
 
     await buildTask.run();
   }
@@ -198,6 +206,8 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
     if (!this.$context.platforms.includes(this.$plugin.id)) {
       return;
     }
+
+    this.updatePluginContext();
 
     // Get locales to reverse build from.
     // If --locale is not specified, reverse build from every locale available in the platform folder.
@@ -243,23 +253,52 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       }
     }
 
-    // If Jovo model files for the current locales exist, ask whether to back them up or not.
-    if (this.$cli.project!.hasModelFiles(Object.values(buildLocaleMap))) {
+    // If Jovo model files for the current locales or resource files exist, ask whether to back them up or not.
+    if (
+      this.$cli.project!.hasModelFiles(Object.values(buildLocaleMap)) ||
+      (this.$context.alexa.isACSkill && existsSync(this.$plugin.resourcesDirectory))
+    ) {
       const answer = await promptOverwriteReverseBuild();
       if (answer.overwrite === ANSWER_CANCEL) {
         return;
       }
       if (answer.overwrite === ANSWER_BACKUP) {
+        Log.spacer();
         // Backup old files.
-        const backupTask: Task = new Task('Creating backups');
-        for (const locale of Object.values(buildLocaleMap)) {
-          const localeTask: Task = new Task(locale, () => this.$cli.project!.backupModel(locale));
-          backupTask.add(localeTask);
+        const backupTask: Task = new Task(`${DISK} Creating backups`);
+        const date: string = new Date().toISOString();
+
+        if (existsSync(this.$cli.project!.getModelsDirectory())) {
+          const modelsBackupDirectory = `${this.$cli.project!.getModelsDirectory()}.${date}`;
+          const modelTask: Task = new Task(
+            `${this.$cli.project!.getModelsDirectory()} -> ${modelsBackupDirectory}`,
+            () => {
+              moveSync(this.$cli.project!.getModelsDirectory(), modelsBackupDirectory, {
+                overwrite: true,
+              });
+            },
+          );
+          backupTask.add(modelTask);
         }
+
+        if (existsSync(this.$plugin.resourcesDirectory)) {
+          const resourcesBackupDirectory = `${this.$plugin.resourcesDirectory}.${date}`;
+          const resourcesTask: Task = new Task(
+            `${this.$plugin.resourcesDirectory} -> ${resourcesBackupDirectory}`,
+            () => {
+              moveSync(this.$plugin.resourcesDirectory, resourcesBackupDirectory, {
+                overwrite: true,
+              });
+            },
+          );
+          backupTask.add(resourcesTask);
+        }
+
         await backupTask.run();
       }
     }
-    const reverseBuildTask: Task = new Task(`${REVERSE_ARROWS} Reversing model files`);
+
+    const reverseBuildTask: Task = new Task(`${REVERSE_ARROWS} Reversing Alexa files`);
     for (const [platformLocale, modelLocale] of Object.entries(buildLocaleMap)) {
       const taskDetails: string = platformLocale === modelLocale ? '' : `(${modelLocale})`;
       const localeTask: Task = new Task(`${platformLocale} ${taskDetails}`, async () => {
@@ -284,13 +323,48 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       });
       reverseBuildTask.add(localeTask);
     }
+
+    if (this.$context.alexa.isACSkill && this.$plugin.config.conversations?.directory) {
+      if (
+        this.$plugin.config.conversations?.acdlDirectory &&
+        existsSync(this.$plugin.conversationsDirectory)
+      ) {
+        const acdlPath: string = joinPaths(
+          this.$plugin.config.conversations.directory,
+          this.$plugin.config.conversations.acdlDirectory,
+        );
+
+        const copyAcdlFilesTask: Task = new Task(
+          `Copying Alexa Conversations files into ${acdlPath}`,
+          () => copySync(this.$plugin.conversationsDirectory, acdlPath),
+        );
+        reverseBuildTask.add(copyAcdlFilesTask);
+      }
+
+      if (
+        this.$plugin.config.conversations?.responsesDirectory &&
+        existsSync(this.$plugin.responseDirectory)
+      ) {
+        const responsesPath: string = joinPaths(
+          this.$plugin.config.conversations.directory,
+          this.$plugin.config.conversations.responsesDirectory,
+        );
+
+        const copyResponseFilesTask: Task = new Task(
+          `Copying Response files into ${responsesPath}`,
+          () => copySync(this.$plugin.responseDirectory, responsesPath),
+        );
+        reverseBuildTask.add(copyResponseFilesTask);
+      }
+    }
+
     await reverseBuildTask.run();
   }
 
   /**
    * Builds the Alexa skill manifest.
    */
-  createAlexaProjectFiles(): void {
+  buildProjectFiles(): void {
     const files: FileObject = FileBuilder.normalizeFileObject(
       _get(this.$plugin.config, 'files', {}),
     );
@@ -304,7 +378,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
     const endpoint: string = this.getPluginEndpoint();
     const endpointPath = 'skill-package/["skill.json"].manifest.apis.custom.endpoint';
     // If a global endpoint is given and one is not already specified, set the global one.
-    if (endpoint && !_has(projectFiles, endpointPath)) {
+    if (!_has(projectFiles, endpointPath)) {
       // If endpoint is of type ARN, omit the Wildcard certificate.
       const certificate: string | null = !endpoint.startsWith('arn') ? 'Wildcard' : null;
       // Create basic HTTPS endpoint from Wildcard SSL.
@@ -314,14 +388,34 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       });
     }
 
-    // Create ask profile entry
-    const askProfilePath = `["ask-resources.json"].profiles.${this.$context.alexa.askProfile}`;
-    if (!_has(projectFiles, askProfilePath)) {
-      _set(projectFiles, askProfilePath, {});
+    // Create entries for Alexa Conversations
+    const conversationsPath = 'skill-package/["skill.json"].manifest.apis.custom.dialogManagement';
+    if (this.$context.alexa.isACSkill && !_has(projectFiles, conversationsPath)) {
+      _set(projectFiles, conversationsPath, {
+        sessionStartDelegationStrategy: {
+          target: this.$plugin.config.conversations?.sessionStartDelegationStrategy?.target,
+        },
+        dialogManagers: [
+          {
+            type: 'AMAZON.Conversations',
+          },
+        ],
+      });
     }
 
+    // Create ask profile entry
+    const askResourcesPath = `["ask-resources.json"].profiles.${this.$context.alexa.askProfile}`;
+    if (!_has(projectFiles, askResourcesPath)) {
+      _set(projectFiles, askResourcesPath, {
+        skillMetadata: {
+          src: './skill-package',
+        },
+      });
+    }
+
+    const askConfigPath = `[".ask/"].["ask-states.json"].profiles.${this.$context.alexa.askProfile}`;
     const skillId: string | undefined = this.$plugin.config.skillId;
-    const skillIdPath = `${askProfilePath}.skillId`;
+    const skillIdPath = `${askConfigPath}.skillId`;
     // Check whether skill id has already been set.
     if (skillId && !_has(projectFiles, skillIdPath)) {
       _set(projectFiles, skillIdPath, skillId);
@@ -364,7 +458,9 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
   /**
    * Creates and returns tasks for each locale to build the interaction model for Alexa.
    */
-  async createInteractionModel(): Promise<void> {
+  async buildInteractionModel(): Promise<string[]> {
+    const output: string[] = [];
+
     for (const locale of this.$context.locales) {
       const resolvedLocales: string[] = getResolvedLocales(
         locale,
@@ -376,13 +472,12 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       const taskDetails: string =
         resolvedLocalesOutput === locale ? '' : `(${resolvedLocalesOutput})`;
 
-      const localeTask: Task = new Task(`${locale} ${taskDetails}`, async () => {
-        await this.buildLanguageModel(locale, resolvedLocales);
-        await wait(500);
-      });
-      localeTask.indent(4);
-      await localeTask.run();
+      await this.buildLanguageModel(locale, resolvedLocales);
+      await wait(500);
+      output.push(`${locale} ${taskDetails}`);
     }
+
+    return output;
   }
 
   /**
@@ -418,11 +513,45 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
         );
       }
     } catch (error) {
-      if (error instanceof JovoCliError) {
-        throw error;
+      if (!isJovoCliError(error)) {
+        throw new JovoCliError({ message: error.message, module: this.$plugin.name });
       }
-      throw new JovoCliError({ message: error.message, module: this.$plugin.name });
+      throw error;
     }
+  }
+
+  buildConversationsFiles(): void {
+    const src: string = joinPaths(
+      this.$plugin.config.conversations!.directory!,
+      this.$plugin.config.conversations!.acdlDirectory!,
+    );
+
+    if (!existsSync(src)) {
+      throw new JovoCliError({
+        message: `Directory for Alexa Conversations files does not exist at ${src}`,
+        module: this.$plugin.name,
+        hint: `Try creating your .acdl files in ${src} or specify the directory of your choice in the project configuration`,
+      });
+    }
+
+    copySync(src, this.$plugin.conversationsDirectory);
+  }
+
+  buildResponseFiles(): void {
+    const src: string = joinPaths(
+      this.$plugin.config.conversations!.directory!,
+      this.$plugin.config.conversations!.responsesDirectory!,
+    );
+
+    if (!existsSync(src)) {
+      throw new JovoCliError({
+        message: `Directory for Alexa response files does not exist at ${src}`,
+        module: this.$plugin.name,
+        hint: `Try creating your APL-A response files in ${src} or specify the directory of your choice in the project configuration`,
+      });
+    }
+
+    copySync(src, this.$plugin.responseDirectory);
   }
 
   /**
@@ -432,6 +561,15 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
     const endpoint =
       _get(this.$plugin.config, 'options.endpoint') ||
       this.$cli.project!.config.getParameter('endpoint');
+
+    if (!endpoint) {
+      throw new JovoCliError({
+        message: 'endpoint has to be set',
+        hint: 'Try setting your endpoint in the project configuration',
+        learnMore: 'https://www.jovo.tech/docs/project-config#endpoint',
+      });
+    }
+
     return this.$cli.resolveEndpoint(endpoint);
   }
 

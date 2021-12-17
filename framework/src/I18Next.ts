@@ -11,7 +11,7 @@ export interface I18NextResources extends Resource {}
 
 // Construct a new type without the index-signature that is inherited from Resource.
 // Otherwise keyof would only return string instead of the explicit keys.
-export type NonIndexedI18NextResources = OmitIndex<I18NextResources, string>;
+export type NonIndexedI18NextResources = OmitIndex<I18NextResources>;
 
 // If KEYS is empty after excluding the number- and symbol-key, string is returned, otherwise KEYS without the number- and symbol-key is returned.
 export type TransformI18NextKeys<KEYS> = Exclude<KEYS, number> extends never

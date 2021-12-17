@@ -28,6 +28,10 @@ export class JovoInput implements Input {
     }
   }
 
+  getText(): string | undefined {
+    return this.text || this.asr?.text;
+  }
+
   getIntentName(): string | undefined {
     function getIntentName(intent: Intent | string): string {
       return typeof intent === 'string' ? intent : intent.name;

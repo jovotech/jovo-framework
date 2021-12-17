@@ -12,6 +12,8 @@ import {
   Platform,
   Plugin,
   PluginConfig,
+  Server,
+  SluPlugin,
   UnknownObject,
 } from '@jovotech/framework';
 import { NlpjsNlu } from '@jovotech/nlu-nlpjs';
@@ -23,12 +25,12 @@ import { LangFr } from '@nlpjs/lang-fr';
 import { LangIt } from '@nlpjs/lang-it';
 import isEqual from 'fast-deep-equal/es6';
 import { promises } from 'fs';
+import _cloneDeep from 'lodash.clonedeep';
 import open from 'open';
 import { homedir } from 'os';
 import { join, resolve } from 'path';
 import { cwd } from 'process';
 import { connect, Socket } from 'socket.io-client';
-import { Writable } from 'stream';
 import { inspect } from 'util';
 import { v4 as uuidV4 } from 'uuid';
 import { STATE_MUTATING_METHOD_KEYS } from './constants';
@@ -46,8 +48,13 @@ import {
 } from './interfaces';
 import { MockServer, MockServerRequest } from './MockServer';
 
+type AugmentedServer = Server & {
+  __augmented?: boolean;
+  originalSetResponse?: Server['setResponse'];
+};
+
 export interface JovoDebuggerConfig extends PluginConfig {
-  nlu: NluPlugin;
+  nlu: NluPlugin | SluPlugin;
   webhookUrl: string;
   debuggerConfigPath: string;
   modelsPath: string;
@@ -115,17 +122,17 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       return this.onReceiveRequest(app, request);
     });
 
+    this.augmentServerForApp(app);
     this.patchHandleRequestToIncludeUniqueId();
     this.patchPlatformsToCreateJovoAsProxy(app.platforms);
   }
 
   mount(parent: HandleRequest): Promise<void> | void {
+    this.augmentServerForRequest(parent);
+
     this.socket = parent.app.plugins.JovoDebugger?.socket;
     parent.middlewareCollection.use('request.start', (jovo) => {
       return this.onRequest(jovo);
-    });
-    parent.middlewareCollection.use('response.end', (jovo) => {
-      return this.onResponse(jovo);
     });
   }
 
@@ -143,6 +150,50 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       data,
     };
     this.socket?.emit(JovoDebuggerEvent.AppStateMutation, payload);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/explicit-module-boundary-types
+  emitResponse(response: any, requestId?: string | number): void {
+    if (!this.socket) {
+      return this.onSocketNotConnected();
+    }
+    const payload: JovoDebuggerPayload = {
+      requestId,
+      data: response,
+    };
+    this.socket.emit(JovoDebuggerEvent.AppResponse, payload);
+  }
+
+  // Augment the server given in app.handle to emit a response event when setResponse is called
+  private augmentServerForApp(app: App): void {
+    const handle = app.handle;
+    app.handle = (server: AugmentedServer) => {
+      if (!server.__augmented) {
+        const setResponse = server.setResponse;
+        server.originalSetResponse = setResponse;
+        server.setResponse = (response) => {
+          this.emitResponse(response);
+          return setResponse.call(server, response);
+        };
+        server.__augmented = true;
+      }
+      return handle.call(app, server);
+    };
+  }
+
+  // Augment the server of HandleRequest to emit a response with a debugger request id if setResponse is called.
+  // If the server was already augmented by augmentServerForApp, the original method will be used instead of the already augmented one.
+  private augmentServerForRequest(handleRequest: HandleRequest): void {
+    const serverCopy: AugmentedServer = _cloneDeep(handleRequest.server);
+    const setResponse =
+      (serverCopy.__augmented && serverCopy.originalSetResponse) || serverCopy.setResponse;
+    serverCopy.setResponse = (response) => {
+      this.emitResponse(response, handleRequest.debuggerRequestId);
+      return setResponse.call(serverCopy, response);
+    };
+    Object.defineProperty(handleRequest, 'server', {
+      value: serverCopy,
+    });
   }
 
   private patchHandleRequestToIncludeUniqueId() {
@@ -163,13 +214,15 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
         const jovo = createJovoFn.call(platform, app, handleRequest);
         // propagate initial values, might not be required, TBD
         for (const key in jovo) {
+          if (!jovo.hasOwnProperty(key)) {
+            continue;
+          }
           const value = jovo[key as keyof Jovo];
           const isEmptyObject =
             typeof value === 'object' && !Array.isArray(value) && !Object.keys(value || {}).length;
           const isEmptyArray = Array.isArray(value) && !((value as unknown[]) || []).length;
 
           if (
-            !jovo.hasOwnProperty(key) ||
             this.config.ignoredProperties.includes(key) ||
             !value ||
             isEmptyObject ||
@@ -341,12 +394,14 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     const webhookId = await this.retrieveLocalWebhookId();
     const debuggerUrl = `${this.config.webhookUrl}/${webhookId}`;
 
+    // eslint-disable-next-line no-console
     console.log('\nThis is your webhook url ☁️ ' + underline(blueText(debuggerUrl)));
     // Check if the current output is being piped to somewhere.
     if (process.stdout.isTTY) {
       // Check if we can enable raw mode for input stream to capture raw keystrokes.
       if (process.stdin.setRawMode) {
         setTimeout(() => {
+          // eslint-disable-next-line no-console
           console.log(`\nTo open Jovo Debugger in your browser, press the "." key.\n`);
         }, 500);
 
@@ -358,7 +413,6 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
         process.stdin.setEncoding('utf-8');
 
         // Collect input text from input stream.
-        let inputText = '';
         process.stdin.on('data', async (keyRaw: Buffer) => {
           const key: string = keyRaw.toString();
           // When dot gets pressed, try to open the debugger in browser.
@@ -366,36 +420,34 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
             try {
               await open(debuggerUrl);
             } catch (error) {
+              // eslint-disable-next-line no-console
               console.log(
                 `Could not open browser. Please open debugger manually by visiting this url: ${debuggerUrl}`,
               );
             }
-            inputText = '';
           } else {
             // When anything else got pressed, record it and send it on enter into the child process.
             if (key.charCodeAt(0) === 13) {
               // Send recorded input to child process. This is useful for restarting a nodemon process with rs, for example.
               process.stdout.write('\n');
-              inputText = '';
             } else if (key.charCodeAt(0) === 3) {
               // Ctrl+C has been pressed, kill process.
               if (process.platform === 'win32') {
                 process.stdin.pause();
-                // @ts-ignore
-                process.stdin.setRawMode(false);
+                process.stdin.setRawMode?.(false);
                 process.exit();
               } else {
                 process.exit();
               }
             } else {
               // Record input text and write it into terminal.
-              inputText += key;
               process.stdout.write(key);
             }
           }
         });
       } else {
         setTimeout(() => {
+          // eslint-disable-next-line no-console
           console.log(
             `☁  Could not open browser. Please open debugger manually by visiting this url: ${debuggerUrl}`,
           );
@@ -412,18 +464,10 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     await this.emitDebuggerConfig();
     await this.emitLanguageModelIfEnabled();
 
-    function propagateStreamAsLog(stream: Writable, socket: typeof Socket) {
-      const originalWriteFn = stream.write;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      stream.write = function (chunk: Buffer, ...args: any[]) {
-        socket.emit(JovoDebuggerEvent.AppConsoleLog, chunk.toString(), new Error().stack);
-        return originalWriteFn.call(this, chunk, ...args);
-      };
-    }
-
     if (!this.hasOverriddenWrite) {
-      propagateStreamAsLog(process.stdout, this.socket);
-      propagateStreamAsLog(process.stderr, this.socket);
+      // disable logging events for now because they are not shown anyways
+      // propagateStreamAsLog(process.stdout, this.socket);
+      // propagateStreamAsLog(process.stderr, this.socket);
       this.hasOverriddenWrite = true;
     }
   }
@@ -441,17 +485,6 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       data: jovo.$request,
     };
     this.socket.emit(JovoDebuggerEvent.AppRequest, payload);
-  }
-
-  private onResponse(jovo: Jovo): void {
-    if (!this.socket) {
-      return this.onSocketNotConnected();
-    }
-    const payload: JovoDebuggerPayload = {
-      requestId: jovo.$handleRequest.debuggerRequestId,
-      data: jovo.$response,
-    };
-    this.socket.emit(JovoDebuggerEvent.AppResponse, payload);
   }
 
   private async emitLanguageModelIfEnabled(): Promise<void> {

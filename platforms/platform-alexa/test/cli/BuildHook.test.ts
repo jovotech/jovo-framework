@@ -21,6 +21,8 @@ beforeEach(() => {
   const cli: JovoCli = new JovoCli();
   plugin.$cli = cli;
   BuildHook.prototype['$cli'] = cli;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   BuildHook.prototype['$plugin'] = plugin;
   BuildHook.prototype['$context'] = {
     command: 'build',

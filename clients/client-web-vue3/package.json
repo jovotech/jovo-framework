@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/client-web-vue3",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "",
   "main": "dist/JovoWebClientVue.cjs.js",
   "module": "dist/JovoWebClientVue.esm.js",
@@ -24,7 +24,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/client-web": "^4.0.0"
+    "@jovotech/client-web": "^4.1.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",

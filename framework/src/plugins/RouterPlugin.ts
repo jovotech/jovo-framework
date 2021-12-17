@@ -45,10 +45,19 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
 
   private async setRoute(jovo: Jovo): Promise<void> {
     if (jovo.$input.type === InputType.Error) {
-      return jovo.$app.handleError(new Error(jovo.$input.text || 'Input is of type ERROR'), jovo);
+      return jovo.$app.handleError(
+        new Error(jovo.$input.getText() || 'Input is of type ERROR'),
+        jovo,
+      );
     }
 
-    const mappedIntent = this.getMappedIntent(jovo.$input, jovo.$config.routing?.intentMap);
+    // merge global intent map with intent map of currently used platform
+    const mergedIntentMap = {
+      ...(jovo.$config.routing?.intentMap || {}),
+      ...(jovo.$platform.config.intentMap || {}),
+    };
+
+    const mappedIntent = this.getMappedIntent(jovo.$input, mergedIntentMap);
     if (mappedIntent) {
       jovo.$input.intent = mappedIntent;
     }
@@ -70,13 +79,19 @@ export class RouterPlugin extends Plugin<RouterPluginConfig> {
     return new Promise((resolve, reject) => {
       const globalHandlerMap: Record<string, HandlerMetadata[]> = {};
 
+      // make an intent map out of all the intent maps of all platforms
+      const platformIntentMap = app.platforms.reduce((intentMap: IntentMap, platform) => {
+        return { ...intentMap, ...(platform.config.intentMap || {}) };
+      }, {});
+      // merge the global intent map with the intent map created by all platforms
+      const mergedIntentMap = { ...(app.config.routing?.intentMap || {}), ...platformIntentMap };
+
       app.componentTree.forEach((node) => {
         const componentHandlerMetadata =
           MetadataStorage.getInstance().getMergedHandlerMetadataOfComponent(node.metadata.target);
         componentHandlerMetadata.forEach((handlerMetadata) => {
           handlerMetadata.globalIntentNames.forEach((globalIntentName) => {
-            const mappedIntentName =
-              app.config.routing?.intentMap?.[globalIntentName] || globalIntentName;
+            const mappedIntentName = mergedIntentMap?.[globalIntentName] || globalIntentName;
             if (!globalHandlerMap[mappedIntentName]) {
               globalHandlerMap[mappedIntentName] = [];
             }

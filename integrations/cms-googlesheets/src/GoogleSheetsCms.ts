@@ -1,22 +1,33 @@
-import { App, Jovo, JovoError, Plugin, PluginConfig } from '@jovotech/framework';
-import { existsSync, readFileSync } from 'fs';
-import { JWT } from 'google-auth-library';
+import { App, Jovo, JovoError, Plugin, PluginConfig, RequiredOnlyWhere } from '@jovotech/framework';
+import { JWT, JWTInput } from 'google-auth-library';
 import { google, sheets_v4 } from 'googleapis';
-import { Credentials } from './interfaces';
 import { GoogleSheetsCmsSheet } from './sheets/GoogleSheetsCmsSheet';
 
 export interface GoogleSheetsCmsConfig extends PluginConfig {
   caching?: boolean;
-  credentialsFile: string;
-  spreadsheetId?: string;
+  serviceAccount: JWTInput;
+  spreadsheetId: string;
   sheets: Record<string, GoogleSheetsCmsSheet>;
 }
+
+export type GoogleSheetsCmsInitConfig = RequiredOnlyWhere<
+  GoogleSheetsCmsConfig,
+  'serviceAccount' | 'spreadsheetId'
+>;
 
 export class GoogleSheetsCms extends Plugin<GoogleSheetsCmsConfig> {
   private jwt?: JWT;
 
+  constructor(config: GoogleSheetsCmsInitConfig) {
+    super(config);
+  }
+
   getDefaultConfig(): GoogleSheetsCmsConfig {
-    return { credentialsFile: 'credentials.json', sheets: {} };
+    return { ...this.getInitConfig(), sheets: {} };
+  }
+
+  getInitConfig(): GoogleSheetsCmsInitConfig {
+    return { serviceAccount: {}, spreadsheetId: '<YOUR-SPREADSHEET-ID>' };
   }
 
   install(app: App): void {
@@ -69,27 +80,17 @@ export class GoogleSheetsCms extends Plugin<GoogleSheetsCmsConfig> {
   }
 
   private async initializeJWT(): Promise<JWT> {
-    if (!this.config.credentialsFile) {
+    if (!this.config.serviceAccount) {
       throw new JovoError({
-        message: 'credentialsFile has to bet set',
+        message: 'serviceAccount has to bet set',
         learnMore: 'https://www.jovo.tech/docs/cms/google-sheets#configuration',
       });
     }
 
-    if (!existsSync(this.config.credentialsFile)) {
-      throw new JovoError({
-        message: `Couldn\'t read credentials file from ${this.config.credentialsFile}`,
-      });
-    }
-
     try {
-      const credentials: Credentials = JSON.parse(
-        readFileSync(this.config.credentialsFile, 'utf-8'),
-      );
-
       const jwt: JWT = new JWT({
-        email: credentials.client_email,
-        key: credentials.private_key,
+        email: this.config.serviceAccount.client_email as string,
+        key: this.config.serviceAccount.private_key as string,
         scopes: ['https://www.googleapis.com/auth/spreadsheets'],
       });
 
