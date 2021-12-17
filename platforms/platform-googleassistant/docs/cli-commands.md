@@ -14,7 +14,7 @@ The Google Assistant CLI plugin allows you to interact with the [Actions on Goog
 To use the Google Assistant CLI, add it as plugin to your `jovo.project.js` file. [Learn more about Google Assistant project configuration here](./project-config.md).
 
 ```js
-const { ProjectConfig } = require('@jovotech/cli');
+const { ProjectConfig } = require('@jovotech/cli-core');
 const { GoogleAssistantCli } = require('@jovotech/platform-googleassistant');
 // ...
 

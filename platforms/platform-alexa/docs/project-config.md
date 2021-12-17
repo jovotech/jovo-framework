@@ -14,7 +14,7 @@ The Alexa project configuration defines how the Alexa CLI plugin builds and depl
 You can add the Alexa plugin for the Jovo CLI and its configurations to your [project configuration](https://www.jovo.tech/docs/project-config) in `jovo.project.js`:
 
 ```js
-const { ProjectConfig } = require('@jovotech/cli');
+const { ProjectConfig } = require('@jovotech/cli-core');
 const { AlexaCli } = require('@jovotech/platform-alexa');
 // ...
 
