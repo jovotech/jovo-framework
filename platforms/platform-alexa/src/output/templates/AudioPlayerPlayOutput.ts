@@ -15,7 +15,7 @@ export class AudioPlayerPlayOutput extends BaseOutput<AudioPlayerPlayOutputOptio
         alexa: {
           nativeResponse: {
             response: {
-              shouldEndSession: null,
+              shouldEndSession: true,
               directives: [
                 {
                   type: 'AudioPlayer.Play',
