@@ -162,6 +162,12 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
       mergeInstances(response, output.platforms.alexa.nativeResponse);
     }
 
+    // if the response is an empty response, set shouldEndSession to true, otherwise Alexa returns INVALID_RESPONSE
+    const responseProperties = Object.keys(response.response);
+    if (responseProperties.length === 1 && responseProperties.includes('shouldEndSession')) {
+      response.response.shouldEndSession = true;
+    }
+
     return response;
   }
 
