@@ -14,7 +14,7 @@ The Alexa CLI plugin allows you to interact with the [Alexa Developer Console](h
 To use the Alexa CLI, add it as plugin to your `jovo.project.js` file. [Learn more about Alexa project configuration here](./project-config.md).
 
 ```js
-const { ProjectConfig } = require('@jovotech/cli');
+const { ProjectConfig } = require('@jovotech/cli-core');
 const { AlexaCli } = require('@jovotech/platform-alexa');
 // ...
 

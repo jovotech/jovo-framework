@@ -61,7 +61,7 @@ const app = new App({
 You can also add the CLI plugin to your [project configuration](https://www.jovo.tech/docs/project-config) in `jovo.project.js`. [Learn more about the Google Assistant specific project configuration here](https://www.jovo.tech/marketplace/platform-googleassistant/project-config).
 
 ```js
-const { ProjectConfig } = require('@jovotech/cli');
+const { ProjectConfig } = require('@jovotech/cli-core');
 const { GoogleAssistantCli } = require('@jovotech/platform-googleassistant');
 // ...
 

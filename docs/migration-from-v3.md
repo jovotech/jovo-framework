@@ -372,7 +372,7 @@ The project configuration (previously `project.js`) can now be found in a file c
 Similar to the [app configuration](#app-configuration), the project config now accepts classes in a `plugins` array. Here is an [example for Alexa](https://www.jovo.tech/marketplace/platform-alexa/project-config):
 
 ```js
-const { ProjectConfig } = require('@jovotech/cli');
+const { ProjectConfig } = require('@jovotech/cli-core');
 const { AlexaCli } = require('@jovotech/platform-alexa');
 // ...
 
