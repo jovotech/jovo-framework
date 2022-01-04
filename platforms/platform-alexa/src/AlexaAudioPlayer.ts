@@ -1,11 +1,6 @@
 import { Alexa } from './Alexa';
-import {
-  getProductList,
-  InSkillProduct,
-  InSkillProductsParams,
-  ProductListResponse,
-} from './api/IspApi';
-import { PlayerActivity, PurchaseResult, PurchaseResultLike } from './interfaces';
+
+import { PlayerActivity, Request } from './interfaces';
 
 export class AlexaAudioPlayer {
   constructor(private alexa: Alexa) {}
@@ -20,6 +15,10 @@ export class AlexaAudioPlayer {
 
   get token(): string | undefined {
     return this.alexa.$request.context?.AudioPlayer?.token;
+  }
+
+  get error(): Request['error'] {
+    return this.alexa.$request.request?.error;
   }
 
   toJSON(): AlexaAudioPlayer {
