@@ -96,7 +96,7 @@ export function handleDeviceLocationApiErrors(error: AxiosError): Error | void {
       errorCode = AlexaApiErrorCode.NO_SKILL_PERMISSION;
     }
 
-    throw new AlexaApiError({ message: error.message, code: errorCode, details: message });
+    throw new AlexaApiError({ message: error.message, code: errorCode });
   }
   throw new JovoError({ message: error.message });
 }
