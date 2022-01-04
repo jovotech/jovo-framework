@@ -1,8 +1,8 @@
+import { PickWhere } from '@jovotech/common';
 import { BaseComponent, ComponentConstructor, ComponentDeclaration } from './BaseComponent';
 import { ComponentTree, Tree } from './ComponentTree';
-import { InternalIntent } from './enums';
+import { BuiltInHandler } from './enums';
 import { HandlerNotFoundError } from './errors/HandlerNotFoundError';
-import { PickWhere } from './index';
 import { Jovo } from './Jovo';
 import { ComponentMetadata } from './metadata/ComponentMetadata';
 
@@ -31,14 +31,20 @@ export class ComponentTreeNode<COMPONENT extends BaseComponent = BaseComponent> 
   readonly children?: Tree<ComponentTreeNode>;
   readonly path: string[];
 
-  constructor({ path, metadata, parent, children }: ComponentTreeNodeOptions<COMPONENT>) {
+  constructor(
+    componentTree: ComponentTree,
+    { path, metadata, parent, children }: ComponentTreeNodeOptions<COMPONENT>,
+  ) {
     this.path = path.slice();
     this.metadata = metadata;
     if (parent) {
       this.parent = parent;
     }
     if (children?.length) {
-      this.children = children.reduce(ComponentTree.createComponentsToTreeReducer(this), {});
+      this.children = children.reduce(
+        ComponentTree.createComponentsToTreeReducer(componentTree, this),
+        {},
+      );
     }
   }
 
@@ -57,18 +63,22 @@ export class ComponentTreeNode<COMPONENT extends BaseComponent = BaseComponent> 
     ARGS extends unknown[] = any[],
   >({
     jovo,
-    handler = InternalIntent.Start,
+    handler = BuiltInHandler.Start,
     callArgs,
   }: ExecuteHandlerOptions<COMPONENT, HANDLER, ARGS>): Promise<void> {
     const componentInstance = new (this.metadata.target as ComponentConstructor<COMPONENT>)(
       jovo,
-      this.metadata.options?.config,
+      this.metadata.options,
     );
-    if (!componentInstance[handler as keyof COMPONENT]) {
-      throw new HandlerNotFoundError(componentInstance.constructor.name, handler.toString());
+    try {
+      if (!componentInstance[handler as keyof COMPONENT]) {
+        throw new HandlerNotFoundError(componentInstance.constructor.name, handler.toString());
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (componentInstance as any)[handler](...(callArgs || []));
+    } catch (e) {
+      return jovo.$app.handleError(e, jovo);
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await (componentInstance as any)[handler](...(callArgs || []));
   }
 
   toJSON(): Omit<ComponentTreeNode<COMPONENT>, 'parent'> & { parent?: string } {

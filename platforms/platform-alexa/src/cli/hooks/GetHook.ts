@@ -1,45 +1,52 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
-import _get from 'lodash.get';
-import _set from 'lodash.set';
+import { decompileProject, loadProject, loadProjectConfig } from '@alexa/acdl';
+import type { BuildPlatformEvents } from '@jovotech/cli-command-build';
+import type { GetPlatformContext, GetPlatformEvents } from '@jovotech/cli-command-get';
 import {
   ANSWER_CANCEL,
+  deleteFolderRecursive,
+  DOWNLOAD,
   flags,
   InstallContext,
-  PluginHook,
+  Log,
+  MAGNIFYING_GLASS,
   printAskProfile,
-  promptListForProjectId,
   promptOverwrite,
   Task,
-  DOWNLOAD,
-  MAGNIFYING_GLASS,
 } from '@jovotech/cli-core';
-import type { GetContext, GetEvents } from '@jovotech/cli-command-get';
-import type { BuildEvents } from '@jovotech/cli-command-build';
-import { FileBuilder, FileObject } from '@jovotech/filebuilder';
-
-import * as smapi from '../smapi';
-import { AskSkillList, checkForAskCli, AlexaContext, prepareSkillList } from '../utils';
-import defaultFiles from '../utils/DefaultFiles.json';
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import _get from 'lodash.get';
+import _set from 'lodash.set';
 import { AlexaCli } from '..';
+import DefaultFiles from '../DefaultFiles.json';
+import { AlexaContext, AskResources, AskSkillList } from '../interfaces';
+import * as smapi from '../smapi';
+import { checkForAskCli, prepareSkillList, promptListForAlexaSkill } from '../utilities';
+import { AlexaHook } from './AlexaHook';
 
-export interface GetContextAlexa extends AlexaContext, GetContext {
-  flags: GetContext['flags'] & { 'ask-profile'?: string; 'skill-id'?: string };
+export interface GetContextAlexa extends AlexaContext, GetPlatformContext {
+  flags: GetPlatformContext['flags'] & {
+    'ask-profile'?: string;
+    'skill-id'?: string;
+    'skill-stage'?: string;
+  };
 }
 
-export class GetHook extends PluginHook<GetEvents | BuildEvents> {
+export class GetHook extends AlexaHook<BuildPlatformEvents | GetPlatformEvents> {
   $plugin!: AlexaCli;
   $context!: GetContextAlexa;
 
   install(): void {
     this.middlewareCollection = {
       'install': [this.addCliOptions.bind(this)],
-      'before.get': [
+      'before.get:platform': [
         this.checkForPlatform.bind(this),
         checkForAskCli,
         this.updatePluginContext.bind(this),
+        this.checkForCleanGet.bind(this),
         this.checkForExistingPlatformFiles.bind(this),
+        this.checkForPlatformsFolder.bind(this),
       ],
-      'get': [this.get.bind(this)],
+      'get:platform': [this.get.bind(this)],
     };
   }
 
@@ -48,7 +55,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
    * @param context - Context providing an access point to command flags and args.
    */
   addCliOptions(context: InstallContext): void {
-    if (context.command !== 'get') {
+    if (context.command !== 'get:platform') {
       return;
     }
 
@@ -57,6 +64,11 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
       description: 'Name of used ASK profile',
     });
     context.flags['skill-id'] = flags.string({ char: 's', description: 'Alexa Skill ID' });
+    context.flags['skill-stage'] = flags.string({
+      description: 'Alexa Skill Stage',
+      options: ['development', 'live', 'certification'],
+      default: 'development',
+    });
   }
 
   /**
@@ -64,7 +76,7 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
    */
   checkForPlatform(): void {
     // Check if this plugin should be used or not.
-    if (this.$context.platform && this.$context.platform !== this.$plugin.$id) {
+    if (!this.$context.platforms.includes(this.$plugin.id)) {
       this.uninstall();
     }
   }
@@ -72,29 +84,57 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
   /**
    * Updates the current plugin context with platform-specific values.
    */
-  updatePluginContext(): void {
-    if (!this.$context.alexa) {
-      this.$context.alexa = {};
-    }
+  async updatePluginContext(): Promise<void> {
+    super.updatePluginContext();
 
     this.$context.alexa.askProfile =
-      this.$context.flags['ask-profile'] || this.$plugin.$config.askProfile;
+      this.$context.flags['ask-profile'] ||
+      this.$plugin.config.askProfile ||
+      (await this.getAskProfile());
 
     this.$context.alexa.skillId =
       this.$context.flags['skill-id'] ||
-      _get(this.$plugin.$config, '[".ask/"]["ask-states.json"].profiles.default.skillId') ||
-      _get(this.$plugin.$config, 'options.skillId');
+      _get(
+        this.$plugin.config,
+        `[".ask/"]["ask-states.json"].profiles.${
+          this.$context.alexa.askProfile || 'default'
+        }.skillId`,
+      ) ||
+      _get(this.$plugin.config, 'options.skillId');
+
+    this.$context.alexa.skillStage = this.$context.flags['skill-stage'];
+  }
+
+  /**
+   * Checks if --clean has been set and deletes the platform folder accordingly
+   */
+  checkForCleanGet(): void {
+    // If --clean has been set, delete the respective platform folders before building
+    if (this.$context.flags.clean) {
+      deleteFolderRecursive(this.$plugin.platformPath);
+    }
   }
 
   /**
    * Checks if platform-specific files already exist and prompts for overwriting them.
    */
   async checkForExistingPlatformFiles(): Promise<void> {
-    if (!this.$context.flags.overwrite && existsSync(this.$plugin.getPlatformPath())) {
-      const answer = await promptOverwrite('Found existing Alexa project files. How to proceed?');
+    if (existsSync(this.$plugin.skillPackagePath)) {
+      const answer = await promptOverwrite('Found existing Alexa skill package. How to proceed?');
       if (answer.overwrite === ANSWER_CANCEL) {
         this.uninstall();
       }
+      deleteFolderRecursive(this.$plugin.skillPackagePath);
+      Log.spacer();
+    }
+  }
+
+  /**
+   * Checks if the platform folder for the current plugin exists
+   */
+  checkForPlatformsFolder(): void {
+    if (!existsSync(this.$plugin.platformPath)) {
+      mkdirSync(this.$plugin.platformPath);
     }
   }
 
@@ -102,123 +142,79 @@ export class GetHook extends PluginHook<GetEvents | BuildEvents> {
    * Fetches platform-specific models from the Alexa Skills Console.
    */
   async get(): Promise<void> {
-    const getTask: Task = new Task(
-      `${DOWNLOAD} Getting Alexa Skill projects ${printAskProfile(this.$context.alexa.askProfile)}`,
-    );
-
     // If no skill id and thus no specified project can be found, try to prompt for one.
     if (!this.$context.alexa.skillId) {
       let skills: AskSkillList = { skills: [] };
+
       const getSkillListTask: Task = new Task(
         `${MAGNIFYING_GLASS} Getting a list of all your skills`,
-        async () => {
-          skills = await smapi.listSkills(this.$context.alexa.askProfile);
-        },
       );
 
+      const searchTask: Task = new Task('Searching', async () => {
+        skills = await smapi.listSkills(this.$context.alexa.askProfile);
+      });
+      getSkillListTask.add(searchTask);
+
       await getSkillListTask.run();
+      Log.spacer();
       const list = prepareSkillList(skills);
 
       try {
-        const answer = await promptListForProjectId(list);
+        const { skill } = await promptListForAlexaSkill(list);
+        Log.spacer();
 
-        this.$context.alexa.skillId = answer.projectId;
+        this.$context.alexa.skillId = skill.skillId;
+        this.$context.alexa.skillStage = skill.stage;
       } catch (error) {
         return;
       }
     }
 
-    const getSkillInformationTask: Task = new Task('Getting skill information', async () => {
-      const skillPackagePath: string = this.$plugin.getSkillPackagePath();
-      if (!existsSync(skillPackagePath)) {
-        mkdirSync(skillPackagePath, { recursive: true });
-      }
+    const getTask: Task = new Task(
+      `${DOWNLOAD} Getting Alexa skill project ${printAskProfile(this.$context.alexa.askProfile)}`,
+    );
 
-      const skillInformation = await smapi.getSkillInformation(
+    const exportTask: Task = new Task('Exporting skill package', async () => {
+      await smapi.exportSkillPackage(
         this.$context.alexa.skillId!,
-        'development',
+        this.$context.alexa.skillStage!,
+        this.$plugin.platformPath,
         this.$context.alexa.askProfile,
       );
-      writeFileSync(this.$plugin.getSkillJsonPath(), JSON.stringify(skillInformation, null, 2));
-      this.setAlexaSkillId(this.$context.alexa.skillId!);
+    });
+    getTask.add(exportTask);
 
-      // Try to get account linking information.
-      try {
-        const accountLinkingJson = await smapi.getAccountLinkingInformation(
-          this.$context.alexa.skillId!,
-          'development',
+    if (this.$context.alexa.isACSkill) {
+      const decompileTask: Task = new Task('Decompiling ACDL files', async () => {
+        if (!existsSync(this.$plugin.conversationsDirectory)) {
+          return;
+        }
+
+        const projectConfig = await loadProjectConfig(
+          this.$plugin.platformPath,
           this.$context.alexa.askProfile,
         );
+        const project = await loadProject(projectConfig);
 
-        if (accountLinkingJson) {
-          writeFileSync(
-            this.$plugin.getAccountLinkingPath(),
-            JSON.stringify({ accountLinkingRequest: accountLinkingJson }, null, 2),
-          );
-          return `Account Linking Information saved to ${this.$plugin.getAccountLinkingPath()}`;
-        }
-      } catch (error) {
-        // If account linking information is not available, do nothing.
-        if (!error.message.includes('AccountLinking is not present for given skillId')) {
-          throw error;
-        }
-      }
-    });
+        await decompileProject(project);
+      });
+      getTask.add(decompileTask);
+    }
 
-    const getModelsTask: Task = new Task('Getting Alexa Skill model files', async () => {
-      const alexaModelPath: string = this.$plugin.getModelsPath();
-      if (!existsSync(alexaModelPath)) {
-        mkdirSync(alexaModelPath, { recursive: true });
-      }
+    // Create ask-resources.json
+    if (!existsSync(this.$plugin.askResourcesPath)) {
+      const askResources: AskResources = _get(DefaultFiles, 'ask-resources.json');
+      _set(askResources, `profiles.${this.$context.alexa.askProfile || 'default'}`, {
+        skillMetadata: {
+          src: './skill-package',
+        },
+      });
+      writeFileSync(this.$plugin.askResourcesPath, JSON.stringify(askResources, null, 2));
+    }
 
-      const modelLocales: string[] = [];
-
-      if (this.$context.flags.locale) {
-        modelLocales.push(...this.$context.flags.locale);
-      } else {
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const skillJson = require(this.$plugin.getSkillJsonPath());
-        const skillJsonLocales = _get(skillJson, 'manifest.publishingInformation.locales');
-        modelLocales.push(...Object.keys(skillJsonLocales));
-      }
-      for (const locale of modelLocales) {
-        const model = await smapi.getInteractionModel(
-          this.$context.alexa.skillId!,
-          locale,
-          'development',
-          this.$context.alexa.askProfile,
-        );
-        writeFileSync(this.$plugin.getModelPath(locale), JSON.stringify(model, null, 2));
-      }
-      return `Locales: ${modelLocales.join(', ')}`;
-    });
-
-    getTask.add(getSkillInformationTask, getModelsTask);
+    // Set skill ID and generate .ask/ask-states.json if it does not yet exist
+    this.setSkillId(this.$context.alexa.skillId);
 
     await getTask.run();
-  }
-
-  /**
-   * Saves skillId to .ask/config.
-   * @param skillId - Skill ID.
-   */
-  setAlexaSkillId(skillId: string): void {
-    const askConfigFolderPath: string = this.$plugin.getAskConfigFolderPath();
-    if (!existsSync(askConfigFolderPath)) {
-      mkdirSync(askConfigFolderPath);
-    }
-
-    // Check if .ask/ask-states.json exists, if not, build default config.
-    const askConfigPath: string = this.$plugin.getAskConfigPath();
-    if (!existsSync(askConfigPath)) {
-      const defaultConfig: FileObject = _get(defaultFiles, '[".ask/"]');
-      FileBuilder.buildDirectory(defaultConfig, askConfigFolderPath);
-    }
-
-    const askConfigContent: string = readFileSync(askConfigPath, 'utf-8');
-    const askConfig = JSON.parse(askConfigContent);
-    _set(askConfig, 'profiles.default.skillId', skillId);
-
-    writeFileSync(askConfigPath, JSON.stringify(askConfig, null, 2));
   }
 }

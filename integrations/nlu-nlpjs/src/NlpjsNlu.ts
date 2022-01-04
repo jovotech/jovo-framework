@@ -1,16 +1,16 @@
 import {
   DeepPartial,
   EntityMap,
-  HandleRequest,
+  InterpretationPluginConfig,
   Jovo,
   NluData,
   NluPlugin,
   Platform,
-  PluginConfig,
   UnknownObject,
 } from '@jovotech/framework';
+
+import { JovoModelNlpjs } from '@jovotech/model-nlpjs';
 import { promises } from 'fs';
-import { JovoModelNlpjs } from 'jovo-model-nlpjs';
 import { join } from 'path';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -32,11 +32,12 @@ export interface NlpJsEntity {
   option: string;
   sourceText: string;
   utteranceText: string;
+  alias?: string;
 }
 
 export type SetupModelFunction = (parent: Platform, nlp: Nlp) => void | Promise<void>;
 
-export interface NlpjsNluConfig extends PluginConfig {
+export interface NlpjsNluConfig extends InterpretationPluginConfig {
   languageMap: UnknownObject;
   preTrainedModelFilePath: string;
   useModel: boolean;
@@ -56,6 +57,7 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
   // TODO fully determine default config
   getDefaultConfig(): NlpjsNluConfig {
     return {
+      ...super.getDefaultConfig(),
       languageMap: {},
       preTrainedModelFilePath: './model.nlp',
       useModel: false,
@@ -91,19 +93,18 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
     }
   }
 
-  async process(handleRequest: HandleRequest, jovo: Jovo): Promise<NluData | undefined> {
-    const text = jovo.$request.getRawText();
-    if (!text) return;
+  async processText(jovo: Jovo, text: string): Promise<NluData | undefined> {
     const language = jovo.$request.getLocale()?.substr(0, 2) || 'en';
     const nlpResult = await this.nlpjs?.process(language, text);
 
     const entities = (nlpResult?.entities || []).reduce(
       (entityMap: EntityMap, entity: NlpJsEntity) => {
-        entityMap[entity.entity] = {
+        const entityName = entity.alias || entity.entity;
+        entityMap[entityName] = {
           id: entity.option,
-          key: entity.option,
-          name: entity.entity,
+          resolved: entity.option,
           value: entity.utteranceText,
+          native: entity,
         };
         return entityMap;
       },

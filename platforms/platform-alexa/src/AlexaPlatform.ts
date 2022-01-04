@@ -1,23 +1,25 @@
 import {
   AnyObject,
-  Entity,
-  EntityMap,
-  ExtensibleConfig,
   HandleRequest,
   Jovo,
   Platform,
+  PlatformConfig,
+  RequiredOnlyWhere,
 } from '@jovotech/framework';
-import { AlexaOutputTemplateConverterStrategy, AlexaResponse } from '@jovotech/output-alexa';
-import { AlexaRequest } from './AlexaRequest';
 import { Alexa } from './Alexa';
+import { AlexaDevice } from './AlexaDevice';
+import { AlexaRequest } from './AlexaRequest';
+import { AlexaRequestBuilder } from './AlexaRequestBuilder';
+import { AlexaResponse } from './AlexaResponse';
 import { AlexaUser } from './AlexaUser';
 import { SUPPORTED_APL_ARGUMENT_TYPES } from './constants';
-import { AlexaDevice } from './AlexaDevice';
+import { AlexaOutputTemplateConverterStrategy } from './output';
 
-export interface AlexaConfig extends ExtensibleConfig {
+export interface AlexaConfig extends PlatformConfig {
   output: {
     genericOutputToApl: boolean;
   };
+  intentMap: Record<string, string>;
 }
 
 export class AlexaPlatform extends Platform<
@@ -29,23 +31,42 @@ export class AlexaPlatform extends Platform<
   AlexaPlatform,
   AlexaConfig
 > {
-  outputTemplateConverterStrategy: AlexaOutputTemplateConverterStrategy =
+  readonly id: string = 'alexa';
+  readonly outputTemplateConverterStrategy: AlexaOutputTemplateConverterStrategy =
     new AlexaOutputTemplateConverterStrategy();
-  requestClass = AlexaRequest;
-  jovoClass = Alexa;
-  userClass = AlexaUser;
-  deviceClass = AlexaDevice;
+  readonly requestClass = AlexaRequest;
+  readonly jovoClass = Alexa;
+  readonly userClass = AlexaUser;
+  readonly deviceClass = AlexaDevice;
+  readonly requestBuilder = AlexaRequestBuilder;
 
   getDefaultConfig(): AlexaConfig {
     return {
+      intentMap: {
+        'AMAZON.StopIntent': 'END',
+        'AMAZON.CancelIntent': 'END',
+      },
       output: {
         genericOutputToApl: true,
       },
     };
   }
 
+  getInitConfig(): RequiredOnlyWhere<AlexaConfig, 'intentMap'> {
+    return {
+      intentMap: {
+        'AMAZON.StopIntent': 'END',
+        'AMAZON.CancelIntent': 'END',
+      },
+    };
+  }
+
   mount(parent: HandleRequest): void {
-    parent.middlewareCollection.use('before.request', this.beforeRequest);
+    super.mount(parent);
+
+    this.middlewareCollection.use('request.start', (jovo) => {
+      return this.onRequestStart(jovo);
+    });
   }
 
   isRequestRelated(request: AnyObject | AlexaRequest): boolean {
@@ -64,34 +85,26 @@ export class AlexaPlatform extends Platform<
     return response;
   }
 
-  private beforeRequest = (handleRequest: HandleRequest, jovo: Jovo) => {
-    if (!(jovo.$platform instanceof AlexaPlatform)) {
-      return;
-    }
+  private onRequestStart(jovo: Jovo): void {
     // Generate generic output to APL if supported and set in config
-    this.outputTemplateConverterStrategy.config.genericOutputToApl =
-      jovo.$alexa?.$request?.isAplSupported() && this.config.output?.genericOutputToApl;
+    this.outputTemplateConverterStrategy.config.genericOutputToApl = !!(
+      jovo.$alexa?.$request?.isAplSupported() && this.config.output?.genericOutputToApl
+    );
 
     if (jovo.$alexa?.$request?.request?.type === 'Alexa.Presentation.APL.UserEvent') {
       const requestArguments = jovo.$alexa.$request.request.arguments || [];
       requestArguments.forEach((argument) => {
+        // if the user-event is an object and is of Selection or QuickReply type
         if (typeof argument === 'object' && SUPPORTED_APL_ARGUMENT_TYPES.includes(argument?.type)) {
           if (argument.intent) {
-            jovo.$nlu.intent = { name: argument.intent };
+            jovo.$input.intent = argument.intent;
           }
           if (argument.entities) {
-            const entityMap: EntityMap = argument.entities.reduce(
-              (entityMap: EntityMap, entity: Entity) => {
-                entityMap[entity.name] = entity;
-                return entityMap;
-              },
-              {},
-            );
-            jovo.$nlu.entities = { ...entityMap };
-            jovo.$entities = entityMap;
+            jovo.$input.entities = { ...argument.entities };
+            jovo.$entities = argument.entities;
           }
         }
       });
     }
-  };
+  }
 }

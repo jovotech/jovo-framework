@@ -1,14 +1,17 @@
-import i18next, { InitOptions, Resource, TOptionsBase } from 'i18next';
-import _merge from 'lodash.merge';
-import type { A, F, U } from 'ts-toolbelt';
-import { AnyObject, OmitIndex } from './index';
+import { AnyObject, OmitIndex } from '@jovotech/common';
+import i18next, { InitOptions, Resource, TFunctionResult, TOptionsBase } from 'i18next';
+import type { A, F, O, S, U } from 'ts-toolbelt';
+import { Plugin, PluginConfig } from './Plugin';
+
+// Make an explicit string literal out of a passed string. If T equals string return never
+export type StringLiteral<T> = T extends string ? (string extends T ? never : T) : never;
 
 // Provide an interface that can be augmented in order to provide code-completion for translation-keys.
 export interface I18NextResources extends Resource {}
 
 // Construct a new type without the index-signature that is inherited from Resource.
 // Otherwise keyof would only return string instead of the explicit keys.
-export type NonIndexedI18NextResources = OmitIndex<I18NextResources, string>;
+export type NonIndexedI18NextResources = OmitIndex<I18NextResources>;
 
 // If KEYS is empty after excluding the number- and symbol-key, string is returned, otherwise KEYS without the number- and symbol-key is returned.
 export type TransformI18NextKeys<KEYS> = Exclude<KEYS, number> extends never
@@ -33,8 +36,28 @@ export type I18NextAutoPath<
   MERGED = U.Merge<I18NextResources[LANGUAGE]>,
 > = F.AutoPath<MERGED[A.Cast<NAMESPACE, keyof MERGED>], PATH>;
 
+// Type that returns the full path joined by a dot limiter
+export type I18NextFullPath<
+  PATH extends string,
+  LANGUAGE extends I18NextResourcesLanguageKeys | string,
+  NAMESPACE extends I18NextResourcesNamespaceKeysOfLanguage<LANGUAGE> | string,
+> = S.Join<[LANGUAGE, A.Cast<NAMESPACE, string>, PATH], '.'>;
+
+// Type that returns the actual value in I18NextResources relative to the given path, language and namespace
+export type I18NextValueAt<
+  PATH extends string,
+  LANGUAGE extends I18NextResourcesLanguageKeys | string,
+  NAMESPACE extends I18NextResourcesNamespaceKeysOfLanguage<LANGUAGE> | string,
+  RESULT = O.Path<
+    NonIndexedI18NextResources,
+    S.Split<I18NextFullPath<PATH, LANGUAGE, NAMESPACE>, '.'>
+  >,
+> = RESULT extends undefined ? string : RESULT;
+
 // Custom init-options for i18next in case some custom properties are used in the future.
-export interface I18NextOptions extends InitOptions {}
+export interface I18NextConfig extends InitOptions, PluginConfig {}
+export type I18NextTFunctionResult = TFunctionResult;
+export type I18NextTFunctionOptions = TOptionsBase & { platform?: string };
 
 // Custom t-options for i18next, needed in order to interfere passed language and namespace.
 export interface I18NextTOptions<
@@ -51,26 +74,23 @@ export interface I18NextTOptions<
     | Array<NAMESPACE | I18NextResourcesNamespaceKeysOfLanguage<LANGUAGE>>,
     string | string[]
   >;
+  platform?: string;
 }
 
-export class I18Next {
+export class I18Next extends Plugin<I18NextConfig> {
   readonly i18n = i18next;
-  readonly options: I18NextOptions;
 
-  constructor(options: I18NextOptions = {}) {
-    this.options = _merge(this.getDefaultOptions(), options);
-  }
-
-  getDefaultOptions(): I18NextOptions {
+  getDefaultConfig(): I18NextConfig {
     return {
       interpolation: {
         escapeValue: false,
       },
+      returnObjects: true,
     };
   }
 
   async initialize(): Promise<void> {
-    await this.i18n.init(this.options);
+    await this.i18n.init(this.config);
   }
 
   t<
@@ -85,8 +105,25 @@ export class I18Next {
       | PATH
       | Array<I18NextAutoPath<PATH, LANGUAGE, NAMESPACE> | PATH>,
     options?: I18NextTOptions<LANGUAGE, NAMESPACE>,
-  ): string {
-    // "Type argument cannot be inferred from usage"-warning can be ignored, it will be inferred, at least in ts 4.2.4.
+  ): I18NextValueAt<PATH, LANGUAGE, NAMESPACE>;
+  t<FORCED_RESULT>(path: string | string[], options?: I18NextTFunctionOptions): FORCED_RESULT;
+  t(path: string | string[], options?: I18NextTFunctionOptions): I18NextTFunctionResult {
+    if (options?.platform) {
+      if (Array.isArray(path)) {
+        for (const p of path) {
+          const platformPath = `${options.platform}:translation:${p}`;
+          if (this.i18n.exists(platformPath, options)) {
+            return this.i18n.t(platformPath, options);
+          }
+        }
+      } else {
+        const platformPath = `${options.platform}:translation:${path}`;
+        if (this.i18n.exists(platformPath, options)) {
+          return this.i18n.t(platformPath, options);
+        }
+      }
+    }
+
     return this.i18n.t(path, options);
   }
 }

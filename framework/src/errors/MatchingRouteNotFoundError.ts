@@ -1,29 +1,21 @@
-import { UnknownObject } from '../index';
-import { JovoError } from '../JovoError';
+import { JovoError, UnknownObject } from '@jovotech/common';
+import { JovoInput } from '../index';
 import { StateStack } from '../JovoSession';
 import { RouteMatch } from '../plugins/RouteMatch';
 
 export interface MatchingRouteNotFoundErrorOptions {
   request: UnknownObject;
-  intent: string;
-  mappedIntent?: string;
+  input: JovoInput;
   state?: StateStack;
   matches?: RouteMatch[];
 }
 
 export class MatchingRouteNotFoundError extends JovoError {
-  constructor({
-    request,
-    intent,
-    mappedIntent,
-    state,
-    matches,
-  }: MatchingRouteNotFoundErrorOptions) {
+  constructor({ request, input, state, matches }: MatchingRouteNotFoundErrorOptions) {
     super({
       message: 'No matching route was found for the request.',
       context: {
-        intent,
-        mappedIntent,
+        input,
         state,
         matches,
         request,

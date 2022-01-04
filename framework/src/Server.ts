@@ -1,6 +1,4 @@
-// TODO implement
-
-import { AnyObject } from './index';
+import { AnyObject } from '@jovotech/common';
 
 export interface Headers {
   [header: string]: string | string[] | undefined;
@@ -30,11 +28,6 @@ export abstract class Server {
   abstract getQueryParams(): QueryParams;
 
   /**
-     Returns request headers
-     **/
-  abstract getRequestHeaders(): Headers;
-
-  /**
      Sets additional response headers. Will be merged with existing
      **/
   abstract setResponseHeaders(header: Record<string, string>): void;
@@ -47,5 +40,33 @@ export abstract class Server {
   /**
      Calls fail method of server
      **/
-  abstract fail(error: Error): void;
+  abstract fail(error: Error): Promise<void> | void;
+
+  /**
+   Returns request headers
+   **/
+  abstract getNativeRequestHeaders(): Headers;
+
+  /**
+   * Converts native header keys to lowercase
+   *
+   * Example:
+   * headers = {
+   *    Host: 'localhost:3000',
+   *    Authorization: 'Bearer TOKEN',
+   * }
+   * Converts to:
+   * headers = {
+   *    host: 'localhost:3000',
+   *    authorization: 'Bearer TOKEN',
+   * }
+   *
+   */
+  getRequestHeaders(): Headers {
+    const headers: Headers = this.getNativeRequestHeaders();
+    return Object.keys(headers).reduce((destination: Headers, key: string) => {
+      destination[key.toLowerCase()] = headers[key];
+      return destination;
+    }, {});
+  }
 }

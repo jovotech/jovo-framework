@@ -1,34 +1,50 @@
-import { EntityMap, JovoRequest, JovoRequestType, UnknownObject } from '@jovotech/framework';
-import { Context, Request, RequestBodyText } from './interfaces';
+import { Input, InputTypeLike, JovoInput, JovoRequest, UnknownObject } from '@jovotech/framework';
+
+import { CoreCapabilityType } from './CoreDevice';
+import { CoreRequestContext } from './interfaces';
 
 export class CoreRequest extends JovoRequest {
   version?: string;
-  type?: 'jovo-platform-core' | string;
-  request?: Request;
-  context?: Context;
-
-  getEntities(): EntityMap | undefined {
-    return this.request?.nlu?.inputs;
-  }
-
-  getIntentName(): string | undefined {
-    return this.request?.nlu?.intent;
-  }
+  platform?: 'core' | string;
+  id?: string; // UUID v4
+  timestamp?: string; // Always in local time, ISO 8601 YYYY-MM-DDTHH:mm:ss.sssZ
+  timeZone?: string; // IANA time zone names e.g. Europe/Berlin
+  locale?: string; // e.g. de-DE, en-US
+  data?: UnknownObject; // this.$request
+  input?: Input;
+  context?: CoreRequestContext;
 
   getLocale(): string | undefined {
-    return this.request?.locale;
+    return this.locale;
   }
 
-  getRawText(): string | undefined {
-    return (this.request?.body as RequestBodyText | undefined)?.text;
+  getIntent(): JovoInput['intent'] {
+    return this.input?.intent;
   }
 
-  getRequestType(): JovoRequestType | undefined {
-    return this.request?.type ? { type: this.request.type } : undefined;
+  setIntent(intent: string): void {
+    if (!this.input) {
+      this.input = {};
+    }
+    this.input.intent = intent;
+  }
+
+  getEntities(): JovoInput['entities'] {
+    return this.input?.entities;
+  }
+
+  getInputType(): InputTypeLike | undefined {
+    return this.input?.type;
+  }
+  getInputText(): JovoInput['text'] {
+    return this.input?.text;
+  }
+  getInputAudio(): JovoInput['audio'] {
+    return this.input?.audio;
   }
 
   getSessionData(): UnknownObject | undefined {
-    return this.context?.session?.data;
+    return this.context?.session;
   }
 
   getSessionId(): string | undefined {
@@ -36,6 +52,35 @@ export class CoreRequest extends JovoRequest {
   }
 
   isNewSession(): boolean | undefined {
-    return this.context?.session?.new;
+    return this.context?.session?.isNew;
+  }
+
+  getDeviceCapabilities(): CoreCapabilityType[] | undefined {
+    return this.context?.device?.capabilities;
+  }
+
+  setLocale(locale: string): void {
+    this.locale = locale;
+  }
+
+  setSessionData(data: Record<string, unknown>): void {
+    if (!this.context?.session?.data) {
+      return;
+    }
+
+    this.context.session.data = data;
+  }
+
+  getUserId(): string | undefined {
+    return this.context?.user.id;
+  }
+
+  setUserId(userId: string): void {
+    if (!this.context) {
+      // TODO: What to do here?
+      return;
+    }
+
+    this.context.user.id = userId;
   }
 }

@@ -4,12 +4,12 @@ import { join as joinPaths } from 'path';
 import { BuildHook } from './hooks/BuildHook';
 import { DeployHook } from './hooks/DeployHook';
 import { GetHook } from './hooks/GetHook';
-import { DialogflowConfig } from './utils';
+import { DialogflowConfig } from './utilities';
 
 export class DialogflowCli extends JovoCliPlugin {
-  readonly $id: string = 'dialogflow';
-  readonly $type: PluginType = 'platform';
-  readonly $config!: DialogflowConfig;
+  readonly id: string = 'dialogflow';
+  readonly type: PluginType = 'platform';
+  readonly config!: DialogflowConfig;
   readonly platformDirectory: string = 'platform.dialogflow';
 
   constructor(config?: DialogflowConfig) {
@@ -20,23 +20,23 @@ export class DialogflowCli extends JovoCliPlugin {
     return [BuildHook, DeployHook, GetHook];
   }
 
-  getPlatformPath(): string {
-    return joinPaths(this.$cli.$project!.getBuildPath(), this.platformDirectory);
+  get platformPath(): string {
+    return joinPaths(this.$cli.project!.getBuildPath(), this.platformDirectory);
   }
 
-  getAgentJsonPath(): string {
-    return joinPaths(this.getPlatformPath(), 'agent.json');
+  get agentJsonPath(): string {
+    return joinPaths(this.platformPath, 'agent.json');
   }
 
-  getPackageJsonPath(): string {
-    return joinPaths(this.getPlatformPath(), 'package.json');
+  get packageJsonPath(): string {
+    return joinPaths(this.platformPath, 'package.json');
   }
 
-  getIntentsFolderPath(): string {
-    return joinPaths(this.getPlatformPath(), 'intents');
+  get intentsFolderPath(): string {
+    return joinPaths(this.platformPath, 'intents');
   }
 
-  getEntitiesFolderPath(): string {
-    return joinPaths(this.getPlatformPath(), 'entities');
+  get entitiesFolderPath(): string {
+    return joinPaths(this.platformPath, 'entities');
   }
 }

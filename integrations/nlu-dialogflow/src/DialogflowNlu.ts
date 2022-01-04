@@ -1,17 +1,18 @@
 import {
   DeepPartial,
-  HandleRequest,
+  EntityMap,
+  InterpretationPluginConfig,
   Jovo,
   JovoError,
   NluData,
   NluPlugin,
-  PluginConfig,
 } from '@jovotech/framework';
+
 import { JWT, JWTInput } from 'google-auth-library';
 import { DIALOGFLOW_API_BASE_URL } from './constants';
 import { DetectIntentRequest, DetectIntentResponse, TextInput } from './interfaces';
 
-export interface DialogflowNluConfig extends PluginConfig {
+export interface DialogflowNluConfig extends InterpretationPluginConfig {
   serviceAccount: JWTInput;
   defaultLocale: string;
 }
@@ -32,14 +33,13 @@ export class DialogflowNlu extends NluPlugin<DialogflowNluConfig> {
 
   getDefaultConfig(): DialogflowNluConfig {
     return {
+      ...super.getDefaultConfig(),
       serviceAccount: {},
       defaultLocale: 'en-US',
     };
   }
 
-  async process(handleRequest: HandleRequest, jovo: Jovo): Promise<NluData | undefined> {
-    const text = jovo.$request.getRawText();
-    if (!text) return;
+  async processText(jovo: Jovo, text: string): Promise<NluData | undefined> {
     if (!jovo.$session.id) {
       throw new JovoError({
         message: `Can not send request to Dialogflow. Session-ID is missing.`,
@@ -54,9 +54,30 @@ export class DialogflowNlu extends NluPlugin<DialogflowNluConfig> {
         },
         jovo.$session.id,
       );
-      return dialogflowResponse?.data?.queryResult?.intent?.displayName
-        ? { intent: { name: dialogflowResponse.data.queryResult.intent.displayName } }
-        : undefined;
+
+      const nluData: NluData = {};
+      const displayName = dialogflowResponse.data.queryResult.intent.displayName;
+      if (displayName) {
+        nluData.intent = { name: displayName };
+      }
+
+      const parameters = dialogflowResponse.data.queryResult.parameters;
+      const parameterEntries = Object.entries(parameters);
+      nluData.entities = parameterEntries.reduce(
+        (entityMap: EntityMap, [entityName, entityData]) => {
+          const resolved = typeof entityData === 'string' ? entityData : entityData.toString();
+          entityMap[entityName] = {
+            id: resolved,
+            resolved,
+            value: text,
+            native: entityData,
+          };
+          return entityMap;
+        },
+        {},
+      );
+
+      return nluData.intent ? nluData : undefined;
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error('Error while retrieving nlu-data from Dialogflow.', e);

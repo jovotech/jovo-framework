@@ -1,25 +1,40 @@
-import { UnknownObject } from './index';
-import { EntityMap, NluData } from './interfaces';
-import { JovoRequestType } from './Jovo';
+import { UnknownObject } from '@jovotech/common';
+import { CapabilityType, DEFAULT_INPUT_TYPE, InputTypeLike, JovoInput } from './index';
+import { JovoInputBuilder } from './JovoInputBuilder';
 import { JovoSession } from './JovoSession';
 
 export abstract class JovoRequest {
   [key: string]: unknown;
 
-  abstract getEntities(): EntityMap | undefined;
-
-  abstract getIntentName(): string | undefined;
-
   abstract getLocale(): string | undefined;
 
-  abstract getRawText(): string | undefined;
+  abstract setLocale(locale: string): void;
 
-  abstract getRequestType(): JovoRequestType | undefined;
+  abstract getIntent(): JovoInput['intent'];
+  abstract setIntent(intent: string): void;
+  abstract getEntities(): JovoInput['entities'];
 
-  abstract getSessionId(): string | undefined;
+  abstract getInputType(): InputTypeLike | undefined;
+  abstract getInputText(): JovoInput['text'];
+  abstract getInputAudio(): JovoInput['audio'];
+
+  getInput(): JovoInput {
+    return new JovoInputBuilder(this.getInputType() || DEFAULT_INPUT_TYPE)
+      .set('intent', this.getIntent())
+      .set('entities', this.getEntities())
+      .set('text', this.getInputText())
+      .set('audio', this.getInputAudio())
+      .build();
+  }
+
+  abstract setSessionData(data: Record<string, unknown>): void;
+
+  abstract getUserId(): string | undefined;
+
+  abstract setUserId(userId: string): void;
 
   abstract getSessionData(): UnknownObject | undefined;
-
+  abstract getSessionId(): string | undefined;
   abstract isNewSession(): boolean | undefined;
 
   getSession(): Partial<JovoSession> | undefined {
@@ -36,18 +51,5 @@ export abstract class JovoRequest {
         };
   }
 
-  getNluData(): NluData | undefined {
-    const nluData: NluData = {};
-    const intentName = this.getIntentName();
-    const entities = this.getEntities();
-    if (intentName) {
-      nluData.intent = {
-        name: intentName,
-      };
-    }
-    if (entities) {
-      nluData.entities = entities;
-    }
-    return nluData;
-  }
+  abstract getDeviceCapabilities(): CapabilityType[] | undefined;
 }

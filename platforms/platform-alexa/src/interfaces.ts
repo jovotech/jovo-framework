@@ -1,4 +1,5 @@
-import { JovoSession } from '@jovotech/framework';
+import { Entity, EnumLike, JovoSession, PartialWhere } from '@jovotech/framework';
+import { Intent, Slot } from './output';
 
 export interface Session {
   new: boolean;
@@ -61,7 +62,7 @@ export interface Speed {
   accuracyInMetersPerSecond?: number; // [0, MAX_INTEGER]
 }
 
-export type PermissionStatus = 'GRANTED' | 'DENIED' | 'ACCEPTED' | 'NOT_ANSWERED';
+export type PermissionStatus = 'DENIED' | 'ACCEPTED' | 'NOT_ANSWERED';
 
 export interface System {
   application: Application;
@@ -147,48 +148,17 @@ export interface Application {
   applicationId: string;
 }
 
-export type ConfirmationStatus = 'NONE' | 'CONFIRMED' | 'DENIED';
-
-export interface Slot {
-  name: string;
-  confirmationStatus?: ConfirmationStatus;
-  value: string;
-  source?: string;
-  resolutions?: Resolutions;
+export interface AlexaEntity extends Entity {
+  native: Slot;
 }
 
-export interface Resolutions {
-  resolutionsPerAuthority: AuthorityResolution[];
+export enum PurchaseResult {
+  Accepted = 'ACCEPTED',
+  Declined = 'DECLINED',
+  AlreadyPurchased = 'ALREADY_PURCHASED',
+  Error = 'ERROR',
 }
-
-export type AuthorityResolutionStatusCode =
-  | 'ER_SUCCESS_MATCH'
-  | 'ER_SUCCESS_NO_MATCH'
-  | 'ER_ERROR_TIMEOUT'
-  | 'ER_ERROR_EXCEPTION';
-
-export interface AuthorityResolution {
-  authority: string;
-  status: {
-    code: AuthorityResolutionStatusCode;
-  };
-  values: AuthorityResolutionValueItem[];
-}
-
-export interface AuthorityResolutionValueItem {
-  value: AuthorityResolutionValue;
-}
-
-export interface AuthorityResolutionValue {
-  name: string;
-  id: string;
-}
-
-export interface Intent {
-  name: string;
-  confirmationStatus?: ConfirmationStatus;
-  slots?: { [key: string]: Slot };
-}
+export type PurchaseResultLike = EnumLike<PurchaseResult> | string;
 
 export interface Request {
   type: string;
@@ -199,7 +169,8 @@ export interface Request {
   arguments?: any[];
   token?: string;
   offsetInMilliseconds?: number;
-  intent?: Intent;
+  // TODO: Use the same type
+  intent?: PartialWhere<Intent, 'confirmationStatus' | 'slots'>;
   status?: {
     // Connections.Response
     code: string;
@@ -208,7 +179,7 @@ export interface Request {
   name?: string; // Connections.Response
   payload?: {
     // Connections.Response
-    purchaseResult?: string;
+    purchaseResult?: PurchaseResultLike;
     productId?: string;
     isCardThrown?: boolean;
     permissionScope?: string;
@@ -230,14 +201,12 @@ export interface Request {
   eventCreationTime?: string; // AlexaSkillEvent.*
   eventPublishingTime?: string; // AlexaSkillEvent.*
   dialogState?: string;
+  apiRequest?: {
+    name: string;
+    arguments: Record<string, string>;
+    slots: Record<string, Slot>;
+  };
 }
 
-// export interface AlexaInput extends Input {
-//   alexaSkill: {
-//     name?: string;
-//     value?: string;
-//     confirmationStatus?: string;
-//     source?: string;
-//     resolutions?: Resolutions;
-//   };
-// }
+// Defines a target for Alexa Conversations
+export type ConversationsTarget = 'AMAZON.Conversations' | 'skill';

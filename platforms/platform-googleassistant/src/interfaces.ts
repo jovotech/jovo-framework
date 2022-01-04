@@ -1,4 +1,4 @@
-import { AnyObject } from '@jovotech/framework';
+import { AnyObject, Entity } from '@jovotech/framework';
 
 export interface Handler {
   name?: string;
@@ -30,4 +30,19 @@ export interface Context {
 
 export interface MediaContext {
   progress: string; // Example: "3.5s
+}
+
+export interface GoogleAccountProfile {
+  [key: string]: string | number | boolean;
+
+  email: string;
+  email_verified: boolean;
+  name: string;
+  picture: string;
+  given_name: string;
+  family_name: string;
+}
+
+export interface GoogleAssistantEntity extends Entity {
+  native: IntentParameterValue;
 }

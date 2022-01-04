@@ -1,70 +1,20 @@
-# FileDb Local JSON Database Integration
+# Jovo FileDb Database Integration
 
-This is the default database for prototyping with Jovo: A file based system that stores data in a JSON file.
+[![Jovo Framework](https://www.jovo.tech/img/github-header.png)](https://www.jovo.tech)
 
-- [Introduction](#introduction)
-- [Installation](#installation)
-- [Configuration](#configuration)
+<p>
+<a href="https://www.jovo.tech" target="_blank">Website</a> -  <a href="https://www.jovo.tech/docs" target="_blank">Docs</a> - <a href="https://www.jovo.tech/marketplace" target="_blank">Marketplace</a> - <a href="https://github.com/jovotech/jovo-v4-template" target="_blank">Template</a>   
+</p>
 
-## Introduction
+<p>
+<a href="https://www.npmjs.com/package/@jovotech/db-filedb" target="_blank"><img src="https://badge.fury.io/js/@jovotech%2Fdb-filedb.svg"></a>      
+<a href="https://opencollective.com/jovo-framework" target="_blank"><img src="https://opencollective.com/jovo-framework/tiers/badge.svg"></a>
+</p>
 
-> Note: This database type is not supposed to be used in production. See other [database integrations](https://www.jovo.tech/marketplace/tag/databases) for production deployments.
+This package enables you to integrate your Jovo app with a file based database for local development.
 
-The FileDb database integration allows you to easily store user specific data in a JSON file. This is especially helpful for local development and prototyping. Data will be stored in a `db.json` file that can be found in a `db` folder:
-
-```js
-db/
-  └── db.json
-models/
-src/
-jovo.project.js
+```bash
+$ npm install @jovotech/db-filedb
 ```
 
-Once the configuration is done, the File DB database integration will create a file in the specified folder (the default being `../db/db.json`) on the first read/write attempt. No need for you to create the file.
-
-
-## Installation
-
-Most Jovo templates already come with FileDb as default database integration for local development. If you're starting from scratch, though, you can install the plugin like this:
-
-```sh
-$ npm install @jovotech/db-filedb --save
-```
-
-We strongly recommend to only use this database integration for local prototyping. Add it as plugin to your `app.dev.ts` file like this:
-
-```typescript
-import { FileDb } from '@jovotech/db-filedb';
-
-// ...
-
-app.configure({
-  plugins: [
-    new FileDb(),
-    // ...
-  ],
-});
-```
-
-## Configuration
-
-After you've added the `FileDb` plugin to the app as discussed in the [installation section](#installation), you can add configuration like this:
-
-```typescript
-new FileDb({
-  // Configuration
-}),
-```
-
-The following configurations can be added:
-
-* `pathToFile`: Where the database is stored. Default: `'../db/db.json'`.
-* `storedElements`: What should be stored in the database. [Learn more in the database integration documentation](../../docs/databases.md).
-
-Here is an example of a configuration with a `pathToFile` property:
-
-```typescript
-new FileDb({
-  pathToFile: '../db/db.json',
-}),
-```
+> Learn more in the docs: https://www.jovo.tech/marketplace/db-filedb

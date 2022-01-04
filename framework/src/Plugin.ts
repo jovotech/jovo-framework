@@ -1,27 +1,19 @@
-import _merge from 'lodash.merge';
-import { DeepPartial, UnknownObject } from '.';
+import { Configurable, UnknownObject } from '@jovotech/common';
 import { Extensible } from './Extensible';
 
 export interface PluginConfig extends UnknownObject {
   enabled?: boolean;
+  skipTests?: boolean;
 }
 
-export abstract class Plugin<CONFIG extends PluginConfig = PluginConfig> {
+export abstract class Plugin<
+  CONFIG extends PluginConfig = PluginConfig,
+> extends Configurable<CONFIG> {
   [key: string]: unknown;
-
-  readonly config: CONFIG;
-  readonly initConfig?: DeepPartial<CONFIG>;
-
-  constructor(config?: DeepPartial<CONFIG>) {
-    this.initConfig = config;
-    const defaultConfig = this.getDefaultConfig();
-    this.config = config ? _merge(defaultConfig, config) : defaultConfig;
-  }
-
-  abstract getDefaultConfig(): CONFIG;
 
   /**
    * Lifecycle Hook: Called when the plugin is installed via `use`.
+   * This hook should be used for installing additional plugins or modifying the App-object in general.
    * Has to be synchronous.
    * @param parent
    */
@@ -36,7 +28,7 @@ export abstract class Plugin<CONFIG extends PluginConfig = PluginConfig> {
 
   /**
    * Lifecycle Hook: Called when a copy of every plugin is created and mounted onto HandleRequest.
-   * This happens on every request.
+   * This happens on every request and should be used for registering middleware-functions.
    * Can be asynchronous.
    * @param parent
    */

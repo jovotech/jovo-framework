@@ -1,34 +1,33 @@
-import JovoCliCore, { getRawString, JovoCli, InstallContext } from '@jovotech/cli-core';
-
-import { JovoModelGoogle } from 'jovo-model-google';
-import { JovoModelData } from 'jovo-model';
-import { BuildContextGoogle } from '../../dist/types/cli/hooks/BuildHook';
-
-import { BuildHook } from '../../src/cli/hooks/BuildHook';
+import JovoCliCore, { getRawString, InstallContext, JovoCli } from '@jovotech/cli-core';
+import { JovoModelData } from '@jovotech/model';
+import { JovoModelGoogle } from '@jovotech/model-google';
+import { BuildHook, BuildPlatformContextGoogle } from '../../src/cli/hooks/BuildHook';
 import { Plugin } from '../__mocks__/Plugin';
 
 // Create mock modules. This allows us to modify the behavior for individual functions.
 jest.mock('@jovotech/cli-core', () => ({
   ...Object.assign({}, jest.requireActual('@jovotech/cli-core')),
   JovoCli: jest.fn().mockReturnValue({
-    $project: { hasModelFiles: jest.fn(), saveModel: jest.fn(), backupModel: jest.fn() },
+    project: { hasModelFiles: jest.fn(), saveModel: jest.fn(), backupModel: jest.fn() },
   }),
 }));
-jest.mock('jovo-model-google');
+jest.mock('@jovotech/model-google');
 
 beforeEach(() => {
   const plugin: Plugin = new Plugin();
   const cli: JovoCli = new JovoCli();
   plugin.$cli = cli;
   BuildHook.prototype['$cli'] = cli;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   BuildHook.prototype['$plugin'] = plugin;
   BuildHook.prototype['$context'] = {
-    command: 'build',
+    command: 'build:platform',
     locales: [],
     platforms: [],
     flags: {},
     args: {},
-  } as unknown as BuildContextGoogle;
+  } as unknown as BuildPlatformContextGoogle;
 });
 
 afterEach(() => {
@@ -45,7 +44,7 @@ describe('install()', () => {
 });
 
 describe('addCliOptions()', () => {
-  test('should do nothing if command is not equal to "build"', () => {
+  test('should do nothing if command is not equal to "build:platform"', () => {
     const args: InstallContext = { command: 'invalid', flags: {}, args: [] };
     const spiedAddClioptions: jest.SpyInstance = jest.spyOn(BuildHook.prototype, 'addCliOptions');
 
@@ -58,7 +57,7 @@ describe('addCliOptions()', () => {
 
   test('should add "project-id" to flags', () => {
     const hook: BuildHook = new BuildHook();
-    const args: InstallContext = { command: 'build', flags: {}, args: [] };
+    const args: InstallContext = { command: 'build:platform', flags: {}, args: [] };
     hook.addCliOptions(args);
 
     expect(args.flags).toHaveProperty('project-id');
@@ -71,13 +70,8 @@ describe('checkForPlatform()', () => {
     jest.spyOn(BuildHook.prototype, 'uninstall').mockImplementation(uninstall);
 
     const hook: BuildHook = new BuildHook();
-    const args = {
-      flags: {
-        platform: ['testPlugin'],
-      },
-    };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (hook.checkForPlatform as any)(args);
+    hook.$context.platforms.push('testPlugin');
+    hook.checkForPlatform();
 
     expect(uninstall).not.toBeCalled();
   });
@@ -87,26 +81,26 @@ describe('checkForPlatform()', () => {
     jest.spyOn(BuildHook.prototype, 'uninstall').mockImplementation(() => uninstall());
 
     const hook: BuildHook = new BuildHook();
-    const context = {
-      flags: {
-        platform: ['anotherPlugin'],
-      },
-    };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (hook.checkForPlatform as any)(context);
+    hook.$context.platforms.push('invalid');
+    hook.checkForPlatform();
 
     expect(uninstall).toBeCalledTimes(1);
   });
 });
 
 describe('updatePluginContext()', () => {
-  test('should do nothing if command is not equal to "build"', () => {
+  test('should throw an error if project-id is not set', () => {
     const hook: BuildHook = new BuildHook();
-    hook['$context'].command = 'invalidCommand';
+    hook.$context.command = 'invalidCommand';
 
-    hook.updatePluginContext();
+    expect(hook.updatePluginContext.bind(hook)).toThrow();
+    try {
+      hook.updatePluginContext();
+    } catch (error) {
+      expect(error.message).toMatch('Could not find project ID.');
+    }
 
-    expect(hook['$context']).not.toHaveProperty('project-id');
+    expect(hook.$context).not.toHaveProperty('project-id');
   });
 
   test('should set "project-id" from flags', () => {
@@ -117,17 +111,17 @@ describe('updatePluginContext()', () => {
     hook.updatePluginContext();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect((hook['$context'] as any).projectId).toBe('123');
+    expect(hook.$context.googleAssistant.projectId).toBe('123');
   });
 
   test('should set "project-id" from config', () => {
-    BuildHook.prototype['$plugin'].$config.projectId = '123';
+    BuildHook.prototype['$plugin'].config.projectId = '123';
     const hook: BuildHook = new BuildHook();
 
     hook.updatePluginContext();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect((hook['$context'] as any).projectId).toBe('123');
+    expect(hook.$context.googleAssistant.projectId).toBe('123');
   });
 
   test('should throw an error if "project-id" could not be found', () => {
@@ -148,7 +142,7 @@ describe('checkForCleanBuild()', () => {
 
   test('should call deleteFolderRecursive() if --clean is set', () => {
     jest.spyOn(JovoCliCore, 'deleteFolderRecursive').mockReturnThis();
-    jest.spyOn(BuildHook.prototype.$plugin, 'getPlatformPath').mockReturnValue('test');
+    jest.spyOn(BuildHook.prototype.$plugin, 'platformPath', 'get').mockReturnValue('test');
 
     const hook: BuildHook = new BuildHook();
     hook.$context.flags.clean = true;
@@ -194,7 +188,7 @@ describe('validateLocales()', () => {
 });
 
 describe('validateModels()', () => {
-  // test.skip('should call jovo.$project!.validateModel() for each locale', () => {});
+  // test.skip('should call jovo.project!.validateModel() for each locale', () => {});
 });
 
 describe.skip('buildReverse()', () => {
@@ -211,8 +205,8 @@ describe.skip('buildReverse()', () => {
     const model: JovoModelData = {
       invocation: '',
     };
-    jest.spyOn(BuildHook.prototype['$cli']['$project']!, 'hasModelFiles').mockReturnValue(false);
-    jest.spyOn(BuildHook.prototype['$cli']['$project']!, 'saveModel').mockImplementation(saveModel);
+    jest.spyOn(BuildHook.prototype['$cli']['project']!, 'hasModelFiles').mockReturnValue(false);
+    jest.spyOn(BuildHook.prototype['$cli']['project']!, 'saveModel').mockImplementation(saveModel);
     jest.spyOn(JovoModelGoogle.prototype, 'exportJovoModel').mockReturnValue(model);
     jest.spyOn(BuildHook.prototype, 'getPlatformInvocationName').mockReturnValue('testInvocation');
 
@@ -249,8 +243,8 @@ describe.skip('buildReverse()', () => {
       invocation: '',
     };
 
-    jest.spyOn(BuildHook.prototype['$cli']['$project']!, 'hasModelFiles').mockReturnValue(false);
-    jest.spyOn(BuildHook.prototype['$cli']['$project']!, 'saveModel').mockImplementation(saveModel);
+    jest.spyOn(BuildHook.prototype['$cli']['project']!, 'hasModelFiles').mockReturnValue(false);
+    jest.spyOn(BuildHook.prototype['$cli']['project']!, 'saveModel').mockImplementation(saveModel);
     jest.spyOn(JovoModelGoogle.prototype, 'exportJovoModel').mockReturnValue(model);
     jest.spyOn(BuildHook.prototype, 'getPlatformInvocationName').mockReturnValue('testInvocation');
 
@@ -303,7 +297,7 @@ describe.skip('buildReverse()', () => {
   });
 
   test('should prompt for overwriting existing model files and return upon cancel', async () => {
-    jest.spyOn(BuildHook.prototype['$cli']['$project']!, 'hasModelFiles').mockReturnValue(true);
+    jest.spyOn(BuildHook.prototype['$cli']['project']!, 'hasModelFiles').mockReturnValue(true);
     jest.spyOn(BuildHook.prototype, 'setDefaultLocale').mockReturnThis();
     jest.spyOn(BuildHook.prototype, 'getPlatformLocales').mockReturnValue(['en', 'en-US']);
     const mockedPromptOverwriteReverseBuild: jest.SpyInstance = jest
@@ -333,10 +327,10 @@ describe.skip('buildReverse()', () => {
       invocation: '',
     };
 
-    jest.spyOn(BuildHook.prototype['$cli']['$project']!, 'hasModelFiles').mockReturnValue(true);
-    jest.spyOn(BuildHook.prototype['$cli']['$project']!, 'saveModel').mockImplementation(saveModel);
+    jest.spyOn(BuildHook.prototype['$cli']['project']!, 'hasModelFiles').mockReturnValue(true);
+    jest.spyOn(BuildHook.prototype['$cli']['project']!, 'saveModel').mockImplementation(saveModel);
     jest
-      .spyOn(BuildHook.prototype['$cli']['$project']!, 'backupModel')
+      .spyOn(BuildHook.prototype['$cli']['project']!, 'backupModel')
       .mockImplementation(backupModel);
 
     jest.spyOn(BuildHook.prototype, 'setDefaultLocale').mockReturnThis();
@@ -365,7 +359,7 @@ describe.skip('buildReverse()', () => {
   });
 
   test('should throw an error if something went wrong while exporting the Jovo Language Model', async () => {
-    jest.spyOn(BuildHook.prototype['$cli']['$project']!, 'hasModelFiles').mockReturnValue(false);
+    jest.spyOn(BuildHook.prototype['$cli']['project']!, 'hasModelFiles').mockReturnValue(false);
 
     jest.spyOn(JovoModelGoogle.prototype, 'exportJovoModel').mockReturnValue(undefined);
     jest.spyOn(BuildHook.prototype, 'setDefaultLocale').mockReturnThis();

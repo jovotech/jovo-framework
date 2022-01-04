@@ -1,17 +1,15 @@
 {
   "packages": [
     "e2e",
+    "common",
     "framework",
+    "output",
+    "clients/**",
     "platforms/**",
     "integrations/**",
     "examples/**"
   ],
-  "ignoreChanges": [
-    "*.md",
-    "*.json",
-    "*.txt",
-    "test/**"
-  ],
+  "ignoreChanges": ["*.md", "*.json", "*.txt", "test/**"],
   "command": {
     "publish": {
       "message": ":bookmark: Publish"

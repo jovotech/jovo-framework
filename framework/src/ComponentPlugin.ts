@@ -1,4 +1,4 @@
-import { DeepPartial } from '.';
+import { DeepPartial } from '@jovotech/common';
 import { App } from './App';
 import {
   BaseComponent,
@@ -6,7 +6,7 @@ import {
   ComponentConstructor,
   ComponentDeclaration,
 } from './BaseComponent';
-import { ComponentOptions } from './metadata/ComponentMetadata';
+import { ComponentOptionsOf } from './metadata/ComponentMetadata';
 import { Plugin, PluginConfig } from './Plugin';
 
 export interface ComponentPluginConfig<COMPONENT extends BaseComponent = BaseComponent>
@@ -21,7 +21,7 @@ export abstract class ComponentPlugin<
   abstract readonly component: ComponentConstructor<COMPONENT>;
 
   install(app: App): void {
-    let options: ComponentOptions<COMPONENT> | undefined = undefined;
+    let options: ComponentOptionsOf<COMPONENT> | undefined = undefined;
 
     if (this.config.component) {
       options = {

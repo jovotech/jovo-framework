@@ -198,12 +198,11 @@ export function handleReminderApiErrors(error: AxiosError): Error | void {
       errorCode = AlexaApiErrorCode.NO_USER_PERMISSION;
     }
 
-    if (code === 'DEVICE_NOT_SUPPORTED') {
-      errorCode = AlexaApiErrorCode.DEVICE_NOT_SUPPORTED;
-    }
-
-    if (code === 'ALERT_NOT_FOUND') {
-      errorCode = AlexaApiErrorCode.ALERT_NOT_FOUND;
+    if (
+      code === AlexaApiErrorCode.DEVICE_NOT_SUPPORTED ||
+      code === AlexaApiErrorCode.ALERT_NOT_FOUND
+    ) {
+      errorCode = code;
     }
 
     // User needs to grant access in app
@@ -223,7 +222,7 @@ export function handleReminderApiErrors(error: AxiosError): Error | void {
       errorCode = AlexaApiErrorCode.NO_SKILL_PERMISSION;
     }
 
-    throw new AlexaApiError({ message: error.message, code: errorCode, details: message });
+    throw new AlexaApiError({ message, code: errorCode });
   }
   throw new JovoError({ message: error.message });
 }

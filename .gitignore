@@ -65,3 +65,6 @@ coverage
 credentials.json
 .history/
 *.drawio
+
+# VSCode configuration files
+.vscode

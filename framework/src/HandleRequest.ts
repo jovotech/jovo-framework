@@ -1,14 +1,14 @@
 import _cloneDeep from 'lodash.clonedeep';
 import _merge from 'lodash.merge';
-import { App, AppBaseMiddlewares, AppConfig, AppInitConfig } from './App';
+import { App, AppConfig, AppInitConfig, AppMiddlewares } from './App';
 import { Extensible } from './Extensible';
 import { ComponentTree, ComponentTreeNode, MiddlewareCollection, Platform } from './index';
 import { Server } from './Server';
 
-export class HandleRequest extends Extensible<AppConfig, AppBaseMiddlewares> {
+export class HandleRequest extends Extensible<AppConfig, AppMiddlewares> {
   readonly componentTree!: ComponentTree;
-  $activeComponentNode?: ComponentTreeNode;
-  $platform!: Platform;
+  activeComponentNode?: ComponentTreeNode;
+  platform!: Platform;
 
   constructor(readonly app: App, readonly server: Server) {
     super(_cloneDeep(app.config) as AppInitConfig);
@@ -40,6 +40,11 @@ export class HandleRequest extends Extensible<AppConfig, AppBaseMiddlewares> {
   }
 
   stopMiddlewareExecution(): void {
-    this.middlewareCollection.remove(...this.middlewareCollection.names);
+    this.middlewareCollection.clear();
+    Object.values(this.plugins).forEach((plugin) => {
+      if (plugin instanceof Extensible) {
+        plugin.middlewareCollection.clear();
+      }
+    });
   }
 }

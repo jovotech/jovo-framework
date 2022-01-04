@@ -1,17 +1,18 @@
+import { AnyObject, DeepPartial, UnknownObject } from '@jovotech/common';
 import {
   BaseComponent,
   ComponentConfig,
   ComponentConstructor,
   ComponentDeclaration,
 } from '../BaseComponent';
-import { AnyObject, DeepPartial, JovoConditionFunction, UnknownObject } from '../index';
+import { JovoConditionFunction } from '../index';
 import { ClassDecoratorMetadata } from './ClassDecoratorMetadata';
 import { ComponentOptionMetadata } from './ComponentOptionMetadata';
 
-export interface ComponentOptions<COMPONENT extends BaseComponent> extends UnknownObject {
+export interface ComponentOptions<CONFIG extends UnknownObject | undefined> extends UnknownObject {
   name?: string;
   global?: boolean;
-  config?: DeepPartial<ComponentConfig<COMPONENT>>;
+  config?: DeepPartial<CONFIG>;
   components?: Array<ComponentConstructor | ComponentDeclaration>;
   models?: AnyObject;
 
@@ -19,13 +20,17 @@ export interface ComponentOptions<COMPONENT extends BaseComponent> extends Unkno
   platforms?: string[];
 }
 
+export type ComponentOptionsOf<COMPONENT extends BaseComponent> = ComponentOptions<
+  ComponentConfig<COMPONENT>
+>;
+
 export class ComponentMetadata<
   COMPONENT extends BaseComponent = BaseComponent,
 > extends ClassDecoratorMetadata<COMPONENT> {
   constructor(
     // eslint-disable-next-line @typescript-eslint/ban-types
     readonly target: ComponentConstructor<COMPONENT> | Function,
-    readonly options: ComponentOptions<COMPONENT> = {},
+    readonly options: ComponentOptionsOf<COMPONENT> = {},
   ) {
     super(target);
   }

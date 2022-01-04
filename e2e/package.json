@@ -1,7 +1,6 @@
 {
   "name": "@jovotech/e2e",
   "private": true,
-  "version": "4.0.0-alpha.19",
   "description": "",
   "scripts": {
     "prettier": "prettier -w -l test",
@@ -12,22 +11,22 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/framework": "^4.0.0-alpha.18",
-    "@jovotech/platform-alexa": "^4.0.0-alpha.19"
+    "@jovotech/framework": "^4.0.0",
+    "@jovotech/platform-alexa": "^4.0.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
-    "@types/node": "^10.17.50",
+    "@types/node": "^12.20.37",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
     "eslint": "^7.17.0",
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.1",
-    "jest": "^26.6.3",
-    "prettier": "^2.2.1",
+    "jest": "^27.3.1",
+    "prettier": "^2.4.1",
     "rimraf": "^3.0.2",
-    "ts-jest": "^26.5.4",
-    "typescript": "^4.2.3"
+    "ts-jest": "^27.0.7",
+    "typescript": "~4.4.4"
   },
   "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176",
   "prettier": "../.prettierrc.js"

@@ -3,8 +3,15 @@ import colorize from 'json-colorizer';
 import _get from 'lodash.get';
 import _set from 'lodash.set';
 import _unset from 'lodash.unset';
-import { App, HandleRequest, Jovo } from '../index';
+
+import { HandleRequest, Jovo } from '../index';
 import { Plugin, PluginConfig } from '../Plugin';
+
+declare module '../interfaces' {
+  interface RequestData {
+    _BASIC_LOGGING_START?: number;
+  }
+}
 
 declare module '../Extensible' {
   interface ExtensiblePluginConfig {
@@ -16,17 +23,17 @@ declare module '../Extensible' {
   }
 }
 
+export interface RequestResponseConfig {
+  enabled: boolean;
+  objects?: string[];
+  maskedObjects?: string[];
+  excludedObjects?: string[];
+}
+
 export interface BasicLoggingConfig extends PluginConfig {
-  request?: boolean;
-  response?: boolean;
-  requestObjects?: string[];
-  responseObjects?: string[];
-  maskedRequestObjects?: string[];
-  maskedResponseObjects?: string[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  maskValue?: any;
-  excludedRequestObjects?: string[];
-  excludedResponseObjects?: string[];
+  request?: RequestResponseConfig | boolean;
+  response?: RequestResponseConfig | boolean;
+  maskValue?: unknown;
   styling?: boolean;
   indentation?: string;
   colorizeSettings?: {
@@ -47,16 +54,21 @@ export interface BasicLoggingConfig extends PluginConfig {
 export class BasicLogging extends Plugin<BasicLoggingConfig> {
   getDefaultConfig(): BasicLoggingConfig {
     return {
+      skipTests: true,
       enabled: true,
-      request: false,
+      request: {
+        enabled: false,
+        excludedObjects: [],
+        maskedObjects: [],
+        objects: [],
+      },
+      response: {
+        enabled: false,
+        excludedObjects: [],
+        maskedObjects: [],
+        objects: [],
+      },
       maskValue: '[ Hidden ]',
-      requestObjects: [],
-      maskedRequestObjects: [],
-      excludedRequestObjects: [],
-      response: false,
-      maskedResponseObjects: [],
-      excludedResponseObjects: [],
-      responseObjects: [],
       indentation: '  ',
       styling: true,
       colorizeSettings: {
@@ -70,12 +82,38 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
     };
   }
 
-  install(parent: App): Promise<void> | void {
-    parent.middlewareCollection.use('after.request', this.logRequest);
-    parent.middlewareCollection.use('after.response', this.logResponse);
+  constructor(config: BasicLoggingConfig) {
+    super(config);
+
+    if (typeof config.request === 'boolean') {
+      this.config.request = {
+        objects: [],
+        maskedObjects: [],
+        excludedObjects: [],
+        enabled: config.request,
+      };
+    }
+
+    if (typeof config.response === 'boolean') {
+      this.config.request = {
+        objects: [],
+        maskedObjects: [],
+        excludedObjects: [],
+        enabled: config.response,
+      };
+    }
   }
 
-  logRequest = async (handleRequest: HandleRequest, jovo: Jovo): Promise<void> => {
+  mount(parent: HandleRequest): Promise<void> | void {
+    parent.middlewareCollection.use('request.start', (jovo) => {
+      return this.logRequest(jovo);
+    });
+    parent.middlewareCollection.use('response.end', (jovo: Jovo) => {
+      return this.logResponse(jovo);
+    });
+  }
+
+  async logRequest(jovo: Jovo): Promise<void> {
     jovo.$data._BASIC_LOGGING_START = new Date().getTime();
 
     if (!this.config.request) {
@@ -84,12 +122,14 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
 
     const requestCopy = JSON.parse(JSON.stringify(jovo.$request));
 
-    if (this.config.maskedRequestObjects && this.config.maskedRequestObjects.length > 0) {
-      this.config.maskedRequestObjects.forEach((maskPath: string) => {
+    const requestConfig = this.config.request as RequestResponseConfig;
+
+    if (requestConfig.maskedObjects && requestConfig.maskedObjects.length > 0) {
+      requestConfig.maskedObjects.forEach((maskPath: string) => {
         const value = _get(requestCopy, maskPath);
         if (value) {
           let newValue = this.config.maskValue;
-          if (typeof newValue === 'function') {
+          if (typeof this.config.maskValue === 'function') {
             newValue = this.config.maskValue(value);
           }
           _set(requestCopy, maskPath, newValue);
@@ -97,8 +137,8 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
       });
     }
 
-    if (this.config.excludedRequestObjects && this.config.excludedRequestObjects.length > 0) {
-      this.config.excludedRequestObjects.forEach((excludePath: string) => {
+    if (requestConfig.excludedObjects && requestConfig.excludedObjects.length > 0) {
+      requestConfig.excludedObjects.forEach((excludePath: string) => {
         _unset(requestCopy, excludePath);
       });
     }
@@ -108,8 +148,8 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
       console.log(chalk.bgWhite.black('\n\n >>>>> Request - ' + new Date().toISOString() + ' '));
     }
 
-    if (this.config.requestObjects && this.config.requestObjects.length > 0) {
-      this.config.requestObjects.forEach((path: string) => {
+    if (requestConfig.objects && requestConfig.objects.length > 0) {
+      requestConfig.objects.forEach((path: string) => {
         console.log(
           colorize(JSON.stringify(_get(requestCopy, path), null, this.config.indentation || 2)),
         );
@@ -119,10 +159,13 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
     }
 
     /* eslint-enable no-console */
-  };
-  logResponse = async (handleRequest: HandleRequest, jovo: Jovo): Promise<void> => {
-    jovo.$data._BASIC_LOGGING_STOP = new Date().getTime();
-    const duration = jovo.$data._BASIC_LOGGING_STOP - jovo.$data._BASIC_LOGGING_START;
+  }
+
+  async logResponse(jovo: Jovo): Promise<void> {
+    const basicLoggingEnd = new Date().getTime();
+    const duration = jovo.$data._BASIC_LOGGING_START
+      ? basicLoggingEnd - jovo.$data._BASIC_LOGGING_START
+      : 0;
 
     if (!this.config.response) {
       return;
@@ -130,12 +173,14 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
 
     const responseCopy = JSON.parse(JSON.stringify(jovo.$response));
 
-    if (this.config.maskedResponseObjects && this.config.maskedResponseObjects.length > 0) {
-      this.config.maskedResponseObjects.forEach((maskPath: string) => {
+    const responseConfig = this.config.response as RequestResponseConfig;
+
+    if (responseConfig.maskedObjects && responseConfig.maskedObjects.length > 0) {
+      responseConfig.maskedObjects.forEach((maskPath: string) => {
         const value = _get(responseCopy, maskPath);
         if (value) {
           let newValue = this.config.maskValue;
-          if (typeof newValue === 'function') {
+          if (typeof this.config.maskValue === 'function') {
             newValue = this.config.maskValue(value);
           }
           _set(responseCopy, maskPath, newValue);
@@ -143,8 +188,8 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
       });
     }
 
-    if (this.config.excludedResponseObjects && this.config.excludedResponseObjects.length > 0) {
-      this.config.excludedResponseObjects.forEach((excludePath: string) => {
+    if (responseConfig.excludedObjects && responseConfig.excludedObjects.length > 0) {
+      responseConfig.excludedObjects.forEach((excludePath: string) => {
         _unset(responseCopy, excludePath);
       });
     }
@@ -158,11 +203,8 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
           'ms',
       );
     }
-    if (this.config.responseObjects && this.config.responseObjects.length > 0) {
-      this.config.responseObjects.forEach((path: string) => {
-        if (!handleRequest.jovo) {
-          return;
-        }
+    if (responseConfig.objects && responseConfig.objects.length > 0) {
+      responseConfig.objects.forEach((path: string) => {
         console.log(
           colorize(
             JSON.stringify(_get(responseCopy, path), null, this.config.indentation || 2),
@@ -179,5 +221,5 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
       );
     }
     /* eslint-enable no-console */
-  };
+  }
 }

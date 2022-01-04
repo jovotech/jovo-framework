@@ -1,3 +1,4 @@
+import { AnyObject, JovoComponentInfo } from './index';
 import { Jovo } from './Jovo';
 
 export class JovoProxy extends Jovo {
@@ -13,24 +14,27 @@ export class JovoProxy extends Jovo {
     Object.getOwnPropertyNames(Jovo.prototype).forEach((key) => keySet.add(key));
     Object.keys(this.jovo).forEach((key) => keySet.add(key));
     const keys = Array.from(keySet);
-    const indexOfConstructor = keys.indexOf('constructor');
-    if (indexOfConstructor >= 0) {
-      keys.splice(indexOfConstructor, 1);
-    }
     keys.forEach((key) => {
-      if (key !== 'jovo') {
-        Object.defineProperty(this, key, {
-          get() {
-            return typeof this.jovo[key] === 'function'
-              ? (this.jovo[key] as (...args: unknown[]) => unknown).bind(this.jovo)
-              : this.jovo[key];
-          },
-          set(val: unknown) {
-            this.jovo[key] = val;
-          },
-        });
+      if (key !== 'jovo' && key !== 'constructor' && key !== '$component') {
+        // if the value is a function just return it as a value and not as getter and setter
+        const propertyDescriptor: PropertyDescriptor =
+          typeof this.jovo[key as keyof Jovo] === 'function'
+            ? { value: this.jovo[key as keyof Jovo].bind(this.jovo) }
+            : {
+                get: () => {
+                  return this.jovo[key as keyof Jovo];
+                },
+                set: (val: unknown) => {
+                  (this.jovo as AnyObject)[key] = val;
+                },
+              };
+        Object.defineProperty(this, key, propertyDescriptor);
       }
     });
+  }
+
+  get $component(): JovoComponentInfo {
+    return this.jovo.$component;
   }
 
   toJSON(): JovoProxy {

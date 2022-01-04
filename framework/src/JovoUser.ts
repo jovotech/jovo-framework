@@ -10,29 +10,27 @@ export interface PersistableUserData {
 export abstract class JovoUser<JOVO extends Jovo = Jovo> {
   createdAt: Date = new Date();
   updatedAt: Date = new Date();
-  $data: UserData = {};
+  data: UserData = {};
 
   constructor(readonly jovo: JOVO) {}
 
-  abstract id: string;
+  abstract get id(): string | undefined;
+
+  get accessToken(): string | undefined {
+    return;
+  }
 
   isNew = true;
 
   getPersistableData(): PersistableUserData {
     return {
-      data: this.$data,
+      data: this.data,
     };
   }
 
   setPersistableData(data?: PersistableUserData): this {
-    this.$data = data?.data || {};
+    this.data = data?.data || {};
     return this;
-  }
-
-  getDefaultPersistableData(): PersistableUserData {
-    return {
-      data: {},
-    };
   }
 
   toJSON(): JovoUser<JOVO> {

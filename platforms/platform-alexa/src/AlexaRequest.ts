@@ -1,14 +1,24 @@
 import {
-  Entity,
+  Capability,
   EntityMap,
+  InputType,
+  InputTypeLike,
+  JovoInput,
   JovoRequest,
-  JovoRequestType,
-  RequestType,
+  JovoSession,
   UnknownObject,
 } from '@jovotech/framework';
-import { ResolutionPerAuthorityStatusCode } from '@jovotech/output-alexa';
+import { AlexaCapability, AlexaCapabilityType } from './AlexaDevice';
 import { DYNAMIC_ENTITY_MATCHES_PREFIX, STATIC_ENTITY_MATCHES_PREFIX } from './constants';
-import { AuthorityResolution, Context, Request, Session } from './interfaces';
+import { AlexaEntity, Context, Request, Session } from './interfaces';
+import { ResolutionPerAuthority, ResolutionPerAuthorityStatusCode, Slot } from './output';
+
+export const ALEXA_REQUEST_TYPE_TO_INPUT_TYPE_MAP: Record<string, InputTypeLike> = {
+  'LaunchRequest': InputType.Launch,
+  'IntentRequest': InputType.Intent,
+  'SessionEndedRequest': InputType.End,
+  'System.ExceptionEncountered': InputType.Error,
+};
 
 export class AlexaRequest extends JovoRequest {
   version?: string;
@@ -16,23 +26,52 @@ export class AlexaRequest extends JovoRequest {
   session?: Session;
   request?: Request;
 
-  getEntities(): EntityMap | undefined {
-    const slots = this.request?.intent?.slots;
-    if (!slots) return;
-    return Object.keys(slots).reduce((entityMap: EntityMap, slotKey: string) => {
-      const entity: Entity = {
-        name: slotKey,
-        alexaSkill: slots[slotKey],
+  getLocale(): string | undefined {
+    return this.request?.locale;
+  }
+
+  getIntent(): JovoInput['intent'] {
+    return this.request?.intent?.name;
+  }
+
+  setIntent(intent: string): void {
+    if (!this.request) {
+      return;
+    }
+
+    if (!this.request.intent) {
+      this.request.intent = { name: intent };
+    } else {
+      this.request.intent.name = intent;
+    }
+  }
+
+  getEntities(): EntityMap<AlexaEntity> | undefined {
+    const slots: Record<string, Slot> = {
+      ...(this.request?.intent?.slots || {}),
+      ...(this.request?.apiRequest?.slots || {}),
+    };
+
+    if (!Object.keys(slots).length) {
+      return;
+    }
+
+    return Object.keys(slots).reduce((entityMap: EntityMap<AlexaEntity>, slotKey: string) => {
+      const entity: AlexaEntity = {
+        native: slots[slotKey],
       };
       if (slots[slotKey].value) {
         entity.value = slots[slotKey].value;
-        entity.key = slots[slotKey].value;
+        entity.resolved = slots[slotKey].value;
       }
 
-      const modifyEntityByAuthorityResolutions = (authorityResolutions: AuthorityResolution[]) => {
-        authorityResolutions.forEach((authorityResolution) => {
-          entity.key = authorityResolution.values[0].value.name;
-          entity.id = authorityResolution.values[0].value.id;
+      const modifyEntityByAuthorityResolutions = (
+        resolutionsPerAuthority: ResolutionPerAuthority[],
+      ) => {
+        resolutionsPerAuthority.forEach((resolutionPerAuthority) => {
+          const { name, id } = resolutionPerAuthority.values[0].value;
+          entity.resolved = name;
+          entity.id = id || name;
         });
       };
 
@@ -47,48 +86,57 @@ export class AlexaRequest extends JovoRequest {
     }, {});
   }
 
-  getStaticEntityMatches(slotKey: string): AuthorityResolution[] {
+  getStaticEntityMatches(slotKey: string): ResolutionPerAuthority[] {
     return this.getEntityResolutions(slotKey, STATIC_ENTITY_MATCHES_PREFIX);
   }
 
-  getDynamicEntityMatches(slotKey: string): AuthorityResolution[] {
+  getDynamicEntityMatches(slotKey: string): ResolutionPerAuthority[] {
     return this.getEntityResolutions(slotKey, DYNAMIC_ENTITY_MATCHES_PREFIX);
   }
 
-  private getEntityResolutions(slotKey: string, startsWith: string): AuthorityResolution[] {
-    return (
-      this.request?.intent?.slots?.[slotKey]?.resolutions?.resolutionsPerAuthority || []
-    ).filter(
+  private getEntityResolutions(slotKey: string, prefix: string): ResolutionPerAuthority[] {
+    return [
+      ...(this.request?.intent?.slots?.[slotKey]?.resolutions?.resolutionsPerAuthority || []),
+      ...(this.request?.apiRequest?.slots?.[slotKey]?.resolutions?.resolutionsPerAuthority || []),
+    ].filter(
       (authorityResolution) =>
         authorityResolution.status.code === ResolutionPerAuthorityStatusCode.SuccessMatch &&
-        authorityResolution.authority.startsWith(startsWith),
+        authorityResolution.authority.startsWith(prefix),
     );
   }
 
-  getIntentName(): string | undefined {
-    return this.request?.intent?.name;
+  getInputType(): InputTypeLike | undefined {
+    return this.request?.type
+      ? ALEXA_REQUEST_TYPE_TO_INPUT_TYPE_MAP[this.request.type] || this.request.type
+      : undefined;
   }
 
-  getLocale(): string | undefined {
-    return this.request?.locale;
+  setLocale(locale: string): void {
+    if (!this.request) {
+      return;
+    }
+
+    this.request.locale = locale;
   }
 
-  getRawText(): string | undefined {
+  getInputText(): JovoInput['text'] {
     return;
   }
 
-  getRequestType(): JovoRequestType | undefined {
-    const requestTypeMap: Record<string, JovoRequestType> = {
-      'LaunchRequest': { type: RequestType.Launch },
-      'IntentRequest': { type: RequestType.Intent },
-      'SessionEndedRequest': { type: RequestType.End, subType: this.request?.reason },
-      'System.ExceptionEncountered': { type: RequestType.OnError },
-    };
-    return this.request?.type ? requestTypeMap[this.request?.type] : undefined;
+  getInputAudio(): JovoInput['audio'] {
+    return;
   }
 
   getSessionData(): UnknownObject | undefined {
     return this.session?.attributes;
+  }
+
+  setSessionData(session: JovoSession): void {
+    if (!this.session) {
+      return;
+    }
+
+    this.session.attributes = session;
   }
 
   getSessionId(): string | undefined {
@@ -99,8 +147,26 @@ export class AlexaRequest extends JovoRequest {
     return this.session?.new;
   }
 
+  // platform-specific
   isAplSupported(): boolean {
     return !!this.context?.System?.device?.supportedInterfaces?.['Alexa.Presentation.APL'];
+  }
+
+  getUserId(): string | undefined {
+    return this.session?.user?.userId;
+  }
+
+  setUserId(userId: string): void {
+    if (!this.session) {
+      // TODO: What to do here?
+      return;
+    }
+
+    if (!this.session.user) {
+      this.session.user = { userId: userId, accessToken: '', permissions: { consentToken: '' } };
+    }
+
+    this.session.user.userId = userId;
   }
 
   getApiEndpoint(): string {
@@ -109,6 +175,21 @@ export class AlexaRequest extends JovoRequest {
 
   getApiAccessToken(): string {
     return this.context!.System.apiAccessToken;
+  }
+
+  getDeviceCapabilities(): AlexaCapabilityType[] | undefined {
+    const supportedInterfaces = this.context?.System?.device?.supportedInterfaces;
+    if (!supportedInterfaces) {
+      return;
+    }
+    const capabilities: AlexaCapabilityType[] = [Capability.Audio];
+    if (supportedInterfaces.AudioPlayer) {
+      capabilities.push(Capability.LongformAudio);
+    }
+    if (supportedInterfaces['Alexa.Presentation.APL']) {
+      capabilities.push(Capability.Screen, AlexaCapability.Apl);
+    }
+    return capabilities;
   }
 
   getDeviceId(): string {

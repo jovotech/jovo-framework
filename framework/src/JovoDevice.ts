@@ -1,27 +1,28 @@
 import { Jovo } from './Jovo';
 
-export type Capability = 'screen' | 'audio' | 'long-form-audio' | string;
+export enum Capability {
+  Screen = 'SCREEN',
+  Audio = 'AUDIO',
+  LongformAudio = 'LONGFORM_AUDIO',
+  Video = 'VIDEO',
+}
+
+export type CapabilityType = Capability | `${Capability}` | string;
 
 export type JovoDeviceConstructor<JOVO extends Jovo> = new (jovo: JOVO) => JOVO['$device'];
 
 export abstract class JovoDevice<
   JOVO extends Jovo = Jovo,
-  CAPABILITY extends Capability = Capability,
+  CAPABILITY extends CapabilityType = CapabilityType,
 > {
-  capabilities: CAPABILITY[] = [];
+  capabilities: CAPABILITY[];
 
   public constructor(readonly jovo: JOVO) {
-    this.setCapabilitiesFromRequest();
+    this.capabilities = (jovo.$request.getDeviceCapabilities() as CAPABILITY[]) || [];
   }
-
-  protected abstract setCapabilitiesFromRequest(): void;
 
   supports(capability: CAPABILITY): boolean {
     return this.capabilities.includes(capability);
-  }
-
-  addCapability(...capability: CAPABILITY[]): void {
-    this.capabilities = this.capabilities.concat(capability);
   }
 
   toJSON(): JovoDevice<JOVO> {

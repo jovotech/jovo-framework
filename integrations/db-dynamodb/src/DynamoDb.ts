@@ -1,15 +1,4 @@
 import {
-  App,
-  DbItem,
-  DbPlugin,
-  DbPluginConfig,
-  HandleRequest,
-  Jovo,
-  PersistableSessionData,
-  PersistableUserData,
-  UnknownObject,
-} from '@jovotech/framework';
-import {
   CreateTableCommand,
   DescribeTableCommand,
   DynamoDBClient,
@@ -17,7 +6,18 @@ import {
   GetItemCommand,
   PutItemCommand,
 } from '@aws-sdk/client-dynamodb';
-import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
+import { marshall, marshallOptions, unmarshall } from '@aws-sdk/util-dynamodb';
+import {
+  DbItem,
+  DbPlugin,
+  DbPluginConfig,
+  HandleRequest,
+  Jovo,
+  PersistableSessionData,
+  PersistableUserData,
+  RequiredOnlyWhere,
+  UnknownObject,
+} from '@jovotech/framework';
 
 export interface DynamoDbConfig extends DbPluginConfig {
   table: {
@@ -29,8 +29,11 @@ export interface DynamoDbConfig extends DbPluginConfig {
   };
   libraryConfig?: {
     dynamoDbClient?: DynamoDBClientConfig;
+    marshall?: marshallOptions;
   };
 }
+
+export type DynamoDbInitConfig = RequiredOnlyWhere<DynamoDbConfig, 'table'>;
 
 export interface DynamoDbItem {
   id: string;
@@ -43,21 +46,38 @@ export interface DynamoDbItem {
 export class DynamoDb extends DbPlugin<DynamoDbConfig> {
   client: DynamoDBClient;
 
+  constructor(config: DynamoDbInitConfig) {
+    super(config);
+    this.client = new DynamoDBClient(this.config.libraryConfig?.dynamoDbClient || {});
+  }
+
   getDefaultConfig(): DynamoDbConfig {
     return {
       ...super.getDefaultConfig(),
       table: {
-        name: '',
+        name: '<YOUR-TABLE-NAME>',
         primaryKeyColumn: 'userId',
         createTableOnInit: true,
         readCapacityUnits: 2,
         writeCapacityUnits: 2,
       },
+      libraryConfig: {
+        marshall: {
+          removeUndefinedValues: true,
+          convertClassInstanceToMap: true,
+        },
+      },
     };
   }
 
-  constructor(config: DynamoDbConfig) {
-    super(config);
+  getInitConfig(): DynamoDbInitConfig {
+    return { table: { name: '<YOUR-TABLE-NAME>' } };
+  }
+
+  mount(parent: HandleRequest): Promise<void> | void {
+    super.mount(parent);
+
+    // initialize a new client for the mounted instance with the given request-config
     this.client = new DynamoDBClient(this.config.libraryConfig?.dynamoDbClient || {});
   }
 
@@ -82,12 +102,7 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
     }
   }
 
-  async install(parent: App): Promise<void> {
-    parent.middlewareCollection.use('after.request', this.loadData);
-    parent.middlewareCollection.use('before.response', this.saveData);
-  }
-
-  createTable = async (): Promise<void> => {
+  async createTable(): Promise<void> {
     const params = {
       AttributeDefinitions: [
         {
@@ -109,9 +124,9 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
     };
 
     await this.client.send(new CreateTableCommand(params));
-  };
+  }
 
-  getDbItem = async (primaryKey: string): Promise<DbItem> => {
+  async getDbItem(primaryKey: string): Promise<DbItem> {
     const params = {
       ConsistentRead: true,
       Key: {
@@ -121,47 +136,47 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
     };
     const data = await this.client.send(new GetItemCommand(params));
     return data.Item as DbItem;
-  };
+  }
 
-  loadData = async (handleRequest: HandleRequest, jovo: Jovo): Promise<void> => {
+  async loadData(userId: string, jovo: Jovo): Promise<void> {
     this.checkRequirements();
-    const dbItem = await this.getDbItem(jovo.$user.id);
 
+    const dbItem = await this.getDbItem(userId);
     if (dbItem) {
       jovo.$user.isNew = false;
       jovo.setPersistableData(unmarshall(dbItem), this.config.storedElements);
     }
-  };
+  }
 
-  saveData = async (handleRequest: HandleRequest, jovo: Jovo): Promise<void> => {
+  async saveData(userId: string, jovo: Jovo): Promise<void> {
     this.checkRequirements();
 
     const params = {
       Item: {
-        [this.config.table.primaryKeyColumn!]: jovo.$user.id as string,
+        [this.config.table.primaryKeyColumn!]: userId,
       } as UnknownObject,
       TableName: this.config.table.name!,
     };
 
     const item: DbItem = {
-      [this.config.table.primaryKeyColumn!]: jovo.$user.id,
+      [this.config.table.primaryKeyColumn!]: userId,
     };
     await this.applyPersistableData(jovo, item);
 
     await this.client.send(
       new PutItemCommand({
         TableName: params.TableName,
-        Item: marshall(item, { removeUndefinedValues: true }),
+        Item: marshall(item, this.config.libraryConfig?.marshall),
       }),
     );
-  };
+  }
 
-  checkRequirements = (): void | Error => {
+  checkRequirements(): void | Error {
     if (!this.config.table.primaryKeyColumn) {
       throw new Error('this.config.table.primaryKeyColumn must not be undefined');
     }
     if (!this.config.table.name) {
       throw new Error('this.config.table.name must not be undefined');
     }
-  };
+  }
 }

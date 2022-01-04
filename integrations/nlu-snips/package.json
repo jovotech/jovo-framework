@@ -1,0 +1,51 @@
+{
+  "name": "@jovotech/nlu-snips",
+  "version": "4.1.0",
+  "description": "Snips NLU Integration",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm5/index.js",
+  "es2015": "dist/esm2015/index.js",
+  "types": "dist/types/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prebuild": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json --clean",
+    "build": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json",
+    "watch": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json --watch",
+    "prettier": "prettier -w -l src test",
+    "eslint": "eslint src test --fix --ext .ts",
+    "rimraf": "rimraf dist",
+    "test": "jest --runInBand"
+  },
+  "author": "jovotech",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@jovotech/model": "^4.0.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@jovotech/framework": "^4.1.0",
+    "@types/jest": "^26.0.20",
+    "@types/node": "^12.20.37",
+    "@typescript-eslint/eslint-plugin": "^4.12.0",
+    "@typescript-eslint/parser": "^4.12.0",
+    "eslint": "^7.17.0",
+    "eslint-config-prettier": "^7.1.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "jest": "^27.3.1",
+    "prettier": "^2.4.1",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^27.0.7",
+    "typescript": "~4.4.4"
+  },
+  "peerDependencies": {
+    "@jovotech/framework": "4.1.0"
+  },
+  "gitHead": "02f1a666ceff33f0907bff129f78be4088d87241",
+  "prettier": "../../.prettierrc.js",
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,4 +1,4 @@
-import { Headers, QueryParams, Server } from '@jovotech/framework';
+import { AnyObject, Headers, QueryParams, Server } from '@jovotech/framework';
 import type { Request, Response } from 'express';
 
 export interface ErrorResponse {
@@ -35,12 +35,12 @@ export class ExpressJs extends Server {
     return (this.req.query as QueryParams) || {};
   }
 
-  getRequestObject(): Record<string, string> {
+  getRequestObject(): AnyObject {
     return this.req.body;
   }
 
-  getRequestHeaders(): Headers {
-    return this.req.headers || {};
+  getNativeRequestHeaders(): Headers {
+    return this.req.headers;
   }
 
   hasWriteFileAccess(): boolean {
@@ -57,5 +57,9 @@ export class ExpressJs extends Server {
   }
 
   // eslint-disable-next-line
-  setResponseHeaders(header: Record<string, string>): void {}
+  setResponseHeaders(header: Record<string, string>): void {
+    Object.keys(header).forEach((key) => {
+      this.res.setHeader(key, header[key]);
+    });
+  }
 }

@@ -1,22 +1,16 @@
-import {
-  AnyObject,
-  App,
-  ExtensibleConfig,
-  HandleRequest,
-  Jovo,
-  Platform,
-} from '@jovotech/framework';
-import {
-  GoogleAssistantOutputTemplateConverterStrategy,
-  GoogleAssistantResponse,
-} from '@jovotech/output-googleassistant';
+import { AnyObject, App, Jovo, Platform, PlatformConfig } from '@jovotech/framework';
+import _mergeWith from 'lodash.mergewith';
+import { v4 as uuidV4 } from 'uuid';
 import { GoogleAssistant } from './GoogleAssistant';
+import { GoogleAssistantDevice } from './GoogleAssistantDevice';
 import { GoogleAssistantRepromptComponent } from './GoogleAssistantRepromptComponent';
 import { GoogleAssistantRequest } from './GoogleAssistantRequest';
+import { GoogleAssistantRequestBuilder } from './GoogleAssistantRequestBuilder';
+import { GoogleAssistantResponse } from './GoogleAssistantResponse';
 import { GoogleAssistantUser } from './GoogleAssistantUser';
-import { GoogleAssistantDevice } from './GoogleAssistantDevice';
+import { GoogleAssistantOutputTemplateConverterStrategy } from './output';
 
-export interface GoogleAssistantConfig extends ExtensibleConfig {}
+export interface GoogleAssistantConfig extends PlatformConfig {}
 
 export class GoogleAssistantPlatform extends Platform<
   GoogleAssistantRequest,
@@ -27,19 +21,33 @@ export class GoogleAssistantPlatform extends Platform<
   GoogleAssistantPlatform,
   GoogleAssistantConfig
 > {
-  outputTemplateConverterStrategy = new GoogleAssistantOutputTemplateConverterStrategy();
-  requestClass = GoogleAssistantRequest;
-  jovoClass = GoogleAssistant;
-  userClass = GoogleAssistantUser;
-  deviceClass = GoogleAssistantDevice;
+  readonly id: string = 'googleAssistant';
+  readonly outputTemplateConverterStrategy = new GoogleAssistantOutputTemplateConverterStrategy();
+  readonly requestClass = GoogleAssistantRequest;
+  readonly jovoClass = GoogleAssistant;
+  readonly userClass = GoogleAssistantUser;
+  readonly deviceClass = GoogleAssistantDevice;
+  readonly requestBuilder = GoogleAssistantRequestBuilder;
 
   getDefaultConfig(): GoogleAssistantConfig {
     return {};
   }
 
-  install(parent: App): void {
-    super.install(parent);
-    parent.middlewareCollection.use('before.request', this.beforeRequest);
+  mount(parent: App): void {
+    super.mount(parent);
+
+    parent.middlewareCollection.use('before.request.start', (jovo) => {
+      if (jovo.$googleAssistant?.$request.intent?.name === 'actions.intent.HEALTH_CHECK') {
+        jovo.$handleRequest.stopMiddlewareExecution();
+        return jovo.$handleRequest.server.setResponse({
+          prompt: { override: true, firstSimple: { speech: 'ok', text: '' } },
+        });
+      }
+    });
+
+    this.middlewareCollection.use('request.start', (jovo) => {
+      return this.onRequestStart(jovo);
+    });
   }
 
   initialize(parent: App): void {
@@ -58,36 +66,49 @@ export class GoogleAssistantPlatform extends Platform<
     response: GoogleAssistantResponse,
     googleAssistant: GoogleAssistant,
   ): GoogleAssistantResponse | Promise<GoogleAssistantResponse> {
-    // TODO: check logic
-    const requestSession = googleAssistant.$request.session;
-    if (requestSession) {
-      if (!response.session) {
-        response.session = { ...requestSession, params: { ...googleAssistant.$session } };
-      } else {
-        response.session.params = { ...requestSession.params, ...googleAssistant.$session };
-      }
+    const requestSession = googleAssistant.$request.session || {};
+    const responseSession = response.session || {};
+    response.session = _mergeWith(
+      { id: '', languageCode: '', ...requestSession },
+      responseSession,
+      { params: { ...googleAssistant.$session } },
+      (objValue, srcValue) => {
+        if (typeof objValue === 'string' && typeof srcValue === 'string') {
+          return objValue ? objValue : srcValue;
+        }
+      },
+    );
+
+    if (googleAssistant.$request.user) {
+      response.user = {
+        ...googleAssistant.$request.user,
+      };
+    }
+
+    if (response.scene && googleAssistant.$request.scene?.name) {
+      response.scene.name = googleAssistant.$request.scene.name;
     }
     return response;
   }
 
-  beforeRequest: (handleRequest: HandleRequest, jovo: Jovo) => void = (
-    handleRequest: HandleRequest,
-    jovo: Jovo,
-  ) => {
-    // if the request is a no-input-request and a state exists, add the reprompt-component to the top
-    const intentName = jovo.$googleAssistant?.$request?.intent?.name;
-    if (
-      intentName &&
-      [
-        'actions.intent.NO_INPUT_1',
-        'actions.intent.NO_INPUT_2',
-        'actions.intent.NO_INPUT_FINAL',
-      ].includes(intentName) &&
-      jovo.$state
-    ) {
-      jovo.$state.push({
-        component: 'GoogleAssistantRepromptComponent',
-      });
+  onRequestStart(jovo: Jovo): void {
+    const user = jovo.$googleAssistant?.$user;
+    // if the user is linked and has no user id, generate one
+    if (user && user.isVerified() && !user.id) {
+      user.setId(uuidV4());
     }
-  };
+
+    const request = jovo.$googleAssistant?.$request;
+    // if it is a selection-event
+    if (
+      request?.intent &&
+      !request?.intent?.name &&
+      !!request.scene?.slotFillingStatus &&
+      Object.keys(request.intent?.params || {}).length &&
+      request.session?.params?._GOOGLE_ASSISTANT_SELECTION_INTENT_
+    ) {
+      jovo.$input.intent = request.session.params._GOOGLE_ASSISTANT_SELECTION_INTENT_;
+      delete request.session.params._GOOGLE_ASSISTANT_SELECTION_INTENT_;
+    }
+  }
 }
