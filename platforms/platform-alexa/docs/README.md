@@ -69,7 +69,7 @@ The Alexa platform comes with its own `intentMap` that gets merged into the [glo
 You can also add the CLI plugin to your [project configuration](https://www.jovo.tech/docs/project-config) in `jovo.project.js`. [Learn more about the Alexa-specific project configuration here](https://www.jovo.tech/marketplace/platform-alexa/project-config).
 
 ```js
-const { ProjectConfig } = require('@jovotech/cli');
+const { ProjectConfig } = require('@jovotech/cli-core');
 const { AlexaCli } = require('@jovotech/platform-alexa');
 // ...
 
