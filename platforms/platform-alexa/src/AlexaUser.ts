@@ -53,7 +53,7 @@ export class AlexaUser extends JovoUser<Alexa> {
     );
   }
 
-  async getDeviceAddress(): Promise<DeviceLocation> {
+  async getDeviceAddress(): Promise<DeviceAddressLocation> {
     const request: AlexaRequest = this.jovo.$request;
     return getDeviceAddress(
       request.getApiEndpoint(),

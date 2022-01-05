@@ -64,7 +64,7 @@ export async function getDeviceAddress(
 // TODO: needs to be refactored after completion of all Alexa APIs
 export function handleDeviceLocationApiErrors(error: AxiosError): Error | void {
   if (error.isAxiosError) {
-    const { message, code } = error.response?.data;
+    const { message, code } = error.response?.data || {};
     let errorCode: AlexaApiErrorCode = AlexaApiErrorCode.ERROR;
 
     if (error.response?.status === 401) {
