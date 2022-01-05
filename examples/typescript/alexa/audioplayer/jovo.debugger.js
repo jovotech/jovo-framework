@@ -8,7 +8,7 @@ const debuggerConfig = new DebuggerConfig({
       input: {
         type: 'LAUNCH',
       },
-    }
+    },
     // ...
   ],
 });
