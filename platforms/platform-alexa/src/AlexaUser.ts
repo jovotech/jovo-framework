@@ -4,12 +4,6 @@ import { Alexa } from './Alexa';
 import { AlexaRequest } from './AlexaRequest';
 import { ProfileProperty, sendCustomerProfileApiRequest } from './api';
 import {
-  getDeviceLocation,
-  getDeviceAddress,
-  DeviceLocation,
-  DeviceAddressLocation,
-} from './api/DeviceLocationApi';
-import {
   AbsoluteReminder,
   deleteReminder,
   getAllReminders,
@@ -42,24 +36,6 @@ export class AlexaUser extends JovoUser<Alexa> {
       request.getApiAccessToken(),
     );
     return email;
-  }
-
-  async getDeviceLocation(): Promise<DeviceLocation> {
-    const request: AlexaRequest = this.jovo.$request;
-    return getDeviceLocation(
-      request.getApiEndpoint(),
-      request.getDeviceId(),
-      request.getApiAccessToken(),
-    );
-  }
-
-  async getDeviceAddress(): Promise<DeviceAddressLocation> {
-    const request: AlexaRequest = this.jovo.$request;
-    return getDeviceAddress(
-      request.getApiEndpoint(),
-      request.getDeviceId(),
-      request.getApiAccessToken(),
-    );
   }
 
   async setReminder(reminder: AbsoluteReminder | RelativeReminder): Promise<ReminderResponse> {
