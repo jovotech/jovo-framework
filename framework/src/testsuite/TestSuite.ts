@@ -118,6 +118,8 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
   $user!: PlatformTypes<PLATFORM>['user'];
   $platform!: PLATFORM;
   $output!: OutputTemplate[];
+  // Optional overrides of request properties applied each time
+  $requestConfig: Partial<JovoRequest>;
 
   constructor(config?: PartialTestSuiteConfig<PLATFORM>) {
     super(config);
@@ -128,6 +130,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
 
     const platform = new this.config.platform();
     this.requestBuilder = new platform.requestBuilder();
+    this.$requestConfig = {};
 
     const request = platform.createRequestInstance(this.requestBuilder.launch());
     const server: TestServer = new TestServer(request);
@@ -227,6 +230,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     }
     _merge(jovo.$user.data, this.$user.data);
     _merge(jovo.$session, this.$session);
+    _merge(jovo.$request, this.$requestConfig);
 
     jovo.$request.setUserId(this.config.userId);
     jovo.$request.setLocale(this.config.locale);
