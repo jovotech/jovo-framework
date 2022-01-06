@@ -26,6 +26,7 @@ export * from './models/Entity';
 export * from './models/JovoResponse';
 export * from './models/Listen';
 export * from './models/Message';
+export * from './models/RichAudio';
 export * from './models/NormalizedOutputTemplate';
 export * from './models/NormalizedOutputTemplatePlatforms';
 export * from './models/NormalizedPlatformOutputTemplate';

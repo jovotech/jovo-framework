@@ -3,6 +3,7 @@ import {
   NormalizedAlexaOutputTemplate,
   AplHeader,
   AplRenderDocumentDirective,
+  AplaRenderDocumentDirective,
   Card as AlexaCard,
   CardType,
   OutputSpeech,
@@ -31,6 +32,12 @@ declare module '@jovotech/output/dist/types/models/Carousel' {
 declare module '@jovotech/output/dist/types/models/Message' {
   interface Message {
     toAlexaOutputSpeech?(): OutputSpeech;
+  }
+}
+
+declare module '@jovotech/output/dist/types/models/RichAudio' {
+  interface RichAudio {
+    toApla?(): AplaRenderDocumentDirective;
   }
 }
 

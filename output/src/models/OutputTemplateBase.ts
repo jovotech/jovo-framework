@@ -7,6 +7,7 @@ import { Carousel } from './Carousel';
 import { Listen, ListenValue } from './Listen';
 import { Message, MessageValue } from './Message';
 import { QuickReply, QuickReplyValue } from './QuickReply';
+import { RichAudio, richAudioTypeDiscriminator } from './RichAudio';
 
 export type AllowNull<T> = {
   [P in keyof T]: T[P] | null;
@@ -51,4 +52,10 @@ export class OutputTemplateBase {
   @ValidateNested()
   @Type(() => Carousel)
   carousel?: Carousel;
+
+  @IsOptional()
+  @IsInstance(RichAudio)
+  @ValidateNested()
+  @Type(() => RichAudio, richAudioTypeDiscriminator)
+  richAudio?: RichAudio;
 }

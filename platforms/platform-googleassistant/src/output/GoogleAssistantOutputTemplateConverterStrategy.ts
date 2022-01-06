@@ -27,7 +27,10 @@ import {
   TypeOverrideMode,
   TypeOverrideModeLike,
 } from './models';
-import { convertMessageToGoogleAssistantSimple } from './utilities';
+import {
+  convertMessageToGoogleAssistantSimple,
+  convertRichAudioToGoogleAssistantSimple,
+} from './utilities';
 
 export class GoogleAssistantOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<
   GoogleAssistantResponse,
@@ -116,8 +119,16 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
       );
     }
 
+    const richAudio = output.richAudio;
+    if (richAudio) {
+      if (!response.prompt) {
+        response.prompt = {};
+      }
+      response.prompt.firstSimple = convertRichAudioToGoogleAssistantSimple(richAudio);
+    }
+
     const message = output.message;
-    if (message) {
+    if (message && !richAudio) {
       if (!response.prompt) {
         response.prompt = {};
       }

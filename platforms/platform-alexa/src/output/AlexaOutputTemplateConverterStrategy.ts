@@ -14,6 +14,7 @@ import { AlexaResponse } from '../AlexaResponse';
 import { ALEXA_STRING_MAX_LENGTH, SLOT_TYPE_VALUES_MAX_SIZE, SSML_OFFSET } from './constants';
 import {
   AplRenderDocumentDirective,
+  AplaRenderDocumentDirective,
   DialogUpdateDynamicEntitiesDirective,
   Directive,
   DynamicEntitiesUpdateBehavior,
@@ -105,8 +106,14 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
       addToDirectives(directive);
     }
 
+    const richAudio = output.richAudio;
+    if (richAudio) {
+      addToDirectives(richAudio.toApla?.() as AplaRenderDocumentDirective);
+    }
+
     const message = output.message;
-    if (message) {
+    // richAudio responses override the message output
+    if (message && !richAudio) {
       response.response.outputSpeech = convertMessageToOutputSpeech(message);
     }
 

@@ -4,6 +4,12 @@ import {
   Message,
   MessageValue,
   QuickReply,
+  RichAudio,
+  Audio,
+  Sequencer,
+  Mixer,
+  Speech,
+  Silence,
   removeSSML,
   SpeechMessage,
   TextMessage,
@@ -28,6 +34,72 @@ export function convertMessageToGoogleAssistantSimple(message: MessageValue): Si
   return {
     speech: toSSML(message.speech || (message.text as string)),
     text: removeSSML(message.text || (message.speech as string)),
+  };
+}
+
+const isAudioElem = (elem: RichAudio): elem is Audio => elem.type === 'Audio';
+const isSpeechElem = (elem: RichAudio): elem is Speech => elem.type === 'Speech';
+const isSilenceElem = (elem: RichAudio): elem is Silence => elem.type === 'Silence';
+const isSequencerElem = (elem: RichAudio): elem is Sequencer => elem.type === 'Sequencer';
+const isMixerElem = (elem: RichAudio): elem is Mixer => elem.type === 'Mixer';
+
+function genChildSSML(elem: RichAudio): string {
+  if (elem.type === 'Mixer' || elem.type === 'Sequencer') {
+    return genRichAudioSSML(elem);
+  }
+  return `<media>${genRichAudioSSML(elem)}</media>`;
+}
+
+export function genRichAudioSSML(elem: RichAudio): string {
+  if (isAudioElem(elem)) {
+    return `<audio src="${elem.source}" />`;
+  }
+  if (isSpeechElem(elem)) {
+    return `<p>${elem.content}</p>`;
+  }
+  if (isSilenceElem(elem)) {
+    return `<break time="${elem.duration}ms" />`;
+  }
+  if (isSequencerElem(elem)) {
+    return `<seq>${elem.items.map(genChildSSML).join('')}</seq>`;
+  }
+  if (isMixerElem(elem)) {
+    return `<par>${elem.items.map(genChildSSML).join('')}</par>`;
+  }
+
+  throw new Error(`Unrecognised RichAudio item: ${elem}`);
+}
+
+export function genRichAudioText(elem: RichAudio): string {
+  if (isAudioElem(elem)) {
+    return '';
+  }
+  if (isSpeechElem(elem)) {
+    return elem.content;
+  }
+  if (isSilenceElem(elem)) {
+    return '';
+  }
+  if (isSequencerElem(elem)) {
+    return elem.items
+      .map(genRichAudioText)
+      .filter((e) => !!e)
+      .join('. ');
+  }
+  if (isMixerElem(elem)) {
+    return elem.items
+      .map(genRichAudioText)
+      .filter((e) => !!e)
+      .join('. ');
+  }
+
+  throw new Error(`Unrecognised RichAudio item: ${elem}`);
+}
+
+export function convertRichAudioToGoogleAssistantSimple(richAudio: RichAudio): Simple {
+  return {
+    speech: genRichAudioSSML(richAudio),
+    text: genRichAudioText(richAudio),
   };
 }
 

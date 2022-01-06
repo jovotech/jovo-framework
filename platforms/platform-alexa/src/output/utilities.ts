@@ -4,16 +4,19 @@ import {
   CarouselItem,
   Message,
   MessageValue,
+  RichAudio,
   removeSSML,
   SpeechMessage,
   TextMessage,
   toSSML,
 } from '@jovotech/output';
+import { classToPlain } from 'class-transformer';
 import AplCardJson from './apl/Card.json';
 import AplCarouselJson from './apl/Carousel.json';
 import { ALEXA_STRING_MAX_LENGTH } from './constants';
 import {
   AplRenderDocumentDirective,
+  AplaRenderDocumentDirective,
   Card as AlexaCard,
   CardType,
   OutputSpeech,
@@ -130,5 +133,24 @@ export function augmentModelPrototypes(): void {
 
   Message.prototype.toAlexaOutputSpeech = function () {
     return convertMessageToOutputSpeech(this as TextMessage | SpeechMessage);
+  };
+
+  RichAudio.prototype.toApla = function (): AplaRenderDocumentDirective {
+    const AplaRichAudioJson = {
+      document: {
+        type: 'APLA',
+        version: '0.8',
+        mainTemplate: {
+          parameters: ['payload'],
+          item: classToPlain(this),
+        },
+      },
+      datasources: {},
+    };
+    return {
+      type: 'Alexa.Presentation.APLA.RenderDocument',
+      token: 'token',
+      ...AplaRichAudioJson,
+    };
   };
 }

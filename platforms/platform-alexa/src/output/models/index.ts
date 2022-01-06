@@ -16,6 +16,7 @@ export * from './apl/AplLoadIndexListDataDirective';
 export * from './apl/AplOperation';
 export * from './apl/AplParameter';
 export * from './apl/AplRenderDocumentDirective';
+export * from './apl/AplaRenderDocumentDirective';
 export * from './apl/AplResource';
 export * from './apl/AplSendIndexListDataDirective';
 export * from './apl/AplUpdateIndexListDirective';
