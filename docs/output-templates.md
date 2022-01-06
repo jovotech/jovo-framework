@@ -38,6 +38,7 @@ Jovo output templates come with a selection of generic elements that are support
 - [`reprompt`](#reprompt)
 - [`carousel`](#carousel)
 - [`card`](#card)
+- [`richAudio`](#richAudio)
 - [`quickReplies`](#quickreplies)
 - [`listen`](#listen)
 
@@ -145,6 +146,42 @@ A `carousel` consists of the following properties:
 
 - `title`
 - `items`: An array of [card](#card) items
+
+### richAudio
+
+Rich Audio combines audio files, text-to-speech and silence to provide more flexibility than simple responses.
+
+**Note:** Including a `richAudio` element an output will override (and ignore) the `message` element on `alexa` and `googleAssistant`.
+
+Supported components:
+
+ - Sequencer - plays its `items` in sequence
+ - Mixer - plays its `items` in parallel
+ - Audio - plays the `source` audio file
+ - Speech - says the `content` using regular TTS
+ - Silence - plays nothing for `duration` milliseconds
+
+Check out the [Alexa APLA Docs](https://developer.amazon.com/en-US/docs/alexa/alexa-presentation-language/apl-for-audio-reference.html) for more detail on the allowed components.
+
+```typescript
+{
+  richAudio: {
+    type: 'Sequencer',
+    items: [
+      {
+        type: "Speech",
+        content: "Text content"
+      },
+      {
+        type: "Audio",
+        source: "https://assets.com/intro_sound.mp3"
+      }
+    ]
+  }
+}
+```
+
+On the `googleAssistant` platform, this object will be converted into [non-standard Google SSML](https://cloud.google.com/text-to-speech/docs/ssml) (ie. using `seq` and `par` tags).
 
 ### quickReplies
 
