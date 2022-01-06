@@ -457,23 +457,23 @@ export interface Home {
 export interface Device {
   capabilities: Capability[];
   currentLocation?: CurrentLocation;
-  timeZone?: TimeZone
+  timeZone?: TimeZone;
 }
 
 export interface CurrentLocation {
-  coordinates?: LatLng,
-  postalAddress?: PostalAddress
+  coordinates?: LatLng;
+  postalAddress?: PostalAddress;
 }
 
 export interface TimeZone {
   /**
    * IANA Time Zone Database time zone, e.g. "America/New_York".
    */
-  id?: string
+  id?: string;
   /**
    * Optional. IANA Time Zone Database version number, e.g. "2019a".
    */
-  version?: string
+  version?: string;
 }
 
 export interface Expected {
