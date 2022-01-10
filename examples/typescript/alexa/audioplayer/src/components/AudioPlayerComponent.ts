@@ -14,8 +14,6 @@ export class AudioPlayerComponent extends BaseComponent {
       audioItem: {
         stream: {
           url: 'https://s3.amazonaws.com/jovo-songs/song1.mp3',
-          token: 'song1',
-          offsetInMilliseconds: 0,
         },
       },
     });
