@@ -100,7 +100,8 @@ export class GoogleAssistantRequest extends JovoRequest {
     return this.session?.id;
   }
   isNewSession(): boolean | undefined {
-    return !this.getSessionData();
+    const sessionData = this.getSessionData();
+    return !sessionData || Object.keys(sessionData).length === 0;
   }
 
   getDeviceCapabilities(): GoogleAssistantCapabilityType[] | undefined {
