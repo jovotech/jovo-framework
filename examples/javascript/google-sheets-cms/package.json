@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-google-sheets-cms",
-  "version": "3.6.0",
+  "version": "3.6.1",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -18,7 +18,7 @@
     "jovo-db-dynamodb": "^3.6.0",
     "jovo-db-filedb": "^3.6.0",
     "jovo-framework": "^3.6.0",
-    "jovo-platform-alexa": "^3.6.0",
+    "jovo-platform-alexa": "^3.6.1",
     "jovo-platform-dialogflow": "^3.6.0",
     "jovo-platform-googleassistant": "^3.6.0",
     "jovo-plugin-debugger": "^3.6.0"

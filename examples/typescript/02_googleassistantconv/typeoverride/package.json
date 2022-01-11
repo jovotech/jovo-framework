@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-ts-googleassistantconv-typeoverride",
-  "version": "3.6.0",
+  "version": "3.6.1",
   "private": true,
   "description": "",
   "main": "dist/src/index",
@@ -19,7 +19,7 @@
   "dependencies": {
     "jovo-db-filedb": "^3.6.0",
     "jovo-framework": "^3.6.0",
-    "jovo-platform-googleassistantconv": "^3.6.0",
+    "jovo-platform-googleassistantconv": "^3.6.1",
     "jovo-plugin-debugger": "^3.6.0"
   },
   "devDependencies": {

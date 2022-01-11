@@ -1,7 +1,7 @@
 {
     "name": "e2e",
     "private": true,
-    "version": "3.6.0",
+    "version": "3.6.1",
     "description": "",
     "main": "dist/src/index",
     "types": "dist/src/index.d.ts",
@@ -26,7 +26,7 @@
         "jest": "^25.1.0",
         "jovo-core": "^3.6.0",
         "jovo-framework": "^3.6.0",
-        "jovo-platform-alexa": "^3.6.0",
+        "jovo-platform-alexa": "^3.6.1",
         "jovo-platform-googleassistant": "^3.6.0",
         "prettier": "2.0.2",
         "rimraf": "^2.6.2",
