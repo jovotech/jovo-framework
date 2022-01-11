@@ -429,6 +429,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
             // Ctrl+C has been pressed, kill process.
             if (process.env.JOVO_CLI_PROCESS_ID) {
               process.kill(parseInt(process.env.JOVO_CLI_PROCESS_ID), 'SIGTERM');
+              process.exit();
             } else {
               process.stdin.pause();
               process.stdin.setRawMode?.(false);
