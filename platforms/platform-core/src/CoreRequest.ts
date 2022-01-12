@@ -1,5 +1,4 @@
 import { Input, InputTypeLike, JovoInput, JovoRequest, UnknownObject } from '@jovotech/framework';
-
 import { CoreCapabilityType } from './CoreDevice';
 import { CoreRequestContext } from './interfaces';
 
@@ -26,6 +25,7 @@ export class CoreRequest extends JovoRequest {
     if (!this.input) {
       this.input = {};
     }
+
     this.input.intent = intent;
   }
 
@@ -64,7 +64,7 @@ export class CoreRequest extends JovoRequest {
   }
 
   setSessionData(data: Record<string, unknown>): void {
-    if (!this.context?.session?.data) {
+    if (!this.context?.session) {
       return;
     }
 
@@ -76,8 +76,7 @@ export class CoreRequest extends JovoRequest {
   }
 
   setUserId(userId: string): void {
-    if (!this.context) {
-      // TODO: What to do here?
+    if (!this.context?.user) {
       return;
     }
 
