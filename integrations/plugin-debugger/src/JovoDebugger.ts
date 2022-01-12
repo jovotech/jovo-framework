@@ -396,63 +396,57 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
 
     // eslint-disable-next-line no-console
     console.log('\nThis is your webhook url ☁️ ' + underline(blueText(debuggerUrl)));
-    // Check if the current output is being piped to somewhere.
-    if (process.stdout.isTTY) {
-      // Check if we can enable raw mode for input stream to capture raw keystrokes.
-      if (process.stdin.setRawMode) {
-        setTimeout(() => {
-          // eslint-disable-next-line no-console
-          console.log(`\nTo open Jovo Debugger in your browser, press the "." key.\n`);
-        }, 500);
 
-        // Capture unprocessed key input.
-        process.stdin.setRawMode(true);
-        // Explicitly resume emitting data from the stream.
-        process.stdin.resume();
-        // Capture readable input as opposed to binary.
-        process.stdin.setEncoding('utf-8');
+    // Check if we can enable raw mode for input stream to capture raw keystrokes
+    if (process.stdin.isTTY && process.stdin.setRawMode) {
+      setTimeout(() => {
+        // eslint-disable-next-line no-console
+        console.log(`\nTo open Jovo Debugger in your browser, press the "." key.\n`);
+      }, 500);
 
-        // Collect input text from input stream.
-        process.stdin.on('data', async (keyRaw: Buffer) => {
-          const key: string = keyRaw.toString();
-          // When dot gets pressed, try to open the debugger in browser.
-          if (key === '.') {
-            try {
-              await open(debuggerUrl);
-            } catch (error) {
-              // eslint-disable-next-line no-console
-              console.log(
-                `Could not open browser. Please open debugger manually by visiting this url: ${debuggerUrl}`,
-              );
+      // Capture unprocessed key input.
+      process.stdin.setRawMode(true);
+      // Explicitly resume emitting data from the stream.
+      process.stdin.resume();
+      // Capture readable input as opposed to binary.
+      process.stdin.setEncoding('utf-8');
+
+      // Collect input text from input stream.
+      process.stdin.on('data', async (keyRaw: Buffer) => {
+        const key: string = keyRaw.toString();
+        // When dot gets pressed, try to open the debugger in browser.
+        if (key === '.') {
+          try {
+            await open(debuggerUrl);
+          } catch (error) {
+            // eslint-disable-next-line no-console
+            console.log(
+              `Could not open browser. Please open debugger manually by visiting this url: ${debuggerUrl}`,
+            );
+          }
+        } else {
+          if (key.charCodeAt(0) === 3) {
+            // Ctrl+C has been pressed, kill process.
+            if (process.env.JOVO_CLI_PROCESS_ID) {
+              process.kill(parseInt(process.env.JOVO_CLI_PROCESS_ID), 'SIGTERM');
+              process.exit();
+            } else {
+              process.stdin.pause();
+              process.stdin.setRawMode?.(false);
+              console.log('Press Ctrl + C again to exit...');
             }
           } else {
-            // When anything else got pressed, record it and send it on enter into the child process.
-            if (key.charCodeAt(0) === 13) {
-              // Send recorded input to child process. This is useful for restarting a nodemon process with rs, for example.
-              process.stdout.write('\n');
-            } else if (key.charCodeAt(0) === 3) {
-              // Ctrl+C has been pressed, kill process.
-              if (process.platform === 'win32') {
-                process.stdin.pause();
-                process.stdin.setRawMode?.(false);
-                process.exit();
-              } else {
-                process.exit();
-              }
-            } else {
-              // Record input text and write it into terminal.
-              process.stdout.write(key);
-            }
+            // Record input text and write it into terminal.
+            process.stdout.write(key);
           }
-        });
-      } else {
-        setTimeout(() => {
-          // eslint-disable-next-line no-console
-          console.log(
-            `☁  Could not open browser. Please open debugger manually by visiting this url: ${debuggerUrl}`,
-          );
-        }, 2500);
-      }
+        }
+      });
+    } else {
+      setTimeout(() => {
+        console.log(
+          `☁  Could not open browser. Please open debugger manually by visiting this url: ${debuggerUrl}`,
+        );
+      }, 2500);
     }
   }
 
