@@ -358,33 +358,31 @@ export class ConversationalActionsCore implements Plugin {
         );
       }
 
-      if (!googleAction.$conversationalSession.reprompts) {
-        let input1, input2, final;
+      let input1, input2, final;
 
-        if (Array.isArray(ask.reprompt) && ask.reprompt[0]) {
-          input1 = ask.reprompt[0];
-        } else if (typeof ask.reprompt === 'string') {
-          input1 = ask.reprompt;
-        }
-
-        if (Array.isArray(ask.reprompt) && ask.reprompt[1]) {
-          input2 = ask.reprompt[1];
-        } else if (typeof ask.reprompt === 'string') {
-          input2 = ask.reprompt;
-        }
-
-        if (Array.isArray(ask.reprompt) && ask.reprompt[2]) {
-          final = ask.reprompt[2];
-        } else if (typeof ask.reprompt === 'string') {
-          final = ask.reprompt;
-        }
-
-        googleAction.$conversationalSession.reprompts = {
-          NO_INPUT1: input1 ? SpeechBuilder.toSSML(input1) : undefined,
-          NO_INPUT2: input2 ? SpeechBuilder.toSSML(input2) : undefined,
-          NO_INPUTFINAL: final ? SpeechBuilder.toSSML(final) : undefined,
-        };
+      if (Array.isArray(ask.reprompt) && ask.reprompt[0]) {
+        input1 = ask.reprompt[0];
+      } else if (typeof ask.reprompt === 'string') {
+        input1 = ask.reprompt;
       }
+
+      if (Array.isArray(ask.reprompt) && ask.reprompt[1]) {
+        input2 = ask.reprompt[1];
+      } else if (typeof ask.reprompt === 'string') {
+        input2 = ask.reprompt;
+      }
+
+      if (Array.isArray(ask.reprompt) && ask.reprompt[2]) {
+        final = ask.reprompt[2];
+      } else if (typeof ask.reprompt === 'string') {
+        final = ask.reprompt;
+      }
+
+      googleAction.$conversationalSession.reprompts = {
+        NO_INPUT1: input1 ? SpeechBuilder.toSSML(input1) : undefined,
+        NO_INPUT2: input2 ? SpeechBuilder.toSSML(input2) : undefined,
+        NO_INPUTFINAL: final ? SpeechBuilder.toSSML(final) : undefined,
+      };
     }
 
     if (output.GoogleAssistant?.firstSimple) {
@@ -517,8 +515,12 @@ export class ConversationalActionsCore implements Plugin {
           ...googleAction.$session.$data,
         },
       };
+      if (googleAction.$conversationalSession.reprompts) {
+        response.session.params._JOVO_SESSION_.reprompts =
+          googleAction.$conversationalSession.reprompts;
+      }
     }
-    // _set(googleAction.$response as ConversationalActionResponse, 'scene.next.name', 'ListPrompt');
+
     if (output.GoogleAssistant?.typeOverrides) {
       _set(
         googleAction.$response as ConversationalActionResponse,
