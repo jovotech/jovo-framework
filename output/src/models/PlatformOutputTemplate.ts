@@ -7,7 +7,7 @@ export type DenormalizePlatformOutputTemplate<
   PLATFORM_OUTPUT_TEMPLATE extends NormalizedPlatformOutputTemplate,
 > = Omit<OmitIndex<PLATFORM_OUTPUT_TEMPLATE, string>, 'message' | 'reprompt' | 'nativeResponse'> & {
   [key: string]: unknown;
-  nativeResponse?: PlainObjectType<PLATFORM_OUTPUT_TEMPLATE['nativeResponse']>;
+  nativeResponse?: PlainObjectType<Exclude<PLATFORM_OUTPUT_TEMPLATE['nativeResponse'], undefined>>;
   message?: PLATFORM_OUTPUT_TEMPLATE['message'] | MessageValue[];
   reprompt?: PLATFORM_OUTPUT_TEMPLATE['reprompt'] | MessageValue[];
 };
