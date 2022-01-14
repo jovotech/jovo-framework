@@ -31,7 +31,7 @@ export type OmitWhere<T, U> = {
 // If K equals I return never, otherwise return the key.
 export type FilterKey<K, I> = A.Equals<K, I> extends 1 ? never : K;
 
-// Omit index signature of T if it equals index-signature I.
+// Omit index signature of T
 export type OmitIndex<T> = {
   [K in keyof T as FilterKey<K, IndexSignature<T>>]: T[K];
 };

@@ -1,4 +1,5 @@
 import { A, Test } from 'ts-toolbelt';
+import { Equals } from 'ts-toolbelt/out/Any/_api';
 import { PartialDeep } from 'type-fest';
 import {
   AnyObject,
@@ -12,6 +13,10 @@ import {
   UnknownObject,
   OmitIndex,
   IndexSignature,
+  PartialWhere,
+  FirstKey,
+  Shift,
+  RequiredOnlyWhere,
 } from '../src';
 
 {
@@ -65,10 +70,6 @@ import {
   type SomeType = {
     required: boolean;
     optional?: boolean;
-    nested: {
-      required: boolean;
-      optional?: boolean;
-    };
   };
   type SomeTypeConstructor = new (...args: string[]) => SomeType;
 
@@ -155,23 +156,15 @@ import {
     optional?: string;
   };
   type TypeWithoutIndexSignature = {
-    required: boolean;
-    optional?: boolean;
+    required: string;
+    optional?: string;
   };
 
   Test.checks([
     // Should remove index signature of SomeType
-    Test.check<
-      OmitIndex<TypeWithIndexSignature>,
-      { required: string; optional?: string },
-      Test.Pass
-    >(),
+    Test.check<OmitIndex<TypeWithIndexSignature>, TypeWithoutIndexSignature, Test.Pass>(),
     // Should not alter object if no index signature is provided
-    Test.check<
-      OmitIndex<TypeWithoutIndexSignature>,
-      { required: boolean; optional?: boolean },
-      Test.Pass
-    >(),
+    Test.check<OmitIndex<TypeWithoutIndexSignature>, TypeWithoutIndexSignature, Test.Pass>(),
     // True negative testing
     Test.check<OmitIndex<TypeWithIndexSignature>, { invalid: string }, Test.Fail>(),
   ]);
@@ -185,8 +178,8 @@ import {
     optional?: string;
   };
   type TypeWithoutIndexSignature = {
-    required: boolean;
-    optional?: boolean;
+    required: string;
+    optional?: string;
   };
 
   Test.checks([
@@ -196,6 +189,43 @@ import {
     Test.check<IndexSignature<TypeWithoutIndexSignature>, 'required' | 'optional', Test.Pass>(),
     // True negative testing
     Test.check<IndexSignature<TypeWithIndexSignature>, boolean, Test.Fail>(),
+  ]);
+}
+
+{
+  // ##### PartialWhere<T, K> #####
+  type SomeType = {
+    required: string;
+  };
+
+  Test.checks([
+    // Should return index signature
+    Test.check<
+      { required: string } & { required?: string },
+      { required: string | undefined },
+      Test.Pass
+    >({ required: string }),
+  ]);
+  Test.checks([
+    // Should mark alsoRequired as optional and should preserve type access property for other elements
+    Test.check<
+      PartialWhere<SomeType, 'alsoRequired'>,
+      {
+        required: string;
+        alsoRequired?: boolean;
+        optional?: boolean;
+      },
+      Test.Pass
+    >({ required: 'hello' }),
+    Test.check<
+      Partial<SomeType>,
+      {
+        required?: string;
+        alsoRequired?: boolean;
+        optional?: boolean;
+      },
+      Test.Pass
+    >(),
   ]);
 }
 
@@ -221,5 +251,69 @@ import {
       { required: boolean; nested: { required: boolean } },
       Test.Pass
     >(),
+    // True negative testing
+    Test.check<RequiredOnly<SomeType>, { required: boolean; optional?: boolean }, Test.Fail>(),
+  ]);
+}
+
+{
+  // ##### FirstKey<K> #####
+  Test.checks([
+    // Should split the key on '.' and return the first element
+    Test.check<FirstKey<'first.second'>, 'first', Test.Pass>(),
+    // Should return the input string if no '.' is detected
+    Test.check<FirstKey<'first'>, 'first', Test.Pass>(),
+    // True negative testing
+    Test.check<FirstKey<'first.second'>, 'second', Test.Fail>(),
+  ]);
+}
+
+{
+  // ##### Shift<S> #####
+  Test.checks([
+    // Should return the first element of S
+    Test.check<Shift<['first', 'second']>, 'first', Test.Pass>(),
+    // Should return the first element in single-size lists
+    Test.check<Shift<['first']>, 'first', Test.Pass>(),
+    // True negative testing
+    Test.check<Shift<['first', 'second']>, 'second', Test.Fail>(),
+  ]);
+}
+
+{
+  // ##### RequiredOnlyWhere<T, K> #####
+  type SomeType = {
+    required: string;
+    optional?: boolean;
+    nestedRequired: {
+      required: string;
+      optional?: boolean;
+    };
+    nestedOptional?: {
+      required: string;
+      optional?: boolean;
+    };
+  };
+
+  Test.checks([
+    // Should set all elements to optional, except "required"
+    Test.check<
+      RequiredOnlyWhere<SomeType, 'required'>,
+      {
+        required: string;
+        optional?: boolean;
+        nestedRequired?: { required?: string; optional?: boolean };
+        nestedOptional?: { required?: string; optional?: boolean };
+      },
+      Test.Pass
+    >(),
+    // Should work for multiple keys
+    // Should work for nested keys
+    // Should mark nested property as required, but preserve type access property of parent
+    Test.check<Shift<['first', 'second']>, 'first', Test.Pass>(),
+    // Should return the first element in single-size lists
+    Test.check<Shift<['first']>, 'first', Test.Pass>(),
+    // True negative testing
+    Test.check<Shift<['first', 'second']>, 'second', Test.Fail>(),
   ]);
 }
