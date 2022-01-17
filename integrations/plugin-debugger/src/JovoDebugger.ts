@@ -25,7 +25,6 @@ import { LangFr } from '@nlpjs/lang-fr';
 import { LangIt } from '@nlpjs/lang-it';
 import isEqual from 'fast-deep-equal/es6';
 import { promises } from 'fs';
-import _cloneDeep from 'lodash.clonedeep';
 import open from 'open';
 import { homedir } from 'os';
 import { join, resolve } from 'path';
@@ -49,6 +48,7 @@ import {
 import { MockServer, MockServerRequest } from './MockServer';
 
 type AugmentedServer = Server & {
+  [key: string]: any;
   __augmented?: boolean;
   originalSetResponse?: Server['setResponse'];
 };
@@ -184,7 +184,12 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   // Augment the server of HandleRequest to emit a response with a debugger request id if setResponse is called.
   // If the server was already augmented by augmentServerForApp, the original method will be used instead of the already augmented one.
   private augmentServerForRequest(handleRequest: HandleRequest): void {
-    const serverCopy: AugmentedServer = _cloneDeep(handleRequest.server);
+    const serverCopy: AugmentedServer = Object.create(handleRequest.server);
+    for (const prop in handleRequest.server) {
+      if (handleRequest.server.hasOwnProperty(prop)) {
+        serverCopy[prop] = handleRequest.server[prop as keyof Server];
+      }
+    }
     const setResponse =
       (serverCopy.__augmented && serverCopy.originalSetResponse) || serverCopy.setResponse;
     serverCopy.setResponse = (response) => {
