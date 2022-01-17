@@ -314,7 +314,7 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
       { enabled: this.$cli.project!.hasModelFiles(this.$context.locales) },
     );
 
-    buildTask.add(projectFilesTask, buildInteractionModelTask);
+    buildTask.add(buildInteractionModelTask, projectFilesTask);
 
     await buildTask.run();
   }

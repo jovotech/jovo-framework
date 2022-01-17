@@ -189,8 +189,8 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
     );
 
     buildTask.add(
-      projectFilesTask,
       interactionModelTask,
+      projectFilesTask,
       buildConversationFilesTask,
       buildResponseFilesTask,
     );
