@@ -558,9 +558,9 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
    * Get plugin-specific endpoint.
    */
   getPluginEndpoint(): string {
-    const endpoint =
-      _get(this.$plugin.config, 'options.endpoint') ||
-      this.$cli.project!.config.getParameter('endpoint');
+    const endpoint: string =
+      _get(this.$plugin.config, 'endpoint') ||
+      (this.$cli.project!.config.getParameter('endpoint') as string);
 
     if (!endpoint) {
       throw new JovoCliError({

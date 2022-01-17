@@ -571,8 +571,9 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
    * Get plugin-specific endpoint.
    */
   getPluginEndpoint(): string {
-    const config = this.$cli.project!.config.get();
-    const endpoint = _get(this.$plugin.config, 'endpoint') || _get(config, 'endpoint');
+    const endpoint: string =
+      _get(this.$plugin.config, 'endpoint') ||
+      (this.$cli.project!.config.getParameter('endpoint') as string);
 
     return this.$cli.resolveEndpoint(endpoint);
   }
