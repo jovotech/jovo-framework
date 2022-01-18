@@ -54,7 +54,6 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
     super(config);
   }
 
-  // TODO fully determine default config
   getDefaultConfig(): NlpjsNluConfig {
     return {
       ...super.getDefaultConfig(),
@@ -117,7 +116,6 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
             name: nlpResult.intent,
           },
           entities,
-          raw: nlpResult, // TODO: temporary property
         }
       : undefined;
   }
