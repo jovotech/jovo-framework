@@ -279,6 +279,64 @@ You can access the following properties and methods of the Alexa device class:
 
 #### Device Location and Address
 
+It is possible to retrieve your Alexa Skill user's address information, if they grant the permission for this. Learn more in the [official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/custom-skills/device-address-api.html).
+
+You need to first get the permission, which you can do by sending a card to the user's Alexa app.
+You can use the `AskForPermissionOutput` for this:
+
+```typescript
+import { AskForPermissionOutput } from '@jovotech/platform-alexa';
+// ...
+
+someHandler() {
+  // ...
+
+  try {
+    const location = await this.$alexa.$device.getLocation();
+    // ...
+
+  } catch(error) {
+    if (error.code === 'NO_USER_PERMISSION') {
+      return this.$send(AskForPermissionOutput, {
+        message: 'Please grant the permission to access your device address.',
+        permissionScope: 'read::alexa:device:all:address',
+      });
+    } else {
+      // ...
+    }
+  }
+}
+```
+
+Under the hood, the `AskForPermissionOutput` looks like this:
+
+```typescript
+{
+  message: this.options.message,
+  platforms: {
+    alexa: {
+      nativeResponse: {
+        response: {
+          shouldEndSession: true,
+          directives: [
+            {
+              type: 'Connections.SendRequest',
+              name: 'AskFor',
+              payload: {
+                '@type': 'AskForPermissionsConsentRequest',
+                '@version': '1',
+                'permissionScope': this.options.permissionScope,
+              },
+              token: this.options.token || '',
+            },
+          ],
+        },
+      },
+    },
+  },
+}
+```
+
 You can use the `getLocation()` method to retrieve the device location:
 
 ```typescript
