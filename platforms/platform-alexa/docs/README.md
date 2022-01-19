@@ -305,7 +305,7 @@ import { DeviceAddressLocation } from '@jovotech/platform-alexa';
 // ...
 
 async someHandler() {
-  const location: DeviceAddressLocation = await this.$alexa.$device.getAddress();
+  const address: DeviceAddressLocation = await this.$alexa.$device.getAddress();
 
   /* Result:
    {
