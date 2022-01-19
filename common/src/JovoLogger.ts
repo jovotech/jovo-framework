@@ -1,6 +1,6 @@
 import chalk, { Chalk } from 'chalk';
 import _merge from 'lodash.merge';
-import { getLogger, Logger, LogLevelDesc } from 'loglevel';
+import { levels, getLogger, Logger, LogLevelDesc } from 'loglevel';
 import { JovoError } from './JovoError';
 
 export interface JovoLoggerConfig {
@@ -44,7 +44,7 @@ export class JovoLogger {
     return {
       name: 'JovoLogger',
       disableStyling: false,
-      level: (process.env.JOVO_LOG_LEVEL as LogLevelDesc | undefined) || 'trace',
+      level: (process.env.JOVO_LOG_LEVEL as LogLevelDesc | undefined) || levels.TRACE,
       properties: ['package', 'message', 'context', 'stack', 'hint', 'learnMore'],
     };
   }
