@@ -6,7 +6,6 @@ import { JovoError } from './JovoError';
 export interface JovoLoggerConfig {
   name: string | symbol;
   level: LogLevelDesc;
-  defaultLevel?: LogLevelDesc;
   disableStyling: boolean;
   // TODO determine name
   properties: Array<keyof JovoError>;
@@ -31,10 +30,6 @@ export class JovoLogger {
     this.logger = getLogger(this.config.name);
     // set the level of the logger depending on the config
     this.logger.setLevel(this.config.level);
-    // if defaultLevel was explicitly set, use it
-    if (this.config.defaultLevel) {
-      this.logger.setDefaultLevel(this.config.defaultLevel);
-    }
   }
 
   get level(): LogLevelDesc {
