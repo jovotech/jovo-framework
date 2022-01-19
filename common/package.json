@@ -23,15 +23,13 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "lodash.clonedeep": "^4.5.0",
     "lodash.merge": "^4.6.2",
-    "ts-toolbelt": "9.5.13",
     "loglevel": "^1.8.0",
+    "ts-toolbelt": "9.5.13",
     "type-fest": "^2.5.1"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
-    "@types/lodash.clonedeep": "^4.5.6",
     "@types/lodash.merge": "^4.6.6",
     "@types/node": "^12.20.37",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
