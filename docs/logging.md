@@ -49,7 +49,7 @@ logging: {
   indentation: '  ',
   styling: true,
   colorizeSettings: { /* ... */ },
-  tslog: { /* ... */ },
+  logger: { /* ... */ },
 },
 ```
 
@@ -57,7 +57,7 @@ logging: {
 - `request`: Configurations for [request logging](#request-logging).
 - `response`: Configurations for [response logging](#response-logging).
 - More information about `indentation`, `style`, and `colorizeSettings` can be found in the [styling](#styling) section.
-- `tslog`: Configurations for the logging library used by the [Jovo Logger](#jovo-logger).
+- `logger`: Configurations for the [Jovo Logger](#jovo-logger).
 
 ## Basic Logging
 
@@ -174,16 +174,25 @@ logging: {
 
 ## Jovo Logger
 
-Jovo has an internal `Logger` that can be used to display certain levels of logs. It is an instance of [tslog](https://tslog.js.org) and can use any features that library provides.
+Jovo has an internal `Logger` that can be used to display certain levels of logs. It uses [loglevel](https://github.com/pimterry/loglevel) and uses the levels described there.
 
-You can add tslog configurations ([learn more on their website](https://tslog.js.org/#/?id=settings)) to the `tslog` property, for example:
+The `JovoLogger` allows a configuration to be passed that can contain any of the properties below but does not have to:
+
+```typescript
+{
+  name: 'some name'; // name of the logger, see loglevel.getLogger
+  level: 'trace'; // level of the logger, see logLevel.setLevel
+  disableStyling: boolean; // disable styling completely 
+  properties: ['package', 'message', 'context']; // can be used to change order of properties that are displayed or even omit some
+}
+```
+
+You can pass a configuration like that to the logging configuration to change the behavior of `Logger`:
 
 ```typescript
 logging: {
-  tslog: {
-    prettyInspectOptions: { depth: 3 },
-    prefix: [''],
-    displayDateTime: false,
+  logger: {
+    level: 'error' // show error only
   },
   // ...
 },
@@ -204,13 +213,14 @@ process.env.JOVO_LOG_LEVEL = 'warn';
 The logs can be done like this:
 
 ```typescript
-Logger.silly(string); // JOVO_LOG_LEVEL = 'silly'
 Logger.trace(string); // JOVO_LOG_LEVEL = 'trace'
+Logger.log(string); // JOVO_LOG_LEVEL = 'debug'
 Logger.debug(string); // JOVO_LOG_LEVEL = 'debug'
 Logger.info(string); // JOVO_LOG_LEVEL = 'info'
 Logger.warn(string); // JOVO_LOG_LEVEL = 'warn'
 Logger.error(new Error()); // JOVO_LOG_LEVEL = 'error'
-Logger.fatal(new Error()); // JOVO_LOG_LEVEL = 'fatal'
 ```
 
-Learn more about log levels in the [official tslog documentation](https://tslog.js.org/#/?id=log-level).
+Additionally, setting the log level to `'silent'` will cause no logs to be shown.
+
+Learn more about log levels in the [official loglevel documentation](https://github.com/pimterry/loglevel#documentation).
