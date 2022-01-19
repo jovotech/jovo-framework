@@ -1,4 +1,4 @@
-import { ArrayElement, ISettingsParam } from '@jovotech/common';
+import { ArrayElement, JovoLoggerConfig } from '@jovotech/common';
 import _merge from 'lodash.merge';
 import {
   ComponentTree,
@@ -55,7 +55,7 @@ export interface AppRoutingConfig {
 }
 
 export interface AppLoggingConfig extends BasicLoggingConfig {
-  tslog?: ISettingsParam;
+  logger?: Partial<JovoLoggerConfig>;
 }
 
 export interface AppConfig extends ExtensibleConfig {
@@ -80,8 +80,8 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
     if (typeof this.config.logging === 'boolean' && this.config.logging) {
       this.use(new BasicLogging({ request: true, response: true }));
     } else if (typeof this.config.logging === 'object') {
-      if (this.config.logging.tslog) {
-        Logger.setSettings(_merge(Logger.settings, this.config.logging.tslog));
+      if (this.config.logging.logger) {
+        _merge(Logger.config, this.config.logging.logger);
       }
       this.use(new BasicLogging(this.config.logging));
     }
