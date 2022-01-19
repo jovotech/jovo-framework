@@ -44,7 +44,7 @@ export class JovoLogger {
     return {
       name: 'JovoLogger',
       disableStyling: false,
-      level: 'trace',
+      level: (process.env.JOVO_LOG_LEVEL as LogLevelDesc | undefined) || 'trace',
       properties: ['package', 'message', 'context', 'stack', 'hint', 'learnMore'],
     };
   }
