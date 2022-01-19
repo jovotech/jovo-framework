@@ -190,6 +190,7 @@ The following Alexa properties offer additional features:
 
 - [User](#user)
 - [Output](#output)
+- [Device](#device)
 - [Entities (Slots)](#entities-slots-)
 - [ISP](#isp)
 - [Alexa Conversations](#alexa-conversations)
@@ -250,6 +251,74 @@ If the `getEmail` call returns an error with the code `NO_USER_PERMISSION`, an `
 There are various Alexa specific elements that can be added to the [output](https://www.jovo.tech/docs/output).
 
 [Learn more in the Jovo Output documentation for Alexa](https://www.jovo.tech/marketplace/platform-alexa/output).
+
+
+### Device
+
+You can check if the device supports APL by using the following method that checks for [platform-specific device capabilities](https://www.jovo.tech/docs/device#platform-specific-device-features):
+
+```typescript
+import { AlexaCapability } from '@jovotech/platform-alexa';
+// ...
+
+if (this.$device.supports(AlexaCapability.Apl)) { /* ... */ };
+// or
+if (this.$device.supports('ALEXA:APL')) { /* ... */ };
+```
+
+There are also various Alexa specific features added to the [device class](https://www.jovo.tech/docs/device) that can be accessed like this:
+
+```typescript
+this.$alexa.$device;
+```
+
+You can access the following properties and methods of the Alexa device class:
+
+- `this.$alexa.$device.id`: Get the device ID from the Alexa request
+- [Device location and address](#device-location-and-address)
+
+#### Device Location and Address
+
+You can use the `getLocation()` method to retrieve the device location:
+
+```typescript
+import { DeviceLocation } from '@jovotech/platform-alexa';
+// ...
+
+async someHandler() {
+  const location: DeviceLocation = await this.$alexa.$device.getLocation();
+
+  /* Result:
+   {
+      city: string;
+      countryCode: string;
+      postalCode: string;
+    }
+  */
+}
+```
+
+The `getAddress()` method can be used to retrieve the address associated with the device:
+
+```typescript
+import { DeviceAddressLocation } from '@jovotech/platform-alexa';
+// ...
+
+async someHandler() {
+  const location: DeviceAddressLocation = await this.$alexa.$device.getAddress();
+
+  /* Result:
+   {
+      addressLine1: string;
+      addressLine2: string;
+      addressLine3: string;
+      districtOrCounty: string;
+      stateOrRegion: string;
+      city: string;
+    }
+  */
+}
+```
 
 ### Entities (Slots)
 
