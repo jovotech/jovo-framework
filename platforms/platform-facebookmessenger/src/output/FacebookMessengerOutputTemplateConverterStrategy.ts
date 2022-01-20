@@ -1,5 +1,6 @@
 import {
   Carousel,
+  MessageMaxLength,
   MessageValue,
   MultipleResponsesOutputTemplateConverterStrategy,
   NormalizedOutputTemplate,
@@ -60,7 +61,7 @@ export class FacebookMessengerOutputTemplateConverterStrategy extends MultipleRe
   protected sanitizeMessage(
     message: MessageValue,
     path: string,
-    maxLength = MESSAGE_TEXT_MAX_LENGTH,
+    maxLength: MessageMaxLength = MESSAGE_TEXT_MAX_LENGTH,
     offset?: number,
   ): MessageValue {
     return super.sanitizeMessage(message, path, maxLength, offset);

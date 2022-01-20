@@ -5,11 +5,17 @@ import {
   DynamicEntity,
   DynamicEntityMap,
   mergeInstances,
+  MessageMaxLength,
   MessageValue,
   NormalizedOutputTemplate,
+  OutputTemplate,
   OutputTemplateConverterStrategyConfig,
   QuickReplyValue,
+  removeSSML,
   SingleResponseOutputTemplateConverterStrategy,
+  SpeechMessage,
+  TextMessage,
+  toSSML,
 } from '@jovotech/output';
 import { GoogleAssistantResponse } from '../GoogleAssistantResponse';
 import {
@@ -36,6 +42,33 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
   platformName = 'googleAssistant' as const;
   responseClass = GoogleAssistantResponse;
 
+  normalizeOutput(output: OutputTemplate | OutputTemplate[]): NormalizedOutputTemplate {
+    // make sure the message always is an object for Google Assistant
+    const makeMessageObj = (message: string): TextMessage | SpeechMessage => {
+      return {
+        text: removeSSML(message),
+        speech: toSSML(message),
+      };
+    };
+
+    const updateMessage = (outputTemplate: OutputTemplate) => {
+      if (outputTemplate.message && typeof outputTemplate.message === 'string') {
+        outputTemplate.message = makeMessageObj(outputTemplate.message);
+      } else if (Array.isArray(outputTemplate.message)) {
+        outputTemplate.message = outputTemplate.message.map((message) =>
+          typeof message === 'string' ? makeMessageObj(message) : message,
+        );
+      }
+    };
+    if (Array.isArray(output)) {
+      output.forEach(updateMessage);
+    } else {
+      updateMessage(output);
+    }
+    console.log(JSON.stringify(output, undefined, 2));
+    return super.normalizeOutput(output);
+  }
+
   protected sanitizeOutput(output: NormalizedOutputTemplate): NormalizedOutputTemplate {
     if (output.message) {
       output.message = this.sanitizeMessage(output.message, 'message');
@@ -59,7 +92,9 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
   protected sanitizeMessage(
     message: MessageValue,
     path: string,
-    maxLength = TEXT_MAX_LENGTH,
+    maxLength: MessageMaxLength = {
+      text: TEXT_MAX_LENGTH,
+    },
     offset?: number,
   ): MessageValue {
     return super.sanitizeMessage(message, path, maxLength, offset);
