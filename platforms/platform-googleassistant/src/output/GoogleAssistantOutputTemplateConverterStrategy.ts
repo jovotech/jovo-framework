@@ -42,7 +42,7 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
   platformName = 'googleAssistant' as const;
   responseClass = GoogleAssistantResponse;
 
-  // make sure the message always is an object for Google Assistant
+  // make sure the (content of) message and reprompt always is an object for Google Assistant
   normalizeOutput(output: OutputTemplate | OutputTemplate[]): NormalizedOutputTemplate {
     const makeMessageObj = (message: string): TextMessage | SpeechMessage => {
       return {
