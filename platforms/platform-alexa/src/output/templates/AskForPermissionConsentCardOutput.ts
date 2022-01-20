@@ -10,6 +10,7 @@ export interface AskForPermissionConsentCardOutputOptions extends OutputOptions 
 export class AskForPermissionConsentCardOutput extends BaseOutput<AskForPermissionConsentCardOutputOptions> {
   build(): OutputTemplate | OutputTemplate[] {
     return {
+      listen: this.options.listen,
       message: this.options.message,
       platforms: {
         alexa: {
