@@ -294,10 +294,7 @@ export abstract class Jovo<
       keyof BaseComponent
     >,
   >(constructor: ComponentConstructor<COMPONENT>, handler?: HANDLER): Promise<void>;
-  async $redirect(
-    constructorOrName: ComponentConstructor | string,
-    handler?: string,
-  ): Promise<void>;
+  async $redirect(name: string, handler?: string): Promise<void>;
   async $redirect(
     constructorOrName: ComponentConstructor | string,
     handler?: string,
