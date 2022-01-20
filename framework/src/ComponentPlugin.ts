@@ -29,7 +29,7 @@ export abstract class ComponentPlugin<
       };
     }
 
-    app.use(new ComponentDeclaration(this.component as ComponentConstructor, options));
+    app.use(new ComponentDeclaration(this.component, options));
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function

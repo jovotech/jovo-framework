@@ -4,20 +4,21 @@ import { Jovo } from './Jovo';
 import { JovoProxy } from './JovoProxy';
 import { ComponentOptionsOf } from './metadata/ComponentMetadata';
 
-export type ComponentConfig<COMPONENT extends BaseComponent = BaseComponent> =
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type ComponentConfig<COMPONENT extends BaseComponent = any> =
   COMPONENT['$component']['config'];
 
-export type ComponentConstructor<COMPONENT extends BaseComponent = BaseComponent> = new (
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type ComponentConstructor<COMPONENT extends BaseComponent = any> = new (
   jovo: Jovo,
   options?: ComponentOptionsOf<COMPONENT>,
 ) => COMPONENT;
 
-export class ComponentDeclaration<
-  COMPONENT_CONSTRUCTOR extends ComponentConstructor = ComponentConstructor,
-> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export class ComponentDeclaration<COMPONENT extends BaseComponent = any> {
   constructor(
-    readonly component: COMPONENT_CONSTRUCTOR,
-    readonly options?: ComponentOptionsOf<InstanceType<COMPONENT_CONSTRUCTOR>>,
+    readonly component: ComponentConstructor<COMPONENT>,
+    readonly options?: ComponentOptionsOf<COMPONENT>,
   ) {}
 }
 
