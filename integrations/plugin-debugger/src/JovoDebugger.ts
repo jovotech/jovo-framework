@@ -338,7 +338,8 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     key: KEY,
   ): ProxyHandler<Jovo[KEY]> {
     return {
-      apply: (target: Jovo[KEY], thisArg: Jovo, argArray: Parameters<Jovo[KEY]>): unknown => {
+      // Parameters<Jovo[KEY]> sadly only returns the parameters of the method without generics, therefore unknown[] is used
+      apply: (target: Jovo[KEY], thisArg: Jovo, argArray: unknown[]): unknown => {
         const mutationData = this.getStateMutationData(handleRequest, key, thisArg, argArray);
         if (mutationData) {
           this.emitStateMutation(handleRequest.debuggerRequestId, mutationData);
@@ -352,17 +353,18 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     handleRequest: HandleRequest,
     key: KEY,
     jovo: Jovo,
-    args: Parameters<Jovo[KEY]>,
+    args: unknown[],
   ): JovoStateMutationData<KEY> | undefined {
     let node: ComponentTreeNode | undefined;
     let handler: string = BuiltInHandler.Start;
     if (key === '$redirect' || key === '$delegate') {
-      const componentName = typeof args[0] === 'function' ? args[0].name : args[0];
+      const componentName =
+        typeof args[0] === 'function' && 'name' in args[0] ? args[0].name : (args[0] as string);
       node = handleRequest.componentTree.getNodeRelativeTo(
         componentName,
         handleRequest.activeComponentNode?.path,
       );
-      handler = args[1] as string;
+      handler = typeof args[1] === 'string' ? args[1] : JSON.stringify(args[1], undefined, 2);
     } else if (key === '$resolve') {
       if (!jovo.$state) {
         return;
