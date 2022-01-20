@@ -42,8 +42,8 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
   platformName = 'googleAssistant' as const;
   responseClass = GoogleAssistantResponse;
 
+  // make sure the message always is an object for Google Assistant
   normalizeOutput(output: OutputTemplate | OutputTemplate[]): NormalizedOutputTemplate {
-    // make sure the message always is an object for Google Assistant
     const makeMessageObj = (message: string): TextMessage | SpeechMessage => {
       return {
         text: removeSSML(message),
@@ -51,19 +51,25 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
       };
     };
 
-    const updateMessage = (outputTemplate: OutputTemplate) => {
-      if (outputTemplate.message && typeof outputTemplate.message === 'string') {
-        outputTemplate.message = makeMessageObj(outputTemplate.message);
-      } else if (Array.isArray(outputTemplate.message)) {
-        outputTemplate.message = outputTemplate.message.map((message) =>
+    const updateMessage = (outputTemplate: OutputTemplate, key: 'message' | 'reprompt') => {
+      const value = outputTemplate[key];
+      if (value && typeof value === 'string') {
+        outputTemplate[key] = makeMessageObj(value);
+      } else if (Array.isArray(value)) {
+        outputTemplate[key] = value.map((message) =>
           typeof message === 'string' ? makeMessageObj(message) : message,
         );
       }
     };
+
     if (Array.isArray(output)) {
-      output.forEach(updateMessage);
+      output.forEach((outputTemplate) => {
+        updateMessage(outputTemplate, 'message');
+        updateMessage(outputTemplate, 'reprompt');
+      });
     } else {
-      updateMessage(output);
+      updateMessage(output, 'message');
+      updateMessage(output, 'reprompt');
     }
     return super.normalizeOutput(output);
   }
