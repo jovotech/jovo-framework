@@ -337,10 +337,7 @@ export abstract class Jovo<
     constructor: ComponentConstructor<COMPONENT>,
     options: DelegateOptions<ComponentConfig<COMPONENT>>,
   ): Promise<void>;
-  async $delegate(
-    constructorOrName: ComponentConstructor | string,
-    options: DelegateOptions,
-  ): Promise<void>;
+  async $delegate(name: string, options: DelegateOptions): Promise<void>;
   async $delegate(
     constructorOrName: ComponentConstructor | string,
     options: DelegateOptions,
