@@ -65,7 +65,6 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
     } else {
       updateMessage(output);
     }
-    console.log(JSON.stringify(output, undefined, 2));
     return super.normalizeOutput(output);
   }
 
