@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/platform-instagram",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -23,12 +23,12 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/platform-facebookmessenger": "^4.1.1",
+    "@jovotech/platform-facebookmessenger": "^4.1.2",
     "lodash.clonedeep": "^4.5.0"
   },
   "devDependencies": {
-    "@jovotech/framework": "^4.1.1",
-    "@jovotech/output": "^4.0.2",
+    "@jovotech/framework": "^4.1.2",
+    "@jovotech/output": "^4.0.3",
     "@types/jest": "^26.0.20",
     "@types/lodash.clonedeep": "^4.5.6",
     "@types/node": "^12.20.37",
@@ -44,8 +44,8 @@
     "typescript": "~4.4.4"
   },
   "peerDependencies": {
-    "@jovotech/framework": "4.1.1",
-    "@jovotech/output": "4.0.2"
+    "@jovotech/framework": "4.1.2",
+    "@jovotech/output": "4.0.3"
   },
   "gitHead": "9d39800224d277cd6b500b48ba3f0fbacb22f176",
   "prettier": "../../.prettierrc.js",
