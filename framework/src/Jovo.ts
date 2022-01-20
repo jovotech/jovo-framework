@@ -187,6 +187,7 @@ export abstract class Jovo<
           forEachDeep(deserializedStateConfig, (value, path) => {
             // TODO: check restriction
             if (
+              value &&
               typeof value === 'object' &&
               value.type === 'output' &&
               value.name &&

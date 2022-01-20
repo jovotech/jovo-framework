@@ -193,8 +193,9 @@ someHandler() {
     updatedRequest: {
       type: 'Dialog.InputRequest',
       input: {
-        name: '<utteranceSetName>',  // Utterance set must use the Invoke APIs dialog act
-    }
+        name: '<utteranceSetName>', // Utterance set must use the Invoke APIs dialog act
+      },
+    },
   });
 }
 ```
@@ -243,7 +244,8 @@ someHandler() {
       type: 'IntentRequest',
       intent: {
         name: 'SomeIntent',
-    }
+      },
+    },
   });
 }
 ```
