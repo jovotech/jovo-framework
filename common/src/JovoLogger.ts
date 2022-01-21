@@ -1,6 +1,6 @@
 import chalk, { Chalk } from 'chalk';
-import _merge from 'lodash.merge';
-import { levels, getLogger, Logger, LogLevelDesc } from 'loglevel';
+import _mergeWith from 'lodash.mergewith';
+import { getLogger, levels, Logger, LogLevelDesc } from 'loglevel';
 import { JovoError } from './JovoError';
 
 export interface JovoLoggerConfig {
@@ -20,11 +20,17 @@ export class JovoLogger {
     // if a config is passed, merge the default config with either the passed config or name
     // otherwise just use the default config
     this.config = nameOrConfig
-      ? _merge(
+      ? _mergeWith(
           defaultConfig,
           typeof nameOrConfig === 'string' ? { name: nameOrConfig } : nameOrConfig,
+          (value, srcValue) => {
+            if (Array.isArray(value) && Array.isArray(srcValue)) {
+              return srcValue;
+            }
+          },
         )
       : defaultConfig;
+
     // create the logger instance with the given name
     // if the name is used again, the same instance will be returned
     this.logger = getLogger(this.config.name);
