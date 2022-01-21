@@ -24,6 +24,7 @@ import { convertMessageToOutputSpeech } from './utilities';
 export interface AlexaOutputTemplateConverterStrategyConfig
   extends OutputTemplateConverterStrategyConfig {
   genericOutputToApl: boolean;
+  aplTemplates?: Record<string, unknown>;
 }
 
 export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<
@@ -128,7 +129,9 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
 
     const carousel = output.carousel;
     if (carousel && this.config.genericOutputToApl) {
-      addToDirectives(carousel.toApl?.() as AplRenderDocumentDirective);
+      addToDirectives(
+        carousel.toApl?.(this.config.aplTemplates?.carousel) as AplRenderDocumentDirective,
+      );
     }
 
     const quickReplies = output.quickReplies;

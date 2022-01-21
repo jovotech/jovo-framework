@@ -304,6 +304,9 @@ const app = new App({
     new AlexaPlatform({
       output: {
         genericOutputToApl: true,
+        aplTemplates: {
+          carousel: CAROUSEL_APL
+        },
       },
     }),
   ],
@@ -313,3 +316,4 @@ const app = new App({
 It includes the following properties:
 
 - `genericOutputToApl`: Determines if generic output like [`quickReplies`](#quickreplies), [`card`](#card), and [`carousel`](#carousel) should automatically be converted into an APL directive.
+- `aplTemplates.carousel`: Allows the app to override the default APL template used for carousels.

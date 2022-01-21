@@ -98,20 +98,22 @@ export function augmentModelPrototypes(): void {
     };
   };
 
-  Carousel.prototype.toApl = function (): AplRenderDocumentDirective {
+  Carousel.prototype.toApl = function (carouselTemplate?: any): AplRenderDocumentDirective {
+    const carouselJson = carouselTemplate || AplCarouselJson;
+
     if (this.title) {
-      AplCarouselJson.datasources.data.title = this.title;
+      carouselJson.datasources.data.title = this.title;
     }
 
     if (this.header) {
-      AplCarouselJson.datasources.data.header = this.header;
+      carouselJson.datasources.data.header = this.header;
     }
 
     if (this.backgroundImageUrl) {
-      AplCarouselJson.datasources.data.backgroundImageUrl = this.backgroundImageUrl;
+      carouselJson.datasources.data.backgroundImageUrl = this.backgroundImageUrl;
     }
 
-    (AplCarouselJson.datasources.data.items as CarouselItem[]) = this.items.map((item) => ({
+    (carouselJson.datasources.data.items as CarouselItem[]) = this.items.map((item) => ({
       ...item,
       selection: item.selection
         ? {
@@ -119,12 +121,18 @@ export function augmentModelPrototypes(): void {
             ...item.selection,
           }
         : undefined,
+
+      // map generic carousel properties to AlexaImageList.listItems properties
+      // https://developer.amazon.com/en-US/docs/alexa/alexa-presentation-language/apl-alexa-image-list-layout.html#list-items
+      primaryText: item.title,
+      secondaryText: item.content,
+      imageSource: item.imageUrl,
     }));
 
     return {
       type: 'Alexa.Presentation.APL.RenderDocument',
       token: 'token',
-      ...AplCarouselJson,
+      ...carouselJson,
     };
   };
 
