@@ -1,5 +1,4 @@
-import { BaseOutput, Output, OutputOptions, OutputTemplate } from '@jovotech/framework';
-import { AudioItem, PlayBehavior, PlayBehaviorLike } from '../models';
+import { BaseOutput, Output, OutputTemplate } from '@jovotech/framework';
 
 @Output()
 export class AudioPlayerStopOutput extends BaseOutput {
