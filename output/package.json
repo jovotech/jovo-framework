@@ -22,7 +22,6 @@
     "@jovotech/common": "^4.0.3",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
-    "lodash.defaultsdeep": "^4.6.1",
     "lodash.merge": "^4.6.2",
     "lodash.mergewith": "^4.6.2",
     "lodash.unset": "^4.5.2",
@@ -32,7 +31,6 @@
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
-    "@types/lodash.defaultsdeep": "^4.6.6",
     "@types/lodash.merge": "^4.6.6",
     "@types/lodash.mergewith": "^4.6.6",
     "@types/lodash.unset": "^4.5.6",
