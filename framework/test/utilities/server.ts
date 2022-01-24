@@ -4,6 +4,7 @@ import { ExamplePlatformRequest } from './platform';
 
 export class ExampleServer extends Server {
   response: ServerResponse;
+  headers: Headers = {};
   constructor(readonly request: PlainObjectType<ExamplePlatformRequest>) {
     super();
     this.response = {};
@@ -33,5 +34,7 @@ export class ExampleServer extends Server {
     this.response = response;
   }
 
-  setResponseHeaders(header: Record<string, string>): void {}
+  setResponseHeaders(headers: Record<string, string>): void {
+    this.headers = headers;
+  }
 }
