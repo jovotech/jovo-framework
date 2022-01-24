@@ -61,6 +61,8 @@ logging: {
 
 ## Basic Logging
 
+Basic logging is responsible for logging the the request and response of each interaction. Learn more about the lifecycle in the [RIDR documentation](./ridr-lifecycle.md).
+
 - [Request Logging](#request-logging)
 - [Response Logging](#response-logging)
 - [Masking](#masking)
@@ -176,26 +178,26 @@ logging: {
 
 Jovo has an internal `Logger` that can be used to display certain levels of logs. It uses [loglevel](https://github.com/pimterry/loglevel) and uses the levels described there.
 
-The `JovoLogger` allows a configuration to be passed that can contain any of the properties below but does not have to:
-
-```typescript
-{
-  name: 'some name'; // name of the logger, see loglevel.getLogger
-  level: 'trace'; // level of the logger, see logLevel.setLevel
-  disableStyling: boolean; // disable styling completely 
-  properties: ['package', 'message', 'context']; // can be used to change order of properties that are displayed or even omit some
-}
-```
-
-You can pass a configuration like that to the logging configuration to change the behavior of `Logger`:
+You can modify the `Logger` by using the `logger` property in the `logging` config:
 
 ```typescript
 logging: {
   logger: {
-    level: 'error' // show error only
+    level: 'error' // Show error only
   },
   // ...
 },
+```
+
+The following properties can be passed:
+
+```typescript
+{
+  name: 'some name'; // Name of the logger, see loglevel.getLogger
+  level: 'trace'; // Level of the logger, see logLevel.setLevel
+  disableStyling: boolean; // Disable styling completely 
+  properties: ['package', 'message', 'context']; // Can be used to change order of properties that are displayed or even omit some
+}
 ```
 
 You can import the Jovo Logger like this:
@@ -223,4 +225,4 @@ Logger.error(new Error()); // JOVO_LOG_LEVEL = 'error'
 
 Additionally, setting the log level to `'silent'` will cause no logs to be shown.
 
-Learn more about log levels in the [official loglevel documentation](https://github.com/pimterry/loglevel#documentation).
+Learn more about log levels in the [official `loglevel` documentation](https://github.com/pimterry/loglevel#documentation).
