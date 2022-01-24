@@ -7,7 +7,8 @@ import { HandlerOptionMetadata } from '../metadata/HandlerOptionMetadata';
 import { MetadataStorage } from '../metadata/MetadataStorage';
 import { getMethodKeys } from '../utilities';
 
-export function Component<COMPONENT extends BaseComponent = BaseComponent>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function Component<COMPONENT extends BaseComponent = any>(
   options?: ComponentOptionsOf<COMPONENT>,
 ): (target: ComponentConstructor<COMPONENT>) => void {
   return function (target) {

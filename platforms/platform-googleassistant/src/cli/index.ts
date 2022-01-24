@@ -16,12 +16,20 @@ import { GoogleCliConfig, SupportedLocales, SupportedLocalesType } from './utili
 export type GoogleCliInitConfig = RequiredOnlyWhere<GoogleCliConfig, 'projectId'>;
 
 export class GoogleAssistantCli extends JovoCliPlugin<GoogleCliConfig> {
-  readonly id: string = 'googleAssistant';
-  readonly type: PluginType = 'platform';
-  readonly platformDirectory: string = 'platform.googleAssistant';
-
   constructor(config: GoogleCliInitConfig) {
     super(config);
+  }
+
+  get id(): string {
+    return 'googleAssistant';
+  }
+
+  get type(): PluginType {
+    return 'platform';
+  }
+
+  get platformDirectory(): string {
+    return `${this.type}.${this.id}`;
   }
 
   getHooks(): typeof PluginHook[] {

@@ -10,7 +10,7 @@ import {
   NluPlugin,
 } from '@jovotech/framework';
 
-import { RasaEntity, RasaIntent, RasaResponse } from './interfaces';
+import { RasaIntent, RasaResponse } from './interfaces';
 
 export interface RasaNluConfig extends InterpretationPluginConfig {
   serverUrl: string;
@@ -51,7 +51,7 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
           confidence: rasaResponse.data.intent.confidence,
         },
         alternativeIntents: this.mapAlternativeIntents(rasaResponse.data.intent_ranking),
-        entities: rasaResponse.data.entities.reduce(this.mapEntities, {}),
+        entities: this.getEntityMapFromResponse(rasaResponse.data),
       };
     } catch (e) {
       // eslint-disable-next-line no-console
@@ -76,20 +76,22 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
       .slice(0, this.config.alternativeIntents.maxAlternatives);
   }
 
-  private mapEntities(entityMap: EntityMap, rasaEntity: RasaEntity): EntityMap {
-    let entityAlias = rasaEntity.entity;
-    // roles can distinguish entities of the same type e.g. departure and destination in
-    // a travel use case and should therefore be preferred as entity name
-    if (rasaEntity.role) {
-      entityAlias = rasaEntity.role;
-    }
-    entityMap[entityAlias] = {
-      id: entityAlias,
-      resolved: entityAlias,
-      value: rasaEntity.value,
-      native: rasaEntity,
-    };
+  private getEntityMapFromResponse(response: RasaResponse): EntityMap {
+    return response.entities.reduce((entityMap: EntityMap, entity) => {
+      let entityName = entity.entity;
+      // roles can distinguish entities of the same type e.g. departure and destination in
+      // a travel use case and should therefore be preferred as entity name
+      if (entity.role) {
+        entityName = entity.role;
+      }
+      entityMap[entityName] = {
+        id: entity.value,
+        resolved: entity.value,
+        value: response.text.substring(entity.start, entity.end),
+        native: entity,
+      };
 
-    return entityMap;
+      return entityMap;
+    }, {});
   }
 }

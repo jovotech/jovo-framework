@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/output",
-  "version": "4.0.1",
+  "version": "4.0.3",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
   "es2015": "dist/esm2015/index.js",
@@ -19,11 +19,13 @@
     "test": "jest"
   },
   "dependencies": {
-    "@jovotech/common": "^4.0.2",
+    "@jovotech/common": "^4.0.3",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "lodash.defaultsdeep": "^4.6.1",
     "lodash.merge": "^4.6.2",
+    "lodash.mergewith": "^4.6.2",
+    "lodash.unset": "^4.5.2",
     "reflect-metadata": "^0.1.13",
     "ts-toolbelt": "9.5.13",
     "type-fest": "^2.5.1"
@@ -32,6 +34,8 @@
     "@types/jest": "^26.0.20",
     "@types/lodash.defaultsdeep": "^4.6.6",
     "@types/lodash.merge": "^4.6.6",
+    "@types/lodash.mergewith": "^4.6.6",
+    "@types/lodash.unset": "^4.5.6",
     "@types/validator": "^13.7.0",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
@@ -56,5 +60,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "02f1a666ceff33f0907bff129f78be4088d87241"
+  "gitHead": "843fd4c0e8d113cf78ab53d667e414bbc0286a54"
 }

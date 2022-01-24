@@ -14,7 +14,7 @@ The Google Assistant project configuration defines how the Google Assistant CLI 
 You can add the Google Assistant plugin for the Jovo CLI and its configurations to your [project configuration](https://www.jovo.tech/docs/project-config) in `jovo.project.js`:
 
 ```js
-const { ProjectConfig } = require('@jovotech/cli');
+const { ProjectConfig } = require('@jovotech/cli-core');
 const { GoogleAssistantCli } = require('@jovotech/platform-googleassistant');
 // ...
 

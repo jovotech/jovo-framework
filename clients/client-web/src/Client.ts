@@ -81,7 +81,7 @@ export interface InitConfig extends DeepPartial<Config> {
 export class Client extends TypedEventEmitter<ClientEventListenerMap> {
   static getDefaultConfig(): Config {
     return {
-      version: '4.0-beta',
+      version: '4.0',
       locale: 'en',
       platform: 'web',
       device: {

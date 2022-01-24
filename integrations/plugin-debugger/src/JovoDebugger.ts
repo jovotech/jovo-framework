@@ -25,7 +25,6 @@ import { LangFr } from '@nlpjs/lang-fr';
 import { LangIt } from '@nlpjs/lang-it';
 import isEqual from 'fast-deep-equal/es6';
 import { promises } from 'fs';
-import _cloneDeep from 'lodash.clonedeep';
 import open from 'open';
 import { homedir } from 'os';
 import { join, resolve } from 'path';
@@ -49,6 +48,7 @@ import {
 import { MockServer, MockServerRequest } from './MockServer';
 
 type AugmentedServer = Server & {
+  [key: string]: any;
   __augmented?: boolean;
   originalSetResponse?: Server['setResponse'];
 };
@@ -184,7 +184,12 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   // Augment the server of HandleRequest to emit a response with a debugger request id if setResponse is called.
   // If the server was already augmented by augmentServerForApp, the original method will be used instead of the already augmented one.
   private augmentServerForRequest(handleRequest: HandleRequest): void {
-    const serverCopy: AugmentedServer = _cloneDeep(handleRequest.server);
+    const serverCopy: AugmentedServer = Object.create(handleRequest.server);
+    for (const prop in handleRequest.server) {
+      if (handleRequest.server.hasOwnProperty(prop)) {
+        serverCopy[prop] = handleRequest.server[prop as keyof Server];
+      }
+    }
     const setResponse =
       (serverCopy.__augmented && serverCopy.originalSetResponse) || serverCopy.setResponse;
     serverCopy.setResponse = (response) => {
@@ -333,7 +338,8 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     key: KEY,
   ): ProxyHandler<Jovo[KEY]> {
     return {
-      apply: (target: Jovo[KEY], thisArg: Jovo, argArray: Parameters<Jovo[KEY]>): unknown => {
+      // Parameters<Jovo[KEY]> sadly only returns the parameters of the method without generics, therefore unknown[] is used
+      apply: (target: Jovo[KEY], thisArg: Jovo, argArray: unknown[]): unknown => {
         const mutationData = this.getStateMutationData(handleRequest, key, thisArg, argArray);
         if (mutationData) {
           this.emitStateMutation(handleRequest.debuggerRequestId, mutationData);
@@ -347,17 +353,18 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
     handleRequest: HandleRequest,
     key: KEY,
     jovo: Jovo,
-    args: Parameters<Jovo[KEY]>,
+    args: unknown[],
   ): JovoStateMutationData<KEY> | undefined {
     let node: ComponentTreeNode | undefined;
     let handler: string = BuiltInHandler.Start;
     if (key === '$redirect' || key === '$delegate') {
-      const componentName = typeof args[0] === 'function' ? args[0].name : args[0];
+      const componentName =
+        typeof args[0] === 'function' && 'name' in args[0] ? args[0].name : (args[0] as string);
       node = handleRequest.componentTree.getNodeRelativeTo(
         componentName,
         handleRequest.activeComponentNode?.path,
       );
-      handler = args[1] as string;
+      handler = typeof args[1] === 'string' ? args[1] : JSON.stringify(args[1], undefined, 2);
     } else if (key === '$resolve') {
       if (!jovo.$state) {
         return;
@@ -396,63 +403,57 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
 
     // eslint-disable-next-line no-console
     console.log('\nThis is your webhook url ☁️ ' + underline(blueText(debuggerUrl)));
-    // Check if the current output is being piped to somewhere.
-    if (process.stdout.isTTY) {
-      // Check if we can enable raw mode for input stream to capture raw keystrokes.
-      if (process.stdin.setRawMode) {
-        setTimeout(() => {
-          // eslint-disable-next-line no-console
-          console.log(`\nTo open Jovo Debugger in your browser, press the "." key.\n`);
-        }, 500);
 
-        // Capture unprocessed key input.
-        process.stdin.setRawMode(true);
-        // Explicitly resume emitting data from the stream.
-        process.stdin.resume();
-        // Capture readable input as opposed to binary.
-        process.stdin.setEncoding('utf-8');
+    // Check if we can enable raw mode for input stream to capture raw keystrokes
+    if (process.stdin.isTTY && process.stdin.setRawMode) {
+      setTimeout(() => {
+        // eslint-disable-next-line no-console
+        console.log(`\nTo open Jovo Debugger in your browser, press the "." key.\n`);
+      }, 500);
 
-        // Collect input text from input stream.
-        process.stdin.on('data', async (keyRaw: Buffer) => {
-          const key: string = keyRaw.toString();
-          // When dot gets pressed, try to open the debugger in browser.
-          if (key === '.') {
-            try {
-              await open(debuggerUrl);
-            } catch (error) {
-              // eslint-disable-next-line no-console
-              console.log(
-                `Could not open browser. Please open debugger manually by visiting this url: ${debuggerUrl}`,
-              );
+      // Capture unprocessed key input.
+      process.stdin.setRawMode(true);
+      // Explicitly resume emitting data from the stream.
+      process.stdin.resume();
+      // Capture readable input as opposed to binary.
+      process.stdin.setEncoding('utf-8');
+
+      // Collect input text from input stream.
+      process.stdin.on('data', async (keyRaw: Buffer) => {
+        const key: string = keyRaw.toString();
+        // When dot gets pressed, try to open the debugger in browser.
+        if (key === '.') {
+          try {
+            await open(debuggerUrl);
+          } catch (error) {
+            // eslint-disable-next-line no-console
+            console.log(
+              `Could not open browser. Please open debugger manually by visiting this url: ${debuggerUrl}`,
+            );
+          }
+        } else {
+          if (key.charCodeAt(0) === 3) {
+            // Ctrl+C has been pressed, kill process.
+            if (process.env.JOVO_CLI_PROCESS_ID) {
+              process.kill(parseInt(process.env.JOVO_CLI_PROCESS_ID), 'SIGTERM');
+              process.exit();
+            } else {
+              process.stdin.pause();
+              process.stdin.setRawMode?.(false);
+              console.log('Press Ctrl + C again to exit...');
             }
           } else {
-            // When anything else got pressed, record it and send it on enter into the child process.
-            if (key.charCodeAt(0) === 13) {
-              // Send recorded input to child process. This is useful for restarting a nodemon process with rs, for example.
-              process.stdout.write('\n');
-            } else if (key.charCodeAt(0) === 3) {
-              // Ctrl+C has been pressed, kill process.
-              if (process.platform === 'win32') {
-                process.stdin.pause();
-                process.stdin.setRawMode?.(false);
-                process.exit();
-              } else {
-                process.exit();
-              }
-            } else {
-              // Record input text and write it into terminal.
-              process.stdout.write(key);
-            }
+            // Record input text and write it into terminal.
+            process.stdout.write(key);
           }
-        });
-      } else {
-        setTimeout(() => {
-          // eslint-disable-next-line no-console
-          console.log(
-            `☁  Could not open browser. Please open debugger manually by visiting this url: ${debuggerUrl}`,
-          );
-        }, 2500);
-      }
+        }
+      });
+    } else {
+      setTimeout(() => {
+        console.log(
+          `☁  Could not open browser. Please open debugger manually by visiting this url: ${debuggerUrl}`,
+        );
+      }, 2500);
     }
   }
 
