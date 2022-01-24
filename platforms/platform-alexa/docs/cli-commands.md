@@ -73,7 +73,7 @@ The Alexa CLI plugin hooks into the `deploy:platform` command to deploy the Alex
 $ jovo deploy:platform alexa
 ```
 
-After successful deployment, you can open the [Alexa Developer Console](https://developer.amazon.com/alexa/console/ask#/) and see the changes there.
+After successful deployment, you can open the [Alexa Developer Console](https://developer.amazon.com/alexa/console/ask#/) and see the changes there. If it was the first deployment, a new Alexa Skill is created. The Skill ID is stored in `build/platform.alexa/.ask/ask-states.json`. We recommend copying the Alexa Skill ID and adding it to your [project config](project-config.md#skillid). This ensures that the project is always deployed to the right Skill in the Alexa Developer Console.
 
 The Alexa CLI plugin adds the following flags to the [`deploy:platform` command](https://www.jovo.tech/docs/deploy-command#deploy:platform):
 

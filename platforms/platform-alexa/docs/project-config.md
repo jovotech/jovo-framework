@@ -77,7 +77,7 @@ new AlexaCli({
 });
 ```
 
-This ensures that your project is always deployed to the right Skill.
+This ensures that your project is always deployed to the right Skill. During the [`build` command](./cli-commands.md#build), the `skillId` is written into the `build/platform.alexa/.ask/ask-states.json` file, which is used during the deployment.
 
 The `skillId` property can be especially helpful for [staging](https://www.jovo.tech/docs/staging), where different stages deploy to different Skills:
 
