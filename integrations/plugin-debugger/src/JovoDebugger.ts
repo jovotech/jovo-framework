@@ -46,6 +46,7 @@ import {
   StateMutatingJovoMethodKey,
 } from './interfaces';
 import { MockServer, MockServerRequest } from './MockServer';
+import _cloneDeep from 'lodash.clonedeep';
 
 type AugmentedServer = Server & {
   [key: string]: any;
