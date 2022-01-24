@@ -96,6 +96,8 @@ This is then turned into the following response:
 }
 ```
 
+The `text` property is [limited to 640 characters](https://developers.google.com/assistant/conversational/prompts-simple#SimpleResponseProperties). By default, Jovo output trims the content to that length. Learn more in the [output sanitization documentation](https://www.jovo.tech/docs/output-config#sanitization).
+
 ### reprompt
 
 The [generic `reprompt` element](https://www.jovo.tech/docs/output-templates#message) is used to ask again if the user does not respond to a prompt after a few seconds:

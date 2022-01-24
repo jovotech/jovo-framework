@@ -4,6 +4,7 @@ import {
   DynamicEntity,
   DynamicEntityMap,
   mergeInstances,
+  MessageMaxLength,
   MessageValue,
   NormalizedOutputTemplate,
   OutputTemplateConverterStrategyConfig,
@@ -63,7 +64,7 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
   protected sanitizeMessage(
     message: MessageValue,
     path: string,
-    maxLength = ALEXA_STRING_MAX_LENGTH,
+    maxLength: MessageMaxLength = ALEXA_STRING_MAX_LENGTH,
     offset = SSML_OFFSET,
   ): MessageValue {
     return super.sanitizeMessage(message, path, maxLength, offset);
