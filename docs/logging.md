@@ -195,7 +195,7 @@ The following properties can be passed:
 {
   name: 'some name'; // Name of the logger, see loglevel.getLogger
   level: 'trace'; // Level of the logger, see logLevel.setLevel
-  disableStyling: boolean; // Disable styling completely 
+  styling: boolean; // Disable styling completely 
   properties: ['package', 'message', 'context']; // Can be used to change order of properties that are displayed or even omit some
 }
 ```

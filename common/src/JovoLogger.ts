@@ -6,7 +6,7 @@ import { JovoError } from './JovoError';
 export interface JovoLoggerConfig {
   name: string | symbol;
   level: LogLevelDesc;
-  disableStyling: boolean;
+  styling: boolean;
   // TODO determine name
   properties: Array<keyof JovoError>;
 }
@@ -49,7 +49,7 @@ export class JovoLogger {
   getDefaultConfig(): JovoLoggerConfig {
     return {
       name: 'JovoLogger',
-      disableStyling: false,
+      styling: true,
       level: (process.env.JOVO_LOG_LEVEL as LogLevelDesc | undefined) || levels.TRACE,
       properties: ['package', 'message', 'context', 'stack', 'hint', 'learnMore'],
     };
@@ -154,7 +154,7 @@ export class JovoLogger {
 
   // utility method that only applies the given chalk-function if styling is not disabled
   private style(text: string, chalkFn: Chalk): string {
-    if (this.config.disableStyling) {
+    if (!this.config.styling) {
       return text;
     }
     return chalkFn(text);
@@ -162,7 +162,7 @@ export class JovoLogger {
 
   // applies the given style to all strings in the given args if styling is not disabled
   private applyStyleIfEnabled<T extends unknown[]>(args: T, chalkFn: Chalk): void {
-    if (this.config.disableStyling) {
+    if (!this.config.styling) {
       return;
     }
     args.forEach((arg, index) => {
