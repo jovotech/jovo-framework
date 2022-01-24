@@ -68,6 +68,8 @@ Under the hood, Jovo translates the `message` into an `outputSpeech` object ([se
 }
 ```
 
+The `outputSpeech` response format is [limited to 8,000 characters](https://developer.amazon.com/docs/alexa/custom-skills/request-and-response-json-reference.html#response-format). By default, Jovo output trims the content of the `message` property to that length. Learn more in the [output sanitization documentation](https://www.jovo.tech/docs/output-config#sanitization).
+
 ### reprompt
 
 The [generic `reprompt` element](https://www.jovo.tech/docs/output-templates#message) is used to ask again if the user does not respond to a prompt after a few seconds:
