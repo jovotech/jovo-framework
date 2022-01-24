@@ -1,6 +1,5 @@
-// TODO determine whether we want to re-export axios
-import axios from 'axios';
 import { JovoLogger } from '@jovotech/common';
+import axios from 'axios';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('source-map-support').install();
@@ -70,6 +69,9 @@ export * from './Platform';
 export * from './Plugin';
 export * from './Server';
 export * from './RequestBuilder';
+
+export * from './audio/AudioUtilities';
+export * from './audio/ParsedAudioInput';
 
 export * from './decorators/Component';
 export * from './decorators/Global';

@@ -293,32 +293,26 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
    * Builds platform-specific models from Jovo language model.
    */
   async build(): Promise<void> {
-    const taskStatus: string = this.$cli.project!.hasPlatform(this.$plugin.platformDirectory)
-      ? 'Updating'
-      : 'Creating';
-
-    const buildTaskTitle = `${STATION} ${taskStatus} Google Conversational Action project files${printStage(
-      this.$cli.project!.stage,
-    )}\n${printSubHeadline(
-      `Path: ./${this.$cli.project!.getBuildDirectory()}/${this.$plugin.platformDirectory}`,
+    const buildPath = `Path: ./${joinPaths(
+      this.$cli.project!.getBuildDirectory(),
+      this.$plugin.platformDirectory,
     )}`;
-    // Define main build task.
+
+    const buildTaskTitle = `${STATION} Building Google Conversational Action files${printStage(
+      this.$cli.project!.stage,
+    )}\n${printSubHeadline(buildPath)}`;
+
+    // Define main build task
     const buildTask: Task = new Task(buildTaskTitle);
 
-    // Update or create Google Conversational Action project files, depending on whether it has already been built or not.
-    const projectFilesTask: Task = new Task(
-      `${taskStatus} Project Files`,
-      this.createGoogleProjectFiles.bind(this),
-    );
+    // Update or create Google Conversational Action project files, depending on whether it has already been built or not
+    const projectFilesTask: Task = new Task(`Project files`, this.buildProjectFiles.bind(this));
 
     const buildInteractionModelTask: Task = new Task(
-      `${taskStatus} Interaction Model`,
-      this.createInteractionModel.bind(this),
+      `Interaction model`,
+      this.buildInteractionModel.bind(this),
+      { enabled: this.$cli.project!.hasModelFiles(this.$context.locales) },
     );
-    // If no model files for the current locales exist, do not build interaction model.
-    if (!this.$cli.project!.hasModelFiles(this.$context.locales)) {
-      buildInteractionModelTask.disable();
-    }
 
     buildTask.add(projectFilesTask, buildInteractionModelTask);
 
@@ -328,7 +322,7 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
   /**
    * Creates Google Conversational Action specific project files.
    */
-  async createGoogleProjectFiles(): Promise<void> {
+  async buildProjectFiles(): Promise<void> {
     const files: FileObject = FileBuilder.normalizeFileObject(
       _get(this.$plugin.config, 'files', {}),
     );
@@ -409,28 +403,24 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
 
     FileBuilder.buildDirectory(projectFiles, this.$plugin.platformPath);
 
-    // Copies across any resources so they can be used in the project settings manifest.
-    // Docs:  https://developers.google.com/assistant/conversational/build/projects?hl=en&tool=sdk#add_resources
-    const copyResourcesTask: Task = new Task(
-      `Copying resources from ${this.$plugin.config.resourcesDirectory!}`,
-      () => {
-        const resourcesDirectory = 'resources';
-        const src: string = joinPaths(
-          this.$cli.projectPath,
-          this.$plugin.config.resourcesDirectory!,
-        );
-        const dest: string = joinPaths(this.$plugin.platformPath, resourcesDirectory);
-        // Delete existing resources folder before copying data
-        removeSync(dest);
-        copySync(src, dest);
-      },
-    );
-    copyResourcesTask.indent(2);
+    if (existsSync(this.$plugin.config.resourcesDirectory)) {
+      // Copies across any resources so they can be used in the project settings manifest.
+      // Docs:  https://developers.google.com/assistant/conversational/build/projects?hl=en&tool=sdk#add_resources
+      const copyResourcesTask: Task = new Task(
+        `Copying resources from ${this.$plugin.config.resourcesDirectory!}`,
+        () => {
+          const src: string = joinPaths(
+            this.$cli.projectPath,
+            this.$plugin.config.resourcesDirectory!,
+          );
+          const dest: string = joinPaths(this.$plugin.platformPath, 'resources');
+          // Delete existing resources folder before copying data
+          removeSync(dest);
+          copySync(src, dest);
+        },
+        { indentation: 2 },
+      );
 
-    if (
-      this.$plugin.config.resourcesDirectory &&
-      existsSync(this.$plugin.config.resourcesDirectory)
-    ) {
       await copyResourcesTask.run();
     }
   }
@@ -438,25 +428,26 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
   /**
    * Creates and returns tasks for each locale to build the interaction model for Alexa.
    */
-  async createInteractionModel(): Promise<void> {
+  async buildInteractionModel(): Promise<string[]> {
+    const output: string[] = [];
+
     for (const locale of this.$context.locales) {
-      const resolvedLocales: SupportedLocalesType[] = getResolvedLocales(
+      const resolvedLocales: string[] = getResolvedLocales(
         locale,
         SupportedLocales,
         this.$plugin.config.locales,
-      ) as SupportedLocalesType[];
+      );
       const resolvedLocalesOutput: string = resolvedLocales.join(', ');
       // If the model locale is resolved to different locales, provide task details, i.e. "en (en-US, en-CA)"".
       const taskDetails: string =
         resolvedLocalesOutput === locale ? '' : `(${resolvedLocalesOutput})`;
 
-      const localeTask: Task = new Task(`${locale} ${taskDetails}`, async () => {
-        await this.buildLanguageModel(locale, resolvedLocales);
-        await wait(500);
-      });
-      localeTask.indent(4);
-      await localeTask.run();
+      await this.buildLanguageModel(locale, resolvedLocales);
+      await wait(500);
+      output.push(`${locale} ${taskDetails}`);
     }
+
+    return output;
   }
 
   /**

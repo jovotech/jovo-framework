@@ -6,7 +6,7 @@ import {
   ComponentConstructor,
   ComponentDeclaration,
 } from './BaseComponent';
-import { ComponentOptions } from './metadata/ComponentMetadata';
+import { ComponentOptionsOf } from './metadata/ComponentMetadata';
 import { Plugin, PluginConfig } from './Plugin';
 
 export interface ComponentPluginConfig<COMPONENT extends BaseComponent = BaseComponent>
@@ -21,7 +21,7 @@ export abstract class ComponentPlugin<
   abstract readonly component: ComponentConstructor<COMPONENT>;
 
   install(app: App): void {
-    let options: ComponentOptions<COMPONENT> | undefined = undefined;
+    let options: ComponentOptionsOf<COMPONENT> | undefined = undefined;
 
     if (this.config.component) {
       options = {
@@ -29,7 +29,7 @@ export abstract class ComponentPlugin<
       };
     }
 
-    app.use(new ComponentDeclaration(this.component as ComponentConstructor, options));
+    app.use(new ComponentDeclaration(this.component, options));
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function

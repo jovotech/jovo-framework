@@ -122,14 +122,13 @@ new DynamoDb({
 
 The `libraryConfig` property can be used to pass configurations to the AWS DynamoDB SDK that is used by this integration.
 
-Currently, it includes the DynamoDbClient([find the official documentation here](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-dynamodb/interfaces/dynamodbclientconfig.html)):
+Currently, it includes options for the [DynamoDbClient](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-dynamodb/interfaces/dynamodbclientconfig.html) and [marshall](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/interfaces/_aws_sdk_util_dynamodb.marshalloptions-1.html):
 
 ```typescript
 new DynamoDb({
   libraryConfig: {
-    dynamoDbClient: {
-      // Add configuration here
-    },
+    dynamoDbClient: { /* ... */ },
+    marshall: { /* ... */ },
   },
   // ...
 }),
@@ -149,5 +148,19 @@ new DynamoDb({
     },
     // ...
   }
+}),
+```
+
+`marshall` includes the following default values:
+
+```typescript
+new DynamoDb({
+  libraryConfig: {
+    marshall: {
+      removeUndefinedValues: true,
+      convertClassInstanceToMap: true,
+    },
+  },
+  // ...
 }),
 ```

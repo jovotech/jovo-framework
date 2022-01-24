@@ -1,10 +1,10 @@
 import { BaseComponent, ComponentConstructor } from '../BaseComponent';
 import { ClassDecoratorMetadata } from './ClassDecoratorMetadata';
-import { ComponentOptions } from './ComponentMetadata';
+import { ComponentOptionsOf } from './ComponentMetadata';
 import { MetadataStorage } from './MetadataStorage';
 
 export function createComponentOptionDecorator<COMPONENT extends BaseComponent = BaseComponent>(
-  options: Partial<ComponentOptions<COMPONENT>>,
+  options: Partial<ComponentOptionsOf<COMPONENT>>,
 ): ClassDecorator {
   return function (target) {
     MetadataStorage.getInstance().addComponentOptionMetadata(
@@ -19,7 +19,7 @@ export class ComponentOptionMetadata<
   constructor(
     // eslint-disable-next-line @typescript-eslint/ban-types
     readonly target: ComponentConstructor<COMPONENT> | Function,
-    readonly options: Partial<ComponentOptions<COMPONENT>> = {},
+    readonly options: Partial<ComponentOptionsOf<COMPONENT>> = {},
   ) {
     super(target);
   }

@@ -16,6 +16,6 @@ export class Plugin extends JovoCliPlugin {
   }
 
   getDefaultConfig(): GoogleCliConfig {
-    return { projectId: '' };
+    return { projectId: '', resourcesDirectory: '' };
   }
 }

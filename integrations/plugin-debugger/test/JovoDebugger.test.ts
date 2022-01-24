@@ -4,6 +4,7 @@ import {
   NluData,
   NluPlugin,
   OmitWhere,
+  PlainObjectType,
   Plugin,
   PluginConfig,
   TestServer,
@@ -26,14 +27,13 @@ class DebuggerTestServer extends TestServer {
 
 class DebuggerTestNluPlugin extends NluPlugin {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async process(jovo: Jovo, text: string): Promise<NluData | undefined> {
+  async processText(jovo: Jovo, text: string): Promise<NluData | undefined> {
     return;
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const coreRequest: OmitWhere<CoreRequest, () => any> = {
-  version: '4.0-beta',
+const coreRequest: PlainObjectType<CoreRequest> = {
+  version: '4.0',
   platform: 'jovo-debugger',
   id: '7bd31461-0211-4c92-b642-69a978c2f18c',
   timestamp: '2020-11-23T12:35:36.368Z',
@@ -45,13 +45,14 @@ const coreRequest: OmitWhere<CoreRequest, () => any> = {
   },
   context: {
     device: {
+      id: '1e4jk3b8-h99a-4hg5-8z14-2ec3cfs51b7f',
       capabilities: ['AUDIO', 'TEXT'],
     },
     session: {
       id: '1e4076b8-539a-48d5-8b14-1ec3cf651b7b',
       data: {},
-      new: true,
-      lastUpdatedAt: '2020-11-23T12:35:21.345Z',
+      isNew: true,
+      updatedAt: new Date('2020-11-23T12:35:21.345Z'),
     },
     user: {
       id: '67fed000-9f11-4acf-bbbc-1e52e5ea22a9',

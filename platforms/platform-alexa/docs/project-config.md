@@ -14,7 +14,7 @@ The Alexa project configuration defines how the Alexa CLI plugin builds and depl
 You can add the Alexa plugin for the Jovo CLI and its configurations to your [project configuration](https://www.jovo.tech/docs/project-config) in `jovo.project.js`:
 
 ```js
-const { ProjectConfig } = require('@jovotech/cli');
+const { ProjectConfig } = require('@jovotech/cli-core');
 const { AlexaCli } = require('@jovotech/platform-alexa');
 // ...
 
@@ -23,13 +23,16 @@ const project = new ProjectConfig({
   plugins: [
     new AlexaCli({
       locales: {
-        /* ... */
+        // ...
       },
       skillId: '<yourSkillId>',
       askProfile: 'default',
       files: {
-        /* ... */
+        // ...
       },
+      conversations: {
+        // ...
+      }
     }),
     // ...
   ],
@@ -42,6 +45,7 @@ The following options are currently supported:
 - [`skillId`](#skillid): The Skill ID that the project should be deployed to.
 - [`askProfile`](#askprofile): The ASK profile that should be used for the deployment.
 - [`files`](#files): This can be used to add or override files in your Alexa `build` folder, for example to make updates to the `skill.json` file.
+- [`conversations`](#conversations): This includes configurations for [Alexa Conversations](./alexa-conversations.md).
 
 ## locales
 

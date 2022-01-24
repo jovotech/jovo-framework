@@ -1,14 +1,15 @@
 import { BaseComponent, ComponentConstructor } from '../BaseComponent';
 import { BuiltInHandler } from '../enums';
 import { DuplicateChildComponentsError } from '../errors/DuplicateChildComponentsError';
-import { ComponentMetadata, ComponentOptions } from '../metadata/ComponentMetadata';
+import { ComponentMetadata, ComponentOptionsOf } from '../metadata/ComponentMetadata';
 import { HandlerMetadata } from '../metadata/HandlerMetadata';
 import { HandlerOptionMetadata } from '../metadata/HandlerOptionMetadata';
 import { MetadataStorage } from '../metadata/MetadataStorage';
 import { getMethodKeys } from '../utilities';
 
-export function Component<COMPONENT extends BaseComponent = BaseComponent>(
-  options?: ComponentOptions<COMPONENT>,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function Component<COMPONENT extends BaseComponent = any>(
+  options?: ComponentOptionsOf<COMPONENT>,
 ): (target: ComponentConstructor<COMPONENT>) => void {
   return function (target) {
     if (options?.components) {

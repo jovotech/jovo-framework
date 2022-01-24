@@ -1,5 +1,4 @@
 import {
-  Intent,
   Jovo,
   JovoRequest,
   JovoResponse,
@@ -52,7 +51,7 @@ export class DashbotUniversal extends DashbotAnalyticsPlugin {
 
   async trackRequest(jovo: Jovo, url: string): Promise<void> {
     const text: string =
-      jovo.$input.text || this.getIntentName(jovo.$input.intent) || jovo.$input.type || '';
+      jovo.$input.getText() || jovo.$input.getIntentName() || jovo.$input.type || '';
 
     const requestLog: DashbotUniversalLog = {
       text,
@@ -61,7 +60,7 @@ export class DashbotUniversal extends DashbotAnalyticsPlugin {
       sessionId: jovo.$session.id || '',
     };
 
-    const intentName: string = this.getIntentName(jovo.$input.intent) || jovo.$input.type;
+    const intentName: string = jovo.$input.getIntentName() || jovo.$input.type;
     const inputs: DashbotUniversalInput[] = Object.entries(jovo.$input.entities || []).map(
       ([key, entry]) => ({
         name: key,
@@ -77,7 +76,7 @@ export class DashbotUniversal extends DashbotAnalyticsPlugin {
   async trackResponse(jovo: Jovo, url: string): Promise<void> {
     for (const output of jovo.$output) {
       // Since we iterate through each output respectively,
-      // it's safe to assume thtt response is an object
+      // it's safe to assume that the response is an object
       const strategy = (jovo.$platform as Platform).outputTemplateConverterStrategy;
       const normalizedOutput = strategy.normalizeOutput(output);
       const response: JovoResponse = (
@@ -99,14 +98,6 @@ export class DashbotUniversal extends DashbotAnalyticsPlugin {
     return true;
   }
 
-  private getIntentName(intent?: string | Intent): string | undefined {
-    if (!intent) {
-      return;
-    }
-
-    return typeof intent === 'string' ? intent : (intent as Intent).name;
-  }
-
   private getButtons(quickReplies?: QuickReplyValue[]): DashbotUniversalButton[] {
     if (!quickReplies || !quickReplies.length) {
       return [];
@@ -125,9 +116,7 @@ export class DashbotUniversal extends DashbotAnalyticsPlugin {
     if (!message) {
       return '';
     }
-
     message = Array.isArray(message) ? this.getRandomElement(message) : message;
-
     return (typeof message === 'object' ? message.text || message.speech : message) || '';
   }
 

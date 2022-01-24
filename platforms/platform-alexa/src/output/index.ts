@@ -51,16 +51,9 @@ export * from './decorators/validation/IsValidCardImageUrl';
 export * from './decorators/validation/IsValidCardString';
 export * from './decorators/validation/IsValidAlexaString';
 export * from './decorators/validation/IsValidOutputSpeechString';
-
 export * from './models';
-
-export * from './templates/AskForPermissionConsentCardOutput';
-export * from './templates/AskForPermissionOutput';
-export * from './templates/AskForRemindersPermissionOutput';
-export * from './templates/AskForTimersPermissionOutput';
-
+export * from './templates';
 export * from './constants';
-
 export * from './AlexaOutputTemplateConverterStrategy';
 
 export { validateAlexaString, convertMessageToOutputSpeech } from './utilities';

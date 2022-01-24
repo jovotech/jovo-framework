@@ -2,10 +2,7 @@ import { OmitIndex } from '@jovotech/common';
 import { getValuesOfDecoratorRestParameter, OutputTemplatePlatforms } from '../index';
 import { createHandlerOptionDecorator } from '../metadata/HandlerOptionMetadata';
 
-export type RegisteredPlatformName = Exclude<
-  keyof OmitIndex<OutputTemplatePlatforms, string>,
-  number
->;
+export type RegisteredPlatformName = Exclude<keyof OmitIndex<OutputTemplatePlatforms>, number>;
 
 export function Platforms(platforms: Array<string | RegisteredPlatformName>): MethodDecorator;
 export function Platforms(...platforms: Array<string | RegisteredPlatformName>): MethodDecorator;

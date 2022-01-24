@@ -1,24 +1,28 @@
 import { UnknownObject } from '@jovotech/common';
-import { ComponentData, JovoComponentInfo } from './index';
+import { ComponentData, ComponentOptions, JovoComponentInfo } from './index';
 import { Jovo } from './Jovo';
 import { JovoProxy } from './JovoProxy';
-import { ComponentOptions } from './metadata/ComponentMetadata';
+import { ComponentOptionsOf } from './metadata/ComponentMetadata';
 
-export type ComponentConstructor<COMPONENT extends BaseComponent = BaseComponent> = new (
+// JovoComponentInfo.config is optional, therefore we need to exclude undefined
+// Otherwise the config-type will always be an union type like config | undefined
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type ComponentConfig<COMPONENT extends BaseComponent = any> = Exclude<
+  COMPONENT['$component']['config'],
+  undefined
+>;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type ComponentConstructor<COMPONENT extends BaseComponent = any> = new (
   jovo: Jovo,
-  options?: ComponentOptions<COMPONENT>,
-  ...args: unknown[]
+  options?: ComponentOptionsOf<COMPONENT>,
 ) => COMPONENT;
 
-export type ComponentConfig<COMPONENT extends BaseComponent = BaseComponent> =
-  COMPONENT['$component']['config'];
-
-export class ComponentDeclaration<
-  COMPONENT_CONSTRUCTOR extends ComponentConstructor = ComponentConstructor,
-> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export class ComponentDeclaration<COMPONENT extends BaseComponent = any> {
   constructor(
-    readonly component: COMPONENT_CONSTRUCTOR,
-    readonly options?: ComponentOptions<InstanceType<COMPONENT_CONSTRUCTOR>>,
+    readonly component: ComponentConstructor<COMPONENT>,
+    readonly options?: ComponentOptionsOf<COMPONENT>,
   ) {}
 }
 
@@ -26,7 +30,14 @@ export abstract class BaseComponent<
   DATA extends ComponentData = ComponentData,
   CONFIG extends UnknownObject = UnknownObject,
 > extends JovoProxy {
+  constructor(jovo: Jovo, readonly options?: ComponentOptions<CONFIG>) {
+    super(jovo);
+  }
+
   get $component(): JovoComponentInfo<DATA, CONFIG> {
-    return this.$component as { data: DATA; config: CONFIG | undefined };
+    return {
+      data: this.jovo.$component.data as DATA,
+      config: { ...(this.options?.config || {}), ...(this.jovo.$component.config || {}) } as CONFIG,
+    };
   }
 }
