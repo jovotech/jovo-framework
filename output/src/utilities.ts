@@ -1,6 +1,7 @@
 import { Constructor } from '@jovotech/common';
 import { Type } from 'class-transformer';
-import _merge from 'lodash.merge';
+import _mergeWith from 'lodash.mergewith';
+import _unset from 'lodash.unset';
 import type { A, O } from 'ts-toolbelt';
 import { IsOptional, ListenValue, ValidateNested, ValidationError } from '.';
 import { NormalizedOutputTemplatePlatforms } from './models/NormalizedOutputTemplatePlatforms';
@@ -128,7 +129,16 @@ export function mergeInstances<D extends object, S extends any[]>(
   destination: D,
   ...sources: S
 ): O.MergeAll<D, S, 'deep'> {
-  return _merge(destination, ...sources.map((source) => instanceToObject(source)));
+  return _mergeWith(
+    destination,
+    ...sources.map((source) => instanceToObject(source)),
+    // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any
+    (value: any, srcValue: any, key: string, object: any) => {
+      if (typeof srcValue === 'undefined') {
+        _unset(object, key);
+      }
+    },
+  );
 }
 
 export function mergeListen(

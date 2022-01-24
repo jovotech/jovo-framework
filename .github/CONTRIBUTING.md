@@ -31,4 +31,4 @@ Adding to Jovo's core can sometimes be daunting for beginners. Here are some ide
 - Investigate [GitHub issues](https://github.com/jovotech/jovo-framework/issues) and find out what people are currently discussing.
 - Take a look at our [community forum](https://community.jovo.tech/) to see what Jovo users are missing.
 
-**Working on your first Pull Request?** You can learn how from this _free_ series [How to Contribute to an Open Source Project on GitHub](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github).
+**Working on your first Pull Request?** You can learn how from this repository: [first-contributions](https://github.com/firstcontributions/first-contributions).

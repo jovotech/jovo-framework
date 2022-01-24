@@ -1,5 +1,5 @@
 {
-  "version": "4.0-beta",
+  "version": "4.0",
   "platform": "web",
   "id": "7bd31461-0211-4c92-b642-69a978c2f18c",
   "timestamp": "2020-11-23T12:35:36.368Z",
@@ -20,8 +20,8 @@
     "session": {
       "id": "1e4076b8-539a-48d5-8b14-1ec3cf651b7b",
       "data": {},
-      "new": false,
-      "lastUpdatedAt": "2020-11-23T12:35:21.345Z"
+      "isNew": false,
+      "updatedAt": "2020-11-23T12:35:21.345Z"
     },
     "user": {
       "id": "67fed000-9f11-4acf-bbbc-1e52e5ea22a9",

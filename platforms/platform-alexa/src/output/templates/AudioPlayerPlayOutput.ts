@@ -1,10 +1,9 @@
 import { BaseOutput, Output, OutputOptions, OutputTemplate } from '@jovotech/framework';
 import { AudioItem, PlayBehavior, PlayBehaviorLike } from '../models';
-import _merge from 'lodash.merge';
 
 export interface AudioPlayerPlayOutputOptions extends OutputOptions {
   playBehavior?: PlayBehaviorLike;
-  audioItem?: AudioItem;
+  audioItem: AudioItem;
 }
 
 @Output()
@@ -23,15 +22,11 @@ export class AudioPlayerPlayOutput extends BaseOutput<AudioPlayerPlayOutputOptio
   }
 
   build(): OutputTemplate | OutputTemplate[] {
-    if (this.options.audioItem) {
-      this.options.audioItem.stream.offsetInMilliseconds =
-        this.options.audioItem.stream.offsetInMilliseconds || 0;
-      this.options.audioItem.stream.token =
-        this.options.audioItem.stream.token ||
-        this.options.audioItem.stream.url.substring(
-          this.options.audioItem.stream.url.lastIndexOf('/') + 1,
-        );
-    }
+    // Sets the file name as token, if it's not set in options by the developer.
+    // https://example.com/fileXYZ.mp3 => token = fileXYZ.mp3
+    this.options.audioItem.stream.token =
+      this.options.audioItem.stream.token ||
+      AudioPlayerPlayOutput.getTokenFromUrl(this.options.audioItem.stream.url);
 
     return {
       message: this.options.message,
@@ -52,5 +47,9 @@ export class AudioPlayerPlayOutput extends BaseOutput<AudioPlayerPlayOutputOptio
         },
       },
     };
+  }
+
+  static getTokenFromUrl(url: string): string {
+    return url.substring(url.lastIndexOf('/') + 1);
   }
 }

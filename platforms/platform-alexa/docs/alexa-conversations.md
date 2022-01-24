@@ -47,6 +47,7 @@ new AlexaCli({
     sessionStartDelegationStrategy: {
       target: 'skill',
     },
+    skipValidation: false,
   },
   // ...
 });
@@ -56,6 +57,7 @@ new AlexaCli({
 - `acdlDirectory`: The folder for ACDL files inside the `directory`. Default: `acdl`, which means that the files are stored in a `resources/alexa/conversations/acdl` folder.
 - `responsesDirectory`: The folder for response files inside the `directory`. Default: `responses`, which means that the files are stored in a `resources/alexa/conversations/responses` folder.
 - `sessionStartDelegationStrategy`: The `target` means where a new session should be directed to,either the `skill` (your app code) or `AMAZON.Conversations`. Default: `skill`.
+- `skipValidation`: If this is set to `true`, the ACDL compiler does not run a validation of the ACDL files before turning them into JSON during deployment. Learn more in the [manage files section](#manage-files).
 
 ## Manage Files
 
@@ -64,7 +66,7 @@ The Jovo integration for Alexa Conversations allows you to store the following f
 - [ACDL](https://developer.amazon.com/docs/alexa/conversations/acdl-files.html): Alexa Conversations Description Language (ACDL) files can be stored in a folder called `resources/alexa/conversations/acdl` in the root of your Jovo project.
 - [Responses](https://developer.amazon.com/docs/alexa/conversations/acdl-response-prompt-files.html): Response prompt files can be stored in a folder called `resources/alexa/conversations/responses` in the root of your Jovo project.
 
-The [`build` command](./cli-commands.md#build) then copies these files over to the `build` folder along with other operations.
+The [`build` command](./cli-commands.md#build) then copies these files over to the `build/platform.alexa` folder along with other operations. The files can then be found in `conversations` (for ACDL files) and `response` (for responses) subfolders inside the `skill-package` directory.
 
 ```sh
 $ jovo build:platform alexa
@@ -72,10 +74,15 @@ $ jovo build:platform alexa
 
 As a convention, the Jovo `build` folder should not be pushed to e.g. your Git repository. The `jovo.project.js` can be seen as a single source of truth that generates the contents of the `build` folder. For additional files like ACDL files (or maybe outsourcing some of the `jovo.project.js` contents into separate files), we recommend sticking to the `resources/alexa` folder convention.
 
-The [`deploy` command](./cli-commands.md#deploy) uploads the contents of the Alexa project in the `build` folder to the Alexa Developer Console. Before doing that, it compiles the ACDL files into JSON.
+It is, however, also possible to work from the `build/platform.alexa` folder and manage the files there.
+
+The [`deploy` command](./cli-commands.md#deploy) uploads the contents of the Alexa project in the `build` folder to the Alexa Developer Console. Before doing that, it compiles the ACDL files into JSON. Since the building of the Alexa Conversations model can take a while during deployment, we recommend adding the `--async` flag.
 
 ```sh
-$ jovo deploy:platform alexa
+$ jovo deploy:platform alexa --async
+
+# You can also skip the validation step of the ACDL compiler
+$ jovo deploy:platform alexa --async --skip-validation
 ```
 
 Learn more about all [Alexa CLI commands here](./cli-commands.md).
@@ -90,8 +97,8 @@ You can have a [handler](https://www.jovo.tech/docs/handlers) accept a request l
 import { AlexaHandles } from '@jovotech/platform-alexa';
 // ...
 
-@Handle(AlexaHandles.onDialogApiInvoked('yourApiName'))
-yourApiName() {
+@Handle(AlexaHandles.onDialogApiInvoked('<yourApiName>'))
+handleApiRequest() { // Name this method however you like
   // ...
 }
 ```
@@ -119,8 +126,8 @@ import { AlexaHandles, ApiResponseOutput } from '@jovotech/platform-alexa';
 
 // ...
 
-@Handle(AlexaHandles.onDialogApiInvoked('yourApiName'))
-yourApiName() {
+@Handle(AlexaHandles.onDialogApiInvoked('<yourApiName>'))
+handleApiRequest() { // Name this method however you like
   // ...
 
   return this.$send(ApiResponseOutput, {
@@ -186,8 +193,9 @@ someHandler() {
     updatedRequest: {
       type: 'Dialog.InputRequest',
       input: {
-        name: '<utteranceSetName>',  // Utterance set must use the Invoke APIs dialog act
-    }
+        name: '<utteranceSetName>', // Utterance set must use the Invoke APIs dialog act
+      },
+    },
   });
 }
 ```
@@ -236,7 +244,8 @@ someHandler() {
       type: 'IntentRequest',
       intent: {
         name: 'SomeIntent',
-    }
+      },
+    },
   });
 }
 ```

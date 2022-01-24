@@ -14,7 +14,7 @@ The Alexa CLI plugin allows you to interact with the [Alexa Developer Console](h
 To use the Alexa CLI, add it as plugin to your `jovo.project.js` file. [Learn more about Alexa project configuration here](./project-config.md).
 
 ```js
-const { ProjectConfig } = require('@jovotech/cli');
+const { ProjectConfig } = require('@jovotech/cli-core');
 const { AlexaCli } = require('@jovotech/platform-alexa');
 // ...
 
@@ -67,7 +67,13 @@ $ jovo build:platform alexa --reverse
 
 ## deploy
 
-The Alexa CLI plugin hooks into the `deploy:platform` command to deploy the Alexa project files (which were previously generated using the [`build` command](#build)) to the Alexa Developer Console. [Learn more about the `deploy:platform` command here](https://www.jovo.tech/docs/deploy-command#deploy:platform).
+You can use the following CLI commands for deployment:
+
+- [`deploy:platform`](#deploy-platform): Deploy your project to the Alexa Developer Console.
+- [`deploy:code`](#deploy-code): Bundle and deploy your source code to a server or cloud hosting platform like AWS.
+### deploy:platform
+
+The Alexa CLI plugin hooks into the [`deploy:platform` command](https://www.jovo.tech/docs/deploy-command#deploy-platform) to deploy the Alexa project files (which were previously generated using the [`build` command](#build)) to the Alexa Developer Console.
 
 ```sh
 $ jovo deploy:platform alexa
@@ -75,15 +81,34 @@ $ jovo deploy:platform alexa
 
 After successful deployment, you can open the [Alexa Developer Console](https://developer.amazon.com/alexa/console/ask#/) and see the changes there. If it was the first deployment, a new Alexa Skill is created. The Skill ID is stored in `build/platform.alexa/.ask/ask-states.json`. We recommend copying the Alexa Skill ID and adding it to your [project config](project-config.md#skillid). This ensures that the project is always deployed to the right Skill in the Alexa Developer Console.
 
-The Alexa CLI plugin adds the following flags to the [`deploy:platform` command](https://www.jovo.tech/docs/deploy-command#deploy:platform):
+The Alexa CLI plugin adds the following flags to the [`deploy:platform` command](https://www.jovo.tech/docs/deploy-command#deploy-platform):
 
 | Flag            | Description                                                                                                                   | Examples                |
 | --------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `--ask-profile` | Deploy to using the specified ASK profile. [Learn more about ASK profile configuration here](./project-config.md#askprofile). | `--ask-profile default` |
+| `--async` | Don't wait for the model building process to be finished. Recommended for [Alexa Conversations](./alexa-conversations.md#manage-files). |  |
+| `--skip-validation` | Skip the validation step of the [Alexa Conversations](./alexa-conversations.md#manage-files) ACDL compiler. |  |
+
+### deploy:code 
+
+If you want to deploy the code of your Jovo app to a server or cloud service, you can use the [`deploy:code` command](https://www.jovo.tech/docs/deploy-command#deploy-code).
+
+If you run into problems while bundling the code, make sure that the `bundle` script in your `package.json` file includes the following:
+
+```json
+{
+  "scripts": {
+    "bundle": "[...] --external:@alexa/*"
+  }
+}
+```
+
+The reason for this is that `esbuild` can't resolve `vscode`, a dependency used in `@alexa/acdl`, which is used for the [Alexa Conversations integration](./alexa-conversations.md).
+
 
 ## get
 
-The Alexa CLI plugin hooks into the `get:platform` command to synchronize the files in your `build` directory with the project data from the [Alexa Developer Console](https://developer.amazon.com/alexa/console/ask#/). [Learn more about the `get:platform` command here](https://www.jovo.tech/docs/get-command#get:platform).
+The Alexa CLI plugin hooks into the [`get:platform` command](https://www.jovo.tech/docs/get-command#get:platform) to synchronize the files in your `build` directory with the project data from the [Alexa Developer Console](https://developer.amazon.com/alexa/console/ask#/).
 
 ```sh
 $ jovo get:platform alexa
@@ -91,7 +116,7 @@ $ jovo get:platform alexa
 
 This is helpful if you've made any updates to the Skill's configuration (for example updating interfaces) that you now want to add to the `jovo.project.js` file using the [`files` configuration](/.project-config.md#files).
 
-The Alexa CLI plugin adds the following flags to the [`get:platform` command](https://www.jovo.tech/docs/get-command#get:platform):
+The Alexa CLI plugin adds the following flags to the [`get:platform` command](https://www.jovo.tech/docs/get-command#get-platform):
 
 | Flag            | Description                                                                                                                       | Examples                |
 | --------------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |

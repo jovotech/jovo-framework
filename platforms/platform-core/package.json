@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/platform-core",
-  "version": "4.0.1",
+  "version": "4.1.2",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -26,8 +26,8 @@
     "lodash.merge": "^4.6.2"
   },
   "devDependencies": {
-    "@jovotech/framework": "^4.0.1",
-    "@jovotech/output": "^4.0.1",
+    "@jovotech/framework": "^4.1.2",
+    "@jovotech/output": "^4.0.3",
     "@types/jest": "^26.0.20",
     "@types/lodash.merge": "^4.6.6",
     "@types/node": "^12.20.37",
@@ -43,10 +43,10 @@
     "typescript": "~4.4.4"
   },
   "peerDependencies": {
-    "@jovotech/framework": "4.0.1",
-    "@jovotech/output": "4.0.1"
+    "@jovotech/framework": "4.1.2",
+    "@jovotech/output": "4.0.3"
   },
-  "gitHead": "02f1a666ceff33f0907bff129f78be4088d87241",
+  "gitHead": "843fd4c0e8d113cf78ab53d667e414bbc0286a54",
   "prettier": "../../.prettierrc.js",
   "publishConfig": {
     "access": "public"

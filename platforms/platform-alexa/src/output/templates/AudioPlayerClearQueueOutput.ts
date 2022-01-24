@@ -7,6 +7,12 @@ export interface AudioPlayerClearQueueOutputOptions extends OutputOptions {
 
 @Output()
 export class AudioPlayerClearQueueOutput extends BaseOutput<AudioPlayerClearQueueOutputOptions> {
+  getDefaultOptions(): AudioPlayerClearQueueOutputOptions {
+    return {
+      clearBehavior: ClearBehavior.All,
+    };
+  }
+
   build(): OutputTemplate | OutputTemplate[] {
     return {
       message: this.options.message,
@@ -18,7 +24,7 @@ export class AudioPlayerClearQueueOutput extends BaseOutput<AudioPlayerClearQueu
               directives: [
                 {
                   type: 'AudioPlayer.ClearQueue',
-                  clearBehavior: this.options.clearBehavior || ClearBehavior.All,
+                  clearBehavior: this.options.clearBehavior,
                 },
               ],
             },

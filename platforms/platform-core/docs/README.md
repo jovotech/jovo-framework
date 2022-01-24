@@ -71,11 +71,11 @@ In a Jovo app, each interaction goes through the [RIDR Lifecycle](https://www.jo
 
 ### Requests
 
-The request usually contains data like an audio file or raw text ([find all sample request JSONs here](https://github.com/jovotech/jovo-framework/tree/v4dev/platforms/platform-core/sample-requests)):
+The request usually contains data like an audio file or raw text ([find all sample request JSONs here](https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-core/sample-requests)):
 
 ```json
 {
-  "version": "4.0-beta",
+  "version": "4.0",
   "platform": "core",
   "id": "7bd31461-0211-4c92-b642-69a978c2f18c",
   "timestamp": "2020-11-23T12:35:36.368Z",
@@ -98,8 +98,8 @@ The request usually contains data like an audio file or raw text ([find all samp
     "session": {
       "id": "1e4076b8-539a-48d5-8b14-1ec3cf651b7b",
       "data": {},
-      "new": true,
-      "lastUpdatedAt": "2020-11-23T12:35:21.345Z"
+      "isNew": true,
+      "updatedAt": "2020-11-23T12:35:21.345Z"
     },
     "user": {
       "id": "67fed000-9f11-4acf-bbbc-1e52e5ea22a9",
@@ -119,7 +119,7 @@ The response contains all the information that is needed by the client to displa
 
 ```json
 {
-  "version": "4.0-beta",
+  "version": "4.0",
   "output": [
     {
       "message": "Hello World!"

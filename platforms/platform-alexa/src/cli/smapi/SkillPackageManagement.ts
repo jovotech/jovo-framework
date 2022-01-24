@@ -58,11 +58,16 @@ export async function exportSkillPackage(
   );
 }
 
-export async function getImportStatus(importId: string, isAsync = false): Promise<ImportStatus> {
-  const { stdout } = await execAskCommand('smapiGetImportStatus', [
-    'ask smapi get-import-status',
-    `--import-id "${importId}"`,
-  ]);
+export async function getImportStatus(
+  importId: string,
+  askProfile?: string,
+  isAsync = false,
+): Promise<ImportStatus> {
+  const { stdout } = await execAskCommand(
+    'smapiGetImportStatus',
+    ['ask smapi get-import-status', `--import-id "${importId}"`],
+    askProfile,
+  );
 
   const status: ImportStatus = JSON.parse(stdout!);
 
@@ -77,7 +82,11 @@ export async function getImportStatus(importId: string, isAsync = false): Promis
   } else if (status.status === 'FAILED') {
     throw new JovoCliError({
       message: 'Errors occured while importing your skill package',
-      hint: status.skill.resources[0].errors[0].message,
+      hint: status.skill.resources.length
+        ? status.skill.resources[0].errors.length
+          ? status.skill.resources[0].errors[0].message
+          : JSON.stringify(status.skill.resources, null, 2)
+        : JSON.stringify(status.skill.resources, null, 2),
     });
   }
 
