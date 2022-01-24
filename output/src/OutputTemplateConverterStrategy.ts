@@ -5,6 +5,7 @@ import {
   Carousel,
   DynamicEntities,
   DynamicEntityMap,
+  isSSML,
   MessageValue,
   NormalizedOutputTemplate,
   OutputTemplate,
@@ -15,6 +16,13 @@ import {
   QuickReplyValue,
 } from '.';
 import { OutputHelpers } from './OutputHelpers';
+
+export interface MessageMaxLengthObject {
+  speech?: number;
+  text?: number;
+}
+
+export type MessageMaxLength = number | MessageMaxLengthObject;
 
 export interface SanitizationConfig {
   trimArrays: boolean;
@@ -139,31 +147,39 @@ export abstract class OutputTemplateConverterStrategy<
   protected sanitizeMessage(
     message: MessageValue,
     path: string,
-    maxLength: number,
+    maxLength: MessageMaxLength,
     offset = 0,
   ): MessageValue {
-    const actualMaxLength = maxLength - offset;
+    const speechMaxLength =
+      (typeof maxLength === 'number' ? maxLength : maxLength.speech || Infinity) - offset;
+    const textMaxLength = typeof maxLength === 'number' ? maxLength : maxLength.text || Infinity;
 
     const speechLength = typeof message === 'string' ? message.length : message.speech?.length || 0;
     const textLength = typeof message === 'string' ? message.length : message.text?.length || 0;
-    const isExceeding = speechLength > actualMaxLength || textLength > actualMaxLength;
+
+    const isSpeechExceeding = speechLength > speechMaxLength;
+    const isTextExceeding = textLength > textMaxLength;
+    const isExceeding = isSpeechExceeding || isTextExceeding;
 
     if (!this.shouldSanitize('trimStrings') || !isExceeding) {
       return message;
     }
 
     if (typeof message === 'object') {
-      if (message.speech) {
-        message.speech = message.speech.slice(0, actualMaxLength);
+      if (message.speech && isSpeechExceeding) {
+        message.speech = message.speech.slice(0, speechMaxLength);
+        this.logStringTrimWarning(`${path}.speech`, speechMaxLength);
       }
-      if (message.text) {
-        message.text = message.text.slice(0, actualMaxLength);
+      if (message.text && isTextExceeding) {
+        message.text = message.text.slice(0, textMaxLength);
+        this.logStringTrimWarning(`${path}.text`, textMaxLength);
       }
     } else {
-      message = message.slice(0, actualMaxLength);
+      const maxLength = isSSML(message) ? speechMaxLength : textMaxLength;
+      message = message.slice(0, maxLength);
+      this.logStringTrimWarning(path, maxLength);
     }
 
-    this.logStringTrimWarning(path, maxLength);
     return message;
   }
 
