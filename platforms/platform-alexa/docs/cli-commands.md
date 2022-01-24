@@ -54,6 +54,17 @@ The Alexa CLI plugin adds the following flags to the [`build` command](https://w
 | `--ask-profile` | Add the specified ASK profile to the `ask-states.json` file. [Learn more about ASK profile configuration here](./project-config.md#askprofile). | `--ask-profile default` |
 | `--async`       | Deploys the skill asynchronously. You can check the status of the upload using the ASK CLI.                                                     | `--async`               |
 
+
+You can also add the `--reverse` flag to turn the Alexa Interaction Model files in your `build` folder into [Jovo Model](https://www.jovo.tech/docs/models) files in your `models` folder. This is especially helpful if you maintain your Interaction Model in the Alexa Developer Console and then use the [`get` command](#get) to synchronize your console project with your local files. [Learn more about reverse builds here](https://www.jovo.tech/docs/build-command#reverse-build).
+
+```sh
+# Import files from Alexa Developer Console
+$ jovo get:platform alexa
+
+# Turn Alexa Interaction Model into Jovo Model
+$ jovo build:platform alexa --reverse
+```
+
 ## deploy
 
 The Alexa CLI plugin hooks into the `deploy:platform` command to deploy the Alexa project files (which were previously generated using the [`build` command](#build)) to the Alexa Developer Console. [Learn more about the `deploy:platform` command here](https://www.jovo.tech/docs/deploy-command#deploy:platform).
@@ -72,7 +83,7 @@ The Alexa CLI plugin adds the following flags to the [`deploy:platform` command]
 
 ## get
 
-The Alexa CLI plugin hooks into the `get:platform` command to synchronize the files in your `build` directory with the project data from the [Alexa Developer Console](https://developer.amazon.com/alexa/console/ask#/). [Learn more about the `get:platform` command here](https://www.jovo.tech/docs/deploy-command#get:platform).
+The Alexa CLI plugin hooks into the `get:platform` command to synchronize the files in your `build` directory with the project data from the [Alexa Developer Console](https://developer.amazon.com/alexa/console/ask#/). [Learn more about the `get:platform` command here](https://www.jovo.tech/docs/get-command#get:platform).
 
 ```sh
 $ jovo get:platform alexa
@@ -85,3 +96,14 @@ The Alexa CLI plugin adds the following flags to the [`get:platform` command](ht
 | Flag            | Description                                                                                                                       | Examples                |
 | --------------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `--ask-profile` | Retrieve data using the specified ASK profile. [Learn more about ASK profile configuration here](./project-config.md#askprofile). | `--ask-profile default` |
+
+
+After running `get`, you can turn your Alexa Interaction Model into [Jovo Model](https://www.jovo.tech/docs/models) files using [`build --reverse`](#build):
+
+```sh
+# Import files from Alexa Developer Console
+$ jovo get:platform alexa
+
+# Turn Alexa Interaction Model into Jovo Model
+$ jovo build:platform alexa --reverse
+```
