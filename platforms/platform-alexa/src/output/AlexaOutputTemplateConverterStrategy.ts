@@ -121,7 +121,7 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
     const card = output.card;
     if (card) {
       if (this.config.genericOutputToApl) {
-        addToDirectives(card.toApl?.() as AplRenderDocumentDirective);
+        addToDirectives(card.toApl?.(this.config.aplTemplates?.card) as AplRenderDocumentDirective);
       } else {
         response.response.card = card.toAlexaCard?.();
       }

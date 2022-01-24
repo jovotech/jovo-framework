@@ -68,33 +68,34 @@ export function augmentModelPrototypes(): void {
     return card;
   };
 
-  Card.prototype.toApl = function (): AplRenderDocumentDirective {
-    AplCardJson.datasources.data.title = this.title;
+  Card.prototype.toApl = function (cardTemplate?: any): AplRenderDocumentDirective {
+    const cardJson = cardTemplate || AplCardJson;
+    cardJson.datasources.data.title = this.title;
 
     if (this.subtitle) {
-      AplCardJson.datasources.data.subtitle = this.subtitle;
+      cardJson.datasources.data.subtitle = this.subtitle;
     }
 
     if (this.content) {
-      AplCardJson.datasources.data.content = this.content;
+      cardJson.datasources.data.content = this.content;
     }
 
     if (this.imageUrl) {
-      AplCardJson.datasources.data.imageUrl = this.imageUrl;
+      cardJson.datasources.data.imageUrl = this.imageUrl;
     }
 
     if (this.header) {
-      AplCardJson.datasources.data.header = this.header;
+      cardJson.datasources.data.header = this.header;
     }
 
     if (this.backgroundImageUrl) {
-      AplCardJson.datasources.data.backgroundImageUrl = this.backgroundImageUrl;
+      cardJson.datasources.data.backgroundImageUrl = this.backgroundImageUrl;
     }
 
     return {
       type: 'Alexa.Presentation.APL.RenderDocument',
       token: 'token',
-      ...AplCardJson,
+      ...cardJson,
     };
   };
 
