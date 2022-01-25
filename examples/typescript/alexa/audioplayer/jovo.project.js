@@ -1,4 +1,5 @@
 const { ProjectConfig } = require('@jovotech/cli-core');
+const { AlexaCli } = require('@jovotech/platform-alexa');
 
 /*
 |--------------------------------------------------------------------------
@@ -11,7 +12,26 @@ const { ProjectConfig } = require('@jovotech/cli-core');
 */
 const project = new ProjectConfig({
   endpoint: '${JOVO_WEBHOOK_URL}',
-  plugins: [],
+  plugins: [
+    new AlexaCli({
+      files: {
+        'skill-package/skill.json': {
+          manifest: {
+            apis: {
+              custom: {
+                interfaces: [
+                  {
+                    type: 'AUDIO_PLAYER',
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
+      // ...
+    }),
+  ],
 });
 
 module.exports = project;
