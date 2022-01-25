@@ -46,6 +46,7 @@ import {
   StateMutatingJovoMethodKey,
 } from './interfaces';
 import { MockServer, MockServerRequest } from './MockServer';
+import _cloneDeep from 'lodash.clonedeep';
 
 type AugmentedServer = Server & {
   [key: string]: any;
@@ -130,6 +131,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   mount(parent: HandleRequest): Promise<void> | void {
     this.augmentServerForRequest(parent);
 
+    // Because the socket does not work properly after being cloned, the instance from the app plugin has to be used
     this.socket = parent.app.plugins.JovoDebugger?.socket;
     parent.middlewareCollection.use('request.start', (jovo) => {
       return this.onRequest(jovo);
@@ -324,10 +326,23 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
           this.emitUpdate(handleRequest.debuggerRequestId, {
             key: stringKey,
             value,
+            previousValue,
             path: getCompletePropertyPath(stringKey, currentPath),
           });
         }
 
+        return true;
+      },
+      deleteProperty: (target: T, key: keyof T): boolean => {
+        const stringKey = key.toString();
+        const copy = _cloneDeep(target);
+        delete copy[key];
+        this.emitUpdate(handleRequest.debuggerRequestId, {
+          key: stringKey,
+          value: copy,
+          previousValue: target,
+          path: currentPath,
+        });
         return true;
       },
     };

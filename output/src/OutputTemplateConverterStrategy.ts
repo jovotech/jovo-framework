@@ -1,5 +1,4 @@
 import { Constructor } from '@jovotech/common';
-import _defaultsDeep from 'lodash.defaultsdeep';
 import { PartialDeep } from 'type-fest';
 import {
   Carousel,
@@ -16,6 +15,7 @@ import {
   QuickReplyValue,
 } from '.';
 import { OutputHelpers } from './OutputHelpers';
+import _merge from 'lodash.merge';
 
 export interface MessageMaxLengthObject {
   speech?: number;
@@ -52,7 +52,7 @@ export abstract class OutputTemplateConverterStrategy<
   abstract readonly responseClass: Constructor<RESPONSE>;
 
   constructor(config?: PartialDeep<CONFIG>) {
-    this.config = _defaultsDeep(this.getDefaultConfig(), config || {});
+    this.config = _merge(this.getDefaultConfig(), config || {});
   }
 
   getDefaultConfig(): CONFIG {
