@@ -29,10 +29,6 @@ describe('e2e', () => {
       },
     });
     await app.handle(server);
-    // delete session of response because it does not matter for this test and is hard to emulate due to dates
-    if (typeof server.response === 'object' && 'session' in server.response) {
-      delete server.response.session;
-    }
     expect((server.response as ExamplePlatformResponse).output).toEqual([
       {
         message: 'Hello world',
