@@ -36,8 +36,6 @@ export class AudioPlayerComponent extends BaseComponent {
       audioItem: {
         stream: {
           url: 'https://s3.amazonaws.com/jovo-songs/song1.mp3',
-          token: 'song1',
-          offsetInMilliseconds: 0,
         },
       },
     });
@@ -50,7 +48,6 @@ export class AudioPlayerComponent extends BaseComponent {
       audioItem: {
         stream: {
           url: 'https://s3.amazonaws.com/jovo-songs/song1.mp3',
-          token: 'song1',
           offsetInMilliseconds: this.$user.data.audioPlayerOffset,
         },
       },
@@ -191,7 +188,7 @@ someHandler() {
 }
 ```
 
-If not `token` is passed, the name of the song including file type (in the above example, it would be `song1.mp3`) will be used. The default `offsetInMilliseconds` is `0` (to play the song from the beginning).
+If no `token` is passed, the name of the song including file type (in the above example, it would be `song1.mp3`) will be used. The default `offsetInMilliseconds` is `0` (to play the song from the beginning).
 
 Under the hood, the [output template](./output.md) returned by the [`AudioPlayerPlayOutput`](https://github.com/jovotech/jovo-framework/blob/v4/latest/platforms/platform-alexa/src/output/templates/AudioPlayerPlayOutput.ts) looks like this:
 
