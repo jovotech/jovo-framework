@@ -169,6 +169,11 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
   fromResponse(response: AlexaResponse): NormalizedOutputTemplate {
     const output: NormalizedOutputTemplate = {};
 
+    // abort early if there is not response-object because all data depends on that
+    if (!response.response) {
+      return output;
+    }
+
     if (
       (response.response.outputSpeech?.text || response.response.outputSpeech?.ssml) &&
       response.response.outputSpeech?.toMessage
