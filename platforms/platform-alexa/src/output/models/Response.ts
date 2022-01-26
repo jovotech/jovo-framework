@@ -1,4 +1,4 @@
-import { IsBoolean, IsOptional, Type, ValidateNested } from '@jovotech/output';
+import { IsBoolean, IsObject, IsOptional, Type, ValidateNested } from '@jovotech/output';
 import { IsValidDirectivesArray } from '../decorators/validation/IsValidDirectivesArray';
 import { AplExecuteCommandsDirective } from './apl/AplExecuteCommandsDirective';
 import { AplLoadIndexListDataDirective } from './apl/AplLoadIndexListDataDirective';
@@ -26,6 +26,8 @@ import { Reprompt } from './Reprompt';
 import { VideoAppLaunchDirective } from './video-app/VideoAppLaunchDirective';
 
 export class Response {
+  [key: string]: unknown;
+
   @IsOptional()
   @ValidateNested()
   @Type(() => OutputSpeech)
@@ -44,6 +46,10 @@ export class Response {
   @IsOptional()
   @IsBoolean()
   shouldEndSession?: boolean;
+
+  @IsOptional()
+  @IsObject()
+  apiResponse?: Record<string, string | number | boolean>;
 
   @IsOptional()
   @IsValidDirectivesArray()

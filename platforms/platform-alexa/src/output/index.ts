@@ -1,10 +1,10 @@
 import { registerOutputPlatform } from '@jovotech/output';
 import {
-  NormalizedAlexaOutputTemplate,
   AplHeader,
   AplRenderDocumentDirective,
   Card as AlexaCard,
   CardType,
+  NormalizedAlexaOutputTemplate,
   OutputSpeech,
 } from './models';
 import { augmentModelPrototypes } from './utilities';
