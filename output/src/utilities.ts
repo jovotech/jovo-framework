@@ -2,7 +2,7 @@ import { Constructor } from '@jovotech/common';
 import { Type } from 'class-transformer';
 import _mergeWith from 'lodash.mergewith';
 import _unset from 'lodash.unset';
-import type { A, O } from 'ts-toolbelt';
+import type { O } from 'ts-toolbelt';
 import { IsOptional, ListenValue, ValidateNested, ValidationError } from '.';
 import { NormalizedOutputTemplatePlatforms } from './models/NormalizedOutputTemplatePlatforms';
 
@@ -87,20 +87,6 @@ export function formatList(
     .map((item) => item.toString())
     .join(delimiter)}${lastDelimiter}${items[items.length - 1].toString()}`;
 }
-
-export type FilterKey<K, I> = A.Equals<K, I> extends 1 ? never : K;
-export type OmitIndex<T, I extends string | number> = {
-  [K in keyof T as FilterKey<K, I>]: T[K];
-};
-
-export type OmitWhere<OBJECT, TYPE> = Omit<
-  OBJECT,
-  {
-    [KEY in keyof OBJECT]: OBJECT[KEY] extends TYPE ? KEY : never;
-  }[keyof OBJECT]
->;
-
-export type PlainObjectType<OBJECT> = OmitWhere<OBJECT, () => unknown>;
 
 export function isAnInstance(
   instance: unknown,
