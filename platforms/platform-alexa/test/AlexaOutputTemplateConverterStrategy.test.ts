@@ -430,7 +430,10 @@ describe('fromResponse', () => {
   describe('listen', () => {
     test('shouldEndSession undefined', async () => {
       const output = await converter.fromResponse({
-        shouldEndSession: undefined,
+        version: '',
+        response: {
+          shouldEndSession: undefined,
+        },
       });
       expect(output.listen).toBe(undefined);
     });
@@ -438,6 +441,7 @@ describe('fromResponse', () => {
     describe('boolean', () => {
       test('shouldEndSession true', async () => {
         const output = await converter.fromResponse({
+          version: '',
           response: {
             shouldEndSession: true,
           },
@@ -447,6 +451,7 @@ describe('fromResponse', () => {
 
       test('shouldEndSession false', async () => {
         const output = await converter.fromResponse({
+          version: '',
           response: {
             shouldEndSession: false,
           },
@@ -459,6 +464,7 @@ describe('fromResponse', () => {
   describe('message', () => {
     test('prompt undefined', async () => {
       const output = await converter.fromResponse({
+        version: '',
         response: {
           outputSpeech: undefined,
         },
@@ -468,6 +474,7 @@ describe('fromResponse', () => {
 
     test('speech prompt', async () => {
       const output = await converter.fromResponse({
+        version: '',
         response: {
           outputSpeech: {
             type: OutputSpeechType.Ssml,
@@ -480,6 +487,7 @@ describe('fromResponse', () => {
 
     test('plain prompt', async () => {
       const output = await converter.fromResponse({
+        version: '',
         response: {
           outputSpeech: {
             type: OutputSpeechType.Plain,
@@ -494,6 +502,7 @@ describe('fromResponse', () => {
   describe('reprompt', () => {
     test('reprompt undefined', async () => {
       const output = await converter.fromResponse({
+        version: '',
         response: {
           reprompt: undefined,
         },
@@ -503,6 +512,7 @@ describe('fromResponse', () => {
 
     test('speech reprompt', async () => {
       const output = await converter.fromResponse({
+        version: '',
         response: {
           reprompt: {
             outputSpeech: {
@@ -517,6 +527,7 @@ describe('fromResponse', () => {
 
     test('plain reprompt', async () => {
       const output = await converter.fromResponse({
+        version: '',
         response: {
           reprompt: {
             outputSpeech: {
@@ -533,6 +544,7 @@ describe('fromResponse', () => {
   describe('card', () => {
     test('card undefined', async () => {
       const output = await converter.fromResponse({
+        version: '',
         response: {
           card: undefined,
         },
@@ -542,18 +554,18 @@ describe('fromResponse', () => {
 
     test('card is set', async () => {
       const output = await converter.fromResponse({
+        version: '',
         response: {
           card: {
+            type: CardType.Standard,
             title: 'title',
-            content: 'content',
-            text: 'text',
             image: {
               smallImageUrl: 'foo',
             },
           },
         },
       });
-      expect(output.card).toEqual({ title: 'title', content: 'text', imageUrl: 'foo' });
+      expect(output.card).toEqual({ title: 'title', imageUrl: 'foo' });
     });
   });
 });
