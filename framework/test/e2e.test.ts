@@ -29,7 +29,7 @@ describe('e2e', () => {
       },
     });
     await app.handle(server);
-    expect((server.response as ExamplePlatformResponse).output).toEqual([
+    expect(server.response.output).toEqual([
       {
         message: 'Hello world',
       },
@@ -63,12 +63,12 @@ describe('e2e', () => {
       },
     });
     await app.handle(server);
-    expect((server.response as ExamplePlatformResponse).output).toEqual([
+    expect(server.response.output).toEqual([
       {
         message: 'Hello world',
       },
     ]);
-    expect((server.response as ExamplePlatformResponse).session.state).toEqual([
+    expect(server.response.session.state).toEqual([
       {
         component: RedirectTargetComponent.name,
       },
@@ -118,12 +118,12 @@ describe('e2e', () => {
       },
     });
     await app.handle(server);
-    expect((server.response as ExamplePlatformResponse).output).toEqual([
+    expect(server.response.output).toEqual([
       {
         message: 'Hello world',
       },
     ]);
-    expect((server.response as ExamplePlatformResponse).session.state).toEqual([
+    expect(server.response.session.state).toEqual([
       {
         component: GlobalComponent.name,
       },
@@ -195,7 +195,7 @@ describe('e2e', () => {
       },
     });
     await app.handle(server);
-    expect((server.response as ExamplePlatformResponse).output).toEqual([{ message: 'Finish' }]);
-    expect((server.response as ExamplePlatformResponse).session.state).toEqual([]);
+    expect(server.response.output).toEqual([{ message: 'Finish' }]);
+    expect(server.response.session.state).toEqual([]);
   });
 });

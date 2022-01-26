@@ -1,17 +1,16 @@
-import { PlainObjectType } from '@jovotech/output';
-import { Headers, QueryParams, Server, ServerResponse } from '../../src';
-import { ExamplePlatformRequest } from './platform';
+import { Headers, PlainObjectType, QueryParams, Server } from '../../src';
+import { ExamplePlatformRequest, ExamplePlatformResponse } from './platform';
 
 export class ExampleServer extends Server {
-  response: ServerResponse;
+  response: PlainObjectType<ExamplePlatformResponse>;
   headers: Headers = {};
   constructor(readonly request: PlainObjectType<ExamplePlatformRequest>) {
     super();
-    this.response = {};
+    this.response = new ExamplePlatformResponse();
   }
 
   fail(error: Error): Promise<void> | void {
-    this.response = error;
+    this.response.error = error;
   }
 
   getNativeRequestHeaders(): Headers {
@@ -30,7 +29,7 @@ export class ExampleServer extends Server {
     return false;
   }
 
-  async setResponse(response: ServerResponse): Promise<void> {
+  async setResponse(response: PlainObjectType<ExamplePlatformResponse>): Promise<void> {
     this.response = response;
   }
 

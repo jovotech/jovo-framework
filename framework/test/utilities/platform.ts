@@ -25,7 +25,7 @@ import {
 
 export class ExamplePlatformRequest extends JovoRequest {
   input: Input = {};
-  session: Partial<JovoSession> = {};
+  session?: Partial<JovoSession> = {};
 
   getUserId(): string | undefined {
     return;
@@ -68,7 +68,7 @@ export class ExamplePlatformRequest extends JovoRequest {
   }
 
   getSessionData(): UnknownObject | undefined {
-    return this.session.data;
+    return this.session?.data;
   }
 
   setSessionData(): void {
@@ -76,11 +76,11 @@ export class ExamplePlatformRequest extends JovoRequest {
   }
 
   getSessionId(): string | undefined {
-    return this.session.id;
+    return this.session?.id;
   }
 
   isNewSession(): boolean | undefined {
-    return this.session.isNew;
+    return this.session?.isNew;
   }
 
   getDeviceCapabilities(): CapabilityType[] | undefined {
@@ -103,6 +103,7 @@ export class ExamplePlatformRequestBuilder extends RequestBuilder<ExamplePlatfor
 export class ExamplePlatformResponse extends JovoResponse {
   output: NormalizedOutputTemplate[] = [];
   session: Partial<JovoSession> = {};
+  error?: unknown;
 
   hasSessionEnded(): boolean {
     return false;
