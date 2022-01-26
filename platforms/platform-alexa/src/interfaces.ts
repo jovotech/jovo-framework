@@ -17,12 +17,12 @@ export interface Context {
   Geolocation?: Geolocation;
 }
 
-export type AudioplayerActivity = 'PLAYING' | 'PAUSED' | 'FINISHED' | 'BUFFER_UNDERRUN' | 'IDLE';
+export type PlayerActivity = 'PLAYING' | 'PAUSED' | 'FINISHED' | 'BUFFER_UNDERRUN' | 'IDLE';
 
 export interface AudioPlayerContext {
   token: string;
   offsetInMilliseconds: number;
-  playerActivity: AudioplayerActivity;
+  playerActivity: PlayerActivity;
 }
 
 export interface Geolocation {

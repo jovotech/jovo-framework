@@ -1,4 +1,4 @@
-import { OmitIndex } from '../utilities';
+import { OmitIndex } from '@jovotech/common';
 import { MessageValue } from './Message';
 import { NormalizedOutputTemplate } from './NormalizedOutputTemplate';
 import { OutputTemplatePlatforms } from './OutputTemplatePlatforms';
@@ -6,7 +6,7 @@ import { OutputTemplatePlatforms } from './OutputTemplatePlatforms';
 // Construct an object-type that has the same keys as NormalizedOutputTemplate but additionally allows an array to be passed to message and reprompt.
 // Also, updates type of platforms to reference OutputTemplatePlatforms
 export type DenormalizeOutputTemplate<OUTPUT_TEMPLATE extends NormalizedOutputTemplate> = Omit<
-  OmitIndex<OUTPUT_TEMPLATE, string>,
+  OmitIndex<OUTPUT_TEMPLATE>,
   'message' | 'reprompt' | 'platforms'
 > & {
   [key: string]: unknown;
