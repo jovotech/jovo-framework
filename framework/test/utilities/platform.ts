@@ -6,8 +6,9 @@ import {
 import {
   AnyObject,
   CapabilityType,
-  EntityMap,
+  EntityMap, Extensible,
   ExtensibleConfig,
+  HandleRequest,
   Input,
   InputTypeLike,
   Jovo,
@@ -168,6 +169,13 @@ export class ExamplePlatform extends Platform<
 
   getDefaultConfig(): ExtensibleConfig {
     return {};
+  }
+
+  mount(parent: Extensible) {
+    super.mount(parent);
+    this.middlewareCollection.use('after.request.end', (jovo) => {
+      this.enableDatabaseSessionStorage(jovo);
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

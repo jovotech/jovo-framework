@@ -1,5 +1,24 @@
-import { APP_MIDDLEWARES } from '../src';
-import { EmptyPlatform, ExamplePlatform } from './utilities';
+import {
+  AnyObject,
+  App,
+  APP_MIDDLEWARES,
+  DbPlugin,
+  HandleRequest,
+  InvalidParentError,
+  Jovo,
+  Plugin,
+  PluginConfig,
+} from '../src';
+import { EmptyPlatform, ExampleExtensible, ExamplePlatform } from './utilities';
+import { ExampleServer } from './utilities/server';
+
+test('Invalid parent: HandleRequest expected', () => {
+  const extensible = new ExampleExtensible();
+  const platform = new ExamplePlatform();
+  expect(() => {
+    platform.mount(extensible);
+  }).toThrowError(InvalidParentError);
+});
 
 describe('middlewareCollection', () => {
   test('no middlewareCollection was specified: default set used', () => {
@@ -10,5 +29,59 @@ describe('middlewareCollection', () => {
   test('middlewareCollection was specified: default overwritten', () => {
     const platform = new EmptyPlatform();
     expect(Object.keys(platform.middlewareCollection.middlewares)).toHaveLength(0);
+  });
+});
+
+describe('enableDatabaseSessionStorage', () => {
+  test('no DbPlugin installed', async () => {
+    const platform = new ExamplePlatform();
+    const enableDatabaseSessionStorageMethod = (platform as AnyObject).enableDatabaseSessionStorage;
+    (platform as AnyObject).enableDatabaseSessionStorage = jest.fn(
+      enableDatabaseSessionStorageMethod,
+    );
+    const app = new App({
+      plugins: [platform],
+    });
+    await app.initialize();
+    const server = new ExampleServer({
+      input: {},
+    });
+    await app.handle(server);
+    expect((platform as AnyObject).enableDatabaseSessionStorage).toHaveBeenCalled();
+  });
+
+  test('DbPlugin installed', async () => {
+    class ExampleDbPlugin extends DbPlugin {
+      loadData(userId: string, jovo: Jovo): Promise<void> {
+        return Promise.resolve(undefined);
+      }
+
+      saveData(userId: string, jovo: Jovo): Promise<void> {
+        return Promise.resolve(undefined);
+      }
+    }
+
+    class TestExpectPlugin extends Plugin {
+      getDefaultConfig(): PluginConfig {
+        return {};
+      }
+
+      mount(parent: HandleRequest) {
+        parent.middlewareCollection.use('after.request.end', () => {
+          expect(
+            (parent.config.plugin?.ExampleDbPlugin as AnyObject)?.storedElements?.session,
+          ).toBe(true);
+        });
+      }
+    }
+
+    const app = new App({
+      plugins: [new ExamplePlatform(), new ExampleDbPlugin(), new TestExpectPlugin()],
+    });
+    await app.initialize();
+    const server = new ExampleServer({
+      input: {},
+    });
+    await app.handle(server);
   });
 });
