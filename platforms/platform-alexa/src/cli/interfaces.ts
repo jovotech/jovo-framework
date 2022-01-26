@@ -38,6 +38,7 @@ export interface AlexaConversationsConfig {
 
 export interface AlexaCliConfig extends PluginConfig {
   askProfile?: string;
+  endpoint?: string;
   skillId?: string;
   locales?: {
     [locale: string]: SupportedLocalesType[];
