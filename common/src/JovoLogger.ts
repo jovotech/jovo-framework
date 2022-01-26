@@ -7,8 +7,7 @@ export interface JovoLoggerConfig {
   name: string | symbol;
   level: LogLevelDesc;
   styling: boolean;
-  // TODO determine name
-  properties: Array<keyof JovoError>;
+  errorProperties: Array<keyof JovoError>;
 }
 
 export class JovoLogger {
@@ -51,7 +50,7 @@ export class JovoLogger {
       name: 'JovoLogger',
       styling: true,
       level: (process.env.JOVO_LOG_LEVEL as LogLevelDesc | undefined) || levels.TRACE,
-      properties: ['package', 'message', 'context', 'stack', 'hint', 'learnMore'],
+      errorProperties: ['package', 'message', 'context', 'stack', 'hint', 'learnMore'],
     };
   }
 
@@ -147,7 +146,7 @@ export class JovoLogger {
     };
 
     // log each configured property
-    this.config.properties.forEach((property) => {
+    this.config.errorProperties.forEach((property) => {
       logProperty(property);
     });
   }
