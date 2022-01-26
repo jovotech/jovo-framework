@@ -10,7 +10,24 @@ export enum IspType {
   Cancel = 'Cancel',
 }
 
+export enum AudioPlayerType {
+  PlaybackStarted = 'AudioPlayer.PlaybackStarted',
+  PlaybackNearlyFinished = 'AudioPlayer.PlaybackNearlyFinished',
+  PlaybackFinished = 'AudioPlayer.PlaybackFinished',
+  PlaybackStopped = 'AudioPlayer.PlaybackStopped',
+  PlaybackFailed = 'AudioPlayer.PlaybackFailed',
+}
+
+export enum PlaybackControllerType {
+  NextCommandIssued = 'PlaybackController.NextCommandIssued',
+  PreviousCommandIssued = 'PlaybackController.PreviousCommandIssued',
+  PlayCommandIssued = 'PlaybackController.PlayCommandIssued',
+  PauseCommandIssued = 'PlaybackController.PauseCommandIssued',
+}
+
 export type IspTypeLike = EnumLike<IspType> | string;
+export type AudioPlayerTypeLike = EnumLike<AudioPlayerType> | string;
+export type PlaybackControllerTypeLike = EnumLike<PlaybackControllerType> | string;
 
 export class AlexaHandles {
   static onPermission(status: PermissionStatus, type?: PermissionType): HandleOptions {
@@ -50,6 +67,22 @@ export class AlexaHandles {
       platforms: ['alexa'],
       if: (jovo: Jovo) =>
         name ? (jovo.$request as AlexaRequest).request?.apiRequest?.name === name : true,
+    };
+  }
+
+  static onAudioPlayer(type: AudioPlayerTypeLike): HandleOptions {
+    return {
+      global: true,
+      types: [type],
+      platforms: ['alexa'],
+    };
+  }
+
+  static onPlaybackController(type: PlaybackControllerTypeLike): HandleOptions {
+    return {
+      global: true,
+      types: [type],
+      platforms: ['alexa'],
     };
   }
 }
