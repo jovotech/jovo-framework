@@ -102,7 +102,7 @@ export class ExamplePlatformRequestBuilder extends RequestBuilder<ExamplePlatfor
 
 export class ExamplePlatformResponse extends JovoResponse {
   output: NormalizedOutputTemplate[] = [];
-  session: Partial<JovoSession> = {};
+  session?: Partial<JovoSession> = {};
   error?: unknown;
 
   hasSessionEnded(): boolean {
@@ -132,7 +132,10 @@ export class ExamplePlatformOutputConverterStrategy extends OutputTemplateConver
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  toResponse(output: NormalizedOutputTemplate): ExamplePlatformResponse {
+  toResponse(
+    output: NormalizedOutputTemplate | NormalizedOutputTemplate[],
+  ): ExamplePlatformResponse {
+    output = Array.isArray(output) ? output : [output];
     return this.normalizeResponse({
       output,
     }) as ExamplePlatformResponse;
