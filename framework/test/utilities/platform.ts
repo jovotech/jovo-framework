@@ -6,9 +6,9 @@ import {
 import {
   AnyObject,
   CapabilityType,
-  EntityMap, Extensible,
+  EntityMap,
+  Extensible,
   ExtensibleConfig,
-  HandleRequest,
   Input,
   InputTypeLike,
   Jovo,

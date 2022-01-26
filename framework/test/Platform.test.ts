@@ -1,16 +1,5 @@
-import {
-  AnyObject,
-  App,
-  APP_MIDDLEWARES,
-  DbPlugin,
-  HandleRequest,
-  InvalidParentError,
-  Jovo,
-  Plugin,
-  PluginConfig,
-} from '../src';
-import { EmptyPlatform, ExampleExtensible, ExamplePlatform } from './utilities';
-import { ExampleServer } from './utilities/server';
+import { AnyObject, App, APP_MIDDLEWARES, DbPlugin, InvalidParentError, Jovo } from '../src';
+import { EmptyPlatform, ExampleExtensible, ExamplePlatform, ExampleServer } from './utilities';
 
 test('Invalid parent: HandleRequest expected', () => {
   const extensible = new ExampleExtensible();
@@ -61,22 +50,13 @@ describe('enableDatabaseSessionStorage', () => {
       }
     }
 
-    class TestExpectPlugin extends Plugin {
-      getDefaultConfig(): PluginConfig {
-        return {};
-      }
-
-      mount(parent: HandleRequest) {
-        parent.middlewareCollection.use('after.request.end', () => {
-          expect(
-            (parent.config.plugin?.ExampleDbPlugin as AnyObject)?.storedElements?.session,
-          ).toBe(true);
-        });
-      }
-    }
-
     const app = new App({
-      plugins: [new ExamplePlatform(), new ExampleDbPlugin(), new TestExpectPlugin()],
+      plugins: [new ExamplePlatform(), new ExampleDbPlugin()],
+    });
+    app.hook('after.request.end', (jovo) => {
+      expect((jovo.$config.plugin?.ExampleDbPlugin as AnyObject)?.storedElements?.session).toBe(
+        true,
+      );
     });
     await app.initialize();
     const server = new ExampleServer({

@@ -1,6 +1,5 @@
 import { App, BaseComponent, BuiltInHandler, Component, InputType, MetadataStorage } from '../src';
-import { ExamplePlatform, ExamplePlatformResponse } from './utilities';
-import { ExampleServer } from './utilities/server';
+import { ExamplePlatform, ExampleServer } from './utilities';
 
 describe('e2e', () => {
   const metadataStorage = MetadataStorage.getInstance();

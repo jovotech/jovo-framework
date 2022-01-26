@@ -6,8 +6,8 @@ import {
   ExamplePlatformRequest,
   ExamplePlatformResponse,
   ExamplePlatformUser,
+  ExampleServer,
 } from './utilities';
-import { ExampleServer } from './utilities/server';
 
 const app = {} as App;
 const platform = new ExamplePlatform();
