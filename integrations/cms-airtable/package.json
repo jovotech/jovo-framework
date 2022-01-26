@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/cms-airtable",
-  "version": "4.1.2",
+  "version": "4.2.0",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -26,7 +26,7 @@
     "lodash.set": "^4.3.2"
   },
   "devDependencies": {
-    "@jovotech/framework": "^4.1.2",
+    "@jovotech/framework": "^4.2.0",
     "@types/jest": "^26.0.20",
     "@types/lodash.set": "^4.3.6",
     "@types/node": "^12.20.37",
@@ -42,7 +42,7 @@
     "typescript": "~4.4.4"
   },
   "peerDependencies": {
-    "@jovotech/framework": "4.1.2"
+    "@jovotech/framework": "4.2.0"
   },
   "gitHead": "843fd4c0e8d113cf78ab53d667e414bbc0286a54",
   "prettier": "../../.prettierrc.js",
