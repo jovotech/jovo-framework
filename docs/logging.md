@@ -189,27 +189,30 @@ logging: {
 },
 ```
 
-The following properties can be passed:
+This is the default configuration for `logger`, simplified for readability:
 
 ```typescript
 {
-  name: 'some name'; // Name of the logger, see loglevel.getLogger
-  level: 'trace'; // Level of the logger, see logLevel.setLevel
-  styling: boolean; // Disable styling completely 
-  properties: ['package', 'message', 'context']; // Can be used to change order of properties that are displayed or even omit some
+  name: 'JovoLogger', // Name of the logger, see loglevel.getLogger
+  level: process.env.JOVO_LOG_LEVEL || 'trace', // Level of the logger, see logLevel.setLevel
+  styling: true, // Enable or disable styling completely 
+  errorProperties: ['package', 'message', 'context', 'stack', 'hint', 'learnMore'], // Can be used to change order of error properties that are displayed or even omit some
 }
 ```
+
+You can use the logger to log to various log levels, which can be set in the config or using the environment variable `JOVO_LOG_LEVEL`, for example like this:
+
+```typescript
+process.env.JOVO_LOG_LEVEL = 'warn';
+```
+
+You can also learn more about all `errorProperties` in the [`JovoError` documentation](./error-handling.md#jovoerror).
+
 
 You can import the Jovo Logger like this:
 
 ```typescript
 import { Logger } from '@jovotech/framework';
-```
-
-You can use the logger to log to various log levels, which can be set as environment variable `JOVO_LOG_LEVEL`, for example like this:
-
-```typescript
-process.env.JOVO_LOG_LEVEL = 'warn';
 ```
 
 The logs can be done like this:
