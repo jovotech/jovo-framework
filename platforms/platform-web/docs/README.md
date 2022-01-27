@@ -25,7 +25,7 @@ You can install the plugin like this:
 $ npm install @jovotech/platform-web
 ```
 
-Add it as plugin to your [app configuration](https://www.jovo.tech/docs/app-config), along with [NLU](https://www.jovo.tech/marketplace) configuration e.g. `app.ts`:
+Add it as plugin to your [app configuration](https://www.jovo.tech/docs/app-config), along with an [NLU integration](https://www.jovo.tech/docs/nlu) like [NLP.js](https://www.jovo.tech/marketplace/nlu-nlpjs):
 
 ```typescript
 import { App } from '@jovotech/framework';
