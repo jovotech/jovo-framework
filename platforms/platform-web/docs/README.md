@@ -25,18 +25,28 @@ You can install the plugin like this:
 $ npm install @jovotech/platform-web
 ```
 
-Add it as plugin to your [app configuration](https://www.jovo.tech/docs/app-config), e.g. `app.ts`:
+Add it as plugin to your [app configuration](https://www.jovo.tech/docs/app-config), along with [NLU](https://www.jovo.tech/marketplace) configuration e.g. `app.ts`:
 
 ```typescript
 import { App } from '@jovotech/framework';
 import { WebPlatform } from '@jovotech/platform-web';
+import { LangEn } from '@nlpjs/lang-en';
+import { NlpjsNlu } from '@jovotech/nlu-nlpjs';
 // ...
 
 const app = new App({
   plugins: [
-    new WebPlatform(),
-    // ...
-  ],
+    new WebPlatform({
+      plugins: [
+        new NlpjsNlu({
+          languageMap: {
+            en: LangEn,
+          },
+        }),
+        // ...
+      ],
+    }),
+  ],,
 });
 ```
 
