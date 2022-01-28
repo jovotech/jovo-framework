@@ -18,6 +18,7 @@ import { AlexaOutputTemplateConverterStrategy } from './output';
 export interface AlexaConfig extends PlatformConfig {
   output: {
     genericOutputToApl: boolean;
+    aplTemplates?: Record<string, unknown>;
   };
   intentMap: Record<string, string>;
 }
@@ -90,6 +91,7 @@ export class AlexaPlatform extends Platform<
     this.outputTemplateConverterStrategy.config.genericOutputToApl = !!(
       jovo.$alexa?.$request?.isAplSupported() && this.config.output?.genericOutputToApl
     );
+    this.outputTemplateConverterStrategy.config.aplTemplates = this.config.output?.aplTemplates;
 
     if (jovo.$alexa?.$request?.request?.type === 'Alexa.Presentation.APL.UserEvent') {
       const requestArguments = jovo.$alexa.$request.request.arguments || [];
