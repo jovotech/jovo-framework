@@ -27,7 +27,7 @@ There are three ways how app configurations can be done:
 In the `app.ts`, the configuration is added like this:
 
 ```typescript
-import { App } from '@jovotech/framework';
+import { App } from '@jovotech/framework'
 
 // ...
 
