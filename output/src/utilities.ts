@@ -3,7 +3,7 @@ import { Type } from 'class-transformer';
 import _mergeWith from 'lodash.mergewith';
 import _unset from 'lodash.unset';
 import type { O } from 'ts-toolbelt';
-import { IsOptional, ListenValue, ValidateNested, ValidationError } from '.';
+import { RichAudio, Sequencer, IsOptional, ListenValue, ValidateNested, ValidationError } from '.';
 import { NormalizedOutputTemplatePlatforms } from './models/NormalizedOutputTemplatePlatforms';
 
 export function registerOutputPlatform<TYPE extends Record<string, unknown>>(
@@ -142,4 +142,19 @@ export function mergeListen(
   }
   // if mergeWith is undefined, just return target
   return target;
+}
+
+export function mergeRichAudio(
+  target: RichAudio | null | undefined,
+  mergeWith: RichAudio,
+): RichAudio {
+  if (!target) {
+    return mergeWith;
+  }
+
+  // If there are two richAudio responses, we want to sequence them one after the other
+  return {
+    type: 'Sequencer',
+    items: [target, mergeWith],
+  } as Sequencer;
 }

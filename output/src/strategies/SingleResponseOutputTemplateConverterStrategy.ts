@@ -2,6 +2,7 @@ import {
   isSSML,
   mergeInstances,
   mergeListen,
+  mergeRichAudio,
   MessageValue,
   NullableOutputTemplateBase,
   NormalizedOutputTemplate,
@@ -118,6 +119,11 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
     const carousel = mergeWith.carousel;
     if (carousel) {
       target.carousel = { ...carousel };
+    }
+
+    const richAudio = mergeWith.richAudio;
+    if (richAudio) {
+      target.richAudio = mergeRichAudio(target.richAudio, richAudio);
     }
 
     target.listen = mergeListen(target.listen, mergeWith.listen);

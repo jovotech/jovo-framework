@@ -20,7 +20,7 @@ export class Mixer extends RichAudio {
   items!: RichAudio[];
 }
 
-export class Sequencer {
+export class Sequencer extends RichAudio {
   type!: 'Sequencer';
 
   @IsArray()
@@ -29,7 +29,7 @@ export class Sequencer {
   items!: RichAudio[];
 }
 
-export class Audio {
+export class Audio extends RichAudio {
   type!: 'Audio';
 
   @IsNotEmpty()
@@ -37,7 +37,7 @@ export class Audio {
   source!: string;
 }
 
-export class Speech {
+export class Speech extends RichAudio {
   type!: 'Speech';
 
   @IsNotEmpty()
@@ -45,7 +45,7 @@ export class Speech {
   content!: string;
 }
 
-export class Silence {
+export class Silence extends RichAudio {
   type!: 'Silence';
 
   @IsNotEmpty()
