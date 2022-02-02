@@ -9,6 +9,8 @@ import {
   DeviceAddressLocation,
 } from './api/DeviceLocationApi';
 
+import { getSystemTimezone } from './api/SettingsApi';
+
 export enum AlexaCapability {
   Apl = 'ALEXA:APL',
 }
@@ -32,6 +34,15 @@ export class AlexaDevice extends JovoDevice<Alexa, AlexaCapabilityType> {
   async getAddress(): Promise<DeviceAddressLocation> {
     const request: AlexaRequest = this.jovo.$request;
     return getDeviceAddress(
+      request.getApiEndpoint(),
+      request.getDeviceId(),
+      request.getApiAccessToken(),
+    );
+  }
+
+  async getTimezone(): Promise<string> {
+    const request: AlexaRequest = this.jovo.$request;
+    return getSystemTimezone(
       request.getApiEndpoint(),
       request.getDeviceId(),
       request.getApiAccessToken(),

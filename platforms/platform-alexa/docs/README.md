@@ -276,6 +276,7 @@ You can access the following properties and methods of the Alexa device class:
 
 - `this.$alexa.$device.id`: Get the device ID from the Alexa request
 - [Device location and address](#device-location-and-address)
+- [System settings](#system-settings)
 
 #### Device Location and Address
 
@@ -377,6 +378,23 @@ async someHandler() {
   */
 }
 ```
+
+#### System Settings
+
+It is possible to retrieve some of your Alexa Skill user's settings without them granting you any special permissions. Learn more in the [official Alexa docs](https://developer.amazon.com/en-GB/docs/alexa/smapi/alexa-settings-api-reference.html).
+
+You can use the `getTimezone()` method to retrieve the timezone setting:
+
+```typescript
+async someHandler() {
+  const timezone: string = await this.$alexa.$device.getTimezone();
+
+  /* Result:
+    "Africa/Abidjan"
+  */
+}
+```
+
 
 ### Entities (Slots)
 
