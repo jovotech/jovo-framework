@@ -4,6 +4,8 @@ import 'reflect-metadata';
 export * from 'class-transformer';
 export * from 'class-validator';
 
+export type { DeepPartial, OmitIndex, OmitWhere, PlainObjectType } from '@jovotech/common';
+
 export * from './errors/OutputValidationError';
 
 export * from './decorators/transformation/TransformMap';

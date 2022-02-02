@@ -1,3 +1,4 @@
+import { DeepPartial } from '@jovotech/common';
 import {
   IsArray,
   IsInstance,
@@ -23,7 +24,7 @@ export class NormalizedPlatformOutputTemplate<
 
   @IsOptional()
   @ValidateNested()
-  nativeResponse?: RESPONSE;
+  nativeResponse?: DeepPartial<RESPONSE>;
 
   @IsOptional()
   @IsStringOrInstance(Message)

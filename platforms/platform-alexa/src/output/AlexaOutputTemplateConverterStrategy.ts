@@ -4,6 +4,7 @@ import {
   DynamicEntity,
   DynamicEntityMap,
   mergeInstances,
+  MessageMaxLength,
   MessageValue,
   NormalizedOutputTemplate,
   OutputTemplateConverterStrategyConfig,
@@ -25,6 +26,7 @@ import { convertMessageToOutputSpeech } from './utilities';
 export interface AlexaOutputTemplateConverterStrategyConfig
   extends OutputTemplateConverterStrategyConfig {
   genericOutputToApl: boolean;
+  aplTemplates?: Record<string, unknown>;
 }
 
 export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTemplateConverterStrategy<
@@ -64,7 +66,7 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
   protected sanitizeMessage(
     message: MessageValue,
     path: string,
-    maxLength = ALEXA_STRING_MAX_LENGTH,
+    maxLength: MessageMaxLength = ALEXA_STRING_MAX_LENGTH,
     offset = SSML_OFFSET,
   ): MessageValue {
     return super.sanitizeMessage(message, path, maxLength, offset);
@@ -127,7 +129,7 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
     const card = output.card;
     if (card) {
       if (this.config.genericOutputToApl) {
-        addToDirectives(card.toApl?.() as AplRenderDocumentDirective);
+        addToDirectives(card.toApl?.(this.config.aplTemplates?.card) as AplRenderDocumentDirective);
       } else {
         response.response.card = card.toAlexaCard?.();
       }
@@ -135,7 +137,9 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
 
     const carousel = output.carousel;
     if (carousel && this.config.genericOutputToApl) {
-      addToDirectives(carousel.toApl?.() as AplRenderDocumentDirective);
+      addToDirectives(
+        carousel.toApl?.(this.config.aplTemplates?.carousel) as AplRenderDocumentDirective,
+      );
     }
 
     const quickReplies = output.quickReplies;
@@ -167,6 +171,12 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
 
     if (output.platforms?.alexa?.nativeResponse) {
       mergeInstances(response, output.platforms.alexa.nativeResponse);
+    }
+
+    // if the response is an empty response, set shouldEndSession to true, otherwise Alexa returns INVALID_RESPONSE
+    const responseProperties = Object.keys(response.response);
+    if (responseProperties.length === 1 && responseProperties.includes('shouldEndSession')) {
+      response.response.shouldEndSession = true;
     }
 
     return response;

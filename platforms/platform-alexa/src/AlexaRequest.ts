@@ -191,4 +191,8 @@ export class AlexaRequest extends JovoRequest {
     }
     return capabilities;
   }
+
+  getDeviceId(): string {
+    return this.context!.System.device.deviceId;
+  }
 }

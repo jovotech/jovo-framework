@@ -1,12 +1,10 @@
-const fs = require('fs');
 const { PackageGraph } = require('@lerna/package-graph');
 const { Project } = require('@lerna/project');
 const { getFilteredPackages } = require('@lerna/filter-options');
-const { join, relative } = require('path');
+const { join } = require('path');
 
 const SCRIPTS_MAP = {
-  prebuild:
-    'tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json --clean',
+  prebuild: 'rimraf dist',
   build:
     'tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json',
   watch:
@@ -21,7 +19,7 @@ const SCRIPTS_MAP = {
   const filteredPackages = await getFilteredPackages(
     packageGraph,
     { cwd },
-    { ignore: ['@jovotech/e2e', '@jovotech/examples-*'] },
+    { ignore: ['@jovotech/e2e', '@jovotech/examples-*', '@jovotech/client-*'] },
   );
 
   const promises = filteredPackages.map((pkg) => {

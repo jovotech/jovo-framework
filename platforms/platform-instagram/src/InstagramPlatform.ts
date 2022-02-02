@@ -13,8 +13,7 @@ import { InstagramResponse } from './InstagramResponse';
 import { InstagramUser } from './InstagramUser';
 import { InstagramOutputTemplateConverterStrategy } from './output';
 
-export interface InstagramConfig
-  extends Omit<OmitIndex<FacebookMessengerConfig, string>, 'senderActions'> {
+export interface InstagramConfig extends Omit<OmitIndex<FacebookMessengerConfig>, 'senderActions'> {
   [key: string]: unknown;
 }
 

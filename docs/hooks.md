@@ -28,7 +28,7 @@ If you compare hooks to [plugins](./plugins.md), you can see that hooks come wit
 The code snippet from above consists of the following elements:
 
 - `app`: Make sure that `app` is set. We recommend adding hooks to your [app configuration files](./app-config.md), for example `app.ts`.
-- `<middleware>`: This is the middleware this hook should use, for example `platform.output`. Find all middlewares in the [RIDR docs](./ridr-lifecycle.md#middlewares). You can also add `before` and `after`, e.g. `before.platform.output`.
+- `<middleware>`: This is the middleware this hook should use, for example `response.output`. Find all middlewares in the [RIDR docs](./ridr-lifecycle.md#middlewares). You can also add `before` and `after`, e.g. `before.response.output`.
 - Callback function with `jovo`: This is where you add the code that should get executed when the middleware triggers the hook.
 
 Here is an example that logs the [`$output` array](./output.md) before it is turned into a native platform response:
@@ -36,7 +36,7 @@ Here is an example that logs the [`$output` array](./output.md) before it is tur
 ```typescript
 // src/app.ts
 
-app.hook('before.platform.output', (jovo) => {
+app.hook('before.response.output', (jovo) => {
   console.log(jovo.$output);
 });
 ```

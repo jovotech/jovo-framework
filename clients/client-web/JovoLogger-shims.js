@@ -1,2 +1,0 @@
-class JovoLogger {}
-export { JovoLogger };

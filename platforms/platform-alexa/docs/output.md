@@ -68,6 +68,8 @@ Under the hood, Jovo translates the `message` into an `outputSpeech` object ([se
 }
 ```
 
+The `outputSpeech` response format is [limited to 8,000 characters](https://developer.amazon.com/docs/alexa/custom-skills/request-and-response-json-reference.html#response-format). By default, Jovo output trims the content of the `message` property to that length. Learn more in the [output sanitization documentation](https://www.jovo.tech/docs/output-config#sanitization).
+
 ### reprompt
 
 The [generic `reprompt` element](https://www.jovo.tech/docs/output-templates#message) is used to ask again if the user does not respond to a prompt after a few seconds:
@@ -162,7 +164,23 @@ Jovo automatically turns the [generic `card` element](https://www.jovo.tech/docs
 }
 ```
 
-For this to work, `genericOutputToApl` needs to be enabled in the [Alexa output configuration](#alexa-output-configuration).
+For this to work, `genericOutputToApl` needs to be enabled in the [Alexa output configuration](#alexa-output-configuration), which is the default. You can also override the default APL template used for `card`:
+
+```typescript
+const app = new App({
+  // ...
+
+  plugins: [
+    new AlexaPlatform({
+      output: {
+        aplTemplates: {
+          card: CARD_APL, // Add imported document here
+        },
+      },
+    }),
+  ],
+});
+```
 
 **Note**: If you want to send a home card to the Alexa mobile app instead, we recommend using the [`nativeResponse` property](#native-response).
 
@@ -188,9 +206,25 @@ Alexa does not natively support carousels. However, Jovo automatically turns the
 }
 ```
 
-For this to work, `genericOutputToApl` needs to be enabled in the [Alexa output configuration](#alexa-output-configuration).
+For this to work, `genericOutputToApl` needs to be enabled in the [Alexa output configuration](#alexa-output-configuration), which is the default. You can also override the default APL template used for `carousel`:
 
-You can make it clickable by adding a `selection` object. Once an element is selected by the user, the Jovo Router will automatically map the request to the provided `intent` (and potentially `entities`):
+```typescript
+const app = new App({
+  // ...
+
+  plugins: [
+    new AlexaPlatform({
+      output: {
+        aplTemplates: {
+          carousel: CAROUSEL_APL, // Add imported document here
+        },
+      },
+    }),
+  ],
+});
+```
+
+You can make the carousel clickable by adding a `selection` object. Once an element is selected by the user, the Jovo Router will automatically map the request to the provided `intent` (and potentially `entities`):
 
 ```typescript
 {
@@ -304,6 +338,10 @@ const app = new App({
     new AlexaPlatform({
       output: {
         genericOutputToApl: true,
+        aplTemplates: {
+          carousel: CAROUSEL_APL
+          card: CARD_APL
+        },
       },
     }),
   ],
@@ -313,3 +351,4 @@ const app = new App({
 It includes the following properties:
 
 - `genericOutputToApl`: Determines if generic output like [`quickReplies`](#quickreplies), [`card`](#card), and [`carousel`](#carousel) should automatically be converted into an APL directive.
+- `aplTemplates`: Allows the app to override the default APL templates used for [`carousel`](#carousel) and [`card`](#card).

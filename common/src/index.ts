@@ -79,7 +79,6 @@ export type EnumLike<T extends string> = T | `${T}`;
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type PlainObjectType<T> = OmitWhere<T, Function>;
 
-export { ILogObject, ISettingsParam } from 'tslog';
 export * from './Configurable';
 export * from './Input';
 export * from './JovoError';

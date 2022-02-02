@@ -340,6 +340,23 @@ For each platform, you can add a `nativeResponse` object that is directly transl
 }
 ```
 
+If you want to explicitly remove a property, you can set it to `undefined`. In the following example, the `shouldEndSession` property is removed from the Alexa response:
+
+```typescript
+{
+  message: 'Hello world!',
+  platforms: {
+    alexa: {
+      nativeResponse: {
+        response: {
+          shouldEndSession: undefined,
+        },
+      },
+    },
+  },
+}
+```
+
 ## Array of Output Templates
 
 You can also have an array of output objects:
