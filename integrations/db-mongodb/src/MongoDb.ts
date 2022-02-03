@@ -52,8 +52,6 @@ export class MongoDb extends DbPlugin<MongoDbConfig> {
   }
 
   async initialize(): Promise<void> {
-    this.config.databaseName = this.config.databaseName;
-    this.config.collectionName = this.config.collectionName;
     this.connectionPromise = new MongoClient(this.config.connectionString).connect();
   }
 
