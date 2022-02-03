@@ -1,36 +1,36 @@
 ---
-title: 'DynamoDB Database Integration'
-excerpt: 'The DynamoDB Jovo integration allows you to store user specific data in a DynamoDB table.'
+title: 'MongoDB Database Integration'
+excerpt: 'The MongoDB Jovo integration allows you to store user specific data in a MongoDB table.'
 ---
 
-# DynamoDB Database Integration
+# MongoDB Database Integration
 
-This [database integration](https://www.jovo.tech/docs/databases) allows you to store user specific data in a DynamoDB table.
+This [database integration](https://www.jovo.tech/docs/databases) allows you to store user specific data in a MongoDB table.
 
 ## Introduction
 
-[DynamoDB](https://aws.amazon.com/dynamodb/) is the NoSQL database service by Amazon Web Services (AWS). Many Jovo apps that are hosted on [AWS Lambda](https://www.jovo.tech/marketplace/server-lambda) rely on DynamoDB to persist user data.
+[MongoDB](https://aws.amazon.com/mongodb/) is the NoSQL database service by Amazon Web Services (AWS). Many Jovo apps that are hosted on [AWS Lambda](https://www.jovo.tech/marketplace/server-lambda) rely on MongoDB to persist user data.
 
-If you use AWS for your deployment, we recommend [FileDb](https://www.jovo.tech/marketplace/db-filedb) for local development and DynamoDB for deployed versions. [Learn more about staging here](https://www.jovo.tech/docs/staging).
+If you use AWS for your deployment, we recommend [FileDb](https://www.jovo.tech/marketplace/db-filedb) for local development and MongoDB for deployed versions. [Learn more about staging here](https://www.jovo.tech/docs/staging).
 
 ## Installation
 
 You can install the plugin like this:
 
 ```sh
-$ npm install @jovotech/db-dynamodb
+$ npm install @jovotech/db-mongodb
 ```
 
 Add it as plugin to any stage you like, e.g. `app.prod.ts`:
 
 ```typescript
-import { DynamoDb } from '@jovotech/db-dynamodb';
+import { MongoDb } from '@jovotech/db-mongodb';
 
 // ...
 
 app.configure({
   plugins: [
-    new DynamoDb({
+    new MongoDb({
       // Configuration
     }),
     // ...
@@ -38,47 +38,21 @@ app.configure({
 });
 ```
 
-Once the configuration is done, the DynamoDB database integration will create a DynamoDB table on the first read/write attempt (might take some seconds). No need for you to create the table.
+Once the configuration is done, the MongoDB database integration will create a MongoDB collection and a document on the first read/write attempt (might take some seconds). No need for you to create the table.
 
 The rest of this section provides an introduction to the steps you need to take depending on where you host your Jovo app:
 
-- [On AWS (e.g. Lambda)](#for-apps-hosted-on-aws)
-- [Outside AWS](#for-apps-hosted-outside-aws)
+- [On MongoDB Atlas](#for-apps-hosted-on-mongodb-atlas)
 
 The [configuration section](#configuration) then provides a detailed overview of all configuration options.
 
-### For Apps Hosted on AWS
-
-If you host your app on [AWS Lambda](https://www.jovo.tech/marketplace/server-lambda) and want to use a DynamoDB table in the same region, you only need to add a table name to get started:
+### Sample MongoDB Atlas configuration
 
 ```typescript
-new DynamoDb({
-  table: {
-    name: 'MyDynamoDbTable',
-  }
-}),
-```
-
-### For Apps Hosted Outside AWS
-
-If you want to use DynamoDB from outside AWS Lambda, you need to set it up for programmatic access. Learn more in the official guide by Amazon: [Setting Up DynamoDB (Web Service)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SettingUp.DynamoWebService.html).
-
-You can then add the necessary keys using the [`libraryConfig` property](#libraryconfig):
-
-```typescript
-new DynamoDb({
-  table: {
-    name: 'MyDynamoDbTable',
-  },
-  libraryConfig: {
-    dynamoDbClient: {
-      region: 'us-east-1',
-      credentials: {
-        accessKeyId: 'myAccessKeyId',
-        secretAccessKey: 'mySecretAccessKey',
-      },
-    },
-  }
+new MongoDb({
+    connectionString: "mongodb+srv://<user>:<password>@<cluster>.mongodb.net/",
+    databaseName: "jovo-db-2",
+    collectionName: "jovo-collection",
 }),
 ```
 
@@ -87,80 +61,22 @@ new DynamoDb({
 The following configurations can be added:
 
 ```typescript
-new DynamoDb({
-  table: { /* ... */ },
-  libraryConfig: { /* ... */ },
-  storedElements: { /* ... */ },
+new MongoDb({
+  /** Specify username, password and clusterUrl. See https://docs.mongodb.com/drivers/node/current/fundamentals/connection/#connection-uri for more details */
+  connectionString: string;
+  /** The name of the database we want to use. If not provided, use database name from connection string. A new database is created if doesn't exist yet. */
+  databaseName?: string;
+  /** A new collection is created with that name if doesn't exist yet. */
+  collectionName?: string;
 }),
 ```
 
-- `table`: Configuration for the table that is going to be created by the plugin. [Learn more below](#table).
-- `libraryConfig`: Any configuration for the AWS DynamoDb SDK can be passed here. [Learn more below](#libraryconfig).
-- `storedElements`: What should be stored in the database. [Learn more in the database integration documentation](https://www.jovo.tech/docs/databases).
+### Reuse connection
 
-### table
+For better performance, you can reuse the connection by importing it from:
 
-The `table` property includes configuration for the creation of the DynamoDB table:
-
-```typescript
-new DynamoDb({
-  table: {
-    // Required properties
-    name: 'MyDynamoDbTable',
-
-    // Optional properties (with default values)
-    createTableOnInit: true, // Creates a table if one does not already exist
-    primaryKeyColumn: 'userId',
-    readCapacityUnits: 2, // https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughput.html
-    writeCapacityUnits: 2, // https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughput.html
-  },
-  // ...
-}),
-```
+Change: Can't find a way to do it well
 
 ### libraryConfig
 
-The `libraryConfig` property can be used to pass configurations to the AWS DynamoDB SDK that is used by this integration.
-
-Currently, it includes options for the [DynamoDbClient](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-dynamodb/interfaces/dynamodbclientconfig.html) and [marshall](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/interfaces/_aws_sdk_util_dynamodb.marshalloptions-1.html):
-
-```typescript
-new DynamoDb({
-  libraryConfig: {
-    dynamoDbClient: { /* ... */ },
-    marshall: { /* ... */ },
-  },
-  // ...
-}),
-```
-
-For example, you can add `credentials` like this:
-
-```typescript
-new DynamoDb({
-  libraryConfig: {
-    dynamoDbClient: {
-      region: 'us-east-1',
-      credentials: {
-        accessKeyId: 'myAccessKeyId',
-        secretAccessKey: 'mySecretAccessKey',
-      },
-    },
-    // ...
-  }
-}),
-```
-
-`marshall` includes the following default values:
-
-```typescript
-new DynamoDb({
-  libraryConfig: {
-    marshall: {
-      removeUndefinedValues: true,
-      convertClassInstanceToMap: true,
-    },
-  },
-  // ...
-}),
-```
+Will be added later

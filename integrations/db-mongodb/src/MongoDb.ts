@@ -17,8 +17,6 @@ export interface MongoDbConfig extends DbPluginConfig {
   databaseName?: string;
   /** A new collection is created with that name if doesn't exist yet. */
   collectionName?: string;
-  /** ID for jovo default managed document created at the specified collection */
-  primaryKeyColumn?: string;
 }
 
 export type MongoDbInitConfig = RequiredOnlyWhere<MongoDbConfig, 'table'>;
@@ -66,7 +64,7 @@ export class MongoDb extends DbPlugin<MongoDbConfig> {
   async loadData(userId: string, jovo: Jovo): Promise<void> {
     try {
       const users = await this.usersCollection();
-      const filter = { [this.config.primaryKeyColumn!]: userId };
+      const filter = { _id: userId };
       const dbItem = (await users.findOne(filter)) as DbItem;
       if (dbItem) {
         jovo.$user.isNew = false;

@@ -2,11 +2,11 @@ import { MongoDb, MongoDbConfig } from './MongoDb';
 
 declare module '@jovotech/framework/dist/types/Extensible' {
   interface ExtensiblePluginConfig {
-    DynamoDb?: MongoDbConfig;
+    MongoDb?: MongoDbConfig;
   }
 
   interface ExtensiblePlugins {
-    DynamoDb?: MongoDb;
+    MongoDb?: MongoDb;
   }
 }
 
