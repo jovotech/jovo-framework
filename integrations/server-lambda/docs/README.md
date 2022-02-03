@@ -9,13 +9,19 @@ Host Jovo apps on AWS Lambda serverless functions.
 
 ## Introduction
 
+![Jovo Alexa Skill and Google Action hosted on AWS Lambda](./img/jovo-diagram-lambda.png)
+
 This [server integration](https://www.jovo.tech/docs/server) allows you to host yor Jovo apps on [AWS Lambda](https://aws.amazon.com/lambda/), a serverless hosting solution by Amazon Web Services. [Find the official documentation here](http://docs.aws.amazon.com/lambda/latest/dg/welcome.html).
 
 While the [Jovo Webhook](https://www.jovo.tech/docs/webhook) is usually called for local development, many teams use AWS Lambda to host their Jovo apps for testing and production stages. [Learn more about staging here](https://www.jovo.tech/docs/staging). The [installation section](#installation) explains how to create a new stage that can be used for Lambda deployment.
 
+The diagram above shows how a Lambda function can be reached for different types of Jovo [platform integrations](https://www.jovo.tech/docs/platforms). While [Alexa Skills](https://www.jovo.tech/marketplace/platform-alexa) can directly point to a Lambda's resource name, other platforms like [Google Assistant](https://www.jovo.tech/marketplace/platform-googleassistant) need to access the function through an endpoint provided by an [API Gateway](#api-gateway).
+
 Lambda functions can be connected to various AWS services, for example [DynamoDB](#dynamodb) for storing user data. Learn more about setting up these integrations in the [configuration section](#configuration).
 
 The [deployment section](#deployment) offers more information about loading up your source code to AWS Lambda.
+
+There is also a [troubleshooting](#troubleshooting) section for common issues with AWS Lambda.
 
 ## Installation
 
@@ -35,14 +41,8 @@ export * from './server.lambda';
 
 Learn more about setting up the following services and configurations:
 
-- [DynamoDB](#dynamodb)
 - [API Gateway](#api-gateway)
-
-### DynamoDB
-
-The [FileDb](https://www.jovo.tech/marketplace/db-filedb) that is used as database for local development can't be used on AWS Lambda. To make your app work with all [data types](https://www.jovo.tech/docs/data), setting up a [database integration](https://www.jovo.tech/docs/databases) is necessary.
-
-DynamoDB is the recommended database for Jovo apps hosted on AWS Lambda. [Learn more in the DynamoDB integration docs](https://www.jovo.tech/marketplace/db-dynamodb).
+- [DynamoDB](#dynamodb)
 
 ### API Gateway
 
@@ -85,6 +85,12 @@ If you have problems reaching your API due to [CORS](https://developer.mozilla.o
 Now, all you need to do is to enable CORS by going to "Actions" > "Enable CORS". This will create an additional `OPTIONS` method, which will be used by your web service to determine allowed methods and headers. Additionally, AWS will set the required headers for CORS to work. If you want to restrict access to your endpoint, you can set specific rules for allowed request origins.
 
 Save this configuration, then deploy your API once again for the changes to be taken into effect.
+
+### DynamoDB
+
+The [FileDb](https://www.jovo.tech/marketplace/db-filedb) that is used as database for local development can't be used on AWS Lambda. To make your app work with all [data types](https://www.jovo.tech/docs/data), setting up a [database integration](https://www.jovo.tech/docs/databases) is necessary.
+
+DynamoDB is the recommended database for Jovo apps hosted on AWS Lambda. [Learn more in the DynamoDB integration docs](https://www.jovo.tech/marketplace/db-dynamodb).
 
 ## Deployment
 
