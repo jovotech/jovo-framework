@@ -30,9 +30,6 @@ export interface MongoDbItem {
 }
 
 export class MongoDb extends DbPlugin<MongoDbConfig> {
-  /** Default name for the database */
-  readonly DEFAULT_DATABASE_NAME = 'jovo-managed-db';
-
   /** Default name for the collection */
   readonly DEFAULT_USERS_COLLECTION_NAME = 'users_all';
 
@@ -80,25 +77,12 @@ export class MongoDb extends DbPlugin<MongoDbConfig> {
 
   /** MongoDB creates the database if one does not already exist */
   async jovoManagedDataBase(): Promise<Db> {
-    try {
-      const connection = await this.connectionPromise;
-      if (this.config.databaseName) {
-        return connection!.db(this.config.databaseName);
-      } else {
-        //If not provided, use database name from connection string.
-        return connection!.db();
-      }
-    } catch (error) {
-      if (!this.config.connectionString) {
-        throw new Error('this.config.connectionString must not be undefined');
-      } else {
-        // eslint-disable-next-line no-console
-        console.error(
-          'Error establishing connection to MongoDb Database. Check the database name is in the connection string or in MongoDb plugin config.',
-          error,
-        );
-        throw error;
-      }
+    const connection = await this.connectionPromise;
+    if (this.config.databaseName) {
+      return connection!.db(this.config.databaseName);
+    } else {
+      //If not provided, use database name from connection string.
+      return connection!.db();
     }
   }
 
