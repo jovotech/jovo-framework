@@ -51,19 +51,20 @@ The following configurations can be added:
 
 ```typescript
 MongoDb.newInstance({
-  /** Specify username, password and clusterUrl. Additional parameters can also be added. See https://docs.mongodb.com/drivers/node/current/fundamentals/connection/#connection-uri for more details */
   connectionString: string;
-  /** The name of the database we want to use. If not provided, use database name from connection string. A new database is created if doesn't exist yet. */
   databaseName?: string;
-  /** A new collection is created with that name if doesn't exist yet. */
   collectionName?: string;
 }),
 
-You should specify a dataBase either in `connectionString` or in `databaseName`. The second takes precedence.
+```
+- ``connectionString``: Specify username, password and clusterUrl. Additional parameters can also be added. Have a look at the [MongoDB documentation](https://docs.mongodb.com/drivers/node/current/fundamentals/connection/#connection-uri) for more details.
+- ``databaseName``: The name of the database we want to use. If not provided, use database name from connection string. A new database is created if doesn't exist yet.
+- ``collectionName``: A new collection is created with that name if doesn't exist yet.
+
+You should specify a dataBase either in ``connectionString`` or in ``databaseName``. The second takes precedence.
 The default collection name is `users_all`.
 
-Note that you can add timeout or other configuration by adding parameters in the connectionString.
-```
+Note that you can add timeout or other configuration by adding parameters in the ``connectionString``.
 
 ### Examples of use
 
@@ -75,19 +76,24 @@ async START() {
     
     // You can read data from another user
     const users = mongoDb.getJovoUsersCollection();
-    const otherUserData = (await users).find({ _id: "<other_user_id>" });
-    console.log("DATA:" + otherUserData);
+    const otherUserData = (await users).find({ _id: "<another_id>" });
 
     // Also you can store manage other collections in the same DB Jovo uses to handle users
     const defaultDb = await mongoDb.getJovoManagedDatabase();
     await defaultDb.collection('my-collection').insertOne(otherUserData);
 
     // Or just get the client to open a transaction 
-    const client = await MongoDb.getInstance().client;
+    const client = await mongoDb.client;
     const transactionResults = await client.startSession().withTransaction(async () => {
       //  modify some data
       // ....
     });
 }
 ```
+
+For the next example, although Jovo will persist it asynchronously during the lifecycle, it will use the same connection pool from the examples above. Reusing the client will get better response times and lower costs.
+```typescript
+this.$user.data.foo = 'bar';
+```
+
 
