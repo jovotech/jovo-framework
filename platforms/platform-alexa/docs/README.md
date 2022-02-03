@@ -383,11 +383,11 @@ async someHandler() {
 
 It is possible to retrieve some of your Alexa Skill user's settings without them granting you any special permissions. Learn more in the [official Alexa docs](https://developer.amazon.com/en-GB/docs/alexa/smapi/alexa-settings-api-reference.html).
 
-You can use the `getTimezone()` method to retrieve the timezone setting:
+You can use the `getTimeZone()` method to retrieve the timezone setting:
 
 ```typescript
 async someHandler() {
-  const timezone: string = await this.$alexa.$device.getTimezone();
+  const timezone: string = await this.$alexa.$device.getTimeZone();
 
   /* Result:
     "Africa/Abidjan"

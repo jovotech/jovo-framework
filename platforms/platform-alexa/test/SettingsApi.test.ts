@@ -1,10 +1,9 @@
-import { getSystemTimezone } from '../src/api/SettingsApi';
-import { AlexaApiErrorCode } from '../src/api/AlexaApi';
+import { getSystemTimeZone } from '../src/api/SettingsApi';
 import { mockAlexaApi } from './mocks';
 
 const ENDPOINT = 'https://mock.alexa.com';
 
-test('getSystemTimezone', async () => {
+test('getSystemTimeZone', async () => {
   mockAlexaApi({
     method: 'GET',
     permissionToken: 'perm_token',
@@ -17,6 +16,6 @@ test('getSystemTimezone', async () => {
     },
   });
 
-  const res = await getSystemTimezone(ENDPOINT, 'device_id', 'perm_token');
+  const res = await getSystemTimeZone(ENDPOINT, 'device_id', 'perm_token');
   expect(res).toEqual('Australia/Brisbane');
 });

@@ -3,7 +3,7 @@ import { AlexaApiError, AlexaApiErrorCode, AlexaApiOptions, sendApiRequest } fro
 
 export const TIMEZONE = 'System.timeZone';
 
-export async function getSystemTimezone(
+export async function getSystemTimeZone(
   apiEndpoint: string,
   deviceId: string,
   permissionToken: string,
