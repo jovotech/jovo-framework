@@ -9,9 +9,7 @@ This [database integration](https://www.jovo.tech/docs/databases) allows you to 
 
 ## Introduction
 
-[MongoDB](https://aws.amazon.com/mongodb/) is the NoSQL database service by Amazon Web Services (AWS). Many Jovo apps that are hosted on [AWS Lambda](https://www.jovo.tech/marketplace/server-lambda) rely on MongoDB to persist user data.
-
-If you use AWS for your deployment, we recommend [FileDb](https://www.jovo.tech/marketplace/db-filedb) for local development and MongoDB for deployed versions. [Learn more about staging here](https://www.jovo.tech/docs/staging).
+[MongoDB](https://www.mongodb.com/) is 
 
 ## Installation
 
@@ -30,7 +28,7 @@ import { MongoDb } from '@jovotech/db-mongodb';
 
 app.configure({
   plugins: [
-    new MongoDb({
+    MongoDb.newInstance({
       // Configuration
     }),
     // ...
@@ -38,7 +36,7 @@ app.configure({
 });
 ```
 
-Once the configuration is done, the MongoDB database integration will create a MongoDB collection and a document on the first read/write attempt (might take some seconds). No need for you to create the table.
+Once the configuration is done, the MongoDB database integration will create a MongoDB database and a collection on the first read/write attempt (might take some seconds). No need for you to create the database.
 
 The rest of this section provides an introduction to the steps you need to take depending on where you host your Jovo app:
 
@@ -46,37 +44,50 @@ The rest of this section provides an introduction to the steps you need to take 
 
 The [configuration section](#configuration) then provides a detailed overview of all configuration options.
 
-### Sample MongoDB Atlas configuration
-
-```typescript
-new MongoDb({
-    connectionString: "mongodb+srv://<user>:<password>@<cluster>.mongodb.net/",
-    databaseName: "jovo-db-2",
-    collectionName: "jovo-collection",
-}),
-```
 
 ## Configuration
 
 The following configurations can be added:
 
 ```typescript
-new MongoDb({
-  /** Specify username, password and clusterUrl. See https://docs.mongodb.com/drivers/node/current/fundamentals/connection/#connection-uri for more details */
+MongoDb.newInstance({
+  /** Specify username, password and clusterUrl. Additional parameters can also be added. See https://docs.mongodb.com/drivers/node/current/fundamentals/connection/#connection-uri for more details */
   connectionString: string;
   /** The name of the database we want to use. If not provided, use database name from connection string. A new database is created if doesn't exist yet. */
   databaseName?: string;
   /** A new collection is created with that name if doesn't exist yet. */
   collectionName?: string;
 }),
+
+You should specify a dataBase either in `connectionString` or in `databaseName`. The second takes precedence.
+The default collection name is `users_all`.
+
+Note that you can add timeout or other configuration by adding parameters in the connectionString.
 ```
 
-### Reuse connection
+### Examples of use
 
-For better performance, you can reuse the connection by importing it from:
+For better performance, you can reuse the connection in any component like in this example:
 
-Change: Can't find a way to do it well
+```typescript
+async START() {
+    const mongoDb = MongoDb.getInstance();
+    
+    // You can read data from another user
+    const users = mongoDb.getJovoUsersCollection();
+    const otherUserData = (await users).find({ _id: "<other_user_id>" });
+    console.log("DATA:" + otherUserData);
 
-### libraryConfig
+    // Also you can store manage other collections in the same DB Jovo uses to handle users
+    const defaultDb = await mongoDb.getJovoManagedDatabase();
+    await defaultDb.collection('my-collection').insertOne(otherUserData);
 
-Will be added later
+    // Or just get the client to open a transaction 
+    const client = await MongoDb.getInstance().client;
+    const transactionResults = await client.startSession().withTransaction(async () => {
+      //  modify some data
+      // ....
+    });
+}
+```
+
