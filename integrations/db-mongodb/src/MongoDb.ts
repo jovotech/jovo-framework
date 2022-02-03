@@ -69,7 +69,7 @@ export class MongoDb extends DbPlugin<MongoDbConfig> {
 
   async initialize(): Promise<void> {
     // if no name was specified, 'test' is used.
-    if ((await this.getJovoManagedDatabase()).databaseName === this.DEFAULT_MONGODB_DATABASE_NAME) {
+    if ((await this.getJovoManagedDatabase()).databaseName === this.MONGODB_DEFAULT_DATABASE_NAME) {
       // eslint-disable-next-line no-console
       console.warn("Connected to default database 'test'.");
     }
