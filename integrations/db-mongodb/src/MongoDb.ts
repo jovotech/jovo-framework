@@ -29,30 +29,28 @@ export interface MongoDbItem {
   updatedAt?: string;
 }
 
+/** This class is a Singleton and has to be instantiated using this.instance(config?) */
 export class MongoDb extends DbPlugin<MongoDbConfig> {
-  /** Default database name in MongoDB. See https://docs.mongodb.com/manual/tutorial/getting-started/#getting-started */
+  /** Default database name in MongoDB. if no name was specified, 'test' is used. See https://docs.mongodb.com/manual/tutorial/getting-started/#getting-started */
   readonly MONGODB_DEFAULT_DATABASE_NAME = 'test';
-  /** Default name for the collection */
-  readonly USERS_COLLECTION_NAME_DEFAULT = 'users';
 
-  private static instance: MongoDb;
+  private static _instance: MongoDb;
 
-  /** A client promise to be reused in any component following MongoDB best practice: https://docs.atlas.mongodb.com/best-practices-connecting-from-aws-lambda/#connection-examples */
-  client: Promise<MongoClient> = new MongoClient(this.config.connectionString).connect();
+  /** A single client promise to be reused by Jovo or others components following MongoDB best practice: https://docs.atlas.mongodb.com/best-practices-connecting-from-aws-lambda/#connection-examples */
+  readonly client: Promise<MongoClient> = new MongoClient(this.config.connectionString).connect();
 
   private constructor(config: MongoDbInitConfig) {
     super(config);
   }
 
-  public static newInstance(config?: MongoDbInitConfig): MongoDb {
-    if (config) {
-      MongoDb.instance = new MongoDb(config);
-      return MongoDb.instance;
-    } else throw new Error('Missing needed configuration for MongoDb plugin.');
-  }
-
-  public static getInstance(): MongoDb {
-    return MongoDb.instance;
+  /** Attach config to instantiated the client with it, for example in your app.prod.ts. Pass no arguments if it's been already instantiated. */
+  public static instance(config?: MongoDbInitConfig): MongoDb {
+    if (!MongoDb._instance && !config) {
+      throw new Error('Missing needed configuration for MongoDb plugin.');
+    }
+    MongoDb._instance = MongoDb._instance || new MongoDb(config!);
+    // important to associate it with _instance before returning
+    return MongoDb._instance;
   }
 
   getDefaultConfig(): MongoDbConfig {
@@ -60,6 +58,7 @@ export class MongoDb extends DbPlugin<MongoDbConfig> {
       ...super.getDefaultConfig(),
       connectionString: '<YOUR-MONGODB-URI>',
       databaseName: 'jovo_db',
+      collectionName: 'jovoUsers',
     };
   }
 
@@ -68,15 +67,16 @@ export class MongoDb extends DbPlugin<MongoDbConfig> {
   }
 
   async initialize(): Promise<void> {
-    // if no name was specified, 'test' is used.
-    if ((await this.getJovoManagedDatabase()).databaseName === this.MONGODB_DEFAULT_DATABASE_NAME) {
+    if ((await this.jovoDb()).databaseName === this.MONGODB_DEFAULT_DATABASE_NAME) {
       // eslint-disable-next-line no-console
-      console.warn("Connected to default database 'test'.");
+      console.warn(
+        '[MongoDB] URI does not have the DB in it, and no databaseName provided to the instance. Using default name: test.',
+      );
     }
   }
 
   async loadData(userId: string, jovo: Jovo): Promise<void> {
-    const users = await MongoDb.instance.getJovoUsersCollection();
+    const users = await MongoDb._instance.jovoUsers();
     const filter = { _id: userId };
     const dbItem = (await users.findOne(filter)) as DbItem;
     if (dbItem) {
@@ -86,7 +86,7 @@ export class MongoDb extends DbPlugin<MongoDbConfig> {
   }
 
   async saveData(userId: string, jovo: Jovo): Promise<void> {
-    const users = await MongoDb.instance.getJovoUsersCollection();
+    const users = await MongoDb._instance.jovoUsers();
     const item: DbItem = { _id: userId };
     await this.applyPersistableData(jovo, item);
     const filter = { _id: userId };
@@ -94,10 +94,10 @@ export class MongoDb extends DbPlugin<MongoDbConfig> {
   }
 
   /** MongoDB creates the database if one does not already exist */
-  async getJovoManagedDatabase(): Promise<Db> {
-    const connection = await MongoDb.instance.client;
-    if (MongoDb.instance.config.databaseName) {
-      return connection!.db(MongoDb.instance.config.databaseName);
+  async jovoDb(): Promise<Db> {
+    const connection = await MongoDb._instance.client;
+    if (MongoDb._instance.config.databaseName) {
+      return connection!.db(MongoDb._instance.config.databaseName);
     } else {
       //If not provided, use database name from connection string.
       return connection!.db();
@@ -105,10 +105,8 @@ export class MongoDb extends DbPlugin<MongoDbConfig> {
   }
 
   /** MongoDB creates the collection if one does not already exist  */
-  async getJovoUsersCollection(): Promise<Collection<Document>> {
-    const db = await MongoDb.instance.getJovoManagedDatabase();
-    return db!.collection(
-      MongoDb.instance.config.collectionName || this.USERS_COLLECTION_NAME_DEFAULT,
-    );
+  async jovoUsers(): Promise<Collection<Document>> {
+    const db = await MongoDb._instance.jovoDb();
+    return db!.collection(MongoDb._instance.config.collectionName!);
   }
 }

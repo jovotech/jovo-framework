@@ -1,6 +1,6 @@
 ---
 title: 'MongoDB Database Integration'
-excerpt: 'The MongoDB Jovo integration allows you to store user specific data in a MongoDB table.'
+excerpt: 'The MongoDB Jovo integration allows you to store user specific data and more in a MongoDB database.'
 ---
 
 # MongoDB Database Integration
@@ -9,7 +9,7 @@ This [database integration](https://www.jovo.tech/docs/databases) allows you to 
 
 ## Introduction
 
-[MongoDB](https://www.mongodb.com/) is 
+[MongoDB](https://www.mongodb.com/) is ... Shared Atlas clusters. Easy config.
 
 ## Installation
 
@@ -28,7 +28,7 @@ import { MongoDb } from '@jovotech/db-mongodb';
 
 app.configure({
   plugins: [
-    MongoDb.newInstance({
+    MongoDb.instance({
       // Configuration
     }),
     // ...
@@ -50,13 +50,14 @@ The [configuration section](#configuration) then provides a detailed overview of
 The following configurations can be added:
 
 ```typescript
-MongoDb.newInstance({
+MongoDb.instance({
   connectionString: string;
   databaseName?: string;
   collectionName?: string;
-}),
+} as MongoDbConfig),
 
 ```
+- MongoDbConfig:
 - ``connectionString``: Specify username, password and clusterUrl. Additional parameters can also be added. Have a look at the [MongoDB documentation](https://docs.mongodb.com/drivers/node/current/fundamentals/connection/#connection-uri) for more details.
 - ``databaseName``: The name of the database we want to use. If not provided, use database name from connection string. A new database is created if doesn't exist yet.
 - ``collectionName``: A new collection is created with that name if doesn't exist yet.
@@ -72,22 +73,23 @@ For better performance, you can reuse the connection in any component like in th
 
 ```typescript
 async START() {
-    const mongoDb = MongoDb.getInstance();
-    
     // You can read data from another user
-    const users = mongoDb.getJovoUsersCollection();
-    const otherUserData = (await users).find({ _id: "<another_id>" });
+    const users = mongoDb.jovoUsers();
+    const otherUserData = (await users).find({ _id: '<another_id>' });
 
-    // Also you can store manage other collections in the same DB Jovo uses to handle users
-    const defaultDb = await mongoDb.getJovoManagedDatabase();
-    await defaultDb.collection('my-collection').insertOne(otherUserData);
+    // Also store documents in other collections in the same DB Jovo handles users
+    const defaultDb = await mongoDb.jovoDb();
+    await defaultDb.collection('my-collection').insertOne({ foo: 'bar' });
 
-    // Or just get the client to open a transaction 
+    // Or just get the single client to open a transaction
     const client = await mongoDb.client;
     const transactionResults = await client.startSession().withTransaction(async () => {
-      //  modify some data
+      //  Modify some data
       // ....
     });
+
+    // Or create a new DB
+    const newDb = client.db("my_new_db");
 }
 ```
 
