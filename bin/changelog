@@ -23,7 +23,7 @@ const project = new Project();
     console.log('✅ Generated changelogs successfully');
   })
   .catch((error) => {
-    console.error('❌ Error while generating changelogs');
+    console.error(' Error while generating changelogs');
     console.error(error);
     process.exit(1);
   });
