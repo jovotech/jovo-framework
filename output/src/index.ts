@@ -42,5 +42,5 @@ export * from './strategies/MultipleResponsesOutputTemplateConverterStrategy';
 
 export * from './OutputTemplateConverterStrategy';
 export * from './OutputTemplateConverter';
-
+export * from './OutputHelpers';
 export * from './utilities';
