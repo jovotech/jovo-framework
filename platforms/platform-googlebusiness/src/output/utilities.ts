@@ -60,6 +60,14 @@ export function augmentModelPrototypes(): void {
   };
 
   Carousel.prototype.toGoogleBusinessRichCard = function () {
+    if (this.items.length === 1) {
+      return {
+        standaloneCard: {
+          cardContent: this.items[0].toGoogleBusinessCardContent!(),
+        },
+      };
+    }
+
     return {
       carouselCard: this.toGoogleBusinessCarousel!(),
     };
