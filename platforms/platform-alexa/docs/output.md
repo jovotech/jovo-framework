@@ -171,7 +171,7 @@ In your [handler](https://www.jovo.tech/docs/handlers), you can then access the 
 ```typescript
 @Intents(['ButtonIntent'])
 showSelectedButton() {
-  const element = this.$entities.button.value;
+  const button = this.$entities.button.value;
 
   // ...
 }
