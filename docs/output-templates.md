@@ -151,8 +151,6 @@ A `carousel` consists of the following properties:
 
 Rich Audio combines audio files, text-to-speech and silence to provide more flexibility than simple responses.
 
-**Note:** Including a `richAudio` element an output will override (and ignore) the `message` element on `alexa` and `googleAssistant`.
-
 Supported components:
 
  - Sequencer - plays its `items` in sequence
@@ -182,6 +180,59 @@ Check out the [Alexa APLA Docs](https://developer.amazon.com/en-US/docs/alexa/al
 ```
 
 On the `googleAssistant` platform, this object will be converted into [non-standard Google SSML](https://cloud.google.com/text-to-speech/docs/ssml) (ie. using `seq` and `par` tags).
+
+If used in the same response, `richAudio` outputs will be combined with `message` outputs by including
+the message as `Speech` elements in a top-level `Sequencer` element. This means that complex logic with
+multiple calls to `$send` doesn't need to be modified to include sound effects and audio clips.
+
+For example, this:
+
+```ts
+await this.$send({
+  richAudio: {
+    type: "Audio",
+    source: "https://assets.com/intro_sound.mp3"
+  }
+});
+
+await this.$send({  message: "Welcome to my app." });
+await this.$send({  message: `Your name is ${name}.` });
+
+await this.$send({
+  richAudio: {
+    type: "Audio",
+    source: "https://assets.com/sound_effect.mp3"
+  }
+});
+```
+
+is equivalent to this:
+
+```ts
+await this.$send({
+  richAudio: {
+    type: "Sequencer",
+    items: [
+      {
+        type: "Audio",
+        source: "https://assets.com/intro_sound.mp3"
+      },
+      {
+        type: "Speech",
+        content: "Welcome to my app."
+      },
+      {
+        type: "Speech",
+        content: `Your name is ${name}.`
+      },
+      {
+        type: "Audio",
+        source: "https://assets.com/sound_effect.mp3"
+      },
+    ],
+  }
+});
+```
 
 ### quickReplies
 
