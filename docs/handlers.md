@@ -612,3 +612,5 @@ UNHANDLED() {
   // ...
 }
 ```
+
+By default, the current component's `UNHANDLED` gets prioritized over global handlers in other components. Learn more about [`UNHANDLED` prioritization in the routing documentation](./routing.md#unhandled-prioritization).
