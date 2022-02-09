@@ -1,5 +1,8 @@
 import {
   JovoResponse,
+  Audio,
+  Sequencer,
+  Speech,
   NormalizedOutputTemplate,
   OutputTemplateConverterStrategyConfig,
   SingleResponseOutputTemplateConverterStrategy,
@@ -265,6 +268,125 @@ describe('prepareOutput', () => {
         carousel: {
           title: 'bar',
           items: [],
+        },
+      });
+    });
+
+    test('richAudio is sequenced with message', () => {
+      const preparedOutput = strategy.normalizeOutput([
+        {
+          richAudio: {
+            type: 'Audio',
+            source: 'https://music.mp3',
+          } as Audio,
+          message: 'foo',
+        },
+        {
+          message: 'bar',
+          listen: true,
+        },
+      ]);
+
+      expect(preparedOutput).toEqual({
+        message: undefined,
+        listen: true,
+        richAudio: {
+          type: 'Sequencer',
+          items: [
+            {
+              type: 'Audio',
+              source: 'https://music.mp3',
+            },
+            {
+              type: 'Speech',
+              content: 'foo',
+            },
+            {
+              type: 'Speech',
+              content: 'bar',
+            },
+          ],
+        },
+      });
+    });
+
+    test('richAudio is sequenced in order', () => {
+      const preparedOutput = strategy.normalizeOutput([
+        {
+          richAudio: {
+            type: 'Audio',
+            source: 'https://music1.mp3',
+          } as Audio,
+        },
+        {
+          richAudio: {
+            type: 'Sequencer',
+            items: [
+              {
+                type: 'Audio',
+                source: 'https://music2.mp3',
+              } as Audio,
+              {
+                type: 'Speech',
+                content: 'foo',
+              } as Speech,
+            ],
+          } as Sequencer,
+          listen: true,
+        },
+      ]);
+
+      expect(preparedOutput).toEqual({
+        message: undefined,
+        listen: true,
+        richAudio: {
+          type: 'Sequencer',
+          items: [
+            {
+              type: 'Audio',
+              source: 'https://music1.mp3',
+            },
+            {
+              type: 'Audio',
+              source: 'https://music2.mp3',
+            },
+            {
+              type: 'Speech',
+              content: 'foo',
+            },
+          ],
+        },
+      });
+    });
+
+    test('nativeResponse arrays are concatenated', () => {
+      const preparedOutput = strategy.normalizeOutput([
+        {
+          platforms: {
+            example: {
+              nativeResponse: {
+                directives: [{ name: 'AAA' }],
+              },
+            },
+          },
+        },
+        {
+          platforms: {
+            example: {
+              nativeResponse: {
+                directives: [{ name: 'BBB' }],
+              },
+            },
+          },
+        },
+      ]);
+      expect(preparedOutput).toEqual({
+        platforms: {
+          example: {
+            nativeResponse: {
+              directives: [{ name: 'AAA' }, { name: 'BBB' }],
+            },
+          },
         },
       });
     });

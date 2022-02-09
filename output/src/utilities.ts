@@ -119,7 +119,11 @@ export function mergeInstances<D extends object, S extends any[]>(
     destination,
     ...sources.map((source) => instanceToObject(source)),
     // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any
-    (value: any, srcValue: any, key: string, object: any) => {
+    (objValue: any, srcValue: any, key: string, object: any) => {
+      if (Array.isArray(objValue) && Array.isArray(srcValue)) {
+        return [...objValue, ...srcValue];
+      }
+
       if (typeof srcValue === 'undefined') {
         _unset(object, key);
       }
@@ -152,9 +156,23 @@ export function mergeRichAudio(
     return mergeWith;
   }
 
-  // If there are two richAudio responses, we want to sequence them one after the other
+  // If there are two richAudio responses, we want to sequence them one after the other. We can
+  // avoid unnecessary nesting of 'Sequence' elements by merging the lists of items in some cases.
+  let items = [];
+  if (target.type === 'Sequencer') {
+    items = (target as Sequencer).items;
+  } else {
+    items = [target];
+  }
+
+  if (mergeWith.type === 'Sequencer') {
+    items = [...items, ...(mergeWith as Sequencer).items];
+  } else {
+    items = [...items, mergeWith];
+  }
+
   return {
     type: 'Sequencer',
-    items: [target, mergeWith],
+    items,
   } as Sequencer;
 }

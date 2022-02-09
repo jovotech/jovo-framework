@@ -17,6 +17,7 @@ import {
   TextMessage,
   toSSML,
   OutputTemplate,
+  Speech,
 } from '..';
 import { OutputTemplateConverterStrategy } from '../OutputTemplateConverterStrategy';
 
@@ -124,6 +125,16 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
     const richAudio = mergeWith.richAudio;
     if (richAudio) {
       target.richAudio = mergeRichAudio(target.richAudio, richAudio);
+    }
+
+    // If there is both a regular TTS message and a richAudio response in the same output,
+    // the richAudio part gets played first, then the message is sequenced afterwards
+    if (target.message && target.richAudio) {
+      target.richAudio = mergeRichAudio(target.richAudio, {
+        type: 'Speech',
+        content: target.message,
+      } as Speech);
+      target.message = undefined;
     }
 
     target.listen = mergeListen(target.listen, mergeWith.listen);

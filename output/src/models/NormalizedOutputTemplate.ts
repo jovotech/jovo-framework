@@ -4,7 +4,7 @@ import { OutputTemplateBase } from './OutputTemplateBase';
 
 export class NormalizedOutputTemplate extends OutputTemplateBase {
   static getKeys(): Array<keyof NormalizedOutputTemplate> {
-    return ['message', 'reprompt', 'listen', 'quickReplies', 'card', 'carousel', 'platforms'];
+    return ['message', 'reprompt', 'listen', 'quickReplies', 'card', 'carousel', 'richAudio', 'platforms'];
   }
 
   @IsOptional()

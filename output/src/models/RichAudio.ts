@@ -1,10 +1,20 @@
-import { IsNotEmpty, IsNumber, IsString, IsUrl, Type, IsArray, DiscriminatorDescriptor } from '..';
+import { IsNotEmpty, IsNumber, IsEnum, IsString, IsUrl, Type, IsArray, TypeOptions } from '..';
+
+export enum RichAudioType {
+  Mixer = 'Mixer',
+  Sequencer = 'Sequencer',
+  Audio = 'Audio',
+  Speech = 'Speech',
+  Silence = 'Silence',
+}
 
 export class RichAudio {
+  @IsEnum(RichAudioType)
   type!: string;
 }
 
-export const richAudioTypeDiscriminator: { discriminator: DiscriminatorDescriptor } = {
+export const richAudioTypeDiscriminator: TypeOptions = {
+  keepDiscriminatorProperty: true,
   discriminator: {
     property: 'type',
     subTypes: [],
@@ -53,10 +63,12 @@ export class Silence extends RichAudio {
   duration!: number;
 }
 
-richAudioTypeDiscriminator.discriminator.subTypes = [
-  { value: Mixer, name: 'Mixer' },
-  { value: Sequencer, name: 'Sequencer' },
-  { value: Audio, name: 'Audio' },
-  { value: Speech, name: 'Speech' },
-  { value: Silence, name: 'Silence' },
-];
+if (richAudioTypeDiscriminator.discriminator) {
+  richAudioTypeDiscriminator.discriminator.subTypes = [
+    { value: Mixer, name: 'Mixer' },
+    { value: Sequencer, name: 'Sequencer' },
+    { value: Audio, name: 'Audio' },
+    { value: Speech, name: 'Speech' },
+    { value: Silence, name: 'Silence' },
+  ];
+}

@@ -114,8 +114,7 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
     }
 
     const message = output.message;
-    // richAudio responses override the message output
-    if (message && !richAudio) {
+    if (message) {
       response.response.outputSpeech = convertMessageToOutputSpeech(message);
     }
 

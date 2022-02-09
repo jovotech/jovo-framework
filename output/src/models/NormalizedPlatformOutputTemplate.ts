@@ -15,6 +15,7 @@ import { Card } from './Card';
 import { Carousel } from './Carousel';
 import { Message, MessageValue } from './Message';
 import { QuickReply, QuickReplyValue } from './QuickReply';
+import { RichAudio, richAudioTypeDiscriminator } from './RichAudio';
 
 export class NormalizedPlatformOutputTemplate<
   RESPONSE extends Record<string, unknown> = Record<string, unknown>,
@@ -60,4 +61,10 @@ export class NormalizedPlatformOutputTemplate<
   @ValidateNested()
   @Type(() => Carousel)
   carousel?: Carousel | null;
+
+  @IsOptional()
+  @IsInstance(RichAudio)
+  @ValidateNested()
+  @Type(() => RichAudio, richAudioTypeDiscriminator)
+  richAudio?: RichAudio;
 }
