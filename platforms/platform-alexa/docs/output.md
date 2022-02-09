@@ -166,6 +166,17 @@ This will add the `intent` and `entities` properties to the APL document as `arg
 
 These are then mapped correctly and added to the [`$input` object](https://www.jovo.tech/docs/input) when the user taps a button.
 
+In your [handler](https://www.jovo.tech/docs/handlers), you can then access the entities like this:
+
+```typescript
+@Intents(['ButtonIntent'])
+showSelectedButton() {
+  const element = this.$entities.button.value;
+
+  // ...
+}
+```
+
 ### card
 
 Jovo automatically turns the [generic `card` element](https://www.jovo.tech/docs/output-templates#card) into a detail screen for APL:
@@ -294,7 +305,16 @@ This will add the `intent` and `entities` properties to the APL document as `arg
 
 These are then mapped correctly and added to the [`$input` object](https://www.jovo.tech/docs/input) when the user taps a button. In the example above, a tap on an element triggers the `ElementIntent` and contains an entity of the name `element`.
 
+In your [handler](https://www.jovo.tech/docs/handlers), you can then access the entities like this:
 
+```typescript
+@Intents(['ElementIntent'])
+showSelectedElement() {
+  const element = this.$entities.element.value;
+
+  // ...
+}
+```
 
 ## Alexa Output Elements
 
@@ -479,6 +499,17 @@ Similar to how it works with [quick replies](#quickreplies) and [carousel items]
 ```
 
 When a user selects that element, the `intent` and `entities` get added to the [`$input` object](https://www.jovo.tech/docs/input). This way, you can deal with APL user events in your handlers the same way as with typical intent requests.
+
+In your [handler](https://www.jovo.tech/docs/handlers), you can then access the entities like this:
+
+```typescript
+@Intents(['ElementIntent'])
+showSelectedElement() {
+  const element = this.$entities.element.value;
+
+  // ...
+}
+```
 
 ## Alexa Output Configuration
 
