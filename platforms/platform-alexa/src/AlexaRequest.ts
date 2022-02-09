@@ -153,7 +153,7 @@ export class AlexaRequest extends JovoRequest {
   }
 
   getUserId(): string | undefined {
-    return this.session?.user?.userId;
+    return this.context?.System?.user?.userId;
   }
 
   setUserId(userId: string): void {
