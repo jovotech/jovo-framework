@@ -190,7 +190,7 @@ For this, there are two options that make it possible to skip `UNHANDLED`:
 
 #### prioritizedOverUnhandled
 
-There might be some handlers where you decide that they are more important than `UHANDLED`, even if they're ranked below it in the `matches`. You can highlight them as prioritized by adding the `prioritizedOverUnhandled` property. [Learn more about `prioritizedOverUnhandled` in the handler docs](./handlers.md#prioritizedOverUnhandled).
+There might be some handlers where you decide that they are more important than `UNHANDLED`, even if they're ranked below it in the `matches`. You can highlight them as prioritized by adding the `prioritizedOverUnhandled` property. [Learn more about `prioritizedOverUnhandled` in the handler docs](./handlers.md#prioritizedOverUnhandled).
 
 If a handler is prioritized, the property gets added to the `matches` element:
 
