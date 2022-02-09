@@ -124,6 +124,8 @@ this.$history.items[0];
 For each [database integration](./databases.md), you can add the `history` configuration to the `storedElements` property.
 
 ```typescript
+// src/app.dev.ts
+
 new FileDb({
   // ...
   storedElements: {
@@ -151,6 +153,8 @@ You can add the following [Jovo properties](./jovo-properties.md) to the history
 You can even add your own custom data to the history. Add any property with a function that returns the data to be stored. Here is an example for a `someCustomData` property:
 
 ```typescript
+// src/app.dev.ts
+
 new FileDb({
   // ...
   storedElements: {
@@ -218,6 +222,8 @@ For voice interfaces, it is recommended to add a functionality that lets users a
 You can repeat the previous message by storing the [`$output` array](./output.md) in the [`$history`](#history). Here is an example for [FileDb](https://www.jovo.tech/marketplace/db-filedb):
 
 ```typescript
+// src/app.dev.ts
+
 new FileDb({
   // ...
   storedElements: {
