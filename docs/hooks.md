@@ -11,12 +11,27 @@ Middleware hooks are the easiest way to extend certain parts of the Jovo Framewo
 
 Jovo hooks allow you to _hook_ into the Jovo middleware architecture to extend or modify the framework without having to change its core code. Learn more about all middlewares in the [RIDR Lifecycle documentation](./ridr-lifecycle.md#middlewares).
 
-Here is an example of a hook:
+Here are some examples of a hook:
 
 ```typescript
 // src/app.ts
 
+import { App, Jovo } from '@jovotech/framework';
+// ...
+
+const app = new App({ /* app config */ });
+
+app.hook('<middleware>', (jovo: Jovo): void => {
+  // ...
+});
+
+// Same hook without types
 app.hook('<middleware>', (jovo) => {
+  // ...
+});
+
+// Example: Execute code before the dialogue.start middleware
+app.hook('before.dialogue.start', (jovo: Jovo): void => {
   // ...
 });
 ```
@@ -36,7 +51,133 @@ Here is an example that logs the [`$output` array](./output.md) before it is tur
 ```typescript
 // src/app.ts
 
+import { App, Jovo } from '@jovotech/framework';
+// ...
+
+const app = new App({ /* app config */ });
+
+app.hook('before.response.output', (jovo: Jovo): void => {
+  console.log(jovo.$output);
+});
+
+// Same hook without types
 app.hook('before.response.output', (jovo) => {
   console.log(jovo.$output);
+});
+```
+
+Learn more in the sections below:
+- [Hooks that use `async` functions](#async-hooks)
+- [Hooks outsourced into separate files](#hook-files)
+
+### Async Hooks
+
+Hooks can also be `async`, which can relevant for operations like API calls.
+
+```typescript
+app.hook('<middleware>', async (jovo: Jovo): Promise<void> => {
+  const response = await someApiCall();
+  // ...
+});
+```
+
+### Hook Files
+
+You can also store your hook functions in a separate file. Here is an example for [`sessionCount`](#sessioncount):
+
+```typescript
+// src/hooks/sessionCountHook.ts
+
+import { Jovo } from '@jovotech/framework';
+
+export const sessionCountHook = (jovo: Jovo): void => {
+  if (jovo.$session.isNew) {
+    jovo.$user.data.sessionCount = (jovo.$user.data.sessionCount || 0) + 1;
+  }
+};
+```
+
+In your `app.ts` file, you can import and use the hook like this:
+
+```typescript
+// src/app.ts
+
+import { App } from '@jovotech/framework';
+import { sessionCountHook } from './hooks/sessionCount';
+// ...
+
+const app = new App({ /* app config */ });
+
+app.hook('before.response.output', sessionCountHook);
+```
+
+## Example Hooks
+
+- [New Session](#new-session)
+- [`sessionCount`](#sessioncount)
+
+### New Session
+
+This hook gets executed for every new session before a [handler](https://www.jovo.tech/docs/handlers) gets called. This can be useful for making API calls or cleaning up some data. See [`sessionCount`](#sessioncount) for an additional example.
+
+```typescript
+// src/app.ts
+
+import { App, Jovo } from '@jovotech/framework';
+// ...
+
+const app = new App({ /* app config */ });
+
+app.hook('before.dialogue.start', (jovo: Jovo): void => {
+  if (jovo.$session.isNew) {
+    // ...
+  }
+});
+
+// Same hook without types
+app.hook('before.dialogue.start', (jovo) => {
+  if (jovo.$session.isNew) {
+    // ...
+  }
+});
+```
+
+This hook can also be `async`, which can relevant for operations like API calls.
+
+```typescript
+app.hook('before.dialogue.start', async (jovo: Jovo): Promise<void> => {
+  if (jovo.$session.isNew) {
+    const response = await someApiCall();
+    // ...
+  }
+});
+```
+
+If you're used to working with Jovo `v3`: This hook can be used as a replacement of the `NEW_SESSION` handler.
+
+
+### sessionCount
+
+This hook stores a `sessionCount` variable in the [user database](./data.md#user-data):
+
+```typescript
+// src/app.ts
+
+import { App, Jovo } from '@jovotech/framework';
+// ...
+
+const app = new App({ /* app config */ });
+
+app.hook('before.dialogue.start', (jovo: Jovo): void => {
+  if (jovo.$session.isNew) {
+    jovo.$user.data.sessionCount = (jovo.$user.data.sessionCount || 0) + 1;
+  }
+});
+
+// Same hook without types
+app.hook('before.dialogue.start', (jovo) => {
+  if (jovo.$session.isNew) {
+    jovo.$user.data.sessionCount = (jovo.$user.data.sessionCount || 0) + 1;
+  }
 });
 ```
