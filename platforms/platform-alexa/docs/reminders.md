@@ -186,7 +186,7 @@ async remindersPermissionAccepted() {
 }
 ```
 
-Using this helper is the same as using the following [`@Handle` decorator](https://www.jovo.tech/docs/handlers#handler-routing-and-the-handle-decorator):
+Using this helper is the same as using the following [`@Handle` decorator](https://www.jovo.tech/docs/handle-decorators):
 
 ```typescript
 import { Handle, Jovo } from '@jovotech/framework';

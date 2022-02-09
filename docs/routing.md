@@ -71,12 +71,12 @@ After `resolved` is determined, Jovo runs the specified handler.
 
 To find handlers that could potentially fulfill a request, the router first goes through the `$state` stack (for local and global handlers) and then through all [root components](./components.md#register-root-components) (for global handlers).
 
-If a handler matches a request is highly dependent on the metadata that is added using the `@Handle` decorator (or convenience decorators like `@Intents`). [Learn more about these decorators here](./handlers.md#handler-routing-and-the-handle-decorator).
+If a handler matches a request is highly dependent on the metadata that is added using the `@Handle` decorator (or convenience decorators like `@Intents`). [Learn more about these decorators here](./handle-decorators.md).
 
 A handler counts as match if:
 
 - It matches a specific request type, like `LAUNCH`
-- For raw text or intent request types: It accepts the incoming `intent` (and potentially [`subState`](./handlers.md#substate))
+- For raw text or intent request types: It accepts the incoming `intent` (and potentially [`subState`](./handle-decorators.md#substate))
 - It also matches other `@Handle` conditions like `platforms` and `if`
 - It is an `UNHANDLED` handler ([more on that below](#unhandled-prioritization))
 
@@ -190,7 +190,7 @@ For this, there are two options that make it possible to skip `UNHANDLED`:
 
 #### prioritizedOverUnhandled
 
-There might be some handlers where you decide that they are more important than `UNHANDLED`, even if they're ranked below it in the `matches`. You can highlight them as prioritized by adding the `prioritizedOverUnhandled` property. [Learn more about `prioritizedOverUnhandled` in the handler docs](./handlers.md#prioritizedOverUnhandled).
+There might be some handlers where you decide that they are more important than `UNHANDLED`, even if they're ranked below it in the `matches`. You can highlight them as prioritized by adding the `prioritizedOverUnhandled` property. [Learn more about `prioritizedOverUnhandled` in the handler docs](./handle-decorators.md#prioritizedOverUnhandled).
 
 If a handler is prioritized, the property gets added to the `matches` element:
 
@@ -301,4 +301,4 @@ Handler routing is what happens after the initial request routing. There are thr
 
 - [Redirect to a different component or handler](./handlers.md#redirect-to-components)
 - [Delegate to a subcomponent](./handlers.md#delegate-to-components)
-- [Resolve a component after delegation](./handlers.md/#resolve-a-component)
+- [Resolve a component after delegation](./handlers.md#resolve-a-component)
