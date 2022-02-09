@@ -12,7 +12,7 @@ import { AlexaCapability, AlexaCapabilityType } from './AlexaDevice';
 import { DYNAMIC_ENTITY_MATCHES_PREFIX, STATIC_ENTITY_MATCHES_PREFIX } from './constants';
 import { AlexaEntity, Context, Request, Session } from './interfaces';
 import { ResolutionPerAuthority, ResolutionPerAuthorityStatusCode, Slot } from './output';
-
+import _set from 'lodash.set';
 export const ALEXA_REQUEST_TYPE_TO_INPUT_TYPE_MAP: Record<string, InputTypeLike> = {
   'LaunchRequest': InputType.Launch,
   'IntentRequest': InputType.Intent,
@@ -153,7 +153,7 @@ export class AlexaRequest extends JovoRequest {
   }
 
   getUserId(): string | undefined {
-    return this.session?.user?.userId;
+    return this.context?.System?.user?.userId;
   }
 
   setUserId(userId: string): void {
@@ -167,6 +167,7 @@ export class AlexaRequest extends JovoRequest {
     }
 
     this.session.user.userId = userId;
+    _set(this, 'context.System.user.userId', userId);
   }
 
   getApiEndpoint(): string {
