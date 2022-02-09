@@ -393,6 +393,28 @@ yourHandler() {
 }
 ```
 
+Here is an additional example that returns a different message if it is a new user:
+
+```typescript
+// src/components/GlobalComponent.ts
+
+import { Jovo, Component, BaseComponent, Global, Handle } from '@jovotech/framework';
+// ...
+
+@Global()
+@Component()
+export class GlobalComponent extends BaseComponent {
+  LAUNCH() {
+    return this.$send('Welcome back!');
+  }
+
+  @Handle({ types: ['LAUNCH'], if: (jovo: Jovo) => jovo.$user.isNew })
+  welcomeNewUser() {
+    return this.$send('Welcome, new user!');
+  }
+}
+```
+
 ### Handler Prioritization
 
 It's possible that multiple handlers are able to fulfill a request, for example:
