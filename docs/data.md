@@ -246,7 +246,11 @@ export class GlobalComponent extends BaseComponent {
 
   @Intents(['RepeatIntent'])
   repeatPreviousMessage() {
-    return this.$send(this.$history.prev.output);
+    if (this.$history.prev?.output) {
+      return this.$send(this.$history.prev.output);
+    } else {
+      return this.$send('Unfortunately, there is nothing to repeat.');
+    }
   }
 }
 ```
@@ -273,7 +277,11 @@ export class GlobalComponent extends BaseComponent {
 
   @Handle({ intents: ['RepeatIntent'], prioritizedOverUnhandled: true })
   repeatPreviousMessage() {
-    return this.$send(this.$history.prev.output);
+    if (this.$history.prev?.output) {
+      return this.$send(this.$history.prev.output);
+    } else {
+      return this.$send('Unfortunately, there is nothing to repeat.');
+    }
   }
 }
 ```
