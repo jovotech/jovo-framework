@@ -115,6 +115,7 @@ app.hook('before.response.output', sessionCountHook);
 
 - [New Session](#new-session)
 - [`sessionCount`](#sessioncount)
+- [New User](#new-user)
 
 ### New Session
 
@@ -142,7 +143,7 @@ app.hook('before.dialogue.start', (jovo) => {
 });
 ```
 
-This hook can also be `async`, which can relevant for operations like API calls.
+This hook can also be [`async`](#async-hooks), which can relevant for operations like API calls.
 
 ```typescript
 app.hook('before.dialogue.start', async (jovo: Jovo): Promise<void> => {
@@ -181,3 +182,42 @@ app.hook('before.dialogue.start', (jovo) => {
   }
 });
 ```
+
+### New User
+
+This hook gets executed for new users before a [handler](https://www.jovo.tech/docs/handlers) gets called. This can be useful for making API calls or adding some boilerplate data.
+
+```typescript
+// src/app.ts
+
+import { App, Jovo } from '@jovotech/framework';
+// ...
+
+const app = new App({ /* app config */ });
+
+app.hook('before.dialogue.start', (jovo: Jovo): void => {
+  if (jovo.$user.isNew) {
+    // ...
+  }
+});
+
+// Same hook without types
+app.hook('before.dialogue.start', (jovo) => {
+  if (jovo.$user.isNew) {
+    // ...
+  }
+});
+```
+
+This hook can also be [`async`](#async-hooks), which can relevant for operations like API calls.
+
+```typescript
+app.hook('before.dialogue.start', async (jovo: Jovo): Promise<void> => {
+  if (jovo.$user.isNew) {
+    const response = await someApiCall();
+    // ...
+  }
+});
+```
+
+If you're used to working with Jovo `v3`: This hook can be used as a replacement of the `NEW_USER` handler.
