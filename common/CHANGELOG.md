@@ -1,5 +1,27 @@
 # Changelog
 
+## [@jovotech/common@4.2.0](https://github.com/jovotech/jovo-framework/compare/@jovotech/common@4.0.3...@jovotech/common@4.2.0)
+
+> 26 January 2022
+
+- :adhesive_bandage: Fix issues with the `build:platform` process [`#1185`](https://github.com/jovotech/jovo-framework/pull/1185)
+- AudioPlayerActivity Types added [`#1165`](https://github.com/jovotech/jovo-framework/pull/1165)
+- :memo: Fix typos in `hooks`  [`#1194`](https://github.com/jovotech/jovo-framework/pull/1194)
+
+## [@jovotech/common@4.0.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/common@4.0.1...@jovotech/common@4.0.3)
+
+> 20 January 2022
+
+- Fixes merging of undefined values in output templates [`#1170`](https://github.com/jovotech/jovo-framework/pull/1170)
+- Fixes null value in state config [`#1186`](https://github.com/jovotech/jovo-framework/pull/1186)
+- :recycle: Refactor process termination [`#1179`](https://github.com/jovotech/jovo-framework/pull/1179)
+- 🐛  Fixes isNewSession in GoogleActionRequest [`#1178`](https://github.com/jovotech/jovo-framework/pull/1178)
+- update tslog library [`#1169`](https://github.com/jovotech/jovo-framework/pull/1169)
+- :bookmark: Publish [`#1164`](https://github.com/jovotech/jovo-framework/pull/1164)
+- :sparkles: Add --skip-validation flag [`#1163`](https://github.com/jovotech/jovo-framework/pull/1163)
+- :ambulance: Add bundle externals for Alexa to package.json [`#1155`](https://github.com/jovotech/jovo-framework/pull/1155)
+- :bug: Set id in resource path manually [`#1153`](https://github.com/jovotech/jovo-framework/pull/1153)
+
 ## [@jovotech/common@4.0.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/common@4.0.0...@jovotech/common@4.0.1)
 
 > 10 December 2021
