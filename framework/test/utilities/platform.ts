@@ -7,13 +7,16 @@ import {
   AnyObject,
   CapabilityType,
   EntityMap,
+  Extensible,
   ExtensibleConfig,
+  Input,
   InputTypeLike,
   Jovo,
   JovoDevice,
   JovoInput,
   JovoRequest,
   JovoResponse,
+  JovoSession,
   JovoUser,
   MiddlewareCollection,
   Platform,
@@ -22,6 +25,9 @@ import {
 } from '../../src';
 
 export class ExamplePlatformRequest extends JovoRequest {
+  input: Input = {};
+  session?: Partial<JovoSession> = {};
+
   getUserId(): string | undefined {
     return;
   }
@@ -39,7 +45,7 @@ export class ExamplePlatformRequest extends JovoRequest {
   }
 
   getIntent(): JovoInput['intent'] {
-    return undefined;
+    return this.input.intent;
   }
 
   setIntent(): void {
@@ -47,23 +53,23 @@ export class ExamplePlatformRequest extends JovoRequest {
   }
 
   getEntities(): EntityMap | undefined {
-    return undefined;
+    return this.input.entities;
   }
 
   getInputType(): InputTypeLike | undefined {
-    return undefined;
+    return this.input.type;
   }
 
   getInputText(): JovoInput['text'] {
-    return undefined;
+    return this.input.text;
   }
 
   getInputAudio(): JovoInput['audio'] {
-    return undefined;
+    return this.input.audio;
   }
 
   getSessionData(): UnknownObject | undefined {
-    return undefined;
+    return this.session?.data;
   }
 
   setSessionData(): void {
@@ -71,11 +77,11 @@ export class ExamplePlatformRequest extends JovoRequest {
   }
 
   getSessionId(): string | undefined {
-    return undefined;
+    return this.session?.id;
   }
 
   isNewSession(): boolean | undefined {
-    return undefined;
+    return this.session?.isNew;
   }
 
   getDeviceCapabilities(): CapabilityType[] | undefined {
@@ -96,6 +102,10 @@ export class ExamplePlatformRequestBuilder extends RequestBuilder<ExamplePlatfor
 }
 
 export class ExamplePlatformResponse extends JovoResponse {
+  output: NormalizedOutputTemplate[] = [];
+  session?: Partial<JovoSession> = {};
+  error?: unknown;
+
   hasSessionEnded(): boolean {
     return false;
   }
@@ -123,8 +133,13 @@ export class ExamplePlatformOutputConverterStrategy extends OutputTemplateConver
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  toResponse(output: NormalizedOutputTemplate): ExamplePlatformResponse {
-    return this.normalizeResponse({}) as ExamplePlatformResponse;
+  toResponse(
+    output: NormalizedOutputTemplate | NormalizedOutputTemplate[],
+  ): ExamplePlatformResponse {
+    output = Array.isArray(output) ? output : [output];
+    return this.normalizeResponse({
+      output,
+    }) as ExamplePlatformResponse;
   }
 }
 
@@ -156,6 +171,13 @@ export class ExamplePlatform extends Platform<
     return {};
   }
 
+  mount(parent: Extensible) {
+    super.mount(parent);
+    this.middlewareCollection.use('after.request.end', (jovo) => {
+      this.enableDatabaseSessionStorage(jovo);
+    });
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isRequestRelated(request: AnyObject | ExamplePlatformRequest): boolean {
     return true;
@@ -175,6 +197,13 @@ export class ExamplePlatform extends Platform<
     | Promise<ExamplePlatformResponse>
     | Promise<ExamplePlatformResponse[]>
     | ExamplePlatformResponse {
+    if (Array.isArray(response)) {
+      response.forEach((res) => {
+        res.session = jovo.$session;
+      });
+    } else {
+      response.session = jovo.$session;
+    }
     return response;
   }
 }
