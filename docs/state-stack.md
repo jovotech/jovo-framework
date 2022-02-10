@@ -92,5 +92,5 @@ The object may also include:
 
 - A `resolve` object that references handlers that should be called for specific events. This data is added using the [`$delegate()` method](./handlers.md#delegate-to-components).
 - A `data` object with [component data](./data.md#component-data).
-- A [`subState`](./handlers.md#substate)
+- A [`subState`](./handle-decorators.md#substate)
 - A `config` object with additional elements passed with [`$delegate()`](./handlers.md#delegate-to-components).

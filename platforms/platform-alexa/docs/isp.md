@@ -223,7 +223,7 @@ Under the hood, the output looks like this:
 
 After a user interacted with the ISP flow, Alexa sends a `Connections.Response` request to your Jovo app. Learn more in the official Alexa docs: [Resume your skill after the purchase flow](https://developer.amazon.com/en-US/docs/alexa/in-skill-purchase/add-isps-to-a-skill.html#handle-results).
 
-To accept these requests, you can use the `onIsp` helper for the [`@Handle` decorator](https://www.jovo.tech/docs/handlers#handler-routing-and-the-handle-decorator).
+To accept these requests, you can use the `onIsp` helper for the [`@Handle` decorator](https://www.jovo.tech/docs/handle-decorators).
 
 Here is an example for accepted purchases of the type `Buy`:
 
@@ -259,7 +259,7 @@ successfulPurchase() {
 }
 ```
 
-Under the hood, the object that is returned for the [`@Handle` decorator](https://www.jovo.tech/docs/handlers#handler-routing-and-the-handle-decorator) looks like this:
+Under the hood, the object that is returned for the [`@Handle` decorator](https://www.jovo.tech/docs/handle-decorators) looks like this:
 
 ```typescript
 {
