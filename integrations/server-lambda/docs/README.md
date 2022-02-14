@@ -108,7 +108,8 @@ To counteract this issue, you can set `callbackWaitsForEmptyEventLoop` to `false
 ```typescript
 export const handler = async (event: any, context: any, callback: Function) => {
   context.callbackWaitsForEmptyEventLoop = false;
-  await app.handle(event);
+  await app.initialize();
+  await app.handle(new Lambda(event, context, callback));
 };
 ```
 
