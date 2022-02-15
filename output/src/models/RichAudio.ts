@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsEnum, IsString, IsUrl, Type, IsArray, TypeOptions } from '..';
+import { MessageValue, IsNotEmpty, IsNumber, IsEnum, IsString, IsUrl, Type, IsArray, TypeOptions } from '..';
 
 export enum RichAudioType {
   Mixer = 'Mixer',
@@ -52,7 +52,7 @@ export class Speech extends RichAudio {
 
   @IsNotEmpty()
   @IsString()
-  content!: string;
+  content!: MessageValue;
 }
 
 export class Silence extends RichAudio {

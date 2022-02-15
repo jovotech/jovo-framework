@@ -50,12 +50,20 @@ function genChildSSML(elem: RichAudio): string {
   return `<media>${genRichAudioSSML(elem)}</media>`;
 }
 
+function getContentString(content: MessageValue): string {
+  if (typeof content === 'string') {
+    return content;
+  }
+
+  return content.text || '';
+}
+
 export function genRichAudioSSML(elem: RichAudio): string {
   if (isAudioElem(elem)) {
     return `<audio src="${elem.source}" />`;
   }
   if (isSpeechElem(elem)) {
-    return `<p>${elem.content}</p>`;
+    return `<p>${getContentString(elem.content)}</p>`;
   }
   if (isSilenceElem(elem)) {
     return `<break time="${elem.duration}ms" />`;
@@ -75,7 +83,7 @@ export function genRichAudioText(elem: RichAudio): string {
     return '';
   }
   if (isSpeechElem(elem)) {
-    return elem.content;
+    return getContentString(elem.content);
   }
   if (isSilenceElem(elem)) {
     return '';
