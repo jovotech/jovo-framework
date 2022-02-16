@@ -113,12 +113,13 @@ Cards are often used to display content in a visual and structured way.
 
 A `card` consists of the following properties:
 
-- `title`: required
-- `key`
-- `subtitle`
-- `content`
-- `imageUrl`
-- `imageAlt`
+- `title`: A `string` that is usually displayed at the top of the card. Required.
+- `subtitle`: An optional `string` that is displayed below the `title`.
+- `content`: An optional `string` that contains the body text of the card.
+- `imageUrl`: An optional `string` with a URL to an image to be displayed as part of the card.
+- `imageAlt`: An optional `string` that contains an alt text for the image.
+- `key`: An optional `string` that is used by some platforms if the card is selected.
+
 
 ### carousel
 
