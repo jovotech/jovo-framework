@@ -3,41 +3,15 @@
   "intents": [
     {
       "name": "HelloWorldIntent",
-      "phrases": ["hello", "say hello", "say hello world"]
+      "phrases": ["hi", "hello", "say hello", "say hello world"]
     },
     {
       "name": "YesIntent",
-      "alexa": {
-        "name": "AMAZON.YesIntent"
-      },
       "phrases": ["yes", "yes please", "sure"]
     },
     {
       "name": "NoIntent",
-      "alexa": {
-        "name": "AMAZON.NoIntent"
-      },
       "phrases": ["no", "no thanks"]
     }
-  ],
-  "alexa": {
-    "interactionModel": {
-      "languageModel": {
-        "intents": [
-          {
-            "name": "AMAZON.CancelIntent",
-            "samples": []
-          },
-          {
-            "name": "AMAZON.HelpIntent",
-            "samples": []
-          },
-          {
-            "name": "AMAZON.StopIntent",
-            "samples": []
-          }
-        ]
-      }
-    }
-  }
+  ]
 }
