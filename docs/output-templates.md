@@ -122,7 +122,7 @@ A `card` consists of the following properties:
 
 ### carousel
 
-A carousel is a (usually horizontally scrollable) collection of at least 2 [cards](#card).
+A carousel is a (usually horizontally scrollable) collection [cards](#card):
 
 ```typescript
 {
@@ -143,8 +143,8 @@ A carousel is a (usually horizontally scrollable) collection of at least 2 [card
 
 A `carousel` consists of the following properties:
 
-- `title`
-- `items`: An array of [card](#card) items
+- `title`: A `string` that is usually displayed at the top of the carousel.
+- `items`: An array of [card](#card) items. The minimum number of items is `1`, the maximum depends on the platform. Some platforms like [Google Assistant](https://www.jovo.tech/marketplace/platform-googleassistant/output#carousel-collection) and [Google Business Messages](https://www.jovo.tech/marketplace/platform-googlebusiness/output#carousel) require a minimum number of `2` items. In that case, single-item carousels are turned into a [card](#card).
 
 ### quickReplies
 
