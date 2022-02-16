@@ -113,7 +113,7 @@ The `listen` element can also be used to add dynamic entities for Alexa. [Learn 
 
 ### quickReplies
 
-Alexa does not natively support quick replies. However, Jovo automatically turns the [generic `quickReplies` element](https://www.jovo.tech/docs/output-templates#quickreplies) into buttons for APL:
+Alexa does not natively support quick replies. However, when used together with a [`card`](#card) or [`carousel`](#carousel), Jovo automatically turns the [generic `quickReplies` element](https://www.jovo.tech/docs/output-templates#quickreplies) into buttons for APL:
 
 ```typescript
 {
@@ -127,11 +127,9 @@ Alexa does not natively support quick replies. However, Jovo automatically turns
 }
 ```
 
-For this to work, `genericOutputToApl` needs to be enabled in the [Alexa output configuration](#alexa-output-configuration).
+For this to work, you need to [enable APL](#apl-configuration) for your Alexa Skill project. Also, `genericOutputToApl` needs to be enabled in the [Alexa output configuration](#alexa-output-configuration), which is the default.
 
-For these buttons, you need to pass a target `intent`. When the button is clicked, the [Jovo Router](https://www.jovo.tech/docs/routing) automatically maps this to the specified intent.
-
-It's also possible to add entities:
+If a user taps on a button, a request of the type `Alexa.Presentation.APL.UserEvent` is sent to your app. You can learn more in the [official Alexa docs](https://developer.amazon.com/docs/alexa/alexa-presentation-language/apl-interface.html#userevent-request). To map this type of request to an intent (and optionally an [entity](https://www.jovo.tech/docs/entities)), you need to add the following to each quick reply item:
 
 ```typescript
 {
@@ -150,9 +148,38 @@ It's also possible to add entities:
 }
 ```
 
+This will add the `intent` and `entities` properties to the APL document as `arguments`.
+
+```json
+"arguments": [
+  {
+    "type": "QuickReply",
+	  "intent": "ButtonIntent",
+	  "entities": {
+      "button": {
+        "value": "a"
+      }
+    }
+  }
+]
+```
+
+These are then mapped correctly and added to the [`$input` object](https://www.jovo.tech/docs/input) when the user taps a button.
+
+In your [handler](https://www.jovo.tech/docs/handlers), you can then access the entities like this:
+
+```typescript
+@Intents(['ButtonIntent'])
+showSelectedButton() {
+  const button = this.$entities.button.value;
+
+  // ...
+}
+```
+
 ### card
 
-Jovo automatically turns the [generic `card` element](https://www.jovo.tech/docs/output-templates#card) into a detail screen for APL.
+Jovo automatically turns the [generic `card` element](https://www.jovo.tech/docs/output-templates#card) into a detail screen for [APL](#apl).
 
 ![A card detail screen using Alexa Presentation Language (APL)](./img/alexa-apl-card-output.png)
 
@@ -184,7 +211,7 @@ Besides the [generic `card` properties](https://www.jovo.tech/docs/output-templa
 
 You can also add buttons by using the [`quickReplies` property](#quickreplies).
 
-For cards to work with APL, `genericOutputToApl` needs to be enabled in the [Alexa output configuration](#alexa-output-configuration), which is the default. You can also override the [default APL template](https://github.com/jovotech/jovo-framework/blob/v4/latest/platforms/platform-alexa/src/output/apl/Card.json) used for `card`:
+For cards to work, you need to [enable APL](#apl-configuration) for your Alexa Skill project. Also, `genericOutputToApl` needs to be enabled in the [Alexa output configuration](#alexa-output-configuration), which is the default. You can also override the default APL template used for `card`:
 
 ```typescript
 const app = new App({
@@ -206,7 +233,7 @@ const app = new App({
 
 ### carousel
 
-Alexa does not natively support carousels. However, Jovo automatically turns the [generic `carousel` element](https://www.jovo.tech/docs/output-templates#carousel) into a card slider for APL.
+Alexa does not natively support carousels. However, Jovo automatically turns the [generic `carousel` element](https://www.jovo.tech/docs/output-templates#carousel) into a card slider for [APL](#apl).
 
 ![A carousel slider using Alexa Presentation Language (APL)](./img/alexa-apl-carousel-output.png)
 
@@ -246,7 +273,7 @@ Besides the [generic `carousel` properties](https://www.jovo.tech/docs/output-te
 
 You can also add buttons by using the [`quickReplies` property](#quickreplies).
 
-For the `carousel` to work with APL, `genericOutputToApl` needs to be enabled in the [Alexa output configuration](#alexa-output-configuration), which is the default. You can also override the [default APL template](https://github.com/jovotech/jovo-framework/blob/v4/latest/platforms/platform-alexa/src/output/apl/Carousel.json) used for `carousel`:
+For the `carousel` to work, you need to [enable APL](#apl-configuration) for your Alexa Skill project. Also, `genericOutputToApl` needs to be enabled in the [Alexa output configuration](#alexa-output-configuration), which is the default. You can also override the default APL template used for `carousel`:
 
 ```typescript
 const app = new App({
@@ -264,7 +291,7 @@ const app = new App({
 });
 ```
 
-You can make the carousel clickable by adding a `selection` object. Once an element is selected by the user, the Jovo Router will automatically map the request to the provided `intent` (and potentially `entities`):
+You can make the carousel clickable by adding a `selection` object. Once an element is selected by the user, a request of the type `Alexa.Presentation.APL.UserEvent` is sent to your app. You can learn more in the [official Alexa docs](https://developer.amazon.com/docs/alexa/alexa-presentation-language/apl-interface.html#userevent-request). To map this type of request to an intent (and optionally an [entity](https://www.jovo.tech/docs/entities)), you need to add the following to each carousel item:
 
 ```typescript
 {
@@ -300,7 +327,34 @@ You can make the carousel clickable by adding a `selection` object. Once an elem
 }
 ```
 
-In the example above, a tap on an element triggers the `ElementIntent` and contains an entity of the name `element`.
+This will add the `intent` and `entities` properties to the APL document as `arguments`.
+
+```json
+"arguments": [
+  {
+    "type": "Selection",
+	  "intent": "ElementIntent",
+	  "entities": {
+      "element": {
+        "value": "A"
+      }
+    }
+  }
+]
+```
+
+These are then mapped correctly and added to the [`$input` object](https://www.jovo.tech/docs/input) when the user taps a button. In the example above, a tap on an element triggers the `ElementIntent` and contains an entity of the name `element`.
+
+In your [handler](https://www.jovo.tech/docs/handlers), you can then access the entities like this:
+
+```typescript
+@Intents(['ElementIntent'])
+showSelectedElement() {
+  const element = this.$entities.element.value;
+
+  // ...
+}
+```
 
 ## Alexa Output Elements
 
@@ -336,7 +390,7 @@ The [`nativeResponse` property](https://www.jovo.tech/docs/output-templates#nati
 }
 ```
 
-For example, an APL RenderDocument directive ([see official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/alexa-presentation-language/apl-interface.html#renderdocument-directive)) could be added like this:
+For example, an [APL](#apl) RenderDocument directive ([see official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/alexa-presentation-language/apl-interface.html#renderdocument-directive)) could be added like this:
 
 ```typescript
 {
@@ -348,7 +402,7 @@ For example, an APL RenderDocument directive ([see official Alexa docs](https://
           directives: [
             {
               type: 'Alexa.Presentation.APL.RenderDocument',
-              token: 'helloworldToken',
+              token: '<some-token>',
               document: {
                 /* ... */
               },
@@ -365,6 +419,137 @@ For example, an APL RenderDocument directive ([see official Alexa docs](https://
 ```
 
 Learn more about the [response format in the official Alexa documentation](https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-and-response-json-reference.html#response-format).
+
+
+### APL
+
+The Alexa Presentation Language (APL) allows you to add visual content and audio (using APLA) to your Alexa Skill. Learn more in the [official Alexa docs](https://developer.amazon.com/docs/alexa/alexa-presentation-language/add-visuals-and-audio-to-your-skill.html). 
+
+You can add an APL RenderDocument directive ([see official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/alexa-presentation-language/apl-interface.html#renderdocument-directive)) to your response by using the [`nativeResponse` property](#native-response), for example:
+
+```typescript
+{
+  // ...
+  platforms: {
+    alexa: {
+      nativeResponse: {
+        response: {
+          directives: [
+            {
+              type: 'Alexa.Presentation.APL.RenderDocument',
+              token: '<some-token>',
+              document: {
+                /* ... */
+              },
+              datasources: {
+                /* ... */
+              },
+            },
+          ];
+        }
+      }
+    }
+  }
+}
+```
+
+Learn more about APL in the following sections:
+
+- [APL Configuration](#apl-configuration): How to enable APL for your Alexa Skill
+- [APL User Events](#apl-user-events): How to respond to APL touch input
+
+Jovo also supports the ability to turn output elements into APL templates. Learn more in the sections above:
+
+- [`card`](#card) is turned into a detail page
+- [`carousel`](#carousel) is turned into a card slider
+
+
+#### APL Configuration
+
+To support APL, you need to enable the `ALEXA_PRESENTATION_APL` interface for your Alexa Skill. You can do so in the Alexa Developer Console, however, we recommend using the Jovo CLI and adding the interface to your the [Alexa project configuration](./project-config.md) using the [`files` property](project-config.md#files):
+
+```js
+new AlexaCli({
+  files: {
+    'skill-package/skill.json': {
+      manifest: {
+        apis: {
+          custom: {
+            interfaces: [
+              {
+                type: 'ALEXA_PRESENTATION_APL',
+                supportedViewports: [
+                  {
+                    mode: 'HUB',
+                    shape: 'RECTANGLE',
+                    minHeight: 600,
+                    maxHeight: 1279,
+                    minWidth: 1280,
+                    maxWidth: 1920,
+                  },
+                  // ...
+                ],
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+  // ...
+});
+```
+
+You can find all [supported APL viewports in the official Alexa docs](https://developer.amazon.com/docs/alexa/alexa-presentation-language/apl-select-the-viewport-profiles-your-skill-supports.html#configure-the-supported-viewports-with-the-ask-cli-or-smapi).
+
+This adds the interface to your `skill.json` manifest during the build process. To update your Skill project, you can follow these steps:
+
+```sh
+# Build Alexa project files
+$ jovo build:platform alexa
+
+# Deploy the files to the Alexa Developer Console
+$ jovo deploy:platform alexa
+```
+
+[Learn more about Alexa CLI commands here](./cli-commands.md).
+
+#### APL User Events
+
+APL also supports touch input for buttons or list selections. If a user taps on an element like this, a request of the type `Alexa.Presentation.APL.UserEvent` is sent to your app. You can learn more in the [official Alexa docs](https://developer.amazon.com/docs/alexa/alexa-presentation-language/apl-interface.html#userevent-request).
+
+Similar to how it works with [quick replies](#quickreplies) and [carousel items](#carousel), you can add the following as `arguments` to your APL document:
+
+- `type`: Can be `Selection` or `QuickReply`. Required.
+- `intent`: The intent name the user input should get mapped to. Required.
+- `entities`: The [entities](https://www.jovo.tech/docs/entities) (slots) that should be added to the user input. Optional.
+
+```json
+"arguments": [
+  {
+    "type": "Selection",
+	  "intent": "ElementIntent",
+	  "entities": {
+      "element": {
+        "value": "A"
+      }
+    }
+  }
+]
+```
+
+When a user selects that element, the `intent` and `entities` get added to the [`$input` object](https://www.jovo.tech/docs/input). This way, you can deal with APL user events in your handlers the same way as with typical intent requests.
+
+In your [handler](https://www.jovo.tech/docs/handlers), you can then access the entities like this:
+
+```typescript
+@Intents(['ElementIntent'])
+showSelectedElement() {
+  const element = this.$entities.element.value;
+
+  // ...
+}
+```
 
 ## Alexa Output Configuration
 
