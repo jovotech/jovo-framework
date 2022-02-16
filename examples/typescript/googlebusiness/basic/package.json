@@ -19,11 +19,12 @@
   "dependencies": {
     "@jovotech/db-filedb": "^4.0.0",
     "@jovotech/framework": "^4.0.0",
-    "@jovotech/platform-googlebusiness": "^4.0.0",
     "@jovotech/nlu-nlpjs": "^4.0.0",
+    "@jovotech/platform-googlebusiness": "^4.0.0",
     "@jovotech/plugin-debugger": "^4.0.0",
     "@jovotech/server-express": "^4.0.0",
-    "@jovotech/server-lambda": "^4.0.0"
+    "@jovotech/server-lambda": "^4.0.0",
+    "@nlpjs/lang-en": "^4.22.7"
   },
   "devDependencies": {
     "@types/express": "^4.17.11",
