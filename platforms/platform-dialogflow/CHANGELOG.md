@@ -1,5 +1,47 @@
 # Changelog
 
+## [@jovotech/platform-dialogflow@4.2.0](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-dialogflow@4.1.2...@jovotech/platform-dialogflow@4.2.0)
+
+> 26 January 2022
+
+- :adhesive_bandage: Fix issues with the `build:platform` process [`#1185`](https://github.com/jovotech/jovo-framework/pull/1185)
+- AudioPlayerActivity Types added [`#1165`](https://github.com/jovotech/jovo-framework/pull/1165)
+- :memo: Fix typos in `hooks`  [`#1194`](https://github.com/jovotech/jovo-framework/pull/1194)
+
+## [@jovotech/platform-dialogflow@4.1.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-dialogflow@4.0.0-beta.10...@jovotech/platform-dialogflow@4.1.2)
+
+> 20 January 2022
+
+- Fixes merging of undefined values in output templates [`#1170`](https://github.com/jovotech/jovo-framework/pull/1170)
+- Fixes null value in state config [`#1186`](https://github.com/jovotech/jovo-framework/pull/1186)
+- :recycle: Refactor process termination [`#1179`](https://github.com/jovotech/jovo-framework/pull/1179)
+- 🐛  Fixes isNewSession in GoogleActionRequest [`#1178`](https://github.com/jovotech/jovo-framework/pull/1178)
+- update tslog library [`#1169`](https://github.com/jovotech/jovo-framework/pull/1169)
+- :bookmark: Publish [`#1164`](https://github.com/jovotech/jovo-framework/pull/1164)
+- :sparkles: Add --skip-validation flag [`#1163`](https://github.com/jovotech/jovo-framework/pull/1163)
+- :ambulance: Add bundle externals for Alexa to package.json [`#1155`](https://github.com/jovotech/jovo-framework/pull/1155)
+- :bug: Set id in resource path manually [`#1153`](https://github.com/jovotech/jovo-framework/pull/1153)
+- :label: Fix some typings [`#1151`](https://github.com/jovotech/jovo-framework/pull/1151)
+- :bug: Fix Task config property [`#1152`](https://github.com/jovotech/jovo-framework/pull/1152)
+- ✨ Initial Alexa ISP helpers [`#1145`](https://github.com/jovotech/jovo-framework/pull/1145)
+- :sparkles: Introduce getInitConfig() [`#1144`](https://github.com/jovotech/jovo-framework/pull/1144)
+- :sparkles: Introduce Alexa Conversations [`#1140`](https://github.com/jovotech/jovo-framework/pull/1140)
+- :sparkles: Implement isJovoCliError [`#1141`](https://github.com/jovotech/jovo-framework/pull/1141)
+- :recycle: Add `skipTests: true` to FileDb default config [`#1121`](https://github.com/jovotech/jovo-framework/pull/1121)
+- 🐛 Fix headline style in JovoLogger [`#1120`](https://github.com/jovotech/jovo-framework/pull/1120)
+- Remove table view on `jovo run` + undefined properties in logger [`#1118`](https://github.com/jovotech/jovo-framework/pull/1118)
+- Fix process.stdin handling  [`#1116`](https://github.com/jovotech/jovo-framework/pull/1116)
+- ✨ Move JovoDebugger code from CLI to plugin [`#1111`](https://github.com/jovotech/jovo-framework/pull/1111)
+- ✨ Add pretty logging [`#1103`](https://github.com/jovotech/jovo-framework/pull/1103)
+- :sparkles: Introduce CMS integrations [`#1089`](https://github.com/jovotech/jovo-framework/pull/1089)
+- :label: Fix typings [`#1105`](https://github.com/jovotech/jovo-framework/pull/1105)
+- :sparkles: Introduce JavaScript Boilerplates [`#1109`](https://github.com/jovotech/jovo-framework/pull/1109)
+- :sparkles: Add NextScene output, onScene GoogleAssistantHandle [`#1088`](https://github.com/jovotech/jovo-framework/pull/1088)
+- :recycle: Adjust Jovo Debugger plugin [`#1093`](https://github.com/jovotech/jovo-framework/pull/1093)
+- **Breaking change:** :recycle: :boom:  Standardize request headers [`#1080`](https://github.com/jovotech/jovo-framework/pull/1080)
+- :bookmark: Publish [`#1092`](https://github.com/jovotech/jovo-framework/pull/1092)
+- :bookmark: Publish [`#1067`](https://github.com/jovotech/jovo-framework/pull/1067)
+
 ## [@jovotech/platform-dialogflow@4.0.0-beta.10](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-dialogflow@4.0.0-beta.8...@jovotech/platform-dialogflow@4.0.0-beta.10)
 
 > 2 November 2021

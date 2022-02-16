@@ -9,13 +9,18 @@ import {
   UnknownObject,
 } from '@jovotech/framework';
 import { AlexaCapability, AlexaCapabilityType } from './AlexaDevice';
-import { DYNAMIC_ENTITY_MATCHES_PREFIX, STATIC_ENTITY_MATCHES_PREFIX } from './constants';
+import {
+  DYNAMIC_ENTITY_MATCHES_PREFIX,
+  STATIC_ENTITY_MATCHES_PREFIX,
+  SUPPORTED_APL_ARGUMENT_TYPES,
+} from './constants';
 import { AlexaEntity, Context, Request, Session } from './interfaces';
 import { ResolutionPerAuthority, ResolutionPerAuthorityStatusCode, Slot } from './output';
-
+import _set from 'lodash.set';
 export const ALEXA_REQUEST_TYPE_TO_INPUT_TYPE_MAP: Record<string, InputTypeLike> = {
   'LaunchRequest': InputType.Launch,
   'IntentRequest': InputType.Intent,
+  'Alexa.Presentation.APL.UserEvent': InputType.Intent,
   'SessionEndedRequest': InputType.End,
   'System.ExceptionEncountered': InputType.Error,
 };
@@ -30,8 +35,22 @@ export class AlexaRequest extends JovoRequest {
     return this.request?.locale;
   }
 
+  private getAplUserEventArg(key: string) {
+    if (this?.request?.type === 'Alexa.Presentation.APL.UserEvent') {
+      const args = this?.request.arguments || [];
+      for (let i = 0; i < args.length; i++) {
+        const argument = args[i];
+        if (typeof argument === 'object' && SUPPORTED_APL_ARGUMENT_TYPES.includes(argument?.type)) {
+          if (argument[key]) {
+            return argument[key];
+          }
+        }
+      }
+    }
+  }
+
   getIntent(): JovoInput['intent'] {
-    return this.request?.intent?.name;
+    return this.getAplUserEventArg('intent') || this.request?.intent?.name;
   }
 
   setIntent(intent: string): void {
@@ -51,6 +70,11 @@ export class AlexaRequest extends JovoRequest {
       ...(this.request?.intent?.slots || {}),
       ...(this.request?.apiRequest?.slots || {}),
     };
+
+    const aplEntities = this.getAplUserEventArg('entities');
+    if (aplEntities) {
+      return aplEntities;
+    }
 
     if (!Object.keys(slots).length) {
       return;
@@ -153,7 +177,7 @@ export class AlexaRequest extends JovoRequest {
   }
 
   getUserId(): string | undefined {
-    return this.session?.user?.userId;
+    return this.context?.System?.user?.userId;
   }
 
   setUserId(userId: string): void {
@@ -167,6 +191,7 @@ export class AlexaRequest extends JovoRequest {
     }
 
     this.session.user.userId = userId;
+    _set(this, 'context.System.user.userId', userId);
   }
 
   getApiEndpoint(): string {

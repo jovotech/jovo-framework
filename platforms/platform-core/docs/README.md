@@ -9,7 +9,7 @@ The Jovo Core Platform is a standalone [platform integration](https://www.jovo.t
 
 ## Introduction
 
-![Jovo Client and Jovo Core Platform](https://github.com/jovotech/jovo-framework/raw/master/jovo-platforms/jovo-platform-core/img/jovo-client-platform-communication.png 'How Jovo Core Platform communicates with clients like web apps')
+![Jovo Client and Jovo Core Platform](https://github.com/jovotech/jovo-framework/raw/v3/latest/jovo-platforms/jovo-platform-core/img/jovo-client-platform-communication.png 'How Jovo Core Platform communicates with clients like web apps')
 
 Besides integrations with major platforms like Alexa, Google Assistant, or Facebook Messenger, Jovo also enables you to connect your own clients to build fully custom conversational experiences for both voice and chat.
 
@@ -36,16 +36,27 @@ You can install the plugin like this:
 $ npm install @jovotech/platform-core
 ```
 
-Add it as plugin to your [app configuration](https://www.jovo.tech/docs/app-config), e.g. `app.ts`:
+Add it as plugin to your [app configuration](https://www.jovo.tech/docs/app-config), along with an [NLU integration](https://www.jovo.tech/docs/nlu) like [NLP.js](https://www.jovo.tech/marketplace/nlu-nlpjs)
 
 ```typescript
 import { App } from '@jovotech/framework';
 import { CorePlatform } from '@jovotech/platform-core';
+import { LangEn } from '@nlpjs/lang-en';
+import { NlpjsNlu } from '@jovotech/nlu-nlpjs';
 // ...
 
 const app = new App({
   plugins: [
-    new CorePlatform(),
+    new CorePlatform({
+      plugins: [
+        new NlpjsNlu({
+          languageMap: {
+            en: LangEn,
+          },
+        }),
+        // ...
+      ],
+    }),
     // ...
   ],
 });

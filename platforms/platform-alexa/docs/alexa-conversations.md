@@ -91,7 +91,7 @@ Learn more about all [Alexa CLI commands here](./cli-commands.md).
 
 With Alexa Conversations, you can define APIs that respond to `Dialog.API.Invoked` requests. Learn more in the [official Alexa docs](https://developer.amazon.com/docs/alexa/conversations/handle-api-calls.html).
 
-You can have a [handler](https://www.jovo.tech/docs/handlers) accept a request like this by using the `onDialogApiInvoked` helper that can be used inside the [`@Handle` decorator](https://www.jovo.tech/docs/handlers#handler-routing-and-the-handle-decorator).
+You can have a [handler](https://www.jovo.tech/docs/handlers) accept a request like this by using the `onDialogApiInvoked` helper that can be used inside the [`@Handle` decorator](https://www.jovo.tech/docs/handle-decorators).
 
 ```typescript
 import { AlexaHandles } from '@jovotech/platform-alexa';
