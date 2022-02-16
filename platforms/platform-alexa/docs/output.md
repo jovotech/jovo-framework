@@ -152,19 +152,39 @@ It's also possible to add entities:
 
 ### card
 
-Jovo automatically turns the [generic `card` element](https://www.jovo.tech/docs/output-templates#card) into a detail screen for APL:
+Jovo automatically turns the [generic `card` element](https://www.jovo.tech/docs/output-templates#card) into a detail screen for APL.
+
+![A card detail screen using Alexa Presentation Language (APL)](./img/alexa-apl-card-output.png)
+
+For example, the image above (screenshot from the testing tab in the Alexa Developer Console) is created by the following output template:
 
 ```typescript
 {
   // ...
   card: {
     title: 'Hello world!',
-    content: 'Welcome to this new app built with Jovo.'
+    subtitle: 'How are you?',
+    content: 'Welcome to this new app built with Jovo.',
+    imageUrl: 'https://jovo-assets.s3.amazonaws.com/jovo-icon.png',
+
+    // Alexa properties
+    backgroundImageUrl: 'https://jovo-assets.s3.amazonaws.com/jovo-bg.png',
+    header: {
+      logo: 'https://jovo-assets.s3.amazonaws.com/jovo-icon.png',
+      title: 'Header title',
+    },
   },
 }
 ```
 
-For this to work, `genericOutputToApl` needs to be enabled in the [Alexa output configuration](#alexa-output-configuration), which is the default. You can also override the default APL template used for `card`:
+Besides the [generic `card` properties](https://www.jovo.tech/docs/output-templates#card), you can add the following optional elements for Alexa:
+
+- `backgroundImageUrl`: A link to a background image. This is used as `backgroundImageSource` for the [`AlexaBackground` APL property](https://developer.amazon.com/docs/alexa/alexa-presentation-language/apl-alexa-background-layout.html).
+- `header`: Contains a `logo` image URL and a `title` to be displayed at the top bar of the APL screen. These are used as `headerAttributionImage` and `headerTitle` for the [`AlexaHeader` APL property](https://developer.amazon.com/docs/alexa/alexa-presentation-language/apl-alexa-header-layout.html).
+
+You can also add buttons by using the [`quickReplies` property](#quickreplies).
+
+For cards to work with APL, `genericOutputToApl` needs to be enabled in the [Alexa output configuration](#alexa-output-configuration), which is the default. You can also override the [default APL template](https://github.com/jovotech/jovo-framework/blob/v4/latest/platforms/platform-alexa/src/output/apl/Card.json) used for `card`:
 
 ```typescript
 const app = new App({
@@ -186,7 +206,11 @@ const app = new App({
 
 ### carousel
 
-Alexa does not natively support carousels. However, Jovo automatically turns the [generic `carousel` element](https://www.jovo.tech/docs/output-templates#carousel) into a card slider for APL:
+Alexa does not natively support carousels. However, Jovo automatically turns the [generic `carousel` element](https://www.jovo.tech/docs/output-templates#carousel) into a card slider for APL.
+
+![A carousel slider using Alexa Presentation Language (APL)](./img/alexa-apl-carousel-output.png)
+
+For example, the image above (screenshot from the testing tab in the Alexa Developer Console) is created by the following output template:
 
 ```typescript
 {
@@ -195,18 +219,34 @@ Alexa does not natively support carousels. However, Jovo automatically turns the
     items: [
       {
         title: 'Element 1',
-        content: 'To my right, you will see element 2.'
+        content: 'Oh hello.',
+        imageUrl: 'https://jovo-assets.s3.amazonaws.com/jovo-icon.png',
       },
       {
         title: 'Element 2',
-        content: 'Hi there!'
-      }
-    ]
+        content: 'Hi there!',
+        imageUrl: 'https://jovo-assets.s3.amazonaws.com/jovo-icon.png',
+      },
+    ],
+
+    // Alexa properties
+    backgroundImageUrl: 'https://jovo-assets.s3.amazonaws.com/jovo-bg.png',
+    header: {
+      logo: 'https://jovo-assets.s3.amazonaws.com/jovo-icon.png',
+      title: 'Header title',
+    },
   },
 }
 ```
 
-For this to work, `genericOutputToApl` needs to be enabled in the [Alexa output configuration](#alexa-output-configuration), which is the default. You can also override the default APL template used for `carousel`:
+Besides the [generic `carousel` properties](https://www.jovo.tech/docs/output-templates#carousel), you can add the following optional elements for Alexa:
+
+- `backgroundImageUrl`: A link to a background image. This is used as `backgroundImageSource` for the [`AlexaBackground` APL property](https://developer.amazon.com/docs/alexa/alexa-presentation-language/apl-alexa-background-layout.html).
+- `header`: Contains a `logo` image URL and a `title` to be displayed at the top bar of the APL screen. These are used as `headerAttributionImage` and `headerTitle` for the [`AlexaHeader` APL property](https://developer.amazon.com/docs/alexa/alexa-presentation-language/apl-alexa-header-layout.html).
+
+You can also add buttons by using the [`quickReplies` property](#quickreplies).
+
+For the `carousel` to work with APL, `genericOutputToApl` needs to be enabled in the [Alexa output configuration](#alexa-output-configuration), which is the default. You can also override the [default APL template](https://github.com/jovotech/jovo-framework/blob/v4/latest/platforms/platform-alexa/src/output/apl/Carousel.json) used for `carousel`:
 
 ```typescript
 const app = new App({
