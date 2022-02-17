@@ -113,16 +113,17 @@ Cards are often used to display content in a visual and structured way.
 
 A `card` consists of the following properties:
 
-- `title`: required
-- `key`
-- `subtitle`
-- `content`
-- `imageUrl`
-- `imageAlt`
+- `title`: A `string` that is usually displayed at the top of the card. Required.
+- `subtitle`: An optional `string` that is displayed below the `title`.
+- `content`: An optional `string` that contains the body text of the card.
+- `imageUrl`: An optional `string` with a URL to an image to be displayed as part of the card.
+- `imageAlt`: An optional `string` that contains an alt text for the image.
+- `key`: An optional `string` that is used by some platforms if the card is selected.
+
 
 ### carousel
 
-A carousel is a (usually horizontally scrollable) collection of at least 2 [cards](#card).
+A carousel is a (usually horizontally scrollable) collection [cards](#card):
 
 ```typescript
 {
@@ -143,8 +144,8 @@ A carousel is a (usually horizontally scrollable) collection of at least 2 [card
 
 A `carousel` consists of the following properties:
 
-- `title`
-- `items`: An array of [card](#card) items
+- `title`: A `string` that is usually displayed at the top of the carousel.
+- `items`: An array of [card](#card) items. The minimum number of items is `1`, the maximum depends on the platform. Some platforms like [Google Assistant](https://www.jovo.tech/marketplace/platform-googleassistant/output#carousel-collection) and [Google Business Messages](https://www.jovo.tech/marketplace/platform-googlebusiness/output#carousel) require a minimum number of `2` items. In that case, single-item carousels are turned into a [card](#card).
 
 ### quickReplies
 

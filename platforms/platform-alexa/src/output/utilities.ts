@@ -126,7 +126,7 @@ export function augmentModelPrototypes(): void {
       // map generic carousel properties to AlexaImageList.listItems properties
       // https://developer.amazon.com/en-US/docs/alexa/alexa-presentation-language/apl-alexa-image-list-layout.html#list-items
       primaryText: item.title,
-      secondaryText: item.content,
+      secondaryText: item.subtitle || item.content,
       imageSource: item.imageUrl,
     }));
 

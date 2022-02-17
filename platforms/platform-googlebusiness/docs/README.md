@@ -7,24 +7,53 @@ excerpt: 'The Google Business Messages platform integration allows you to build 
 
 The Google Business Messages [platform integration](https://www.jovo.tech/docs/platforms) allows you to build custom Google Business bots using Jovo.
 
-## Getting Started
+## Introduction
 
-You can install the plugin like this:
+[Google Business Messages](https://developers.google.com/business-communications/business-messages) allows you to build conversational experiences that can be connected to many Google channels, including Maps and Search. You can [find the official documentation here](https://developers.google.com/business-communications/business-messages/guides).
+
+Learn more about getting started in the [installation](#installation) and [configuration](#configuration) sections. You can also [find a sample app here](https://github.com/jovotech/jovo-framework/tree/v4/latest/examples/typescript/googlebusiness/basic).
+
+## Installation
+
+If you want to create a new Google Business messages project with Jovo, we recommend installing the Jovo CLI, creating a new Jovo project, and selecting Google Business Messages as platform using the CLI wizard. Learn more in our [getting started guide](https://www.jovo.tech/docs/getting-started).
+
+```sh
+# Install Jovo CLI globally
+$ npm install -g @jovotech/cli
+
+# Start new project wizard
+# In the platform step, use the space key to select Google Business Messages
+$ jovo new <directory>
+```
+
+If you want to add Google Business Messages to an existing Jovo project, you can install the plugin like this:
 
 ```sh
 $ npm install @jovotech/platform-googlebusiness
 ```
 
-Add it as plugin to your [app configuration](https://www.jovo.tech/docs/app-config), e.g. `app.ts`:
+Add it as plugin to your [app configuration](https://www.jovo.tech/docs/app-config). Google Business Messages requires at least a `serviceAccount` (learn more in the [configuration section](#configuration) below) and we also recommend adding an [NLU integration](https://www.jovo.tech/docs/nlu) like [NLP.js](https://www.jovo.tech/marketplace/nlu-nlpjs):
 
 ```typescript
 import { App } from '@jovotech/framework';
 import { GoogleBusinessPlatform } from '@jovotech/platform-googlebusiness';
+import { NlpjsNlu } from '@jovotech/nlu-nlpjs';
+import { LangEn } from '@nlpjs/lang-en';
+import serviceAccount from './service-account.json';
 // ...
 
 const app = new App({
   plugins: [
-    new GoogleBusinessPlatform(),
+    new GoogleBusinessPlatform({
+      serviceAccount, // Used to authenticate with the GBM platform
+      plugins: [
+        new NlpjsNlu({
+          languageMap: {
+            en: LangEn,
+          },
+        }),
+      ],
+    }),
     // ...
   ],
 });
@@ -36,12 +65,13 @@ You can configure the Google Business platform in the [app configuration](https:
 
 ```typescript
 import { GoogleBusinessPlatform } from '@jovotech/platform-googlebusiness';
-
+import serviceAccount from './service-account.json';
 // ...
 
 const app = new App({
   plugins: [
     new GoogleBusinessPlatform({
+      serviceAccount,
       plugins: [
         /* ... */
       ],
@@ -56,7 +86,8 @@ const app = new App({
 
 Options include:
 
-- `plugins`: For example, you need to ddd an [NLU integration](#nlu-integration) here.
+- `serviceAccount`: Your service account file required for authentication. Learn more in the [official Google Business Messages docs](https://developers.google.com/business-communications/business-messages/guides/how-to/register?hl=en#enable-api).
+- `plugins`: For example, you need to add an [NLU integration](#nlu-integration) here.
 - `session`: Session specific config. Take a look at [session data](#session-data) for more information.
 
 ### NLU Integration
@@ -68,13 +99,19 @@ Here is an example how you can add an NLU integration (in this case [NLP.js](htt
 ```typescript
 import { GoogleBusinessPlatform } from '@jovotech/platform-googlebusiness';
 import { NlpjsNlu } from '@jovotech/nlu-nlpjs';
-
+import { LangEn } from '@nlpjs/lang-en';
 // ...
 
 const app = new App({
   plugins: [
     new GoogleBusinessPlatform({
-      plugins: [new NlpjsNlu()],
+      plugins: [
+        new NlpjsNlu({
+          languageMap: {
+            en: LangEn,
+          },
+        }),
+      ],
     }),
     // ...
   ],
