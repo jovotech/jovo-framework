@@ -98,7 +98,8 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
     this.$context.alexa.askProfile =
       this.$context.flags['ask-profile'] ||
       this.$plugin.config.askProfile ||
-      (await this.getAskProfile());
+      (await this.getAskProfile()) ||
+      'default';
 
     this.$context.alexa.skillId = this.$context.flags['skill-id'] || this.getSkillId();
     // TODO: this.$plugin.config.convertsations.enabled enough?

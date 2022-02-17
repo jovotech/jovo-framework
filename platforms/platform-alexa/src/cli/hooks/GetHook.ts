@@ -60,7 +60,6 @@ export class GetHook extends AlexaHook<BuildPlatformEvents | GetPlatformEvents> 
     }
 
     context.flags['ask-profile'] = flags.string({
-      default: 'default',
       description: 'Name of used ASK profile',
     });
     context.flags['skill-id'] = flags.string({ char: 's', description: 'Alexa Skill ID' });
@@ -80,7 +79,6 @@ export class GetHook extends AlexaHook<BuildPlatformEvents | GetPlatformEvents> 
       this.uninstall();
     }
   }
-
   /**
    * Updates the current plugin context with platform-specific values.
    */
@@ -90,7 +88,8 @@ export class GetHook extends AlexaHook<BuildPlatformEvents | GetPlatformEvents> 
     this.$context.alexa.askProfile =
       this.$context.flags['ask-profile'] ||
       this.$plugin.config.askProfile ||
-      (await this.getAskProfile());
+      (await this.getAskProfile()) ||
+      'default';
 
     this.$context.alexa.skillId =
       this.$context.flags['skill-id'] ||
@@ -169,7 +168,8 @@ export class GetHook extends AlexaHook<BuildPlatformEvents | GetPlatformEvents> 
         return;
       }
     }
-
+    console.log('.........');
+    console.log(this.$context.alexa);
     const getTask: Task = new Task(
       `${DOWNLOAD} Getting Alexa skill project ${printAskProfile(this.$context.alexa.askProfile)}`,
     );
