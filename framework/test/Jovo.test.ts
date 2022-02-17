@@ -98,7 +98,7 @@ describe('Jovo.$send', () => {
     ]);
   });
 
-  test('Output class internal properties overwritten', async () => {
+  test('Output class internal properties overwritten (boolean values)', async () => {
     class ExampleOutput extends BaseOutput {
       build(): OutputTemplate | OutputTemplate[] {
         return {
@@ -107,16 +107,11 @@ describe('Jovo.$send', () => {
         };
       }
     }
-    await jovo.$send(ExampleOutput);
     await jovo.$send(ExampleOutput, {
       message: 'world',
       listen: false,
     });
     expect(jovo.$output).toEqual([
-      {
-        message: 'Hello',
-        listen: true,
-      },
       {
         message: 'world',
         listen: false,
