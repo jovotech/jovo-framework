@@ -1,6 +1,6 @@
 {
   "name": "jovo-plugin-pulselabs",
-  "version": "3.6.0",
+  "version": "3.6.1",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -15,7 +15,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-core": "^3.6.0",
+    "jovo-core": "^3.6.1",
     "lodash.merge": "^4.6.2",
     "pulselabs-recorder": "^1.1.2"
   },

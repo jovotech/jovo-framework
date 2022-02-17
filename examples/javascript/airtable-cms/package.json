@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-airtable-cms",
-  "version": "3.6.1",
+  "version": "3.6.2",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -14,9 +14,9 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-cms-airtable": "^3.6.0",
-    "jovo-framework": "^3.6.0",
-    "jovo-platform-alexa": "^3.6.1",
-    "jovo-plugin-debugger": "^3.6.0"
+    "jovo-cms-airtable": "^3.6.1",
+    "jovo-framework": "^3.6.1",
+    "jovo-platform-alexa": "^3.6.2",
+    "jovo-plugin-debugger": "^3.6.1"
   }
 }

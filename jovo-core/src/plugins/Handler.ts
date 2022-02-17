@@ -484,8 +484,9 @@ export class Handler implements Plugin {
      * @param {ComponentResponse} response
      */
     Jovo.prototype.sendComponentResponse = function (response: ComponentResponse): Promise<void> {
-      const componentSessionStack: Array<[string, ComponentSessionData]> =
-        this.$session.$data[SessionConstants.COMPONENT];
+      const componentSessionStack: Array<[string, ComponentSessionData]> = this.$session.$data[
+        SessionConstants.COMPONENT
+      ];
       const activeComponentSessionData: [string, ComponentSessionData] =
         componentSessionStack[componentSessionStack.length - 1];
       const activeComponent = this.$components[activeComponentSessionData[0]];

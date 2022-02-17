@@ -103,8 +103,6 @@ export class GoogleAnalyticsGoogleAssistant extends GoogleAnalytics {
     );
   }
 
-
-
   setGoogleAnalyticsObject(handleRequest: HandleRequest) {
     const jovo: Jovo = handleRequest.jovo!;
     if (!jovo) {

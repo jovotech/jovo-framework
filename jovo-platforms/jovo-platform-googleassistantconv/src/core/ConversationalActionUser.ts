@@ -47,9 +47,15 @@ export class ConversationalActionUser extends User {
   }
 
   async getGoogleProfile(): Promise<GoogleAccountProfile> {
-    const token =
-      this.conversationalAction.$host.headers['Authorization'] ||
-      this.conversationalAction.$host.headers['authorization'];
+    const headers = this.conversationalAction.$host.headers;
+
+    if (!headers) {
+      throw new JovoError(
+        'No header in Google Request. Make sure they are passed into jovo! Amazon API Gateway needs a mapping template in place.',
+      );
+    }
+
+    const token = headers['Authorization'] || headers['authorization'];
 
     if (!token) {
       throw new JovoError('No valid authorization token found. Make sure account linking worked!');

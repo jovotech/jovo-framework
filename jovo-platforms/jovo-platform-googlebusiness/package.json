@@ -1,6 +1,6 @@
 {
   "name": "jovo-platform-googlebusiness",
-  "version": "3.6.0",
+  "version": "3.6.1",
   "description": " ",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -17,7 +17,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "google-auth-library": "^5.5.1",
-    "jovo-core": "^3.6.0",
+    "jovo-core": "^3.6.1",
     "lodash.merge": "^4.6.2"
   },
   "devDependencies": {
@@ -25,8 +25,8 @@
     "@types/lodash.merge": "^4.6.6",
     "@types/node": "^10.3.1",
     "jest": "^25.1.0",
-    "jovo-db-filedb": "^3.6.0",
-    "jovo-framework": "^3.6.0",
+    "jovo-db-filedb": "^3.6.1",
+    "jovo-framework": "^3.6.1",
     "prettier": "2.0.2",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",

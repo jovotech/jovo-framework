@@ -1,6 +1,6 @@
 {
   "name": "jovo-platform-googleassistant",
-  "version": "3.6.0",
+  "version": "3.6.1",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -15,8 +15,8 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-core": "^3.6.0",
-    "jovo-platform-dialogflow": "^3.6.0",
+    "jovo-core": "^3.6.1",
+    "jovo-platform-dialogflow": "^3.6.1",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",
     "lodash.sample": "^4.2.1",
@@ -32,7 +32,7 @@
     "@types/node": "^10.3.1",
     "googleapis": "^42.0.0",
     "jest": "^25.1.0",
-    "jovo-framework": "^3.6.0",
+    "jovo-framework": "^3.6.1",
     "lodash.clonedeep": "^4.5.0",
     "prettier": "2.0.2",
     "rimraf": "^2.6.2",

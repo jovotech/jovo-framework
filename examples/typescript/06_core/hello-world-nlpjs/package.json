@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-ts-core-platform-hello-world-nlpjs",
-  "version": "3.6.0",
+  "version": "3.6.1",
   "private": true,
   "description": "",
   "main": "dist/src/index",
@@ -21,12 +21,12 @@
     "@nlpjs/lang-de": "^4.3.0",
     "@nlpjs/lang-en": "^4.3.0",
     "dotenv": "^8.2.0",
-    "jovo-db-filedb": "^3.6.0",
-    "jovo-framework": "^3.6.0",
-    "jovo-nlu-nlpjs": "^3.6.0",
-    "jovo-platform-core": "^3.6.0",
-    "jovo-plugin-debugger": "^3.6.0",
-    "jovo-tts-polly": "^3.6.0"
+    "jovo-db-filedb": "^3.6.1",
+    "jovo-framework": "^3.6.1",
+    "jovo-nlu-nlpjs": "^3.6.1",
+    "jovo-platform-core": "^3.6.1",
+    "jovo-plugin-debugger": "^3.6.1",
+    "jovo-tts-polly": "^3.6.1"
   },
   "devDependencies": {
     "@types/express": "^4.16.0",

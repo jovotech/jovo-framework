@@ -601,8 +601,9 @@ export class JovoUser implements Plugin {
       };
     }
 
-    const requestItem =
-      handleRequest.jovo!.$user.$metaData.requests[handleRequest.jovo!.getHandlerPath()];
+    const requestItem = handleRequest.jovo!.$user.$metaData.requests[
+      handleRequest.jovo!.getHandlerPath()
+    ];
 
     requestItem.count += 1;
     requestItem.log.push(new Date().toISOString());
@@ -748,8 +749,9 @@ export class JovoUser implements Plugin {
    */
   private updatePrevRequestState(handleRequest: HandleRequest, prevObject: ContextPrevObject) {
     if (handleRequest.jovo!.$requestSessionAttributes[SessionConstants.STATE]) {
-      prevObject.request!.state =
-        handleRequest.jovo!.$requestSessionAttributes[SessionConstants.STATE];
+      prevObject.request!.state = handleRequest.jovo!.$requestSessionAttributes[
+        SessionConstants.STATE
+      ];
     }
   }
 

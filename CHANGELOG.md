@@ -2,6 +2,13 @@
 
 ### Latest Framework Version: 3.5.2<br><br>
 
+
+#### 2022-02-17
+
+##### `jovo-platform-googleassistantconv [3.6.3]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googleassistantconv) | [npm](https://www.npmjs.com/package/jovo-platform-googleassistantconv)
+- [#1226](https://github.com/jovotech/jovo-framework/pull/1226) Improved Error Handling when header Data is missing  ([@dominik-meissner](https://github.com/dominik-meissner))
+-  Fix reprompt issue #1171 ([@aswetlow](https://github.com/aswetlow))
+
 #### 2021-10-28
 
 ##### `jovo-db-dynamodb [3.5.3]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-db-dynamodb) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-db-dynamodb) | [npm](https://www.npmjs.com/package/jovo-db-dynamodb)

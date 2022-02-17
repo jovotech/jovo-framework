@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-facebook-messenger-platform-attachments",
-  "version": "3.6.0",
+  "version": "3.6.1",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -15,10 +15,10 @@
   "license": "Apache-2.0",
   "dependencies": {
     "dotenv": "^8.2.0",
-    "jovo-db-filedb": "^3.6.0",
-    "jovo-framework": "^3.6.0",
-    "jovo-nlu-dialogflow": "^3.6.0",
-    "jovo-platform-facebookmessenger": "^3.6.0",
-    "jovo-plugin-debugger": "^3.6.0"
+    "jovo-db-filedb": "^3.6.1",
+    "jovo-framework": "^3.6.1",
+    "jovo-nlu-dialogflow": "^3.6.1",
+    "jovo-platform-facebookmessenger": "^3.6.1",
+    "jovo-plugin-debugger": "^3.6.1"
   }
 }
