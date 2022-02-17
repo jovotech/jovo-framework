@@ -1,5 +1,15 @@
 # Changelog
 
+## [@jovotech/slu-lex@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/slu-lex@4.2.0...@jovotech/slu-lex@4.2.1)
+
+> 10 February 2022
+
+- Fix bug in handling of APL user events [`#1212`](https://github.com/jovotech/jovo-framework/pull/1212)
+- Fix Alexa getUserId getter/setter [`#1228`](https://github.com/jovotech/jovo-framework/pull/1228)
+- :bug: Fix missing OutputHelpers export [`#1229`](https://github.com/jovotech/jovo-framework/pull/1229)
+- ✅ Implement tests for Framework and Platforms [`#1199`](https://github.com/jovotech/jovo-framework/pull/1199)
+- :recycle: Move "." functionality to CLI [`#1204`](https://github.com/jovotech/jovo-framework/pull/1204)
+
 ## [@jovotech/slu-lex@4.2.0](https://github.com/jovotech/jovo-framework/compare/@jovotech/slu-lex@4.1.2...@jovotech/slu-lex@4.2.0)
 
 > 26 January 2022
@@ -8,9 +18,13 @@
 - AudioPlayerActivity Types added [`#1165`](https://github.com/jovotech/jovo-framework/pull/1165)
 - :memo: Fix typos in `hooks`  [`#1194`](https://github.com/jovotech/jovo-framework/pull/1194)
 
-## [@jovotech/slu-lex@4.1.2](https://github.com/jovotech/jovo-framework/compare/v3.5...@jovotech/slu-lex@4.1.2)
+## [@jovotech/slu-lex@4.1.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/slu-lex@4.1.1...@jovotech/slu-lex@4.1.2)
 
 > 20 January 2022
+
+## [@jovotech/slu-lex@4.1.1](https://github.com/jovotech/jovo-framework/compare/v3.5...@jovotech/slu-lex@4.1.1)
+
+> 18 January 2022
 
 - Fixes merging of undefined values in output templates [`#1170`](https://github.com/jovotech/jovo-framework/pull/1170)
 - Fixes null value in state config [`#1186`](https://github.com/jovotech/jovo-framework/pull/1186)
