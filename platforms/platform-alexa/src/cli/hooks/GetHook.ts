@@ -168,8 +168,6 @@ export class GetHook extends AlexaHook<BuildPlatformEvents | GetPlatformEvents> 
         return;
       }
     }
-    console.log('.........');
-    console.log(this.$context.alexa);
     const getTask: Task = new Task(
       `${DOWNLOAD} Getting Alexa skill project ${printAskProfile(this.$context.alexa.askProfile)}`,
     );
