@@ -48,11 +48,13 @@ export class ConversationalActionUser extends User {
 
   async getGoogleProfile(): Promise<GoogleAccountProfile> {
     const headers = this.conversationalAction.$host.headers;
-    
+
     if (!headers) {
-      throw new JovoError('No header in Google Request. Make sure they are passed into jovo! Amazon API Gateway needs a mapping template in place.');
+      throw new JovoError(
+        'No header in Google Request. Make sure they are passed into jovo! Amazon API Gateway needs a mapping template in place.',
+      );
     }
-    
+
     const token = headers['Authorization'] || headers['authorization'];
 
     if (!token) {
