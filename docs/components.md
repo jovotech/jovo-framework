@@ -11,151 +11,62 @@ Components are self-contained and reusable elements in a Jovo app. Similar to we
 
 You can see a component as an isolated part of your app that handles a specific task. It could be something small like asking for a confirmation (yes or no), and something bigger like collecting all necessary information for a restaurant table reservation. For larger cases like the latter example, it's also possible for a component to have multiple subcomponents.
 
-Components are located in the `src/components` folder of a Jovo app and consist of several elements:
+Components are located in the `src/components` folder of a Jovo app. While a component can be a [complete folder](#component-folder-structure) (that contains its own [output](#output) classes, subcomponents, and more), the most common approach to get started is to have single component classes.
 
-- [Component Class](#component-class): The TypeScript/JavaScript class containing the logic of the component. One component has at least a class with the component's name, and potentially a few subcomponent classes.
-- [Output](#output): A folder of output classes that are referenced by the component's handlers.
-- [Models](#models): A folder with the component's specific language model files.
-
-## Component Registration
-
-When we talk about components in this documentation, we typically talk about a specific component class. These classes can either be registered globally in the `app.ts` file (root components) or as subcomponents of other component classes.
-
-### Register Root Components
-
-Root components are registered in the `app.ts` file. These are all top-level components that are accessible using [global handlers](./handlers.md#global-handlers).
-
-Each Jovo template usually comes with a `GlobalComponent` that is added like this:
+For example, the [Jovo `v4` template](https://github.com/jovotech/jovo-v4-template) contains a [`GlobalComponent`](https://github.com/jovotech/jovo-v4-template/blob/master/src/components/GlobalComponent.ts) that looks like this:
 
 ```typescript
-// src/app.ts
+// src/components/GlobalComponent.ts
 
-import { GlobalComponent } from './components/GlobalComponent/GlobalComponent';
+import { Component, BaseComponent, Global } from '@jovotech/framework';
+import { LoveHatePizzaComponent } from './LoveHatePizzaComponent';
 
-// ...
-
-const app = new App({
-  // ...
-
-  components: [GlobalComponent],
-
-  // ...
-});
-```
-
-You can add more components by importing their classes and referencing them in the `components` array:
-
-```typescript
-// src/app.ts
-
-import { GlobalComponent } from './components/GlobalComponent/GlobalComponent';
-import { YourComponent } from './components/YourComponent/YourComponent';
-
-// ...
-
-const app = new App({
-  // ...
-
-  components: [GlobalComponent, YourComponent],
-
-  // ...
-});
-```
-
-Some components (especially from third parties) may require you to add options. [Learn more about component options below](#component-options).
-
-There are two ways how you can add those to your root component registration:
-
-- Using `ComponentDeclaration` (this will allow you to access the types of the component options)
-- Using an object
-
-If you're a TypeScript user, we recommend using `ComponentDeclaration`. This way, your code editor will be able to provide the option types with code completion:
-
-```typescript
-// src/app.ts
-
-import { ComponentDeclaration } from '@jovotech/framework';
-import { YourComponent } from './components/YourComponent/YourComponent';
-
-// ...
-
-const app = new App({
-  // ...
-
-  components: [
-    new ComponentDeclaration(YourComponent, {
-      /* options */
-    }),
-  ],
-
-  // ...
-});
-```
-
-You can also use an object:
-
-```typescript
-// src/app.ts
-
-import { YourComponent } from './components/YourComponent/YourComponent';
-
-// ...
-
-const app = new App({
-  // ...
-
-  components: [
-    {
-      component: YourComponent,
-      options: {
-        /* options */
-      },
-    },
-  ],
-
-  // ...
-});
-```
-
-One example of an option is `name`. If you use two components that have the same class name (especially relevant for third-party components), you can rename one and pass its adjusted name. In the below example, both imported files export a `MenuComponent` class:
-
-```typescript
-// src/app.ts
-
-import { MenuComponent } from './components/MenuComponent';
-import { MenuComponent as MenuComponent2 } from './components/MenuComponent2';
-
-// ...
-
-const app = new App({
-  // ...
-
-  components: [MenuComponent, new ComponentDeclaration(MenuComponent2, { name: 'MenuComponent2' })],
-
-  // ...
-});
-```
-
-### Register Subcomponents
-
-Subcomponents They are registered inside their parent component using the `components` property in the `@Component` decorator.
-
-```typescript
-import { YourSubComponent } from './YourSubComponent';
-
-// ...
-
-@Component({
-  components: [YourSubComponent],
-})
-class YourComponent extends BaseComponent {
-  // ...
+/*
+|--------------------------------------------------------------------------
+| Global Component
+|--------------------------------------------------------------------------
+|
+| The global component handlers can be reached from anywhere in the app
+| Learn more here: www.jovo.tech/docs/components#global-components
+|
+*/
+@Global()
+@Component()
+export class GlobalComponent extends BaseComponent {
+  LAUNCH() {
+    return this.$redirect(LoveHatePizzaComponent);
+  }
 }
 ```
 
+The [component class](#component-class) section dives deeper into the contents of the example above.
+
+Root components like `GlobalComponent` are registered in the [`app.ts`](https://github.com/jovotech/jovo-v4-template/blob/master/src/app.ts) like this:
+
+```typescript
+import { GlobalComponent } from './components/GlobalComponent';
+import { LoveHatePizzaComponent } from './components/LoveHatePizzaComponent';
+// ...
+
+const app = new App({
+  /*
+  |--------------------------------------------------------------------------
+  | Components
+  |--------------------------------------------------------------------------
+  |
+  | Components contain the Jovo app logic
+  | Learn more here: www.jovo.tech/docs/components
+  |
+  */
+  components: [GlobalComponent, LoveHatePizzaComponent],
+});
+```
+
+Learn more about [component registration](#component-registration) below.
+
 ## Component Class
 
-Each component consists of at least a component class that is imported in the `app.ts` file (for root components) or a parent component class (for subcomponents). The smallest possible component class could look like this:
+Each component consists of at least a component class that is [imported](#component-registration) in the [app configuration](./app-config.md) (for root components) or a parent component class (for subcomponents). The smallest possible component class could look like this:
 
 ```typescript
 // src/components/YourComponent.ts
@@ -170,9 +81,47 @@ class YourComponent extends BaseComponent {
 }
 ```
 
+It includes the following elements:
+
+- `@Component()` decorator: This is used to mark this class as a component. It can also include [component options](#component-options).
+- [Handlers](#handlers) like `START`: These handlers contain the dialogue logic of the component.
+
+Besides those, the following stages also dive into the following concepts:
+
+- [Routing and state management](#routing-and-state-management)
+- [Global components](#global-components)
+- [Component data](#component-data)
+
 ### Handlers
 
-The core of a class are [handlers](./handlers.md) that are responsible to turn structured meaning (e.g. an _intent_) into structured output.
+The core of a component class are [handlers](./handlers.md) that are responsible for responding to a request and returning output.
+
+For example, the [`LoveHatePizzaComponent`](https://github.com/jovotech/jovo-v4-template/blob/master/src/components/LoveHatePizzaComponent.ts) in the Jovo `v4` template includes the following handlers:
+
+```typescript
+@Component()
+export class LoveHatePizzaComponent extends BaseComponent {
+  START() {
+    return this.$send(YesNoOutput, { message: 'Do you like pizza?' });
+  }
+
+  @Intents(['YesIntent'])
+  lovesPizza() {
+    return this.$send({ message: 'Yes! I love pizza, too.', listen: false });
+  }
+
+  @Intents(['NoIntent'])
+  hatesPizza() {
+    return this.$send({ message: `That's OK! Not everyone likes pizza.`, listen: false });
+  }
+
+  UNHANDLED() {
+    return this.START();
+  }
+}
+```
+
+[Learn more about handlers here](./handlers.md).
 
 ### Routing and State Management
 
@@ -188,21 +137,21 @@ $state = [
 ];
 ```
 
-The component is removed from the stack once it resolves or the session closes.
+The component is removed from the stack once it [resolves](./handlers.md#resolve-a-component) or the [session closes](./output-templates.md#listen).
 
 There are two ways how a component can be entered:
 
-- Through one of its global handlers
-- By getting called from a different component using `$redirect()` or `$delegate()`
+- Through one of its global handlers (or any handlers if it's a [global component](#global-components))
+- By getting called from a different component using [`$redirect()`](./handlers.md#redirect-to-components) or [`$delegate()`](./handlers.md#delegate-to-components)
 
 You can find out more about the [`$state` stack here](./state-stack.md) and learn about component delegation in our [handlers documentation](./handlers.md).
 
 ### Global Components
 
-A Jovo project usually comes with a `GlobalComponent`. This (and potentially other components) is a special `global` component that has the following characteristics:
+A Jovo project usually comes with a [`GlobalComponent`](https://github.com/jovotech/jovo-v4-template/blob/master/src/components/GlobalComponent.ts). This (and potentially other components) is a special `global` component that has the following characteristics:
 
-- Each of its handlers is global, no need to add a `global` property.
-- It does not get added to the [`$state` stack](./state-stack.md) (except it uses `$delegate()`, then it is added to the stack just until the delegation was resolved).
+- Each of its handlers is global, no need to add a [`global` property](./handle-decorators.md#global).
+- It does not get added to the [`$state` stack](./state-stack.md) (except it uses [`$delegate()`](./handlers.md#delegate-to-components), then it is added to the stack just until the delegation was resolved).
 - It does not store [component data](#component-data): If you want to store data, we recommend using [session data](./data.md#session-data).
 
 You can either add the `global` property to the [component options](#component-options):
@@ -226,11 +175,11 @@ class YourComponent extends BaseComponent {
 }
 ```
 
-As a rule of thumb, a global component can be seen as a "last resort" that is only triggered if no other more specific component matches a request. Global `LAUNCH`, `UNHANDLED`, or a help handler are often part of a global component.
+As a rule of thumb, a global component can be seen as a "last resort" that is only triggered if no other more specific component matches a request. Global [`LAUNCH`](./handlers.md#launch), [`UNHANDLED`](./handlers.md#unhandled), or a help handler are often part of a global component.
 
 ### Component Data
 
-For data that is only relevant for this specific component, you can use component data:
+For [data](./data.md) that is only relevant for this specific component, you can use component data:
 
 ```typescript
 this.$component.data.someKey = 'someValue';
@@ -260,7 +209,7 @@ For some components, it may be helpful (or necessary) to add options for customi
 - `models`: Model files for component-specific intents and entities (_in development_)
 - `name`: If two components have the same class name, one component's name can be changed here
 
-In the [Register Root Components](#register-root-components) section, we already talked about how to pass options when registering existing components.
+In the [register root components](#register-root-components) section, we already talked about how to pass options when registering existing components.
 
 It is also possible to add options to a component class using its `@Component` decorator:
 
@@ -273,13 +222,141 @@ class YourComponent extends BaseComponent {
 }
 ```
 
-> **A note on decorators and JavaScript**: To make the code more readable, Jovo uses decorators, a feature only available in TypeScript. No worries, though, if you're a JavaScript user: Jovo uses Babel to transpile the code with decorators to a supported format.
-
 The hierarchy of options being used by the component is as follows (starting with the most important one):
 
 - Options passed using the constructor when registering the component
 - Options in the `@Component` decorator
 - Default options of the component
+
+## Component Registration
+
+When we talk about components in this documentation, we typically talk about a specific [component class](#component-class). These classes can either be registered globally in the `app.ts` file (root components) or as subcomponents of other component classes.
+
+### Register Root Components
+
+Root components are registered in the `app.ts` file (or any other [app config](./app-config.md) file). These are all top-level components that are accessible using [global handlers](./handle-decorators.md#global).
+
+Each Jovo template usually comes with a [`GlobalComponent`](https://github.com/jovotech/jovo-v4-template/blob/master/src/components/GlobalComponent.ts) that is added like this:
+
+```typescript
+// src/app.ts
+
+import { GlobalComponent } from './components/GlobalComponent';
+// ...
+
+const app = new App({
+  // ...
+
+  components: [GlobalComponent],
+
+  // ...
+});
+```
+
+You can add more components by importing their classes and referencing them in the `components` array:
+
+```typescript
+// src/app.ts
+
+import { GlobalComponent } from './components/GlobalComponent';
+import { YourComponent } from './components/YourComponent';
+// ...
+
+const app = new App({
+  // ...
+
+  components: [GlobalComponent, YourComponent],
+
+  // ...
+});
+```
+
+Some components (especially from third parties) may require you to add options. [Learn more about component options here](#component-options).
+
+There are two ways how you can add those to your root component registration:
+
+- Using `ComponentDeclaration` (this will allow you to access the types of the component options)
+- Using an object
+
+If you're a TypeScript user, we recommend using `ComponentDeclaration`. This way, your code editor will be able to provide the option types with code completion:
+
+```typescript
+// src/app.ts
+
+import { ComponentDeclaration } from '@jovotech/framework';
+import { YourComponent } from './components/YourComponent';
+// ...
+
+const app = new App({
+  // ...
+
+  components: [
+    new ComponentDeclaration(YourComponent, {
+      /* options */
+    }),
+  ],
+
+  // ...
+});
+```
+
+You can also use an object:
+
+```typescript
+// src/app.ts
+
+import { YourComponent } from './components/YourComponent';
+// ...
+
+const app = new App({
+  // ...
+
+  components: [
+    {
+      component: YourComponent,
+      options: {
+        /* options */
+      },
+    },
+  ],
+
+  // ...
+});
+```
+
+One example of an option is `name`. If you use two components that have the same class name (especially relevant for third-party components), you can rename one and pass its adjusted name. In the below example, both imported files export a `MenuComponent` class:
+
+```typescript
+// src/app.ts
+
+import { MenuComponent } from './components/MenuComponent';
+import { MenuComponent as MenuComponent2 } from './components/MenuComponent2';
+// ...
+
+const app = new App({
+  // ...
+
+  components: [MenuComponent, new ComponentDeclaration(MenuComponent2, { name: 'MenuComponent2' })],
+
+  // ...
+});
+```
+
+### Register Subcomponents
+
+Subcomponents They are registered inside their parent component using the `components` property in the `@Component` decorator.
+
+```typescript
+import { YourSubComponent } from './YourSubComponent';
+// ...
+
+@Component({
+  components: [YourSubComponent],
+})
+class YourComponent extends BaseComponent {
+  // ...
+}
+```
 
 ## Component Folder Structure
 
@@ -292,19 +369,12 @@ There are multiple ways how a component can be structured:
 A folder allows for a modular approach where all relevant elements of a component can be included in one place:
 
 - `output`
-- `models`
 - `services`
 - subcomponents
 
 ### Output
 
 This folder contains all output classes that are used by the Jovo `$send()` method. Learn more about this in our [output classes documentation](./output-classes.md).
-
-### Models
-
-_Models functionality is added soon._
-
-This folder contains the language model files for this specific component. The files are merged into the main model using the jovo `build` command.
 
 ### Services
 
