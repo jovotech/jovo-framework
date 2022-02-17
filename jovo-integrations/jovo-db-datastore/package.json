@@ -1,6 +1,6 @@
 {
   "name": "jovo-db-datastore",
-  "version": "3.6.0",
+  "version": "3.6.1",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -16,7 +16,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@google-cloud/datastore": "^5.0.5",
-    "jovo-core": "^3.6.0",
+    "jovo-core": "^3.6.1",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",
     "lodash.set": "^4.3.2"

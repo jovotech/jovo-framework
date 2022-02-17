@@ -1,6 +1,6 @@
 {
   "name": "jovo-asr-gcloud",
-  "version": "3.6.0",
+  "version": "3.6.1",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -17,7 +17,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "google-auth-library": "^5.5.1",
-    "jovo-core": "^3.6.0"
+    "jovo-core": "^3.6.1"
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1",

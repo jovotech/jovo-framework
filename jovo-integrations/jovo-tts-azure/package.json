@@ -1,6 +1,6 @@
 {
   "name": "jovo-tts-azure",
-  "version": "3.6.0",
+  "version": "3.6.1",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -16,7 +16,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-core": "^3.6.0"
+    "jovo-core": "^3.6.1"
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
