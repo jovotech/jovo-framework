@@ -27,6 +27,7 @@ const project = new ProjectConfig({
       },
       skillId: '<yourSkillId>',
       askProfile: 'default',
+      endpoint: '<yourEndpoint>',
       files: {
         // ...
       },
@@ -44,6 +45,7 @@ The following options are currently supported:
 - [`locales`](#locales): Defines how the locales in the [`models` folder](https://www.jovo.tech/docs/models) should be mapped to Alexa locales.
 - [`skillId`](#skillid): The Skill ID that the project should be deployed to.
 - [`askProfile`](#askprofile): The ASK profile that should be used for the deployment.
+- [`endpoint`](#endpoint): The endpoint to your Jovo app's code, for example on AWS Lambda.
 - [`files`](#files): This can be used to add or override files in your Alexa `build` folder, for example to make updates to the `skill.json` file.
 - [`conversations`](#conversations): This includes configurations for [Alexa Conversations](./alexa-conversations.md).
 
@@ -77,7 +79,7 @@ new AlexaCli({
 });
 ```
 
-This ensures that your project is always deployed to the right Skill.
+This ensures that your project is always deployed to the right Skill. During the [`build` command](./cli-commands.md#build), the `skillId` is written into the `build/platform.alexa/.ask/ask-states.json` file, which is used during the deployment.
 
 The `skillId` property can be especially helpful for [staging](https://www.jovo.tech/docs/staging), where different stages deploy to different Skills:
 
@@ -168,6 +170,43 @@ The CLI decides in the following order which ASK profile should be used:
 - The one in the current stage in `jovo.project.js`
 - The one in the root Alexa configuration in `jovo.project.js`
 - The `default` ASK profile
+
+
+## endpoint
+
+The [generic `endpoint` property](https://www.jovo.tech/docs/project-config#endpoint) can also be overridden by the Alexa CLI plugin. This is useful if you build for multiple platforms that need to use different endpoints.
+
+```js
+new AlexaCli({
+  endpoint: '<yourEndpoint>',
+  // ...
+});
+```
+
+This can be especially helpful for [staging](https://www.jovo.tech/docs/staging). For example, the `dev` stage could use the [Jovo Webhook](https://www.jovo.tech/docs/webhook) for local development, and a `prod` stage for Alexa could reference an ARN that points to the hosted code on [AWS Lambda](https://www.jovo.tech/marketplace/server-lambda):
+
+```js
+const project = new ProjectConfig({
+  // ...
+
+  defaultStage: 'dev',
+  stages: {
+    dev: {
+      endpoint: '${JOVO_WEBHOOK_URL}',
+      // ...
+    },
+    prod: {
+      plugins: [
+        new AlexaCli({
+          endpoint: '<yourProdEndpoint>',
+          // ...
+        }),
+      ],
+      // ...
+    },
+  },
+});
+```
 
 ## files
 

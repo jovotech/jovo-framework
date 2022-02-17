@@ -164,7 +164,7 @@ Under the hood, Jovo translates the `card` into the following rich card:
           "height": "MEDIUM",
           "contentInfo": {
             "altText": "The image displays a...",
-            "fileUrl": "https://..."
+            "fileUrl": "https://jovo-assets.s3.amazonaws.com/jovo-icon.png"
           }
         },
         "suggestions": []
@@ -193,13 +193,13 @@ This is how a carousel can be defined:
       {
         title: 'Hello world!',
         content: 'Welcome to the show.',
-        imageUrl: 'https://...',
+        imageUrl: 'https://jovo-assets.s3.amazonaws.com/jovo-icon.png',
         imageAlt: 'The image displays a...',
       },
       {
         title: 'Hi there!',
         content: 'This is element 2.',
-        imageUrl: 'https://...',
+        imageUrl: 'https://jovo-assets.s3.amazonaws.com/jovo-icon.png',
         imageAlt: 'The image displays a...',
       }
     ]
@@ -207,7 +207,7 @@ This is how a carousel can be defined:
 }
 ```
 
-The elements in the `items` array can contain all properties that are shown in the [`card` section](#card).
+The elements in the `items` array can contain all properties that are shown in the [`card` section](#card). If the array consists of only 1 item, the output is converted to a single [`card`](#card).
 
 Under the hood, Jovo translates the `carousel` into the following rich card carousel:
 

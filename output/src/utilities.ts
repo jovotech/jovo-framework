@@ -1,7 +1,8 @@
 import { Constructor } from '@jovotech/common';
 import { Type } from 'class-transformer';
-import _merge from 'lodash.merge';
-import type { A, O } from 'ts-toolbelt';
+import _mergeWith from 'lodash.mergewith';
+import _unset from 'lodash.unset';
+import type { O } from 'ts-toolbelt';
 import { IsOptional, ListenValue, ValidateNested, ValidationError } from '.';
 import { NormalizedOutputTemplatePlatforms } from './models/NormalizedOutputTemplatePlatforms';
 
@@ -87,20 +88,6 @@ export function formatList(
     .join(delimiter)}${lastDelimiter}${items[items.length - 1].toString()}`;
 }
 
-export type FilterKey<K, I> = A.Equals<K, I> extends 1 ? never : K;
-export type OmitIndex<T, I extends string | number> = {
-  [K in keyof T as FilterKey<K, I>]: T[K];
-};
-
-export type OmitWhere<OBJECT, TYPE> = Omit<
-  OBJECT,
-  {
-    [KEY in keyof OBJECT]: OBJECT[KEY] extends TYPE ? KEY : never;
-  }[keyof OBJECT]
->;
-
-export type PlainObjectType<OBJECT> = OmitWhere<OBJECT, () => unknown>;
-
 export function isAnInstance(
   instance: unknown,
   ignoredConstructorNames = ['Object', 'Array'],
@@ -128,7 +115,16 @@ export function mergeInstances<D extends object, S extends any[]>(
   destination: D,
   ...sources: S
 ): O.MergeAll<D, S, 'deep'> {
-  return _merge(destination, ...sources.map((source) => instanceToObject(source)));
+  return _mergeWith(
+    destination,
+    ...sources.map((source) => instanceToObject(source)),
+    // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any
+    (value: any, srcValue: any, key: string, object: any) => {
+      if (typeof srcValue === 'undefined') {
+        _unset(object, key);
+      }
+    },
+  );
 }
 
 export function mergeListen(

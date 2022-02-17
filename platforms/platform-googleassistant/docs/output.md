@@ -96,6 +96,8 @@ This is then turned into the following response:
 }
 ```
 
+The `text` property is [limited to 640 characters](https://developers.google.com/assistant/conversational/prompts-simple#SimpleResponseProperties). By default, Jovo output trims the content to that length. Learn more in the [output sanitization documentation](https://www.jovo.tech/docs/output-config#sanitization).
+
 ### reprompt
 
 The [generic `reprompt` element](https://www.jovo.tech/docs/output-templates#message) is used to ask again if the user does not respond to a prompt after a few seconds:
@@ -180,7 +182,7 @@ The [generic `card` element](https://www.jovo.tech/docs/output-templates#card) c
     title: 'Hello world!',
     subtitle: 'Some subtitle',
     content: 'Welcome to this new app built with Jovo.',
-    imageUrl: 'https://...'
+    imageUrl: 'https://jovo-assets.s3.amazonaws.com/jovo-icon.png'
   },
 }
 ```
@@ -195,7 +197,7 @@ Under the hood, this gets translated into the following object as part of the re
     "text": "Welcome to this new app built with Jovo.", // Taken from 'content'
     "image": {
       "alt": "Hello world!", // Taken from 'title'
-      "url": "https://..."
+      "url": "https://jovo-assets.s3.amazonaws.com/jovo-icon.png"
     }
   }
 }
@@ -245,7 +247,7 @@ A [generic `carousel` element](https://www.jovo.tech/docs/output-templates#carou
 It includes the following properties:
 
 - `selection` (required): This is used to map a selection of an item to both an `intent` and an `entityType`. The type is needed to create a type override ([see official Google documentation](https://developers.google.com/assistant/conversational/webhooks?hl=en&tool=builder#runtime_type_overrides)).
-- `items` (required): An array of elements to be displayed. They also need to include a `selection` property with an `entities` map.
+- `items` (required): An array of elements to be displayed. They also need to include a `selection` property with an `entities` map. If the array consists of only 1 item, the output is converted to a [`card`](#card).
 - `title` (optional): A string that gets displayed at the top.
 
 ## Google Assistant Output Elements
