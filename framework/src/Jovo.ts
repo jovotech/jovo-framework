@@ -261,7 +261,7 @@ export abstract class Jovo<
       const output = await outputInstance.build();
       // overwrite reserved properties of the built object i.e. message
       NormalizedOutputTemplate.getKeys().forEach((key) => {
-        if (options?.[key]) {
+        if (typeof options?.[key] !== 'undefined') {
           if (Array.isArray(output)) {
             output[output.length - 1][key] =
               key === 'platforms'

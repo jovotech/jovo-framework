@@ -97,6 +97,27 @@ describe('Jovo.$send', () => {
       },
     ]);
   });
+
+  test('Output class internal properties overwritten (boolean values)', async () => {
+    class ExampleOutput extends BaseOutput {
+      build(): OutputTemplate | OutputTemplate[] {
+        return {
+          message: 'Hello',
+          listen: true,
+        };
+      }
+    }
+    await jovo.$send(ExampleOutput, {
+      message: 'world',
+      listen: false,
+    });
+    expect(jovo.$output).toEqual([
+      {
+        message: 'world',
+        listen: false,
+      },
+    ]);
+  });
 });
 
 test('AsyncJovo.$send', async () => {
