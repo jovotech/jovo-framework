@@ -379,3 +379,42 @@ This folder contains all output classes that are used by the Jovo `$send()` meth
 ### Services
 
 We recommend placing all component specific backend services like API calls in a `services` folder inside the component folder.
+
+## Advanced
+
+### ComponentTree
+
+The [`ComponentTree`](https://github.com/jovotech/jovo-framework/blob/v4/latest/framework/src/ComponentTree.ts) contains all [registered components](#component-registration):
+
+```typescript
+this.$handleRequest.componentTree;
+```
+
+Here is an example tree:
+
+```json
+{
+  "tree": {
+    "GlobalComponent": {
+      "path": ["GlobalComponent"],
+      "metadata": {
+        "options": {
+          "global": true
+        }
+      }
+    },
+    "LoveHatePizzaComponent": {
+      "path": ["LoveHatePizzaComponent"],
+      "metadata": {
+        "options": {}
+      }
+    }
+  }
+}
+```
+
+You can also access the active component like this:
+
+```typescript
+this.$handleRequest.activeComponentNode;
+```
