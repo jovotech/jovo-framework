@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-ts-googleassistantconv-custom-nlu",
-  "version": "3.6.1",
+  "version": "3.6.2",
   "private": true,
   "description": "",
   "main": "dist/src/index",
@@ -20,7 +20,7 @@
     "jovo-db-filedb": "^3.6.0",
     "jovo-framework": "^3.6.0",
     "jovo-nlu-nlpjs": "^3.6.0",
-    "jovo-platform-googleassistantconv": "^3.6.1",
+    "jovo-platform-googleassistantconv": "^3.6.2",
     "jovo-plugin-debugger": "^3.6.0"
   },
   "devDependencies": {
