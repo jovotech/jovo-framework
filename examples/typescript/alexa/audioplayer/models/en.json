@@ -1,0 +1,37 @@
+{
+  "invocation": "my test app",
+  "intents": [
+    {
+      "name": "PlayAudioIntent",
+      "phrases": ["play audio", "play my test song", "play test audio"]
+    }
+  ],
+  "alexa": {
+    "interactionModel": {
+      "languageModel": {
+        "intents": [
+          {
+            "name": "AMAZON.CancelIntent",
+            "samples": []
+          },
+          {
+            "name": "AMAZON.HelpIntent",
+            "samples": []
+          },
+          {
+            "name": "AMAZON.StopIntent",
+            "samples": []
+          },
+          {
+            "name": "AMAZON.ResumeIntent",
+            "samples": []
+          },
+          {
+            "name": "AMAZON.PauseIntent",
+            "samples": []
+          }
+        ]
+      }
+    }
+  }
+}

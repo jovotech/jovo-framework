@@ -1,10 +1,10 @@
 import { registerOutputPlatform } from '@jovotech/output';
 import {
-  NormalizedAlexaOutputTemplate,
   AplHeader,
   AplRenderDocumentDirective,
   Card as AlexaCard,
   CardType,
+  NormalizedAlexaOutputTemplate,
   OutputSpeech,
 } from './models';
 import { augmentModelPrototypes } from './utilities';
@@ -15,7 +15,7 @@ declare module '@jovotech/output/dist/types/models/Card' {
     backgroundImageUrl?: string;
 
     toAlexaCard?(): AlexaCard<CardType.Standard>;
-    toApl?(): AplRenderDocumentDirective;
+    toApl?(cardTemplate?: any): AplRenderDocumentDirective;
   }
 }
 
@@ -24,7 +24,7 @@ declare module '@jovotech/output/dist/types/models/Carousel' {
     header?: AplHeader;
     backgroundImageUrl?: string;
 
-    toApl?(): AplRenderDocumentDirective;
+    toApl?(carouselTemplate?: any): AplRenderDocumentDirective;
   }
 }
 

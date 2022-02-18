@@ -9,20 +9,26 @@ Host Jovo apps on AWS Lambda serverless functions.
 
 ## Introduction
 
+![Jovo Alexa Skill and Google Action hosted on AWS Lambda](./img/jovo-diagram-lambda.png)
+
 This [server integration](https://www.jovo.tech/docs/server) allows you to host yor Jovo apps on [AWS Lambda](https://aws.amazon.com/lambda/), a serverless hosting solution by Amazon Web Services. [Find the official documentation here](http://docs.aws.amazon.com/lambda/latest/dg/welcome.html).
 
 While the [Jovo Webhook](https://www.jovo.tech/docs/webhook) is usually called for local development, many teams use AWS Lambda to host their Jovo apps for testing and production stages. [Learn more about staging here](https://www.jovo.tech/docs/staging). The [installation section](#installation) explains how to create a new stage that can be used for Lambda deployment.
+
+The diagram above shows how a Lambda function can be reached for different types of Jovo [platform integrations](https://www.jovo.tech/docs/platforms). While [Alexa Skills](https://www.jovo.tech/marketplace/platform-alexa) can directly point to a Lambda's resource name, other platforms like [Google Assistant](https://www.jovo.tech/marketplace/platform-googleassistant) need to access the function through an endpoint provided by an [API Gateway](#api-gateway).
 
 Lambda functions can be connected to various AWS services, for example [DynamoDB](#dynamodb) for storing user data. Learn more about setting up these integrations in the [configuration section](#configuration).
 
 The [deployment section](#deployment) offers more information about loading up your source code to AWS Lambda.
 
+There is also a [troubleshooting](#troubleshooting) section for common issues with AWS Lambda.
+
 ## Installation
 
-Create a new stage using the `jovov4 new:stage` command as explained in the [app config documentation](https://www.jovo.tech/docs/app-config#staging), for example:
+Create a new stage using the `jovo new:stage` command as explained in the [app config documentation](https://www.jovo.tech/docs/app-config#staging), for example:
 
 ```sh
-$ jovo new: stage prod
+$ jovo new:stage prod
 ```
 
 When it prompts you to select a server integration, choose Lambda. This will add a [`server.lambda.ts` file](https://github.com/jovotech/jovo-framework/blob/v4/latest/integrations/server-lambda/boilerplate/server.lambda.ts) to your project's `src` folder, and reference it in your newly created [app stage config](https://www.jovo.tech/docs/app-config#staging) (in this example `app.prod.ts`):
@@ -35,14 +41,8 @@ export * from './server.lambda';
 
 Learn more about setting up the following services and configurations:
 
-- [DynamoDB](#dynamodb)
 - [API Gateway](#api-gateway)
-
-### DynamoDB
-
-The [FileDb](https://www.jovo.tech/marketplace/db-filedb) that is used as database for local development can't be used on AWS Lambda. To make your app work with all [data types](https://www.jovo.tech/docs/data), setting up a [database integration](https://www.jovo.tech/docs/databases) is necessary.
-
-DynamoDB is the recommended database for Jovo apps hosted on AWS Lambda. [Learn more in the DynamoDB integration docs](https://www.jovo.tech/marketplace/db-dynamodb).
+- [DynamoDB](#dynamodb)
 
 ### API Gateway
 
@@ -86,6 +86,12 @@ Now, all you need to do is to enable CORS by going to "Actions" > "Enable CORS".
 
 Save this configuration, then deploy your API once again for the changes to be taken into effect.
 
+### DynamoDB
+
+The [FileDb](https://www.jovo.tech/marketplace/db-filedb) that is used as database for local development can't be used on AWS Lambda. To make your app work with all [data types](https://www.jovo.tech/docs/data), setting up a [database integration](https://www.jovo.tech/docs/databases) is necessary.
+
+DynamoDB is the recommended database for Jovo apps hosted on AWS Lambda. [Learn more in the DynamoDB integration docs](https://www.jovo.tech/marketplace/db-dynamodb).
+
 ## Deployment
 
 You can deploy your Jovo app to AWS Lambda in two ways:
@@ -102,7 +108,8 @@ To counteract this issue, you can set `callbackWaitsForEmptyEventLoop` to `false
 ```typescript
 export const handler = async (event: any, context: any, callback: Function) => {
   context.callbackWaitsForEmptyEventLoop = false;
-  await app.handle(event);
+  await app.initialize();
+  await app.handle(new Lambda(event, context, callback));
 };
 ```
 

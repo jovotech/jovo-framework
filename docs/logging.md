@@ -49,7 +49,7 @@ logging: {
   indentation: '  ',
   styling: true,
   colorizeSettings: { /* ... */ },
-  tslog: { /* ... */ },
+  logger: { /* ... */ },
 },
 ```
 
@@ -57,9 +57,11 @@ logging: {
 - `request`: Configurations for [request logging](#request-logging).
 - `response`: Configurations for [response logging](#response-logging).
 - More information about `indentation`, `style`, and `colorizeSettings` can be found in the [styling](#styling) section.
-- `tslog`: Configurations for the logging library used by the [Jovo Logger](#jovo-logger).
+- `logger`: Configurations for the [Jovo Logger](#jovo-logger).
 
 ## Basic Logging
+
+Basic logging is responsible for logging the the request and response of each interaction. Learn more about the lifecycle in the [RIDR documentation](./ridr-lifecycle.md).
 
 - [Request Logging](#request-logging)
 - [Response Logging](#response-logging)
@@ -174,20 +176,38 @@ logging: {
 
 ## Jovo Logger
 
-Jovo has an internal `Logger` that can be used to display certain levels of logs. It is an instance of [tslog](https://tslog.js.org) and can use any features that library provides.
+Jovo has an internal `Logger` that can be used to display certain levels of logs. It uses [loglevel](https://github.com/pimterry/loglevel) and uses the levels described there.
 
-You can add tslog configurations ([learn more on their website](https://tslog.js.org/#/?id=settings)) to the `tslog` property, for example:
+You can modify the `Logger` by using the `logger` property in the `logging` config:
 
 ```typescript
 logging: {
-  tslog: {
-    prettyInspectOptions: { depth: 3 },
-    prefix: [''],
-    displayDateTime: false,
+  logger: {
+    level: 'error' // Show error only
   },
   // ...
 },
 ```
+
+This is the default configuration for `logger`, simplified for readability:
+
+```typescript
+{
+  name: 'JovoLogger', // Name of the logger, see loglevel.getLogger
+  level: process.env.JOVO_LOG_LEVEL || 'trace', // Level of the logger, see logLevel.setLevel
+  styling: true, // Enable or disable styling completely 
+  errorProperties: ['package', 'message', 'context', 'stack', 'hint', 'learnMore'], // Can be used to change order of error properties that are displayed or even omit some
+}
+```
+
+You can use the logger to log to various log levels, which can be set in the config or using the environment variable `JOVO_LOG_LEVEL`, for example like this:
+
+```typescript
+process.env.JOVO_LOG_LEVEL = 'warn';
+```
+
+You can also learn more about all `errorProperties` in the [`JovoError` documentation](./error-handling.md#jovoerror).
+
 
 You can import the Jovo Logger like this:
 
@@ -195,22 +215,17 @@ You can import the Jovo Logger like this:
 import { Logger } from '@jovotech/framework';
 ```
 
-You can use the logger to log to various log levels, which can be set as environment variable `JOVO_LOG_LEVEL`, for example like this:
-
-```typescript
-process.env.JOVO_LOG_LEVEL = 'warn';
-```
-
 The logs can be done like this:
 
 ```typescript
-Logger.silly(string); // JOVO_LOG_LEVEL = 'silly'
 Logger.trace(string); // JOVO_LOG_LEVEL = 'trace'
+Logger.log(string); // JOVO_LOG_LEVEL = 'debug'
 Logger.debug(string); // JOVO_LOG_LEVEL = 'debug'
 Logger.info(string); // JOVO_LOG_LEVEL = 'info'
 Logger.warn(string); // JOVO_LOG_LEVEL = 'warn'
 Logger.error(new Error()); // JOVO_LOG_LEVEL = 'error'
-Logger.fatal(new Error()); // JOVO_LOG_LEVEL = 'fatal'
 ```
 
-Learn more about log levels in the [official tslog documentation](https://tslog.js.org/#/?id=log-level).
+Additionally, setting the log level to `'silent'` will cause no logs to be shown.
+
+Learn more about log levels in the [official `loglevel` documentation](https://github.com/pimterry/loglevel#documentation).

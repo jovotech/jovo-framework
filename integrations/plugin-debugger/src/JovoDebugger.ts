@@ -25,7 +25,6 @@ import { LangFr } from '@nlpjs/lang-fr';
 import { LangIt } from '@nlpjs/lang-it';
 import isEqual from 'fast-deep-equal/es6';
 import { promises } from 'fs';
-import open from 'open';
 import { homedir } from 'os';
 import { join, resolve } from 'path';
 import { cwd } from 'process';
@@ -46,12 +45,13 @@ import {
   StateMutatingJovoMethodKey,
 } from './interfaces';
 import { MockServer, MockServerRequest } from './MockServer';
+import _cloneDeep from 'lodash.clonedeep';
 
-type AugmentedServer = Server & {
-  [key: string]: any;
-  __augmented?: boolean;
-  originalSetResponse?: Server['setResponse'];
-};
+type AugmentedServer = Server &
+  AnyObject & {
+    __augmented?: boolean;
+    originalSetResponse?: Server['setResponse'];
+  };
 
 export interface JovoDebuggerConfig extends PluginConfig {
   nlu: NluPlugin | SluPlugin;
@@ -130,6 +130,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   mount(parent: HandleRequest): Promise<void> | void {
     this.augmentServerForRequest(parent);
 
+    // Because the socket does not work properly after being cloned, the instance from the app plugin has to be used
     this.socket = parent.app.plugins.JovoDebugger?.socket;
     parent.middlewareCollection.use('request.start', (jovo) => {
       return this.onRequest(jovo);
@@ -324,10 +325,23 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
           this.emitUpdate(handleRequest.debuggerRequestId, {
             key: stringKey,
             value,
+            previousValue,
             path: getCompletePropertyPath(stringKey, currentPath),
           });
         }
 
+        return true;
+      },
+      deleteProperty: (target: T, key: keyof T): boolean => {
+        const stringKey = key.toString();
+        const copy = _cloneDeep(target);
+        delete copy[key];
+        this.emitUpdate(handleRequest.debuggerRequestId, {
+          key: stringKey,
+          value: copy,
+          previousValue: target,
+          path: currentPath,
+        });
         return true;
       },
     };
@@ -403,58 +417,6 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
 
     // eslint-disable-next-line no-console
     console.log('\nThis is your webhook url ☁️ ' + underline(blueText(debuggerUrl)));
-
-    // Check if we can enable raw mode for input stream to capture raw keystrokes
-    if (process.stdin.isTTY && process.stdin.setRawMode) {
-      setTimeout(() => {
-        // eslint-disable-next-line no-console
-        console.log(`\nTo open Jovo Debugger in your browser, press the "." key.\n`);
-      }, 500);
-
-      // Capture unprocessed key input.
-      process.stdin.setRawMode(true);
-      // Explicitly resume emitting data from the stream.
-      process.stdin.resume();
-      // Capture readable input as opposed to binary.
-      process.stdin.setEncoding('utf-8');
-
-      // Collect input text from input stream.
-      process.stdin.on('data', async (keyRaw: Buffer) => {
-        const key: string = keyRaw.toString();
-        // When dot gets pressed, try to open the debugger in browser.
-        if (key === '.') {
-          try {
-            await open(debuggerUrl);
-          } catch (error) {
-            // eslint-disable-next-line no-console
-            console.log(
-              `Could not open browser. Please open debugger manually by visiting this url: ${debuggerUrl}`,
-            );
-          }
-        } else {
-          if (key.charCodeAt(0) === 3) {
-            // Ctrl+C has been pressed, kill process.
-            if (process.env.JOVO_CLI_PROCESS_ID) {
-              process.kill(parseInt(process.env.JOVO_CLI_PROCESS_ID), 'SIGTERM');
-              process.exit();
-            } else {
-              process.stdin.pause();
-              process.stdin.setRawMode?.(false);
-              console.log('Press Ctrl + C again to exit...');
-            }
-          } else {
-            // Record input text and write it into terminal.
-            process.stdout.write(key);
-          }
-        }
-      });
-    } else {
-      setTimeout(() => {
-        console.log(
-          `☁  Could not open browser. Please open debugger manually by visiting this url: ${debuggerUrl}`,
-        );
-      }, 2500);
-    }
   }
 
   private async onDebuggingAvailable(): Promise<void> {

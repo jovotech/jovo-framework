@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/output",
-  "version": "4.0.3",
+  "version": "4.2.2",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
   "es2015": "dist/esm2015/index.js",
@@ -10,7 +10,7 @@
     "dist"
   ],
   "scripts": {
-    "prebuild": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json --clean",
+    "prebuild": "rimraf dist",
     "build": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json",
     "watch": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json --watch",
     "prettier": "prettier -w -l src test",
@@ -19,10 +19,9 @@
     "test": "jest"
   },
   "dependencies": {
-    "@jovotech/common": "^4.0.3",
+    "@jovotech/common": "^4.2.0",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
-    "lodash.defaultsdeep": "^4.6.1",
     "lodash.merge": "^4.6.2",
     "lodash.mergewith": "^4.6.2",
     "lodash.unset": "^4.5.2",
@@ -32,7 +31,6 @@
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
-    "@types/lodash.defaultsdeep": "^4.6.6",
     "@types/lodash.merge": "^4.6.6",
     "@types/lodash.mergewith": "^4.6.6",
     "@types/lodash.unset": "^4.5.6",
@@ -60,5 +58,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "843fd4c0e8d113cf78ab53d667e414bbc0286a54"
+  "gitHead": "c9569fabbf075a77c83272149bae8a055f76caee"
 }

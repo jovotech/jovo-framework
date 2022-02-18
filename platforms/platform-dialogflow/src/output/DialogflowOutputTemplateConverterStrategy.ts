@@ -4,6 +4,7 @@ import {
   DynamicEntity,
   DynamicEntityMap,
   mergeInstances,
+  MessageMaxLength,
   MessageValue,
   NormalizedOutputTemplate,
   OutputTemplateConverterStrategyConfig,
@@ -38,7 +39,7 @@ export class DialogflowOutputTemplateConverterStrategy extends SingleResponseOut
   protected sanitizeMessage(
     message: MessageValue,
     path: string,
-    maxLength = TEXT_MAX_LENGTH,
+    maxLength: MessageMaxLength = TEXT_MAX_LENGTH,
     offset?: number,
   ): MessageValue {
     return super.sanitizeMessage(message, path, maxLength, offset);

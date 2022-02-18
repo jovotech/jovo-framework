@@ -23,7 +23,7 @@ When we talk about components in this documentation, we typically talk about a s
 
 ### Register Root Components
 
-Root components are registered in the `app.ts` file. These are all top-level components that are accessible using [global handlers](./handlers.md#global-handlers).
+Root components are registered in the `app.ts` file. These are all top-level components that are accessible using [global handlers](./handle-decorators.md#global).
 
 Each Jovo template usually comes with a `GlobalComponent` that is added like this:
 

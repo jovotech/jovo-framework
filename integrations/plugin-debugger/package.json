@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/plugin-debugger",
-  "version": "4.1.2",
+  "version": "4.2.3",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -11,7 +11,7 @@
     "dist"
   ],
   "scripts": {
-    "prebuild": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json --clean",
+    "prebuild": "rimraf dist",
     "build": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json",
     "watch": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json --watch",
     "prettier": "prettier -w -l src test",
@@ -22,22 +22,24 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/nlu-nlpjs": "^4.1.2",
-    "@jovotech/platform-core": "^4.1.2",
+    "@jovotech/nlu-nlpjs": "^4.2.2",
+    "@jovotech/platform-core": "^4.2.2",
     "@nlpjs/lang-de": "^4.22.0",
     "@nlpjs/lang-en": "^4.22.0",
     "@nlpjs/lang-es": "^4.22.0",
     "@nlpjs/lang-fr": "^4.22.0",
     "@nlpjs/lang-it": "^4.22.0",
     "fast-deep-equal": "^3.1.3",
+    "lodash.clonedeep": "^4.5.0",
     "open": "^8.0.7",
     "socket.io-client": "^2.4.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@jovotech/framework": "^4.1.2",
+    "@jovotech/framework": "^4.2.2",
     "@types/cli-table": "^0.3.0",
     "@types/jest": "^26.0.20",
+    "@types/lodash.clonedeep": "^4.5.6",
     "@types/node": "^12.20.37",
     "@types/socket.io-client": "^1.4.36",
     "@types/uuid": "^8.3.0",
@@ -53,9 +55,9 @@
     "typescript": "~4.4.4"
   },
   "peerDependencies": {
-    "@jovotech/framework": "4.1.2"
+    "@jovotech/framework": "4.2.2"
   },
-  "gitHead": "843fd4c0e8d113cf78ab53d667e414bbc0286a54",
+  "gitHead": "c9569fabbf075a77c83272149bae8a055f76caee",
   "prettier": "../../.prettierrc.js",
   "publishConfig": {
     "access": "public"

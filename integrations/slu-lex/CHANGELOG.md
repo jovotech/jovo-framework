@@ -1,5 +1,96 @@
 # Changelog
 
+## [@jovotech/slu-lex@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/slu-lex@4.2.0...@jovotech/slu-lex@4.2.1)
+
+> 10 February 2022
+
+- Fix bug in handling of APL user events [`#1212`](https://github.com/jovotech/jovo-framework/pull/1212)
+- Fix Alexa getUserId getter/setter [`#1228`](https://github.com/jovotech/jovo-framework/pull/1228)
+- :bug: Fix missing OutputHelpers export [`#1229`](https://github.com/jovotech/jovo-framework/pull/1229)
+- ✅ Implement tests for Framework and Platforms [`#1199`](https://github.com/jovotech/jovo-framework/pull/1199)
+- :recycle: Move "." functionality to CLI [`#1204`](https://github.com/jovotech/jovo-framework/pull/1204)
+
+## [@jovotech/slu-lex@4.2.0](https://github.com/jovotech/jovo-framework/compare/@jovotech/slu-lex@4.1.2...@jovotech/slu-lex@4.2.0)
+
+> 26 January 2022
+
+- :adhesive_bandage: Fix issues with the `build:platform` process [`#1185`](https://github.com/jovotech/jovo-framework/pull/1185)
+- AudioPlayerActivity Types added [`#1165`](https://github.com/jovotech/jovo-framework/pull/1165)
+- :memo: Fix typos in `hooks`  [`#1194`](https://github.com/jovotech/jovo-framework/pull/1194)
+
+## [@jovotech/slu-lex@4.1.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/slu-lex@4.1.1...@jovotech/slu-lex@4.1.2)
+
+> 20 January 2022
+
+## [@jovotech/slu-lex@4.1.1](https://github.com/jovotech/jovo-framework/compare/v3.5...@jovotech/slu-lex@4.1.1)
+
+> 18 January 2022
+
+- Fixes merging of undefined values in output templates [`#1170`](https://github.com/jovotech/jovo-framework/pull/1170)
+- Fixes null value in state config [`#1186`](https://github.com/jovotech/jovo-framework/pull/1186)
+- :recycle: Refactor process termination [`#1179`](https://github.com/jovotech/jovo-framework/pull/1179)
+- 🐛  Fixes isNewSession in GoogleActionRequest [`#1178`](https://github.com/jovotech/jovo-framework/pull/1178)
+- update tslog library [`#1169`](https://github.com/jovotech/jovo-framework/pull/1169)
+- :bookmark: Publish [`#1164`](https://github.com/jovotech/jovo-framework/pull/1164)
+- :sparkles: Add --skip-validation flag [`#1163`](https://github.com/jovotech/jovo-framework/pull/1163)
+- :ambulance: Add bundle externals for Alexa to package.json [`#1155`](https://github.com/jovotech/jovo-framework/pull/1155)
+- :bug: Set id in resource path manually [`#1153`](https://github.com/jovotech/jovo-framework/pull/1153)
+- :label: Fix some typings [`#1151`](https://github.com/jovotech/jovo-framework/pull/1151)
+- :bug: Fix Task config property [`#1152`](https://github.com/jovotech/jovo-framework/pull/1152)
+- ✨ Initial Alexa ISP helpers [`#1145`](https://github.com/jovotech/jovo-framework/pull/1145)
+- :sparkles: Introduce getInitConfig() [`#1144`](https://github.com/jovotech/jovo-framework/pull/1144)
+- :sparkles: Introduce Alexa Conversations [`#1140`](https://github.com/jovotech/jovo-framework/pull/1140)
+- :sparkles: Implement isJovoCliError [`#1141`](https://github.com/jovotech/jovo-framework/pull/1141)
+- :recycle: Add `skipTests: true` to FileDb default config [`#1121`](https://github.com/jovotech/jovo-framework/pull/1121)
+- 🐛 Fix headline style in JovoLogger [`#1120`](https://github.com/jovotech/jovo-framework/pull/1120)
+- Remove table view on `jovo run` + undefined properties in logger [`#1118`](https://github.com/jovotech/jovo-framework/pull/1118)
+- Fix process.stdin handling  [`#1116`](https://github.com/jovotech/jovo-framework/pull/1116)
+- ✨ Move JovoDebugger code from CLI to plugin [`#1111`](https://github.com/jovotech/jovo-framework/pull/1111)
+- ✨ Add pretty logging [`#1103`](https://github.com/jovotech/jovo-framework/pull/1103)
+- :sparkles: Introduce CMS integrations [`#1089`](https://github.com/jovotech/jovo-framework/pull/1089)
+- :label: Fix typings [`#1105`](https://github.com/jovotech/jovo-framework/pull/1105)
+- :sparkles: Introduce JavaScript Boilerplates [`#1109`](https://github.com/jovotech/jovo-framework/pull/1109)
+- :sparkles: Add NextScene output, onScene GoogleAssistantHandle [`#1088`](https://github.com/jovotech/jovo-framework/pull/1088)
+- :recycle: Adjust Jovo Debugger plugin [`#1093`](https://github.com/jovotech/jovo-framework/pull/1093)
+- **Breaking change:** :recycle: :boom:  Standardize request headers [`#1080`](https://github.com/jovotech/jovo-framework/pull/1080)
+- :bookmark: Publish [`#1092`](https://github.com/jovotech/jovo-framework/pull/1092)
+- :bug: Set entities manually [`#1090`](https://github.com/jovotech/jovo-framework/pull/1090)
+- :sparkles: Add Instagram platform integration [`#1069`](https://github.com/jovotech/jovo-framework/pull/1069)
+- :sparkles: Add Dashbot Analytics integration [`#1076`](https://github.com/jovotech/jovo-framework/pull/1076)
+- ✨ Platform handles (Alexa Reminders) [`#1071`](https://github.com/jovotech/jovo-framework/pull/1071)
+- ✨ Skip health checks [`#1068`](https://github.com/jovotech/jovo-framework/pull/1068)
+- :sparkles: Introduce Instagram [`#40`](https://github.com/jovotech/jovo-framework/pull/40)
+- :bookmark: Publish [`#1067`](https://github.com/jovotech/jovo-framework/pull/1067)
+- :rewind: Reverse d10b5c3 [`#1065`](https://github.com/jovotech/jovo-framework/pull/1065)
+- :bug: Resolve project path correctly [`#1062`](https://github.com/jovotech/jovo-framework/pull/1062)
+- 🐛🏷️ Fix invalid typing of `InputTypeLike` [`#1064`](https://github.com/jovotech/jovo-framework/pull/1064)
+- :bookmark: Publish [`#1063`](https://github.com/jovotech/jovo-framework/pull/1063)
+- :recycle: Refactor CLI Plugins [`#1046`](https://github.com/jovotech/jovo-framework/pull/1046)
+- :sparkles: Add system intents to model [`#1056`](https://github.com/jovotech/jovo-framework/pull/1056)
+- :ambulance: Apply TestSuite hotfixes [`#1052`](https://github.com/jovotech/jovo-framework/pull/1052)
+- :bookmark: Publish [`#1045`](https://github.com/jovotech/jovo-framework/pull/1045)
+- ✨ Introduce TestSuite [`#1033`](https://github.com/jovotech/jovo-framework/pull/1033)
+- 🐛 Add global intents to actions.yml [`#1032`](https://github.com/jovotech/jovo-framework/pull/1032)
+- ✨ Add hasSessionEnded() to JovoResponse [`#29`](https://github.com/jovotech/jovo-framework/pull/29)
+- 🐛 Fix copying resources [`#1021`](https://github.com/jovotech/jovo-framework/pull/1021)
+- ✨ Improve model validation [`#1020`](https://github.com/jovotech/jovo-framework/pull/1020)
+- ✨ Add accessToken property to JovoUser [`#1027`](https://github.com/jovotech/jovo-framework/pull/1027)
+- Async Model [`#996`](https://github.com/jovotech/jovo-framework/pull/996)
+- 🚚 Only use $ for direct properties of `Jovo` [`#986`](https://github.com/jovotech/jovo-framework/pull/986)
+- :recycle: Update CorePlatform response [`#16`](https://github.com/jovotech/jovo-framework/pull/16)
+- Improve type for device capabilities [`#985`](https://github.com/jovotech/jovo-framework/pull/985)
+- ✨ Alexa reminders  [`#972`](https://github.com/jovotech/jovo-framework/pull/972)
+- ✨ Implement this.$device (wip) [`#966`](https://github.com/jovotech/jovo-framework/pull/966)
+- 🚚 Rename platform resources [`#962`](https://github.com/jovotech/jovo-framework/pull/962)
+- ✨ Implement Alexa Customer Profile API [`#970`](https://github.com/jovotech/jovo-framework/pull/970)
+- ✨ Implement Alexa Customer Profile API [`#969`](https://github.com/jovotech/jovo-framework/pull/969)
+- ✨ Initial DynamoDb implementation (wip) [`#953`](https://github.com/jovotech/jovo-framework/pull/953)
+- ✨ Introduce plugin-specific context [`#939`](https://github.com/jovotech/jovo-framework/pull/939)
+- ⬆️ Update dependencies [`#936`](https://github.com/jovotech/jovo-framework/pull/936)
+- ✨ Add Dialogflow CLI Plugin [`#928`](https://github.com/jovotech/jovo-framework/pull/928)
+- 🚚 Abstract JovoCli class, pass instance to plugins [`#926`](https://github.com/jovotech/jovo-framework/pull/926)
+- ✨ Add CLI plugins for Alexa and Google Assistant [`#925`](https://github.com/jovotech/jovo-framework/pull/925)
+
 ## [v3.5](https://github.com/jovotech/jovo-framework/compare/v3.3...v3.5)
 
 > 22 February 2021
