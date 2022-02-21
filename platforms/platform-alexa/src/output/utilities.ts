@@ -67,7 +67,7 @@ export function augmentModelPrototypes(): void {
     }
     return card;
   };
-
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   Card.prototype.toApl = function (cardTemplate?: any): AplRenderDocumentDirective {
     const cardJson = cardTemplate || AplCardJson;
     cardJson.datasources.data.title = this.title;
@@ -98,7 +98,7 @@ export function augmentModelPrototypes(): void {
       ...cardJson,
     };
   };
-
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   Carousel.prototype.toApl = function (carouselTemplate?: any): AplRenderDocumentDirective {
     const carouselJson = carouselTemplate || AplCarouselJson;
 

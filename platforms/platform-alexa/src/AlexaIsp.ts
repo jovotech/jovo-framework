@@ -5,7 +5,7 @@ import {
   InSkillProductsParams,
   ProductListResponse,
 } from './api/IspApi';
-import { PurchaseResult, PurchaseResultLike } from './interfaces';
+import { PurchaseResultLike } from './interfaces';
 
 export class AlexaIsp {
   constructor(private alexa: Alexa) {}

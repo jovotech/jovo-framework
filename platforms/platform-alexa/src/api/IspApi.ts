@@ -55,7 +55,7 @@ export async function getProductList(
     return response.data;
   } catch (error) {
     if (error.isAxiosError) {
-      const { message, code } = error.response.data;
+      const { message } = error.response.data;
       throw new JovoError({ message });
     }
     throw new JovoError({ message: error.message });

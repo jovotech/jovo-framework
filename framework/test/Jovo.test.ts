@@ -129,6 +129,7 @@ test('AsyncJovo.$send', async () => {
     ExamplePlatformDevice,
     ExamplePlatform
   > {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     protected sendResponse(response: ExamplePlatformResponse): Promise<unknown> {
       return Promise.resolve();
     }
