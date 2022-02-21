@@ -3,7 +3,6 @@ import {
   Jovo,
   NluData,
   NluPlugin,
-  OmitWhere,
   PlainObjectType,
   Plugin,
   PluginConfig,
