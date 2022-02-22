@@ -41,6 +41,7 @@ import { forEachDeep } from './utilities';
 const DELEGATE_MIDDLEWARE = 'component.delegate';
 const RESOLVE_MIDDLEWARE = 'component.resolve';
 const REDIRECT_MIDDLEWARE = 'component.redirect';
+const SEND_MIDDLEWARE = 'component.send';
 
 export type JovoConstructor<
   REQUEST extends JovoRequest,
@@ -288,6 +289,8 @@ export abstract class Jovo<
 
     // push the new OutputTemplate(s) to $output
     Array.isArray(newOutput) ? this.$output.push(...newOutput) : this.$output.push(newOutput);
+
+    this.$handleRequest.middlewareCollection.run(SEND_MIDDLEWARE, this);
   }
 
   async $redirect<
