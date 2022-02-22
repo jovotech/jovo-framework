@@ -78,7 +78,7 @@ export async function getImportStatus(
 
   if (status.status === 'IN_PROGRESS') {
     await wait(500);
-    return await getImportStatus(importId);
+    return await getImportStatus(importId, askProfile);
   } else if (status.status === 'FAILED') {
     throw new JovoCliError({
       message: 'Errors occured while importing your skill package',
