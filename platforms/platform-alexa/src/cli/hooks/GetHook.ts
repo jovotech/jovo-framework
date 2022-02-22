@@ -99,7 +99,7 @@ export class GetHook extends AlexaHook<BuildPlatformEvents | GetPlatformEvents> 
           this.$context.alexa.askProfile || 'default'
         }.skillId`,
       ) ||
-      _get(this.$plugin.config, 'options.skillId');
+      _get(this.$plugin.config, 'skillId');
 
     this.$context.alexa.skillStage = this.$context.flags['skill-stage'];
   }
