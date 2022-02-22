@@ -171,7 +171,7 @@ export class ExamplePlatform extends Platform<
     return {};
   }
 
-  mount(parent: Extensible) {
+  mount(parent: Extensible): void {
     super.mount(parent);
     this.middlewareCollection.use('after.request.end', (jovo) => {
       this.enableDatabaseSessionStorage(jovo);

@@ -41,10 +41,11 @@ describe('enableDatabaseSessionStorage', () => {
 
   test('DbPlugin installed', async () => {
     class ExampleDbPlugin extends DbPlugin {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       loadData(userId: string, jovo: Jovo): Promise<void> {
         return Promise.resolve(undefined);
       }
-
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       saveData(userId: string, jovo: Jovo): Promise<void> {
         return Promise.resolve(undefined);
       }
