@@ -38,10 +38,10 @@ import { Platform } from './Platform';
 import { JovoRoute } from './plugins/RouterPlugin';
 import { forEachDeep } from './utilities';
 
-const DELEGATE_MIDDLEWARE = 'component.delegate';
-const RESOLVE_MIDDLEWARE = 'component.resolve';
-const REDIRECT_MIDDLEWARE = 'component.redirect';
-const SEND_MIDDLEWARE = 'component.send';
+const DELEGATE_MIDDLEWARE = 'event.$delegate';
+const RESOLVE_MIDDLEWARE = 'event.$resolve';
+const REDIRECT_MIDDLEWARE = 'event.$redirect';
+const SEND_MIDDLEWARE = 'event.$send';
 
 export type JovoConstructor<
   REQUEST extends JovoRequest,
@@ -290,7 +290,7 @@ export abstract class Jovo<
     // push the new OutputTemplate(s) to $output
     Array.isArray(newOutput) ? this.$output.push(...newOutput) : this.$output.push(newOutput);
 
-    this.$handleRequest.middlewareCollection.run(SEND_MIDDLEWARE, this);
+    await this.$handleRequest.middlewareCollection.run(SEND_MIDDLEWARE, this);
   }
 
   async $redirect<
@@ -331,7 +331,7 @@ export abstract class Jovo<
     // update the active component node in handleRequest to keep track of the state
     this.$handleRequest.activeComponentNode = componentNode;
 
-    this.$handleRequest.middlewareCollection.run(REDIRECT_MIDDLEWARE, this);
+    await this.$handleRequest.middlewareCollection.run(REDIRECT_MIDDLEWARE, this);
 
     // execute the component's handler
     await componentNode.executeHandler({
@@ -405,7 +405,7 @@ export abstract class Jovo<
     // update the active component node in handleRequest to keep track of the state
     this.$handleRequest.activeComponentNode = componentNode;
 
-    this.$handleRequest.middlewareCollection.run(DELEGATE_MIDDLEWARE, this);
+    await this.$handleRequest.middlewareCollection.run(DELEGATE_MIDDLEWARE, this);
 
     // execute the component's handler
     await componentNode.executeHandler({
@@ -440,7 +440,7 @@ export abstract class Jovo<
     // update the active component node in handleRequest to keep track of the state
     this.$handleRequest.activeComponentNode = previousComponentNode;
 
-    this.$handleRequest.middlewareCollection.run(RESOLVE_MIDDLEWARE, this);
+    await this.$handleRequest.middlewareCollection.run(RESOLVE_MIDDLEWARE, this);
 
     // execute the component's handler
     await previousComponentNode.executeHandler({
