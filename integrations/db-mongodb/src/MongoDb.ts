@@ -29,36 +29,25 @@ export interface MongoDbItem {
   updatedAt?: string;
 }
 
-/** This class is a Singleton and has to be instantiated using this.instance(config?) */
 export class MongoDb extends DbPlugin<MongoDbConfig> {
   /** Default database name in MongoDB. if no name was specified, 'test' is used. See https://docs.mongodb.com/manual/tutorial/getting-started/#getting-started */
-  readonly MONGODB_DEFAULT_DATABASE_NAME = 'test';
+  public static readonly MONGODB_DEFAULT_DATABASE_NAME = 'test';
+  public static readonly JOVO_DEFAULT_DATABASE_NAME = 'jovo_db';
+  public static readonly JOVO_DEFAULT_COLLECTION_NAME = 'jovoUsers';
 
-  private static _instance: MongoDb;
-
-  /** A single client promise to be reused by Jovo or others components following MongoDB best practice: https://docs.atlas.mongodb.com/best-practices-connecting-from-aws-lambda/#connection-examples */
+  /** A single client promise to be shared by Jovo and others components following MongoDB best practice: https://docs.atlas.mongodb.com/best-practices-connecting-from-aws-lambda/#connection-examples */
   readonly client: Promise<MongoClient> = new MongoClient(this.config.connectionString).connect();
 
-  private constructor(config: MongoDbInitConfig) {
+  constructor(config: MongoDbInitConfig) {
     super(config);
-  }
-
-  /** Attach config to instantiated the client with it, for example in your app.prod.ts. Pass no arguments if it's been already instantiated. */
-  public static instance(config?: MongoDbInitConfig): MongoDb {
-    if (!MongoDb._instance && !config) {
-      throw new Error('Missing needed configuration for MongoDb plugin.');
-    }
-    MongoDb._instance = MongoDb._instance || new MongoDb(config!);
-    // important to associate it with _instance before returning
-    return MongoDb._instance;
   }
 
   getDefaultConfig(): MongoDbConfig {
     return {
       ...super.getDefaultConfig(),
       connectionString: '<YOUR-MONGODB-URI>',
-      databaseName: 'jovo_db',
-      collectionName: 'jovoUsers',
+      databaseName: MongoDb.JOVO_DEFAULT_DATABASE_NAME,
+      collectionName: MongoDb.JOVO_DEFAULT_COLLECTION_NAME,
     };
   }
 
@@ -69,14 +58,12 @@ export class MongoDb extends DbPlugin<MongoDbConfig> {
   async initialize(): Promise<void> {
     if ((await this.jovoDb()).databaseName === this.MONGODB_DEFAULT_DATABASE_NAME) {
       // eslint-disable-next-line no-console
-      console.warn(
-        '[MongoDB] URI does not have the DB in it, and no databaseName provided to the instance. Using default name: test.',
-      );
+      console.warn('[MongoDB] Warning: The "test" database is being used.');
     }
   }
 
   async loadData(userId: string, jovo: Jovo): Promise<void> {
-    const users = await MongoDb._instance.jovoUsers();
+    const users = await this.jovoUsers();
     const filter = { _id: userId };
     const dbItem = (await users.findOne(filter)) as DbItem;
     if (dbItem) {
@@ -86,27 +73,27 @@ export class MongoDb extends DbPlugin<MongoDbConfig> {
   }
 
   async saveData(userId: string, jovo: Jovo): Promise<void> {
-    const users = await MongoDb._instance.jovoUsers();
+    const users = await this.jovoUsers();
     const item: DbItem = { _id: userId };
     await this.applyPersistableData(jovo, item);
     const filter = { _id: userId };
     await users.updateOne(filter, { $set: item }, { upsert: true });
   }
 
-  /** MongoDB creates the database if one does not already exist */
+  /** MongoDB creates the database if doesn't exist yet */
   async jovoDb(): Promise<Db> {
-    const connection = await MongoDb._instance.client;
-    if (MongoDb._instance.config.databaseName) {
-      return connection!.db(MongoDb._instance.config.databaseName);
+    const connection = await this.client;
+    if (this.config.databaseName) {
+      return connection!.db(this.config.databaseName);
     } else {
       //If not provided, use database name from connection string.
       return connection!.db();
     }
   }
 
-  /** MongoDB creates the collection if one does not already exist  */
+  /** MongoDB creates the collection if doesn't exist yet  */
   async jovoUsers(): Promise<Collection<Document>> {
-    const db = await MongoDb._instance.jovoDb();
-    return db!.collection(MongoDb._instance.config.collectionName!);
+    const db = await this.jovoDb();
+    return db!.collection(this.config.collectionName!);
   }
 }
