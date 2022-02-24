@@ -199,8 +199,27 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
     }
 
     const carousel = output.carousel;
+    // Show a regular card if there is a single item in the carousel
+    if (
+      carousel?.selection?.entityType &&
+      carousel?.selection?.intent &&
+      carousel.items.length === 1
+    ) {
+      if (!response.prompt) {
+        response.prompt = {};
+      }
+      if (!response.prompt.content) {
+        response.prompt.content = {};
+      }
+      response.prompt.content.card = carousel.toGoogleAssistantCard?.();
+    }
+
     // if a carousel exists and selection.entityType is set for it (otherwise carousel can't be displayed)
-    if (carousel?.selection?.entityType && carousel?.selection?.intent) {
+    if (
+      carousel?.selection?.entityType &&
+      carousel?.selection?.intent &&
+      carousel.items.length > 1
+    ) {
       const collectionData = carousel.toGoogleAssistantCollectionData?.();
       if (collectionData) {
         if (!response.session) {

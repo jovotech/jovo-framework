@@ -51,6 +51,23 @@ export function augmentModelPrototypes(): void {
     return card;
   };
 
+  Carousel.prototype.toGoogleAssistantCard = function () {
+    const { title, subtitle, content, imageUrl } = this.items[0];
+    const card: GoogleAssistantCard = {
+      title: this.title || title,
+      subtitle,
+      text: content,
+      image: imageUrl
+        ? {
+            url: imageUrl,
+            alt: title,
+          }
+        : undefined,
+    };
+
+    return card;
+  };
+
   Carousel.prototype.toGoogleAssistantCollectionData = function () {
     const typeOverride: TypeOverride = {
       name: this.selection?.entityType || '',
@@ -62,7 +79,7 @@ export function augmentModelPrototypes(): void {
             synonyms: [],
             display: {
               title: item.title,
-              description: item.subtitle,
+              description: item.subtitle || item.content,
               image: item.imageUrl ? { alt: item.title, url: item.imageUrl } : undefined,
             },
           };

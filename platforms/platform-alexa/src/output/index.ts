@@ -15,6 +15,7 @@ declare module '@jovotech/output/dist/types/models/Card' {
     backgroundImageUrl?: string;
 
     toAlexaCard?(): AlexaCard<CardType.Standard>;
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     toApl?(cardTemplate?: any): AplRenderDocumentDirective;
   }
 }

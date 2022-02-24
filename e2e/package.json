@@ -3,7 +3,7 @@
   "private": true,
   "description": "",
   "scripts": {
-    "prettier": "prettier -w -l test",
+    "prettier": "prettier -w -l test package.json",
     "eslint": "eslint test --fix --ext .ts",
     "rimraf": "rimraf dist",
     "test": "jest --runInBand"

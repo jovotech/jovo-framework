@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/plugin-debugger",
-  "version": "4.2.1",
+  "version": "4.2.3",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -14,7 +14,7 @@
     "prebuild": "rimraf dist",
     "build": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json",
     "watch": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json --watch",
-    "prettier": "prettier -w -l src test",
+    "prettier": "prettier -w -l src test package.json",
     "eslint": "eslint src test --fix --ext .ts",
     "rimraf": "rimraf dist",
     "test": "jest --runInBand"
@@ -22,8 +22,8 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/nlu-nlpjs": "^4.2.0",
-    "@jovotech/platform-core": "^4.2.0",
+    "@jovotech/nlu-nlpjs": "^4.2.2",
+    "@jovotech/platform-core": "^4.2.2",
     "@nlpjs/lang-de": "^4.22.0",
     "@nlpjs/lang-en": "^4.22.0",
     "@nlpjs/lang-es": "^4.22.0",
@@ -36,7 +36,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@jovotech/framework": "^4.2.0",
+    "@jovotech/framework": "^4.2.2",
     "@types/cli-table": "^0.3.0",
     "@types/jest": "^26.0.20",
     "@types/lodash.clonedeep": "^4.5.6",
@@ -55,7 +55,7 @@
     "typescript": "~4.4.4"
   },
   "peerDependencies": {
-    "@jovotech/framework": "4.2.0"
+    "@jovotech/framework": "4.2.2"
   },
   "gitHead": "c9569fabbf075a77c83272149bae8a055f76caee",
   "prettier": "../../.prettierrc.js",

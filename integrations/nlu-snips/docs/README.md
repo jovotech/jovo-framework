@@ -11,9 +11,9 @@ Turn raw text into structured meaning with the Jovo Framework integration for th
 
 [Snips NLU](https://github.com/snipsco/snips-nlu) is an open source [natural language understanding (NLU)](https://www.jovo.tech/docs/nlu) library.
 
-Since it is an open source service, you can host Snips NLU on your own servers without any external API calls. You can learn how to set up a server in the [official Snips NLU documentation](https://snips-nlu.readthedocs.io/en/latest/).
+Since it is an open source service, you can host Snips NLU on your own servers without any external API calls. You can learn how to set up a server in the [official Snips NLU documentation](https://snips-nlu.readthedocs.io/en/latest/). Jovo also offers an open source repository repository that can be used to run a Snips NLU Python server that supports [dynamic entities](#dynamic-entities): [jovotech/snips-nlu-server](https://github.com/jovotech/snips-nlu-server).
 
-You can use the Jovo Snips NLU integration for projects where you receive raw text input that needs to be translated into structured meaning to work with the Jovo intent structure. Platforms like the [Jovo Core Platform](https://www.jovo.tech/marketplace/jovo-platform-core) (e.g. in conjunction with the [Jovo Web Client](https://www.jovo.tech/marketplace/jovo-client-web)), [Facebook Messenger](https://www.jovo.tech/marketplace/jovo-platform-facebookmessenger), and [Google Business Messages](https://www.jovo.tech/marketplace/jovo-platform-googlebusiness) are some examples where this would work.
+You can use the Jovo Snips NLU integration for projects where you receive raw text input that needs to be translated into structured meaning to work with the Jovo intent structure. Platforms like the [Jovo Core Platform](https://www.jovo.tech/marketplace/platform-core) (e.g. in conjunction with the [Jovo Web Client](https://www.jovo.tech/marketplace/jovo-client-web)), [Facebook Messenger](https://www.jovo.tech/marketplace/platform-facebookmessenger), and [Google Business Messages](https://www.jovo.tech/marketplace/platform-googlebusiness) are some examples where this would work.
 
 ## Installation
 

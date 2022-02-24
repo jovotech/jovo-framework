@@ -322,7 +322,7 @@ The following Jovo features help you deal with requests like this:
 
 ### AudioPlayer Handlers
 
-Jovo offers `AlexaHandles` helpers for the [`@Handle` decorator](https://www.jovo.tech/docs/handlers#handler-routing-and-the-handle-decorator) that can be used to react to [AudioPlayer requests](https://developer.amazon.com/de-DE/docs/alexa/custom-skills/audioplayer-interface-reference.html#requests).
+Jovo offers `AlexaHandles` helpers for the [`@Handle` decorator](https://www.jovo.tech/docs/handle-decorators) that can be used to react to [AudioPlayer requests](https://developer.amazon.com/docs/alexa/custom-skills/audioplayer-interface-reference.html#requests).
 
 You can accept AudioPlayer and PlayBackController events in your handlers like this:
 
@@ -341,7 +341,7 @@ nextCommandIssued() {
 }
 ```
 
-Using these helpers is the same as using the following [`@Handle` decorator](https://www.jovo.tech/docs/handlers#handler-routing-and-the-handle-decorator):
+Using these helpers is the same as using the following [`@Handle` decorator](https://www.jovo.tech/docs/handle-decorators):
 
 ```typescript
 @Handle({
@@ -351,9 +351,9 @@ Using these helpers is the same as using the following [`@Handle` decorator](htt
 })
 ```
 
-The key here is the [`types` property](https://www.jovo.tech/docs/handlers#types) that is important to match the handler with the request type coming from the Alexa AudioPlayer interface.
+The key here is the [`types` property](https://www.jovo.tech/docs/handle-decorators#types) that is important to match the handler with the request type coming from the Alexa AudioPlayer interface.
 
-The handlers need to be [`global`](https://www.jovo.tech/docs/handlers#global-handlers) because these requests happen outside Alexa's definition of a session, meaning they come without any [state](https://www.jovo.tech/docs/state-stack) data.
+The handlers need to be [`global`](https://www.jovo.tech/docs/handle-decorators#global) because these requests happen outside Alexa's definition of a session, meaning they come without any [state](https://www.jovo.tech/docs/state-stack) data.
 
 Here is an example for all AudioPlayer request types:
 
