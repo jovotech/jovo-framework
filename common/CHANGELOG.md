@@ -40,12 +40,17 @@
 - :recycle: Add `skipTests: true` to FileDb default config [`#1121`](https://github.com/jovotech/jovo-framework/pull/1121)
 - 🐛 Fix headline style in JovoLogger [`#1120`](https://github.com/jovotech/jovo-framework/pull/1120)
 
-## [@jovotech/common@4.0.0-beta.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/common@4.0.0-beta.2...@jovotech/common@4.0.0-beta.4)
+## [@jovotech/common@4.0.0-beta.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/common@4.0.0-beta.3...@jovotech/common@4.0.0-beta.4)
 
 > 17 November 2021
 
 - Remove table view on `jovo run` + undefined properties in logger [`#1118`](https://github.com/jovotech/jovo-framework/pull/1118)
 - Fix process.stdin handling  [`#1116`](https://github.com/jovotech/jovo-framework/pull/1116)
+
+## [@jovotech/common@4.0.0-beta.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/common@4.0.0-beta.2...@jovotech/common@4.0.0-beta.3)
+
+> 16 November 2021
+
 - ✨ Move JovoDebugger code from CLI to plugin [`#1111`](https://github.com/jovotech/jovo-framework/pull/1111)
 - ✨ Add pretty logging [`#1103`](https://github.com/jovotech/jovo-framework/pull/1103)
 - :sparkles: Introduce CMS integrations [`#1089`](https://github.com/jovotech/jovo-framework/pull/1089)
