@@ -1,6 +1,6 @@
 ---
 title: 'Entities'
-excerpt: 'Learn how to access entities and configure dynamic entities using Jovo'
+excerpt: 'Learn how to access entities and configure dynamic entities using Jovo.'
 ---
 
 # Entities
@@ -19,15 +19,39 @@ For example, a user saying "_my name is max_" could result in a `MyNameIsIntent`
   intent: 'MyNameIsIntent',
   entities: {
     name: {
-      value: 'Max',
+      value: 'max',
     },
   },
 }
 ```
 
-Depending on if the information is coming from a [platform](./platforms.md) directly, or from an [NLU](./nlu.md) integration, the `entities` can either be found in the root of the [`$input` object](./input.md) or inside an `nlu` property. Jovo offers a convenience property `this.$entities` to [access entities](#access-entities).
+Depending on if the information is coming from a [platform](./platforms.md) directly, or from an [NLU](./nlu.md) integration, the `entities` can either be found in the root of the [`$input` object](./input.md) or inside an `nlu` property. Jovo offers a convenience property `this.$entities` to [access entities](#access-entities):
 
-Usually, entities and their entity types are defined in the [Jovo Model](./models.md). The downside of this is that the trained models are static and can't be dynamically updated, e.g. by using data from an API call. Jovo offers a concept called [dynamic entities](#dynamic-entities) to update entity values during runtime.
+```typescript
+this.$entities.entityName
+
+// Example
+someHandler() {
+  // ...
+
+  const name = this.$entities.name!.value; // Result: max
+}
+```
+
+Usually, entities and their entity types are defined in the [Jovo Model](./models.md). [Learn more about entity types here](https://www.jovo.tech/docs/model-schema#entitytypes).
+
+```json
+{
+  "entityTypes": {
+    "myCityEntityType": {
+      "values": ["Berlin", "New York"]
+    }
+  }
+  // ...
+}
+```
+
+The downside of this is that the trained models are static and can't be dynamically updated, e.g. by using data from an API call. Jovo offers a concept called [dynamic entities](#dynamic-entities) to update entity values during runtime.
 
 ## Access Entities
 
@@ -59,6 +83,36 @@ Each entity is an object that contains the following information:
 - `resolved`: If the entity value was a synonym, the "main" value of the language model will be provided here. If there is no resolved value, this will default to `value`.
 - `id`: Some platforms and NLUs provide the possibility to add IDs to their entity values. If there is no ID available, the `id` will be the same as `resolved`.
 - `native`: For platforms that support additional entity features, the raw entity data of the API response will be stored here.
+
+For example, if we have a `city` [entity type](https://www.jovo.tech/docs/model-schema#entitytypes) in our [model](./models.md) that includes the following for `New York`:
+
+```json
+"myCityEntityType": {
+  "values": [
+    {
+      "value": "New York",
+      "id": "nyc",
+      "synonyms": [
+        "New York City",
+        "NYC",
+        "n. y. c."
+      ]
+    }
+  ]
+}
+```
+
+If a user said something like `I live in new york`, the values would be the following:
+
+```typescript
+{
+  value: 'new york',
+  resolved: 'New York',
+  id: 'nyc',
+}
+```
+
+In general, we recommend using the `resolved` property because the `value` can be ambiguous and might even include typos on text-based platforms.
 
 ## Dynamic Entities
 
