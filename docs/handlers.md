@@ -230,6 +230,24 @@ YesIntent() {
 
 The component is then removed from the [`$state` stack](./state-stack.md) and the delegating component is called, looking for a handler that matches the event that is passed with `$resolve()` (in the above example `yes`).
 
+You can also pass data in the second argument. This is especially helpful if the delegation has been used for [slot filling](./entities.md#slot-filling). For example, if you have a `CityIntent` that uses the `city` entity, you can resolve it like this:
+
+```typescript
+CityIntent() {
+  // ...
+
+  return this.$resolve('success', this.$entities.city.resolved);
+}
+```
+
+The accepting handler defined in [`$delegate`](#delegate-to-components) can use it as a parameter:
+
+```typescript
+onSuccess(city) {
+  // ...
+}
+```
+
 ## Handler Types
 
 There are some default handlers that you can use in your components:
