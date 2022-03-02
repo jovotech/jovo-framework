@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-ts-googleassistantconv-rich",
-  "version": "3.6.3",
+  "version": "3.6.4",
   "private": true,
   "description": "",
   "main": "dist/src/index",
@@ -19,7 +19,7 @@
   "dependencies": {
     "jovo-db-filedb": "^3.6.1",
     "jovo-framework": "^3.6.1",
-    "jovo-platform-googleassistantconv": "^3.6.3",
+    "jovo-platform-googleassistantconv": "^3.6.4",
     "jovo-plugin-debugger": "^3.6.1"
   },
   "devDependencies": {
