@@ -119,7 +119,7 @@ export class ConversationalActionsCore implements Plugin {
     const request = googleAction.$request as ConversationalActionRequest;
 
     const hasNotificationSlot = (intent: Intent) => {
-      for (const [key, value] of Object.entries(intent.params)) {
+      for (const [key, value] of Object.entries(intent.params || {})) {
         if (key.startsWith('NotificationsSlot_')) {
           return (
             (value.resolved as PermissionResult)['@type'] ===
@@ -143,7 +143,7 @@ export class ConversationalActionsCore implements Plugin {
         type: EnumRequestType.END,
       };
     } else if (
-      request.intent?.params.prompt_option &&
+      request.intent?.params?.prompt_option &&
       request.scene?.slotFillingStatus === 'FINAL'
     ) {
       googleAction.$type = {
