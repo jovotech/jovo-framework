@@ -1,5 +1,22 @@
 # Changelog
 
+## [@jovotech/platform-web@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-web@4.2.2...@jovotech/platform-web@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/platform-web@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-web@4.2.1...@jovotech/platform-web@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
+
 ## [@jovotech/platform-web@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-web@4.2.0...@jovotech/platform-web@4.2.1)
 
 > 10 February 2022

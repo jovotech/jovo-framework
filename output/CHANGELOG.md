@@ -1,5 +1,14 @@
 # Changelog
 
+## [@jovotech/output@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/output@4.2.1...@jovotech/output@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
+
 ## [@jovotech/output@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/output@4.2.0...@jovotech/output@4.2.1)
 
 > 10 February 2022
