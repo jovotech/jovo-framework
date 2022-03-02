@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/platform-dialogflow",
-  "version": "4.2.2",
+  "version": "4.2.3",
   "private": true,
   "description": "",
   "main": "dist/cjs/index.js",
@@ -15,7 +15,7 @@
     "prebuild": "rimraf dist",
     "build": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json",
     "watch": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json --watch",
-    "prettier": "prettier -w -l src test",
+    "prettier": "prettier -w -l src test package.json",
     "eslint": "eslint src test --fix --ext .ts",
     "rimraf": "rimraf dist",
     "test": "jest --runInBand",
@@ -30,7 +30,7 @@
     "@jovotech/cli-command-new": "^4.0.0",
     "@jovotech/cli-core": "^4.0.0",
     "@jovotech/filebuilder": "^0.0.1",
-    "@jovotech/framework": "^4.2.2",
+    "@jovotech/framework": "^4.2.3",
     "@jovotech/model": "^4.0.0",
     "@jovotech/model-dialogflow": "^4.0.0",
     "@jovotech/model-google": "^4.0.0",
@@ -70,7 +70,7 @@
     "typescript": "~4.4.4"
   },
   "peerDependencies": {
-    "@jovotech/framework": "4.2.2",
+    "@jovotech/framework": "4.2.3",
     "@jovotech/output": "4.2.2"
   },
   "browser": {

@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/analytics-dashbot",
-  "version": "4.2.2",
+  "version": "4.2.3",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -14,7 +14,7 @@
     "prebuild": "rimraf dist",
     "build": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json",
     "watch": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json --watch",
-    "prettier": "prettier -w -l src test",
+    "prettier": "prettier -w -l src test package.json",
     "eslint": "eslint src test --fix --ext .ts",
     "rimraf": "rimraf dist",
     "test": "jest --runInBand"
@@ -22,7 +22,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@jovotech/framework": "^4.2.2",
+    "@jovotech/framework": "^4.2.3",
     "@types/jest": "^26.0.20",
     "@types/node": "^12.20.37",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
@@ -37,7 +37,7 @@
     "typescript": "~4.4.4"
   },
   "peerDependencies": {
-    "@jovotech/framework": "4.2.2"
+    "@jovotech/framework": "4.2.3"
   },
   "gitHead": "5a9ba2fe3100f807f627f55117e7b2ad4bbce9c1",
   "prettier": "../../.prettierrc.js",
