@@ -13,7 +13,7 @@ export interface ComponentTreeNodeOptions<COMPONENT extends BaseComponent = Base
   children?: Array<ComponentConstructor | ComponentDeclaration>;
 }
 
-const HANDLER_MIDDLEWARE = 'event.handler';
+const EXECUTE_HANDLER_MIDDLEWARE = 'event.ComponentTreeNode.executeHandler';
 
 export interface ExecuteHandlerOptions<
   COMPONENT extends BaseComponent,
@@ -77,8 +77,8 @@ export class ComponentTreeNode<COMPONENT extends BaseComponent = BaseComponent> 
         throw new HandlerNotFoundError(componentInstance.constructor.name, handler.toString());
       }
 
-      // Run any middlewares that are attached to 'component.handler'
-      await jovo.$handleRequest.middlewareCollection.run(HANDLER_MIDDLEWARE, jovo);
+      // Run any middlewares that are attached to 'event.ComponentTreeNode.executeHandler'
+      await jovo.$handleRequest.middlewareCollection.run(EXECUTE_HANDLER_MIDDLEWARE, jovo);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await (componentInstance as any)[handler](...(callArgs || []));
