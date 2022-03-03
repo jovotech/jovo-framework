@@ -29,12 +29,12 @@ export interface MongoDbItem {
   updatedAt?: string;
 }
 
-export class MongoDb extends DbPlugin<MongoDbConfig> {
-  /** Default database name in MongoDB. if no name was specified, 'test' is used. See https://docs.mongodb.com/manual/tutorial/getting-started/#getting-started */
-  public static readonly MONGODB_DEFAULT_DATABASE_NAME = 'test';
-  public static readonly JOVO_DEFAULT_DATABASE_NAME = 'jovo_db';
-  public static readonly JOVO_DEFAULT_COLLECTION_NAME = 'jovoUsers';
+/** Default database name in MongoDB. if no name was specified, 'test' is used. See https://docs.mongodb.com/manual/tutorial/getting-started/#getting-started */
+export const MONGODB_DEFAULT_DATABASE_NAME = 'test';
+export const JOVO_DEFAULT_DATABASE_NAME = 'jovo_db';
+export const JOVO_DEFAULT_COLLECTION_NAME = 'jovoUsers';
 
+export class MongoDb extends DbPlugin<MongoDbConfig> {
   /** A single client promise to be shared by Jovo and others components following MongoDB best practice: https://docs.atlas.mongodb.com/best-practices-connecting-from-aws-lambda/#connection-examples */
   readonly client: Promise<MongoClient> = new MongoClient(this.config.connectionString).connect();
 
@@ -46,8 +46,8 @@ export class MongoDb extends DbPlugin<MongoDbConfig> {
     return {
       ...super.getDefaultConfig(),
       connectionString: '<YOUR-MONGODB-URI>',
-      databaseName: MongoDb.JOVO_DEFAULT_DATABASE_NAME,
-      collectionName: MongoDb.JOVO_DEFAULT_COLLECTION_NAME,
+      databaseName: JOVO_DEFAULT_DATABASE_NAME,
+      collectionName: JOVO_DEFAULT_COLLECTION_NAME,
     };
   }
 
@@ -56,7 +56,7 @@ export class MongoDb extends DbPlugin<MongoDbConfig> {
   }
 
   async initialize(): Promise<void> {
-    if ((await this.jovoDb()).databaseName === this.MONGODB_DEFAULT_DATABASE_NAME) {
+    if ((await this.jovoDb()).databaseName === MONGODB_DEFAULT_DATABASE_NAME) {
       // eslint-disable-next-line no-console
       console.warn('[MongoDB] Warning: The "test" database is being used.');
     }
