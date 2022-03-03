@@ -230,6 +230,56 @@ showMenu() {
 }
 ```
 
+#### Built-In Handlers
+
+We removed `NEW_SESSION`, `NEW_USER`, and `ON_REQUEST` because they are usually used for data operations where [hooks](./hooks.md) are more fitting.
+
+Here is an example for a [`NEW_SESSION` type hook](./hooks.md#new-session):
+
+```typescript
+// src/app.ts
+
+import { App, Jovo } from '@jovotech/framework';
+// ...
+
+const app = new App({ /* app config */ });
+
+app.hook('before.dialogue.start', (jovo: Jovo): void => {
+  if (jovo.$session.isNew) {
+    // ...
+  }
+});
+
+// Same hook without types
+app.hook('before.dialogue.start', (jovo) => {
+  if (jovo.$session.isNew) {
+    // ...
+  }
+});
+```
+
+If you want to use different handlers for different types of users (for example previously using `NEW_USER`), you can also use the `if` property of the `@Handle` decorator:
+
+```typescript
+// src/components/GlobalComponent.ts
+
+import { Jovo, Component, BaseComponent, Global, Handle } from '@jovotech/framework';
+// ...
+
+@Global()
+@Component()
+export class GlobalComponent extends BaseComponent {
+  LAUNCH() {
+    return this.$send('Welcome back!');
+  }
+
+  @Handle({ types: ['LAUNCH'], if: (jovo: Jovo) => jovo.$user.isNew })
+  welcomeNewUser() {
+    return this.$send('Welcome, new user!');
+  }
+}
+```
+
 ### Output
 
 > [Learn more about output here](./output.md).

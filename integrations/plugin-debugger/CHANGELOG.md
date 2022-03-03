@@ -1,5 +1,52 @@
 # Changelog
 
+## [@jovotech/plugin-debugger@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-debugger@4.2.1...@jovotech/plugin-debugger@4.2.2)
+
+> 10 February 2022
+
+- Fix bug in handling of APL user events [`#1212`](https://github.com/jovotech/jovo-framework/pull/1212)
+- Fix Alexa getUserId getter/setter [`#1228`](https://github.com/jovotech/jovo-framework/pull/1228)
+- :bug: Fix missing OutputHelpers export [`#1229`](https://github.com/jovotech/jovo-framework/pull/1229)
+- ✅ Implement tests for Framework and Platforms [`#1199`](https://github.com/jovotech/jovo-framework/pull/1199)
+
+## [@jovotech/plugin-debugger@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-debugger@4.2.0...@jovotech/plugin-debugger@4.2.1)
+
+> 28 January 2022
+
+- :recycle: Move "." functionality to CLI [`#1204`](https://github.com/jovotech/jovo-framework/pull/1204)
+
+## [@jovotech/plugin-debugger@4.2.0](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-debugger@4.1.2...@jovotech/plugin-debugger@4.2.0)
+
+> 26 January 2022
+
+- :adhesive_bandage: Fix issues with the `build:platform` process [`#1185`](https://github.com/jovotech/jovo-framework/pull/1185)
+- AudioPlayerActivity Types added [`#1165`](https://github.com/jovotech/jovo-framework/pull/1165)
+- :memo: Fix typos in `hooks`  [`#1194`](https://github.com/jovotech/jovo-framework/pull/1194)
+
+## [@jovotech/plugin-debugger@4.1.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-debugger@4.1.1...@jovotech/plugin-debugger@4.1.2)
+
+> 20 January 2022
+
+## [@jovotech/plugin-debugger@4.1.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-debugger@4.0.0...@jovotech/plugin-debugger@4.1.1)
+
+> 18 January 2022
+
+- Fixes merging of undefined values in output templates [`#1170`](https://github.com/jovotech/jovo-framework/pull/1170)
+- Fixes null value in state config [`#1186`](https://github.com/jovotech/jovo-framework/pull/1186)
+- :recycle: Refactor process termination [`#1179`](https://github.com/jovotech/jovo-framework/pull/1179)
+- 🐛  Fixes isNewSession in GoogleActionRequest [`#1178`](https://github.com/jovotech/jovo-framework/pull/1178)
+- update tslog library [`#1169`](https://github.com/jovotech/jovo-framework/pull/1169)
+- :bookmark: Publish [`#1164`](https://github.com/jovotech/jovo-framework/pull/1164)
+- :sparkles: Add --skip-validation flag [`#1163`](https://github.com/jovotech/jovo-framework/pull/1163)
+- :ambulance: Add bundle externals for Alexa to package.json [`#1155`](https://github.com/jovotech/jovo-framework/pull/1155)
+- :bug: Set id in resource path manually [`#1153`](https://github.com/jovotech/jovo-framework/pull/1153)
+- :label: Fix some typings [`#1151`](https://github.com/jovotech/jovo-framework/pull/1151)
+- :bug: Fix Task config property [`#1152`](https://github.com/jovotech/jovo-framework/pull/1152)
+- ✨ Initial Alexa ISP helpers [`#1145`](https://github.com/jovotech/jovo-framework/pull/1145)
+- :sparkles: Introduce getInitConfig() [`#1144`](https://github.com/jovotech/jovo-framework/pull/1144)
+- :sparkles: Introduce Alexa Conversations [`#1140`](https://github.com/jovotech/jovo-framework/pull/1140)
+- :sparkles: Implement isJovoCliError [`#1141`](https://github.com/jovotech/jovo-framework/pull/1141)
+
 ## [@jovotech/plugin-debugger@4.0.0](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-debugger@4.0.0-beta.12...@jovotech/plugin-debugger@4.0.0)
 
 > 18 November 2021
@@ -7,12 +54,22 @@
 - :recycle: Add `skipTests: true` to FileDb default config [`#1121`](https://github.com/jovotech/jovo-framework/pull/1121)
 - 🐛 Fix headline style in JovoLogger [`#1120`](https://github.com/jovotech/jovo-framework/pull/1120)
 
-## [@jovotech/plugin-debugger@4.0.0-beta.12](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-debugger@4.0.0-beta.9...@jovotech/plugin-debugger@4.0.0-beta.12)
+## [@jovotech/plugin-debugger@4.0.0-beta.12](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-debugger@4.0.0-beta.11...@jovotech/plugin-debugger@4.0.0-beta.12)
 
 > 17 November 2021
 
 - Remove table view on `jovo run` + undefined properties in logger [`#1118`](https://github.com/jovotech/jovo-framework/pull/1118)
+
+## [@jovotech/plugin-debugger@4.0.0-beta.11](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-debugger@4.0.0-beta.10...@jovotech/plugin-debugger@4.0.0-beta.11)
+
+> 17 November 2021
+
 - Fix process.stdin handling  [`#1116`](https://github.com/jovotech/jovo-framework/pull/1116)
+
+## [@jovotech/plugin-debugger@4.0.0-beta.10](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-debugger@4.0.0-beta.9...@jovotech/plugin-debugger@4.0.0-beta.10)
+
+> 16 November 2021
+
 - ✨ Move JovoDebugger code from CLI to plugin [`#1111`](https://github.com/jovotech/jovo-framework/pull/1111)
 - ✨ Add pretty logging [`#1103`](https://github.com/jovotech/jovo-framework/pull/1103)
 - :sparkles: Introduce CMS integrations [`#1089`](https://github.com/jovotech/jovo-framework/pull/1089)

@@ -9,7 +9,7 @@ The Jovo Web Platform is a standalone [platform integration](https://www.jovo.te
 
 ## Introduction
 
-![Jovo Client and Jovo Core Platform](https://github.com/jovotech/jovo-framework/raw/master/jovo-platforms/jovo-platform-core/img/jovo-client-platform-communication.png 'How Jovo Web Platform communicates with web clients')
+![Jovo Client and Jovo Core Platform](https://github.com/jovotech/jovo-framework/raw/v3/latest/jovo-platforms/jovo-platform-core/img/jovo-client-platform-communication.png 'How Jovo Web Platform communicates with web clients')
 
 Besides integrations with major platforms like Alexa, Google Assistant, or Facebook Messenger, Jovo also enables you to connect your own clients to build fully custom conversational experiences for both voice and chat.
 
@@ -25,18 +25,28 @@ You can install the plugin like this:
 $ npm install @jovotech/platform-web
 ```
 
-Add it as plugin to your [app configuration](https://www.jovo.tech/docs/app-config), e.g. `app.ts`:
+Add it as plugin to your [app configuration](https://www.jovo.tech/docs/app-config), along with an [NLU integration](https://www.jovo.tech/docs/nlu) like [NLP.js](https://www.jovo.tech/marketplace/nlu-nlpjs):
 
 ```typescript
 import { App } from '@jovotech/framework';
 import { WebPlatform } from '@jovotech/platform-web';
+import { LangEn } from '@nlpjs/lang-en';
+import { NlpjsNlu } from '@jovotech/nlu-nlpjs';
 // ...
 
 const app = new App({
   plugins: [
-    new WebPlatform(),
-    // ...
-  ],
+    new WebPlatform({
+      plugins: [
+        new NlpjsNlu({
+          languageMap: {
+            en: LangEn,
+          },
+        }),
+        // ...
+      ],
+    }),
+  ],,
 });
 ```
 

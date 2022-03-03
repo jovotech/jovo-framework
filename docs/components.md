@@ -11,7 +11,7 @@ Components are self-contained and reusable elements in a Jovo app. Similar to we
 
 You can see a component as an isolated part of your app that handles a specific task. It could be something small like asking for a confirmation (yes or no), and something bigger like collecting all necessary information for a restaurant table reservation. For larger cases like the latter example, it's also possible for a component to have multiple subcomponents.
 
-Components are located in the `src/components` folder of a Jovo app. While a component can be a [complete folder](#component-folder-structure) (that contains its own [output](#output) classes, subcomponents, and more), the most common approach to get started is to have single component classes.
+Components are located in the `src/components` folder of a Jovo app. While a component can be a [complete folder](#component-folder-structure) (that may contain its own [output](#output) classes, subcomponents, and more), the most common approach to get started is to have single component classes.
 
 For example, the [Jovo `v4` template](https://github.com/jovotech/jovo-v4-template) contains a [`GlobalComponent`](https://github.com/jovotech/jovo-v4-template/blob/master/src/components/GlobalComponent.ts) that looks like this:
 

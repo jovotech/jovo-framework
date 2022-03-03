@@ -124,6 +124,8 @@ this.$history.items[0];
 For each [database integration](./databases.md), you can add the `history` configuration to the `storedElements` property.
 
 ```typescript
+// src/app.dev.ts
+
 new FileDb({
   // ...
   storedElements: {
@@ -134,8 +136,8 @@ new FileDb({
 
       // Example: Store this.$output into the history
       output: true, // this.$output, optional
-
-  }
+    },
+  },
 }),
 ```
 
@@ -151,6 +153,8 @@ You can add the following [Jovo properties](./jovo-properties.md) to the history
 You can even add your own custom data to the history. Add any property with a function that returns the data to be stored. Here is an example for a `someCustomData` property:
 
 ```typescript
+// src/app.dev.ts
+
 new FileDb({
   // ...
   storedElements: {
@@ -159,8 +163,9 @@ new FileDb({
       // ...
       someCustomData: (jovo: Jovo) => {
           return `Some custom data for user ${jovo.$user.id}`
-      }
-  }
+      },
+    },
+  },
 }),
 ```
 
@@ -208,4 +213,81 @@ Here is an example how the history is then stored in a database:
     updatedAt: '2021-06-30T06:47:44.253Z',
   },
 ];
+```
+
+#### Example: Repeat
+
+For voice interfaces, it is recommended to add a functionality that lets users ask to repeat the previous message. For example, [Alexa](https://www.jovo.tech/marketplace/platform-alexa) has a built-in `AMAZON.RepeatIntent` for use cases like this.
+
+You can repeat the previous message by storing the [`$output` array](./output.md) in the [`$history`](#history). Here is an example for [FileDb](https://www.jovo.tech/marketplace/db-filedb):
+
+```typescript
+// src/app.dev.ts
+
+new FileDb({
+  // ...
+  storedElements: {
+    // ...
+    history: {
+      enabled: true,
+      size: 1, // Size of the this.$history array
+      output: true, // Store this.$output in history
+    },
+  },
+}),
+```
+
+In your [handler](./handlers.md), you can then access the previous output using `this.$history.prev.output`. The below example has a handler for this as part of the `GlobalComponent`:
+
+```typescript
+// src/components/GlobalComponent.ts
+
+import { Component, BaseComponent, Global, Intents } from '@jovotech/framework';
+// ...
+
+@Global()
+@Component()
+export class GlobalComponent extends BaseComponent {
+  // ...
+
+  @Intents(['RepeatIntent'])
+  repeatPreviousMessage() {
+    if (this.$history.prev?.output) {
+      return this.$send(this.$history.prev.output);
+    } else {
+      return this.$send('Unfortunately, there is nothing to repeat.');
+    }
+  }
+}
+```
+
+Since in this example, the repeat handler is part of a [global component](./components.md#global-components), this comes with the following benefits:
+
+- The handler can be reached from anywhere, even if the flow is currently deep down inside subcomponents.
+- Global components don't get added to the [`$state` stack](./state-stack.md). This way, the interaction stays in the previous component and the user can proceed with the flow after hearing the repeated message.
+
+If you are using [`UNHANDLED`](./handlers.md#unhandled) as part of a component, it is possible that the global component handlers don't get reached because the `UNHANDLED` handler of the current component gets prioritized by default. Learn more about this in the [routing documentation](./routing.md#unhandled-prioritization). 
+
+To have the repeat handler always be executed instead of `UNHANDLED`, you can use the [`prioritizedOverUnhandled`](./handlers.md#prioritizedOverUnhandled) property:
+
+```typescript
+// src/components/GlobalComponent.ts
+
+import { Component, BaseComponent, Global, Handle } from '@jovotech/framework';
+// ...
+
+@Global()
+@Component()
+export class GlobalComponent extends BaseComponent {
+  // ...
+
+  @Handle({ intents: ['RepeatIntent'], prioritizedOverUnhandled: true })
+  repeatPreviousMessage() {
+    if (this.$history.prev?.output) {
+      return this.$send(this.$history.prev.output);
+    } else {
+      return this.$send('Unfortunately, there is nothing to repeat.');
+    }
+  }
+}
 ```

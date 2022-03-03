@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/client-web",
-  "version": "4.2.0",
+  "version": "4.2.3",
   "description": "",
   "main": "dist/JovoWebClient.cjs.js",
   "module": "dist/JovoWebClient.esm.js",
@@ -16,7 +16,7 @@
     "prebuild": "rimraf dist",
     "build": "tsc --emitDeclarationOnly && node scripts/build.js",
     "start:dev": "esbuild src/index.ts --bundle --servedir=demo --outdir=demo/js --global-name=JovoWebClient --external:@jovotech/common",
-    "prettier": "prettier -w -l src test",
+    "prettier": "prettier -w -l src test package.json",
     "eslint": "eslint src test --fix --ext .ts",
     "rimraf": "rimraf dist",
     "test": "jest --runInBand"
@@ -25,8 +25,8 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@jovotech/common": "^4.2.0",
-    "@jovotech/output": "^4.2.0",
-    "@jovotech/platform-core": "^4.2.0",
+    "@jovotech/output": "^4.2.2",
+    "@jovotech/platform-core": "^4.2.3",
     "detect-browser": "^5.2.1",
     "events": "^3.3.0",
     "lodash.defaultsdeep": "^4.6.1",
