@@ -200,91 +200,95 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
 
     this.updatePluginContext();
 
-    // Get locales to reverse build from.
-    // If --locale is not specified, reverse build from every locale available in the platform folder.
-    const selectedLocales: string[] = [];
-    const platformLocales: string[] = this.getPlatformLocales();
-    if (!this.$context.flags.locale) {
-      selectedLocales.push(...platformLocales);
-    } else {
-      // Otherwise only reverse build from the specified locale if it exists inside the platform folder.
-      for (const locale of this.$context.flags.locale) {
-        if (platformLocales.includes(locale)) {
-          selectedLocales.push(locale);
-        } else {
-          throw new JovoCliError({
-            message: `Could not find platform models for locale: ${printHighlight(locale)}`,
-            module: this.$plugin.name,
-            hint: `Available locales include: ${platformLocales.join(', ')}`,
-          });
-        }
-      }
-    }
-
-    // Try to resolve the locale according to the locale map provided in this.$plugin.config.locales.
-    // If en resolves to en-US, this loop will generate { 'en-US': 'en' }
-    const buildLocaleMap: { [locale: string]: string } = selectedLocales.reduce(
-      (localeMap: { [locale: string]: string }, locale: string) => {
-        localeMap[locale] = locale;
-        return localeMap;
-      },
-      {},
-    );
-    for (const modelLocale in this.$plugin.config.locales) {
-      const resolvedLocales: string[] = getResolvedLocales(
-        modelLocale,
-        SupportedLocales,
-        this.$plugin.config.locales,
-      );
-
-      for (const selectedLocale of selectedLocales) {
-        if (resolvedLocales.includes(selectedLocale)) {
-          buildLocaleMap[selectedLocale] = modelLocale;
-        }
-      }
-    }
-
-    // If Jovo model files for the current locales exist, ask whether to back them up or not.
-    if (
-      this.$cli.project!.hasModelFiles(Object.values(buildLocaleMap)) &&
-      !this.$context.flags.clean
-    ) {
-      const answer = await promptOverwriteReverseBuild();
-      if (answer.overwrite === ANSWER_CANCEL) {
-        return;
-      }
-      if (answer.overwrite === ANSWER_BACKUP) {
-        // Backup old files.
-        const backupTask: Task = new Task(`${DISK} Creating backups`);
-        for (const locale of Object.values(buildLocaleMap)) {
-          const localeTask: Task = new Task(locale, () => this.$cli.project!.backupModel(locale));
-          backupTask.add(localeTask);
-        }
-        await backupTask.run();
-      }
-    }
     const reverseBuildTask: Task = new Task(`${REVERSE_ARROWS} Reversing model files`);
-    for (const [platformLocale, modelLocale] of Object.entries(buildLocaleMap)) {
-      const taskDetails: string = platformLocale === modelLocale ? '' : `(${modelLocale})`;
-      const localeTask: Task = new Task(`${platformLocale} ${taskDetails}`, async () => {
-        // Extract platform models, containing platform-specific intents and entities.
-        const platformFiles: NativeFileInformation[] = this.getPlatformModels(platformLocale);
-        const jovoModel: JovoModelGoogle = new JovoModelGoogle();
-        jovoModel.importNative(platformFiles, modelLocale);
-        const nativeData: JovoModelData | undefined = jovoModel.exportJovoModel();
-        if (!nativeData) {
-          throw new JovoCliError({
-            message: 'Something went wrong while exporting your Jovo model.',
-            module: this.$plugin.name,
-          });
+
+    if (this.$cli.project!.config.getParameter('models.enabled') !== false) {
+      // Get locales to reverse build from.
+      // If --locale is not specified, reverse build from every locale available in the platform folder.
+      const selectedLocales: string[] = [];
+      const platformLocales: string[] = this.getPlatformLocales();
+      if (!this.$context.flags.locale) {
+        selectedLocales.push(...platformLocales);
+      } else {
+        // Otherwise only reverse build from the specified locale if it exists inside the platform folder.
+        for (const locale of this.$context.flags.locale) {
+          if (platformLocales.includes(locale)) {
+            selectedLocales.push(locale);
+          } else {
+            throw new JovoCliError({
+              message: `Could not find platform models for locale: ${printHighlight(locale)}`,
+              module: this.$plugin.name,
+              hint: `Available locales include: ${platformLocales.join(', ')}`,
+            });
+          }
         }
+      }
 
-        nativeData.invocation = this.getPlatformInvocationName(platformLocale);
+      // Try to resolve the locale according to the locale map provided in this.$plugin.config.locales.
+      // If en resolves to en-US, this loop will generate { 'en-US': 'en' }
+      const buildLocaleMap: { [locale: string]: string } = selectedLocales.reduce(
+        (localeMap: { [locale: string]: string }, locale: string) => {
+          localeMap[locale] = locale;
+          return localeMap;
+        },
+        {},
+      );
+      for (const modelLocale in this.$plugin.config.locales) {
+        const resolvedLocales: string[] = getResolvedLocales(
+          modelLocale,
+          SupportedLocales,
+          this.$plugin.config.locales,
+        );
 
-        this.$cli.project!.saveModel(nativeData, modelLocale);
-        await wait(500);
-      });
-      reverseBuildTask.add(localeTask);
+        for (const selectedLocale of selectedLocales) {
+          if (resolvedLocales.includes(selectedLocale)) {
+            buildLocaleMap[selectedLocale] = modelLocale;
+          }
+        }
+      }
+
+      // If Jovo model files for the current locales exist, ask whether to back them up or not.
+      if (
+        this.$cli.project!.hasModelFiles(Object.values(buildLocaleMap)) &&
+        !this.$context.flags.clean
+      ) {
+        const answer = await promptOverwriteReverseBuild();
+        if (answer.overwrite === ANSWER_CANCEL) {
+          return;
+        }
+        if (answer.overwrite === ANSWER_BACKUP) {
+          // Backup old files.
+          const backupTask: Task = new Task(`${DISK} Creating backups`);
+          for (const locale of Object.values(buildLocaleMap)) {
+            const localeTask: Task = new Task(locale, () => this.$cli.project!.backupModel(locale));
+            backupTask.add(localeTask);
+          }
+          await backupTask.run();
+        }
+      }
+
+      for (const [platformLocale, modelLocale] of Object.entries(buildLocaleMap)) {
+        const taskDetails: string = platformLocale === modelLocale ? '' : `(${modelLocale})`;
+        const localeTask: Task = new Task(`${platformLocale} ${taskDetails}`, async () => {
+          // Extract platform models, containing platform-specific intents and entities.
+          const platformFiles: NativeFileInformation[] = this.getPlatformModels(platformLocale);
+          const jovoModel: JovoModelGoogle = new JovoModelGoogle();
+          jovoModel.importNative(platformFiles, modelLocale);
+          const nativeData: JovoModelData | undefined = jovoModel.exportJovoModel();
+          if (!nativeData) {
+            throw new JovoCliError({
+              message: 'Something went wrong while exporting your Jovo model.',
+              module: this.$plugin.name,
+            });
+          }
+
+          nativeData.invocation = this.getPlatformInvocationName(platformLocale);
+
+          this.$cli.project!.saveModel(nativeData, modelLocale);
+          await wait(500);
+        });
+        reverseBuildTask.add(localeTask);
+      }
     }
     await reverseBuildTask.run();
   }
@@ -311,10 +315,14 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
     const buildInteractionModelTask: Task = new Task(
       `Interaction model`,
       this.buildInteractionModel.bind(this),
-      { enabled: this.$cli.project!.hasModelFiles(this.$context.locales) },
+      {
+        enabled:
+          this.$cli.project!.config.getParameter('models.enabled') !== false &&
+          this.$cli.project!.hasModelFiles(this.$context.locales),
+      },
     );
 
-    buildTask.add(projectFilesTask, buildInteractionModelTask);
+    buildTask.add(buildInteractionModelTask, projectFilesTask);
 
     await buildTask.run();
   }
@@ -456,7 +464,10 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
    * @param resolvedLocales - Locales to which to resolve the modelLocale.
    */
   async buildLanguageModel(modelLocale: string, resolvedLocales: string[]): Promise<void> {
-    const model = await this.getJovoModel(modelLocale);
+    const model = _merge(
+      await this.getJovoModel(modelLocale),
+      this.$cli.project!.config.getParameter(`models.override.${modelLocale}`),
+    );
 
     for (const locale of resolvedLocales) {
       const jovoModel = new JovoModelGoogle(
@@ -571,8 +582,9 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
    * Get plugin-specific endpoint.
    */
   getPluginEndpoint(): string {
-    const config = this.$cli.project!.config.get();
-    const endpoint = _get(this.$plugin.config, 'endpoint') || _get(config, 'endpoint');
+    const endpoint: string =
+      _get(this.$plugin.config, 'endpoint') ||
+      (this.$cli.project!.config.getParameter('endpoint') as string);
 
     return this.$cli.resolveEndpoint(endpoint);
   }

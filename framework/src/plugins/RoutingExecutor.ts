@@ -124,8 +124,11 @@ export class RoutingExecutor {
     handlerMetadata: HandlerMetadata,
     componentMetadata: ComponentMetadata,
   ): boolean {
-    const isGlobal = handlerMetadata.options.global || componentMetadata.isGlobal;
-    // if neither handler nor component is global, abort
+    const isGlobal =
+      handlerMetadata.options.global ||
+      componentMetadata.isGlobal ||
+      !!handlerMetadata.globalIntentNames.length;
+    // if neither handler nor component nor any intent is global, abort
     if (!isGlobal) {
       return false;
     }

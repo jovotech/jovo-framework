@@ -18,6 +18,7 @@ declare module '@jovotech/output/dist/types/models/Card' {
 declare module '@jovotech/output/dist/types/models/Carousel' {
   interface Carousel {
     toGoogleAssistantCollectionData?(): { collection: Collection; typeOverride: TypeOverride };
+    toGoogleAssistantCard?(): GoogleAssistantCard;
   }
 }
 

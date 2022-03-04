@@ -57,13 +57,13 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
       skipTests: true,
       enabled: true,
       request: {
-        enabled: false,
+        enabled: true,
         excludedObjects: [],
         maskedObjects: [],
         objects: [],
       },
       response: {
-        enabled: false,
+        enabled: true,
         excludedObjects: [],
         maskedObjects: [],
         objects: [],
@@ -95,7 +95,7 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
     }
 
     if (typeof config.response === 'boolean') {
-      this.config.request = {
+      this.config.response = {
         objects: [],
         maskedObjects: [],
         excludedObjects: [],

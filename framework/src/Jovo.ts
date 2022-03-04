@@ -187,6 +187,7 @@ export abstract class Jovo<
           forEachDeep(deserializedStateConfig, (value, path) => {
             // TODO: check restriction
             if (
+              value &&
               typeof value === 'object' &&
               value.type === 'output' &&
               value.name &&
@@ -260,7 +261,7 @@ export abstract class Jovo<
       const output = await outputInstance.build();
       // overwrite reserved properties of the built object i.e. message
       NormalizedOutputTemplate.getKeys().forEach((key) => {
-        if (options?.[key]) {
+        if (typeof options?.[key] !== 'undefined') {
           if (Array.isArray(output)) {
             output[output.length - 1][key] =
               key === 'platforms'
@@ -293,10 +294,7 @@ export abstract class Jovo<
       keyof BaseComponent
     >,
   >(constructor: ComponentConstructor<COMPONENT>, handler?: HANDLER): Promise<void>;
-  async $redirect(
-    constructorOrName: ComponentConstructor | string,
-    handler?: string,
-  ): Promise<void>;
+  async $redirect(name: string, handler?: string): Promise<void>;
   async $redirect(
     constructorOrName: ComponentConstructor | string,
     handler?: string,
@@ -336,10 +334,7 @@ export abstract class Jovo<
     constructor: ComponentConstructor<COMPONENT>,
     options: DelegateOptions<ComponentConfig<COMPONENT>>,
   ): Promise<void>;
-  async $delegate(
-    constructorOrName: ComponentConstructor | string,
-    options: DelegateOptions,
-  ): Promise<void>;
+  async $delegate(name: string, options: DelegateOptions): Promise<void>;
   async $delegate(
     constructorOrName: ComponentConstructor | string,
     options: DelegateOptions,

@@ -1,4 +1,4 @@
-import { DeepPartial, RequiredOnly, RequiredOnlyWhere } from '@jovotech/common';
+import { DeepPartial, RequiredOnlyWhere } from '@jovotech/common';
 import _merge from 'lodash.merge';
 import { MiddlewareCollection } from './MiddlewareCollection';
 import { Plugin, PluginConfig } from './Plugin';

@@ -16,21 +16,26 @@ export class JovoError extends Error {
   hint?: string;
   learnMore?: string;
 
-  constructor(options: JovoErrorOptions) {
-    super(options.message);
-    this.name = options.name || this.constructor.name;
+  constructor(messageOrOptions: string | JovoErrorOptions) {
+    super(typeof messageOrOptions === 'string' ? messageOrOptions : messageOrOptions.message);
 
-    if (options.package) {
-      this.package = options.package;
-    }
-    if (options.context) {
-      this.context = options.context;
-    }
-    if (options.hint) {
-      this.hint = options.hint;
-    }
-    if (options.learnMore) {
-      this.learnMore = options.learnMore;
+    if (typeof messageOrOptions === 'string') {
+      this.name = this.constructor.name;
+    } else {
+      this.name = messageOrOptions.name || this.constructor.name;
+
+      if (messageOrOptions.package) {
+        this.package = messageOrOptions.package;
+      }
+      if (messageOrOptions.context) {
+        this.context = messageOrOptions.context;
+      }
+      if (messageOrOptions.hint) {
+        this.hint = messageOrOptions.hint;
+      }
+      if (messageOrOptions.learnMore) {
+        this.learnMore = messageOrOptions.learnMore;
+      }
     }
   }
 

@@ -26,6 +26,7 @@ const project = new ProjectConfig({
       locales: {
         /* ... */
       },
+      endpoint: '<yourEndpoint>',
       resourcesDirectory: 'resources',
       files: {
         /* ... */
@@ -40,6 +41,7 @@ The following options are currently supported:
 
 - [`projectId`](#projectid) (required): The Google Action project ID that the project should be deployed to.
 - [`locales`](#locales): Defines how the locales in the [`models` folder](https://www.jovo.tech/docs/models) should be mapped to Google Assistant locales.
+- [`endpoint`](#endpoint): The endpoint to your Jovo app's code, for example on AWS Lambda.
 - [`resourcesDirectory`](#resourcesdirectory): The folder where resources are maintained.
 - [`files`](#files): This can be used to add or override files in your Google Assistant `build` folder.
 
@@ -108,6 +110,42 @@ new GoogleAssistantCli({
     'en-US': ['en', 'en-US'],
   },
   // ...
+});
+```
+
+## endpoint
+
+The [generic `endpoint` property](https://www.jovo.tech/docs/project-config#endpoint) can also be overridden by the Google Assistant CLI plugin. This is useful if you build for multiple platforms that need to use different endpoints.
+
+```js
+new GoogleAssistantCli({
+  endpoint: '<yourEndpoint>',
+  // ...
+});
+```
+
+This can be especially helpful for [staging](https://www.jovo.tech/docs/staging). For example, the `dev` stage could use the [Jovo Webhook](https://www.jovo.tech/docs/webhook) for local development, and a `prod` stage for Google Assistant could reference an API Gateway URL that points to the hosted code on [AWS Lambda](https://www.jovo.tech/marketplace/server-lambda):
+
+```js
+const project = new ProjectConfig({
+  // ...
+
+  defaultStage: 'dev',
+  stages: {
+    dev: {
+      endpoint: '${JOVO_WEBHOOK_URL}',
+      // ...
+    },
+    prod: {
+      plugins: [
+        new GoogleAssistantCli({
+          endpoint: '<yourProdEndpoint>',
+          // ...
+        }),
+      ],
+      // ...
+    },
+  },
 });
 ```
 

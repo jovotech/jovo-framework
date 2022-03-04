@@ -190,6 +190,7 @@ The following Alexa properties offer additional features:
 
 - [User](#user)
 - [Output](#output)
+- [Device](#device)
 - [Entities (Slots)](#entities-slots-)
 - [ISP](#isp)
 - [Alexa Conversations](#alexa-conversations)
@@ -250,6 +251,150 @@ If the `getEmail` call returns an error with the code `NO_USER_PERMISSION`, an `
 There are various Alexa specific elements that can be added to the [output](https://www.jovo.tech/docs/output).
 
 [Learn more in the Jovo Output documentation for Alexa](https://www.jovo.tech/marketplace/platform-alexa/output).
+
+
+### Device
+
+You can check if the device supports APL by using the following method that checks for [platform-specific device capabilities](https://www.jovo.tech/docs/device#platform-specific-device-features):
+
+```typescript
+import { AlexaCapability } from '@jovotech/platform-alexa';
+// ...
+
+if (this.$device.supports(AlexaCapability.Apl)) { /* ... */ };
+// or
+if (this.$device.supports('ALEXA:APL')) { /* ... */ };
+```
+
+There are also various Alexa specific features added to the [device class](https://www.jovo.tech/docs/device) that can be accessed like this:
+
+```typescript
+this.$alexa.$device;
+```
+
+You can access the following properties and methods of the Alexa device class:
+
+- `this.$alexa.$device.id`: Get the device ID from the Alexa request
+- [Device location and address](#device-location-and-address)
+- [System settings](#system-settings)
+
+#### Device Location and Address
+
+It is possible to retrieve your Alexa Skill user's address information, if they grant the permission for this. Learn more in the [official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/custom-skills/device-address-api.html).
+
+You need to first get the permission, which you can do by sending a card to the user's Alexa app.
+You can use the `AskForPermissionOutput` for this:
+
+```typescript
+import { AskForPermissionOutput } from '@jovotech/platform-alexa';
+// ...
+
+someHandler() {
+  // ...
+
+  try {
+    const location = await this.$alexa.$device.getLocation();
+    // ...
+
+  } catch(error) {
+    if (error.code === 'NO_USER_PERMISSION') {
+      return this.$send(AskForPermissionOutput, {
+        message: 'Please grant the permission to access your device address.',
+        permissionScope: 'read::alexa:device:all:address',
+      });
+    } else {
+      // ...
+    }
+  }
+}
+```
+
+Under the hood, the `AskForPermissionOutput` looks like this:
+
+```typescript
+{
+  message: this.options.message,
+  platforms: {
+    alexa: {
+      nativeResponse: {
+        response: {
+          shouldEndSession: true,
+          directives: [
+            {
+              type: 'Connections.SendRequest',
+              name: 'AskFor',
+              payload: {
+                '@type': 'AskForPermissionsConsentRequest',
+                '@version': '1',
+                'permissionScope': this.options.permissionScope,
+              },
+              token: this.options.token || '',
+            },
+          ],
+        },
+      },
+    },
+  },
+}
+```
+
+You can use the `getLocation()` method to retrieve the device location:
+
+```typescript
+import { DeviceLocation } from '@jovotech/platform-alexa';
+// ...
+
+async someHandler() {
+  const location: DeviceLocation = await this.$alexa.$device.getLocation();
+
+  /* Result:
+   {
+      city: string;
+      countryCode: string;
+      postalCode: string;
+    }
+  */
+}
+```
+
+The `getAddress()` method can be used to retrieve the address associated with the device:
+
+```typescript
+import { DeviceAddressLocation } from '@jovotech/platform-alexa';
+// ...
+
+async someHandler() {
+  const address: DeviceAddressLocation = await this.$alexa.$device.getAddress();
+
+  /* Result:
+   {
+      addressLine1: string;
+      addressLine2: string;
+      addressLine3: string;
+      districtOrCounty: string;
+      stateOrRegion: string;
+      city: string;
+    }
+  */
+}
+```
+
+#### System Settings
+
+It is possible to retrieve some of your Alexa Skill user's settings without them granting you any special permissions. Learn more in the [official Alexa docs](https://developer.amazon.com/en-GB/docs/alexa/smapi/alexa-settings-api-reference.html).
+
+You can use the `getTimeZone()` method to retrieve the timezone setting:
+
+```typescript
+async someHandler() {
+  const timezone: string = await this.$alexa.$device.getTimeZone();
+
+  /* Result:
+    "Africa/Abidjan"
+  */
+}
+```
+
 
 ### Entities (Slots)
 

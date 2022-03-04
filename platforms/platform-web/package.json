@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/platform-web",
-  "version": "4.1.0",
+  "version": "4.2.3",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -12,10 +12,10 @@
     "sample-requests"
   ],
   "scripts": {
-    "prebuild": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json --clean",
+    "prebuild": "rimraf dist",
     "build": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json",
     "watch": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json --watch",
-    "prettier": "prettier -w -l src test",
+    "prettier": "prettier -w -l src test package.json",
     "eslint": "eslint src test --fix --ext .ts",
     "rimraf": "rimraf dist",
     "test": "jest --runInBand"
@@ -23,10 +23,10 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/platform-core": "^4.1.0"
+    "@jovotech/platform-core": "^4.2.3"
   },
   "devDependencies": {
-    "@jovotech/framework": "^4.1.0",
+    "@jovotech/framework": "^4.2.3",
     "@types/jest": "^26.0.20",
     "@types/node": "^12.20.37",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
@@ -41,9 +41,9 @@
     "typescript": "~4.4.4"
   },
   "peerDependencies": {
-    "@jovotech/framework": "4.1.0"
+    "@jovotech/framework": "4.2.3"
   },
-  "gitHead": "02f1a666ceff33f0907bff129f78be4088d87241",
+  "gitHead": "c9569fabbf075a77c83272149bae8a055f76caee",
   "prettier": "../../.prettierrc.js",
   "publishConfig": {
     "access": "public"

@@ -18,7 +18,7 @@ export class Carousel {
   title?: string;
 
   @IsArray()
-  @ArrayMinSize(2)
+  @ArrayMinSize(1)
   @ValidateNested({
     each: true,
   })
