@@ -3,6 +3,12 @@
 ### Latest Framework Version: 3.5.2<br><br>
 
 
+#### 2022-03-2
+
+##### `jovo-platform-googleassistantconv [3.6.4]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googleassistantconv) | [npm](https://www.npmjs.com/package/jovo-platform-googleassistantconv)
+- [#1253](https://github.com/jovotech/jovo-framework/pull/1253) Fixes Google Assistant health check request ([@aswetlow](https://github.com/aswetlow))
+
+
 #### 2022-02-17
 
 ##### `jovo-platform-googleassistantconv [3.6.3]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googleassistantconv) | [npm](https://www.npmjs.com/package/jovo-platform-googleassistantconv)

@@ -2,6 +2,11 @@
 
 Current version might be higher than the latest changes displayed below because of updates of dependencies.
 
+
+##### 2022-03-02 [3.6.4]
+- [#1253](https://github.com/jovotech/jovo-framework/pull/1253) Fixes Google Assistant health check request ([@aswetlow](https://github.com/aswetlow))
+
+
 ##### 2022-02-17 [3.6.3]
 - [#1226](https://github.com/jovotech/jovo-framework/pull/1226) Improved Error Handling when header Data is missing  ([@dominik-meissner](https://github.com/dominik-meissner))
 -  Fix reprompt issue #1171 ([@aswetlow](https://github.com/aswetlow))
