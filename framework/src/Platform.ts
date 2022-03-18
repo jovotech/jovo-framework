@@ -21,6 +21,7 @@ import { JovoDevice, JovoDeviceConstructor } from './JovoDevice';
 import { JovoRequest } from './JovoRequest';
 import { JovoUserConstructor } from './JovoUser';
 import { MiddlewareCollection } from './MiddlewareCollection';
+import { OutputTemplateConverterStrategyConfig } from '@jovotech/output/src';
 
 export type PlatformMiddlewares = AppMiddlewares;
 
@@ -75,6 +76,11 @@ export abstract class Platform<
         return this.middlewareCollection.run(middlewareName, jovo);
       });
     });
+    const strategyConfig = parent.config.output as OutputTemplateConverterStrategyConfig;
+
+    this.outputTemplateConverterStrategy.config.validation = strategyConfig.validation;
+    this.outputTemplateConverterStrategy.config.sanitization = strategyConfig.sanitization;
+    this.outputTemplateConverterStrategy.config.omitWarnings = strategyConfig.omitWarnings;
   }
 
   createJovoInstance<APP extends App>(app: APP, handleRequest: HandleRequest): JOVO {
