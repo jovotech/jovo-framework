@@ -1,5 +1,15 @@
 # Changelog
 
+## [@jovotech/plugin-debugger@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-debugger@4.2.4...@jovotech/plugin-debugger@4.2.5)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
 ## [@jovotech/plugin-debugger@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-debugger@4.2.3...@jovotech/plugin-debugger@4.2.4)
 
 > 1 March 2022
