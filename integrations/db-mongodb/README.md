@@ -1,4 +1,4 @@
-# Jovo MongoDb Database Integration
+# Jovo MongoDB Database Integration
 
 [![Jovo Framework](https://www.jovo.tech/img/github-header.png)](https://www.jovo.tech)
 
@@ -11,7 +11,7 @@
 <a href="https://opencollective.com/jovo-framework" target="_blank"><img src="https://opencollective.com/jovo-framework/tiers/badge.svg"></a>
 </p>
 
-This package enables you to integrate your Jovo app with a MongoDb database.
+This package enables you to integrate your Jovo app with a MongoDB database.
 
 ```bash
 $ npm install @jovotech/db-mongodb
