@@ -15,7 +15,7 @@ The following database integrations are currently working with Jovo `v4`:
 
 - [`FileDb`](https://www.jovo.tech/marketplace/db-filedb): File-based system for local prototyping. Added to the `app.dev` [stage](./staging.md) by default.
 - [`DynamoDb`](https://www.jovo.tech/marketplace/db-dynamodb): NoSQL database by AWS, typically used together with [AWS Lambda](https://www.jovo.tech/marketplace/server-lambda).
-- [`MongoDb`](https://www.jovo.tech/marketplace/db-mongodb): Open source NoSQL database.
+- [`MongoDb`](https://www.jovo.tech/marketplace/db-mongodb): Source-available NoSQL database.
 
 The [configuration](#configuration) section explains how database integrations can be added and configured.
 
