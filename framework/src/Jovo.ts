@@ -38,6 +38,11 @@ import { Platform } from './Platform';
 import { JovoRoute } from './plugins/RouterPlugin';
 import { forEachDeep } from './utilities';
 
+const DELEGATE_MIDDLEWARE = 'event.$delegate';
+const RESOLVE_MIDDLEWARE = 'event.$resolve';
+const REDIRECT_MIDDLEWARE = 'event.$redirect';
+const SEND_MIDDLEWARE = 'event.$send';
+
 export type JovoConstructor<
   REQUEST extends JovoRequest,
   RESPONSE extends JovoResponse,
@@ -284,6 +289,8 @@ export abstract class Jovo<
 
     // push the new OutputTemplate(s) to $output
     Array.isArray(newOutput) ? this.$output.push(...newOutput) : this.$output.push(newOutput);
+
+    await this.$handleRequest.middlewareCollection.run(SEND_MIDDLEWARE, this);
   }
 
   async $redirect<
@@ -323,6 +330,9 @@ export abstract class Jovo<
 
     // update the active component node in handleRequest to keep track of the state
     this.$handleRequest.activeComponentNode = componentNode;
+
+    await this.$handleRequest.middlewareCollection.run(REDIRECT_MIDDLEWARE, this);
+
     // execute the component's handler
     await componentNode.executeHandler({
       jovo: this.getJovoReference(),
@@ -394,6 +404,9 @@ export abstract class Jovo<
     });
     // update the active component node in handleRequest to keep track of the state
     this.$handleRequest.activeComponentNode = componentNode;
+
+    await this.$handleRequest.middlewareCollection.run(DELEGATE_MIDDLEWARE, this);
+
     // execute the component's handler
     await componentNode.executeHandler({
       jovo: this.getJovoReference(),
@@ -426,6 +439,9 @@ export abstract class Jovo<
 
     // update the active component node in handleRequest to keep track of the state
     this.$handleRequest.activeComponentNode = previousComponentNode;
+
+    await this.$handleRequest.middlewareCollection.run(RESOLVE_MIDDLEWARE, this);
+
     // execute the component's handler
     await previousComponentNode.executeHandler({
       jovo: this.getJovoReference(),
