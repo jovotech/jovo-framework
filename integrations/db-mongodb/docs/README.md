@@ -57,13 +57,9 @@ new MongoDb({
 }),
 ```
 
-- `connectionString`: Specify username, password and clusterUrl. Additional parameters can also be added. Have a look at the [MongoDB documentation](https://docs.mongodb.com/drivers/node/current/fundamentals/connection/#connection-uri) for more details.
-- `databaseName`: The name of the database we want to use. If not provided, use database name from connection string. A new database is created if doesn't exist yet.
-- `collectionName`: A new collection is created with that name if doesn't exist yet.
-
-You should specify a database either in `connectionString` or in `databaseName`. The second takes precedence. The default collection name is `users_all`.
-
-Note that you can add timeout or other configuration by adding parameters in the `connectionString`.
+- `connectionString`: The URI string used to connect to the MongoDB database. Learn more in the [official MongoDB docs](https://docs.mongodb.com/manual/reference/connection-string/).
+- `databaseName`: Name of the [MongoDB database](https://docs.mongodb.com/manual/core/databases-and-collections/#databases). Default: `jovo_db`.
+- `collectionName`: Name of the [MongoDB collection](https://docs.mongodb.com/manual/core/databases-and-collections/#collections) that stores the user specific data. A new collection is created with that name if doesn't exist yet. Default: `jovoUsers`.s
 
 ## Advanced Usage
 
