@@ -1,4 +1,12 @@
-import { AnyObject, App, AsyncJovo, BaseOutput, HandleRequest, OutputTemplate } from '../src';
+import {
+  AnyObject,
+  App,
+  AsyncJovo,
+  BaseOutput,
+  HandleRequest,
+  MiddlewareCollection,
+  OutputTemplate,
+} from '../src';
 import {
   ExamplePlatform,
   ExamplePlatformDevice,
@@ -14,7 +22,8 @@ const platform = new ExamplePlatform();
 const server = new ExampleServer({
   input: {},
 });
-const handleRequest = { app, platform, server } as unknown as HandleRequest;
+const middlewareCollection = new MiddlewareCollection();
+const handleRequest = { app, platform, server, middlewareCollection } as unknown as HandleRequest;
 
 describe('Jovo.$send', () => {
   const jovo = platform.createJovoInstance(app, handleRequest);
