@@ -9,7 +9,11 @@ This [database integration](https://www.jovo.tech/docs/databases) allows you to 
 
 ## Introduction
 
-[MongoDB](https://www.mongodb.com/) is ... Shared Atlas clusters. Easy config.
+[MongoDB](https://www.mongodb.com/) is a source-available document database that can be used to store [long-term data](https://www.jovo.tech/docs/data#long-term-data-storage) for your Jovo app.
+
+MongoDB can be hosted on your own servers, which is helpful if you want to run your Jovo apps on your own premises, for example using [Express](https://www.jovo.tech/marketplace/server-express). Alternatively, you can also use [MongoDB Atlas](https://www.mongodb.com/atlas/database) for fast and easy setup.
+
+Learn more about connecting your Jovo app to a MongoDB database in the [installation](#installation) and [configuration](#configuration) sections.
 
 ## Installation
 
@@ -19,17 +23,16 @@ You can install the plugin like this:
 $ npm install @jovotech/db-mongodb
 ```
 
-Add it as plugin to any stage you like, e.g. `app.prod.ts`:
+Add it as plugin to any [stage](https://www.jovo.tech/docs/staging) you like, e.g. `app.prod.ts`:
 
 ```typescript
 import { MongoDb } from '@jovotech/db-mongodb';
-
 // ...
 
 app.configure({
   plugins: [
-    MongoDb.instance({
-      // Configuration
+    new MongoDb({
+      connectionString: '<YOUR-MONGODB-URI>',
     }),
     // ...
   ],
@@ -38,38 +41,37 @@ app.configure({
 
 Once the configuration is done, the MongoDB database integration will create a MongoDB database and a collection on the first read/write attempt (might take some seconds). No need for you to create the database.
 
-The rest of this section provides an introduction to the steps you need to take depending on where you host your Jovo app:
+For the integration to work, you need to at least add the `connectionString` config property. Learn more in the [official MongoDB docs](https://docs.mongodb.com/manual/reference/connection-string/).
 
-- [On MongoDB Atlas](#for-apps-hosted-on-mongodb-atlas)
-
-The [configuration section](#configuration) then provides a detailed overview of all configuration options.
-
+The [configuration section](#configuration) provides a detailed overview of all configuration options.
 
 ## Configuration
 
 The following configurations can be added:
 
 ```typescript
-MongoDb.instance({
-  connectionString: string;
-  databaseName?: string;
-  collectionName?: string;
-} as MongoDbConfig),
-
+new MongoDb({
+  connectionString: '<YOUR-MONGODB-URI>',
+  databaseName: 'jovo_db',
+  collectionName: 'jovoUsers',
+}),
 ```
-- MongoDbConfig:
-- ``connectionString``: Specify username, password and clusterUrl. Additional parameters can also be added. Have a look at the [MongoDB documentation](https://docs.mongodb.com/drivers/node/current/fundamentals/connection/#connection-uri) for more details.
-- ``databaseName``: The name of the database we want to use. If not provided, use database name from connection string. A new database is created if doesn't exist yet.
-- ``collectionName``: A new collection is created with that name if doesn't exist yet.
 
-You should specify a dataBase either in ``connectionString`` or in ``databaseName``. The second takes precedence.
-The default collection name is `users_all`.
+- `connectionString`: Specify username, password and clusterUrl. Additional parameters can also be added. Have a look at the [MongoDB documentation](https://docs.mongodb.com/drivers/node/current/fundamentals/connection/#connection-uri) for more details.
+- `databaseName`: The name of the database we want to use. If not provided, use database name from connection string. A new database is created if doesn't exist yet.
+- `collectionName`: A new collection is created with that name if doesn't exist yet.
 
-Note that you can add timeout or other configuration by adding parameters in the ``connectionString``.
+You should specify a database either in `connectionString` or in `databaseName`. The second takes precedence. The default collection name is `users_all`.
 
-### Examples of use
+Note that you can add timeout or other configuration by adding parameters in the `connectionString`.
 
-For better performance, you can reuse the connection in any component like in this example:
+## Advanced Usage
+
+The MongoDB integration works just like any other [database integration](https://www.jovo.tech/docs/databases): The database connection is done in the background so you can focus building app logic.
+
+If you want to access the connection from a handler, for example if you want to access other users' data, you can do so like this:
+
+// TODO
 
 ```typescript
 async START() {
@@ -84,18 +86,11 @@ async START() {
     // Or just get the single client to open a transaction
     const client = await mongoDb.client;
     const transactionResults = await client.startSession().withTransaction(async () => {
-      //  Modify some data
-      // ....
+      // Modify some data
+      // ...
     });
 
     // Or create a new DB
     const newDb = client.db("my_new_db");
 }
 ```
-
-For the next example, although Jovo will persist it asynchronously during the lifecycle, it will use the same connection pool from the examples above. Reusing the client will get better response times and lower costs.
-```typescript
-this.$user.data.foo = 'bar';
-```
-
-
