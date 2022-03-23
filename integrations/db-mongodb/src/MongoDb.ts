@@ -51,6 +51,10 @@ export class MongoDb extends DbPlugin<MongoDbConfig> {
     };
   }
 
+  getInitConfig(): MongoDbInitConfig {
+    return { connectionString: '<YOUR-MONGODB-URI>' };
+  }
+
   mount(parent: HandleRequest): Promise<void> | void {
     super.mount(parent);
   }
