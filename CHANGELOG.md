@@ -1,5 +1,32 @@
 # Changelog
 
+## [@jovotech/slu-lex@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/slu-lex@4.2.3...@jovotech/slu-lex@4.2.4)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/slu-lex@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/slu-lex@4.2.2...@jovotech/slu-lex@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/slu-lex@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/slu-lex@4.2.1...@jovotech/slu-lex@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
+
 ## [@jovotech/slu-lex@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/slu-lex@4.2.0...@jovotech/slu-lex@4.2.1)
 
 > 10 February 2022
@@ -21,6 +48,33 @@
 ## [@jovotech/slu-lex@4.1.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/slu-lex@4.1.1...@jovotech/slu-lex@4.1.2)
 
 > 20 January 2022
+
+## [@jovotech/server-lambda@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/server-lambda@4.2.3...@jovotech/server-lambda@4.2.4)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/server-lambda@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/server-lambda@4.2.2...@jovotech/server-lambda@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/server-lambda@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/server-lambda@4.2.1...@jovotech/server-lambda@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
 
 ## [@jovotech/server-lambda@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/server-lambda@4.2.0...@jovotech/server-lambda@4.2.1)
 
@@ -166,6 +220,33 @@
 
 > 24 August 2021
 
+## [@jovotech/server-express@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/server-express@4.2.3...@jovotech/server-express@4.2.4)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/server-express@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/server-express@4.2.2...@jovotech/server-express@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/server-express@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/server-express@4.2.1...@jovotech/server-express@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
+
 ## [@jovotech/server-express@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/server-express@4.2.0...@jovotech/server-express@4.2.1)
 
 > 10 February 2022
@@ -310,6 +391,33 @@
 
 > 24 August 2021
 
+## [@jovotech/plugin-slack@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-slack@4.2.3...@jovotech/plugin-slack@4.2.4)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/plugin-slack@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-slack@4.2.2...@jovotech/plugin-slack@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/plugin-slack@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-slack@4.2.1...@jovotech/plugin-slack@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
+
 ## [@jovotech/plugin-slack@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-slack@4.2.0...@jovotech/plugin-slack@4.2.1)
 
 > 10 February 2022
@@ -331,6 +439,33 @@
 ## [@jovotech/plugin-slack@4.1.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-slack@4.1.1...@jovotech/plugin-slack@4.1.2)
 
 > 20 January 2022
+
+## [@jovotech/plugin-debugger@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-debugger@4.2.4...@jovotech/plugin-debugger@4.2.5)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/plugin-debugger@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-debugger@4.2.3...@jovotech/plugin-debugger@4.2.4)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/plugin-debugger@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-debugger@4.2.2...@jovotech/plugin-debugger@4.2.3)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
 
 ## [@jovotech/plugin-debugger@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-debugger@4.2.1...@jovotech/plugin-debugger@4.2.2)
 
@@ -482,6 +617,33 @@
 
 > 24 August 2021
 
+## [@jovotech/platform-web@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-web@4.2.3...@jovotech/platform-web@4.2.4)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/platform-web@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-web@4.2.2...@jovotech/platform-web@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/platform-web@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-web@4.2.1...@jovotech/platform-web@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
+
 ## [@jovotech/platform-web@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-web@4.2.0...@jovotech/platform-web@4.2.1)
 
 > 10 February 2022
@@ -532,6 +694,33 @@
 
 - Remove table view on `jovo run` + undefined properties in logger [`#1118`](https://github.com/jovotech/jovo-framework/pull/1118)
 - Fix process.stdin handling  [`#1116`](https://github.com/jovotech/jovo-framework/pull/1116)
+
+## [@jovotech/platform-instagram@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-instagram@4.2.3...@jovotech/platform-instagram@4.2.4)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/platform-instagram@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-instagram@4.2.2...@jovotech/platform-instagram@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/platform-instagram@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-instagram@4.2.1...@jovotech/platform-instagram@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
 
 ## [@jovotech/platform-instagram@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-instagram@4.2.0...@jovotech/platform-instagram@4.2.1)
 
@@ -598,6 +787,33 @@
 - **Breaking change:** :recycle: :boom:  Standardize request headers [`#1080`](https://github.com/jovotech/jovo-framework/pull/1080)
 - :bookmark: Publish [`#1092`](https://github.com/jovotech/jovo-framework/pull/1092)
 - :bookmark: Publish [`#1067`](https://github.com/jovotech/jovo-framework/pull/1067)
+
+## [@jovotech/platform-googlebusiness@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-googlebusiness@4.2.3...@jovotech/platform-googlebusiness@4.2.4)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/platform-googlebusiness@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-googlebusiness@4.2.2...@jovotech/platform-googlebusiness@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/platform-googlebusiness@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-googlebusiness@4.2.1...@jovotech/platform-googlebusiness@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
 
 ## [@jovotech/platform-googlebusiness@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-googlebusiness@4.2.0...@jovotech/platform-googlebusiness@4.2.1)
 
@@ -742,6 +958,33 @@
 ## [@jovotech/platform-googlebusiness@4.0.0-beta.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-googlebusiness@4.0.0-beta.0...@jovotech/platform-googlebusiness@4.0.0-beta.1)
 
 > 24 August 2021
+
+## [@jovotech/platform-googleassistant@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-googleassistant@4.2.3...@jovotech/platform-googleassistant@4.2.4)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/platform-googleassistant@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-googleassistant@4.2.2...@jovotech/platform-googleassistant@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/platform-googleassistant@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-googleassistant@4.2.1...@jovotech/platform-googleassistant@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
 
 ## [@jovotech/platform-googleassistant@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-googleassistant@4.2.0...@jovotech/platform-googleassistant@4.2.1)
 
@@ -891,6 +1134,33 @@
 
 > 24 August 2021
 
+## [@jovotech/platform-facebookmessenger@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-facebookmessenger@4.2.3...@jovotech/platform-facebookmessenger@4.2.4)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/platform-facebookmessenger@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-facebookmessenger@4.2.2...@jovotech/platform-facebookmessenger@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/platform-facebookmessenger@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-facebookmessenger@4.2.1...@jovotech/platform-facebookmessenger@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
+
 ## [@jovotech/platform-facebookmessenger@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-facebookmessenger@4.2.0...@jovotech/platform-facebookmessenger@4.2.1)
 
 > 10 February 2022
@@ -1035,6 +1305,33 @@
 
 > 24 August 2021
 
+## [@jovotech/platform-dialogflow@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-dialogflow@4.2.3...@jovotech/platform-dialogflow@4.2.4)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/platform-dialogflow@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-dialogflow@4.2.2...@jovotech/platform-dialogflow@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/platform-dialogflow@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-dialogflow@4.2.1...@jovotech/platform-dialogflow@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
+
 ## [@jovotech/platform-dialogflow@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-dialogflow@4.2.0...@jovotech/platform-dialogflow@4.2.1)
 
 > 10 February 2022
@@ -1171,6 +1468,33 @@
 ## [@jovotech/platform-dialogflow@4.0.0-beta.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-dialogflow@4.0.0-beta.0...@jovotech/platform-dialogflow@4.0.0-beta.1)
 
 > 24 August 2021
+
+## [@jovotech/platform-core@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-core@4.2.3...@jovotech/platform-core@4.2.4)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/platform-core@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-core@4.2.2...@jovotech/platform-core@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/platform-core@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-core@4.2.1...@jovotech/platform-core@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
 
 ## [@jovotech/platform-core@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-core@4.2.0...@jovotech/platform-core@4.2.1)
 
@@ -1315,6 +1639,33 @@
 ## [@jovotech/platform-core@4.0.0-beta.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-core@4.0.0-beta.0...@jovotech/platform-core@4.0.0-beta.1)
 
 > 24 August 2021
+
+## [@jovotech/platform-alexa@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-alexa@4.2.3...@jovotech/platform-alexa@4.2.4)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/platform-alexa@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-alexa@4.2.2...@jovotech/platform-alexa@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/platform-alexa@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-alexa@4.2.1...@jovotech/platform-alexa@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
 
 ## [@jovotech/platform-alexa@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-alexa@4.2.0...@jovotech/platform-alexa@4.2.1)
 
@@ -1469,6 +1820,15 @@
 ## [@jovotech/platform-alexa@4.0.0-beta.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-alexa@4.0.0-beta.0...@jovotech/platform-alexa@4.0.0-beta.1)
 
 > 24 August 2021
+
+## [@jovotech/output@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/output@4.2.1...@jovotech/output@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
 
 ## [@jovotech/output@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/output@4.2.0...@jovotech/output@4.2.1)
 
@@ -5419,6 +5779,33 @@
 
 > 18 August 2021
 
+## [@jovotech/nlu-snips@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-snips@4.2.3...@jovotech/nlu-snips@4.2.4)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/nlu-snips@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-snips@4.2.2...@jovotech/nlu-snips@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/nlu-snips@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-snips@4.2.1...@jovotech/nlu-snips@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
+
 ## [@jovotech/nlu-snips@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-snips@4.2.0...@jovotech/nlu-snips@4.2.1)
 
 > 10 February 2022
@@ -5521,6 +5908,33 @@
 
 - Remove table view on `jovo run` + undefined properties in logger [`#1118`](https://github.com/jovotech/jovo-framework/pull/1118)
 - Fix process.stdin handling  [`#1116`](https://github.com/jovotech/jovo-framework/pull/1116)
+
+## [@jovotech/nlu-rasa@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-rasa@4.2.3...@jovotech/nlu-rasa@4.2.4)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/nlu-rasa@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-rasa@4.2.2...@jovotech/nlu-rasa@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/nlu-rasa@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-rasa@4.2.1...@jovotech/nlu-rasa@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
 
 ## [@jovotech/nlu-rasa@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-rasa@4.2.0...@jovotech/nlu-rasa@4.2.1)
 
@@ -5672,6 +6086,33 @@
 
 > 24 August 2021
 
+## [@jovotech/nlu-nlpjs@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-nlpjs@4.2.3...@jovotech/nlu-nlpjs@4.2.4)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/nlu-nlpjs@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-nlpjs@4.2.2...@jovotech/nlu-nlpjs@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/nlu-nlpjs@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-nlpjs@4.2.1...@jovotech/nlu-nlpjs@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
+
 ## [@jovotech/nlu-nlpjs@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-nlpjs@4.2.0...@jovotech/nlu-nlpjs@4.2.1)
 
 > 10 February 2022
@@ -5815,6 +6256,33 @@
 ## [@jovotech/nlu-nlpjs@4.0.0-beta.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-nlpjs@4.0.0-beta.0...@jovotech/nlu-nlpjs@4.0.0-beta.1)
 
 > 24 August 2021
+
+## [@jovotech/nlu-dialogflow@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-dialogflow@4.2.3...@jovotech/nlu-dialogflow@4.2.4)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/nlu-dialogflow@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-dialogflow@4.2.2...@jovotech/nlu-dialogflow@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/nlu-dialogflow@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-dialogflow@4.2.1...@jovotech/nlu-dialogflow@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
 
 ## [@jovotech/nlu-dialogflow@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-dialogflow@4.2.0...@jovotech/nlu-dialogflow@4.2.1)
 
@@ -5960,6 +6428,33 @@
 
 > 24 August 2021
 
+## [@jovotech/framework@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/framework@4.2.3...@jovotech/framework@4.2.4)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/framework@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/framework@4.2.2...@jovotech/framework@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/framework@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/framework@4.2.1...@jovotech/framework@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
+
 ## [@jovotech/framework@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/framework@4.2.0...@jovotech/framework@4.2.1)
 
 > 10 February 2022
@@ -6104,6 +6599,33 @@
 
 > 24 August 2021
 
+## [@jovotech/db-filedb@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-filedb@4.2.3...@jovotech/db-filedb@4.2.4)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/db-filedb@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-filedb@4.2.2...@jovotech/db-filedb@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/db-filedb@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-filedb@4.2.1...@jovotech/db-filedb@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
+
 ## [@jovotech/db-filedb@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-filedb@4.2.0...@jovotech/db-filedb@4.2.1)
 
 > 10 February 2022
@@ -6247,6 +6769,33 @@
 ## [@jovotech/db-filedb@4.0.0-beta.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-filedb@4.0.0-beta.0...@jovotech/db-filedb@4.0.0-beta.1)
 
 > 24 August 2021
+
+## [@jovotech/db-dynamodb@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-dynamodb@4.2.3...@jovotech/db-dynamodb@4.2.4)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/db-dynamodb@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-dynamodb@4.2.2...@jovotech/db-dynamodb@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/db-dynamodb@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-dynamodb@4.2.1...@jovotech/db-dynamodb@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
 
 ## [@jovotech/db-dynamodb@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-dynamodb@4.2.0...@jovotech/db-dynamodb@4.2.1)
 
@@ -6449,6 +6998,33 @@
 - :bookmark: Publish [`#1092`](https://github.com/jovotech/jovo-framework/pull/1092)
 - :bookmark: Publish [`#1067`](https://github.com/jovotech/jovo-framework/pull/1067)
 
+## [@jovotech/cms-googlesheets@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/cms-googlesheets@4.2.3...@jovotech/cms-googlesheets@4.2.4)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/cms-googlesheets@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/cms-googlesheets@4.2.2...@jovotech/cms-googlesheets@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/cms-googlesheets@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/cms-googlesheets@4.2.1...@jovotech/cms-googlesheets@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
+
 ## [@jovotech/cms-googlesheets@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/cms-googlesheets@4.2.0...@jovotech/cms-googlesheets@4.2.1)
 
 > 10 February 2022
@@ -6499,6 +7075,33 @@
 
 - Remove table view on `jovo run` + undefined properties in logger [`#1118`](https://github.com/jovotech/jovo-framework/pull/1118)
 - Fix process.stdin handling  [`#1116`](https://github.com/jovotech/jovo-framework/pull/1116)
+
+## [@jovotech/cms-airtable@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/cms-airtable@4.2.3...@jovotech/cms-airtable@4.2.4)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/cms-airtable@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/cms-airtable@4.2.2...@jovotech/cms-airtable@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/cms-airtable@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/cms-airtable@4.2.1...@jovotech/cms-airtable@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
 
 ## [@jovotech/cms-airtable@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/cms-airtable@4.2.0...@jovotech/cms-airtable@4.2.1)
 
@@ -6551,6 +7154,33 @@
 - Remove table view on `jovo run` + undefined properties in logger [`#1118`](https://github.com/jovotech/jovo-framework/pull/1118)
 - Fix process.stdin handling  [`#1116`](https://github.com/jovotech/jovo-framework/pull/1116)
 
+## [@jovotech/client-web@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/client-web@4.2.3...@jovotech/client-web@4.2.4)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/client-web@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/client-web@4.2.2...@jovotech/client-web@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/client-web@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/client-web@4.2.1...@jovotech/client-web@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
+
 ## [@jovotech/client-web@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/client-web@4.2.0...@jovotech/client-web@4.2.1)
 
 > 10 February 2022
@@ -6601,6 +7231,33 @@
 
 - Remove table view on `jovo run` + undefined properties in logger [`#1118`](https://github.com/jovotech/jovo-framework/pull/1118)
 - Fix process.stdin handling  [`#1116`](https://github.com/jovotech/jovo-framework/pull/1116)
+
+## [@jovotech/client-web-vue3@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/client-web-vue3@4.2.3...@jovotech/client-web-vue3@4.2.4)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/client-web-vue3@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/client-web-vue3@4.2.2...@jovotech/client-web-vue3@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/client-web-vue3@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/client-web-vue3@4.2.1...@jovotech/client-web-vue3@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
 
 ## [@jovotech/client-web-vue3@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/client-web-vue3@4.2.0...@jovotech/client-web-vue3@4.2.1)
 
@@ -6653,6 +7310,33 @@
 - Remove table view on `jovo run` + undefined properties in logger [`#1118`](https://github.com/jovotech/jovo-framework/pull/1118)
 - Fix process.stdin handling  [`#1116`](https://github.com/jovotech/jovo-framework/pull/1116)
 
+## [@jovotech/client-web-vue2@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/client-web-vue2@4.2.3...@jovotech/client-web-vue2@4.2.4)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/client-web-vue2@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/client-web-vue2@4.2.2...@jovotech/client-web-vue2@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/client-web-vue2@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/client-web-vue2@4.2.1...@jovotech/client-web-vue2@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
+
 ## [@jovotech/client-web-vue2@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/client-web-vue2@4.2.0...@jovotech/client-web-vue2@4.2.1)
 
 > 10 February 2022
@@ -6703,6 +7387,33 @@
 
 - Remove table view on `jovo run` + undefined properties in logger [`#1118`](https://github.com/jovotech/jovo-framework/pull/1118)
 - Fix process.stdin handling  [`#1116`](https://github.com/jovotech/jovo-framework/pull/1116)
+
+## [@jovotech/analytics-dashbot@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/analytics-dashbot@4.2.3...@jovotech/analytics-dashbot@4.2.4)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/analytics-dashbot@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/analytics-dashbot@4.2.2...@jovotech/analytics-dashbot@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/analytics-dashbot@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/analytics-dashbot@4.2.1...@jovotech/analytics-dashbot@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
 
 ## [@jovotech/analytics-dashbot@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/analytics-dashbot@4.2.0...@jovotech/analytics-dashbot@4.2.1)
 
