@@ -1,5 +1,12 @@
 # Changelog
 
+## [@jovotech/slu-lex@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/slu-lex@4.2.4...@jovotech/slu-lex@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
+
 ## [@jovotech/slu-lex@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/slu-lex@4.2.3...@jovotech/slu-lex@4.2.4)
 
 > 18 March 2022
@@ -48,6 +55,13 @@
 ## [@jovotech/slu-lex@4.1.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/slu-lex@4.1.1...@jovotech/slu-lex@4.1.2)
 
 > 20 January 2022
+
+## [@jovotech/server-lambda@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/server-lambda@4.2.4...@jovotech/server-lambda@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
 
 ## [@jovotech/server-lambda@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/server-lambda@4.2.3...@jovotech/server-lambda@4.2.4)
 
@@ -220,6 +234,13 @@
 
 > 24 August 2021
 
+## [@jovotech/server-express@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/server-express@4.2.4...@jovotech/server-express@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
+
 ## [@jovotech/server-express@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/server-express@4.2.3...@jovotech/server-express@4.2.4)
 
 > 18 March 2022
@@ -391,6 +412,13 @@
 
 > 24 August 2021
 
+## [@jovotech/plugin-slack@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-slack@4.2.4...@jovotech/plugin-slack@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
+
 ## [@jovotech/plugin-slack@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-slack@4.2.3...@jovotech/plugin-slack@4.2.4)
 
 > 18 March 2022
@@ -439,6 +467,13 @@
 ## [@jovotech/plugin-slack@4.1.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-slack@4.1.1...@jovotech/plugin-slack@4.1.2)
 
 > 20 January 2022
+
+## [@jovotech/plugin-debugger@4.2.6](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-debugger@4.2.5...@jovotech/plugin-debugger@4.2.6)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
 
 ## [@jovotech/plugin-debugger@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-debugger@4.2.4...@jovotech/plugin-debugger@4.2.5)
 
@@ -617,6 +652,13 @@
 
 > 24 August 2021
 
+## [@jovotech/platform-web@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-web@4.2.4...@jovotech/platform-web@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
+
 ## [@jovotech/platform-web@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-web@4.2.3...@jovotech/platform-web@4.2.4)
 
 > 18 March 2022
@@ -694,6 +736,13 @@
 
 - Remove table view on `jovo run` + undefined properties in logger [`#1118`](https://github.com/jovotech/jovo-framework/pull/1118)
 - Fix process.stdin handling  [`#1116`](https://github.com/jovotech/jovo-framework/pull/1116)
+
+## [@jovotech/platform-instagram@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-instagram@4.2.4...@jovotech/platform-instagram@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
 
 ## [@jovotech/platform-instagram@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-instagram@4.2.3...@jovotech/platform-instagram@4.2.4)
 
@@ -787,6 +836,13 @@
 - **Breaking change:** :recycle: :boom:  Standardize request headers [`#1080`](https://github.com/jovotech/jovo-framework/pull/1080)
 - :bookmark: Publish [`#1092`](https://github.com/jovotech/jovo-framework/pull/1092)
 - :bookmark: Publish [`#1067`](https://github.com/jovotech/jovo-framework/pull/1067)
+
+## [@jovotech/platform-googlebusiness@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-googlebusiness@4.2.4...@jovotech/platform-googlebusiness@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
 
 ## [@jovotech/platform-googlebusiness@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-googlebusiness@4.2.3...@jovotech/platform-googlebusiness@4.2.4)
 
@@ -958,6 +1014,13 @@
 ## [@jovotech/platform-googlebusiness@4.0.0-beta.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-googlebusiness@4.0.0-beta.0...@jovotech/platform-googlebusiness@4.0.0-beta.1)
 
 > 24 August 2021
+
+## [@jovotech/platform-googleassistant@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-googleassistant@4.2.4...@jovotech/platform-googleassistant@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
 
 ## [@jovotech/platform-googleassistant@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-googleassistant@4.2.3...@jovotech/platform-googleassistant@4.2.4)
 
@@ -1134,6 +1197,13 @@
 
 > 24 August 2021
 
+## [@jovotech/platform-facebookmessenger@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-facebookmessenger@4.2.4...@jovotech/platform-facebookmessenger@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
+
 ## [@jovotech/platform-facebookmessenger@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-facebookmessenger@4.2.3...@jovotech/platform-facebookmessenger@4.2.4)
 
 > 18 March 2022
@@ -1305,6 +1375,13 @@
 
 > 24 August 2021
 
+## [@jovotech/platform-dialogflow@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-dialogflow@4.2.4...@jovotech/platform-dialogflow@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
+
 ## [@jovotech/platform-dialogflow@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-dialogflow@4.2.3...@jovotech/platform-dialogflow@4.2.4)
 
 > 18 March 2022
@@ -1468,6 +1545,13 @@
 ## [@jovotech/platform-dialogflow@4.0.0-beta.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-dialogflow@4.0.0-beta.0...@jovotech/platform-dialogflow@4.0.0-beta.1)
 
 > 24 August 2021
+
+## [@jovotech/platform-core@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-core@4.2.4...@jovotech/platform-core@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
 
 ## [@jovotech/platform-core@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-core@4.2.3...@jovotech/platform-core@4.2.4)
 
@@ -1639,6 +1723,13 @@
 ## [@jovotech/platform-core@4.0.0-beta.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-core@4.0.0-beta.0...@jovotech/platform-core@4.0.0-beta.1)
 
 > 24 August 2021
+
+## [@jovotech/platform-alexa@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-alexa@4.2.4...@jovotech/platform-alexa@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
 
 ## [@jovotech/platform-alexa@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-alexa@4.2.3...@jovotech/platform-alexa@4.2.4)
 
@@ -5779,6 +5870,13 @@
 
 > 18 August 2021
 
+## [@jovotech/nlu-snips@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-snips@4.2.4...@jovotech/nlu-snips@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
+
 ## [@jovotech/nlu-snips@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-snips@4.2.3...@jovotech/nlu-snips@4.2.4)
 
 > 18 March 2022
@@ -5908,6 +6006,13 @@
 
 - Remove table view on `jovo run` + undefined properties in logger [`#1118`](https://github.com/jovotech/jovo-framework/pull/1118)
 - Fix process.stdin handling  [`#1116`](https://github.com/jovotech/jovo-framework/pull/1116)
+
+## [@jovotech/nlu-rasa@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-rasa@4.2.4...@jovotech/nlu-rasa@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
 
 ## [@jovotech/nlu-rasa@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-rasa@4.2.3...@jovotech/nlu-rasa@4.2.4)
 
@@ -6086,6 +6191,13 @@
 
 > 24 August 2021
 
+## [@jovotech/nlu-nlpjs@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-nlpjs@4.2.4...@jovotech/nlu-nlpjs@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
+
 ## [@jovotech/nlu-nlpjs@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-nlpjs@4.2.3...@jovotech/nlu-nlpjs@4.2.4)
 
 > 18 March 2022
@@ -6256,6 +6368,13 @@
 ## [@jovotech/nlu-nlpjs@4.0.0-beta.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-nlpjs@4.0.0-beta.0...@jovotech/nlu-nlpjs@4.0.0-beta.1)
 
 > 24 August 2021
+
+## [@jovotech/nlu-dialogflow@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-dialogflow@4.2.4...@jovotech/nlu-dialogflow@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
 
 ## [@jovotech/nlu-dialogflow@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/nlu-dialogflow@4.2.3...@jovotech/nlu-dialogflow@4.2.4)
 
@@ -6428,6 +6547,13 @@
 
 > 24 August 2021
 
+## [@jovotech/framework@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/framework@4.2.4...@jovotech/framework@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
+
 ## [@jovotech/framework@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/framework@4.2.3...@jovotech/framework@4.2.4)
 
 > 18 March 2022
@@ -6599,6 +6725,13 @@
 
 > 24 August 2021
 
+## [@jovotech/db-filedb@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-filedb@4.2.4...@jovotech/db-filedb@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
+
 ## [@jovotech/db-filedb@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-filedb@4.2.3...@jovotech/db-filedb@4.2.4)
 
 > 18 March 2022
@@ -6769,6 +6902,13 @@
 ## [@jovotech/db-filedb@4.0.0-beta.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-filedb@4.0.0-beta.0...@jovotech/db-filedb@4.0.0-beta.1)
 
 > 24 August 2021
+
+## [@jovotech/db-dynamodb@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-dynamodb@4.2.4...@jovotech/db-dynamodb@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
 
 ## [@jovotech/db-dynamodb@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-dynamodb@4.2.3...@jovotech/db-dynamodb@4.2.4)
 
@@ -6998,6 +7138,13 @@
 - :bookmark: Publish [`#1092`](https://github.com/jovotech/jovo-framework/pull/1092)
 - :bookmark: Publish [`#1067`](https://github.com/jovotech/jovo-framework/pull/1067)
 
+## [@jovotech/cms-googlesheets@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/cms-googlesheets@4.2.4...@jovotech/cms-googlesheets@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
+
 ## [@jovotech/cms-googlesheets@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/cms-googlesheets@4.2.3...@jovotech/cms-googlesheets@4.2.4)
 
 > 18 March 2022
@@ -7075,6 +7222,13 @@
 
 - Remove table view on `jovo run` + undefined properties in logger [`#1118`](https://github.com/jovotech/jovo-framework/pull/1118)
 - Fix process.stdin handling  [`#1116`](https://github.com/jovotech/jovo-framework/pull/1116)
+
+## [@jovotech/cms-airtable@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/cms-airtable@4.2.4...@jovotech/cms-airtable@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
 
 ## [@jovotech/cms-airtable@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/cms-airtable@4.2.3...@jovotech/cms-airtable@4.2.4)
 
@@ -7154,6 +7308,13 @@
 - Remove table view on `jovo run` + undefined properties in logger [`#1118`](https://github.com/jovotech/jovo-framework/pull/1118)
 - Fix process.stdin handling  [`#1116`](https://github.com/jovotech/jovo-framework/pull/1116)
 
+## [@jovotech/client-web@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/client-web@4.2.4...@jovotech/client-web@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
+
 ## [@jovotech/client-web@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/client-web@4.2.3...@jovotech/client-web@4.2.4)
 
 > 18 March 2022
@@ -7231,6 +7392,13 @@
 
 - Remove table view on `jovo run` + undefined properties in logger [`#1118`](https://github.com/jovotech/jovo-framework/pull/1118)
 - Fix process.stdin handling  [`#1116`](https://github.com/jovotech/jovo-framework/pull/1116)
+
+## [@jovotech/client-web-vue3@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/client-web-vue3@4.2.4...@jovotech/client-web-vue3@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
 
 ## [@jovotech/client-web-vue3@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/client-web-vue3@4.2.3...@jovotech/client-web-vue3@4.2.4)
 
@@ -7310,6 +7478,13 @@
 - Remove table view on `jovo run` + undefined properties in logger [`#1118`](https://github.com/jovotech/jovo-framework/pull/1118)
 - Fix process.stdin handling  [`#1116`](https://github.com/jovotech/jovo-framework/pull/1116)
 
+## [@jovotech/client-web-vue2@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/client-web-vue2@4.2.4...@jovotech/client-web-vue2@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
+
 ## [@jovotech/client-web-vue2@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/client-web-vue2@4.2.3...@jovotech/client-web-vue2@4.2.4)
 
 > 18 March 2022
@@ -7387,6 +7562,13 @@
 
 - Remove table view on `jovo run` + undefined properties in logger [`#1118`](https://github.com/jovotech/jovo-framework/pull/1118)
 - Fix process.stdin handling  [`#1116`](https://github.com/jovotech/jovo-framework/pull/1116)
+
+## [@jovotech/analytics-dashbot@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/analytics-dashbot@4.2.4...@jovotech/analytics-dashbot@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
 
 ## [@jovotech/analytics-dashbot@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/analytics-dashbot@4.2.3...@jovotech/analytics-dashbot@4.2.4)
 
