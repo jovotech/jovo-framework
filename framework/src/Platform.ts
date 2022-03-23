@@ -82,11 +82,11 @@ export abstract class Platform<
     });
     const appOutputConfig = parent.config.output as OutputTemplateConverterStrategyConfig;
     this.outputTemplateConverterStrategy.config.validation =
-      appOutputConfig?.validation || this.outputTemplateConverterStrategy.config.validation;
+      appOutputConfig?.validation ?? this.outputTemplateConverterStrategy.config.validation;
     this.outputTemplateConverterStrategy.config.sanitization =
-      appOutputConfig?.sanitization || this.outputTemplateConverterStrategy.config.sanitization;
+      appOutputConfig?.sanitization ?? this.outputTemplateConverterStrategy.config.sanitization;
     this.outputTemplateConverterStrategy.config.omitWarnings =
-      appOutputConfig?.omitWarnings || this.outputTemplateConverterStrategy.config.omitWarnings;
+      appOutputConfig?.omitWarnings ?? this.outputTemplateConverterStrategy.config.omitWarnings;
   }
 
   createJovoInstance<APP extends App>(app: APP, handleRequest: HandleRequest): JOVO {
