@@ -227,6 +227,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     }
     _merge(jovo.$user.data, this.$user.data);
     _merge(jovo.$session, this.$session);
+    _merge(jovo.$request, this.$request);
 
     jovo.$request.setUserId(this.config.userId);
     jovo.$request.setLocale(this.config.locale);
