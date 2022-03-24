@@ -1,5 +1,12 @@
 # Changelog
 
+## [@jovotech/platform-core@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-core@4.2.4...@jovotech/platform-core@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
+
 ## [@jovotech/platform-core@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-core@4.2.3...@jovotech/platform-core@4.2.4)
 
 > 18 March 2022
