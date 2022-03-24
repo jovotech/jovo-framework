@@ -52,37 +52,58 @@ The following configurations can be added:
 ```typescript
 new MongoDb({
   connectionString: '<YOUR-MONGODB-URI>',
-  databaseName: 'jovoDb',
+  databaseName: '<YOUR-DATABASE-NAME>', // optional, can also be set using connectionString
   collectionName: 'jovoUsers',
 }),
 ```
 
 - `connectionString`: The URI string used to connect to the MongoDB database. Learn more in the [official MongoDB docs](https://docs.mongodb.com/manual/reference/connection-string/).
-- `databaseName`: Name of the [MongoDB database](https://docs.mongodb.com/manual/core/databases-and-collections/#databases). Default: `test`.
-- `collectionName`: Name of the [MongoDB collection](https://docs.mongodb.com/manual/core/databases-and-collections/#collections) that stores the user specific data. A new collection is created with that name if doesn't exist yet. Default: `jovoUsers`.s
+- `databaseName`: Name of the [MongoDB database](https://docs.mongodb.com/manual/core/databases-and-collections/#databases). This is an optional property. Generally, it is recommended to use the `connectionString` to reference the database name. If it doesn't contain a database name and the `databaseName` property is not set either, MongoDb will use the default value `test`.
+- `collectionName`: Name of the [MongoDB collection](https://docs.mongodb.com/manual/core/databases-and-collections/#collections) that stores the user specific data. A new collection is created with that name if doesn't exist yet. Default: `jovoUsers`.
+
+If you're testing MongoDb in development together with the [Jovo Debugger](https://www.jovo.tech/docs/debugger), we recommend ignoring the `$mongoDb` object. Update your `app.dev.ts` like this then:
+
+```typescript
+app.use(
+  // ...
+  new JovoDebugger({
+    ignoredProperties: ['$app', '$handleRequest', '$platform', '$mongoDb'],
+  }),
+  new MongoDb({
+    connectionString: '<YOUR-MONGODB-URI>',
+  }),
+);
+```
 
 ## Advanced Usage
 
-The MongoDB integration works just like any other [database integration](https://www.jovo.tech/docs/databases): The database connection is done in the background so you can focus building app logic.
+The MongoDb integration works just like any other [database integration](https://www.jovo.tech/docs/databases): The database connection is done in the background so you can focus building app logic.
 
-If you want to access the connection from a handler, for example if you want to access other users' data, you can do so like this:
-
-// TODO
-
-// note from jrglg: Jan, I leave this part as I can see you recovered from an older commit when it was a Singleton. I only change the namings.
+If you want to access the connection from a handler, for example if you want to access other users' data, you can also use the `$mongoDb` property:
 
 ```typescript
-async START() {
+this.$mongoDb;
+
+// Features
+await this.$mongoDb.getClient();
+await this.$mongoDb.getDatabase();
+await this.$mongoDb.getConnection();
+```
+
+Here is an example:
+
+```typescript
+async someHandler() {
     // You can read data from another user
-    const users = mongoDb.getCollection();
+    const users = await this.$mongoDb.getCollection();
     const otherUserData = (await users).find({ _id: '<another_id>' });
 
     // Also store documents in other collections in the same DB Jovo handles users
-    const defaultDb = await mongoDb.getDb();
+    const defaultDb = await this.$mongoDb.getDb();
     await defaultDb.collection('myCollection').insertOne({ foo: 'bar' });
 
     // Or just get the single client to open a transaction
-    const client = await mongoDb.client;
+    const client = await this.$mongoDb.getClient();
     const transactionResults = await client.startSession().withTransaction(async () => {
       // Modify some data
       // ...
