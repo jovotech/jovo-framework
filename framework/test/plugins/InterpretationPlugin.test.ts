@@ -22,10 +22,12 @@ class ExampleInterpretationPlugin extends InterpretationPlugin {
     };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async processAudio(jovo: Jovo, audio: ParsedAudioInput): Promise<AsrData | undefined> {
     return;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async processText(jovo: Jovo, text: string): Promise<NluData | undefined> {
     return;
   }
@@ -64,6 +66,7 @@ describe('interpretation', () => {
 
     test('supported - asr result', async () => {
       const plugin = new ExampleInterpretationPlugin();
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       plugin.processAudio = async function (jovo, audio) {
         return {
           text: 'Hello world',
@@ -128,6 +131,7 @@ describe('interpretation', () => {
 
     test('supported - nlu result', async () => {
       const plugin = new ExampleInterpretationPlugin();
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       plugin.processText = async function (jovo, audio) {
         return {
           intent: 'ExampleIntent',

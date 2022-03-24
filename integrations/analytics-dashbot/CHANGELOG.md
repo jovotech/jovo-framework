@@ -1,5 +1,39 @@
 # Changelog
 
+## [@jovotech/analytics-dashbot@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/analytics-dashbot@4.2.4...@jovotech/analytics-dashbot@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
+
+## [@jovotech/analytics-dashbot@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/analytics-dashbot@4.2.3...@jovotech/analytics-dashbot@4.2.4)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/analytics-dashbot@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/analytics-dashbot@4.2.2...@jovotech/analytics-dashbot@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/analytics-dashbot@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/analytics-dashbot@4.2.1...@jovotech/analytics-dashbot@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
+
 ## [@jovotech/analytics-dashbot@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/analytics-dashbot@4.2.0...@jovotech/analytics-dashbot@4.2.1)
 
 > 10 February 2022
