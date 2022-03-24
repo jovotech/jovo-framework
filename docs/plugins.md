@@ -9,7 +9,7 @@ Learn how you can build your own plugins to customize and extend the Jovo Framew
 
 ## Introduction
 
-Jovo plugins allow you to hook into the Jovo middleware architecture to extend or modify the framework without having to change its core code. Learn more about all middlewares in the [RIDR Lifecycle documentation](./ridr-lifecycle.md).
+Jovo plugins allow you to hook into the Jovo [middleware architecture](./middlewares.md) to extend or modify the framework without having to change its core code. Usually, this is used to hook into the [RIDR Lifecycle](./ridr-lifecycle.md), but it's also possible to hook into [events](./middlewares.md#event-middlewares).
 
 Here are a few use cases where plugins can be helpful:
 
