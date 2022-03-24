@@ -9,6 +9,7 @@ import {
   PersistableUserData,
   RequiredOnlyWhere,
 } from '@jovotech/framework';
+import { JovoMongoDb } from './JovoMongoDb';
 
 export interface MongoDbConfig extends DbPluginConfig {
   /** Specify username, password and clusterUrl. Additional parameters can also be added. See https://docs.mongodb.com/drivers/node/current/fundamentals/connection/#connection-uri for more details */
@@ -55,6 +56,9 @@ export class MongoDb extends DbPlugin<MongoDbConfig> {
 
   mount(parent: HandleRequest): Promise<void> | void {
     super.mount(parent);
+    parent.middlewareCollection.use('before.request.start', (jovo) => {
+      jovo.$mongoDb = new JovoMongoDb(this);
+    });
   }
 
   async initialize(): Promise<void> {
@@ -88,7 +92,7 @@ export class MongoDb extends DbPlugin<MongoDbConfig> {
     if (this.config.databaseName) {
       return connection!.db(this.config.databaseName);
     } else {
-      //If not provided, use database name from connection string.
+      // If not provided, use database name from connection string.
       return connection!.db();
     }
   }

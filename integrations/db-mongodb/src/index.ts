@@ -1,4 +1,5 @@
 import { MongoDb, MongoDbConfig } from './MongoDb';
+import { JovoMongoDb } from './JovoMongoDb';
 
 declare module '@jovotech/framework/dist/types/Extensible' {
   interface ExtensiblePluginConfig {
@@ -7,6 +8,12 @@ declare module '@jovotech/framework/dist/types/Extensible' {
 
   interface ExtensiblePlugins {
     MongoDb?: MongoDb;
+  }
+}
+
+declare module '@jovotech/framework/dist/types/Jovo' {
+  interface Jovo {
+    $mongoDb: JovoMongoDb;
   }
 }
 
