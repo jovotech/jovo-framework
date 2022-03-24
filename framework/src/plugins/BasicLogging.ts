@@ -155,7 +155,12 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
         );
       });
     } else {
-      console.log(colorize(JSON.stringify(requestCopy, null, 2), this.config.colorizeSettings));
+      console.log(
+        colorize(
+          JSON.stringify(requestCopy, null, this.config.indentation || 2),
+          this.config.colorizeSettings,
+        ),
+      );
     }
 
     /* eslint-enable no-console */
