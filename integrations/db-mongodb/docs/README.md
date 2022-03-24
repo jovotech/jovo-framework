@@ -52,13 +52,13 @@ The following configurations can be added:
 ```typescript
 new MongoDb({
   connectionString: '<YOUR-MONGODB-URI>',
-  databaseName: 'jovo_db',
+  databaseName: 'jovoDb',
   collectionName: 'jovoUsers',
 }),
 ```
 
 - `connectionString`: The URI string used to connect to the MongoDB database. Learn more in the [official MongoDB docs](https://docs.mongodb.com/manual/reference/connection-string/).
-- `databaseName`: Name of the [MongoDB database](https://docs.mongodb.com/manual/core/databases-and-collections/#databases). Default: `jovo_db`.
+- `databaseName`: Name of the [MongoDB database](https://docs.mongodb.com/manual/core/databases-and-collections/#databases). Default: `test`.
 - `collectionName`: Name of the [MongoDB collection](https://docs.mongodb.com/manual/core/databases-and-collections/#collections) that stores the user specific data. A new collection is created with that name if doesn't exist yet. Default: `jovoUsers`.s
 
 ## Advanced Usage
@@ -69,15 +69,17 @@ If you want to access the connection from a handler, for example if you want to 
 
 // TODO
 
+// note from jrglg: Jan, I leave this part as I can see you recovered from an older commit when it was a Singleton. I only change the namings.
+
 ```typescript
 async START() {
     // You can read data from another user
-    const users = mongoDb.jovoUsers();
+    const users = mongoDb.getCollection();
     const otherUserData = (await users).find({ _id: '<another_id>' });
 
     // Also store documents in other collections in the same DB Jovo handles users
-    const defaultDb = await mongoDb.jovoDb();
-    await defaultDb.collection('my-collection').insertOne({ foo: 'bar' });
+    const defaultDb = await mongoDb.getDb();
+    await defaultDb.collection('myCollection').insertOne({ foo: 'bar' });
 
     // Or just get the single client to open a transaction
     const client = await mongoDb.client;
@@ -87,6 +89,6 @@ async START() {
     });
 
     // Or create a new DB
-    const newDb = client.db("my_new_db");
+    const newDb = client.db("anotherDb");
 }
 ```
