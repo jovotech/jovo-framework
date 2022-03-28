@@ -22,7 +22,7 @@ You don't have to make large code changes to Jovo to become a contributor. Help 
 You can have a huge impact on Jovo without ever touching the framework's core.
 
 - Open source a [project](https://github.com/FlorianHollandt/skillPlayer-basic) and help others learn Jovo by showing your code.
-- Build a [plugin](https://github.com/cellular/jovo-plugin-raven) and help others extend Jovo easily.
+- Build a [plugin](https://www.jovo.tech/docs/plugins) and help others extend Jovo easily.
 
 ## Add new Features
 
@@ -30,5 +30,6 @@ Adding to Jovo's core can sometimes be daunting for beginners. Here are some ide
 
 - Investigate [GitHub issues](https://github.com/jovotech/jovo-framework/issues) and find out what people are currently discussing.
 - Take a look at our [community forum](https://community.jovo.tech/) to see what Jovo users are missing.
+-
 
-**Working on your first Pull Request?** You can learn how from this repository: [first-contributions](https://github.com/firstcontributions/first-contributions).
+**Working on your first Pull Request?** You can learn how in our [contributing docs](https://www.jovo.tech/docs/contributing).
