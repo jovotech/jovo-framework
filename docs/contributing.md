@@ -36,7 +36,7 @@ $ npm install
 $ npm run setup:dev
 ```
 
-To learn more about all scripts, take a look at the [`package.json` file](https://github.com/jovotech/jovo-framework/blob/v4/latest/package.json).
+The `setup:dev` script is responsible for linking all packages of the repository together and compiling each package's source code. To learn more about all scripts, take a look at the [`package.json` file](https://github.com/jovotech/jovo-framework/blob/v4/latest/package.json).
 
 If you want to test your updates, we recommend using a project in the [`examples` folder](https://github.com/jovotech/jovo-framework/tree/v4/latest/examples). The examples are linked with the local packages of the `jovo-framework` monorepo.
 
