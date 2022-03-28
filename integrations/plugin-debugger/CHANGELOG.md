@@ -1,5 +1,15 @@
 # Changelog
 
+## [@jovotech/plugin-debugger@4.2.7](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-debugger@4.2.6...@jovotech/plugin-debugger@4.2.7)
+
+> 24 March 2022
+
+- Add MongoDB integration [`#1217`](https://github.com/jovotech/jovo-framework/pull/1217)
+- add `$requestConfig` to testSuite [`#1256`](https://github.com/jovotech/jovo-framework/pull/1256)
+- [PROPOSAL] Add `component.handler` middleware [`#1208`](https://github.com/jovotech/jovo-framework/pull/1208)
+- :recycle: Add middlewareCollection to handleRequest in test [`#1266`](https://github.com/jovotech/jovo-framework/pull/1266)
+- 🔖 Release 4.2.4  [`#1262`](https://github.com/jovotech/jovo-framework/pull/1262)
+
 ## [@jovotech/plugin-debugger@4.2.6](https://github.com/jovotech/jovo-framework/compare/@jovotech/plugin-debugger@4.2.5...@jovotech/plugin-debugger@4.2.6)
 
 > 21 March 2022
