@@ -11,7 +11,7 @@ Learn more about setting up your Jovo development environment and contributing t
 
 Jovo is open source under an [Apache 2.0 license](https://github.com/jovotech/jovo-framework/blob/v4/latest/LICENSE), which means that the source code is openly available and a community of contributors helps us add new features, fix bugs, and write documentation. [Financial contributors](https://opencollective.com/jovo-framework) also help our core team focus on building new features and supporting the community.
 
-The [`jovo-framework` repository](https://github.com/jovotech/jovo-framework) uses a [monorepo structure](https://en.wikipedia.org/wiki/Monorepo) that contains all packages needed for development. There is also a [`docs` folder](https://github.com/jovotech/jovo-framework/tree/v4/latest/docs) that contains all general documentation. Each integration also contains a `docs` folder with documentation for the respective pages in the [Jovo Marketplace](https://www.jovo.tech/marketplace). For example, all Alexa docs can be found in [`platforms/platform-alexa/docs`](https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/docs). 
+The [`jovo-framework` repository](https://github.com/jovotech/jovo-framework) uses a [monorepo structure](https://en.wikipedia.org/wiki/Monorepo) that contains all packages needed for development. There is also a [`docs` folder](https://github.com/jovotech/jovo-framework/tree/v4/latest/docs) that contains all general documentation. Each integration also contains its own `docs` folder with documentation for the respective pages in the [Jovo Marketplace](https://www.jovo.tech/marketplace). For example, all [Alexa docs](https://www.jovo.tech/marketplace/platform-alexa) can be found in [`platforms/platform-alexa/docs`](https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/docs).
 
 If you want to contribute to Jovo, you can learn more in the sections below:
 
@@ -38,11 +38,33 @@ $ npm run setup:dev
 
 To learn more about all scripts, take a look at the [`package.json` file](https://github.com/jovotech/jovo-framework/blob/v4/latest/package.json).
 
+If you want to test your updates, we recommend using a project in the [`examples` folder](https://github.com/jovotech/jovo-framework/tree/v4/latest/examples). The examples are linked with the local packages of the `jovo-framework` monorepo.
 
+If you are making updates to a specific package in the repository, make sure that its content is compiled before testing:
+
+```sh
+## Package folder, e.g. integrations/db-dynamodb
+
+# Build files of updated package
+$ npm run build
+
+# Alternative: Watch package and build on file change
+$ npm run watch
+```
+
+In the example project, you can run and watch the code like this and then test it in the [Jovo Debugger](https://www.jovo.tech/docs/debugger):
+
+```sh
+## Example folder, e.g. examples/typescript/basic
+
+# Run (and watch) Jovo src files
+$ npm run start:dev
+```
 
 ## PR Workflow
 
 If you want to contribute to the Jovo open source code by opening a [pull request (PR)](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests), you can learn more about all steps of the workflow in the sections below:
+
 - [Branches](#branches)
 - [Commits](#commits)
 - [PR creation](#pr-creation)
@@ -96,7 +118,6 @@ Here are a few examples:
 :bug: Fix user session bug
 ```
 
-
 ### PR Creation
 
 After pushing all commits to a branch in your [fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo), you can create a [pull request (PR)](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests) that points to:
@@ -105,7 +126,6 @@ After pushing all commits to a branch in your [fork](https://docs.github.com/en/
 - `v4/latest` for changes to the docs only
 
 Please also check the [allow changes from maintainers](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/allowing-changes-to-a-pull-request-branch-created-from-a-fork) option for the core team to make updates during review.
-
 
 ### Merge and Release
 
