@@ -1,4 +1,11 @@
-import { Input, InputTypeLike, JovoInput, JovoRequest, UnknownObject } from '@jovotech/framework';
+import {
+  Input,
+  InputTypeLike,
+  JovoInput,
+  JovoInputBuilder,
+  JovoRequest,
+  UnknownObject,
+} from '@jovotech/framework';
 
 import { CoreCapabilityType } from './CoreDevice';
 import { CoreRequestContext } from './interfaces';
@@ -18,8 +25,12 @@ export class CoreRequest extends JovoRequest {
     return this.locale;
   }
 
+  getInput(): JovoInput {
+    return new JovoInputBuilder(super.getInput()).set('nlu', this.input?.nlu).build();
+  }
+
   getIntent(): JovoInput['intent'] {
-    return this.input?.intent;
+    return this.input?.nlu?.intent || this.input?.intent;
   }
 
   setIntent(intent: string): void {
@@ -30,15 +41,17 @@ export class CoreRequest extends JovoRequest {
   }
 
   getEntities(): JovoInput['entities'] {
-    return this.input?.entities;
+    return this.input?.nlu?.entities || this.input?.entities;
   }
 
   getInputType(): InputTypeLike | undefined {
     return this.input?.type;
   }
+
   getInputText(): JovoInput['text'] {
     return this.input?.text;
   }
+
   getInputAudio(): JovoInput['audio'] {
     return this.input?.audio;
   }
