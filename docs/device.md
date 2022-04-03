@@ -68,7 +68,7 @@ this.$device.supports('ALEXA:APL');
 
 this.$device.supports(GoogleAssistantCapability.InteractiveCanvas);
 // or
-this.$device.supports('GOOGLE_ASSISTANT:INTERACTIVE_CANVAS');
+this.$device.supports('INTERACTIVE_CANVAS');
 ```
 
 If a platform offers specific device features beyond capabilities, you can access its `$device` object as part of the platform object. Here is an example for Amazon Alexa:
