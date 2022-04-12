@@ -64,6 +64,11 @@ export interface Speed {
   accuracyInMetersPerSecond?: number; // [0, MAX_INTEGER]
 }
 
+export interface Unit {
+  unitId: string;
+  persistentUnitId: string;
+}
+
 export type PermissionStatus = 'DENIED' | 'ACCEPTED' | 'NOT_ANSWERED';
 
 export interface System {
@@ -73,6 +78,7 @@ export interface System {
   device: Device;
   apiEndpoint: string;
   apiAccessToken: string;
+  unit?: Unit
 }
 
 export interface Viewport {
