@@ -213,6 +213,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
   clearData(): void {
     this.$user = this.$platform.createUserInstance(this);
     this.$session = new JovoSession();
+    this.$request = this.$platform.createRequestInstance({});
   }
 
   private prepareRequest(jovo: Jovo) {
