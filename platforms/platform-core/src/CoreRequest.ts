@@ -30,7 +30,7 @@ export class CoreRequest extends JovoRequest {
   }
 
   getIntent(): JovoInput['intent'] {
-    return this.input?.nlu?.intent || this.input?.intent;
+    return this.input?.intent || this.input?.nlu?.intent;
   }
 
   setIntent(intent: string): void {
@@ -41,7 +41,7 @@ export class CoreRequest extends JovoRequest {
   }
 
   getEntities(): JovoInput['entities'] {
-    return this.input?.nlu?.entities || this.input?.entities;
+    return this.input?.entities || this.input?.nlu?.entities;
   }
 
   getInputType(): InputTypeLike | undefined {
