@@ -11,7 +11,7 @@ export abstract class Configurable<CONFIG extends AnyObject = AnyObject> {
     this.config = config ? _merge(defaultConfig, config) : defaultConfig;
   }
 
-  mergeConfig(config: DeepPartial<CONFIG>): void {
+  mergeConfig(config?: DeepPartial<CONFIG>): void {
     this.config = _merge(this.config, config);
   }
 
