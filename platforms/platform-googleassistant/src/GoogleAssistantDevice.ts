@@ -3,8 +3,8 @@ import { GoogleAssistant } from './GoogleAssistant';
 import { Capability as NativeCapability } from './output';
 
 export enum GoogleAssistantCapability {
-  InteractiveCanvas = 'INTERACTIVE_CANVAS',
-  WebLink = 'WEB_LINK',
+  InteractiveCanvas = 'GOOGLE_ASSISTANT:INTERACTIVE_CANVAS',
+  WebLink = 'GOOGLE_ASSISTANT:WEB_LINK',
 }
 
 export type GoogleAssistantCapabilityType =
