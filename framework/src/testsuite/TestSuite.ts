@@ -42,15 +42,9 @@ export type PlatformTypes<PLATFORM extends Platform> = PLATFORM extends Platform
 /**
  * Determines whether the provided response type is of type array or not
  */
-export type PlatformResponseType<
-  PLATFORM extends Platform,
-  RESPONSE extends JovoResponse,
-> = PLATFORM['outputTemplateConverterStrategy'] extends SingleResponseOutputTemplateConverterStrategy<
-  RESPONSE,
-  OutputTemplateConverterStrategyConfig
->
-  ? RESPONSE
-  : RESPONSE | RESPONSE[];
+export type PlatformResponseType<PLATFORM extends Platform> = ReturnType<
+  PLATFORM['outputTemplateConverterStrategy']['toResponse']
+>;
 
 /**
  * Return type of TestSuite.prototype.run().
@@ -59,7 +53,7 @@ export type PlatformResponseType<
  */
 export type TestSuiteResponse<PLATFORM extends Platform> = {
   output: OutputTemplate[];
-  response: PlatformResponseType<PLATFORM, PlatformTypes<PLATFORM>['response']>;
+  response: PlatformResponseType<PLATFORM>;
 };
 
 export type RequestOrInput<PLATFORM extends Platform> =
@@ -213,6 +207,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
   clearData(): void {
     this.$user = this.$platform.createUserInstance(this);
     this.$session = new JovoSession();
+    this.$request = this.$platform.createRequestInstance({});
   }
 
   private prepareRequest(jovo: Jovo) {
