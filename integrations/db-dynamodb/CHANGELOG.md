@@ -1,5 +1,19 @@
 # Changelog
 
+## [@jovotech/db-dynamodb@4.2.8](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-dynamodb@4.2.7...@jovotech/db-dynamodb@4.2.8)
+
+> 14 April 2022
+
+- 🐛 Fix optional paramter [`#1280`](https://github.com/jovotech/jovo-framework/pull/1280)
+
+## [@jovotech/db-dynamodb@4.2.7](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-dynamodb@4.2.6...@jovotech/db-dynamodb@4.2.7)
+
+> 14 April 2022
+
+- :recycle: Add additional config merge helper [`#1278`](https://github.com/jovotech/jovo-framework/pull/1278)
+- :bug: Reset $request data in TestSuite [`#1277`](https://github.com/jovotech/jovo-framework/pull/1277)
+- 🔖 Release 4.2.5 [`#1264`](https://github.com/jovotech/jovo-framework/pull/1264)
+
 ## [@jovotech/db-dynamodb@4.2.6](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-dynamodb@4.2.5...@jovotech/db-dynamodb@4.2.6)
 
 > 24 March 2022

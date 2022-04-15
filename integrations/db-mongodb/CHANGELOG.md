@@ -1,5 +1,19 @@
 # Changelog
 
+## [@jovotech/db-mongodb@4.2.6](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-mongodb@4.2.5...@jovotech/db-mongodb@4.2.6)
+
+> 14 April 2022
+
+- 🐛 Fix optional paramter [`#1280`](https://github.com/jovotech/jovo-framework/pull/1280)
+
+## [@jovotech/db-mongodb@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-mongodb@4.2.4...@jovotech/db-mongodb@4.2.5)
+
+> 14 April 2022
+
+- :recycle: Add additional config merge helper [`#1278`](https://github.com/jovotech/jovo-framework/pull/1278)
+- :bug: Reset $request data in TestSuite [`#1277`](https://github.com/jovotech/jovo-framework/pull/1277)
+- 🔖 Release 4.2.5 [`#1264`](https://github.com/jovotech/jovo-framework/pull/1264)
+
 ## [@jovotech/db-mongodb@4.2.4](https://github.com/jovotech/jovo-framework/compare/v3.5...@jovotech/db-mongodb@4.2.4)
 
 > 24 March 2022
