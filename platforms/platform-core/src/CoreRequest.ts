@@ -25,10 +25,6 @@ export class CoreRequest extends JovoRequest {
     return this.locale;
   }
 
-  getInput(): JovoInput {
-    return new JovoInputBuilder(super.getInput()).set('nlu', this.input?.nlu).build();
-  }
-
   getIntent(): JovoInput['intent'] {
     return this.input?.intent || this.input?.nlu?.intent;
   }
