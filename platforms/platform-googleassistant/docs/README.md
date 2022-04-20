@@ -85,7 +85,7 @@ After successfully installing the Jovo Google Assistant packages, you can do the
 
 Jovo helps you manage your Google Action project in the [Actions on Google Console](https://console.actions.google.com/) using the Jovo CLI.
 
-To do this, it is necessary to create a Actions on Google project manually as explained in the [official documentation by Google](https://developers.google.com/assistant/actionssdk/gactions#install_the_gactions_command-line_tool) and then add the project ID to your [project configuration](https://www.jovo.tech/docs/project-config) in `jovo.project.js`:
+To do this, it is necessary to create a Actions on Google project manually as explained in the [official Google Assistant docs](https://developers.google.com/assistant/conversational/build/projects?tool=builder#create_a_project) and then add the project ID to your [project configuration](https://www.jovo.tech/docs/project-config) in `jovo.project.js`:
 
 ```js
 const { ProjectConfig } = require('@jovotech/cli-core');
