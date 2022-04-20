@@ -68,7 +68,7 @@ const { GoogleAssistantCli } = require('@jovotech/platform-googleassistant');
 const project = new ProjectConfig({
   // ...
   plugins: [
-    new GoogleAssistantCli(),
+    new GoogleAssistantCli({ projectId: '<yourProjectId>' }),
     // ...
   ],
 });
@@ -78,20 +78,36 @@ The Google Assistant CLI plugin uses the official `gactions` CLI provided by Goo
 
 After successfully installing the Jovo Google Assistant packages, you can do the following:
 
-- Use the Jovo CLI to [create a project in the Actions on Google Console](#actions-on-google-console-project)
+- Use the Jovo CLI to [manage a project in the Actions on Google Console](#actions-on-google-console-project)
 - Use the Jovo Framework to [build the Google Action code](#google-action-code)
 
 ## Actions on Google Console Project
 
 Jovo helps you manage your Google Action project in the [Actions on Google Console](https://console.actions.google.com/) using the Jovo CLI.
 
-You can use the [`build` command](https://www.jovo.tech/marketplace/platform-googleassistant/cli-commands#build) to turn the [Google Assistant project configuration](https://www.jovo.tech/marketplace/platform-googleassistant/project-config) into Google Assistant specific files.
+To do this, it is necessary to create a Actions on Google project manually as explained in the [official documentation by Google](https://developers.google.com/assistant/actionssdk/gactions#install_the_gactions_command-line_tool) and then add the project ID to your [project configuration](https://www.jovo.tech/docs/project-config) in `jovo.project.js`:
+
+```js
+const { ProjectConfig } = require('@jovotech/cli-core');
+const { GoogleAssistantCli } = require('@jovotech/platform-googleassistant');
+// ...
+
+const project = new ProjectConfig({
+  // ...
+  plugins: [
+    new GoogleAssistantCli({ projectId: '<yourProjectId>' }),
+    // ...
+  ],
+});
+```
+
+You can use the [`build` command](https://www.jovo.tech/marketplace/platform-googleassistant/cli-commands#build) to turn the [Google Assistant project configuration](https://www.jovo.tech/marketplace/platform-googleassistant/project-config) into Google Assistant specific files. Make sure you have installed the `gactions` CLI as explained in the [installation](#installation) section.
 
 ```sh
 $ jovo build:platform googleAssistant
 ```
 
-These files can be found in a folder called `platform.googleAssistant` in the `build` directory of your project. They include the [Google Assistant Conversational Model](https://www.jovo.tech/marketplace/platform-googleassistant/model) that is responsible for training Google Assistant's natural language understanding service.
+The resulting files can be found in a folder called `platform.googleAssistant` in the `build` directory of your project. They include the [Google Assistant Conversational Model](https://www.jovo.tech/marketplace/platform-googleassistant/model) that is responsible for training Google Assistant's natural language understanding service.
 
 The resulting files can then be deployed to the Actions on Google Console using the [`deploy:platform` command](https://www.jovo.tech/marketplace/platform-googleassistant/cli-commands#deploy).
 
