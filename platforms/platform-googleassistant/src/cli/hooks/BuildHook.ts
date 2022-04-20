@@ -322,7 +322,7 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
       },
     );
 
-    buildTask.add(buildInteractionModelTask, projectFilesTask);
+    buildTask.add(projectFilesTask, buildInteractionModelTask);
 
     await buildTask.run();
   }
