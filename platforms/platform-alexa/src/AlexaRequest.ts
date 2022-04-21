@@ -202,7 +202,7 @@ export class AlexaRequest extends JovoRequest {
     return this.context!.System.apiAccessToken;
   }
 
-  getUnit(): Unit|undefined {
+  getUnit(): Unit | undefined {
     return this.context!.System!.unit;
   }
 
