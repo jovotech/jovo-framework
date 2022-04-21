@@ -86,8 +86,8 @@ this.$mongoDb;
 
 // Features
 await this.$mongoDb.getClient();
-await this.$mongoDb.getDatabase();
-await this.$mongoDb.getConnection();
+await this.$mongoDb.getDb();
+await this.$mongoDb.getCollection();
 ```
 
 Here is an example:
