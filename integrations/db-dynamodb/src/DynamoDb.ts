@@ -99,6 +99,7 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
           );
         }
       }
+      throw e;
     }
   }
 
