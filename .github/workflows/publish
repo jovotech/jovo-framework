@@ -1,0 +1,83 @@
+name: workflow
+
+on:
+  push:
+    # start workflow on releases named YYYY-MM-DD-(patch|minor)
+    # e.g. 2022-04-21-patch, 2022-04-21-2-patch, 2022-04-21-minor
+    tags:
+      - "20*"
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node-version: [14.x]
+        os: [ubuntu-latest]
+    steps:
+    
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+          
+      - name: Prepare repository
+        run: git checkout v4/latest
+      
+      # take RELEASE_VERSION from release and add to $GITHUB_ENV
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      
+      # set RELEASE variable to 'patch' RELEASE_VERSION ends with 'patch'
+      - if: endsWith(env.RELEASE_VERSION, 'patch')
+        run: echo "RELEASE=patch" >> $GITHUB_ENV
+        
+      # set RELEASE variable to 'minor' RELEASE_VERSION ends with 'minor'  
+      - if: endsWith(env.RELEASE_VERSION, 'minor')
+        run: echo "RELEASE=minor" >> $GITHUB_ENV 
+        
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: https://registry.npmjs.org/
+      
+      - name: setup git config
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+      
+      - run: |
+            git checkout v4/latest
+            git push --set-upstream origin v4/latest
+      
+      - run: npm install --ci
+      - run: npm run setup:dev 
+      - run: npm run prettier
+      - run: npm run eslint
+      - run: npm run test
+      
+      - name: npm version
+        uses: mathiasvr/command-output@v1
+        id: npmversion
+        with:
+          run: |
+            npm run updateVersions:${{env.RELEASE}}
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.PUBLISH_PACKAGES}}  
+          
+      - run: | 
+          git add .
+          git commit -m "Release ${{env.RELEASE_VERSION}}"
+          git push --set-upstream origin v4/latest     
+          
+      - run: npm run publishPackages
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.PUBLISH_PACKAGES}}
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_TITLE: ":rocket: New ${{env.RELEASE_VERSION}} release"
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_MESSAGE: ${{ steps.npmversion.outputs.stdout }}  
+          MSG_MINIMAL: "actions url"
