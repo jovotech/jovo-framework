@@ -1,5 +1,29 @@
 # Changelog
 
+## [@jovotech/db-dynamodb@4.2.8](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-dynamodb@4.2.7...@jovotech/db-dynamodb@4.2.8)
+
+> 14 April 2022
+
+- 🐛 Fix optional paramter [`#1280`](https://github.com/jovotech/jovo-framework/pull/1280)
+
+## [@jovotech/db-dynamodb@4.2.7](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-dynamodb@4.2.6...@jovotech/db-dynamodb@4.2.7)
+
+> 14 April 2022
+
+- :recycle: Add additional config merge helper [`#1278`](https://github.com/jovotech/jovo-framework/pull/1278)
+- :bug: Reset $request data in TestSuite [`#1277`](https://github.com/jovotech/jovo-framework/pull/1277)
+- 🔖 Release 4.2.5 [`#1264`](https://github.com/jovotech/jovo-framework/pull/1264)
+
+## [@jovotech/db-dynamodb@4.2.6](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-dynamodb@4.2.5...@jovotech/db-dynamodb@4.2.6)
+
+> 24 March 2022
+
+- Add MongoDB integration [`#1217`](https://github.com/jovotech/jovo-framework/pull/1217)
+- add `$requestConfig` to testSuite [`#1256`](https://github.com/jovotech/jovo-framework/pull/1256)
+- [PROPOSAL] Add `component.handler` middleware [`#1208`](https://github.com/jovotech/jovo-framework/pull/1208)
+- :recycle: Add middlewareCollection to handleRequest in test [`#1266`](https://github.com/jovotech/jovo-framework/pull/1266)
+- 🔖 Release 4.2.4  [`#1262`](https://github.com/jovotech/jovo-framework/pull/1262)
+
 ## [@jovotech/db-dynamodb@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/db-dynamodb@4.2.4...@jovotech/db-dynamodb@4.2.5)
 
 > 21 March 2022
