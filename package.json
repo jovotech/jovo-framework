@@ -3,7 +3,6 @@
   "private": true,
   "version": "4.0.0",
   "scripts": {
-    "postinstall": "npm run bootstrap",
     "setup:dev": "npm run bootstrap && npm run build",
     "setup:cli": "lerna run setup:cli && npm run setup:dev",
     "bootstrap": "lerna bootstrap --hoist --no-ci --nohoist=@babel/* --nohoist=babel-*",
@@ -15,9 +14,9 @@
     "test": "lerna exec npm run test --ignore @jovotech/examples-*",
     "version": "node scripts/update-peer-dependencies.js",
     "preparePublish": "npm run bootstrap && npm run prettier && npm run eslint && npm run build && npm run test",
-    "updateVersions": "lerna version --no-push",
-    "publishPackages": "lerna publish from-package",
-    "doPublish": "npm run updateVersions && npm run publishPackages"
+    "updateVersions:minor": "lerna version minor --yes --no-push --no-git-tag-version",
+    "updateVersions:patch": "lerna version patch --yes --no-push --no-git-tag-version",
+    "publishPackages": "lerna publish from-git --yes --no-verify-access"
   },
   "author": "jovotech",
   "license": "Apache-2.0",

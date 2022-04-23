@@ -9,7 +9,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [12.x, 14.x]
+        node-version: [12.x, 14.x, 16.x]
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
 
@@ -19,6 +19,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm install
+      - run: npm run setup:dev
       - run: npm run prettier
       - run: npm run eslint
       - run: npm run build

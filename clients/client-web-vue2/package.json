@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/client-web-vue2",
-  "version": "4.2.1",
+  "version": "4.2.9",
   "description": "",
   "main": "dist/JovoWebClientVue.cjs.js",
   "module": "dist/JovoWebClientVue.esm.js",
@@ -16,7 +16,7 @@
     "prebuild": "rimraf dist",
     "build": "tsc --emitDeclarationOnly && node scripts/build.js",
     "start:dev": "esbuild src/index.ts --bundle --servedir=demo --outdir=demo/js --global-name=JovoWebClientVue --external:@jovotech/common",
-    "prettier": "prettier -w -l src test",
+    "prettier": "prettier -w -l src test package.json",
     "eslint": "eslint src test --fix --ext .ts",
     "rimraf": "rimraf dist",
     "test": "jest --runInBand"
@@ -24,7 +24,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/client-web": "^4.2.1"
+    "@jovotech/client-web": "^4.2.9"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",

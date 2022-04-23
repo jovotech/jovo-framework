@@ -5,18 +5,25 @@ excerpt: 'Jovo offers a variety of integrations that allow you to store elements
 
 # Database Integrations
 
-Jovo offers a variety of integrations that allow you to store elements like user data, session data, and a user's interaction history in a database. [Learn more about the different data types here](./data.md).
+Jovo offers a variety of integrations that allow you to store elements like user data, session data, and a user's interaction history in a database.
 
-## Integrations
+## Introduction
+
+For data that needs to be stored across sessions, it is necessary to use a database for long-term storage. [Learn more about the different data types here](./data.md).
 
 The following database integrations are currently working with Jovo `v4`:
 
-- `FileDb`: File-based system for local prototyping. Added to the `app.dev` stage by default.
-- `DynamoDb`: NoSQL database by AWS, typically used together with AWS Lambda.
+- [`FileDb`](https://www.jovo.tech/marketplace/db-filedb): File-based system for local prototyping. Added to the `app.dev` [stage](./staging.md) by default.
+- [`DynamoDb`](https://www.jovo.tech/marketplace/db-dynamodb): NoSQL database by AWS, typically used together with [AWS Lambda](https://www.jovo.tech/marketplace/server-lambda).
+- [`MongoDb`](https://www.jovo.tech/marketplace/db-mongodb): Source-available NoSQL database.
+
+The [configuration](#configuration) section explains how database integrations can be added and configured.
+
+If you want to build your own database integration, take a look at the [custom database integration](#custom-database-integration) section
 
 ## Configuration
 
-You can add a database integration as a plugin. For example, many Jovo projects have `FileDb` added to `app.dev.ts`:
+You can add a database integration as a plugin. For example, many Jovo projects have [`FileDb`](https://www.jovo.tech/marketplace/db-filedb) added to `app.dev.ts`:
 
 ```typescript
 app.configure({
@@ -28,6 +35,8 @@ app.configure({
   ],
 });
 ```
+
+We recommend keeping [`FileDb`](https://www.jovo.tech/marketplace/db-filedb) for the `dev` stage and then adding a production database like [`DynamoDb`](https://www.jovo.tech/marketplace/db-dynamodb) to stages like `prod`. [Learn more about staging here](./staging.md).
 
 Along with integration specific options (which can be found in each integration's documentation), there are also features that are configured the same way across all databases. This section uses `FileDb` for its code examples, which can be replaced with the database integration of your choice.
 
@@ -118,3 +127,14 @@ new FileDb({
   }
 }),
 ```
+
+## Custom Database Integration
+
+You can create your own database integration as a [`DbPlugin`](https://github.com/jovotech/jovo-framework/blob/v4/latest/framework/src/plugins/DbPlugin.ts), which is a special type of [Jovo plugin](./plugins.md).
+
+For guidance, we recommend taking a look at the [DynamoDB integration code](https://github.com/jovotech/jovo-framework/tree/v4/latest/integrations/db-dynamodb), especially the [`DynamoDb.ts` file](https://github.com/jovotech/jovo-framework/blob/v4/latest/integrations/db-dynamodb/src/DynamoDb.ts).
+
+The custom database needs to implement the following methods:
+
+- `loadData`: Load the data at the beginning of the request lifecycle. Needs to call the `jovo.setPersistableData` method.
+- `saveData`: Save the data at the end of the request lifecycle. Needs to call the `jovo.applyPersistableData` method.

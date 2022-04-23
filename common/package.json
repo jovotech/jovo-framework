@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/common",
-  "version": "4.2.0",
+  "version": "4.2.3",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -15,7 +15,7 @@
     "prebuild": "rimraf dist",
     "build": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json",
     "watch": "tsc -b tsconfig.build.cjs.json tsconfig.build.esm5.json tsconfig.build.esm2015.json tsconfig.build.types.json --watch",
-    "prettier": "prettier -w -l src test",
+    "prettier": "prettier -w -l src test package.json",
     "eslint": "eslint src test --fix --ext .ts",
     "rimraf": "rimraf dist",
     "test": "jest --runInBand"

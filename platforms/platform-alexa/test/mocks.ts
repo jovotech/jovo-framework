@@ -2,6 +2,7 @@ import nock, { Scope } from 'nock';
 
 interface AlexaMockSpec {
   response: {
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     body: any;
     statusCode: 200 | 403 | 401;
   };
