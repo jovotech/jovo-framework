@@ -4,6 +4,7 @@ import { BaseOutput, Output, OutputTemplate } from '@jovotech/framework';
 export class LinkAccountCardOutput extends BaseOutput {
   build(): OutputTemplate | OutputTemplate[] {
     return {
+      message: this.options.message,
       listen: false,
       platforms: {
         alexa: {
