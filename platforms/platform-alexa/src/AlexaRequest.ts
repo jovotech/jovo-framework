@@ -14,7 +14,7 @@ import {
   STATIC_ENTITY_MATCHES_PREFIX,
   SUPPORTED_APL_ARGUMENT_TYPES,
 } from './constants';
-import { AlexaEntity, Context, Request, Session } from './interfaces';
+import { AlexaEntity, Context, Request, Session, Unit } from './interfaces';
 import { ResolutionPerAuthority, ResolutionPerAuthorityStatusCode, Slot } from './output';
 import _set from 'lodash.set';
 export const ALEXA_REQUEST_TYPE_TO_INPUT_TYPE_MAP: Record<string, InputTypeLike> = {
@@ -200,6 +200,10 @@ export class AlexaRequest extends JovoRequest {
 
   getApiAccessToken(): string {
     return this.context!.System.apiAccessToken;
+  }
+
+  getUnit(): Unit | undefined {
+    return this.context!.System!.unit;
   }
 
   getDeviceCapabilities(): AlexaCapabilityType[] | undefined {

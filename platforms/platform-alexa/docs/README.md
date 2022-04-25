@@ -188,12 +188,42 @@ if (this.$alexa) {
 
 The following Alexa properties offer additional features:
 
+- [Request](#request)
 - [User](#user)
 - [Output](#output)
 - [Device](#device)
 - [Entities (Slots)](#entities-slots-)
 - [ISP](#isp)
 - [Alexa Conversations](#alexa-conversations)
+
+
+### Request
+
+You can access the request using the following methods:
+
+```typescript
+// Generic request type
+this.$request
+
+// Alexa request type
+this.$alexa.$request
+```
+
+There are also some helper methods to help you retrieve information from Alexa requests.
+
+For example, you can retrieve the `unit` property from the [Alexa System object](https://developer.amazon.com/docs/alexa/custom-skills/request-and-response-json-reference.html#system-object) like this:
+
+```typescript
+this.$alexa.$request.getUnit();
+
+/* Result:
+  {
+    unitId: string;
+    persistentUnitId: string;
+  }
+*/
+```
+
 
 ### User
 
