@@ -1,4 +1,4 @@
-import { ExpressJs, Webhook } from '@jovotech/server-express';
+import { ExpressJs, Request, Response, Webhook } from '@jovotech/server-express';
 import { app } from './app';
 
 /*
@@ -7,7 +7,7 @@ import { app } from './app';
 |--------------------------------------------------------------------------
 |
 | Creates a new express app instance, default for local development
-| Learn more here: https://www.jovo.tech/marketplace/server-express
+| Learn more here: www.jovo.tech/docs/server/express
 |
 */
 
@@ -24,7 +24,7 @@ const port = process.env.JOVO_PORT || 3000;
     console.info(`Local server listening on port ${port}.`);
   });
 
-  Webhook.post('/webhook', async (req, res) => {
+  Webhook.post('/webhook', async (req: Request, res: Response) => {
     await app.handle(new ExpressJs(req, res));
   });
 })();

@@ -7,7 +7,7 @@ import { app } from './app';
 |--------------------------------------------------------------------------
 |
 | Used to run the app on AWS Lambda
-| Learn more here: www.jovo.tech/docs/server/lambda
+| Learn more here: https://www.jovo.tech/marketplace/server-lambda
 |
 */
 
