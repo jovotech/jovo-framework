@@ -11,12 +11,12 @@ export class LinkAccountCardOutput extends BaseOutput {
           nativeResponse: {
             response: {
               card: {
-                type: 'LinkAccount'
-              }
-            }
-          }
-        }
-      }
+                type: 'LinkAccount',
+              },
+            },
+          },
+        },
+      },
     };
   }
 }
