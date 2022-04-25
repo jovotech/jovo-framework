@@ -40,7 +40,8 @@ export class Table {
 
   @ValidateNested()
   @Type(() => Link)
-  button!: Link;
+  @IsOptional()
+  button?: Link;
 }
 
 export enum HorizontalAlignment {
