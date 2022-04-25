@@ -13,6 +13,8 @@ This [database integration](https://www.jovo.tech/docs/databases) allows you to 
 
 If you use AWS for your deployment, we recommend [FileDb](https://www.jovo.tech/marketplace/db-filedb) for local development and DynamoDB for deployed versions. [Learn more about staging here](https://www.jovo.tech/docs/staging).
 
+[You can also find an example on GitHub](https://github.com/jovotech/jovo-sample-alexa-googleassistant-lambda).
+
 ## Installation
 
 You can install the plugin like this:
@@ -31,21 +33,23 @@ import { DynamoDb } from '@jovotech/db-dynamodb';
 app.configure({
   plugins: [
     new DynamoDb({
-      // Configuration
+      table: {
+        name: '<YOUR_TABLE_NAME>',
+      },
     }),
     // ...
   ],
 });
 ```
 
-Once the configuration is done, the DynamoDB database integration will create a DynamoDB table on the first read/write attempt (might take some seconds). No need for you to create the table.
+For the plugin to work, you need to at least add a table name to the configuration. The [configuration section](#configuration) then provides a detailed overview of all options.
+
+Once the configuration is done, the DynamoDB database integration will create a DynamoDB table on the first read/write attempt. This might take some seconds and could lead to the app returning an error during the first request. The second request should then work as expected.
 
 The rest of this section provides an introduction to the steps you need to take depending on where you host your Jovo app:
 
 - [On AWS (e.g. Lambda)](#for-apps-hosted-on-aws)
 - [Outside AWS](#for-apps-hosted-outside-aws)
-
-The [configuration section](#configuration) then provides a detailed overview of all configuration options.
 
 ### For Apps Hosted on AWS
 
@@ -54,7 +58,7 @@ If you host your app on [AWS Lambda](https://www.jovo.tech/marketplace/server-la
 ```typescript
 new DynamoDb({
   table: {
-    name: 'MyDynamoDbTable',
+    name: '<YOUR_TABLE_NAME>',
   }
 }),
 ```
@@ -68,7 +72,7 @@ You can then add the necessary keys using the [`libraryConfig` property](#librar
 ```typescript
 new DynamoDb({
   table: {
-    name: 'MyDynamoDbTable',
+    name: '<YOUR_TABLE_NAME>',
   },
   libraryConfig: {
     dynamoDbClient: {
@@ -106,7 +110,7 @@ The `table` property includes configuration for the creation of the DynamoDB tab
 new DynamoDb({
   table: {
     // Required properties
-    name: 'MyDynamoDbTable',
+    name: '<YOUR_TABLE_NAME>',
 
     // Optional properties (with default values)
     createTableOnInit: true, // Creates a table if one does not already exist
@@ -164,3 +168,18 @@ new DynamoDb({
   // ...
 }),
 ```
+
+## Permissions
+
+The DynamoDB integration needs the following permissions. Learn more in the [official AWS docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Operations.html).
+
+- `dynamodb:CreateTable`
+- `dynamodb:DescribeTable`
+- `dynamodb:Query`
+- `dynamodb:Scan`
+- `dynamodb:GetItem`
+- `dynamodb:PutItem`
+- `dynamodb:UpdateItem`
+- `dynamodb:DeleteItem`
+
+You can find all permissions for the [Serverless CLI](https://www.jovo.tech/marketplace/target-serverless) in this [example `jovo.project.js` file](https://github.com/jovotech/jovo-sample-alexa-googleassistant-lambda/blob/main/jovo.project.js).

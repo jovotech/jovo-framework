@@ -7,7 +7,7 @@ import { app } from './app';
 |--------------------------------------------------------------------------
 |
 | Creates a new express app instance, default for local development
-| Learn more here: www.jovo.tech/docs/server/express
+| Learn more here: https://www.jovo.tech/marketplace/server-express
 |
 */
 
