@@ -594,7 +594,10 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
    * @param locale - The locale of the Jovo model to fetch the invocation name from.
    */
   async getInvocationName(locale: string): Promise<string> {
-    const { invocation } = await this.getJovoModel(locale);
+    const { invocation } = _merge(
+      await this.getJovoModel(locale),
+      this.$cli.project!.config.getParameter(`models.override.${locale}`),
+    );
 
     if (typeof invocation === 'object') {
       // ToDo: Test!

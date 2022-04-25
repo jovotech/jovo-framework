@@ -66,6 +66,11 @@ export interface Speed {
 
 export type PermissionStatus = 'DENIED' | 'ACCEPTED' | 'NOT_ANSWERED';
 
+export interface Unit {
+  unitId: string;
+  persistentUnitId: string;
+}
+
 export interface System {
   application: Application;
   user: User;
@@ -73,6 +78,7 @@ export interface System {
   device: Device;
   apiEndpoint: string;
   apiAccessToken: string;
+  unit?: Unit
 }
 
 export interface Viewport {

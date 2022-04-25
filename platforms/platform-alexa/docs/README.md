@@ -188,12 +188,42 @@ if (this.$alexa) {
 
 The following Alexa properties offer additional features:
 
+- [Request](#request)
 - [User](#user)
 - [Output](#output)
 - [Device](#device)
 - [Entities (Slots)](#entities-slots-)
 - [ISP](#isp)
 - [Alexa Conversations](#alexa-conversations)
+
+
+### Request
+
+You can access the request using the following methods:
+
+```typescript
+// Generic request type
+this.$request
+
+// Alexa request type
+this.$alexa.$request
+```
+
+There are also some helper methods to help you retrieve information from Alexa requests.
+
+For example, you can retrieve the `unit` property from the [Alexa System object](https://developer.amazon.com/docs/alexa/custom-skills/request-and-response-json-reference.html#system-object) like this:
+
+```typescript
+this.$alexa.$request.getUnit();
+
+/* Result:
+  {
+    unitId: string;
+    persistentUnitId: string;
+  }
+*/
+```
+
 
 ### User
 
@@ -206,6 +236,7 @@ this.$alexa.$user;
 The following features are offered by the Alexa user property:
 
 - [User Profile](#user-profile)
+- [Account Linking](#account-linking)
 
 #### User Profile
 
@@ -246,12 +277,17 @@ async getEmail() {
 
 If the `getEmail` call returns an error with the code `NO_USER_PERMISSION`, an `AskForPermissionsConsent` card ([learn more in the official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-customer-contact-information-for-use-in-your-skill.html#sample-response-with-permissions-card)) is added to the Alexa-specific [output](https://www.jovo.tech/docs/output). Please note that the example adds the output to the `$send()` method for simplicity. It could also be added using output classes.
 
+#### Account Linking
+
+Account linking enables you to connect your Alexa Skill users to other systems.
+
+[Learn more in the Account Linking documentation for Alexa](https://www.jovo.tech/marketplace/platform-alexa/account-linking).
+
 ### Output
 
 There are various Alexa specific elements that can be added to the [output](https://www.jovo.tech/docs/output).
 
 [Learn more in the Jovo Output documentation for Alexa](https://www.jovo.tech/marketplace/platform-alexa/output).
-
 
 ### Device
 
@@ -261,9 +297,13 @@ You can check if the device supports APL by using the following method that chec
 import { AlexaCapability } from '@jovotech/platform-alexa';
 // ...
 
-if (this.$device.supports(AlexaCapability.Apl)) { /* ... */ };
+if (this.$device.supports(AlexaCapability.Apl)) {
+  /* ... */
+}
 // or
-if (this.$device.supports('ALEXA:APL')) { /* ... */ };
+if (this.$device.supports('ALEXA:APL')) {
+  /* ... */
+}
 ```
 
 There are also various Alexa specific features added to the [device class](https://www.jovo.tech/docs/device) that can be accessed like this:
@@ -395,7 +435,6 @@ async someHandler() {
 }
 ```
 
-
 ### Entities (Slots)
 
 Alexa _slots_ are called _entities_ in Jovo. You can learn more in the [Jovo Model](https://www.jovo.tech/docs/models) and the [`$entities` documentation](https://www.jovo.tech/docs/entities).
@@ -410,7 +449,6 @@ this.$alexa.$entities.name.native;
 ```
 
 Learn more about the structure of the API result in the [official Alexa documentation on entity resolution](https://developer.amazon.com/en-US/docs/alexa/custom-skills/entity-resolution.html).
-
 
 ### ISP
 
