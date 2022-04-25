@@ -1,5 +1,34 @@
 # Changelog
 
+## [@jovotech/output@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/output@4.2.3...@jovotech/output@4.2.4)
+
+> 14 April 2022
+
+- 🐛 Fix optional paramter [`#1280`](https://github.com/jovotech/jovo-framework/pull/1280)
+
+## [@jovotech/output@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/output@4.2.2...@jovotech/output@4.2.3)
+
+> 14 April 2022
+
+- :recycle: Add additional config merge helper [`#1278`](https://github.com/jovotech/jovo-framework/pull/1278)
+- :bug: Reset $request data in TestSuite [`#1277`](https://github.com/jovotech/jovo-framework/pull/1277)
+- Add MongoDB integration [`#1217`](https://github.com/jovotech/jovo-framework/pull/1217)
+- add `$requestConfig` to testSuite [`#1256`](https://github.com/jovotech/jovo-framework/pull/1256)
+- [PROPOSAL] Add `component.handler` middleware [`#1208`](https://github.com/jovotech/jovo-framework/pull/1208)
+- :recycle: Add middlewareCollection to handleRequest in test [`#1266`](https://github.com/jovotech/jovo-framework/pull/1266)
+- 🔖 Release 4.2.5 [`#1264`](https://github.com/jovotech/jovo-framework/pull/1264)
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.4  [`#1262`](https://github.com/jovotech/jovo-framework/pull/1262)
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
 ## [@jovotech/output@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/output@4.2.1...@jovotech/output@4.2.2)
 
 > 17 February 2022
