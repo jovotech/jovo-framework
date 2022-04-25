@@ -68,7 +68,7 @@ jobs:
           
       - run: | 
           git add .
-          git commit -m "Release ${{env.RELEASE_VERSION}}"
+          git commit -m ":bookmark: Release ${{env.RELEASE_VERSION}}"
           git push --set-upstream origin v4/latest     
           
       - run: npm run publishPackages
