@@ -1207,6 +1207,12 @@
 
 > 24 August 2021
 
+## [@jovotech/platform-googleassistant@4.2.9](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-googleassistant@4.2.8...@jovotech/platform-googleassistant@4.2.9)
+
+> 20 April 2022
+
+- :bug: Fix build order of project files [`#1285`](https://github.com/jovotech/jovo-framework/pull/1285)
+
 ## [@jovotech/platform-googleassistant@4.2.8](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-googleassistant@4.2.7...@jovotech/platform-googleassistant@4.2.8)
 
 > 14 April 2022
