@@ -208,6 +208,10 @@ export interface Request {
     arguments: Record<string, string>;
     slots: Record<string, Slot>;
   };
+  body?: {
+    acceptedPermissions?: { scope: string }[];
+    acceptedPersonPermissions?: { scope: string }[];
+  };
 }
 
 // Defines a target for Alexa Conversations
