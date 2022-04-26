@@ -1,4 +1,4 @@
-name: workflow
+name: npm publish
 
 on:
   push:
@@ -74,6 +74,13 @@ jobs:
       - run: npm run publishPackages
         env:
           NODE_AUTH_TOKEN: ${{secrets.PUBLISH_PACKAGES}}
+      
+      # Push version bump to v4/dev    
+      - run: | 
+          git checkout v4/dev
+          git merge v4/latest -m ":twisted_rightwards_arrows: Merge v4/latest into v4/dev"
+          git push --set-upstream origin v4/dev    
+      
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
         env:
