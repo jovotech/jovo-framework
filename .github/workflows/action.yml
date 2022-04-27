@@ -1,7 +1,7 @@
 
 name: jovo-framework workflow
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   build:
