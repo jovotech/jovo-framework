@@ -1,10 +1,5 @@
 import { Constructor, Input, InputType, JovoError, OmitWhere } from '@jovotech/common';
-import {
-  JovoResponse,
-  OutputTemplate,
-  OutputTemplateConverterStrategyConfig,
-  SingleResponseOutputTemplateConverterStrategy,
-} from '@jovotech/output';
+import { OutputTemplate } from '@jovotech/output';
 import { existsSync } from 'fs';
 import _cloneDeep from 'lodash.clonedeep';
 import _merge from 'lodash.merge';
