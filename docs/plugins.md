@@ -31,7 +31,14 @@ Here is an example of a basic plugin called `SomePlugin`:
 ```typescript
 // src/plugins/SomePlugin.ts
 
-import { Jovo, HandleRequest, Plugin, Extensible, InvalidParentError } from '@jovotech/framework';
+import {
+  Jovo,
+  HandleRequest,
+  Plugin,
+  PluginConfig,
+  Extensible,
+  InvalidParentError,
+} from '@jovotech/framework';
 
 export class SomePlugin extends Plugin {
   mount(extensible: Extensible) {
@@ -47,7 +54,7 @@ export class SomePlugin extends Plugin {
     // ...
   }
 
-  getDefaultConfig() {
+  getDefaultConfig(): PluginConfig {
     return {};
   }
 }
