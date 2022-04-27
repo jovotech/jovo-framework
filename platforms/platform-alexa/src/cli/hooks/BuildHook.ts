@@ -21,7 +21,7 @@ import {
   Task,
   wait,
 } from '@jovotech/cli-core';
-import { FileBuilder, FileObject, FileObjectEntry } from '@jovotech/filebuilder';
+import { FileBuilder, FileObject } from '@jovotech/filebuilder';
 import { JovoModelData, JovoModelDataV3, NativeFileInformation } from '@jovotech/model';
 import { JovoModelAlexa } from '@jovotech/model-alexa';
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs';
