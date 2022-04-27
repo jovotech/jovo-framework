@@ -21,7 +21,7 @@ import {
   Task,
   wait,
 } from '@jovotech/cli-core';
-import { FileBuilder, FileObject } from '@jovotech/filebuilder';
+import { FileBuilder, FileObject, FileObjectEntry } from '@jovotech/filebuilder';
 import { JovoModelData, JovoModelDataV3, NativeFileInformation } from '@jovotech/model';
 import { JovoModelAlexa } from '@jovotech/model-alexa';
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs';
@@ -393,6 +393,16 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
         sslCertificateType: certificate,
         uri: endpoint,
       });
+    }
+
+    // replace ${JOVO_WEBHOOK_URL} in event uri with the Jovo Webhook url
+    const eventEndpointUriPath = 'skill-package/["skill.json"].manifest.events.endpoint.uri';
+    if (_has(projectFiles, eventEndpointUriPath)) {
+      _set(
+        projectFiles,
+        eventEndpointUriPath,
+        this.$cli.resolveEndpoint(_get(projectFiles, eventEndpointUriPath).toString()),
+      );
     }
 
     // Create entries for Alexa Conversations
