@@ -98,7 +98,7 @@ this.$user.data.someKey = 'someValue';
 
 ### History
 
-The `$history` makes it possible to store data of each interaction into a persisted history. This enables your app to remember what was previously said, repeat things like previous output, or just track usage over time.
+The `$history` uses [database integrations](./databases.md) to make it possible to store data of each interaction into a persisted history. This enables your app to remember what was previously said, repeat things like previous output, or just track usage over time.
 
 The history object contains an `items` array that is sorted by time (DESC). The most recent history item can be accessed like this:
 
@@ -266,7 +266,7 @@ Since in this example, the repeat handler is part of a [global component](./comp
 - The handler can be reached from anywhere, even if the flow is currently deep down inside subcomponents.
 - Global components don't get added to the [`$state` stack](./state-stack.md). This way, the interaction stays in the previous component and the user can proceed with the flow after hearing the repeated message.
 
-If you are using [`UNHANDLED`](./handlers.md#unhandled) as part of a component, it is possible that the global component handlers don't get reached because the `UNHANDLED` handler of the current component gets prioritized by default. Learn more about this in the [routing documentation](./routing.md#unhandled-prioritization). 
+If you are using [`UNHANDLED`](./handlers.md#unhandled) as part of a component, it is possible that the global component handlers don't get reached because the `UNHANDLED` handler of the current component gets prioritized by default. Learn more about this in the [routing documentation](./routing.md#unhandled-prioritization).
 
 To have the repeat handler always be executed instead of `UNHANDLED`, you can use the [`prioritizedOverUnhandled`](./handlers.md#prioritizedOverUnhandled) property:
 
