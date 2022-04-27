@@ -31,7 +31,14 @@ Here is an example of a basic plugin called `SomePlugin`:
 ```typescript
 // src/plugins/SomePlugin.ts
 
-import { Jovo, HandleRequest, Plugin, Extensible, InvalidParentError } from '@jovotech/framework';
+import {
+  Jovo,
+  HandleRequest,
+  Plugin,
+  PluginConfig,
+  Extensible,
+  InvalidParentError,
+} from '@jovotech/framework';
 
 export class SomePlugin extends Plugin {
   mount(extensible: Extensible) {
@@ -47,7 +54,7 @@ export class SomePlugin extends Plugin {
     // ...
   }
 
-  getDefaultConfig() {
+  getDefaultConfig(): PluginConfig {
     return {};
   }
 }
@@ -203,6 +210,58 @@ On every request, the mounting takes place, which consists of the following step
 The `config` of the plugins is now the request config. Changes to the request config are just applied during this request and do not mutate the original config.
 
 Due to the request config getting set during mounting, the `mount`-[lifecycle-hook](#plugin-lifecycle) should be used for registering middlewares.
+
+### Jovo Properties
+
+You can also add your own [Jovo properties](./jovo-properties.md#custom-properties) using a plugin:
+
+```typescript
+// MyPropertyPlugin.ts
+
+import {
+  Jovo,
+  HandleRequest,
+  Plugin,
+  PluginConfig,
+  Extensible,
+  InvalidParentError,
+} from '@jovotech/framework';
+
+// Add the $myProperty type to the Jovo class
+declare module '@jovotech/framework/dist/types/Jovo' {
+  interface Jovo {
+    $myProperty: MyPropertyPlugin;
+  }
+}
+
+export class MyPropertyPlugin extends Plugin {
+  mount(extensible: Extensible) {
+    if (!(extensible instanceof HandleRequest)) {
+      throw new InvalidParentError(this.constructor.name, HandleRequest);
+    }
+
+    // Add the $myProperty property to the Jovo object
+    extensible.middlewareCollection.use('before.request.start', (jovo) => {
+      jovo.$myProperty = new MyPropertyPlugin(this);
+    });
+  }
+
+  // Sample method that can be called using $myProperty
+  myFunction(jovo: Jovo) {
+    // ...
+  }
+
+  getDefaultConfig(): PluginConfig {
+    return {};
+  }
+}
+```
+
+As a result, you can use this in your handler:
+
+```typescript
+this.$myProperty.myFunction();
+```
 
 ### Jovo Extensible Structure
 

@@ -128,6 +128,15 @@ new FileDb({
 }),
 ```
 
+## Middlewares
+
+Each database integration extends the [`DbPlugin` class](https://github.com/jovotech/jovo-framework/blob/v4/latest/framework/src/plugins/DbPlugin.ts) and hooks into the following [RIDR middlewares](./middlewares.md#ridr-middlewares):
+
+- Data is retrieved in `request.start`
+- Data is stored in `response.end`
+
+If you want to build a [plugin](./plugins.md) or [hook](./hooks.md) that modifies the data, make sure that this happens between these two middlewares. See the [RIDR middlewares](./middlewares.md#ridr-middlewares) section for an overview.
+
 ## Custom Database Integration
 
 You can create your own database integration as a [`DbPlugin`](https://github.com/jovotech/jovo-framework/blob/v4/latest/framework/src/plugins/DbPlugin.ts), which is a special type of [Jovo plugin](./plugins.md).
