@@ -319,8 +319,10 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       set: (target, key: keyof T, value: T[keyof T]): boolean => {
         const previousValue = target[key];
         target[key as keyof T] = value;
+        const stringKey = key.toString();
+
         // only emit changes
-        if (!isEqual(previousValue, value)) {
+        if (!isEqual(previousValue, value) && !this.config.ignoredProperties.includes(stringKey)) {
           const stringKey = key.toString();
           this.emitUpdate(handleRequest.debuggerRequestId, {
             key: stringKey,
