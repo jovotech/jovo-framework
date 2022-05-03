@@ -1,5 +1,14 @@
 import { EnumLike } from '@jovotech/framework';
-import { IsArray, IsEnum } from '@jovotech/output';
+import {
+  IsArray,
+  IsEnum,
+  IsNotEmpty,
+  IsObject,
+  IsOptional,
+  IsString,
+  Type,
+  ValidateNested,
+} from '@jovotech/output';
 
 export enum Capability {
   Unspecified = 'UNSPECIFIED',
@@ -12,8 +21,23 @@ export enum Capability {
 
 export type CapabilityLike = EnumLike<Capability>;
 
+export class TimeZone {
+  @IsString()
+  @IsNotEmpty()
+  id!: string;
+
+  @IsOptional()
+  @IsString()
+  version?: string;
+}
 export class Device {
   @IsArray()
   @IsEnum(Capability, { each: true })
   capabilities!: CapabilityLike[];
+
+  @IsObject()
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => TimeZone)
+  timeZone?: TimeZone;
 }
