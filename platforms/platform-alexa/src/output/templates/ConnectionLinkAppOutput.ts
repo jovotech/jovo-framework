@@ -29,6 +29,7 @@ export class ConnectionLinkAppOutput extends BaseOutput<ConnectionLinkAppOutputO
   build(): OutputTemplate | OutputTemplate[] {
 
     return {
+      message: this.options.message,
       platforms: {
         alexa: {
           nativeResponse: {

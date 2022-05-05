@@ -27,6 +27,7 @@ export class ConnectionPrintImageOutput extends BaseOutput<ConnectionPrintImageO
   build(): OutputTemplate | OutputTemplate[] {
 
     return {
+      message: this.options.message,
       platforms: {
         alexa: {
           nativeResponse: {

@@ -21,6 +21,7 @@ export class ConnectionPrintWebPageOutput extends BaseOutput<ConnectionPrintWebP
   build(): OutputTemplate | OutputTemplate[] {
 
     return {
+      message: this.options.message,
       platforms: {
         alexa: {
           nativeResponse: {

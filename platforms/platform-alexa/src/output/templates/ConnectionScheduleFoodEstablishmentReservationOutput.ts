@@ -39,6 +39,7 @@ export class ConnectionScheduleFoodEstablishmentReservationOutput extends BaseOu
   build(): OutputTemplate | OutputTemplate[] {
 
     return {
+      message: this.options.message,
       platforms: {
         alexa: {
           nativeResponse: {

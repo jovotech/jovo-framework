@@ -20,6 +20,7 @@ export class ConnectionScheduleTaxiReservationOutput extends BaseOutput<Connecti
   build(): OutputTemplate | OutputTemplate[] {
 
     return {
+      message: this.options.message,
       platforms: {
         alexa: {
           nativeResponse: {

@@ -21,6 +21,7 @@ export class ConnectionPrintPdfOutput extends BaseOutput<ConnectionPrintPdfOutpu
   build(): OutputTemplate | OutputTemplate[] {
 
     return {
+      message: this.options.message,
       platforms: {
         alexa: {
           nativeResponse: {

@@ -18,6 +18,7 @@ export class ConnectionTestStatusCodeOutput extends BaseOutput<ConnectionTestSta
   build(): OutputTemplate | OutputTemplate[] {
 
     return {
+      message: this.options.message,
       platforms: {
         alexa: {
           nativeResponse: {
