@@ -5,7 +5,7 @@ export enum ImageType {
   Jpeg = 'JPEG',
 }
 
-export interface ConnectionPrintPdfOutputOptions extends OutputOptions {
+export interface ConnectionPrintImageOutputOptions extends OutputOptions {
   shouldEndSession?: boolean;
   token?: string;
   title: string;
@@ -15,8 +15,8 @@ export interface ConnectionPrintPdfOutputOptions extends OutputOptions {
 }
 
 @Output()
-export class ConnectionPrintPdfOutput extends BaseOutput<ConnectionPrintPdfOutputOptions> {
-  getDefaultOptions(): ConnectionPrintPdfOutputOptions {
+export class ConnectionPrintImageOutput extends BaseOutput<ConnectionPrintImageOutputOptions> {
+  getDefaultOptions(): ConnectionPrintImageOutputOptions {
     return {
       title: '',
       url: '',
