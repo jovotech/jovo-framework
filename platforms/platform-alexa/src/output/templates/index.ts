@@ -21,4 +21,3 @@ export * from './ConnectionScheduleTaxiReservationOutput';
 export * from './ConnectionTestStatusCodeOutput';
 export * from './ConnectionVerifyPersonOutput';
 export * from './ConnectionScheduleFoodEstablishmentReservationOutput';
-export * from './ConnectionPostalAddress';

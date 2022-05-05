@@ -1,5 +1,5 @@
 import { BaseOutput, Output, OutputOptions, OutputTemplate } from '@jovotech/framework';
-import { ConnectionPostalAddress } from './ConnectionPostalAddress';
+import { ConnectionPostalAddress } from '../../interfaces';
 
 export interface ConnectionScheduleTaxiReservationOutputOptions extends OutputOptions {
   shouldEndSession?: boolean;

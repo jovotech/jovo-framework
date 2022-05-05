@@ -8,6 +8,7 @@ import {
   IsString,
   Type,
 } from '@jovotech/output';
+import { PermissionScope } from '../../../interfaces';
 import { IsValidCardImage } from '../../decorators/validation/IsValidCardImage';
 import { IsValidCardString } from '../../decorators/validation/IsValidCardString';
 import { CardImage } from './CardImage';
@@ -21,21 +22,13 @@ export enum CardType {
 
 export type CardTypeLike = EnumLike<CardType>;
 
-export enum PermissionScope {
-  ReadProfileName = 'alexa::profile:name:read',
-  ReadProfileGivenName = 'alexa::profile:given_name:read',
-  ReadProfileEmail = 'alexa::profile:email:read',
-  ReadProfileMobileNumber = 'alexa::profile:mobile_number:read',
-  ReadWriteReminders = 'alexa::alerts:reminders:skill:readwrite',
-  ReadWriteTimers = 'alexa::alerts:timers:skill:readwrite',
+export enum CardPermissionScope {
   ReadList = 'read::alexa:household:list',
   WriteList = 'write::alexa:household:list',
   ReadAddressFull = 'read::alexa:device:all:address',
-  ReadAddressCountryAndPostalCode = 'read::alexa:device:all:address:country_and_postal_code',
-  ReadGeolocation = 'alexa::devices:all:geolocation:read',
 }
 
-export type PermissionScopeLike = EnumLike<PermissionScope> | string;
+export type CardPermissionScopeLike = EnumLike<PermissionScope | CardPermissionScope> | string;
 
 export class Card<TYPE extends CardTypeLike = CardTypeLike> {
   @IsEnum(CardType)
@@ -60,7 +53,7 @@ export class Card<TYPE extends CardTypeLike = CardTypeLike> {
   @IsArray()
   @IsString({ each: true })
   @IsNotEmpty({ each: true })
-  permissions?: PermissionScopeLike[];
+  permissions?: CardPermissionScopeLike[];
 
   toCard?(): BaseCard {
     const card: BaseCard = {
