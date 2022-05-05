@@ -28,7 +28,7 @@ export enum CardPermissionScope {
   ReadAddressFull = 'read::alexa:device:all:address',
 }
 
-export type CardPermissionScopeLike = EnumLike<PermissionScope | CardPermissionScope> | string;
+export type CardPermissionScopeLike = EnumLike<PermissionScope> | EnumLike<CardPermissionScope> | string;
 
 export class Card<TYPE extends CardTypeLike = CardTypeLike> {
   @IsEnum(CardType)

@@ -105,23 +105,23 @@ export interface Experience {
 export type TouchMethod = 'SINGLE';
 export type InputMechanism = 'DIRECTION';
 
-export interface AudioPlayerInterface {}
+export interface AudioPlayerInterface { }
 export interface AlexaPresentationAplInterface {
   runtime: {
     maxVersion: string;
   };
 }
-export interface AlexaPresentationAplTInterface extends AlexaPresentationAplInterface {}
-export interface AlexaPresentationHtmlInterface extends AlexaPresentationAplInterface {}
+export interface AlexaPresentationAplTInterface extends AlexaPresentationAplInterface { }
+export interface AlexaPresentationHtmlInterface extends AlexaPresentationAplInterface { }
 
 export interface DisplayInterface {
   templateVersion?: string;
   markupVersion?: string;
 }
 
-export interface VideoAppInterface {}
-export interface GeolocationInterface {}
-export interface NavigationInterface {}
+export interface VideoAppInterface { }
+export interface GeolocationInterface { }
+export interface NavigationInterface { }
 
 export interface Device {
   deviceId: string;
@@ -222,35 +222,3 @@ export interface Request {
 
 // Defines a target for Alexa Conversations
 export type ConversationsTarget = 'AMAZON.Conversations' | 'skill';
-
-export interface ConnectionPostalAddress {
-  "@type": "PostalAddress",
-  "@version": "1",
-  streetAddress: string;
-  locality: string;
-  region: string;
-  postalCode: string;
-  country?: string;
-}
-
-export enum ConsentLevel {
-  Account = 'ACCOUNT',
-  Person = 'PERSON',
-}
-
-export type ConsentLevelLike = EnumLike<ConsentLevel> | string;
-
-export enum PermissionScope {
-  ReadProfileGivenName = 'alexa::profile:given_name:read',
-  ReadProfileName = 'alexa::profile:name:read',
-  ReadProfileMobileNumber = 'alexa::profile:mobile_number:read',
-  ReadProfileEmail = 'alexa::profile:email:read',
-  ReadAddressCountryAndPostalCode = 'alexa:devices:all:address:country_and_postal_code:read',
-  ReadGeolocation = 'alexa::devices:all:geolocation:read',
-  ReadWriteTimers = 'alexa::alerts:timers:skill:readwrite',
-  ReadWriteReminders = 'alexa::alerts:reminders:skill:readwrite',
-}
-
-export type PermissionScopeLike = EnumLike<PermissionScope> | string;
-
-

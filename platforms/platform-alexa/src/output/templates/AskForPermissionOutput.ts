@@ -1,9 +1,9 @@
 import { BaseOutput, Output, OutputOptions, OutputTemplate } from '@jovotech/framework';
-import { PermissionScopeLike } from '../models';
+import { CardPermissionScopeLike } from '../models';
 
 export interface AskForPermissionOutputOptions extends OutputOptions {
   token?: string;
-  permissionScope?: PermissionScopeLike;
+  permissionScope?: CardPermissionScopeLike;
 }
 
 @Output()

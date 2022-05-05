@@ -1,11 +1,11 @@
 import { Jovo, Output } from '@jovotech/framework';
-import { PermissionScope } from '../models';
+import { CardPermissionScopeLike } from '../models';
 import { AskForPermissionOutput } from './AskForPermissionOutput';
 
 @Output()
 export class AskForTimersPermissionOutput extends AskForPermissionOutput {
   constructor(jovo: Jovo) {
     super(jovo);
-    this.options.permissionScope = PermissionScope.ReadWriteTimers;
+    this.options.permissionScope = CardPermissionScopeLike.ReadWriteTimers;
   }
 }

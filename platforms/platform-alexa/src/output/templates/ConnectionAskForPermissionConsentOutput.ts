@@ -1,5 +1,5 @@
 import { BaseOutput, Output, OutputOptions, OutputTemplate } from '@jovotech/framework';
-import { PermissionScopeLike, ConsentLevelLike } from '../../interfaces';
+import { PermissionScopeLike, ConsentLevelLike } from '../models';
 
 export interface PermissionScopeItem {
   permissionScope: PermissionScopeLike;
