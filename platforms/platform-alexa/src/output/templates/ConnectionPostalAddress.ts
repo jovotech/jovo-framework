@@ -7,3 +7,4 @@ export interface ConnectionPostalAddress {
     postalCode: string;
     country?: string;
   }
+  
