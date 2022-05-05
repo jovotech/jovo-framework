@@ -8,7 +8,7 @@ import {
   IsString,
   Type,
 } from '@jovotech/output';
-import { PermissionScope } from '../../../interfaces';
+import { PermissionScope } from '../../models'
 import { IsValidCardImage } from '../../decorators/validation/IsValidCardImage';
 import { IsValidCardString } from '../../decorators/validation/IsValidCardString';
 import { CardImage } from './CardImage';
