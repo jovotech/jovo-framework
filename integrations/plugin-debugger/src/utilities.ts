@@ -6,6 +6,7 @@ export function propagateStreamAsLog(stream: Writable, socket: typeof Socket): v
   const originalWriteFn = stream.write;
   stream.write = function (chunk: Buffer, ...args: unknown[]) {
     socket.emit(JovoDebuggerEvent.AppConsoleLog, chunk.toString(), new Error().stack);
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     return (originalWriteFn as any).call(this, chunk, ...args);
   };
 }

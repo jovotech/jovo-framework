@@ -9,7 +9,7 @@ Middleware hooks are the easiest way to extend certain parts of the Jovo Framewo
 
 ## Introduction
 
-Jovo hooks allow you to _hook_ into the Jovo middleware architecture to extend or modify the framework without having to change its core code. Learn more about all middlewares in the [RIDR Lifecycle documentation](./ridr-lifecycle.md#middlewares).
+Jovo hooks allow you to _hook_ into the Jovo [middleware architecture](./middlewares.md) to extend or modify the framework without having to change its core code. Usually, this is used to hook into the [RIDR Lifecycle](./ridr-lifecycle.md), but it's also possible to hook into [events](./middlewares.md#event-middlewares).
 
 Here are some examples of a hook:
 
@@ -19,7 +19,9 @@ Here are some examples of a hook:
 import { App, Jovo } from '@jovotech/framework';
 // ...
 
-const app = new App({ /* app config */ });
+const app = new App({
+  /* app config */
+});
 
 app.hook('<middleware>', (jovo: Jovo): void => {
   // ...
@@ -54,7 +56,9 @@ Here is an example that logs the [`$output` array](./output.md) before it is tur
 import { App, Jovo } from '@jovotech/framework';
 // ...
 
-const app = new App({ /* app config */ });
+const app = new App({
+  /* app config */
+});
 
 app.hook('before.response.output', (jovo: Jovo): void => {
   console.log(jovo.$output);
@@ -67,6 +71,7 @@ app.hook('before.response.output', (jovo) => {
 ```
 
 Learn more in the sections below:
+
 - [Hooks that use `async` functions](#async-hooks)
 - [Hooks outsourced into separate files](#hook-files)
 
@@ -106,7 +111,9 @@ import { App } from '@jovotech/framework';
 import { sessionCountHook } from './hooks/sessionCount';
 // ...
 
-const app = new App({ /* app config */ });
+const app = new App({
+  /* app config */
+});
 
 app.hook('before.response.output', sessionCountHook);
 ```
@@ -127,7 +134,9 @@ This hook gets executed for every new session before a [handler](https://www.jov
 import { App, Jovo } from '@jovotech/framework';
 // ...
 
-const app = new App({ /* app config */ });
+const app = new App({
+  /* app config */
+});
 
 app.hook('before.dialogue.start', (jovo: Jovo): void => {
   if (jovo.$session.isNew) {
@@ -156,7 +165,6 @@ app.hook('before.dialogue.start', async (jovo: Jovo): Promise<void> => {
 
 If you're used to working with Jovo `v3`: This hook can be used as a replacement of the `NEW_SESSION` handler.
 
-
 ### sessionCount
 
 This hook stores a `sessionCount` variable in the [user database](./data.md#user-data):
@@ -167,7 +175,9 @@ This hook stores a `sessionCount` variable in the [user database](./data.md#user
 import { App, Jovo } from '@jovotech/framework';
 // ...
 
-const app = new App({ /* app config */ });
+const app = new App({
+  /* app config */
+});
 
 app.hook('before.dialogue.start', (jovo: Jovo): void => {
   if (jovo.$session.isNew) {
@@ -193,7 +203,9 @@ This hook gets executed for new users before a [handler](https://www.jovo.tech/d
 import { App, Jovo } from '@jovotech/framework';
 // ...
 
-const app = new App({ /* app config */ });
+const app = new App({
+  /* app config */
+});
 
 app.hook('before.dialogue.start', (jovo: Jovo): void => {
   if (jovo.$user.isNew) {

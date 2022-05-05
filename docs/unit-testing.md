@@ -550,3 +550,9 @@ test('...', async () => {
   // ...
 });
 ```
+
+Currently, you can modify the following properties that will be merged into the `jovo` instance:
+
+- `testSuite.$user.data`
+- `testSuite.$session`
+- `testSuite.$request`

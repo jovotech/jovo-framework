@@ -395,6 +395,16 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       });
     }
 
+    // replace ${JOVO_WEBHOOK_URL} in event uri with the Jovo Webhook url
+    const eventEndpointUriPath = 'skill-package/["skill.json"].manifest.events.endpoint.uri';
+    if (_has(projectFiles, eventEndpointUriPath)) {
+      _set(
+        projectFiles,
+        eventEndpointUriPath,
+        this.$cli.resolveEndpoint(_get(projectFiles, eventEndpointUriPath).toString()),
+      );
+    }
+
     // Create entries for Alexa Conversations
     const conversationsPath = 'skill-package/["skill.json"].manifest.apis.custom.dialogManagement';
     if (this.$context.alexa.isACSkill && !_has(projectFiles, conversationsPath)) {

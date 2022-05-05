@@ -168,11 +168,11 @@ describe('validation - Carousel', () => {
       1,
     );
   });
-  test('items - invalid: fewer than 2 elements', async () => {
+  test('items - invalid: fewer than 1 element', async () => {
     await validateAndExpectLength(
       Carousel,
       {
-        items: [{ title: 'foo' }],
+        items: [],
       },
       1,
     );

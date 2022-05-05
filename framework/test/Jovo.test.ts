@@ -1,4 +1,12 @@
-import { AnyObject, App, AsyncJovo, BaseOutput, HandleRequest, OutputTemplate } from '../src';
+import {
+  AnyObject,
+  App,
+  AsyncJovo,
+  BaseOutput,
+  HandleRequest,
+  MiddlewareCollection,
+  OutputTemplate,
+} from '../src';
 import {
   ExamplePlatform,
   ExamplePlatformDevice,
@@ -14,7 +22,8 @@ const platform = new ExamplePlatform();
 const server = new ExampleServer({
   input: {},
 });
-const handleRequest = { app, platform, server } as unknown as HandleRequest;
+const middlewareCollection = new MiddlewareCollection();
+const handleRequest = { app, platform, server, middlewareCollection } as unknown as HandleRequest;
 
 describe('Jovo.$send', () => {
   const jovo = platform.createJovoInstance(app, handleRequest);
@@ -97,6 +106,27 @@ describe('Jovo.$send', () => {
       },
     ]);
   });
+
+  test('Output class internal properties overwritten (boolean values)', async () => {
+    class ExampleOutput extends BaseOutput {
+      build(): OutputTemplate | OutputTemplate[] {
+        return {
+          message: 'Hello',
+          listen: true,
+        };
+      }
+    }
+    await jovo.$send(ExampleOutput, {
+      message: 'world',
+      listen: false,
+    });
+    expect(jovo.$output).toEqual([
+      {
+        message: 'world',
+        listen: false,
+      },
+    ]);
+  });
 });
 
 test('AsyncJovo.$send', async () => {
@@ -108,6 +138,7 @@ test('AsyncJovo.$send', async () => {
     ExamplePlatformDevice,
     ExamplePlatform
   > {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     protected sendResponse(response: ExamplePlatformResponse): Promise<unknown> {
       return Promise.resolve();
     }

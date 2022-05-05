@@ -119,10 +119,10 @@ export class GoogleAssistantRequest extends JovoRequest {
     if (supportedCapabilities?.includes(NativeCapability.RichResponse)) {
       capabilities.push(Capability.Screen);
     }
-    if (supportedCapabilities?.includes(GoogleAssistantCapability.WebLink)) {
+    if (supportedCapabilities?.includes(NativeCapability.WebLink)) {
       capabilities.push(GoogleAssistantCapability.WebLink);
     }
-    if (supportedCapabilities?.includes(GoogleAssistantCapability.InteractiveCanvas)) {
+    if (supportedCapabilities?.includes(NativeCapability.InteractiveCanvas)) {
       capabilities.push(GoogleAssistantCapability.InteractiveCanvas);
     }
     return capabilities;

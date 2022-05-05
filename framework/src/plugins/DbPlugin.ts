@@ -90,7 +90,7 @@ export abstract class DbPlugin<
       }
       return this.loadData(jovo.$user.id, jovo);
     });
-    parent.middlewareCollection.use('response.start', (jovo) => {
+    parent.middlewareCollection.use('response.end', (jovo) => {
       if (!jovo.$user.id) {
         return;
       }

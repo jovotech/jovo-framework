@@ -5,7 +5,7 @@ excerpt: 'Learn more about one of the key concepts of Jovo: The RIDR (Request - 
 
 # RIDR Lifecycle
 
-Learn more about one of the key concepts of Jovo: The RIDR (Request - Interpretation - Dialogue & Logic - Response) Lifecycle.
+Learn more about one of the key concepts of Jovo: The RIDR (_Request - Interpretation - Dialogue & Logic - Response_) Lifecycle.
 
 ## Introduction
 
@@ -71,7 +71,7 @@ This response is then returned back to the platform.
 
 ## Middlewares
 
-For a detailed look into all the framework middlewares that are executed as part of the RIDR Lifecycle, take a look at table below.
+For a detailed look into all the RIDR [middlewares](./middlewares.md) that are executed as part of the RIDR Lifecycle, take a look at table below.
 
 | Middleware             | Description                                                                              |
 | ---------------------- | ---------------------------------------------------------------------------------------- |
@@ -90,16 +90,3 @@ For a detailed look into all the framework middlewares that are executed as part
 | `response.output`      | Turns `$output` into a raw JSON response                                                 |
 | `response.tts`         | TTS integrations turn text into speech output                                            |
 | `response.end`         | Leaves the `response` middleware group with propagated `$response` object                |
-
-### Stopping the Middleware Execution
-
-Either a [hook](./hooks.md) or a [plugin](./plugins.md) can use `stopMiddlewareExecution` to remove all middlewares from the middleware collection of `HandleRequest` and its plugins. This way, all following middlewares won't be executed.
-
-Here is an example how this could look like for a plugin method (that was registered with a middleware inside `mount`):
-
-```typescript
-someMethod(jovo: Jovo): void {
-  // ...
-  jovo.$handleRequest.stopMiddlewareExecution();
-}
-```

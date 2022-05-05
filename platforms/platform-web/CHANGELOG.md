@@ -1,5 +1,73 @@
 # Changelog
 
+## [@jovotech/platform-web@4.2.8](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-web@4.2.7...@jovotech/platform-web@4.2.8)
+
+> 14 April 2022
+
+- 🐛 Fix optional paramter [`#1280`](https://github.com/jovotech/jovo-framework/pull/1280)
+
+## [@jovotech/platform-web@4.2.7](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-web@4.2.6...@jovotech/platform-web@4.2.7)
+
+> 14 April 2022
+
+- :recycle: Add additional config merge helper [`#1278`](https://github.com/jovotech/jovo-framework/pull/1278)
+- :bug: Reset $request data in TestSuite [`#1277`](https://github.com/jovotech/jovo-framework/pull/1277)
+- 🔖 Release 4.2.5 [`#1264`](https://github.com/jovotech/jovo-framework/pull/1264)
+
+## [@jovotech/platform-web@4.2.6](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-web@4.2.5...@jovotech/platform-web@4.2.6)
+
+> 24 March 2022
+
+- Add MongoDB integration [`#1217`](https://github.com/jovotech/jovo-framework/pull/1217)
+- add `$requestConfig` to testSuite [`#1256`](https://github.com/jovotech/jovo-framework/pull/1256)
+- [PROPOSAL] Add `component.handler` middleware [`#1208`](https://github.com/jovotech/jovo-framework/pull/1208)
+- :recycle: Add middlewareCollection to handleRequest in test [`#1266`](https://github.com/jovotech/jovo-framework/pull/1266)
+- 🔖 Release 4.2.4  [`#1262`](https://github.com/jovotech/jovo-framework/pull/1262)
+
+## [@jovotech/platform-web@4.2.5](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-web@4.2.4...@jovotech/platform-web@4.2.5)
+
+> 21 March 2022
+
+- :bug: Fix output validation [`#1263`](https://github.com/jovotech/jovo-framework/pull/1263)
+- 🔖 Release 4.2.3 [`#1252`](https://github.com/jovotech/jovo-framework/pull/1252)
+
+## [@jovotech/platform-web@4.2.4](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-web@4.2.3...@jovotech/platform-web@4.2.4)
+
+> 18 March 2022
+
+- 🐛 Fixes output config delegation [`#1261`](https://github.com/jovotech/jovo-framework/pull/1261)
+- :bug: Fix indentation from config [`#1259`](https://github.com/jovotech/jovo-framework/pull/1259)
+- Update code sample in AWS Lambda integration [`#1235`](https://github.com/jovotech/jovo-framework/pull/1235)
+- Update README.md [`#1234`](https://github.com/jovotech/jovo-framework/pull/1234)
+- 🔖 Publish 4.2.1 [`#1230`](https://github.com/jovotech/jovo-framework/pull/1230)
+
+## [@jovotech/platform-web@4.2.3](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-web@4.2.2...@jovotech/platform-web@4.2.3)
+
+> 1 March 2022
+
+- 🐛 Fixes retrieving skillId from `jovo.project.js` [`#1248`](https://github.com/jovotech/jovo-framework/pull/1248)
+- :bug: added missing parameter for recursive getImportStatus call [`#1247`](https://github.com/jovotech/jovo-framework/pull/1247)
+- :construction_worker: Update npm scripts, satisfy linter [`#1245`](https://github.com/jovotech/jovo-framework/pull/1245)
+
+## [@jovotech/platform-web@4.2.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-web@4.2.1...@jovotech/platform-web@4.2.2)
+
+> 17 February 2022
+
+- :bug: Fix askProfile config in jovo.project.js [`#1241`](https://github.com/jovotech/jovo-framework/pull/1241)
+- :bug: Fixes output merging [`#1239`](https://github.com/jovotech/jovo-framework/pull/1239)
+- implement `$device.getTimeZone()` on Alexa [`#1213`](https://github.com/jovotech/jovo-framework/pull/1213)
+- :bookmark: Publish @jovotech/plugin-debugger@4.2.1 [`#1205`](https://github.com/jovotech/jovo-framework/pull/1205)
+
+## [@jovotech/platform-web@4.2.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-web@4.2.0...@jovotech/platform-web@4.2.1)
+
+> 10 February 2022
+
+- Fix bug in handling of APL user events [`#1212`](https://github.com/jovotech/jovo-framework/pull/1212)
+- Fix Alexa getUserId getter/setter [`#1228`](https://github.com/jovotech/jovo-framework/pull/1228)
+- :bug: Fix missing OutputHelpers export [`#1229`](https://github.com/jovotech/jovo-framework/pull/1229)
+- ✅ Implement tests for Framework and Platforms [`#1199`](https://github.com/jovotech/jovo-framework/pull/1199)
+- :recycle: Move "." functionality to CLI [`#1204`](https://github.com/jovotech/jovo-framework/pull/1204)
+
 ## [@jovotech/platform-web@4.2.0](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-web@4.1.2...@jovotech/platform-web@4.2.0)
 
 > 26 January 2022
@@ -8,9 +76,13 @@
 - AudioPlayerActivity Types added [`#1165`](https://github.com/jovotech/jovo-framework/pull/1165)
 - :memo: Fix typos in `hooks`  [`#1194`](https://github.com/jovotech/jovo-framework/pull/1194)
 
-## [@jovotech/platform-web@4.1.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-web@4.0.0...@jovotech/platform-web@4.1.2)
+## [@jovotech/platform-web@4.1.2](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-web@4.1.1...@jovotech/platform-web@4.1.2)
 
 > 20 January 2022
+
+## [@jovotech/platform-web@4.1.1](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-web@4.0.0...@jovotech/platform-web@4.1.1)
+
+> 18 January 2022
 
 - Fixes merging of undefined values in output templates [`#1170`](https://github.com/jovotech/jovo-framework/pull/1170)
 - Fixes null value in state config [`#1186`](https://github.com/jovotech/jovo-framework/pull/1186)
@@ -35,12 +107,17 @@
 - :recycle: Add `skipTests: true` to FileDb default config [`#1121`](https://github.com/jovotech/jovo-framework/pull/1121)
 - 🐛 Fix headline style in JovoLogger [`#1120`](https://github.com/jovotech/jovo-framework/pull/1120)
 
-## [@jovotech/platform-web@4.0.0-beta.11](https://github.com/jovotech/jovo-framework/compare/v3.5...@jovotech/platform-web@4.0.0-beta.11)
+## [@jovotech/platform-web@4.0.0-beta.11](https://github.com/jovotech/jovo-framework/compare/@jovotech/platform-web@4.0.0-beta.10...@jovotech/platform-web@4.0.0-beta.11)
 
 > 17 November 2021
 
 - Remove table view on `jovo run` + undefined properties in logger [`#1118`](https://github.com/jovotech/jovo-framework/pull/1118)
 - Fix process.stdin handling  [`#1116`](https://github.com/jovotech/jovo-framework/pull/1116)
+
+## [@jovotech/platform-web@4.0.0-beta.10](https://github.com/jovotech/jovo-framework/compare/v3.5...@jovotech/platform-web@4.0.0-beta.10)
+
+> 16 November 2021
+
 - ✨ Move JovoDebugger code from CLI to plugin [`#1111`](https://github.com/jovotech/jovo-framework/pull/1111)
 - ✨ Add pretty logging [`#1103`](https://github.com/jovotech/jovo-framework/pull/1103)
 - :sparkles: Introduce CMS integrations [`#1089`](https://github.com/jovotech/jovo-framework/pull/1089)

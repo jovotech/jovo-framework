@@ -1,5 +1,9 @@
 import { AnyObject, Constructor } from '@jovotech/common';
-import { JovoResponse, OutputTemplateConverterStrategy } from '@jovotech/output';
+import {
+  JovoResponse,
+  OutputTemplateConverterStrategy,
+  OutputTemplateConverterStrategyConfig,
+} from '@jovotech/output';
 import _merge from 'lodash.merge';
 import {
   App,
@@ -21,6 +25,7 @@ import { JovoDevice, JovoDeviceConstructor } from './JovoDevice';
 import { JovoRequest } from './JovoRequest';
 import { JovoUserConstructor } from './JovoUser';
 import { MiddlewareCollection } from './MiddlewareCollection';
+// import { OutputTemplateConverterStrategyConfig } from '@jovotech/output/src';
 
 export type PlatformMiddlewares = AppMiddlewares;
 
@@ -75,6 +80,13 @@ export abstract class Platform<
         return this.middlewareCollection.run(middlewareName, jovo);
       });
     });
+    const appOutputConfig = parent.config.output as OutputTemplateConverterStrategyConfig;
+    this.outputTemplateConverterStrategy.config.validation =
+      appOutputConfig?.validation ?? this.outputTemplateConverterStrategy.config.validation;
+    this.outputTemplateConverterStrategy.config.sanitization =
+      appOutputConfig?.sanitization ?? this.outputTemplateConverterStrategy.config.sanitization;
+    this.outputTemplateConverterStrategy.config.omitWarnings =
+      appOutputConfig?.omitWarnings ?? this.outputTemplateConverterStrategy.config.omitWarnings;
   }
 
   createJovoInstance<APP extends App>(app: APP, handleRequest: HandleRequest): JOVO {
