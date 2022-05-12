@@ -1,0 +1,13 @@
+{
+  "translation": {
+    "pizza": {
+      "prompt": "Do you like Pizza?",
+      "loves": "Yes! I love pizza, too.",
+      "hates": "That's OK! Not everyone likes pizza."
+    },
+    "common": {
+      "yes": "yes",
+      "no": "no"
+    }
+  }
+}
