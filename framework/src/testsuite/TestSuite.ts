@@ -3,7 +3,6 @@ import { OutputTemplate } from '@jovotech/output';
 import { existsSync } from 'fs';
 import _cloneDeep from 'lodash.clonedeep';
 import _merge from 'lodash.merge';
-import _set from 'lodash.set';
 import { join as joinPaths } from 'path';
 import { PartialDeep } from 'type-fest';
 import { v4 as uuidv4 } from 'uuid';
@@ -184,7 +183,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
         : (requestLike as RequestOrInput<PLATFORM>);
 
       await this.app.initialize();
-      //
+
       const request: PlatformTypes<PLATFORM>['request'] = this.isRequest(this.requestOrInput)
         ? this.requestOrInput
         : this.requestOrInput.type === InputType.Launch
