@@ -1,6 +1,7 @@
 {
   "translation": {
     "pizza": {
+      "message": "Hallo Welt!",
       "prompt": "Magst du Pizza?",
       "loves": "Ja! Ich mag Pizza auch.",
       "hates": "Kein Problem, nicht alle mögen Pizza."

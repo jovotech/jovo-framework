@@ -1,5 +1,4 @@
 import { App } from '@jovotech/framework';
-import { AlexaPlatform } from '@jovotech/platform-alexa';
 import { GlobalComponent } from './components/GlobalComponent';
 import { LoveHatePizzaComponent } from './components/LoveHatePizzaComponent';
 import en from './i18n/en.json';
@@ -11,7 +10,7 @@ declare module '@jovotech/framework/dist/types/I18Next' {
   interface I18NextResources {
     // Reference resources here
     en: typeof en;
-    de: typeof de;
+    // de: typeof de;
   }
 }
 
@@ -47,7 +46,7 @@ const app = new App({
   |
   */
 
-  plugins: [new AlexaPlatform()],
+  plugins: [],
 
   /*
   |--------------------------------------------------------------------------

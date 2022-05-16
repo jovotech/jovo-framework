@@ -19,7 +19,6 @@
   "dependencies": {
     "@jovotech/db-filedb": "^4.0.0",
     "@jovotech/framework": "^4.0.0",
-    "@jovotech/platform-alexa": "^4.0.0",
     "@jovotech/plugin-debugger": "^4.0.0",
     "@jovotech/server-express": "^4.0.0",
     "@jovotech/server-lambda": "^4.0.0"
