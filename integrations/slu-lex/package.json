@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/slu-lex",
-  "version": "4.2.13",
+  "version": "4.2.14",
   "description": "Lex SLU Integration",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -26,7 +26,7 @@
     "@jovotech/model": "^4.0.0"
   },
   "devDependencies": {
-    "@jovotech/framework": "^4.2.13",
+    "@jovotech/framework": "^4.2.14",
     "@types/jest": "^26.0.20",
     "@types/node": "^12.20.37",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
@@ -41,7 +41,7 @@
     "typescript": "~4.4.4"
   },
   "peerDependencies": {
-    "@jovotech/framework": "4.2.13"
+    "@jovotech/framework": "4.2.14"
   },
   "gitHead": "5a9ba2fe3100f807f627f55117e7b2ad4bbce9c1",
   "prettier": "../../.prettierrc.js",
