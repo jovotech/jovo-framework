@@ -290,7 +290,10 @@ export abstract class Jovo<
     // push the new OutputTemplate(s) to $output
     Array.isArray(newOutput) ? this.$output.push(...newOutput) : this.$output.push(newOutput);
 
-    await this.$handleRequest.middlewareCollection.run(SEND_MIDDLEWARE, this);
+    await this.$handleRequest.middlewareCollection.run(SEND_MIDDLEWARE, this, {
+      outputConstructorOrTemplateOrMessage,
+      options,
+    });
   }
 
   async $redirect<
