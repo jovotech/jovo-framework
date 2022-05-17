@@ -81,6 +81,24 @@ Find all current event middlewares in the table below:
 
 ## Middleware Features
 
+### Custom Middlewares
+
+You can also use the `$handleRequest` object to run your own middlewares, for example:
+
+```typescript
+await jovo.$handleRequest.middlewareCollection.run('<YOUR_MIDDLEWARE_NAME>', jovo, payload);
+```
+
+The `payload` is of the type `AnyObject`, so you can pass any object to the middleware, for example `{ name: 'SomeName' }`.
+
+Using a [hook](./hooks.md) or a [plugin](./plugins.md), you can then hook into this middleware:
+
+```typescript
+app.hook('<YOUR_MIDDLEWARE_NAME>', async (jovo: Jovo, payload): Promise<void> => {
+  // ...
+});
+```
+
 ### Stop the Middleware Execution
 
 Either a [hook](./hooks.md) or a [plugin](./plugins.md) can use `stopMiddlewareExecution` to remove all middlewares from the middleware collection of `HandleRequest` and its plugins. This way, all following middlewares won't be executed.
