@@ -127,7 +127,7 @@ yourHandler() {
 
 ### Redirect to Components
 
-If you `$redirect()` to a different component, the current one is removed from the [`$state` stack](./state-stack.md). You can see this as a permanent redirect.
+If you `$redirect()` to a different component, the current [`$state` stack](./state-stack.md) is cleared. You can see this as a permanent redirect. We recommend redirects if you want to move from one isolated part (or component) of a conversation to another. If you want to keep the state when moving between components, we recommend using [`$delegate()`](#delegate-to-components).
 
 If no handler name is specified, the redirect triggers the other component's `START` handler.
 
@@ -288,13 +288,17 @@ UNHANDLED() {
 
 By default, the current component's `UNHANDLED` gets prioritized over global handlers in other components. Learn more about [`UNHANDLED` prioritization in the routing documentation](./routing.md#unhandled-prioritization).
 
-
 ## Middlewares
 
 The `event.ComponentTreeNode.executeHandler` [event middleware](./middlewares.md#event-middlewares) gets called every time a handler is executed. For example, you can [hook](./hooks.md) into it like this:
 
 ```typescript
-app.hook('after.event.ComponentTreeNode.executeHandler', (jovo: Jovo): void => {
+app.hook('after.event.ComponentTreeNode.executeHandler', (jovo: Jovo, payload): void => {
   // ...
 });
 ```
+
+The `payload` includes the following properties:
+
+- `componentName`
+- `handler`

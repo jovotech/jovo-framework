@@ -189,7 +189,6 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
         : this.requestOrInput.type === InputType.Launch
         ? this.requestBuilder.launch()
         : this.requestBuilder.intent();
-
       await this.app.handle(new TestServer(request));
     }
 
@@ -227,7 +226,10 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     // Set session data
     jovo.$session.isNew = false;
 
-    Object.assign(this, jovo);
+    _merge(this.$user.data, jovo.$user.data);
+    _merge(this.$session, jovo.$session);
+    _merge(this.$response, jovo.$response);
+    _merge(this.$output, jovo.$output);
   }
 
   private loadApp(): App {
