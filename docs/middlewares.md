@@ -69,15 +69,24 @@ There are two types of event middlewares:
 - Public methods like [`$resolve`](./handlers.md#resolve-a-component) can be accessed using `event.$resolve`
 - Some "under the hood" methods can be accessed using the class name and the method name, for example `event.ComponentTreeNode.executeHandler`
 
+These middlewares can also come with a `payload` that you can access in your hook or plugin as second parameter, for example:
+
+```typescript
+app.hook('event.$resolve', async (jovo: Jovo, payload): Promise<void> => {
+  const resolvedHandler = payload.resolvedHandler;
+  // ...
+});
+```
+
 Find all current event middlewares in the table below:
 
-| Middleware                               | Description                                                                                                                                                                                                                                                                              |
-| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `event.$resolve`                         | [`$resolve`](./handlers.md#resolve-a-component) is called in a handler                                                                                                                                                                                                                   |
-| `event.$redirect`                        | [`$redirect`](./handlers.md#redirect-to-components) is called in a handler                                                                                                                                                                                                               |
-| `event.$delegate`                        | [`$delegate`](./handlers.md#delegate-to-components) is called in a handler                                                                                                                                                                                                               |
-| `event.$send`                            | [`$send`](./output.md#send-a-message) is called in a handler                                                                                                                                                                                                                             |
-| `event.ComponentTreeNode.executeHandler` | This event is called whenever a new handler gets executed. Part of the [`ComponentTreeNode` class](https://github.com/jovotech/jovo-framework/blob/v4/latest/framework/src/ComponentTreeNode.ts). See the [`ComponentTree` section](./components.md#componenttree) for more information. |
+| Middleware                               | Description                                                                                                                                                                                                                                                                              | Payload                                                                             |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `event.$resolve`                         | [`$resolve`](./handlers.md#resolve-a-component) is called in a handler                                                                                                                                                                                                                   | `resolvedHandler: string`, `eventName: string`, `eventArgs: ARGS extends unknown[]` |
+| `event.$redirect`                        | [`$redirect`](./handlers.md#redirect-to-components) is called in a handler                                                                                                                                                                                                               | `componentName: string`, `handler: string`                                          |
+| `event.$delegate`                        | [`$delegate`](./handlers.md#delegate-to-components) is called in a handler                                                                                                                                                                                                               | `componentName: string`, `options: DelegateOptions`                                 |
+| `event.$send`                            | [`$send`](./output.md#send-a-message) is called in a handler                                                                                                                                                                                                                             | `outputConstructorOrTemplateOrMessage`, `options`                                   |
+| `event.ComponentTreeNode.executeHandler` | This event is called whenever a new handler gets executed. Part of the [`ComponentTreeNode` class](https://github.com/jovotech/jovo-framework/blob/v4/latest/framework/src/ComponentTreeNode.ts). See the [`ComponentTree` section](./components.md#componenttree) for more information. | `componentName: string`, `handler: string`                                          |
 
 ## Middleware Features
 
