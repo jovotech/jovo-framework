@@ -293,7 +293,12 @@ By default, the current component's `UNHANDLED` gets prioritized over global han
 The `event.ComponentTreeNode.executeHandler` [event middleware](./middlewares.md#event-middlewares) gets called every time a handler is executed. For example, you can [hook](./hooks.md) into it like this:
 
 ```typescript
-app.hook('after.event.ComponentTreeNode.executeHandler', (jovo: Jovo): void => {
+app.hook('after.event.ComponentTreeNode.executeHandler', (jovo: Jovo, payload): void => {
   // ...
 });
 ```
+
+The `payload` includes the following properties:
+
+- `componentName`
+- `handler`

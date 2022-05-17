@@ -1,4 +1,4 @@
-import { ArrayElement } from '@jovotech/common';
+import { AnyObject, ArrayElement } from '@jovotech/common';
 import { Jovo } from './index';
 import { Middleware, MiddlewareFunction } from './Middleware';
 
@@ -77,30 +77,39 @@ export class MiddlewareCollection<MIDDLEWARES extends string[] = string[]> {
     return this;
   }
 
-  async run(name: PossibleMiddlewareNames<MIDDLEWARES>, jovo: Jovo): Promise<void>;
-  async run(name: string, jovo: Jovo): Promise<void>;
-  async run(names: PossibleMiddlewareNames<MIDDLEWARES>[], jovo: Jovo): Promise<void>;
-  async run(names: string[], jovo: Jovo): Promise<void>;
+  async run(
+    name: PossibleMiddlewareNames<MIDDLEWARES>,
+    jovo: Jovo,
+    payload?: AnyObject,
+  ): Promise<void>;
+  async run(name: string, jovo: Jovo, payload?: AnyObject): Promise<void>;
+  async run(
+    names: PossibleMiddlewareNames<MIDDLEWARES>[],
+    jovo: Jovo,
+    payload?: AnyObject,
+  ): Promise<void>;
+  async run(names: string[], jovo: Jovo, payload?: AnyObject): Promise<void>;
   async run(
     nameOrNames:
       | string
       | PossibleMiddlewareNames<MIDDLEWARES>
       | Array<string | PossibleMiddlewareNames<MIDDLEWARES>>,
     jovo: Jovo,
+    payload?: AnyObject,
   ): Promise<void> {
     const names = typeof nameOrNames === 'string' ? [nameOrNames] : nameOrNames;
     for (const name of names) {
       const beforeName = `before.${name}`;
       if (this.has(beforeName)) {
-        await this.run(beforeName, jovo);
+        await this.run(beforeName, jovo, payload);
       }
 
       const middleware = this.get(name);
-      await middleware?.run(jovo);
+      await middleware?.run(jovo, payload);
 
       const afterName = `after.${name}`;
       if (this.has(afterName)) {
-        await this.run(afterName, jovo);
+        await this.run(afterName, jovo, payload);
       }
     }
   }

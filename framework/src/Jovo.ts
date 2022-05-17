@@ -290,7 +290,10 @@ export abstract class Jovo<
     // push the new OutputTemplate(s) to $output
     Array.isArray(newOutput) ? this.$output.push(...newOutput) : this.$output.push(newOutput);
 
-    await this.$handleRequest.middlewareCollection.run(SEND_MIDDLEWARE, this);
+    await this.$handleRequest.middlewareCollection.run(SEND_MIDDLEWARE, this, {
+      outputConstructorOrTemplateOrMessage,
+      options,
+    });
   }
 
   async $redirect<
@@ -329,7 +332,10 @@ export abstract class Jovo<
     // update the active component node in handleRequest to keep track of the state
     this.$handleRequest.activeComponentNode = componentNode;
 
-    await this.$handleRequest.middlewareCollection.run(REDIRECT_MIDDLEWARE, this);
+    await this.$handleRequest.middlewareCollection.run(REDIRECT_MIDDLEWARE, this, {
+      componentName,
+      handler,
+    });
 
     // execute the component's handler
     await componentNode.executeHandler({
@@ -403,7 +409,10 @@ export abstract class Jovo<
     // update the active component node in handleRequest to keep track of the state
     this.$handleRequest.activeComponentNode = componentNode;
 
-    await this.$handleRequest.middlewareCollection.run(DELEGATE_MIDDLEWARE, this);
+    await this.$handleRequest.middlewareCollection.run(DELEGATE_MIDDLEWARE, this, {
+      componentName,
+      options,
+    });
 
     // execute the component's handler
     await componentNode.executeHandler({
@@ -438,7 +447,11 @@ export abstract class Jovo<
     // update the active component node in handleRequest to keep track of the state
     this.$handleRequest.activeComponentNode = previousComponentNode;
 
-    await this.$handleRequest.middlewareCollection.run(RESOLVE_MIDDLEWARE, this);
+    await this.$handleRequest.middlewareCollection.run(RESOLVE_MIDDLEWARE, this, {
+      resolvedHandler,
+      eventName,
+      eventArgs,
+    });
 
     // execute the component's handler
     await previousComponentNode.executeHandler({
