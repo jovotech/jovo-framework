@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/platform-alexa",
-  "version": "4.2.14",
+  "version": "4.2.15",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -43,8 +43,8 @@
     "@jovotech/cli-command-new": "^4.0.0",
     "@jovotech/cli-core": "^4.0.0",
     "@jovotech/filebuilder": "^0.0.1",
-    "@jovotech/framework": "^4.2.14",
-    "@jovotech/output": "^4.2.10",
+    "@jovotech/framework": "^4.2.15",
+    "@jovotech/output": "^4.2.11",
     "@types/jest": "^26.0.20",
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.has": "^4.5.6",
@@ -76,8 +76,8 @@
     "@jovotech/cli-command-new": "^4.0.0",
     "@jovotech/cli-core": "^4.0.0",
     "@jovotech/filebuilder": "^0.0.1",
-    "@jovotech/framework": "4.2.14",
-    "@jovotech/output": "4.2.10"
+    "@jovotech/framework": "4.2.15",
+    "@jovotech/output": "4.2.11"
   },
   "gitHead": "c9569fabbf075a77c83272149bae8a055f76caee",
   "prettier": "../../.prettierrc.js",
