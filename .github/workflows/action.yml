@@ -1,7 +1,11 @@
 
 name: jovo-framework workflow
 
-on: [push, pull_request]
+on:
+  pull_request:
+    branches:    
+      - 'v4/dev'
+      - '!v4/latest'
 
 jobs:
   build:
