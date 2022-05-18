@@ -226,10 +226,10 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     // Set session data
     jovo.$session.isNew = false;
 
-    _merge(this.$user.data, jovo.$user.data);
-    _merge(this.$session, jovo.$session);
-    _merge(this.$response, jovo.$response);
-    _merge(this.$output, jovo.$output);
+    this.$user.data = jovo.$user.data;
+    this.$session = jovo.$session;
+    this.$response = jovo.$response as TestSuiteResponse<PLATFORM>['response'];
+    this.$output = jovo.$output;
   }
 
   private loadApp(): App {
