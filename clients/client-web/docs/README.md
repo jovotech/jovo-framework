@@ -9,7 +9,7 @@ Build voice experiences and chatbots for the web. This frontend client brings yo
 
 ## Introduction
 
-![Jovo Client and Jovo Core Platform](https://github.com/jovotech/jovo-framework/raw/master/jovo-platforms/jovo-platform-core/img/jovo-client-platform-communication.png 'How Jovo Core Platform communicates with clients like web apps')
+![Jovo Client and Jovo Core Platform](https://github.com/jovotech/jovo-framework/raw/v3/latest/jovo-platforms/jovo-platform-core/img/jovo-client-platform-communication.png 'How Jovo Core Platform communicates with clients like web apps')
 
 [Jovo Clients](https://www.jovo.tech/docs/clients) help with two tasks:
 
@@ -141,7 +141,7 @@ client.isInitialized;
 
 ### AudioRecorder
 
-The Jovo Web Client implements an [`AudioRecorder`](https://github.com/jovotech/jovo-framework/blob/v4/latestclients/client-web/src/standalone/AudioRecorder.ts) that records speech in an audio file and sends it to your Jovo app as [`SPEECH` input type](https://www.jovo.tech/docs/input#speech).
+The Jovo Web Client implements an [`AudioRecorder`](https://github.com/jovotech/jovo-framework/blob/v4/latest/clients/client-web/src/standalone/AudioRecorder.ts) that records speech in an audio file and sends it to your Jovo app as [`SPEECH` input type](https://www.jovo.tech/docs/input#speech).
 
 The default configuration for the `AudioRecorder` (which you can access with `client.audioRecorder`) is:
 
