@@ -39,14 +39,14 @@ const app = new App({
         new LexSlu({
           bot: {
             id: '<your-bot-id>',
-            aliasId: '<your-alias-id>' 
+            aliasId: '<your-alias-id>',
           },
           region: '<your-aws-region>',
           credentials: {
             accessKeyId: '<your-access-key-id>',
             secretAccessKey: '<your-secret-access-key>',
           },
-        })
+        }),
       ],
     }),
     // ...
@@ -103,7 +103,7 @@ You can learn more about the Lex slot format in the [official Lex documentation]
 
 ## Dialog Management
 
-Lex allows you to specify multiple slots that need to be filled before the intent can complete. But this is not required. The `$input.nlu` data will contain additional values for `state`, `confirmationState` and `messages`.
+Lex allows you to specify multiple slots that need to be filled before the intent can complete. But this is not required. The `$input.nlu` data will contain additional values for `state`, `confirmationState`, `dialogAction` and `messages`.
 
 ### NLU Data
 
@@ -130,9 +130,7 @@ Lex allows you to specify multiple slots that need to be filled before the inten
         "value": {
           "interpretedValue": "2022-08-09",
           "originalValue": "August 9th",
-          "resolvedValues": [
-            "2022-08-09"
-          ]
+          "resolvedValues": ["2022-08-09"]
         }
       }
     },
@@ -144,17 +142,23 @@ Lex allows you to specify multiple slots that need to be filled before the inten
         "value": {
           "interpretedValue": "Los Angeles",
           "originalValue": "Los Angeles",
-          "resolvedValues": [
-            "los angeles"
-          ]
+          "resolvedValues": ["los angeles"]
         }
+      }
+    },
+    "sessionState": {
+      "dialogAction": {
+        "slotToElicit": "Nights",
+        "type": "ElicitSlot"
       }
     }
   }
 }
 ```
+
 - `state`: Contains fulfillment information for the intent. Values are "InProgress", "ReadyForFulfillment", "Failed" and [others](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-lex-runtime-v2/enums/intentstate.html).
 - `confirmationState`: Contains information about whether fulfillment of the intent has been confirmed. Values are "None", "Confirmed" and "Denied".
+- `dialogAction`: The next step that Amazon Lex V2 should take in the conversation with a user. The `slotToElicit` has its prompt in `messages`.
 - `messages`: The next prompt to pass on to the user.
 - `entities`: Contains the values of slots as they are filled.
 
@@ -167,7 +171,6 @@ Here is an example of how a component handler can manage the dialog state:
 bookRoom() {
   const nluData = this.$input.nlu as LexNluData;
   if (nluData.intent.state === 'ReadyForFulfillment') {
-
     // make api call
 
     return this.$send('The room has been booked!');
@@ -178,6 +181,15 @@ bookRoom() {
   }
 
   const message = nluData.messages?.[0].content as string;
-  return this.$send(message);
-}  
+  let quickReplies;
+
+  if (
+    nluData.sessionState?.dialogAction?.type === 'ElicitSlot' &&
+    nluData.sessionState?.dialogAction?.slotToElicit === 'RoomType'
+  ) {
+    quickReplies = ['king', 'queen', 'deluxe'];
+  }
+
+  return this.$send({ message, quickReplies });
+}
 ```

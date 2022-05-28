@@ -1,11 +1,13 @@
 import {
   Interpretation,
   Message,
+  SessionState,
   LexRuntimeV2Client,
   RecognizeTextCommand,
   RecognizeTextCommandInput,
   RecognizeUtteranceCommand,
   RecognizeUtteranceCommandInput,
+  DialogAction,
 } from '@aws-sdk/client-lex-runtime-v2';
 import type { Credentials } from '@aws-sdk/types';
 import {
@@ -35,6 +37,7 @@ function asyncGunzip(buffer: GunzipBuffer): Promise<Buffer> {
 interface AsrOutput {
   interpretations?: Interpretation[];
   messages?: Message[];
+  sessionState?: SessionState;
 }
 
 export interface LexNluData extends NluData {
@@ -46,6 +49,7 @@ export interface LexNluData extends NluData {
   };
   entities?: EntityMap;
   messages?: Message[];
+  sessionState?: { dialogAction?: DialogAction };
 }
 
 export interface LexSluConfig extends InterpretationPluginConfig {
@@ -125,10 +129,11 @@ export class LexSlu extends SluPlugin<LexSluConfig> {
     }
     // The return inputTranscript is a gzipped string that is encoded with base64
     // base64 -> gzip
-    const parsedText = await this.extractValue(response.inputTranscript);
-    const interpretations: Interpretation[] = await this.extractValue(response.interpretations);
-    const messages: Message[] = await this.extractValue(response.messages);
-    this.asrOutput = { interpretations, messages };
+    const parsedText = await this.extractValue(response.inputTranscript) as string;
+    const interpretations = await this.extractValue(response.interpretations) as Interpretation[];
+    const messages = await this.extractValue(response.messages) as Message[];
+    const sessionState = await this.extractValue(response.sessionState) as SessionState;
+    this.asrOutput = { interpretations, messages, sessionState };
 
     return {
       text: parsedText,
@@ -148,6 +153,7 @@ export class LexSlu extends SluPlugin<LexSluConfig> {
       return this.getNluDataFromInterpretation(
         this.asrOutput.interpretations[0],
         this.asrOutput.messages,
+        this.asrOutput.sessionState,
       );
     } else {
       // Text input so ASR was skipped
@@ -165,13 +171,18 @@ export class LexSlu extends SluPlugin<LexSluConfig> {
       }
 
       // Assuming the interpretations will be sorted by confidence,
-      return this.getNluDataFromInterpretation(response.interpretations[0], response.messages);
+      return this.getNluDataFromInterpretation(
+        response.interpretations[0],
+        response.messages,
+        response.sessionState,
+      );
     }
   }
 
   private getNluDataFromInterpretation(
     interpretation: Interpretation,
     messages?: Message[],
+    sessionState?: SessionState,
   ): LexNluData | undefined {
     if (!interpretation.intent) {
       return;
@@ -205,6 +216,13 @@ export class LexSlu extends SluPlugin<LexSluConfig> {
         {},
       );
     }
+
+    if (sessionState?.dialogAction) {
+      nluData.sessionState = {
+        dialogAction: sessionState.dialogAction,
+      };
+    }
+
     return nluData;
   }
 
@@ -212,7 +230,7 @@ export class LexSlu extends SluPlugin<LexSluConfig> {
     return this.config.locale || jovo.$request.getLocale() || this.config.fallbackLocale;
   }
 
-  private async extractValue(input?: string): Promise<any> {
+  private async extractValue(input?: string): Promise<string | Interpretation[] | Message[] | SessionState | undefined> {
     if (!input) {
       return;
     }
