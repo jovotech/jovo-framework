@@ -101,3 +101,83 @@ The Lex slot values are translated into the following Jovo entity properties:
 
 You can learn more about the Lex slot format in the [official Lex documentation](https://docs.aws.amazon.com/lexv2/latest/dg/API_runtime_Slot.html).
 
+## Dialog Management
+
+Lex allows you to specify multiple slots that need to be filled before the intent can complete. But this is not required. The `$input.nlu` data will contain additional values for `state`, `confirmationState` and `messages`.
+
+### NLU Data
+
+```json
+{
+  "intent": {
+    "name": "BookHotel",
+    "confidence": 1,
+    "state": "InProgress",
+    "confirmationState": "None"
+  },
+  "messages": [
+    {
+      "content": "How many nights will you be staying?",
+      "contentType": "PlainText"
+    }
+  ],
+  "entities": {
+    "CheckInDate": {
+      "id": "2022-08-09",
+      "resolved": "2022-08-09",
+      "value": "August 9th",
+      "native": {
+        "value": {
+          "interpretedValue": "2022-08-09",
+          "originalValue": "August 9th",
+          "resolvedValues": [
+            "2022-08-09"
+          ]
+        }
+      }
+    },
+    "Location": {
+      "id": "los angeles",
+      "resolved": "los angeles",
+      "value": "Los Angeles",
+      "native": {
+        "value": {
+          "interpretedValue": "Los Angeles",
+          "originalValue": "Los Angeles",
+          "resolvedValues": [
+            "los angeles"
+          ]
+        }
+      }
+    }
+  }
+}
+```
+- `state`: Contains fulfillment information for the intent. Values are "InProgress", "ReadyForFulfillment", "Failed" and [others](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-lex-runtime-v2/enums/intentstate.html).
+- `confirmationState`: Contains information about whether fulfillment of the intent has been confirmed. Values are "None", "Confirmed" and "Denied".
+- `messages`: The next prompt to pass on to the user.
+- `entities`: Contains the values of slots as they are filled.
+
+### Usage
+
+Here is an example of how a component handler can manage the dialog state:
+
+```ts
+@Intents(['BookHotel'])
+bookRoom() {
+  const nluData = this.$input.nlu as LexNluData;
+  if (nluData.intent.state === 'ReadyForFulfillment') {
+
+    // make api call
+
+    return this.$send('The room has been booked!');
+  }
+
+  if (nluData.intent.state === 'Failed') {
+    return this.$send('No worries. Maybe next time.');
+  }
+
+  const message = nluData.messages?.[0].content as string;
+  return this.$send(message);
+}  
+```
