@@ -63,6 +63,7 @@ app.configure({
   plugins: [
     new JovoDebugger({
       nlu: new NlpjsNlu(),
+      plugins: [],
       webhookUrl: 'https://webhook.jovo.cloud',
       debuggerConfigPath: './jovo.debugger.js',
       modelsPath: './models',
@@ -76,6 +77,7 @@ app.configure({
 It includes the following properties:
 
 - [`nlu`](#nlu): Lets you define which [NLU integration](https://www.jovo.tech/docs/nlu) should be used if the Debugger sends a text request. Learn more in the [NLU section](#nlu) below.
+- `plugins`: Under the hood, Jovo Debugger extends the [Jovo Core Platform](https://www.jovo.tech/marketplace/platform-core). You can add any plugin to the `plugins` array in the way you would add it to the Core platform.
 - `webhookUrl`: The webhook to pass to the Debugger. By default, your [Jovo Webhook](https://www.jovo.tech/docs/webhook) URL is used.
 - [`debuggerConfigPath`](#debugger-customization): The path to the Debugger Config file. Learn more in the [Debugger customization](#debugger-customization) section.
 - `modelsPath`: The path to the [Jovo Models](https://www.jovo.tech/docs/models) folder.
