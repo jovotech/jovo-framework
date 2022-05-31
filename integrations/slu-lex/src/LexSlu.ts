@@ -39,6 +39,7 @@ export interface LexSluConfig extends InterpretationPluginConfig {
   credentials: Credentials;
   region: string;
   locale?: string;
+  localeMap?: Record<string, string>;
   fallbackLocale: string;
   asr: boolean;
   nlu: boolean;
@@ -50,6 +51,27 @@ export type LexSluInitConfig = DeepPartial<LexSluConfig> &
 export class LexSlu extends SluPlugin<LexSluConfig> {
   targetSampleRate = 16000;
 
+  readonly supportedLocaleIds = [
+    'ca_ES',
+    'de_AT',
+    'de_DE',
+    'en_AU',
+    'en_GB',
+    'en_IN',
+    'en_US',
+    'en_ZA',
+    'es_419',
+    'es_ES',
+    'es_US',
+    'fr_CA',
+    'fr_FR',
+    'it_IT',
+    'ja_JP',
+    'ko_KR',
+    'pt_BR',
+    'pt_PT',
+    'zh_CN',
+  ];
   readonly client: LexRuntimeV2Client;
 
   constructor(config: LexSluInitConfig) {
@@ -167,6 +189,9 @@ export class LexSlu extends SluPlugin<LexSluConfig> {
   }
 
   private getLocale(jovo: Jovo): string {
-    return this.config.locale || jovo.$request.getLocale() || this.config.fallbackLocale;
+    const locale = this.config.locale || jovo.$request.getLocale() || '';
+    return this.supportedLocaleIds.includes(locale)
+      ? locale
+      : this.config?.localeMap?.[locale] || this.config.fallbackLocale;
   }
 }

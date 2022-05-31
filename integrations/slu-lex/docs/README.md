@@ -72,6 +72,10 @@ new LexSlu({
     secretAccessKey: '',
   },
   fallbackLocale: 'en_US',
+  localeMap: {
+    'en': 'en_US',
+    'es': 'es_ES',
+  },  
   asr: true,
   nlu: true,
 }),
@@ -81,6 +85,7 @@ new LexSlu({
 - `region`: The AWS region of the Lex bot, for example `us-east-1`.
 - `credentials`: Your AWS security credentials.
 - `fallbackLocale`: Locale that should be used if none could be found in the request. Default: `en_US`.
+- `localeMap` (optional): This is used to map a request locale to a Lex localeId.
 - `asr`: Determines whether the Lex [ASR](https://www.jovo.tech/docs/asr) capabilities should be used. Default: `true`.
 - `nlu`: Determines whether the Lex [NLU](https://www.jovo.tech/docs/nlu) capabilities should be used. Default: `true`.
 
