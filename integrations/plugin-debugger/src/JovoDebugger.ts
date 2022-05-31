@@ -38,7 +38,12 @@ import { LanguageModelDirectoryNotFoundError } from './errors/LanguageModelDirec
 import { SocketConnectionFailedError } from './errors/SocketConnectionFailedError';
 import { SocketNotConnectedError } from './errors/SocketNotConnectedError';
 import { WebhookIdNotFoundError } from './errors/WebhookIdNotFoundError';
-import { JovoDebuggerPayload, JovoStateMutationData, JovoUpdateData, StateMutatingJovoMethodKey, } from './interfaces';
+import {
+  JovoDebuggerPayload,
+  JovoStateMutationData,
+  JovoUpdateData,
+  StateMutatingJovoMethodKey,
+} from './interfaces';
 import { MockServer, MockServerRequest } from './MockServer';
 import _cloneDeep from 'lodash.clonedeep';
 
