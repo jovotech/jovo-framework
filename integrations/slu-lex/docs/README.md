@@ -5,7 +5,7 @@ excerpt: 'Turn speech input into structured meaning with the Jovo Framework inte
 
 # Lex SLU Integration
 
-Turn speech input into structured meaning with the Jovo Framework integration for Amazon Lex.
+Turn speech or text input into structured meaning with the Jovo Framework integration for Amazon Lex.
 
 ## Introduction
 
@@ -13,9 +13,14 @@ Turn speech input into structured meaning with the Jovo Framework integration fo
 
 Lex can be used for [platforms](https://www.jovo.tech/docs/platforms) that don't come with their own ASR and NLU capabilities, for example [Jovo for Web](https://www.jovo.tech/marketplace/platform-web).
 
-Learn more how to set everything up in the [installation](#installation) and [configuration](#configuration) sections.
+Learn more in the sections below:
 
-To learn more how the integration maps Lex slots to `$entities`, take a look at the [entities section](#entities).
+- [Installation](#installation): How to add Lex to your Jovo project
+- [Configuration](#configuration): All configuration options
+- [Entities](#entities): How tu use Lex with `this.$entities`
+- [Dialog Management](#dialog-management): How to do slot filling with Lex
+
+If you want to dig deeper, you can find the implementation here: [`LexSlu.ts`](https://github.com/jovotech/jovo-framework/blob/v4/latest/integrations/slu-lex/src/LexSlu.ts).
 
 ## Installation
 
@@ -25,7 +30,7 @@ You can install the plugin like this:
 $ npm install @jovotech/slu-lex
 ```
 
-SLU plugins need to be added to Jovo [platform integrations](https://www.jovo.tech/docs/platforms). Here is an example how it can be added to the Jovo Core Platform in `app.ts`:
+SLU plugins need to be added to Jovo [platform integrations](https://www.jovo.tech/docs/platforms). Here is an example how it can be added to the [Jovo Core Platform](https://www.jovo.tech/marketplace/platform-core) in `app.ts`:
 
 ```typescript
 import { CorePlatform } from '@jovotech/platform-core';
@@ -103,9 +108,18 @@ You can learn more about the Lex slot format in the [official Lex documentation]
 
 ## Dialog Management
 
-Lex allows you to specify multiple slots that need to be filled before the intent can complete. But this is not required. The `$input.nlu` data will contain additional values for `state`, `confirmationState`, `dialogAction` and `messages`.
+Lex allows you to [manage sessions](https://docs.aws.amazon.com/lexv2/latest/dg/using-sessions.html) by specifying multiple slots that need to be filled before the intent can complete.
 
-### NLU Data
+Learn more in the following sections:
+
+- [Dialog Management NLU Data](#dialog-management-nlu-data)
+- [Use Lex Dialog Management in a Handler](#use-lex-dialog-management-in-a-handler)
+
+### Dialog Management NLU Data
+
+In addition to the properties that are usually part of `$input.nlu` (written into the [`$input` object](https://www.jovo.tech/docs/input) by [NLU integrations](https://www.jovo.tech/docs/nlu)), Lex can also add additional values for `state`, `confirmationState`, `dialogAction` and `messages`.
+
+Here is an example:
 
 ```json
 {
@@ -156,13 +170,16 @@ Lex allows you to specify multiple slots that need to be filled before the inten
 }
 ```
 
-- `state`: Contains fulfillment information for the intent. Values are "InProgress", "ReadyForFulfillment", "Failed" and [others](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-lex-runtime-v2/enums/intentstate.html).
-- `confirmationState`: Contains information about whether fulfillment of the intent has been confirmed. Values are "None", "Confirmed" and "Denied".
-- `dialogAction`: The next step that Amazon Lex V2 should take in the conversation with a user. The `slotToElicit` has its prompt in `messages`.
-- `messages`: The next prompt to pass on to the user.
-- `entities`: Contains the values of slots as they are filled.
+Additional values are explained below:
 
-### Usage
+- `intent`
+  - `state`: Contains fulfillment information for the intent. Values are "InProgress", "ReadyForFulfillment", "Failed" and [others](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-lex-runtime-v2/enums/intentstate.html).
+  - `confirmationState`: Contains information about whether fulfillment of the intent has been confirmed. Values are "None", "Confirmed" and "Denied".
+- `sessionState`
+  - `dialogAction`: The next step that Amazon Lex V2 should take in the conversation with a user. The `slotToElicit` has its prompt in `messages`.
+- `messages`: The next prompt to pass on to the user.
+
+### Use Lex Dialog Management in a Handler
 
 Here is an example of how a component handler can manage the dialog state:
 
