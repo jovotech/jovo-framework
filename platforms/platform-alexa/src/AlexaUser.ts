@@ -29,13 +29,29 @@ export class AlexaUser extends JovoUser<Alexa> {
   }
 
   async getEmail(): Promise<string | undefined> {
+    return await this.getProfilePropery(ProfileProperty.EMAIL) as string;
+  }
+
+  async getMobileNumber(): Promise<{ countryCode: string; mobileNumber: string; } | undefined> {
+    return await this.getProfilePropery(ProfileProperty.MOBILE_NUMBER) as { countryCode: string; mobileNumber: string; };
+
+  }
+
+  async getName(): Promise<string | undefined> {
+    return await this.getProfilePropery(ProfileProperty.NAME) as string;
+  }
+
+  async getGivenName(): Promise<string | undefined> {
+    return await this.getProfilePropery(ProfileProperty.GIVEN_NAME) as string;
+  }
+
+  private async getProfilePropery(property: ProfileProperty): Promise<unknown> {
     const request: AlexaRequest = this.jovo.$request;
-    const email: string = await sendCustomerProfileApiRequest(
-      ProfileProperty.EMAIL,
+    return sendCustomerProfileApiRequest(
+      property,
       request.getApiEndpoint(),
       request.getApiAccessToken(),
     );
-    return email;
   }
 
   async setReminder(reminder: AbsoluteReminder | RelativeReminder): Promise<ReminderResponse> {
