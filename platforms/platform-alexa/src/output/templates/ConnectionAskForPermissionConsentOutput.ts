@@ -1,5 +1,6 @@
 import { BaseOutput, Output, OutputOptions, OutputTemplate } from '@jovotech/framework';
 import { PermissionScopeLike, ConsentLevelLike } from '../models';
+import { OnCompletion } from '../models/common/OnCompletion';
 
 export interface PermissionScopeItem {
   permissionScope: PermissionScopeLike;
@@ -9,6 +10,7 @@ export interface PermissionScopeItem {
 export interface ConnectionAskForPermissionConsentOutputOptions extends OutputOptions {
   shouldEndSession?: boolean;
   token?: string;
+  onCompletion: OnCompletion;
   permissionScopes: PermissionScopeItem[];
 }
 
@@ -16,11 +18,16 @@ export interface ConnectionAskForPermissionConsentOutputOptions extends OutputOp
 export class ConnectionAskForPermissionConsentOutput extends BaseOutput<ConnectionAskForPermissionConsentOutputOptions> {
   getDefaultOptions(): ConnectionAskForPermissionConsentOutputOptions {
     return {
+      onCompletion: OnCompletion.ResumeSession,
       permissionScopes: [],
     };
   }
 
   build(): OutputTemplate | OutputTemplate[] {
+    const shouldEndSession =
+      this.options.onCompletion === OnCompletion.SendErrorsOnly
+        ? true
+        : this.options.shouldEndSession;
 
     return {
       message: this.options.message,
@@ -28,18 +35,19 @@ export class ConnectionAskForPermissionConsentOutput extends BaseOutput<Connecti
         alexa: {
           nativeResponse: {
             response: {
-              shouldEndSession: this.options.shouldEndSession,
+              shouldEndSession,
               directives: [
                 {
-                  type: "Connections.StartConnection",
-                  uri: "connection://AMAZON.AskForPermissionsConsent/2",
+                  type: 'Connections.StartConnection',
+                  uri: 'connection://AMAZON.AskForPermissionsConsent/2',
                   input: {
-                    "@type": "PrintWebPageRequest",
-                    "@version": "1",
-                    permissionScopes: this.options.permissionScopes,
+                    '@type': 'PrintWebPageRequest',
+                    '@version': '1',
+                    'permissionScopes': this.options.permissionScopes,
                   },
-                  token: this.options.token
-                }
+                  token: this.options.token,
+                  onCompletion: this.options.onCompletion,
+                },
               ],
             },
           },

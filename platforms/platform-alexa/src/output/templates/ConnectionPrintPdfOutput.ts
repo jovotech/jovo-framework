@@ -1,9 +1,10 @@
 import { BaseOutput, Output, OutputOptions, OutputTemplate } from '@jovotech/framework';
-
+import { OnCompletion } from '../models/common/OnCompletion';
 
 export interface ConnectionPrintPdfOutputOptions extends OutputOptions {
   shouldEndSession?: boolean;
   token?: string;
+  onCompletion: OnCompletion;
   title: string;
   description?: string;
   url: string;
@@ -13,12 +14,17 @@ export interface ConnectionPrintPdfOutputOptions extends OutputOptions {
 export class ConnectionPrintPdfOutput extends BaseOutput<ConnectionPrintPdfOutputOptions> {
   getDefaultOptions(): ConnectionPrintPdfOutputOptions {
     return {
+      onCompletion: OnCompletion.ResumeSession,
       title: '',
       url: '',
     };
   }
 
   build(): OutputTemplate | OutputTemplate[] {
+    const shouldEndSession =
+      this.options.onCompletion === OnCompletion.SendErrorsOnly
+        ? true
+        : this.options.shouldEndSession;
 
     return {
       message: this.options.message,
@@ -26,20 +32,21 @@ export class ConnectionPrintPdfOutput extends BaseOutput<ConnectionPrintPdfOutpu
         alexa: {
           nativeResponse: {
             response: {
-              shouldEndSession: this.options.shouldEndSession,
+              shouldEndSession,
               directives: [
                 {
-                  type: "Connections.StartConnection",
-                  uri: "connection://AMAZON.PrintPDF/1",
+                  type: 'Connections.StartConnection',
+                  uri: 'connection://AMAZON.PrintPDF/1',
                   input: {
-                    "@type": "PrintPDFRequest",
-                    "@version": "1",
-                    title: this.options.title,
-                    description: this.options.description,
-                    url: this.options.url,
+                    '@type': 'PrintPDFRequest',
+                    '@version': '1',
+                    'title': this.options.title,
+                    'description': this.options.description,
+                    'url': this.options.url,
                   },
-                  token: this.options.token
-                }
+                  token: this.options.token,
+                  onCompletion: this.options.onCompletion,
+                },
               ],
             },
           },

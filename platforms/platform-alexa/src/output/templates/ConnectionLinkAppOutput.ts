@@ -1,4 +1,5 @@
 import { BaseOutput, Output, OutputOptions, OutputTemplate } from '@jovotech/framework';
+import { OnCompletion } from '../models/common/OnCompletion';
 
 export enum DirectLaunchDefaultPromptBehavior {
   Speak = 'SPEAK',
@@ -8,6 +9,7 @@ export enum DirectLaunchDefaultPromptBehavior {
 export interface ConnectionLinkAppOutputOptions extends OutputOptions {
   shouldEndSession?: boolean;
   token?: string;
+  onCompletion: OnCompletion;
   topic: string;
   links: unknown;
   directLaunchDefaultPromptBehavior?: DirectLaunchDefaultPromptBehavior;
@@ -19,6 +21,7 @@ export interface ConnectionLinkAppOutputOptions extends OutputOptions {
 export class ConnectionLinkAppOutput extends BaseOutput<ConnectionLinkAppOutputOptions> {
   getDefaultOptions(): ConnectionLinkAppOutputOptions {
     return {
+      onCompletion: OnCompletion.ResumeSession,
       topic: '',
       links: {},
       sendToDeviceEnabled: true,
@@ -27,6 +30,10 @@ export class ConnectionLinkAppOutput extends BaseOutput<ConnectionLinkAppOutputO
   }
 
   build(): OutputTemplate | OutputTemplate[] {
+    const shouldEndSession =
+      this.options.onCompletion === OnCompletion.SendErrorsOnly
+        ? true
+        : this.options.shouldEndSession;
 
     return {
       message: this.options.message,
@@ -34,26 +41,28 @@ export class ConnectionLinkAppOutput extends BaseOutput<ConnectionLinkAppOutputO
         alexa: {
           nativeResponse: {
             response: {
-              shouldEndSession: this.options.shouldEndSession,
+              shouldEndSession,
               directives: [
                 {
-                  type: "Connections.StartConnection",
-                  uri: "connection://AMAZON.LinkApp/2",
+                  type: 'Connections.StartConnection',
+                  uri: 'connection://AMAZON.LinkApp/2',
                   input: {
                     links: this.options.links,
                     prompt: {
                       topic: this.options.topic,
-                      directLaunchDefaultPromptBehavior: this.options.directLaunchDefaultPromptBehavior
+                      directLaunchDefaultPromptBehavior:
+                        this.options.directLaunchDefaultPromptBehavior,
                     },
                     directLaunch: {
-                      enabled: this.options.directLaunchEnabled
+                      enabled: this.options.directLaunchEnabled,
                     },
                     sendToDevice: {
-                      enabled: this.options.sendToDeviceEnabled
-                    }
+                      enabled: this.options.sendToDeviceEnabled,
+                    },
                   },
-                  token: this.options.token
-                }
+                  token: this.options.token,
+                  onCompletion: this.options.onCompletion,
+                },
               ],
             },
           },
