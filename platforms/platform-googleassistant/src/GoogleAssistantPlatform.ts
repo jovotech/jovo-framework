@@ -76,6 +76,9 @@ export class GoogleAssistantPlatform extends Platform<
         if (typeof objValue === 'string' && typeof srcValue === 'string') {
           return objValue ? objValue : srcValue;
         }
+        if (Array.isArray(objValue) && Array.isArray(srcValue)) {
+          return srcValue;
+        }
       },
     );
 
