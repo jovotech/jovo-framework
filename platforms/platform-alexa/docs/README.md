@@ -478,7 +478,7 @@ For this, the Jovo Alexa integration offers convenience [output classes](https:/
 | [`ConnectionTestStatusCodeOutput`](<(https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/src/output/templates/ConnectionTestStatusCodeOutput.ts)>)                                             | `connection://AMAZON.TestStatusCode/1`                       |
 | [`ConnectionVerifyPersonOutput`](<(https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/src/output/templates/ConnectionVerifyPersonOutput.ts)>)                                                 | `connection://AMAZON.VerifyPerson/2`                         |
 
-You can find the output options in each class implementation. For example, you use the [`ConnectionAskForPermissionConsentOutput`](<(https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/src/output/templates/ConnectionAskForPermissionConsentOutput.ts) like this:
+You can find the output options in each class implementation. For example, you use the [`ConnectionAskForPermissionConsentOutput`](https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/src/output/templates/ConnectionAskForPermissionConsentOutput.ts) like this:
 
 ```typescript
 import { ConnectionAskForPermissionConsentOutput } from '@jovotech/platform-alexa';
@@ -489,9 +489,40 @@ someHandler() {
 
   return this.$send(ConnectionAskForPermissionConsentOutput, {
     // Options
+    message: 'Please grant access to your Alexa profile name',
     shouldEndSession: true,
     token: '<your-token>',
     permissionScopes: ['alexa::profile:given_name:read']
   })
+}
+```
+
+This would result in the following output template:
+
+```typescript
+{
+  message: 'Please grant access to your Alexa profile name',
+  platforms: {
+    alexa: {
+      nativeResponse: {
+        response: {
+          shouldEndSession: true,
+          directives: [
+            {
+              type: 'Connections.StartConnection',
+              uri: 'connection://AMAZON.AskForPermissionsConsent/2',
+              input: {
+                '@type': 'PrintWebPageRequest',
+                '@version': '1',
+                'permissionScopes': ['alexa::profile:given_name:read'],
+              },
+              token: '<your-token>',
+              onCompletion: 'RESUME_SESSION', // default
+            },
+          ],
+        },
+      },
+    },
+  },
 }
 ```
