@@ -29,23 +29,23 @@ export class AlexaUser extends JovoUser<Alexa> {
   }
 
   async getEmail(): Promise<string | undefined> {
-    return await this.getProfilePropery(ProfileProperty.EMAIL) as string;
+    return await this.getProfileProperty(ProfileProperty.EMAIL) as string;
   }
 
   async getMobileNumber(): Promise<{ countryCode: string; mobileNumber: string; } | undefined> {
-    return await this.getProfilePropery(ProfileProperty.MOBILE_NUMBER) as { countryCode: string; mobileNumber: string; };
+    return await this.getProfileProperty(ProfileProperty.MOBILE_NUMBER) as { countryCode: string; mobileNumber: string; };
 
   }
 
   async getName(): Promise<string | undefined> {
-    return await this.getProfilePropery(ProfileProperty.NAME) as string;
+    return await this.getProfileProperty(ProfileProperty.NAME) as string;
   }
 
   async getGivenName(): Promise<string | undefined> {
-    return await this.getProfilePropery(ProfileProperty.GIVEN_NAME) as string;
+    return await this.getProfileProperty(ProfileProperty.GIVEN_NAME) as string;
   }
 
-  private async getProfilePropery(property: ProfileProperty): Promise<unknown> {
+  private async getProfileProperty(property: ProfileProperty): Promise<unknown> {
     const request: AlexaRequest = this.jovo.$request;
     return sendCustomerProfileApiRequest(
       property,
