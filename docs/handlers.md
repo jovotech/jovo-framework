@@ -276,6 +276,15 @@ START() {
 }
 ```
 
+It's also possible to add intents to the `START` handler. If you want the handler to be reachable from outside the current component, make sure that you're setting the intent `global`, not the whole handler, as described in the [`@Handle` docs](./handle-decorators.md#intents). Setting the whole `START` handler `global` could lead to problems with multiple handlers of the same name being `global`.
+
+```typescript
+@Handle({ intents: [ { name: 'TableReservationIntent', global: true } ] })
+START() {
+   ...
+}
+```
+
 ### UNHANDLED
 
 `UNHANDLED` is called when no other handler in the current component can fulfill the current request. It can be seen as a catch-all of handlers in one specific component.
