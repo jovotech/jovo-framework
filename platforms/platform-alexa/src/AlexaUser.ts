@@ -37,6 +37,16 @@ export class AlexaUser extends JovoUser<Alexa> {
     );
     return email;
   }
+  
+  async getMobileNumber(): Promise<string | undefined> {
+    const request: AlexaRequest = this.jovo.$request;
+    const mobileNumber: string = await sendCustomerProfileApiRequest(
+      ProfileProperty.MOBILE_NUMBER,
+      request.getApiEndpoint(),
+      request.getApiAccessToken(),
+    );
+    return mobileNumber;
+  }
 
   async setReminder(reminder: AbsoluteReminder | RelativeReminder): Promise<ReminderResponse> {
     const request: AlexaRequest = this.jovo.$request;
