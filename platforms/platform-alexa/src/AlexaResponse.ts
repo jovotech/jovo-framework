@@ -7,7 +7,7 @@ import {
   Type,
   ValidateNested,
 } from '@jovotech/output';
-import { Response } from './output';
+import { convertMessageToOutputSpeech, Response } from './output';
 
 export class AlexaResponse extends JovoResponse {
   @IsString()
@@ -24,5 +24,21 @@ export class AlexaResponse extends JovoResponse {
 
   hasSessionEnded(): boolean {
     return !!this.response.shouldEndSession;
+  }
+
+  getSpeech(): string | undefined {
+    return this.response.outputSpeech?.ssml;
+  }
+
+  getReprompt(): string | undefined {
+    return this.response.reprompt?.outputSpeech?.ssml;
+  }
+
+  setSpeech(speech: string): void {
+    this.response.outputSpeech = convertMessageToOutputSpeech(speech);
+  }
+
+  setReprompt(speech: string): void {
+    this.response.reprompt = { outputSpeech: convertMessageToOutputSpeech(speech) };
   }
 }
