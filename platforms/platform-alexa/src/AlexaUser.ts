@@ -2,7 +2,7 @@ import { JovoUser } from '@jovotech/framework';
 import { Alexa } from './Alexa';
 
 import { AlexaRequest } from './AlexaRequest';
-import { ProfileProperty, sendCustomerProfileApiRequest } from './api';
+import { CustomerProfileApiResponse, ProfileProperty, sendCustomerProfileApiRequest } from './api';
 import {
   AbsoluteReminder,
   deleteReminder,
@@ -29,23 +29,25 @@ export class AlexaUser extends JovoUser<Alexa> {
   }
 
   async getEmail(): Promise<string | undefined> {
-    return await this.getProfileProperty(ProfileProperty.EMAIL) as string;
+    return await this.getProfileProperty(ProfileProperty.EMAIL);
   }
 
   async getMobileNumber(): Promise<{ countryCode: string; mobileNumber: string; } | undefined> {
-    return await this.getProfileProperty(ProfileProperty.MOBILE_NUMBER) as { countryCode: string; mobileNumber: string; };
+    return await this.getProfileProperty(ProfileProperty.MOBILE_NUMBER);
 
   }
 
   async getName(): Promise<string | undefined> {
-    return await this.getProfileProperty(ProfileProperty.NAME) as string;
+    return await this.getProfileProperty(ProfileProperty.NAME);
   }
 
   async getGivenName(): Promise<string | undefined> {
-    return await this.getProfileProperty(ProfileProperty.GIVEN_NAME) as string;
+    return await this.getProfileProperty(ProfileProperty.GIVEN_NAME);
   }
 
-  private async getProfileProperty(property: ProfileProperty): Promise<unknown> {
+  private async getProfileProperty<PROPERTY extends ProfileProperty>(
+    property: PROPERTY,
+  ): Promise<CustomerProfileApiResponse<PROPERTY> | undefined> {
     const request: AlexaRequest = this.jovo.$request;
     return sendCustomerProfileApiRequest(
       property,
