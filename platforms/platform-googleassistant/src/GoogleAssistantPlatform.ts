@@ -76,6 +76,10 @@ export class GoogleAssistantPlatform extends Platform<
         if (typeof objValue === 'string' && typeof srcValue === 'string') {
           return objValue ? objValue : srcValue;
         }
+        // Replaces full array with the value furthest to the right. No concatenation of array values.
+        if (Array.isArray(objValue) && Array.isArray(srcValue)) {
+          return srcValue;
+        }
       },
     );
 
