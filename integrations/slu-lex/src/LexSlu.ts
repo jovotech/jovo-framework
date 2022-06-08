@@ -151,10 +151,10 @@ export class LexSlu extends SluPlugin<LexSluConfig> {
     }
     // The return inputTranscript is a gzipped string that is encoded with base64
     // base64 -> gzip
-    const parsedText = await this.extractValue(response.inputTranscript) as string;
-    const interpretations = await this.extractValue(response.interpretations) as Interpretation[];
-    const messages = await this.extractValue(response.messages) as Message[];
-    const sessionState = await this.extractValue(response.sessionState) as SessionState;
+    const parsedText = (await this.extractValue(response.inputTranscript)) as string;
+    const interpretations = (await this.extractValue(response.interpretations)) as Interpretation[];
+    const messages = (await this.extractValue(response.messages)) as Message[];
+    const sessionState = (await this.extractValue(response.sessionState)) as SessionState;
     this.asrOutput = { interpretations, messages, sessionState };
 
     return {
@@ -255,7 +255,9 @@ export class LexSlu extends SluPlugin<LexSluConfig> {
       : this.config?.localeMap?.[locale] || this.config.fallbackLocale;
   }
 
-  private async extractValue(input?: string): Promise<string | Interpretation[] | Message[] | SessionState | undefined> {
+  private async extractValue(
+    input?: string,
+  ): Promise<string | Interpretation[] | Message[] | SessionState | undefined> {
     if (!input) {
       return;
     }

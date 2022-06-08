@@ -32,9 +32,8 @@ export class AlexaUser extends JovoUser<Alexa> {
     return await this.getProfileProperty(ProfileProperty.EMAIL);
   }
 
-  async getMobileNumber(): Promise<{ countryCode: string; mobileNumber: string; } | undefined> {
+  async getMobileNumber(): Promise<{ countryCode: string; mobileNumber: string } | undefined> {
     return await this.getProfileProperty(ProfileProperty.MOBILE_NUMBER);
-
   }
 
   async getName(): Promise<string | undefined> {
