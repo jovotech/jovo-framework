@@ -116,10 +116,14 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
 
   mount(parent: HandleRequest): Promise<void> | void {
     parent.middlewareCollection.use('request.start', (jovo) => {
-      return this.logRequest(jovo);
+      if ((this.config.request as RequestResponseConfig).enabled) {
+        return this.logRequest(jovo);
+      }
     });
     parent.middlewareCollection.use('response.end', (jovo: Jovo) => {
-      return this.logResponse(jovo);
+      if ((this.config.response as RequestResponseConfig).enabled) {
+        return this.logResponse(jovo);
+      }
     });
   }
 
