@@ -83,6 +83,16 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
   }
 
   constructor(config: BasicLoggingConfig) {
+    if (config.enabled === false) {
+      if (typeof config.request === 'undefined') {
+        config.request = false;
+      }
+
+      if (typeof config.response === 'undefined') {
+        config.response = false;
+      }
+    }
+
     super(config);
 
     if (typeof config.request === 'boolean') {
