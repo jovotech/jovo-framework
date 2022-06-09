@@ -26,19 +26,25 @@ export class AlexaResponse extends JovoResponse {
     return !!this.response.shouldEndSession;
   }
 
-  getSpeech(): string | undefined {
+  getSpeech(): string | string[] | undefined {
     return this.response.outputSpeech?.ssml;
   }
 
-  getReprompt(): string | undefined {
+  getReprompt(): string | string[] | undefined {
     return this.response.reprompt?.outputSpeech?.ssml;
   }
 
-  setSpeech(speech: string): void {
-    this.response.outputSpeech = convertMessageToOutputSpeech(speech);
+  replaceSpeech(speech: string | string[]): void {
+    // For consistency with JovoResponse, this method can also accept a string of arrays
+    // However, Alexa responses use only 1 speech element, so the first item is used
+    const message = Array.isArray(speech) ? speech[0] : speech;
+    this.response.outputSpeech = convertMessageToOutputSpeech(message);
   }
 
-  setReprompt(speech: string): void {
-    this.response.reprompt = { outputSpeech: convertMessageToOutputSpeech(speech) };
+  replaceReprompt(reprompt: string | string[]): void {
+    // For consistency with JovoResponse, this method can also accept a string of arrays
+    // However, Alexa responses use only 1 reprompt element, so the first item is used
+    const message = Array.isArray(reprompt) ? reprompt[0] : reprompt;
+    this.response.reprompt = { outputSpeech: convertMessageToOutputSpeech(message) };
   }
 }
