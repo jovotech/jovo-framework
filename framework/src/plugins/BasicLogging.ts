@@ -1,13 +1,10 @@
-import { AnyObject, EnumLike } from '@jovotech/common';
+import { EnumLike } from '@jovotech/common';
 import chalk from 'chalk';
 import colorize from 'json-colorizer';
-import _get from 'lodash.get';
-import _set from 'lodash.set';
-import _unset from 'lodash.unset';
 import { LoggingFormat } from '../enums';
 import { HandleRequest, Jovo } from '../index';
 import { Plugin, PluginConfig } from '../Plugin';
-import { copy, exclude, mask } from '../utilities';
+import { copy, mask } from '../utilities';
 
 declare module '../interfaces' {
   interface RequestData {
@@ -178,11 +175,6 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
       include: responseConfig.objects,
       exclude: responseConfig.excludedObjects,
     });
-
-    // Exclude properties from logs according to configuration
-    if (responseConfig.excludedObjects && responseConfig.excludedObjects.length > 0) {
-      exclude(responseCopy, responseConfig.excludedObjects);
-    }
 
     if (responseConfig.maskedObjects && responseConfig.maskedObjects.length > 0) {
       mask(responseCopy, responseConfig.maskedObjects, this.config.maskValue);
