@@ -1,11 +1,11 @@
+import { EnumLike } from '@jovotech/common';
 import chalk from 'chalk';
 import colorize from 'json-colorizer';
-import _get from 'lodash.get';
-import _set from 'lodash.set';
 import _unset from 'lodash.unset';
-
+import { LoggingFormat } from '../enums';
 import { HandleRequest, Jovo } from '../index';
 import { Plugin, PluginConfig } from '../Plugin';
+import { mask } from '../utilities';
 
 declare module '../interfaces' {
   interface RequestData {
@@ -33,9 +33,9 @@ export interface RequestResponseConfig {
 export interface BasicLoggingConfig extends PluginConfig {
   request?: RequestResponseConfig | boolean;
   response?: RequestResponseConfig | boolean;
+  format?: EnumLike<LoggingFormat>;
   maskValue?: unknown;
-  styling?: boolean;
-  indentation?: string;
+  indentation?: string | number;
   colorizeSettings?: {
     colors: {
       BRACE?: string;
@@ -68,9 +68,9 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
         maskedObjects: [],
         objects: [],
       },
+      format: LoggingFormat.Pretty,
       maskValue: '[ Hidden ]',
-      indentation: '  ',
-      styling: true,
+      indentation: 2,
       colorizeSettings: {
         colors: {
           STRING_KEY: 'white',
@@ -138,46 +138,38 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
 
     const requestConfig = this.config.request as RequestResponseConfig;
 
-    if (requestConfig.maskedObjects && requestConfig.maskedObjects.length > 0) {
-      requestConfig.maskedObjects.forEach((maskPath: string) => {
-        const value = _get(requestCopy, maskPath);
-        if (value) {
-          let newValue = this.config.maskValue;
-          if (typeof this.config.maskValue === 'function') {
-            newValue = this.config.maskValue(value);
-          }
-          _set(requestCopy, maskPath, newValue);
-        }
-      });
-    }
-
+    // Exclude properties from logs according to configuration
     if (requestConfig.excludedObjects && requestConfig.excludedObjects.length > 0) {
       requestConfig.excludedObjects.forEach((excludePath: string) => {
         _unset(requestCopy, excludePath);
       });
     }
 
-    /* eslint-disable no-console */
-    if (this.config.styling) {
-      console.log(chalk.bgWhite.black('\n\n >>>>> Request - ' + new Date().toISOString() + ' '));
+    if (requestConfig.objects && requestConfig.objects.length > 0) {
+      requestConfig.objects.forEach((objectPath: string) => {
+        _unset(requestCopy, objectPath);
+      });
     }
 
-    if (requestConfig.objects && requestConfig.objects.length > 0) {
-      requestConfig.objects.forEach((path: string) => {
-        console.log(
-          colorize(JSON.stringify(_get(requestCopy, path), null, this.config.indentation || 2)),
-        );
-      });
-    } else {
+    // Mask properties according to configuration
+    if (requestConfig.maskedObjects && requestConfig.maskedObjects.length > 0) {
+      mask(requestConfig.maskedObjects, requestCopy, this.config.maskValue);
+    }
+
+    if (this.config.format === LoggingFormat.Pretty) {
+      // eslint-disable-next-line no-console
+      console.log(chalk.bgWhite.black('\n\n >>>>> Request - ' + new Date().toISOString() + ' '));
+      // eslint-disable-next-line no-console
       console.log(
         colorize(
           JSON.stringify(requestCopy, null, this.config.indentation || 2),
           this.config.colorizeSettings,
         ),
       );
+    } else if (this.config.format === LoggingFormat.Json) {
+      // eslint-disable-next-line no-console
+      console.log(colorize(JSON.stringify(requestCopy), this.config.colorizeSettings));
     }
-
-    /* eslint-enable no-console */
   }
 
   async logResponse(jovo: Jovo): Promise<void> {
@@ -194,51 +186,41 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
 
     const responseConfig = this.config.response as RequestResponseConfig;
 
-    if (responseConfig.maskedObjects && responseConfig.maskedObjects.length > 0) {
-      responseConfig.maskedObjects.forEach((maskPath: string) => {
-        const value = _get(responseCopy, maskPath);
-        if (value) {
-          let newValue = this.config.maskValue;
-          if (typeof this.config.maskValue === 'function') {
-            newValue = this.config.maskValue(value);
-          }
-          _set(responseCopy, maskPath, newValue);
-        }
-      });
-    }
-
+    // Exclude properties from logs according to configuration
     if (responseConfig.excludedObjects && responseConfig.excludedObjects.length > 0) {
       responseConfig.excludedObjects.forEach((excludePath: string) => {
         _unset(responseCopy, excludePath);
       });
     }
 
-    /* eslint-disable no-console */
-    if (this.config.styling) {
+    if (responseConfig.objects && responseConfig.objects.length > 0) {
+      responseConfig.objects.forEach((objectPath: string) => {
+        _unset(responseCopy, objectPath);
+      });
+    }
+
+    if (responseConfig.maskedObjects && responseConfig.maskedObjects.length > 0) {
+      mask(responseConfig.maskedObjects, responseCopy, this.config.maskValue);
+    }
+
+    if (this.config.format === LoggingFormat.Pretty) {
+      // eslint-disable-next-line no-console
       console.log(
         chalk.bgGray.white('\n\n <<<<< Response - ' + new Date().toISOString() + ' ') +
           ' ✔️ ' +
           duration +
           'ms',
       );
-    }
-    if (responseConfig.objects && responseConfig.objects.length > 0) {
-      responseConfig.objects.forEach((path: string) => {
-        console.log(
-          colorize(
-            JSON.stringify(_get(responseCopy, path), null, this.config.indentation || 2),
-            this.config.colorizeSettings,
-          ),
-        );
-      });
-    } else {
+      // eslint-disable-next-line no-console
       console.log(
         colorize(
           JSON.stringify(responseCopy, null, this.config.indentation || 2),
           this.config.colorizeSettings,
         ),
       );
+    } else if (this.config.format === LoggingFormat.Json) {
+      // eslint-disable-next-line no-console
+      console.log(colorize(JSON.stringify(responseCopy), this.config.colorizeSettings));
     }
-    /* eslint-enable no-console */
   }
 }
