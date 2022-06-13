@@ -1,6 +1,7 @@
 import { AnyObject } from '@jovotech/common';
 import _get from 'lodash.get';
 import _set from 'lodash.set';
+import _unset from 'lodash.unset';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function forEachDeep<T = any>(
@@ -52,4 +53,35 @@ export function mask(obj: AnyObject, objectsToMask: string[], mask: unknown): vo
       _set(obj, maskPath, maskedValue);
     }
   });
+}
+
+/**
+ * Copies an object and allows to suggest properties to include/exclude
+ * @param source - Source object to copy
+ * @param config - Copy configuration, allows to set properties to include/exclude when copying. Nested properties are supported, e.g. "foo.bar".
+ */
+export function copy<T extends AnyObject>(
+  source?: AnyObject,
+  config?: {
+    include?: string[];
+    exclude?: string[];
+  },
+): T {
+  // TODO: Check if include and exclude have matching values, thus creating a paradoxon
+  let result: AnyObject = {};
+  if (config?.include?.length) {
+    config.include.forEach((includePath: string) => {
+      _set(result, includePath, _get(source, includePath));
+    });
+  } else {
+    result = JSON.parse(JSON.stringify(source));
+  }
+
+  if (config?.exclude?.length) {
+    config.exclude.forEach((excludePath: string) => {
+      _unset(result, excludePath);
+    });
+  }
+
+  return result as T;
 }

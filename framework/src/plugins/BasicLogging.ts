@@ -1,11 +1,13 @@
-import { EnumLike } from '@jovotech/common';
+import { AnyObject, EnumLike } from '@jovotech/common';
 import chalk from 'chalk';
 import colorize from 'json-colorizer';
+import _get from 'lodash.get';
+import _set from 'lodash.set';
 import _unset from 'lodash.unset';
 import { LoggingFormat } from '../enums';
 import { HandleRequest, Jovo } from '../index';
 import { Plugin, PluginConfig } from '../Plugin';
-import { mask } from '../utilities';
+import { copy, exclude, mask } from '../utilities';
 
 declare module '../interfaces' {
   interface RequestData {
@@ -134,26 +136,15 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
       return;
     }
 
-    const requestCopy = JSON.parse(JSON.stringify(jovo.$request));
-
     const requestConfig = this.config.request as RequestResponseConfig;
-
-    // Exclude properties from logs according to configuration
-    if (requestConfig.excludedObjects && requestConfig.excludedObjects.length > 0) {
-      requestConfig.excludedObjects.forEach((excludePath: string) => {
-        _unset(requestCopy, excludePath);
-      });
-    }
-
-    if (requestConfig.objects && requestConfig.objects.length > 0) {
-      requestConfig.objects.forEach((objectPath: string) => {
-        _unset(requestCopy, objectPath);
-      });
-    }
+    const requestCopy = copy(jovo.$request, {
+      include: requestConfig.objects,
+      exclude: requestConfig.excludedObjects,
+    });
 
     // Mask properties according to configuration
     if (requestConfig.maskedObjects && requestConfig.maskedObjects.length > 0) {
-      mask(requestConfig.maskedObjects, requestCopy, this.config.maskValue);
+      mask(requestCopy, requestConfig.maskedObjects, this.config.maskValue);
     }
 
     if (this.config.format === LoggingFormat.Pretty) {
@@ -182,25 +173,19 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
       return;
     }
 
-    const responseCopy = JSON.parse(JSON.stringify(jovo.$response));
-
     const responseConfig = this.config.response as RequestResponseConfig;
+    const responseCopy = copy(jovo.$response, {
+      include: responseConfig.objects,
+      exclude: responseConfig.excludedObjects,
+    });
 
     // Exclude properties from logs according to configuration
     if (responseConfig.excludedObjects && responseConfig.excludedObjects.length > 0) {
-      responseConfig.excludedObjects.forEach((excludePath: string) => {
-        _unset(responseCopy, excludePath);
-      });
-    }
-
-    if (responseConfig.objects && responseConfig.objects.length > 0) {
-      responseConfig.objects.forEach((objectPath: string) => {
-        _unset(responseCopy, objectPath);
-      });
+      exclude(responseCopy, responseConfig.excludedObjects);
     }
 
     if (responseConfig.maskedObjects && responseConfig.maskedObjects.length > 0) {
-      mask(responseConfig.maskedObjects, responseCopy, this.config.maskValue);
+      mask(responseCopy, responseConfig.maskedObjects, this.config.maskValue);
     }
 
     if (this.config.format === LoggingFormat.Pretty) {
