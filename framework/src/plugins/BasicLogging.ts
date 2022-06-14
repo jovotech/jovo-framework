@@ -33,6 +33,8 @@ export interface BasicLoggingConfig extends PluginConfig {
   request?: RequestResponseConfig | boolean;
   response?: RequestResponseConfig | boolean;
   format?: EnumLike<LoggingFormat>;
+  /** @deprecated Use the property "format" instead */
+  styling?: boolean;
   maskValue?: unknown;
   indentation?: string | number;
   colorizeSettings?: {
@@ -141,8 +143,10 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
     }
 
     if (this.config.format === LoggingFormat.Pretty) {
-      // eslint-disable-next-line no-console
-      console.log(chalk.bgWhite.black('\n\n >>>>> Request - ' + new Date().toISOString() + ' '));
+      if (this.config.styling) {
+        // eslint-disable-next-line no-console
+        console.log(chalk.bgWhite.black('\n\n >>>>> Request - ' + new Date().toISOString() + ' '));
+      }
       // eslint-disable-next-line no-console
       console.log(
         colorize(
