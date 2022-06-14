@@ -81,8 +81,8 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
     };
   }
 
-  constructor(config: BasicLoggingConfig) {
-    if (config.enabled === false) {
+  constructor(config?: BasicLoggingConfig) {
+    if (config?.enabled === false) {
       if (typeof config.request === 'undefined') {
         config.request = false;
       }
@@ -94,21 +94,21 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
 
     super(config);
 
-    if (typeof config.request === 'boolean') {
+    if (typeof this.config.request === 'boolean') {
       this.config.request = {
         objects: [],
         maskedObjects: [],
         excludedObjects: [],
-        enabled: config.request,
+        enabled: this.config.request,
       };
     }
 
-    if (typeof config.response === 'boolean') {
+    if (typeof this.config.response === 'boolean') {
       this.config.response = {
         objects: [],
         maskedObjects: [],
         excludedObjects: [],
-        enabled: config.response,
+        enabled: this.config.response,
       };
     }
   }
@@ -128,10 +128,6 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
 
   async logRequest(jovo: Jovo): Promise<void> {
     jovo.$data._BASIC_LOGGING_START = new Date().getTime();
-
-    if (!this.config.request) {
-      return;
-    }
 
     const requestConfig = this.config.request as RequestResponseConfig;
     const requestCopy = copy(jovo.$request, {
@@ -165,10 +161,6 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
     const duration = jovo.$data._BASIC_LOGGING_START
       ? basicLoggingEnd - jovo.$data._BASIC_LOGGING_START
       : 0;
-
-    if (!this.config.response) {
-      return;
-    }
 
     const responseConfig = this.config.response as RequestResponseConfig;
     const responseCopy = copy(jovo.$response, {
