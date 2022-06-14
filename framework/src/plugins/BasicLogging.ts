@@ -70,6 +70,7 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
         objects: [],
       },
       format: LoggingFormat.Pretty,
+      styling: true,
       maskValue: '[ Hidden ]',
       indentation: 2,
       colorizeSettings: {
