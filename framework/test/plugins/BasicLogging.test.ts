@@ -1,4 +1,4 @@
-import { AnyObject } from '@jovotech/cli-core';
+import { AnyObject, OmitIndex } from '@jovotech/cli-core';
 import {
   App,
   BasicLogging,
@@ -8,7 +8,6 @@ import {
   JovoRequest,
   JovoResponse,
   LoggingFormat,
-  MiddlewareCollection,
   RequestResponseConfig,
   Server,
 } from '../../src';
@@ -84,6 +83,53 @@ describe('getDefaultConfig()', () => {
 
     const logging: BasicLogging = new BasicLogging();
     expect(logging.config).toStrictEqual(defaultConfig);
+  });
+});
+
+describe('mount()', () => {
+  test('should not log if disabled', async () => {
+    const mockedLogRequest: jest.SpyInstance = jest
+      .spyOn<OmitIndex<BasicLogging>, 'logRequest'>(BasicLogging.prototype, 'logRequest')
+      .mockReturnThis();
+    const mockedLogResponse: jest.SpyInstance = jest
+      .spyOn<OmitIndex<BasicLogging>, 'logResponse'>(BasicLogging.prototype, 'logResponse')
+      .mockReturnThis();
+    const logging: BasicLogging = new BasicLogging({
+      request: { enabled: false },
+      response: { enabled: false },
+    });
+    const handleRequest: HandleRequest = new HandleRequest(new App(), {} as Server);
+
+    logging.mount(handleRequest);
+    await handleRequest.middlewareCollection.run('request.start', {} as Jovo);
+    await handleRequest.middlewareCollection.run('response.end', {} as Jovo);
+
+    expect(mockedLogRequest).toBeCalledTimes(0);
+    expect(mockedLogResponse).toBeCalledTimes(0);
+
+    mockedLogRequest.mockRestore();
+    mockedLogResponse.mockRestore();
+  });
+
+  test('should log if enabled', async () => {
+    const mockedLogRequest: jest.SpyInstance = jest
+      .spyOn<OmitIndex<BasicLogging>, 'logRequest'>(BasicLogging.prototype, 'logRequest')
+      .mockReturnThis();
+    const mockedLogResponse: jest.SpyInstance = jest
+      .spyOn<OmitIndex<BasicLogging>, 'logResponse'>(BasicLogging.prototype, 'logResponse')
+      .mockReturnThis();
+    const logging: BasicLogging = new BasicLogging();
+    const handleRequest: HandleRequest = new HandleRequest(new App(), {} as Server);
+
+    logging.mount(handleRequest);
+    await handleRequest.middlewareCollection.run('request.start', {} as Jovo);
+    await handleRequest.middlewareCollection.run('response.end', {} as Jovo);
+
+    expect(mockedLogRequest).toBeCalledTimes(1);
+    expect(mockedLogResponse).toBeCalledTimes(1);
+
+    mockedLogRequest.mockRestore();
+    mockedLogResponse.mockRestore();
   });
 });
 
