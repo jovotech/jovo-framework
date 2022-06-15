@@ -1,5 +1,6 @@
 import { AnyObject, JovoError } from '@jovotech/common';
 import _get from 'lodash.get';
+import _intersection from 'lodash.intersection';
 import _set from 'lodash.set';
 import _unset from 'lodash.unset';
 
@@ -67,14 +68,12 @@ export function copy<T extends AnyObject>(
     exclude?: string[];
   },
 ): T {
-  const diff: string[] | undefined = config?.include?.filter(
-    (path: string) => (config?.exclude?.indexOf(path) ?? -1) >= 0,
-  );
+  const intersection: string[] = _intersection(config?.include, config?.exclude);
 
-  if (diff?.length) {
+  if (intersection.length) {
     throw new JovoError({
       message: `Collision detected during object construction, trying to include/exclude the same properties ${JSON.stringify(
-        diff,
+        intersection,
       )}`,
       hint: 'Please disambiguate your configuration by specifying which properties to include/exclude',
     });
