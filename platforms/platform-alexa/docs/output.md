@@ -589,6 +589,25 @@ import { AskForPermissionOutput } from '@jovotech/platform-alexa';
 someHandler() {
   // ...
 
-  return this.$send(AskForPermissionOutput, { /* options */ })
+  return this.$send(AskForPermissionOutput, { /* options */ });
+}
+```
+
+### Progressive Responses
+
+Alexa offers the ability to send [progressive responses](https://developer.amazon.com/docs/alexa/custom-skills/send-the-user-a-progressive-response.html), which means you can send an initial response while preparing the final response. This is helpful in cases where you have data intensive tasks (like API calls) and want to give the user a heads up.
+
+To send a progressive response, you can use a convenience output class called [`ProgressiveResponseOutput`](https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/src/output/templates/ProgressiveResponseOutput.ts):
+
+```typescript
+import { ProgressiveResponseOutput } from '@jovotech/platform-alexa';
+// ...
+
+async yourHandler() {
+  await this.$send(ProgressiveResponseOutput, { speech: 'Alright, one second.' });
+
+  // ...
+
+  return this.$send('Done');
 }
 ```

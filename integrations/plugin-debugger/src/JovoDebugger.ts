@@ -59,6 +59,7 @@ export interface JovoDebuggerConfig extends PluginConfig {
   debuggerConfigPath: string;
   modelsPath: string;
   ignoredProperties: Array<keyof Jovo | string>;
+  plugins: Plugin[];
 }
 
 export function getDefaultLanguageMap(): UnknownObject {
@@ -70,6 +71,8 @@ export function getDefaultLanguageMap(): UnknownObject {
     it: LangIt,
   };
 }
+
+export class JovoDebuggerPlatform extends CorePlatform<'JovoDebuggerPlatform'> {}
 
 export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   socket?: typeof Socket;
@@ -89,6 +92,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       debuggerConfigPath: './jovo.debugger.js',
       modelsPath: './models',
       ignoredProperties: ['$app', '$handleRequest', '$platform'],
+      plugins: [],
     };
   }
 
@@ -100,10 +104,12 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   }
 
   private installDebuggerPlatform(app: App) {
+    const plugins: Plugin[] = (this.config.plugins as Plugin[]) || [];
+
     app.use(
-      new CorePlatform({
+      new JovoDebuggerPlatform({
         platform: 'jovo-debugger',
-        plugins: [this.config.nlu],
+        plugins: [this.config.nlu, ...plugins],
       }),
     );
   }

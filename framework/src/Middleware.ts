@@ -1,6 +1,7 @@
 import { Jovo } from './Jovo';
+import { AnyObject } from '@jovotech/common';
 
-export type MiddlewareFunction = (jovo: Jovo) => Promise<unknown> | unknown;
+export type MiddlewareFunction = (jovo: Jovo, payload?: AnyObject) => Promise<unknown> | unknown;
 
 export class Middleware<NAME extends string = string> {
   readonly fns: MiddlewareFunction[];
@@ -15,12 +16,12 @@ export class Middleware<NAME extends string = string> {
     return this;
   }
 
-  async run(jovo: Jovo): Promise<void> {
+  async run(jovo: Jovo, payload?: AnyObject): Promise<void> {
     if (!this.enabled) {
       return;
     }
     for (let i = 0, len = this.fns.length; i < len; i++) {
-      await this.fns[i](jovo);
+      await this.fns[i](jovo, payload);
     }
   }
 

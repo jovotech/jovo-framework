@@ -238,33 +238,38 @@ The following features are offered by the Alexa user property:
 
 #### User Profile
 
-You can call the [Alexa Customer Profile API](https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-customer-contact-information-for-use-in-your-skill.html) to retrieve the user's email address like this:
+You can call the [Alexa Customer Profile API](https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-customer-contact-information-for-use-in-your-skill.html) by using the following methods:
 
 ```typescript
 await this.$alexa.$user.getEmail();
+// Result: string
+
+await this.$alexa.$user.getName();
+// Result: string
+
+await this.$alexa.$user.getGivenName();
+// Result: string
+
+await this.$alexa.$user.getMobileNumber();
+// Result: { countryCode: string; mobileNumber: string; }
 ```
 
 Below is an example `getEmail` handler:
 
 ```typescript
+import { AskForPermissionConsentCardOutput } from '@jovotech/platform-alexa';
+// ...
+
 async getEmail() {
   try {
     const email = await this.$alexa.$user.getEmail();
     return this.$send({ message: `Your email address is ${email}` });
   } catch(error) {
     if (error.code === 'NO_USER_PERMISSION') {
-      return this.$send({
+      return this.$send(AskForPermissionConsentCardOutput, {
         message: 'Please grant access to your email address.',
-        platforms: {
-          alexa: {
-            card: {
-              type: 'AskForPermissionsConsent',
-              permissions: [
-                'alexa::profile:email:read'
-              ],
-            },
-          },
-        },
+        permissions: 'alexa::profile:email:read',
+        listen: false,
       });
     } else {
       // ...
@@ -273,7 +278,46 @@ async getEmail() {
 },
 ```
 
-If the `getEmail` call returns an error with the code `NO_USER_PERMISSION`, an `AskForPermissionsConsent` card ([learn more in the official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-customer-contact-information-for-use-in-your-skill.html#sample-response-with-permissions-card)) is added to the Alexa-specific [output](https://www.jovo.tech/docs/output). Please note that the example adds the output to the `$send()` method for simplicity. It could also be added using output classes.
+If the `getEmail` call returns an error with the code `NO_USER_PERMISSION`, an `AskForPermissionsConsent` card ([learn more in the official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-customer-contact-information-for-use-in-your-skill.html#sample-response-with-permissions-card)) returned to ask the user for permission. For this, the [`AskForPermissionConsentCardOutput`](https://github.com/jovotech/jovo-framework/blob/v4/latest/platforms/platform-alexa/src/output/templates/AskForPermissionConsentCardOutput.ts) convenience [output class](https://www.jovo.tech/docs/output-classes) is used.
+
+Under the hood, it looks like this:
+
+```typescript
+{
+  listen: this.options.listen,
+  message: this.options.message,
+  platforms: {
+    alexa: {
+      nativeResponse: {
+        response: {
+          card: {
+            type: 'AskForPermissionsConsent',
+            permissions: this.options.permissions,
+          },
+        },
+      },
+    },
+  },
+}
+```
+
+For a Skill to be able to request information from the Customer Profile API, the permissions need to be added to the Skill manifest, either in the Alexa Developer Console or the `skill.json` file. The latter can be done by using the [`files` property of the Alexa project config](./project-config.md#files):
+
+```js
+new AlexaCli({
+  files: {
+    'skill-package/skill.json': {
+      manifest: {
+        permissions: [
+          'alexa::profile:email:read',
+          // ...
+        ],
+      },
+    },
+  },
+  // ...
+});
+```
 
 #### Account Linking
 
@@ -320,8 +364,7 @@ You can access the following properties and methods of the Alexa device class:
 
 It is possible to retrieve your Alexa Skill user's address information, if they grant the permission for this. Learn more in the [official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/custom-skills/device-address-api.html).
 
-You need to first get the permission, which you can do by sending a card to the user's Alexa app.
-You can use the `AskForPermissionOutput` for this:
+You need to first get the permission, which you can do by sending a card to the user's Alexa app. You can use the [`AskForPermissionOutput`](https://github.com/jovotech/jovo-framework/blob/v4/latest/platforms/platform-alexa/src/output/templates/AskForPermissionOutput.ts) for this:
 
 ```typescript
 import { AskForPermissionOutput } from '@jovotech/platform-alexa';

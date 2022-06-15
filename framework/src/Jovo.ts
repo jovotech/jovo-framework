@@ -3,6 +3,7 @@ import { JovoResponse, NormalizedOutputTemplate, OutputTemplate } from '@jovotec
 import _cloneDeep from 'lodash.clonedeep';
 import _merge from 'lodash.merge';
 import _set from 'lodash.set';
+import util from 'util';
 import { App, AppConfig } from './App';
 import { HandleRequest } from './HandleRequest';
 import {
@@ -263,7 +264,8 @@ export abstract class Jovo<
     let newOutput: OutputTemplate | OutputTemplate[];
     if (typeof outputConstructorOrTemplateOrMessage === 'function') {
       const outputInstance = new outputConstructorOrTemplateOrMessage(this, options);
-      const output = await outputInstance.build();
+      const outputRes = outputInstance.build();
+      const output = util.types.isPromise(outputRes) ? await outputRes : outputRes;
       // overwrite reserved properties of the built object i.e. message
       NormalizedOutputTemplate.getKeys().forEach((key) => {
         if (typeof options?.[key] !== 'undefined') {
@@ -290,7 +292,10 @@ export abstract class Jovo<
     // push the new OutputTemplate(s) to $output
     Array.isArray(newOutput) ? this.$output.push(...newOutput) : this.$output.push(newOutput);
 
-    await this.$handleRequest.middlewareCollection.run(SEND_MIDDLEWARE, this);
+    await this.$handleRequest.middlewareCollection.run(SEND_MIDDLEWARE, this, {
+      outputConstructorOrTemplateOrMessage,
+      options,
+    });
   }
 
   async $redirect<
@@ -314,24 +319,25 @@ export abstract class Jovo<
       this.$handleRequest.activeComponentNode?.path,
     );
 
-    // update the state-stack if the component is not global
+    // clear the state stack
+    this.$session.state = [];
+
+    // add new component to the stack if it's not global
+    // @see https://www.jovo.tech/docs/components#global-components
     if (!componentNode.metadata.isGlobal) {
       const stackItem: StateStackItem = {
         component: componentNode.path.join('.'),
       };
-      if (!this.$state?.length) {
-        // initialize the state-stack if it is empty or does not exist
-        this.$session.state = [stackItem];
-      } else {
-        // replace last item in stack
-        this.$state[this.$state.length - 1] = stackItem;
-      }
+      this.$session.state.push(stackItem);
     }
 
     // update the active component node in handleRequest to keep track of the state
     this.$handleRequest.activeComponentNode = componentNode;
 
-    await this.$handleRequest.middlewareCollection.run(REDIRECT_MIDDLEWARE, this);
+    await this.$handleRequest.middlewareCollection.run(REDIRECT_MIDDLEWARE, this, {
+      componentName,
+      handler,
+    });
 
     // execute the component's handler
     await componentNode.executeHandler({
@@ -405,7 +411,10 @@ export abstract class Jovo<
     // update the active component node in handleRequest to keep track of the state
     this.$handleRequest.activeComponentNode = componentNode;
 
-    await this.$handleRequest.middlewareCollection.run(DELEGATE_MIDDLEWARE, this);
+    await this.$handleRequest.middlewareCollection.run(DELEGATE_MIDDLEWARE, this, {
+      componentName,
+      options,
+    });
 
     // execute the component's handler
     await componentNode.executeHandler({
@@ -440,7 +449,11 @@ export abstract class Jovo<
     // update the active component node in handleRequest to keep track of the state
     this.$handleRequest.activeComponentNode = previousComponentNode;
 
-    await this.$handleRequest.middlewareCollection.run(RESOLVE_MIDDLEWARE, this);
+    await this.$handleRequest.middlewareCollection.run(RESOLVE_MIDDLEWARE, this, {
+      resolvedHandler,
+      eventName,
+      eventArgs,
+    });
 
     // execute the component's handler
     await previousComponentNode.executeHandler({
