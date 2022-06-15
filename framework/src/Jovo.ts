@@ -3,6 +3,7 @@ import { JovoResponse, NormalizedOutputTemplate, OutputTemplate } from '@jovotec
 import _cloneDeep from 'lodash.clonedeep';
 import _merge from 'lodash.merge';
 import _set from 'lodash.set';
+import util from 'util';
 import { App, AppConfig } from './App';
 import { HandleRequest } from './HandleRequest';
 import {
@@ -263,7 +264,8 @@ export abstract class Jovo<
     let newOutput: OutputTemplate | OutputTemplate[];
     if (typeof outputConstructorOrTemplateOrMessage === 'function') {
       const outputInstance = new outputConstructorOrTemplateOrMessage(this, options);
-      const output = await outputInstance.build();
+      const outputRes = outputInstance.build();
+      const output = util.types.isPromise(outputRes) ? await outputRes : outputRes;
       // overwrite reserved properties of the built object i.e. message
       NormalizedOutputTemplate.getKeys().forEach((key) => {
         if (typeof options?.[key] !== 'undefined') {
