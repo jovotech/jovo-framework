@@ -1,9 +1,9 @@
 import { BaseOutput, Output, OutputOptions, OutputTemplate } from '@jovotech/framework';
-import { PermissionScopeLike, ConsentLevelLike } from '../models';
+import { ConnectionPermissionScopeLike, ConsentLevelLike } from '../models';
 import { OnCompletion } from '../models/common/OnCompletion';
 
 export interface PermissionScopeItem {
-  permissionScope: PermissionScopeLike;
+  permissionScope: ConnectionPermissionScopeLike;
   consentLevel: ConsentLevelLike;
 }
 
