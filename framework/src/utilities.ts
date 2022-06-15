@@ -1,4 +1,4 @@
-import { AnyObject } from '@jovotech/common';
+import { AnyObject, JovoError } from '@jovotech/common';
 import _get from 'lodash.get';
 import _set from 'lodash.set';
 import _unset from 'lodash.unset';
@@ -67,7 +67,19 @@ export function copy<T extends AnyObject>(
     exclude?: string[];
   },
 ): T {
-  // TODO: Check if include and exclude have matching values, thus creating a paradoxon
+  const diff: string[] | undefined = config?.include?.filter(
+    (path: string) => (config?.exclude?.indexOf(path) ?? -1) >= 0,
+  );
+
+  if (diff?.length) {
+    throw new JovoError({
+      message: `Collision detected during object construction, trying to include/exclude the same properties ${JSON.stringify(
+        diff,
+      )}`,
+      hint: 'Please disambiguate your configuration by specifying which properties to include/exclude',
+    });
+  }
+
   let result: AnyObject = {};
   if (config?.include?.length) {
     config.include.forEach((includePath: string) => {
