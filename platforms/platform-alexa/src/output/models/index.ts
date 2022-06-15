@@ -28,6 +28,8 @@ export * from './aplt/ApltDocument';
 export * from './aplt/ApltDocumentSettings';
 export * from './aplt/ApltExecuteCommandsDirective';
 export * from './aplt/ApltRenderDocumentDirective';
+export * from './apla/AplaRenderDocumentDirective';
+export * from './apla/AplaDataSource';
 export * from './audio-player/AudioItem';
 export * from './audio-player/AudioItemMetadata';
 export * from './audio-player/AudioItemStream';
