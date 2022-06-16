@@ -502,3 +502,70 @@ Jovo offers an integration with in-skill purchasing (ISP) which allows you to ma
 You can build Alexa Skills with Jovo that make use of the Alexa Conversations dialogue management engine.
 
 [Learn more in the Jovo Alexa Conversations documentation](https://www.jovo.tech/marketplace/platform-alexa/alexa-conversations).
+
+### Skill Connections
+
+You can use Jovo with [Alexa Skill Connections](https://developer.amazon.com/docs/alexa/custom-skills/understand-skill-connections.html) by sending a `Connections.StartConnection` directive as shown in the [official Alexa docs](https://developer.amazon.com/docs/alexa/custom-skills/use-skill-connections-to-request-tasks.html#implement-a-handler-to-return-a-connectionsstartconnection-directive-to-use-skill-connection).
+
+For this, the Jovo Alexa integration offers convenience [output classes](https://www.jovo.tech/docs/output-classes). Below is an overview of all classes:
+
+| Class                                                                                                                                                                                                                     | URI                                                          |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| [`ConnectionAskForPermissionConsentOutput`](https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/src/output/templates/ConnectionAskForPermissionConsentOutput.ts)                           | `connection://AMAZON.AskForPermissionsConsent/2`             |
+| [`ConnectionLinkAppOutput`](https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/src/output/templates/ConnectionLinkAppOutput.ts)                                                           | `connection://AMAZON.LinkApp/2`                              |
+| [`ConnectionPrintImageOutput`](https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/src/output/templates/ConnectionPrintImageOutput.ts)                                                     | `connection://AMAZON.PrintImage/1`                           |
+| [`ConnectionPrintPdfOutput`](https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/src/output/templates/ConnectionPrintPdfOutput.ts)                                                         | `connection://AMAZON.PrintPDF/1`                             |
+| [`ConnectionPrintWebPageOutput`](https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/src/output/templates/ConnectionPrintWebPageOutput.ts)                                                 | `connection://AMAZON.PrintWebPage/1`                         |
+| [`ConnectionScheduleFoodEstablishmentReservationOutput`](https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/src/output/templates/ConnectionScheduleFoodEstablishmentReservationOutput.ts) | `connection://AMAZON.ScheduleFoodEstablishmentReservation/1` |
+| [`ConnectionScheduleTaxiReservationOutput`](https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/src/output/templates/ConnectionScheduleTaxiReservationOutput.ts)                           | `connection://AMAZON.ScheduleTaxiReservation/1`              |
+| [`ConnectionTestStatusCodeOutput`](https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/src/output/templates/ConnectionTestStatusCodeOutput.ts)                                             | `connection://AMAZON.TestStatusCode/1`                       |
+| [`ConnectionVerifyPersonOutput`](https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/src/output/templates/ConnectionVerifyPersonOutput.ts)                                                 | `connection://AMAZON.VerifyPerson/2`                         |
+
+You can find the output options in each class implementation. For example, you use the [`ConnectionAskForPermissionConsentOutput`](https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/src/output/templates/ConnectionAskForPermissionConsentOutput.ts) like this:
+
+```typescript
+import { ConnectionAskForPermissionConsentOutput } from '@jovotech/platform-alexa';
+// ...
+
+someHandler() {
+  // ...
+
+  return this.$send(ConnectionAskForPermissionConsentOutput, {
+    // Options
+    message: 'Please grant access to your Alexa profile name',
+    shouldEndSession: true,
+    token: '<your-token>',
+    permissionScopes: ['alexa::profile:given_name:read']
+  })
+}
+```
+
+This would result in the following output template:
+
+```typescript
+{
+  message: 'Please grant access to your Alexa profile name',
+  platforms: {
+    alexa: {
+      nativeResponse: {
+        response: {
+          shouldEndSession: true,
+          directives: [
+            {
+              type: 'Connections.StartConnection',
+              uri: 'connection://AMAZON.AskForPermissionsConsent/2',
+              input: {
+                '@type': 'PrintWebPageRequest',
+                '@version': '1',
+                'permissionScopes': ['alexa::profile:given_name:read'],
+              },
+              token: '<your-token>',
+              onCompletion: 'RESUME_SESSION', // default
+            },
+          ],
+        },
+      },
+    },
+  },
+}
+```

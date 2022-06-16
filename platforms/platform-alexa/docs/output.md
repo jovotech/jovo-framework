@@ -420,10 +420,9 @@ For example, an [APL](#apl) RenderDocument directive ([see official Alexa docs](
 
 Learn more about the [response format in the official Alexa documentation](https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-and-response-json-reference.html#response-format).
 
-
 ### APL
 
-The Alexa Presentation Language (APL) allows you to add visual content and audio (using APLA) to your Alexa Skill. Learn more in the [official Alexa docs](https://developer.amazon.com/docs/alexa/alexa-presentation-language/add-visuals-and-audio-to-your-skill.html). 
+The Alexa Presentation Language (APL) allows you to add visual content and audio (using APLA) to your Alexa Skill. Learn more in the [official Alexa docs](https://developer.amazon.com/docs/alexa/alexa-presentation-language/add-visuals-and-audio-to-your-skill.html).
 
 You can add an APL RenderDocument directive ([see official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/alexa-presentation-language/apl-interface.html#renderdocument-directive)) to your response by using the [`nativeResponse` property](#native-response), for example:
 
@@ -462,7 +461,6 @@ Jovo also supports the ability to turn output elements into APL templates. Learn
 
 - [`card`](#card) is turned into a detail page
 - [`carousel`](#carousel) is turned into a card slider
-
 
 #### APL Configuration
 
@@ -577,3 +575,39 @@ It includes the following properties:
 
 - `genericOutputToApl`: Determines if generic output like [`quickReplies`](#quickreplies), [`card`](#card), and [`carousel`](#carousel) should automatically be converted into an APL directive.
 - `aplTemplates`: Allows the app to override the default APL templates used for [`carousel`](#carousel) and [`card`](#card).
+
+## Alexa Output Classes
+
+The Alexa integration also offers a variety of convenience [output classes](https://www.jovo.tech/docs/output-classes) that help you return use case specific responses, for example to request permissions from the user. [You can find all output classes here](https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/src/output/templates).
+
+You can import any of the classes and then use them with the `$send()` method, for example:
+
+```typescript
+import { AskForPermissionOutput } from '@jovotech/platform-alexa';
+// ...
+
+someHandler() {
+  // ...
+
+  return this.$send(AskForPermissionOutput, { /* options */ });
+}
+```
+
+### Progressive Responses
+
+Alexa offers the ability to send [progressive responses](https://developer.amazon.com/docs/alexa/custom-skills/send-the-user-a-progressive-response.html), which means you can send an initial response while preparing the final response. This is helpful in cases where you have data intensive tasks (like API calls) and want to give the user a heads up.
+
+To send a progressive response, you can use a convenience output class called [`ProgressiveResponseOutput`](https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/src/output/templates/ProgressiveResponseOutput.ts):
+
+```typescript
+import { ProgressiveResponseOutput } from '@jovotech/platform-alexa';
+// ...
+
+async yourHandler() {
+  await this.$send(ProgressiveResponseOutput, { speech: 'Alright, one second.' });
+
+  // ...
+
+  return this.$send('Done');
+}
+```
