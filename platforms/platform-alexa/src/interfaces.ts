@@ -105,23 +105,23 @@ export interface Experience {
 export type TouchMethod = 'SINGLE';
 export type InputMechanism = 'DIRECTION';
 
-export interface AudioPlayerInterface { }
+export interface AudioPlayerInterface {}
 export interface AlexaPresentationAplInterface {
   runtime: {
     maxVersion: string;
   };
 }
-export interface AlexaPresentationAplTInterface extends AlexaPresentationAplInterface { }
-export interface AlexaPresentationHtmlInterface extends AlexaPresentationAplInterface { }
+export interface AlexaPresentationAplTInterface extends AlexaPresentationAplInterface {}
+export interface AlexaPresentationHtmlInterface extends AlexaPresentationAplInterface {}
 
 export interface DisplayInterface {
   templateVersion?: string;
   markupVersion?: string;
 }
 
-export interface VideoAppInterface { }
-export interface GeolocationInterface { }
-export interface NavigationInterface { }
+export interface VideoAppInterface {}
+export interface GeolocationInterface {}
+export interface NavigationInterface {}
 
 export interface Device {
   deviceId: string;
