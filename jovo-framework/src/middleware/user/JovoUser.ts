@@ -296,7 +296,7 @@ export class JovoUser implements Plugin {
       if (_get(this.$user, '$context.prev[0].response.output')) {
         this.setOutput(_get(this.$user, '$context.prev[0].response.output'));
       } else {
-        throw new Error('Context saving has to be set in config to use repeat().');
+        throw new JovoError('Context saving has to be set in config to use repeat().', ErrorCode.ERR, 'jovo-framework');
       }
     };
   }
