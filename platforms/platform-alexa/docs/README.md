@@ -195,6 +195,7 @@ The following Alexa properties offer additional features:
 - [Entities (Slots)](#entities-slots-)
 - [ISP](#isp)
 - [Alexa Conversations](#alexa-conversations)
+- [Name-free Interaction](#name-free-interaction)
 
 ### Request
 
@@ -567,5 +568,22 @@ This would result in the following output template:
       },
     },
   },
+}
+```
+
+### Name-free Interaction
+You can handle [name-free interactions](https://developer.amazon.com/en-US/docs/alexa/custom-skills/implement-canfulfillintentrequest-for-name-free-interaction.html) by responding to `CanFulfillIntentRequest` requests. To do this, setup a handler with `AlexaHandles.onCanFulfillIntent` and respond with the `CanFulfillIntentOutput` output template.
+
+```typescript
+import { Handle } from '@jovotech/framework';
+import { CanFulfillIntentOutput, AlexaHandles } from '@jovotech/platform-alexa';
+// ...
+
+@Handle(AlexaHandles.onCanFulfillIntent())
+someHandler() {
+  // ...
+  return this.$send(CanFulfillIntentOutput, {
+    canFulfill: "YES"
+  });
 }
 ```
