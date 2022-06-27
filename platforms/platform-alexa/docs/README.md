@@ -579,7 +579,7 @@ import { Handle } from '@jovotech/framework';
 import { CanFulfillIntentOutput, AlexaHandles } from '@jovotech/platform-alexa';
 // ...
 
-@Handle(AlexaHandles.onCanFulfillIntent())
+@Handle(AlexaHandles.onCanFulfillIntentRequest())
 someHandler() {
   // ...
   return this.$send(CanFulfillIntentOutput, {

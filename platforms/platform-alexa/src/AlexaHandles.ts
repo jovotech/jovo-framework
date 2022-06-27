@@ -86,7 +86,7 @@ export class AlexaHandles {
     };
   }
 
-  static onCanFulfillIntent(): HandleOptions {
+  static onCanFulfillIntentRequest(): HandleOptions {
     return {
       global: true,
       types: ['CanFulfillIntentRequest'],
