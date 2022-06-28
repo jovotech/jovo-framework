@@ -156,7 +156,7 @@ Under the hood, the output looks like this:
                 InSkillProduct: {
                   productId: this.options.productId,
                 },
-                message: this.options.upsellMessage,
+                upsellMessage: this.options.upsellMessage,
               },
               token: this.options.token || '',
             },

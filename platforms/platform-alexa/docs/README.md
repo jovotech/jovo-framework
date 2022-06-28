@@ -195,6 +195,7 @@ The following Alexa properties offer additional features:
 - [Entities (Slots)](#entities-slots-)
 - [ISP](#isp)
 - [Alexa Conversations](#alexa-conversations)
+- [Name-free Interaction](#name-free-interaction)
 
 ### Request
 
@@ -555,14 +556,65 @@ This would result in the following output template:
               type: 'Connections.StartConnection',
               uri: 'connection://AMAZON.AskForPermissionsConsent/2',
               input: {
-                '@type': 'PrintWebPageRequest',
-                '@version': '1',
+                '@type': 'AskForPermissionsConsentRequest',
+                '@version': '2',
                 'permissionScopes': ['alexa::profile:given_name:read'],
               },
               token: '<your-token>',
               onCompletion: 'RESUME_SESSION', // default
             },
           ],
+        },
+      },
+    },
+  },
+}
+```
+
+### Name-free Interaction
+
+You can handle [name-free interactions](https://developer.amazon.com/docs/alexa/custom-skills/implement-canfulfillintentrequest-for-name-free-interaction.html) by responding to `CanFulfillIntentRequest` requests. To do this, you can use the following two helpers:
+
+- `AlexaHandles.onCanFulfillIntentRequest()`: A method for the [`@Handle` decorator](https://www.jovo.tech/docs/handle-decorators) that can be added to a handler to accept requests of the type `CanFulfillIntentRequest`
+- By returning [`CanFulfillIntentOutput`](https://github.com/jovotech/jovo-framework/blob/v4/latest/platforms/platform-alexa/src/output/templates/CanFulfillIntentOutput.ts), a [convenience output class](https://www.jovo.tech/marketplace/platform-alexa/output#alexa-output-classes), you can send a response to Alexa that includes the `CanFulfillIntent` directive
+
+```typescript
+import { Handle } from '@jovotech/framework';
+import { CanFulfillIntentOutput, AlexaHandles } from '@jovotech/platform-alexa';
+// ...
+
+@Handle(AlexaHandles.onCanFulfillIntentRequest())
+someHandler() {
+  // ...
+  return this.$send(CanFulfillIntentOutput, {
+    canFulfill: 'YES',
+  });
+}
+```
+
+Under the hood, `onCanFulfillIntentRequest()` as part of [`AlexaHandles`](https://github.com/jovotech/jovo-framework/blob/v4/latest/platforms/platform-alexa/src/AlexaHandles.ts) looks like this:
+
+```typescript
+{
+  global: true,
+  types: ['CanFulfillIntentRequest'],
+  platforms: ['alexa'],
+}
+```
+
+[`CanFulfillIntentOutput`](https://github.com/jovotech/jovo-framework/blob/v4/latest/platforms/platform-alexa/src/output/templates/CanFulfillIntentOutput.ts) looks like this:
+
+```typescript
+{
+  listen: false,
+  platforms: {
+    alexa: {
+      nativeResponse: {
+        response: {
+          canFulfillIntent: {
+            canFulfill: this.options.canFulfill,
+            slots: this.options.slots ?? {},
+          },
         },
       },
     },
