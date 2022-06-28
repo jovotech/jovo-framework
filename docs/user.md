@@ -21,7 +21,7 @@ In addition to the data, platforms offer their own user specific features (for e
 
 ## User Data
 
-User data makes it possible to store user specific data across sessions using the [Jovo database integrations](./databases.md). [Learn more about all data types here](./data.md).
+User data makes it possible to store user specific data across sessions using the [Jovo database integrations](./databases.md). Learn more about all data types [here](./data.md).
 
 After a request has been received, the app loads the data from the database. You can then access it like this:
 
