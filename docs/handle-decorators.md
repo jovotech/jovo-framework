@@ -364,7 +364,7 @@ Currently, they include:
 
 ### platforms
 
-You can specify that a handler is only responsible for specific platforms. The `platforms` property is an array of strings with the names of each platform in camel case:
+You can specify that a handler is only responsible for specific platforms. The `platforms` property is an array of strings with the names of each platform in camelCase:
 
 ```typescript
 @Handle({
