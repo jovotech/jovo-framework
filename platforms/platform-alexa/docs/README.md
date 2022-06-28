@@ -555,8 +555,8 @@ This would result in the following output template:
               type: 'Connections.StartConnection',
               uri: 'connection://AMAZON.AskForPermissionsConsent/2',
               input: {
-                '@type': 'PrintWebPageRequest',
-                '@version': '1',
+                '@type': 'AskForPermissionsConsentRequest',
+                '@version': '2',
                 'permissionScopes': ['alexa::profile:given_name:read'],
               },
               token: '<your-token>',
