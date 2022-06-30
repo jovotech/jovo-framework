@@ -27,7 +27,7 @@
     "@jovotech/output": "^4.2.15",
     "axios": "^0.21.1",
     "chalk": "^4.1.0",
-    "i18next": "^20.3.1",
+    "i18next": "^21.8.11",
     "json-colorizer": "^2.2.2",
     "lodash.clonedeep": "^4.5.0",
     "lodash.get": "^4.4.2",
