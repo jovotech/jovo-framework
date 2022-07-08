@@ -70,7 +70,7 @@ Here are all the files and folders inside `src`:
 - `app.ts`: This file contains the default [Jovo app configuration](./app-config.md). Plugins and other configurations are added here.
 - `app.dev.ts`: This file contains the app configuration for local development (`dev` stage). [Learn more about staging here](./staging.md).
 - `components`: This folder contains all [components](./components.md). In this example, a `GlobalComponent` and a `LoveHatePizzaComponent`.
-- `output`: This folder contains all [output classes](./output-classes.md), which offer a modular way to return structured output. This example includes a `YesNoOutput` class that is used by th `START` handler of the `LoveHatePizzaComponent`.
+- `output`: This folder contains all [output classes](./output-classes.md), which offer a modular way to return structured output. This example includes a `YesNoOutput` class that is used by the `START` handler of the `LoveHatePizzaComponent`.
 
 If we take a look at the `GlobalComponent`, we can find a `LAUNCH` [handler](./handlers.md) that is executed for users who open the app:
 
@@ -121,5 +121,5 @@ Here are a few things you can do to extend the app:
 - Add more intents and entities to the [Jovo Model](./models.md).
 - Add [handlers](./handlers.md) for these intents to the existing components.
 - Create new [components](./components.md).
-- Learn more about [routing](./routing.md) to understand when which components ad handlers are executed.
+- Learn more about [routing](./routing.md) to understand when which components and handlers are executed.
 - Learn more about [Jovo properties](./jovo-properties.md) and how to use them.
