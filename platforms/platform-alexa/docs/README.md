@@ -235,6 +235,7 @@ this.$alexa.$user;
 The following features are offered by the Alexa user property:
 
 - [User Profile](#user-profile)
+- [Person Profile](#person-profile)
 - [Account Linking](#account-linking)
 
 #### User Profile
@@ -311,6 +312,64 @@ new AlexaCli({
       manifest: {
         permissions: [
           'alexa::profile:email:read',
+          // ...
+        ],
+      },
+    },
+  },
+  // ...
+});
+```
+
+#### Person Profile
+
+You can call the [Alexa Person Profile API](https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-recognized-speaker-contact-information.html) by using the following methods:
+
+```typescript
+await this.$alexa.$user.getSpeakerName();
+// Result: string
+
+await this.$alexa.$user.getSpeakerGivenName();
+// Result: string
+
+await this.$alexa.$user.getSpeakerMobileNumber();
+// Result: { countryCode: string; mobileNumber: string; }
+```
+
+Below is an example `getName` handler:
+
+```typescript
+import { AskForPermissionConsentCardOutput } from '@jovotech/platform-alexa';
+// ...
+
+async getName() {
+  try {
+    const name = await this.$alexa.$user.getSpeakerName();
+    return this.$send({ message: `Your name is ${name}` });
+  } catch(error) {
+    if (error.code === 'NO_USER_PERMISSION') {
+      return this.$send(AskForPermissionConsentCardOutput, {
+        message: 'Please grant access to your name.',
+        permissions: 'alexa::profile:name:read',
+        listen: false,
+      });
+    } else {
+      // ...
+    }
+  }
+},
+```
+
+For a Skill to be able to request information from the Person Profile API, the permissions need to be added to the Skill manifest, either in the Alexa Developer Console or the `skill.json` file. The latter can be done by using the [`files` property of the Alexa project config](./project-config.md#files):
+
+```js
+new AlexaCli({
+  files: {
+    'skill-package/skill.json': {
+      manifest: {
+        permissions: [
+          'alexa::person_id:read',
+          'alexa::profile:name:read',
           // ...
         ],
       },
