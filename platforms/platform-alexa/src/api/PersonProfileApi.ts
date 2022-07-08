@@ -22,7 +22,7 @@ export type PersonProfileApiResponse<PROPERTY extends PersonProfileProperty> =
  * @param profileProperty - The profile property which determines the final API endpoint url
  * @param apiEndpoint - API endpoint, differs on the geographic location of the skill
  * @param permissionToken - Token to authorize the request
- * @see {@link https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-recognized-speaker-contact-information.html|Request Recognized Speaker Contact Information}
+ * @see {@link https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-recognized-speaker-contact-information.html Request Recognized Speaker Contact Information}
  */
 export async function sendPersonProfileApiRequest<PROPERTY extends PersonProfileProperty>(
   profileProperty: PROPERTY,
