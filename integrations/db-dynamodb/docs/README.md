@@ -117,6 +117,7 @@ new DynamoDb({
     primaryKeyColumn: 'userId',
     readCapacityUnits: 2, // https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughput.html
     writeCapacityUnits: 2, // https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughput.html
+    billingMode: 'PROVISIONED', // @see https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html
   },
   // ...
 }),
