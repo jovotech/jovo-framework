@@ -139,4 +139,26 @@ describe('mergeInstances', () => {
 
     expect(mergeInstances(b, a)).toEqual(merged);
   });
+
+  test('test merging of nested arrays', () => {
+    const a = {
+      obj: {
+        arr: ['a', 'b'],
+      },
+    };
+
+    const b = {
+      obj: {
+        arr: ['c', 'd'],
+      },
+    };
+
+    const merged = {
+      obj: {
+        arr: ['a', 'b', 'c', 'd'],
+      },
+    };
+
+    expect(mergeInstances(b, a)).toEqual(merged);
+  });
 });
