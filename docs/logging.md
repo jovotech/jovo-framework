@@ -47,7 +47,7 @@ logging: {
   response: { /* ... */ },
   maskValue: '[ Hidden ]',
   indentation: '  ',
-  styling: true,
+  format: 'pretty',
   colorizeSettings: { /* ... */ },
   logger: { /* ... */ },
 },
@@ -56,7 +56,7 @@ logging: {
 - `enabled`: Enable [Basic Logging](#basic-logging) for both requests and responses.
 - `request`: Configurations for [request logging](#request-logging).
 - `response`: Configurations for [response logging](#response-logging).
-- More information about `indentation`, `style`, and `colorizeSettings` can be found in the [styling](#styling) section.
+- More information about `indentation`, `format`, and `colorizeSettings` can be found in the [styling](#styling) section.
 - `logger`: Configurations for the [Jovo Logger](#jovo-logger).
 
 ## Basic Logging
@@ -161,7 +161,8 @@ You can make changes to the log's styling with the following properties:
 ```typescript
 logging: {
   indentation: '   ',
-  styling: true, // Enable or disable styling
+  format: 'pretty', // also possible: 'json'
+  styling: true, // @deprecated uses format property instead
   colorizeSettings: {
     colors: { // Change the display of colors
       STRING_KEY: 'white',
@@ -172,6 +173,21 @@ logging: {
   },
   // ...
 },
+```
+
+Instead of the `styling` property, it is recommended to use the `format` to specify how the logs should be displayed. You can use either `pretty` (styled) or `json` (plain):
+
+```typescript
+import { LoggingFormat, App } from '@jovotech/framework';
+// ...
+
+new App({
+  logging: {
+    format: LoggingFormat.Pretty, // or 'pretty'
+    // ...
+  },
+  // ...
+});
 ```
 
 ## Jovo Logger
@@ -195,7 +211,7 @@ This is the default configuration for `logger`, simplified for readability:
 {
   name: 'JovoLogger', // Name of the logger, see loglevel.getLogger
   level: process.env.JOVO_LOG_LEVEL || 'trace', // Level of the logger, see logLevel.setLevel
-  styling: true, // Enable or disable styling completely 
+  styling: true, // Enable or disable styling completely
   errorProperties: ['package', 'message', 'context', 'stack', 'hint', 'learnMore'], // Can be used to change order of error properties that are displayed or even omit some
 }
 ```
@@ -207,7 +223,6 @@ process.env.JOVO_LOG_LEVEL = 'warn';
 ```
 
 You can also learn more about all `errorProperties` in the [`JovoError` documentation](./error-handling.md#jovoerror).
-
 
 You can import the Jovo Logger like this:
 

@@ -195,6 +195,7 @@ The following Alexa properties offer additional features:
 - [Entities (Slots)](#entities-slots-)
 - [ISP](#isp)
 - [Alexa Conversations](#alexa-conversations)
+- [Name-free Interaction](#name-free-interaction)
 
 ### Request
 
@@ -234,6 +235,7 @@ this.$alexa.$user;
 The following features are offered by the Alexa user property:
 
 - [User Profile](#user-profile)
+- [Person Profile](#person-profile)
 - [Account Linking](#account-linking)
 
 #### User Profile
@@ -310,6 +312,64 @@ new AlexaCli({
       manifest: {
         permissions: [
           'alexa::profile:email:read',
+          // ...
+        ],
+      },
+    },
+  },
+  // ...
+});
+```
+
+#### Person Profile
+
+You can call the [Alexa Person Profile API](https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-recognized-speaker-contact-information.html) by using the following methods:
+
+```typescript
+await this.$alexa.$user.getSpeakerName();
+// Result: string
+
+await this.$alexa.$user.getSpeakerGivenName();
+// Result: string
+
+await this.$alexa.$user.getSpeakerMobileNumber();
+// Result: { countryCode: string; mobileNumber: string; }
+```
+
+Below is an example `getName` handler:
+
+```typescript
+import { AskForPermissionConsentCardOutput } from '@jovotech/platform-alexa';
+// ...
+
+async getName() {
+  try {
+    const name = await this.$alexa.$user.getSpeakerName();
+    return this.$send({ message: `Your name is ${name}` });
+  } catch(error) {
+    if (error.code === 'NO_USER_PERMISSION') {
+      return this.$send(AskForPermissionConsentCardOutput, {
+        message: 'Please grant access to your name.',
+        permissions: 'alexa::profile:name:read',
+        listen: false,
+      });
+    } else {
+      // ...
+    }
+  }
+},
+```
+
+For a Skill to be able to request information from the Person Profile API, the permissions need to be added to the Skill manifest, either in the Alexa Developer Console or the `skill.json` file. The latter can be done by using the [`files` property of the Alexa project config](./project-config.md#files):
+
+```js
+new AlexaCli({
+  files: {
+    'skill-package/skill.json': {
+      manifest: {
+        permissions: [
+          'alexa::person_id:read',
+          'alexa::profile:name:read',
           // ...
         ],
       },
@@ -502,3 +562,121 @@ Jovo offers an integration with in-skill purchasing (ISP) which allows you to ma
 You can build Alexa Skills with Jovo that make use of the Alexa Conversations dialogue management engine.
 
 [Learn more in the Jovo Alexa Conversations documentation](https://www.jovo.tech/marketplace/platform-alexa/alexa-conversations).
+
+### Skill Connections
+
+You can use Jovo with [Alexa Skill Connections](https://developer.amazon.com/docs/alexa/custom-skills/understand-skill-connections.html) by sending a `Connections.StartConnection` directive as shown in the [official Alexa docs](https://developer.amazon.com/docs/alexa/custom-skills/use-skill-connections-to-request-tasks.html#implement-a-handler-to-return-a-connectionsstartconnection-directive-to-use-skill-connection).
+
+For this, the Jovo Alexa integration offers convenience [output classes](https://www.jovo.tech/docs/output-classes). Below is an overview of all classes:
+
+| Class                                                                                                                                                                                                                     | URI                                                          |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| [`ConnectionAskForPermissionConsentOutput`](https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/src/output/templates/ConnectionAskForPermissionConsentOutput.ts)                           | `connection://AMAZON.AskForPermissionsConsent/2`             |
+| [`ConnectionLinkAppOutput`](https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/src/output/templates/ConnectionLinkAppOutput.ts)                                                           | `connection://AMAZON.LinkApp/2`                              |
+| [`ConnectionPrintImageOutput`](https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/src/output/templates/ConnectionPrintImageOutput.ts)                                                     | `connection://AMAZON.PrintImage/1`                           |
+| [`ConnectionPrintPdfOutput`](https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/src/output/templates/ConnectionPrintPdfOutput.ts)                                                         | `connection://AMAZON.PrintPDF/1`                             |
+| [`ConnectionPrintWebPageOutput`](https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/src/output/templates/ConnectionPrintWebPageOutput.ts)                                                 | `connection://AMAZON.PrintWebPage/1`                         |
+| [`ConnectionScheduleFoodEstablishmentReservationOutput`](https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/src/output/templates/ConnectionScheduleFoodEstablishmentReservationOutput.ts) | `connection://AMAZON.ScheduleFoodEstablishmentReservation/1` |
+| [`ConnectionScheduleTaxiReservationOutput`](https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/src/output/templates/ConnectionScheduleTaxiReservationOutput.ts)                           | `connection://AMAZON.ScheduleTaxiReservation/1`              |
+| [`ConnectionTestStatusCodeOutput`](https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/src/output/templates/ConnectionTestStatusCodeOutput.ts)                                             | `connection://AMAZON.TestStatusCode/1`                       |
+| [`ConnectionVerifyPersonOutput`](https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/src/output/templates/ConnectionVerifyPersonOutput.ts)                                                 | `connection://AMAZON.VerifyPerson/2`                         |
+
+You can find the output options in each class implementation. For example, you use the [`ConnectionAskForPermissionConsentOutput`](https://github.com/jovotech/jovo-framework/tree/v4/latest/platforms/platform-alexa/src/output/templates/ConnectionAskForPermissionConsentOutput.ts) like this:
+
+```typescript
+import { ConnectionAskForPermissionConsentOutput } from '@jovotech/platform-alexa';
+// ...
+
+someHandler() {
+  // ...
+
+  return this.$send(ConnectionAskForPermissionConsentOutput, {
+    // Options
+    message: 'Please grant access to your Alexa profile name',
+    shouldEndSession: true,
+    token: '<your-token>',
+    permissionScopes: ['alexa::profile:given_name:read']
+  })
+}
+```
+
+This would result in the following output template:
+
+```typescript
+{
+  message: 'Please grant access to your Alexa profile name',
+  platforms: {
+    alexa: {
+      nativeResponse: {
+        response: {
+          shouldEndSession: true,
+          directives: [
+            {
+              type: 'Connections.StartConnection',
+              uri: 'connection://AMAZON.AskForPermissionsConsent/2',
+              input: {
+                '@type': 'AskForPermissionsConsentRequest',
+                '@version': '2',
+                'permissionScopes': ['alexa::profile:given_name:read'],
+              },
+              token: '<your-token>',
+              onCompletion: 'RESUME_SESSION', // default
+            },
+          ],
+        },
+      },
+    },
+  },
+}
+```
+
+### Name-free Interaction
+
+You can handle [name-free interactions](https://developer.amazon.com/docs/alexa/custom-skills/implement-canfulfillintentrequest-for-name-free-interaction.html) by responding to `CanFulfillIntentRequest` requests. To do this, you can use the following two helpers:
+
+- `AlexaHandles.onCanFulfillIntentRequest()`: A method for the [`@Handle` decorator](https://www.jovo.tech/docs/handle-decorators) that can be added to a handler to accept requests of the type `CanFulfillIntentRequest`
+- By returning [`CanFulfillIntentOutput`](https://github.com/jovotech/jovo-framework/blob/v4/latest/platforms/platform-alexa/src/output/templates/CanFulfillIntentOutput.ts), a [convenience output class](https://www.jovo.tech/marketplace/platform-alexa/output#alexa-output-classes), you can send a response to Alexa that includes the `CanFulfillIntent` directive
+
+```typescript
+import { Handle } from '@jovotech/framework';
+import { CanFulfillIntentOutput, AlexaHandles } from '@jovotech/platform-alexa';
+// ...
+
+@Handle(AlexaHandles.onCanFulfillIntentRequest())
+someHandler() {
+  // ...
+  return this.$send(CanFulfillIntentOutput, {
+    canFulfill: 'YES',
+  });
+}
+```
+
+Under the hood, `onCanFulfillIntentRequest()` as part of [`AlexaHandles`](https://github.com/jovotech/jovo-framework/blob/v4/latest/platforms/platform-alexa/src/AlexaHandles.ts) looks like this:
+
+```typescript
+{
+  global: true,
+  types: ['CanFulfillIntentRequest'],
+  platforms: ['alexa'],
+}
+```
+
+[`CanFulfillIntentOutput`](https://github.com/jovotech/jovo-framework/blob/v4/latest/platforms/platform-alexa/src/output/templates/CanFulfillIntentOutput.ts) looks like this:
+
+```typescript
+{
+  listen: false,
+  platforms: {
+    alexa: {
+      nativeResponse: {
+        response: {
+          canFulfillIntent: {
+            canFulfill: this.options.canFulfill,
+            slots: this.options.slots ?? {},
+          },
+        },
+      },
+    },
+  },
+}
+```

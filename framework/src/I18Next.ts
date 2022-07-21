@@ -84,6 +84,7 @@ export class I18Next extends Plugin<I18NextConfig> {
     return {
       interpolation: {
         escapeValue: false,
+        skipOnVariables: false,
       },
       returnObjects: true,
     };

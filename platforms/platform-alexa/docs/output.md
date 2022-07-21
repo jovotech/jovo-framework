@@ -585,9 +585,11 @@ You can import any of the classes and then use them with the `$send()` method, f
 ```typescript
 import { AskForPermissionOutput } from '@jovotech/platform-alexa';
 // ...
+
 someHandler() {
   // ...
-  return this.$send(AskForPermissionOutput, { /* options */ })
+
+  return this.$send(AskForPermissionOutput, { /* options */ });
 }
 ```
 

@@ -77,13 +77,8 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
   constructor(config?: AppInitConfig) {
     super(config ? { ...config, components: undefined } : config);
 
-    if (typeof this.config.logging === 'boolean' && this.config.logging) {
-      this.use(new BasicLogging({ request: true, response: true }));
-    } else if (typeof this.config.logging === 'object') {
-      if (this.config.logging.logger) {
-        _merge(Logger.config, this.config.logging.logger);
-      }
-      this.use(new BasicLogging(this.config.logging));
+    if (typeof this.config.logging === 'object' && this.config.logging.logger) {
+      _merge(Logger.config, this.config.logging.logger);
     }
 
     this.onError((error) => {
@@ -153,6 +148,16 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
     if (this.initialized) {
       return;
     }
+
+    if (typeof this.config.logging === 'boolean' && this.config.logging) {
+      this.use(new BasicLogging({ request: true, response: true }));
+    } else if (typeof this.config.logging === 'object') {
+      if (this.config.logging.logger) {
+        _merge(Logger.config, this.config.logging.logger);
+      }
+      this.use(new BasicLogging(this.config.logging));
+    }
+
     try {
       await this.componentTree.initialize();
       await this.i18n.initialize();

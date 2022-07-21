@@ -4,6 +4,11 @@ import { Alexa } from './Alexa';
 import { AlexaRequest } from './AlexaRequest';
 import { CustomerProfileApiResponse, ProfileProperty, sendCustomerProfileApiRequest } from './api';
 import {
+  PersonProfileApiResponse,
+  PersonProfileProperty,
+  sendPersonProfileApiRequest,
+} from './api/PersonProfileApi';
+import {
   AbsoluteReminder,
   deleteReminder,
   getAllReminders,
@@ -42,6 +47,31 @@ export class AlexaUser extends JovoUser<Alexa> {
 
   async getGivenName(): Promise<string | undefined> {
     return await this.getProfileProperty(ProfileProperty.GIVEN_NAME);
+  }
+
+  async getSpeakerName(): Promise<string | undefined> {
+    return await this.getPersonProfileProperty(PersonProfileProperty.NAME);
+  }
+
+  async getSpeakerGivenName(): Promise<string | undefined> {
+    return await this.getPersonProfileProperty(PersonProfileProperty.GIVEN_NAME);
+  }
+
+  async getSpeakerMobileNumber(): Promise<
+    { countryCode: string; mobileNumber: string } | undefined
+  > {
+    return await this.getPersonProfileProperty(PersonProfileProperty.MOBILE_NUMBER);
+  }
+
+  private async getPersonProfileProperty<PROPERTY extends PersonProfileProperty>(
+    property: PROPERTY,
+  ): Promise<PersonProfileApiResponse<PROPERTY> | undefined> {
+    const request: AlexaRequest = this.jovo.$request;
+    return sendPersonProfileApiRequest(
+      property,
+      request.getApiEndpoint(),
+      request.getApiAccessToken(),
+    );
   }
 
   private async getProfileProperty<PROPERTY extends ProfileProperty>(
