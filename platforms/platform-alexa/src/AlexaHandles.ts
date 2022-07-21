@@ -85,4 +85,12 @@ export class AlexaHandles {
       platforms: ['alexa'],
     };
   }
+
+  static onCanFulfillIntentRequest(): HandleOptions {
+    return {
+      global: true,
+      types: ['CanFulfillIntentRequest'],
+      platforms: ['alexa'],
+    };
+  }
 }

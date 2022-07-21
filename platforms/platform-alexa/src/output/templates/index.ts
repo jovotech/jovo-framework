@@ -22,3 +22,4 @@ export * from './ConnectionTestStatusCodeOutput';
 export * from './ConnectionVerifyPersonOutput';
 export * from './ConnectionScheduleFoodEstablishmentReservationOutput';
 export * from './ProgressiveResponseOutput';
+export * from './CanFulfillIntentOutput';

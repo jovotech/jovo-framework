@@ -41,8 +41,8 @@ export class ConnectionAskForPermissionConsentOutput extends BaseOutput<Connecti
                   type: 'Connections.StartConnection',
                   uri: 'connection://AMAZON.AskForPermissionsConsent/2',
                   input: {
-                    '@type': 'PrintWebPageRequest',
-                    '@version': '1',
+                    '@type': 'AskForPermissionsConsentRequest',
+                    '@version': '2',
                     'permissionScopes': this.options.permissionScopes,
                   },
                   token: this.options.token,
