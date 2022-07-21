@@ -25,7 +25,7 @@ interface SanityTranslation {
 export class TranslationsQueryTransformer extends BaseSanityQueryTransformer {
   getDefaultConfig(): SanityQueryTransformerConfig {
     return {
-      query: '',
+      query: "*[_type == 'translation' && !(_id in path('drafts.**'))]",
     };
   }
 
