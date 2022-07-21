@@ -31,6 +31,7 @@ export interface StoredElementHistory extends StoredElement {
   size?: number;
   asr?: StoredElement | boolean;
   state?: StoredElement | boolean;
+  input?: StoredElement | boolean;
   output?: StoredElement | boolean;
   nlu?: StoredElement | boolean;
   request?: StoredElement | boolean;
