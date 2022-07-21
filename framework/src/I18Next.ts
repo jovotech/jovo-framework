@@ -84,9 +84,10 @@ export class I18Next extends Plugin<I18NextConfig> {
     return {
       interpolation: {
         escapeValue: false,
-        skipOnVariables: false,
+        skipOnVariables: false, // Added for backwards compatibility, @see https://www.i18next.com/misc/migration-guide#skiponvariables-true
       },
       returnObjects: true,
+      compatibilityJSON: 'v3', // Added for backwards compatibility, @see https://www.i18next.com/misc/migration-guide#json-format-v4-pluralization
     };
   }
 
