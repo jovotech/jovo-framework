@@ -1,4 +1,4 @@
-import { BaseOutput, Output, OutputOptions, OutputTemplate,  } from '@jovotech/framework';
+import { BaseOutput, Output, OutputOptions, OutputTemplate } from '@jovotech/framework';
 import { AsinProduct } from '../models';
 import { OnCompletion } from '../models/common/OnCompletion';
 
