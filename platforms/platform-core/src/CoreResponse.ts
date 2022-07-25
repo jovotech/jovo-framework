@@ -89,13 +89,13 @@ export class CoreResponse extends JovoResponse {
       for (let outputIndex = speechIndex; outputIndex < this.output.length; outputIndex++) {
         if (this.output[outputIndex].message) {
           if (typeof this.output[outputIndex].message === 'string') {
-            this.output[outputIndex].message = speech[speechIndex];
+            this.output[outputIndex].message = speechArray[speechIndex];
             break; // continue with the next speech item (outer loop)
           }
 
           if (typeof this.output[outputIndex].message === 'object') {
             // TODO: Clean this up
-            (this.output[outputIndex].message as SpeechMessage).speech = speech[speechIndex];
+            (this.output[outputIndex].message as SpeechMessage).speech = speechArray[speechIndex];
             break; // continue with the next speech item (outer loop)
           }
         }
@@ -110,13 +110,14 @@ export class CoreResponse extends JovoResponse {
       for (let outputIndex = repromptIndex; outputIndex < this.output.length; outputIndex++) {
         if (this.output[outputIndex].reprompt) {
           if (typeof this.output[outputIndex].reprompt === 'string') {
-            this.output[outputIndex].reprompt = reprompt[repromptIndex];
+            this.output[outputIndex].reprompt = repromptArray[repromptIndex];
             break; // continue with the next reprompt item (outer loop)
           }
 
           if (typeof this.output[outputIndex].reprompt === 'object') {
             // TODO: Clean this up
-            (this.output[outputIndex].reprompt as SpeechMessage).speech = reprompt[repromptIndex];
+            (this.output[outputIndex].reprompt as SpeechMessage).speech =
+              repromptArray[repromptIndex];
             break; // continue with the next reprompt item (outer loop)
           }
         }
