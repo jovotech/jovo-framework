@@ -53,6 +53,7 @@ export * from './common/SlotType';
 export * from './common/SlotTypeValue';
 export * from './common/SlotTypeValueName';
 export * from './common/SlotValue';
+export * from './common/AsinProduct';
 export * from './common/ConnectionPostalAddress';
 export * from './common/ConsentLevel';
 export * from './common/PermissionScope';
