@@ -54,12 +54,14 @@ new MongoDb({
   connectionString: '<YOUR-MONGODB-URI>',
   databaseName: '<YOUR-DATABASE-NAME>', // optional, can also be set using connectionString
   collectionName: 'jovoUsers',
+  libraryConfig: { /* MongoClientOptions */ },
 }),
 ```
 
 - `connectionString`: The URI string used to connect to the MongoDB database. Learn more in the [official MongoDB docs](https://docs.mongodb.com/manual/reference/connection-string/).
 - `databaseName`: Name of the [MongoDB database](https://docs.mongodb.com/manual/core/databases-and-collections/#databases). This is an optional property. Generally, it is recommended to use the `connectionString` to reference the database name. If it doesn't contain a database name and the `databaseName` property is not set either, MongoDb will use the default value `test`.
 - `collectionName`: Name of the [MongoDB collection](https://docs.mongodb.com/manual/core/databases-and-collections/#collections) that stores the user specific data. A new collection is created with that name if doesn't exist yet. Default: `jovoUsers`.
+- `libraryConfig`: Additional options that can be passed to the MongoDB client. You can find all options in the [official `MongoClientOptions` reference](https://mongodb.github.io/node-mongodb-native/4.4/interfaces/MongoClientOptions.html).
 
 If you're testing MongoDb in development together with the [Jovo Debugger](https://www.jovo.tech/docs/debugger), we recommend ignoring the `$mongoDb` object. Update your `app.dev.ts` like this then:
 
