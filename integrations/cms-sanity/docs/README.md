@@ -158,7 +158,7 @@ Identifies the data store within your project. Can be used for `development` or 
 ```typescript
 new SanityCms({
   client: {
-    apiVersion: '2021-03-25',
+    dataset: '<YOUR-DATASET>',
     // ...
   },
 }),
@@ -188,7 +188,7 @@ Specifies the version of the API.
 ```typescript
 new SanityCms({
   client: {
-    projectId: '<YOUR-PROJECT-ID>',
+    apiVersion: '2021-03-25',
     // ...
   },
 }),
