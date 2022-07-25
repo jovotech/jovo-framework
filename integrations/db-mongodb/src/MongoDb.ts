@@ -1,4 +1,4 @@
-import { Collection, Db, Document, MongoClient } from 'mongodb';
+import { Collection, Db, Document, MongoClient, MongoClientOptions } from 'mongodb';
 import {
   DbItem,
   DbPlugin,
@@ -18,6 +18,9 @@ export interface MongoDbConfig extends DbPluginConfig {
   databaseName?: string;
   /** A new collection is created with that name if doesn't exist yet. */
   collectionName?: string;
+
+  /** Client options for the official `mongodb` package that is used */
+  libraryConfig?: MongoClientOptions;
 }
 
 export type MongoDbInitConfig = RequiredOnlyWhere<MongoDbConfig, 'connectionString'>;
@@ -36,7 +39,10 @@ export const JOVO_DEFAULT_COLLECTION_NAME = 'jovoUsers';
 
 export class MongoDb extends DbPlugin<MongoDbConfig> {
   /** A single client promise to be shared by Jovo and others components following MongoDB best practice: https://docs.atlas.mongodb.com/best-practices-connecting-from-aws-lambda/#connection-examples */
-  readonly client: Promise<MongoClient> = new MongoClient(this.config.connectionString).connect();
+  readonly client: Promise<MongoClient> = new MongoClient(
+    this.config.connectionString,
+    this.config.libraryConfig,
+  ).connect();
 
   constructor(config: MongoDbInitConfig) {
     super(config);
