@@ -29,6 +29,12 @@ const project = new ProjectConfig({
 
 This CLI plugin uses the official `gactions` CLI provided by Google for deployment. [Follow the official Google Assistant docs to install and configure `gactions` CLI](https://developers.google.com/assistant/actionssdk/gactions#install_the_gactions_command-line_tool). A tip: To find the right path where to put the `gactions` binary, you can for example type `which jovov4` into your command line and place it into the same parent folder.
 
+The `gactions` CLI is also available as an [NPM package](https://www.npmjs.com/package/@assistant/gactions) since 2021. Instead of downloading the binary, you can alo install it like this:
+
+```sh
+$ npm install -g @assistant/gactions
+```
+
 The Google Assistant CLI plugin hooks into the following commands:
 
 - [`build`](#build): Create Google Assistant project files based on the project config and `models` folder

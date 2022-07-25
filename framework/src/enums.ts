@@ -4,3 +4,8 @@ export enum BuiltInHandler {
   End = 'END',
   Unhandled = 'UNHANDLED',
 }
+
+export enum LoggingFormat {
+  Json = 'json',
+  Pretty = 'pretty',
+}

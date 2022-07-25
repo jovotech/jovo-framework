@@ -2,7 +2,12 @@ import { JovoUser } from '@jovotech/framework';
 import { Alexa } from './Alexa';
 
 import { AlexaRequest } from './AlexaRequest';
-import { ProfileProperty, sendCustomerProfileApiRequest } from './api';
+import { CustomerProfileApiResponse, ProfileProperty, sendCustomerProfileApiRequest } from './api';
+import {
+  PersonProfileApiResponse,
+  PersonProfileProperty,
+  sendPersonProfileApiRequest,
+} from './api/PersonProfileApi';
 import {
   AbsoluteReminder,
   deleteReminder,
@@ -29,13 +34,55 @@ export class AlexaUser extends JovoUser<Alexa> {
   }
 
   async getEmail(): Promise<string | undefined> {
+    return await this.getProfileProperty(ProfileProperty.EMAIL);
+  }
+
+  async getMobileNumber(): Promise<{ countryCode: string; mobileNumber: string } | undefined> {
+    return await this.getProfileProperty(ProfileProperty.MOBILE_NUMBER);
+  }
+
+  async getName(): Promise<string | undefined> {
+    return await this.getProfileProperty(ProfileProperty.NAME);
+  }
+
+  async getGivenName(): Promise<string | undefined> {
+    return await this.getProfileProperty(ProfileProperty.GIVEN_NAME);
+  }
+
+  async getSpeakerName(): Promise<string | undefined> {
+    return await this.getPersonProfileProperty(PersonProfileProperty.NAME);
+  }
+
+  async getSpeakerGivenName(): Promise<string | undefined> {
+    return await this.getPersonProfileProperty(PersonProfileProperty.GIVEN_NAME);
+  }
+
+  async getSpeakerMobileNumber(): Promise<
+    { countryCode: string; mobileNumber: string } | undefined
+  > {
+    return await this.getPersonProfileProperty(PersonProfileProperty.MOBILE_NUMBER);
+  }
+
+  private async getPersonProfileProperty<PROPERTY extends PersonProfileProperty>(
+    property: PROPERTY,
+  ): Promise<PersonProfileApiResponse<PROPERTY> | undefined> {
     const request: AlexaRequest = this.jovo.$request;
-    const email: string = await sendCustomerProfileApiRequest(
-      ProfileProperty.EMAIL,
+    return sendPersonProfileApiRequest(
+      property,
       request.getApiEndpoint(),
       request.getApiAccessToken(),
     );
-    return email;
+  }
+
+  private async getProfileProperty<PROPERTY extends ProfileProperty>(
+    property: PROPERTY,
+  ): Promise<CustomerProfileApiResponse<PROPERTY> | undefined> {
+    const request: AlexaRequest = this.jovo.$request;
+    return sendCustomerProfileApiRequest(
+      property,
+      request.getApiEndpoint(),
+      request.getApiAccessToken(),
+    );
   }
 
   async setReminder(reminder: AbsoluteReminder | RelativeReminder): Promise<ReminderResponse> {

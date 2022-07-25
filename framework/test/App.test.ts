@@ -9,7 +9,7 @@ describe('constructor config', () => {
     expect(app.componentTree.getNodeAt(['EmptyComponent'])).toBeInstanceOf(ComponentTreeNode);
   });
 
-  test('logging boolean passed and used', () => {
+  test('logging boolean passed and used', async () => {
     // reset env variables for this test, otherwise BasicLogging is never included
     const jestWorkerId = process.env.JEST_WORKER_ID;
     process.env.NODE_ENV = 'development';
@@ -17,6 +17,7 @@ describe('constructor config', () => {
     const app = new App({
       logging: true,
     });
+    await app.initialize();
     expect(app.plugins.BasicLogging?.config?.request).toEqual({
       objects: [],
       maskedObjects: [],
@@ -33,7 +34,7 @@ describe('constructor config', () => {
     process.env.JEST_WORKER_ID = jestWorkerId;
   });
 
-  test('logging object passed and used', () => {
+  test('logging object passed and used', async () => {
     // reset env variables for this test, otherwise BasicLogging is never included
     const jestWorkerId = process.env.JEST_WORKER_ID;
     process.env.NODE_ENV = 'development';
@@ -48,6 +49,7 @@ describe('constructor config', () => {
         },
       },
     });
+    await app.initialize();
     expect(app.plugins.BasicLogging?.config?.request).toEqual({
       objects: [],
       maskedObjects: [],

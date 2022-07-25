@@ -19,3 +19,4 @@ Currently, the following integrations are available with Jovo `v4`:
 
 - [Google Sheets CMS](https://www.jovo.tech/marketplace/cms-googlesheets)
 - [Airtable CMS](https://www.jovo.tech/marketplace/cms-airtable)
+- [Sanity CMS](https://www.jovo.tech/marketplace/cms-sanity)

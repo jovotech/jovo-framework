@@ -33,7 +33,7 @@ const project = new ProjectConfig({
       },
       conversations: {
         // ...
-      }
+      },
     }),
     // ...
   ],
@@ -171,7 +171,6 @@ The CLI decides in the following order which ASK profile should be used:
 - The one in the root Alexa configuration in `jovo.project.js`
 - The `default` ASK profile
 
-
 ## endpoint
 
 The [generic `endpoint` property](https://www.jovo.tech/docs/project-config#endpoint) can also be overridden by the Alexa CLI plugin. This is useful if you build for multiple platforms that need to use different endpoints.
@@ -212,7 +211,7 @@ const project = new ProjectConfig({
 
 You can use the [Jovo CLI File Builder](https://www.jovo.tech/docs/project-config#file-builder) to add or override files in a path of the Alexa folder in the `build` directory.
 
-For example, you can make changes to the `skill.json` file like this:
+For example, you can make changes to the [`skill.json` file](https://developer.amazon.com/docs/alexa/smapi/skill-manifest.html) like this:
 
 ```js
 new AlexaCli({

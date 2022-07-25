@@ -120,6 +120,9 @@ export function mergeInstances<D extends object, S extends any[]>(
     ...sources.map((source) => instanceToObject(source)),
     // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any
     (value: any, srcValue: any, key: string, object: any) => {
+      if (Array.isArray(srcValue) && Array.isArray(value)) {
+        return srcValue.concat(value);
+      }
       if (typeof srcValue === 'undefined') {
         _unset(object, key);
       }

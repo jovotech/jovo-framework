@@ -5,6 +5,7 @@ import { AplLoadIndexListDataDirective } from './apl/AplLoadIndexListDataDirecti
 import { AplRenderDocumentDirective } from './apl/AplRenderDocumentDirective';
 import { AplSendIndexListDataDirective } from './apl/AplSendIndexListDataDirective';
 import { AplUpdateIndexListDirective } from './apl/AplUpdateIndexListDirective';
+import { AplaRenderDocumentDirective } from './apla/AplaRenderDocumentDirective';
 import { ApltExecuteCommandsDirective } from './aplt/ApltExecuteCommandsDirective';
 import { ApltRenderDocumentDirective } from './aplt/ApltRenderDocumentDirective';
 import { AudioPlayerClearQueueDirective } from './audio-player/AudioPlayerClearQueueDirective';
@@ -68,6 +69,7 @@ export class Response {
         { value: AplLoadIndexListDataDirective, name: 'Alexa.Presentation.APL.LoadIndexListData' },
         { value: ApltRenderDocumentDirective, name: 'Alexa.Presentation.APLT.RenderDocument' },
         { value: ApltExecuteCommandsDirective, name: 'Alexa.Presentation.APLT.ExecuteCommands' },
+        { value: AplaRenderDocumentDirective, name: 'Alexa.Presentation.APLA.RenderDocument' },
         { value: AudioPlayerPlayDirective, name: 'AudioPlayer.Play' },
         { value: AudioPlayerStopDirective, name: 'AudioPlayer.Stop' },
         { value: AudioPlayerClearQueueDirective, name: 'AudioPlayer.ClearQueue' },

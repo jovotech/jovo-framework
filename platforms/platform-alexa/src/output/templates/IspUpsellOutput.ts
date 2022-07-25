@@ -24,7 +24,7 @@ export class IspUpsellOutput extends BaseOutput<IspUpsellOutputOptions> {
                     InSkillProduct: {
                       productId: this.options.productId,
                     },
-                    message: this.options.upsellMessage,
+                    upsellMessage: this.options.upsellMessage,
                   },
                   token: this.options.token || '',
                 },

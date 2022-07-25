@@ -1,11 +1,10 @@
+import { EnumLike } from '@jovotech/common';
 import chalk from 'chalk';
 import colorize from 'json-colorizer';
-import _get from 'lodash.get';
-import _set from 'lodash.set';
-import _unset from 'lodash.unset';
-
+import { LoggingFormat } from '../enums';
 import { HandleRequest, Jovo } from '../index';
 import { Plugin, PluginConfig } from '../Plugin';
+import { copy, mask } from '../utilities';
 
 declare module '../interfaces' {
   interface RequestData {
@@ -33,9 +32,11 @@ export interface RequestResponseConfig {
 export interface BasicLoggingConfig extends PluginConfig {
   request?: RequestResponseConfig | boolean;
   response?: RequestResponseConfig | boolean;
-  maskValue?: unknown;
+  format?: EnumLike<LoggingFormat>;
+  /** @deprecated Use the property "format" instead */
   styling?: boolean;
-  indentation?: string;
+  maskValue?: unknown;
+  indentation?: string | number;
   colorizeSettings?: {
     colors: {
       BRACE?: string;
@@ -68,9 +69,10 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
         maskedObjects: [],
         objects: [],
       },
-      maskValue: '[ Hidden ]',
-      indentation: '  ',
+      format: LoggingFormat.Pretty,
       styling: true,
+      maskValue: '[ Hidden ]',
+      indentation: 2,
       colorizeSettings: {
         colors: {
           STRING_KEY: 'white',
@@ -82,88 +84,81 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
     };
   }
 
-  constructor(config: BasicLoggingConfig) {
+  constructor(config?: BasicLoggingConfig) {
+    if (config?.enabled === false) {
+      if (typeof config.request === 'undefined') {
+        config.request = false;
+      }
+
+      if (typeof config.response === 'undefined') {
+        config.response = false;
+      }
+    }
+
     super(config);
 
-    if (typeof config.request === 'boolean') {
+    if (typeof this.config.request === 'boolean') {
       this.config.request = {
         objects: [],
         maskedObjects: [],
         excludedObjects: [],
-        enabled: config.request,
+        enabled: this.config.request,
       };
     }
 
-    if (typeof config.response === 'boolean') {
+    if (typeof this.config.response === 'boolean') {
       this.config.response = {
         objects: [],
         maskedObjects: [],
         excludedObjects: [],
-        enabled: config.response,
+        enabled: this.config.response,
       };
     }
   }
 
   mount(parent: HandleRequest): Promise<void> | void {
     parent.middlewareCollection.use('request.start', (jovo) => {
-      return this.logRequest(jovo);
+      if ((this.config.request as RequestResponseConfig).enabled) {
+        return this.logRequest(jovo);
+      }
     });
     parent.middlewareCollection.use('response.end', (jovo: Jovo) => {
-      return this.logResponse(jovo);
+      if ((this.config.response as RequestResponseConfig).enabled) {
+        return this.logResponse(jovo);
+      }
     });
   }
 
   async logRequest(jovo: Jovo): Promise<void> {
     jovo.$data._BASIC_LOGGING_START = new Date().getTime();
 
-    if (!this.config.request) {
-      return;
-    }
-
-    const requestCopy = JSON.parse(JSON.stringify(jovo.$request));
-
     const requestConfig = this.config.request as RequestResponseConfig;
+    const requestCopy = copy(jovo.$request, {
+      include: requestConfig.objects,
+      exclude: requestConfig.excludedObjects,
+    });
 
+    // Mask properties according to configuration
     if (requestConfig.maskedObjects && requestConfig.maskedObjects.length > 0) {
-      requestConfig.maskedObjects.forEach((maskPath: string) => {
-        const value = _get(requestCopy, maskPath);
-        if (value) {
-          let newValue = this.config.maskValue;
-          if (typeof this.config.maskValue === 'function') {
-            newValue = this.config.maskValue(value);
-          }
-          _set(requestCopy, maskPath, newValue);
-        }
-      });
+      mask(requestCopy, requestConfig.maskedObjects, this.config.maskValue);
     }
 
-    if (requestConfig.excludedObjects && requestConfig.excludedObjects.length > 0) {
-      requestConfig.excludedObjects.forEach((excludePath: string) => {
-        _unset(requestCopy, excludePath);
-      });
-    }
-
-    /* eslint-disable no-console */
-    if (this.config.styling) {
-      console.log(chalk.bgWhite.black('\n\n >>>>> Request - ' + new Date().toISOString() + ' '));
-    }
-
-    if (requestConfig.objects && requestConfig.objects.length > 0) {
-      requestConfig.objects.forEach((path: string) => {
-        console.log(
-          colorize(JSON.stringify(_get(requestCopy, path), null, this.config.indentation || 2)),
-        );
-      });
-    } else {
+    if (this.config.format === LoggingFormat.Pretty) {
+      if (this.config.styling) {
+        // eslint-disable-next-line no-console
+        console.log(chalk.bgWhite.black('\n\n >>>>> Request - ' + new Date().toISOString() + ' '));
+      }
+      // eslint-disable-next-line no-console
       console.log(
         colorize(
           JSON.stringify(requestCopy, null, this.config.indentation || 2),
           this.config.colorizeSettings,
         ),
       );
+    } else if (this.config.format === LoggingFormat.Json) {
+      // eslint-disable-next-line no-console
+      console.log(colorize(JSON.stringify(requestCopy), this.config.colorizeSettings));
     }
-
-    /* eslint-enable no-console */
   }
 
   async logResponse(jovo: Jovo): Promise<void> {
@@ -172,59 +167,34 @@ export class BasicLogging extends Plugin<BasicLoggingConfig> {
       ? basicLoggingEnd - jovo.$data._BASIC_LOGGING_START
       : 0;
 
-    if (!this.config.response) {
-      return;
-    }
-
-    const responseCopy = JSON.parse(JSON.stringify(jovo.$response));
-
     const responseConfig = this.config.response as RequestResponseConfig;
+    const responseCopy = copy(jovo.$response, {
+      include: responseConfig.objects,
+      exclude: responseConfig.excludedObjects,
+    });
 
     if (responseConfig.maskedObjects && responseConfig.maskedObjects.length > 0) {
-      responseConfig.maskedObjects.forEach((maskPath: string) => {
-        const value = _get(responseCopy, maskPath);
-        if (value) {
-          let newValue = this.config.maskValue;
-          if (typeof this.config.maskValue === 'function') {
-            newValue = this.config.maskValue(value);
-          }
-          _set(responseCopy, maskPath, newValue);
-        }
-      });
+      mask(responseCopy, responseConfig.maskedObjects, this.config.maskValue);
     }
 
-    if (responseConfig.excludedObjects && responseConfig.excludedObjects.length > 0) {
-      responseConfig.excludedObjects.forEach((excludePath: string) => {
-        _unset(responseCopy, excludePath);
-      });
-    }
-
-    /* eslint-disable no-console */
-    if (this.config.styling) {
+    if (this.config.format === LoggingFormat.Pretty) {
+      // eslint-disable-next-line no-console
       console.log(
         chalk.bgGray.white('\n\n <<<<< Response - ' + new Date().toISOString() + ' ') +
           ' ✔️ ' +
           duration +
           'ms',
       );
-    }
-    if (responseConfig.objects && responseConfig.objects.length > 0) {
-      responseConfig.objects.forEach((path: string) => {
-        console.log(
-          colorize(
-            JSON.stringify(_get(responseCopy, path), null, this.config.indentation || 2),
-            this.config.colorizeSettings,
-          ),
-        );
-      });
-    } else {
+      // eslint-disable-next-line no-console
       console.log(
         colorize(
           JSON.stringify(responseCopy, null, this.config.indentation || 2),
           this.config.colorizeSettings,
         ),
       );
+    } else if (this.config.format === LoggingFormat.Json) {
+      // eslint-disable-next-line no-console
+      console.log(colorize(JSON.stringify(responseCopy), this.config.colorizeSettings));
     }
-    /* eslint-enable no-console */
   }
 }
