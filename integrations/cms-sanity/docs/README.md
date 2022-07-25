@@ -58,7 +58,7 @@ $ cd <your-project-name>
 $ sanity start
 ```
 
-If you want to use translations for [i18n](https://www.jovo.tech/docs/i18n) (one of the typical use cases for [Jovo CMS integrations](https://www.jovo.tech/docs/cms)), the integration expects the schema in your Sanity Studio project to include both a [`translation.js`](./sanity-studio/translation.js) and a [`translationEntry.js`](./sanity-studio/translationEntry.js) file. Learn more in the [`TranslationsQueryTransformer` section](#translationsquerytransformer).
+If you want to use translations for [i18n](https://www.jovo.tech/docs/i18n) (one of the typical use cases for [Jovo CMS integrations](https://www.jovo.tech/docs/cms)), the integration expects the schema in your Sanity Studio project to include both a `translation.js` and a `translationEntry.js` file. You can find examples [in this folder](https://github.com/jovotech/jovo-framework/tree/v4/latest/integrations/cms-sanity/docs/sanity-studio). Learn more in the [`TranslationsQueryTransformer` section](#translationsquerytransformer).
 
 ### Add Sanity Integration to Jovo App
 
@@ -267,7 +267,7 @@ new SanityCms({
 }),
 ```
 
-If you use the `TranslationsQueryTransformer` the integration expects the schema in your Sanity Studio project to include both a [`translation.js`](./sanity-studio/translation.js) and a [`translationEntry.js`](./sanity-studio/translationEntry.js) file.
+If you use the `TranslationsQueryTransformer` the integration expects the schema in your Sanity Studio project to include both a `translation.js` and a `translationEntry.js` file. You can find examples [in this folder](https://github.com/jovotech/jovo-framework/tree/v4/latest/integrations/cms-sanity/docs/sanity-studio).
 
 This will give you the following screens in Sanity Studio to enter translations:
 
