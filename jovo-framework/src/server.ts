@@ -68,8 +68,13 @@ verifiedServer.listen = function () {
       Log.warn('  Please install module alexa-verifier-middleware');
       Log.warn('  $ npm install alexa-verifier-middleware');
       Log.warn();
+    } else if (error.code === 'ERR_REQUIRE_ESM') {
+      Log.warn();
+      Log.warn('  alexa-verifier-middleware version 2.x is now a pure es module');
+      Log.warn('  use alexa-verifier-middleware@1.x');
+      Log.warn();
     } else {
-      Log.error(error);
+     throw error;
     }
   }
 };
