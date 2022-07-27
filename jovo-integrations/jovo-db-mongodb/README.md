@@ -60,6 +60,7 @@ module.exports = {
             databaseName: 'yourDatabaseName',
         collectionName: 'yourCollectionName',
         uri: 'yourMongoDbURI',
+        libraryConfig: { /* MongoClientOptions */ },
         },
     },
 
@@ -87,6 +88,8 @@ const config = {
 ```
 
 If you don't specify a collection name, a default collection ```UserData``` will be created in your specified database.
+
+`libraryConfig`: Additional options that can be passed to the MongoDB client. You can find all options in the [official `MongoClientOptions` reference](https://mongodb.github.io/node-mongodb-native/3.6/api/global.html#MongoClientOptions).
 
 ## Troubleshooting
 
