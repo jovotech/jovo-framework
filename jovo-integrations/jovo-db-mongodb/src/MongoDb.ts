@@ -16,9 +16,9 @@ export class MongoDb implements Db {
   config: Config = {
     collectionName: 'UserData',
     databaseName: undefined,
+    libraryConfig: { useNewUrlParser: true, useUnifiedTopology: true },
     primaryKeyColumn: 'userId',
     uri: undefined,
-    libraryConfig: { useNewUrlParser: true, useUnifiedTopology: true },
   };
   needsWriteFileAccess = false;
   isCreating = false;
