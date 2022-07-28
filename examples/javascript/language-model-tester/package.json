@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-language-model-tester",
-  "version": "3.6.2",
+  "version": "3.6.3",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -14,9 +14,9 @@
   "license": "Apache-2.0",
   "dependencies": {
     "jovo-db-filedb": "^3.6.1",
-    "jovo-framework": "^3.6.1",
-    "jovo-platform-alexa": "^3.6.2",
-    "jovo-platform-googleassistant": "^3.6.1",
+    "jovo-framework": "^3.6.2",
+    "jovo-platform-alexa": "^3.6.3",
+    "jovo-platform-googleassistant": "^3.6.2",
     "jovo-plugin-debugger": "^3.6.1"
   },
   "devDependencies": {

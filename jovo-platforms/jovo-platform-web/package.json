@@ -1,6 +1,6 @@
 {
   "name": "jovo-platform-web",
-  "version": "3.6.1",
+  "version": "3.6.2",
   "description": " ",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",
@@ -18,7 +18,7 @@
   "dependencies": {
     "jovo-core": "^3.6.1",
     "jovo-db-platformstorage": "^3.6.1",
-    "jovo-platform-core": "^3.6.1",
+    "jovo-platform-core": "^3.6.2",
     "lodash.clonedeep": "^4.5.0",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",
@@ -34,7 +34,7 @@
     "@types/lodash.set": "^4.3.6",
     "@types/node": "^10.3.1",
     "jest": "^25.1.0",
-    "jovo-framework": "^3.6.1",
+    "jovo-framework": "^3.6.2",
     "prettier": "2.0.2",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.8",

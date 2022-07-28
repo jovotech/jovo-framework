@@ -1,6 +1,6 @@
 {
   "name": "jovo-db-mongodb",
-  "version": "3.6.1",
+  "version": "3.6.2",
   "description": "",
   "main": "dist/src/index",
   "types": "dist/src/index.d.ts",

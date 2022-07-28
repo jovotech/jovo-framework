@@ -1,19 +1,22 @@
 import { BaseApp, Db, ErrorCode, Jovo, JovoError, PluginConfig } from 'jovo-core';
 import _get = require('lodash.get');
 import _merge = require('lodash.merge');
-import { MongoClient } from 'mongodb';
+import { MongoClient, MongoClientOptions } from 'mongodb';
 
 export interface Config extends PluginConfig {
   uri?: string;
   databaseName?: string;
   collectionName?: string;
   primaryKeyColumn?: string;
+  /** Client options for the official `mongodb` package that is used */
+  libraryConfig?: MongoClientOptions;
 }
 
 export class MongoDb implements Db {
   config: Config = {
     collectionName: 'UserData',
     databaseName: undefined,
+    libraryConfig: { useNewUrlParser: true, useUnifiedTopology: true },
     primaryKeyColumn: 'userId',
     uri: undefined,
   };
@@ -46,7 +49,7 @@ export class MongoDb implements Db {
   }
 
   async getConnectedMongoClient(uri: string): Promise<MongoClient> {
-    return MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    return MongoClient.connect(uri, this.config.libraryConfig);
   }
 
   errorHandling() {
