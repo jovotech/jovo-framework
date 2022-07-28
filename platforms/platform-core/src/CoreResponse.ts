@@ -33,7 +33,7 @@ export class CoreResponse extends JovoResponse {
   }
 
   getSpeech(): string | string[] | undefined {
-    let speech: string[] = [];
+    const speech: string[] = [];
     this.output.forEach((output) => {
       if (output.message) {
         // The message property can either be a string or an object with a speech property.
@@ -58,7 +58,7 @@ export class CoreResponse extends JovoResponse {
   }
 
   getReprompt(): string | string[] | undefined {
-    let reprompts: string[] = [];
+    const reprompts: string[] = [];
     this.output.forEach((output) => {
       if (output.reprompt) {
         // The reprompt property can either be a string or an object with a speech property.
