@@ -44,18 +44,18 @@ if (this.$response.getSpeech) {
 }
 ```
 
-After modifying the speech and reprompt, you can use `setSpeech()` and `setReprompt()` to update the elements in the `$response`.
+After modifying the speech and reprompt, you can use `replaceSpeech()` and `replaceReprompt()` to update the elements in the `$response`.
 
 They accept ether a `string` or an array `string[]`. If an array is provided, the response elements will be replaced in the order exactly how they are returned by `getSpeech()` and `getReprompt()`.
 
 Like `getSpeech()` and `getReprompt()`, those are optional methods only implemented by platforms that support SSML:
 
 ```typescript
-this.$response.setSpeech(speech);
-this.$response.setReprompt(reprompt);
+this.$response.replaceSpeech(speech);
+this.$response.replaceReprompt(reprompt);
 
 // Example for setSpeech
-if (this.$response.setSpeech) {
-  this.$response.setSpeech('<speak>Hi there!</speak>');
+if (this.$response.replaceSpeech) {
+  this.$response.replaceSpeech('<speak>Hi there!</speak>');
 }
 ```
