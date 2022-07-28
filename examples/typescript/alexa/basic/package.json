@@ -1,0 +1,53 @@
+{
+  "name": "@jovotech/examples-alexa-basic",
+  "private": true,
+  "description": "A sample TypeScript Alexa Skill that works with the Jovo Framework",
+  "scripts": {
+    "build": "tsc",
+    "start": "node ./dist/app.dev.js --jovo-webhook",
+    "start:dev": "tsc-watch --onSuccess \"npm start\"",
+    "bundle:dev": "npm run bundle -- \"src/app.dev.ts\"",
+    "bundle:prod": "npm run bundle -- \"src/app.prod.ts\" --minify",
+    "prebundle": "rimraf bundle",
+    "bundle": "esbuild --bundle --outfile=bundle/index.js --sourcemap --minify --keep-names --platform=node --target=node14 --format=cjs  --external:aws-sdk --external:@oclif/* --external:@jovotech/cli*",
+    "postbundle": "cd bundle && bestzip ../bundle.zip * && cd ..",
+    "eslint": "eslint src test --fix --ext .ts",
+    "test": "jest"
+  },
+  "author": "jovotech",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@jovotech/db-filedb": "^4.0.0",
+    "@jovotech/framework": "^4.0.0",
+    "@jovotech/platform-alexa": "^4.0.0",
+    "@jovotech/plugin-debugger": "^4.0.0",
+    "@jovotech/server-express": "^4.0.0",
+    "@jovotech/server-lambda": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.11",
+    "@types/jest": "^26.0.20",
+    "@typescript-eslint/eslint-plugin": "^4.12.0",
+    "@typescript-eslint/parser": "^4.12.0",
+    "bestzip": "^2.1.7",
+    "esbuild": "^0.13.8",
+    "eslint": "^7.17.0",
+    "eslint-config-prettier": "^7.1.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "jest": "^27.3.1",
+    "prettier": "^2.4.1",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^27.0.7",
+    "tsc-watch": "^4.2.9",
+    "typescript": "~4.4.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jovotech/jovo-framework.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jovotech/jovo-framework"
+  },
+  "homepage": "https://github.com/jovotech/jovo-framework#readme",
+  "prettier": "../../../.prettierrc.js"
+}
