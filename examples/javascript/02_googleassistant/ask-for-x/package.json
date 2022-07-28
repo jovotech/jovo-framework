@@ -1,6 +1,6 @@
 {
   "name": "jovo-examples-googleassistant-ask-for-x",
-  "version": "3.6.1",
+  "version": "3.6.2",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -13,8 +13,8 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "jovo-framework": "^3.6.1",
-    "jovo-platform-googleassistant": "^3.6.1",
+    "jovo-framework": "^3.6.2",
+    "jovo-platform-googleassistant": "^3.6.2",
     "jovo-plugin-debugger": "^3.6.1"
   }
 }

@@ -1,6 +1,6 @@
 {
     "name": "jovo-examples-alexa-geolocation",
-    "version": "3.6.2",
+    "version": "3.6.3",
     "private": true,
     "description": "",
     "main": "index.js",
@@ -13,7 +13,7 @@
     "author": "jovotech",
     "license": "Apache-2.0",
     "dependencies": {
-        "jovo-framework": "^3.6.1",
-        "jovo-platform-alexa": "^3.6.2"
+        "jovo-framework": "^3.6.2",
+        "jovo-platform-alexa": "^3.6.3"
     }
 }
