@@ -1,10 +1,10 @@
+import { SsmlUtilities } from '@jovotech/common';
 import {
   Card,
   Carousel,
   Message,
   MessageValue,
   QuickReply,
-  removeSSML,
   SpeechMessage,
   TextMessage,
 } from '@jovotech/output';
@@ -21,7 +21,7 @@ export function convertMessageToFacebookMessengerMessage(
   message: MessageValue,
 ): FacebookMessengerMessage {
   return {
-    text: removeSSML(
+    text: SsmlUtilities.removeSSML(
       typeof message === 'string' ? message : message.text || (message.speech as string),
     ),
   };

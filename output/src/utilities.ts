@@ -15,23 +15,6 @@ export function registerOutputPlatform<TYPE extends Record<string, unknown>>(
   Type(() => platformType)(NormalizedOutputTemplatePlatforms.prototype, platformKey);
 }
 
-export function isSSML(text: string): boolean {
-  return /^<speak>.*<\/speak>$/.test(text);
-}
-
-export function toSSML(text: string): string {
-  text = text.replace(/<[/]?speak>/g, '');
-  return `<speak>${text}</speak>`;
-}
-
-export function removeSSMLSpeakTags(ssml: string): string {
-  return ssml.replace(/<[/]?speak>/g, '');
-}
-
-export function removeSSML(ssml: string): string {
-  return ssml.replace(/<[^>]*>/g, '');
-}
-
 export interface FormatValidationErrorsOptions {
   text?: string;
   delimiter?: string;

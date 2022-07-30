@@ -83,3 +83,4 @@ export * from './Configurable';
 export * from './Input';
 export * from './JovoError';
 export * from './JovoLogger';
+export * from './SsmlUtilities';

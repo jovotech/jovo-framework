@@ -1,9 +1,9 @@
+import { SsmlUtilities } from '@jovotech/common';
 import {
   Card,
   Message,
   MessageValue,
   QuickReply,
-  removeSSML,
   SpeechMessage,
   TextMessage,
 } from '@jovotech/output';
@@ -12,7 +12,7 @@ import { Card as DialogflowCard, Text } from './models';
 export function convertMessageToDialogflowText(message: MessageValue): Text {
   return {
     text: [
-      removeSSML(
+      SsmlUtilities.removeSSML(
         typeof message === 'string' ? message : message.text || (message.speech as string),
       ),
     ],
