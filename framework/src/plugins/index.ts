@@ -10,3 +10,6 @@ export * from './RouteMatch';
 export * from './RouterPlugin';
 export * from './RoutingExecutor';
 export * from './SluPlugin';
+export * from './TtsData';
+export * from './TtsCachePlugin';
+export * from './TtsPlugin';
