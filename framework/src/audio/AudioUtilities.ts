@@ -1,5 +1,4 @@
-import { Readable } from 'stream';
-import * as streams from 'memory-streams';
+import { Stream } from 'stream';
 
 export class AudioUtilities {
   static getSamplesFromBase64(base64: string): Float32Array {
@@ -82,22 +81,13 @@ export class AudioUtilities {
     }
   }
 
-  static getBase64Audio(reader: Readable): Promise<string | undefined> {
+  static getBase64Audio(stream: Stream): Promise<string | undefined> {
     return new Promise((resolve, reject) => {
-      const writer = new streams.WritableStream();
+      const _buf = Array<any>();
 
-      reader.on('end', () => {
-        const buff = writer.toBuffer();
-        const value = buff.toString('base64');
-
-        resolve(value);
-      });
-
-      reader.on('error', (e) => {
-        reject(e);
-      });
-
-      reader.pipe(writer);
+      stream.on('data', (chunk) => _buf.push(chunk));
+      stream.on('end', () => resolve(Buffer.concat(_buf).toString('base64')));
+      stream.on('error', (err) => reject(`error converting stream - ${err}`));
     });
   }
 
