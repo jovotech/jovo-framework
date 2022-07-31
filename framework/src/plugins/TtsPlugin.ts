@@ -25,7 +25,6 @@ export interface TtsPluginConfig extends PluginConfig {
 export abstract class TtsPlugin<
   CONFIG extends TtsPluginConfig = TtsPluginConfig,
 > extends Plugin<CONFIG> {
-  config: any;
   abstract supportedSsmlTags: string[];
   abstract processTts(
     jovo: Jovo,
@@ -85,7 +84,9 @@ export abstract class TtsPlugin<
             replaceList.push(SsmlUtilities.buildAudioTag(result.url));
           } else if (result.encodedAudio && result.contentType) {
             replaceList.push(
-              SsmlUtilities.buildAudioTag(AudioUtilities.buildBase64Uri(result.encodedAudio, result.contentType)),
+              SsmlUtilities.buildAudioTag(
+                AudioUtilities.buildBase64Uri(result.encodedAudio, result.contentType),
+              ),
             );
           }
         }

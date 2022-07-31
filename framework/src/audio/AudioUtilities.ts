@@ -83,7 +83,7 @@ export class AudioUtilities {
 
   static getBase64Audio(stream: Stream): Promise<string | undefined> {
     return new Promise((resolve, reject) => {
-      const _buf = Array<any>();
+      const _buf = [];
 
       stream.on('data', (chunk) => _buf.push(chunk));
       stream.on('end', () => resolve(Buffer.concat(_buf).toString('base64')));
