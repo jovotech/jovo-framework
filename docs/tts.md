@@ -9,17 +9,25 @@ Learn more about text to speech (TTS) services that can be integrated with Jovo.
 
 ## Introduction
 
-Text to speech (in short, TTS) is the process of turning text-based responses into spoken audio. It is part of the `response` step of the [RIDR lifecycle](./ridr-lifecycle.md). The `response.tts` step occurs after the platform-specific response has been created.
+Text to speech (in short, TTS) is the process of turning text-based responses into spoken audio. It is part of the `response` step of the [RIDR lifecycle](./ridr-lifecycle.md). The `response.tts` step occurs after the platform-specific [response](./response.md) has been created.
 
-Jovo offers integrations with a variety of TTS services that can either be self-hosted or accessed via an API. [You can find all the current integrations here](#integrations).
+Jovo offers (and is working on) integrations with a variety of TTS services that can either be self-hosted or accessed via an API. [You can find all the current integrations here](#integrations).
 
-TTS integrations are helpful for platforms that can play audio files or when you want to replace the platform's default TTS implementation. The integration replaces the response speech and reprompt entry with an audio tag. If the response supports multiple speech or reprompts then each will be replaced. The orginal speech or reprompt needs to be either plain text or Speech Synthesis Markup Language (SSML) as supported by the chosen TTS integration. For example, if the Amazon Polly TTS implementation was selected then speech and reprompt should only contain SSML tags supported by Polly.
+TTS integrations are helpful for platforms that can play audio files or when you want to replace the platform's default TTS implementation. The integration replaces the [response](./response.md) speech and reprompt entry with an audio tag. If the response supports multiple speech or reprompts then each will be replaced.
+
+The original speech or reprompt needs to be either plain text or Speech Synthesis Markup Language (SSML) as supported by the chosen TTS integration. For example, if the Amazon Polly TTS implementation was selected then speech and reprompt should only contain SSML tags supported by Polly.
+
+Learn more about Jovo TTS integrations in the following sections:
+
+- [Integrations](#integrations)
+- [Configuration](#configuration)
+- [Custom Implementation](#custom-tts-integration)
 
 ## Integrations
 
 Currently, the following integrations are available with Jovo `v4`:
 
-- [Polly TTS](https://www.jovo.tech/marketplace/tts-polly)
+- Polly TTS (_work in progress_)
 
 ## Configuration
 
@@ -28,7 +36,6 @@ A TTS integration needs to be added as a [platform](./platforms.md) plugin in th
 ```typescript
 import { CorePlatform } from '@jovotech/platform-core';
 import { PollyTts } from '@jovotech/tts-polly';
-
 // ...
 
 const app = new App({
@@ -41,11 +48,34 @@ const app = new App({
 });
 ```
 
-Each integration has specific options which can be found in each integration's documentation.
+Along with integration specific options (which can be found in each integration's documentation), there are also features that are configured the same way across all TTS integrations.
+
+The following configurations can be set for each TTS integration:
+
+```typescript
+new PollyTts({
+  // ...
+  cache: new S3TtsCache({ /* ... */ }),
+  fallbackLocale: 'en',
+  fileExtension: 'mp3',
+}),
+```
+
+- `cache`: Initialize a TTS Cache integration here to store converted audio files on a cloud service, for example AWS S3.
+- `fallbackLocale`: The locale that gets used for the creation of the audio files in case no locale can be found in the [request](./request.md).
+- `fileExtension`: The desired format of the resulting audio, for example `mp3`.
+
+## Custom Implementation
+
+Learn more about building your own custom TTS (and TTS Cache) integrations in the following sections:
+
+- [Custom TTS Integration](#custom-tts-integration)
+- [TTS Data](#tts-data)
+- [Custom TTS Cache](#custom-tts-cache)
 
 ### Custom TTS Integration
 
-If you want to create your own TTS integration, you can build your own plugin.
+If you want to create your own TTS integration, you can build your own plugin, which extends [`TtsPlugin`](https://github.com/jovotech/jovo-framework/blob/v4/latest/framework/src/plugins/TtsPlugin.ts).
 
 ```ts
 import { Jovo, TtsPlugin, TtsPluginConfig } from '@jovotech/framework';
@@ -70,8 +100,8 @@ export class SampleTts extends TtsPlugin<SampleTtsConfig> {
 
   getDefaultConfig(): SampleTtsConfig {
     return {
-      outputFormat: 'mp3',
       fallbackLocale: 'en-US',
+      fileExtension: 'mp3',
       // ...
 
       // integration-specific config values
@@ -100,7 +130,7 @@ export class SampleTts extends TtsPlugin<SampleTtsConfig> {
 }
 ```
 
-The plugin consists of the following:
+The plugin consists of the following methods:
 
 - `supportedSsmlTags`: An array of strings listing which SSML tags the TTS plugin supports.
 - `getKeyPrefix()`: An optional function that returns a prefix used to generate a cache key for a given text string.
@@ -138,7 +168,6 @@ The configure a TTS integration to use a cache, set the `cache` configuration va
 import { CorePlatform } from '@jovotech/platform-core';
 import { SampleTts } from 'sample-tts';
 import { SampleTtsCache } from 'sample-tts-cache';
-
 // ...
 
 const app = new App({
@@ -186,7 +215,7 @@ export class SampleTtsCache extends TtsCachePlugin<SampleTtsCacheConfig> {
   async getItem(key: string, locale: string, fileExtension: string): Promise<TtsData | undefined> {
     // key - the TTS cache key
     // locale - The locale of the TTS response. ex: `en-US`.
-    // fileExtension - The file extension for the audio source URL. ex: `mp3`    
+    // fileExtension - The file extension for the audio source URL. ex: `mp3`
 
     // Call TTS client
 
@@ -215,4 +244,4 @@ export class SampleTtsCache extends TtsCachePlugin<SampleTtsCacheConfig> {
 The plugin consists of the following:
 
 - `getItem()`: Attempts to get the TTS response from the cache. If success, does not call TTS integration to generate response.
-- `storeItem()`: If TTS response does not exist in TTS chace, store the item in the cache and return source URL.
+- `storeItem()`: If TTS response does not exist in TTS cache, store the item in the cache and return source URL.
