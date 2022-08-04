@@ -1,4 +1,4 @@
-import { ArrayElement, JovoLoggerConfig } from '@jovotech/common';
+import { ArrayElement, JovoLoggerConfig, DeploymentDebugging } from '@jovotech/common';
 import _merge from 'lodash.merge';
 import {
   ComponentTree,
@@ -25,6 +25,8 @@ import { RouterPlugin } from './plugins/RouterPlugin';
 import { Server } from './Server';
 
 export type Usable = Plugin | ComponentConstructor | ComponentDeclaration;
+
+DeploymentDebugging.debug();
 
 export const APP_MIDDLEWARES = [
   'request.start',
