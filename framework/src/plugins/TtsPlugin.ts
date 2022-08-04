@@ -17,8 +17,8 @@ export enum TtsTextType {
 
 export interface TtsPluginConfig extends PluginConfig {
   cache?: TtsCachePlugin;
-  outputFormat: string;
   fallbackLocale: string;
+  fileExtension: string;
 }
 
 // Provide basic functionality that will then be used by all TTS plugins
@@ -117,7 +117,7 @@ export abstract class TtsPlugin<
     let ttsResponse;
 
     if (this.config.cache) {
-      ttsResponse = await this.config.cache.getItem(audioKey, locale, this.config.outputFormat);
+      ttsResponse = await this.config.cache.getItem(audioKey, locale, this.config.fileExtension);
       if (ttsResponse) {
         if (!ttsResponse.text) {
           ttsResponse.text = text;
