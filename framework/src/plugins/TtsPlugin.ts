@@ -50,8 +50,9 @@ export abstract class TtsPlugin<
       return;
     }
     if (response.getSpeech) {
-      const speech = response.getSpeech();
-      const replaceList = await this.processSpeech(jovo, speech);
+      const speech = response.getSpeech() || [];
+      const speechList = Array.isArray(speech) ? speech : [speech];
+      const replaceList = await this.processTextList(jovo, speechList);
 
       if (replaceList && response.replaceSpeech) {
         response.replaceSpeech(replaceList);
@@ -59,8 +60,9 @@ export abstract class TtsPlugin<
     }
 
     if (response.getReprompt) {
-      const speech = response.getReprompt();
-      const replaceList = await this.processSpeech(jovo, speech);
+      const reprompt = response.getReprompt() || [];
+      const repromptList = Array.isArray(reprompt) ? reprompt : [reprompt];
+      const replaceList = await this.processTextList(jovo, repromptList);
 
       if (replaceList && response.replaceReprompt) {
         response.replaceReprompt(replaceList);
@@ -68,28 +70,14 @@ export abstract class TtsPlugin<
     }
   }
 
-  private async processSpeech(
-    jovo: Jovo,
-    speech: string | string[] | undefined,
-  ): Promise<string[] | undefined> {
+  private async processTextList(jovo: Jovo, textList: string[]): Promise<string[] | undefined> {
     const replaceList: string[] = [];
 
-    if (speech) {
-      const speechList = Array.isArray(speech) ? speech : [speech];
-      for (const text of speechList) {
-        const result = await this.getTtsData(jovo, text);
-
-        if (result) {
-          if (result.url) {
-            replaceList.push(SsmlUtilities.buildAudioTag(result.url));
-          } else if (result.encodedAudio && result.contentType) {
-            replaceList.push(
-              SsmlUtilities.buildAudioTag(
-                AudioUtilities.buildBase64Uri(result.encodedAudio, result.contentType),
-              ),
-            );
-          }
-        }
+    for (const item of textList) {
+      const result = await this.processTextItem(jovo, item);
+      const audioTag = this.buildAudioTag(result);
+      if (audioTag) {
+        replaceList.push(audioTag);
       }
     }
 
@@ -100,7 +88,7 @@ export abstract class TtsPlugin<
     return replaceList;
   }
 
-  private async getTtsData(jovo: Jovo, text: string): Promise<TtsData | undefined> {
+  private async processTextItem(jovo: Jovo, text: string): Promise<TtsData | undefined> {
     if (!text) {
       return;
     }
@@ -141,6 +129,16 @@ export abstract class TtsPlugin<
     }
 
     return ttsResponse;
+  }
+
+  private buildAudioTag(data?: TtsData): string | undefined {
+    if (data?.url) {
+      return SsmlUtilities.buildAudioTag(data.url);
+    } else if (data?.encodedAudio && data?.contentType) {
+      return SsmlUtilities.buildAudioTag(
+        AudioUtilities.buildBase64Uri(data.encodedAudio, data.contentType),
+      );
+    }
   }
 
   protected buildKey(text: string, prefix?: string): string {
