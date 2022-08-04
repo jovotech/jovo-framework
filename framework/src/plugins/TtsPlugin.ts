@@ -93,11 +93,11 @@ export abstract class TtsPlugin<
       }
     }
 
-    if (replaceList.length > 0) {
-      return replaceList;
+    if (replaceList.length === 0) {
+      return;
     }
 
-    return;
+    return replaceList;
   }
 
   private async getTtsData(jovo: Jovo, text: string): Promise<TtsData | undefined> {
