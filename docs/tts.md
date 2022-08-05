@@ -61,7 +61,7 @@ new PollyTts({
 }),
 ```
 
-- `cache`: Initialize a TTS Cache integration here to store converted audio files on a cloud service, for example AWS S3.
+- `cache`: Initialize a TTS Cache integration here to store converted audio files on a cloud service, for example AWS S3. See [custom TTS cache](#custom-tts-cache) for more information.
 - `fallbackLocale`: The locale that gets used for the creation of the audio files in case no locale can be found in the [request](./request.md).
 - `fileExtension`: The desired format of the resulting audio, for example `mp3`.
 
@@ -138,6 +138,8 @@ The plugin consists of the following methods:
 
 ### TTS Data
 
+The TtsData object includes the following fields:
+
 ```ts
 export interface TtsData {
   contentType?: string;
@@ -148,8 +150,6 @@ export interface TtsData {
   url?: string;
 }
 ```
-
-The TtsData object includes the following fields:
 
 - `contentType`: Audio MIME type. ex: `audio/mpeg`
 - `encodedAudio`: Base64 encoded audio. Often this is the format the TTS provides support.
