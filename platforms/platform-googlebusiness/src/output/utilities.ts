@@ -1,17 +1,17 @@
+import { SsmlUtilities } from '@jovotech/common';
 import {
   Card,
   Carousel,
   Message,
   MessageValue,
   QuickReply,
-  removeSSML,
   SpeechMessage,
   TextMessage,
 } from '@jovotech/output';
 import { CardContent, CardWidth, MediaHeight } from './models';
 
 export function convertMessageToGoogleBusinessText(message: MessageValue): string {
-  return removeSSML(
+  return SsmlUtilities.removeSSML(
     typeof message === 'string' ? message : message.text || (message.speech as string),
   );
 }

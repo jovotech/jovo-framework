@@ -1,13 +1,12 @@
+import { SsmlUtilities } from '@jovotech/common';
 import {
   Card,
   Carousel,
   CarouselItem,
   Message,
   MessageValue,
-  removeSSML,
   SpeechMessage,
   TextMessage,
-  toSSML,
 } from '@jovotech/output';
 import AplCardJson from './apl/Card.json';
 import AplCarouselJson from './apl/Carousel.json';
@@ -37,18 +36,18 @@ export function convertMessageToOutputSpeech(message: MessageValue): OutputSpeec
   if (typeof message === 'string') {
     return {
       type: OutputSpeechType.Ssml,
-      ssml: toSSML(message),
+      ssml: SsmlUtilities.toSSML(message),
     };
   }
   if (message.speech) {
     return {
       type: OutputSpeechType.Ssml,
-      ssml: toSSML(message.speech),
+      ssml: SsmlUtilities.toSSML(message.speech),
     };
   }
   return {
     type: OutputSpeechType.Plain,
-    text: removeSSML((message as TextMessage).text),
+    text: SsmlUtilities.removeSSML((message as TextMessage).text),
   };
 }
 

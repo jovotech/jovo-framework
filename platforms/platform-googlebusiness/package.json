@@ -45,6 +45,7 @@
     "typescript": "~4.4.4"
   },
   "peerDependencies": {
+    "@jovotech/common": "^4.2.17",
     "@jovotech/framework": "4.2.23",
     "@jovotech/output": "4.2.19"
   },

@@ -30,6 +30,11 @@ NLU integrations are helpful for platforms that deal with raw text. The integrat
 }
 ```
 
+Learn more about Jovo TTS integrations in the following sections:
+
+- [Integrations](#integrations)
+- [Configuration](#configuration)
+
 ## Integrations
 
 Currently, the following integrations are available with Jovo `v4`:
@@ -37,6 +42,7 @@ Currently, the following integrations are available with Jovo `v4`:
 - [Rasa NLU](https://www.jovo.tech/marketplace/nlu-rasa)
 - [Snips NLU](https://www.jovo.tech/marketplace/nlu-snips)
 - [NLP.js](https://www.jovo.tech/marketplace/nlu-nlpjs)
+- [Lex SLU](https://www.jovo.tech/marketplace/slu-lex)
 
 ## Configuration
 
@@ -45,7 +51,6 @@ An NLU integration needs to be added as a [platform](./platforms.md) plugin in t
 ```typescript
 import { CorePlatform } from '@jovotech/platform-core';
 import { NlpjsNlu } from '@jovotech/nlu-nlpjs';
-
 // ...
 
 const app = new App({

@@ -1,5 +1,5 @@
+import { SsmlUtilities } from '@jovotech/common';
 import {
-  isSSML,
   mergeInstances,
   mergeListen,
   MessageValue,
@@ -10,11 +10,8 @@ import {
   PlainObjectType,
   plainToClass,
   NormalizedPlatformOutputTemplate,
-  removeSSML,
-  removeSSMLSpeakTags,
   SpeechMessage,
   TextMessage,
-  toSSML,
   OutputTemplate,
 } from '..';
 import { OutputTemplateConverterStrategy } from '../OutputTemplateConverterStrategy';
@@ -159,19 +156,19 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
       return;
     }
     if (!target && mergeWith) {
-      return toSSML(mergeWith);
+      return SsmlUtilities.toSSML(mergeWith);
     }
     if (!mergeWith && target) {
-      return toSSML(target);
+      return SsmlUtilities.toSSML(target);
     }
     const mergedText = [target as string, mergeWith as string].reduce((result, text) => {
       if (text) {
-        result += `${result?.length ? ' ' : ''}${removeSSMLSpeakTags(text)}`;
+        result += `${result?.length ? ' ' : ''}${SsmlUtilities.removeSSMLSpeakTags(text)}`;
       }
       return result;
     });
-    return isSSML(target as string) || isSSML(mergeWith as string)
-      ? toSSML(mergedText)
+    return SsmlUtilities.isSSML(target as string) || SsmlUtilities.isSSML(mergeWith as string)
+      ? SsmlUtilities.toSSML(mergedText)
       : mergedText;
   }
 
@@ -183,17 +180,17 @@ export abstract class SingleResponseOutputTemplateConverterStrategy<
       return;
     }
     if (!target && mergeWith) {
-      return removeSSML(mergeWith);
+      return SsmlUtilities.removeSSML(mergeWith);
     }
     if (!mergeWith && target) {
-      return removeSSML(target);
+      return SsmlUtilities.removeSSML(target);
     }
     return [target, mergeWith].reduce((result, text) => {
       if (text) {
         if (!result) {
           result = '';
         }
-        result += `${result?.length ? ' ' : ''}${removeSSML(text)}`;
+        result += `${result?.length ? ' ' : ''}${SsmlUtilities.removeSSML(text)}`;
       }
       return result;
     }, undefined);
