@@ -35,6 +35,7 @@
     "lodash.merge": "^4.6.2",
     "lodash.set": "^4.3.2",
     "lodash.unset": "^4.5.2",
+    "ts-md5": "^1.2.11",
     "ts-mixer": "^6.0.0",
     "ts-toolbelt": "9.5.13",
     "type-fest": "^2.5.1",

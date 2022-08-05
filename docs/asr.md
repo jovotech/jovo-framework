@@ -27,6 +27,11 @@ ASR integrations are helpful for platforms that deal with raw speech input. The 
 
 The `text` then needs to be turned into structured meaning by using an [NLU integration](./nlu.md). Some services like [Amazon Lex](https://www.jovo.tech/marketplace/slu-lex) are also called spoken language understanding (SLU) services because they do both the ASR and NLU parts.
 
+Learn more about Jovo ASR integrations in the following sections:
+
+- [Integrations](#integrations)
+- [Configuration](#configuration)
+
 ## Integrations
 
 Currently, the following integrations are available with Jovo `v4`:

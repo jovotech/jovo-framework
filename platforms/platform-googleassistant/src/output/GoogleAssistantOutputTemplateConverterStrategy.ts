@@ -1,3 +1,4 @@
+import { SsmlUtilities } from '@jovotech/common';
 import {
   Carousel,
   DynamicEntities,
@@ -11,11 +12,9 @@ import {
   OutputTemplate,
   OutputTemplateConverterStrategyConfig,
   QuickReplyValue,
-  removeSSML,
   SingleResponseOutputTemplateConverterStrategy,
   SpeechMessage,
   TextMessage,
-  toSSML,
 } from '@jovotech/output';
 import { GoogleAssistantResponse } from '../GoogleAssistantResponse';
 import {
@@ -46,8 +45,8 @@ export class GoogleAssistantOutputTemplateConverterStrategy extends SingleRespon
   normalizeOutput(output: OutputTemplate | OutputTemplate[]): NormalizedOutputTemplate {
     const makeMessageObj = (message: string): TextMessage | SpeechMessage => {
       return {
-        text: removeSSML(message),
-        speech: toSSML(message),
+        text: SsmlUtilities.removeSSML(message),
+        speech: SsmlUtilities.toSSML(message),
       };
     };
 

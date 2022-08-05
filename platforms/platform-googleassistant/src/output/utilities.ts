@@ -1,13 +1,12 @@
+import { SsmlUtilities } from '@jovotech/common';
 import {
   Card,
   Carousel,
   Message,
   MessageValue,
   QuickReply,
-  removeSSML,
   SpeechMessage,
   TextMessage,
-  toSSML,
 } from '@jovotech/output';
 import {
   Card as GoogleAssistantCard,
@@ -20,14 +19,14 @@ import {
 export function convertMessageToGoogleAssistantSimple(message: MessageValue): Simple {
   if (typeof message === 'string') {
     return {
-      speech: toSSML(message),
-      text: removeSSML(message),
+      speech: SsmlUtilities.toSSML(message),
+      text: SsmlUtilities.removeSSML(message),
     };
   }
 
   return {
-    speech: toSSML(message.speech || (message.text as string)),
-    text: removeSSML(message.text || (message.speech as string)),
+    speech: SsmlUtilities.toSSML(message.speech || (message.text as string)),
+    text: SsmlUtilities.removeSSML(message.text || (message.speech as string)),
   };
 }
 

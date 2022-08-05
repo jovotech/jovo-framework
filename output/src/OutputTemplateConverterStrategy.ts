@@ -1,10 +1,9 @@
-import { Constructor } from '@jovotech/common';
+import { Constructor, SsmlUtilities } from '@jovotech/common';
 import { PartialDeep } from 'type-fest';
 import {
   Carousel,
   DynamicEntities,
   DynamicEntityMap,
-  isSSML,
   MessageValue,
   NormalizedOutputTemplate,
   OutputTemplate,
@@ -175,7 +174,7 @@ export abstract class OutputTemplateConverterStrategy<
         this.logStringTrimWarning(`${path}.text`, textMaxLength);
       }
     } else {
-      const maxLength = isSSML(message) ? speechMaxLength : textMaxLength;
+      const maxLength = SsmlUtilities.isSSML(message) ? speechMaxLength : textMaxLength;
       message = message.slice(0, maxLength);
       this.logStringTrimWarning(path, maxLength);
     }

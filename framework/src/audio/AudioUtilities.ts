@@ -1,3 +1,5 @@
+import { Stream } from 'stream';
+
 export class AudioUtilities {
   static getSamplesFromBase64(base64: string): Float32Array {
     const binaryBuffer = Buffer.from(base64, 'base64').toString('binary');
@@ -77,5 +79,19 @@ export class AudioUtilities {
     for (let i = 0; i < val.length; i++) {
       view.setUint8(offset + i, val.charCodeAt(i));
     }
+  }
+
+  static getBase64Audio(stream: Stream): Promise<string | undefined> {
+    return new Promise((resolve, reject) => {
+      const _buf = Array<any>();
+
+      stream.on('data', (chunk) => _buf.push(chunk));
+      stream.on('end', () => resolve(Buffer.concat(_buf).toString('base64')));
+      stream.on('error', (err) => reject(`error converting stream - ${err}`));
+    });
+  }
+
+  static buildBase64Uri(data: string, mimeType: string): string {
+    return `data:${mimeType};base64,${data}`;
   }
 }
