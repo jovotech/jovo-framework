@@ -1,0 +1,153 @@
+import {
+  S3Client,
+  PutObjectCommand,
+  PutObjectCommandInput,
+  HeadObjectCommand,
+  HeadObjectCommandInput,
+  GetObjectCommand,
+  GetObjectCommandInput,
+  GetObjectCommandOutput,
+} from '@aws-sdk/client-s3';
+
+import type { Credentials } from '@aws-sdk/types';
+
+import { DeepPartial } from '@jovotech/common';
+
+import { Readable } from 'stream';
+
+import { urlJoin } from 'url-join-ts';
+
+import { TtsCachePlugin, TtsCachePluginConfig, TtsData, AudioUtilities } from '@jovotech/framework';
+
+export interface S3TtsCacheConfig extends TtsCachePluginConfig {
+  credentials: Credentials;
+  bucket: string;
+  path: string;
+  baseUrl: string;
+}
+
+export type S3TtsCacheInitConfig = DeepPartial<S3TtsCacheConfig> &
+  Pick<S3TtsCacheConfig, 'credentials' | 'bucket' | 'baseUrl'>;
+
+export class S3TtsCache extends TtsCachePlugin<S3TtsCacheConfig> {
+  readonly client: S3Client;
+
+  constructor(config: S3TtsCacheInitConfig) {
+    super(config);
+
+    this.client = new S3Client({
+      credentials: this.config.credentials,
+    });
+  }
+
+  getDefaultConfig(): S3TtsCacheConfig {
+    return {
+      credentials: {
+        accessKeyId: '',
+        secretAccessKey: '',
+      },
+      bucket: '',
+      path: '',
+      baseUrl: '',
+      returnEncodedAudio: false,
+    };
+  }
+
+  async getItem(key: string, locale: string, fileExtension: string): Promise<TtsData | undefined> {
+    let command: HeadObjectCommand | GetObjectCommand;
+    const filePath = this.getFilePath(key, locale, fileExtension);
+    const fullPath = urlJoin(this.config.baseUrl, filePath);
+
+    if (this.config.returnEncodedAudio) {
+      command = this.buildGetCommand(filePath);
+    } else {
+      command = this.buildHeadCommand(filePath);
+    }
+
+    try {
+      const response = await this.client.send(command);
+
+      const body = (response as GetObjectCommandOutput).Body;
+      if (body) {
+        const result: TtsData = {
+          key,
+          fileExtension,
+          contentType: response.ContentType,
+          url: fullPath,
+          encodedAudio: await AudioUtilities.getBase64Audio(body as Readable),
+        };
+
+        return result;
+      }
+
+      if (response.ContentType) {
+        return {
+          key,
+          fileExtension,
+          contentType: response.ContentType,
+          url: fullPath,
+        };
+      }
+    } catch (error) {
+      console.log((error as Error).message);
+    }
+
+    // object couldn't be retrieved from cache
+    return;
+  }
+
+  private buildHeadCommand(filePath: string) {
+    const params: HeadObjectCommandInput = {
+      Bucket: this.config.bucket,
+      Key: filePath,
+    };
+
+    const command = new HeadObjectCommand(params);
+    return command;
+  }
+
+  private buildGetCommand(filePath: string) {
+    const params: GetObjectCommandInput = {
+      Bucket: this.config.bucket,
+      Key: filePath,
+    };
+
+    const command = new GetObjectCommand(params);
+    return command;
+  }
+
+  async storeItem(key: string, locale: string, data: TtsData): Promise<string | undefined> {
+    if (!data.encodedAudio) {
+      return;
+    }
+
+    const filePath = this.getFilePath(key, locale, data.fileExtension);
+    const fullPath = urlJoin(this.config.baseUrl, filePath);
+    const body = Buffer.from(data.encodedAudio, 'base64');
+
+    const params: PutObjectCommandInput = {
+      Bucket: this.config.bucket,
+      Key: filePath,
+      Body: body,
+      ContentType: data.contentType,
+      ACL: 'public-read',
+    };
+
+    const command = new PutObjectCommand(params);
+
+    try {
+      await this.client.send(command);
+      return fullPath;
+    } catch (error) {
+      console.log((error as Error).message);
+    }
+
+    return;
+  }
+
+  private getFilePath(key: string, locale: string, extension?: string) {
+    const filename = extension ? `${key}.${extension}` : key;
+    const filePath = urlJoin(this.config.path, locale, filename);
+    return filePath;
+  }
+}
