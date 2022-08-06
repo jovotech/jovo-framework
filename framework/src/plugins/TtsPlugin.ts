@@ -134,10 +134,8 @@ export abstract class TtsPlugin<
   private buildAudioTag(data?: TtsData): string | undefined {
     if (data?.url) {
       return SsmlUtilities.buildAudioTag(data.url);
-    } else if (data?.encodedAudio && data?.contentType) {
-      return SsmlUtilities.buildAudioTag(
-        AudioUtilities.buildBase64Uri(data.encodedAudio, data.contentType),
-      );
+    } else if (data?.encodedAudio) {
+      return SsmlUtilities.buildAudioTag(data.encodedAudio);
     }
   }
 
