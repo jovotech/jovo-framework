@@ -68,7 +68,7 @@ export class PollyTts extends TtsPlugin<PollyTtsConfig> {
         accessKeyId: '',
         secretAccessKey: '',
       },
-      fileExtension: 'mp3',
+      outputFormat: 'mp3',
       voiceId: 'Matthew',
       sampleRate: '16000',
       engine: 'standard',
@@ -84,7 +84,7 @@ export class PollyTts extends TtsPlugin<PollyTtsConfig> {
     const params: SynthesizeSpeechCommandInput = {
       Text: text,
       TextType: textType,
-      OutputFormat: this.config.fileExtension,
+      OutputFormat: this.config.outputFormat,
       VoiceId: this.config.voiceId,
       SampleRate: this.config.sampleRate,
       LanguageCode: this.config.languageCode,
@@ -104,7 +104,7 @@ export class PollyTts extends TtsPlugin<PollyTtsConfig> {
       const result: TtsData = {
         contentType: response.ContentType,
         text,
-        fileExtension: this.config.fileExtension,
+        fileExtension: this.config.outputFormat,
         encodedAudio: await AudioUtilities.getBase64Audio(response.AudioStream as Readable),
       };
       return result;

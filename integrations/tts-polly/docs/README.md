@@ -24,7 +24,6 @@ TTS plugins can be added to Jovo platform integrations. Here is an example how i
 ```typescript
 import { CorePlatform } from '@jovotech/platform-core';
 import { PollyTts } from '@jovotech/tts-polly';
-
 // ...
 
 app.configure({
@@ -46,7 +45,7 @@ new PollyTts({
     region: 'us-east-1',
     credentials: {/* ... */},
     cache: new SampleTtsCache({/* ... */}),
-    fileExtension: 'mp3',
+    outputFormat: 'mp3',
     fallbackLocale: 'en-US',
     voiceId: 'Matthew',
     sampleRate: '16000',
@@ -61,13 +60,13 @@ new PollyTts({
 - `credentials`: Required. AWS credentials. See [credentials](#credentials) for more information.
 - `cache`: Optional. [TTS Cache](#tts-cache) implementation.
 - `fallbackLocale`: Required. Default: 'en-US'. Used as a fallback if the locale from Jovo is not found.
-- `fileExtension`: Required. Default: 'mp3'. The format in which the returned output will be encoded. See [outputFormat](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-polly/interfaces/synthesizespeechcommandinput.html#outputformat) for more information.
-- `voiceId`: Required. Default: 'Matthew'. Voice ID to use for the synthesis. See [voiceId](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-polly/interfaces/synthesizespeechcommandinput.html#voiceid) for more information.
-- `sampleRate`: Required. Default: '16000'. The audio frequency specified in Hz. See [sampleRate](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-polly/interfaces/synthesizespeechcommandinput.html#samplerate) for more information.
-- `engine`: Required. Default: 'standard'. Specifies the engine (standard or neural) for Amazon Polly to use when processing input text for speech synthesis. See [engine](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-polly/interfaces/synthesizespeechcommandinput.html#engine) for more information.
-- `lexiconNames`: Optional. List of one or more pronunciation lexicon names you want the service to apply during synthesis. See [lexiconNames](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-polly/interfaces/synthesizespeechcommandinput.html#lexiconnames) for more information.
-- `languageCode`: Optional. Optional language code for the Synthesize Speech request. This is only necessary if using a bilingual voice, such as Aditi, which can be used for either Indian English (en-IN) or Hindi (hi-IN). See [languageCode](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-polly/interfaces/synthesizespeechcommandinput.html#languagecode) for more information.
-- `speechMarkTypes`: Optional. The type of speech marks returned for the input text. See [speechMarkTypes](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-polly/interfaces/synthesizespeechcommandinput.html#speechmarktypes) for more information.
+- `outputFormat`: Required. Default: 'mp3'. The format in which the returned output will be encoded. See [`outputFormat` Polly docs](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-polly/interfaces/synthesizespeechcommandinput.html#outputformat) for more information.
+- `voiceId`: Required. Default: 'Matthew'. Voice ID to use for the synthesis. See [`voiceId` Polly docs](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-polly/interfaces/synthesizespeechcommandinput.html#voiceid) for more information.
+- `sampleRate`: Required. Default: '16000'. The audio frequency specified in Hz. See [`sampleRate` Polly docs](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-polly/interfaces/synthesizespeechcommandinput.html#samplerate) for more information.
+- `engine`: Required. Default: 'standard'. Specifies the engine (standard or neural) for Amazon Polly to use when processing input text for speech synthesis. See [`engine` Polly docs](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-polly/interfaces/synthesizespeechcommandinput.html#engine) for more information.
+- `lexiconNames`: Optional. List of one or more pronunciation lexicon names you want the service to apply during synthesis. See [`lexiconNames` Polly docs](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-polly/interfaces/synthesizespeechcommandinput.html#lexiconnames) for more information.
+- `languageCode`: Optional. Optional language code for the Synthesize Speech request. This is only necessary if using a bilingual voice, such as Aditi, which can be used for either Indian English (en-IN) or Hindi (hi-IN). See [`languageCode` Polly docs](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-polly/interfaces/synthesizespeechcommandinput.html#languagecode) for more information.
+- `speechMarkTypes`: Optional. The type of speech marks returned for the input text. See [`speechMarkTypes` Polly docs](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-polly/interfaces/synthesizespeechcommandinput.html#speechmarktypes) for more information.
 
 ### Credentials
 
@@ -85,7 +84,6 @@ new PollyTts({
 
 - `accessKeyId`: AWS access key id
 - `secretAccessKey`: AWS secret access key
-
 
 ## TTS Cache
 
