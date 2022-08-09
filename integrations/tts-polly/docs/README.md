@@ -1,15 +1,21 @@
 title: 'Amazon Polly TTS Integration'
-excerpt: 'Turn Jovo Framework platform-specific response text into audio files with the Jovo Framework text to speech (TTS) integration for Amazon Polly.'
+excerpt: 'Turn text into audio files with the Jovo Framework text to speech (TTS) integration for Amazon Polly.'
 
 ---
 
 # Amazon Polly TTS Integration
 
-Turn Jovo Framework platform-specific response text into audio files with the Jovo Framework text to speech (TTS) integration for Amazon Polly.
+Turn text into audio files with the Jovo Framework text to speech (TTS) integration for Amazon Polly.
 
 ## Introduction
 
 [Polly](https://aws.amazon.com/polly/) is a [text to speech (TTS)](https://www.jovo.tech/docs/tts) service that turns text into lifelike speech with dozens of voices across a broad set of languages.
+
+Learn more in the following sections:
+
+- [Installation](#installation)
+- [Configuration](#configuration)
+-
 
 ## Installation
 
@@ -85,7 +91,7 @@ new PollyTts({
 - `accessKeyId`: AWS access key id
 - `secretAccessKey`: AWS secret access key
 
-## TTS Cache
+### TTS Cache
 
 Without a TTS cache, each time text is passed to Polly, you will incur the cost and time of generating the TTS response.
 
