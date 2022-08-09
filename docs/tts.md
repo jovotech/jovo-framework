@@ -27,7 +27,7 @@ Learn more about Jovo TTS integrations in the following sections:
 
 Currently, the following integrations are available with Jovo `v4`:
 
-- Polly TTS (_work in progress_)
+- [Polly TTS](https://www.jovo.tech/marketplace/tts-polly)
 
 ## Configuration
 
