@@ -1,16 +1,14 @@
 import {
   PollyClient,
+  PollyClientConfig,
   SynthesizeSpeechCommand,
   SynthesizeSpeechCommandInput,
 } from '@aws-sdk/client-polly';
-
-import type { Credentials } from '@aws-sdk/types';
 
 import { Readable } from 'stream';
 
 import {
   TtsPluginConfig,
-  DeepPartial,
   TtsPlugin,
   Jovo,
   AudioUtilities,
@@ -19,18 +17,16 @@ import {
 } from '@jovotech/framework';
 
 export interface PollyTtsConfig extends TtsPluginConfig {
-  credentials: Credentials;
-  region: string;
   lexiconNames?: string[];
   voiceId: string;
   sampleRate: string;
   languageCode?: string;
   speechMarkTypes?: string[];
   engine: string;
+  libraryConfig?: PollyClientConfig; // @see https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-polly/interfaces/pollyclientconfig.html
 }
 
-export type PollyTtsInitConfig = DeepPartial<PollyTtsConfig> &
-  Pick<PollyTtsConfig, 'credentials' | 'region'>;
+export type PollyTtsInitConfig = PollyTtsConfig;
 
 export class PollyTts extends TtsPlugin<PollyTtsConfig> {
   readonly client: PollyClient;
@@ -56,18 +52,12 @@ export class PollyTts extends TtsPlugin<PollyTtsConfig> {
     super(config);
 
     this.client = new PollyClient({
-      credentials: this.config.credentials,
-      region: this.config.region,
+      ...this.config.libraryConfig
     });
   }
 
   getDefaultConfig(): PollyTtsConfig {
     return {
-      region: '',
-      credentials: {
-        accessKeyId: '',
-        secretAccessKey: '',
-      },
       outputFormat: 'mp3',
       voiceId: 'Matthew',
       sampleRate: '16000',
