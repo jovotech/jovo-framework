@@ -1,6 +1,6 @@
+---
 title: 'Amazon S3 TTS Cache'
 excerpt: 'Use a TTS cache plugin with a text to speech (TTS) integration to improve the speed of retrieval of TTS responses and reduce costs over re-generating the TTS for the same text multiple times. This integration stores TTS responses in an Amazon S3 bucket and is able to access the audio source URL using S3's Object URLs.'
-
 ---
 
 # Amazon S3 TTS Cache
