@@ -7,27 +7,23 @@ import {
   GetObjectCommand,
   GetObjectCommandInput,
   GetObjectCommandOutput,
+  S3ClientConfig
 } from '@aws-sdk/client-s3';
-
-import type { Credentials } from '@aws-sdk/types';
-
-import { DeepPartial } from '@jovotech/common';
 
 import { Readable } from 'stream';
 
 import { urlJoin } from 'url-join-ts';
 
-import { TtsCachePlugin, TtsCachePluginConfig, TtsData, AudioUtilities } from '@jovotech/framework';
+import { TtsCachePlugin, TtsCachePluginConfig, TtsData, AudioUtilities, RequiredOnlyWhere } from '@jovotech/framework';
 
 export interface S3TtsCacheConfig extends TtsCachePluginConfig {
-  credentials: Credentials;
   bucket: string;
   path: string;
   baseUrl: string;
+  libraryConfig?: S3ClientConfig;
 }
 
-export type S3TtsCacheInitConfig = DeepPartial<S3TtsCacheConfig> &
-  Pick<S3TtsCacheConfig, 'credentials' | 'bucket' | 'baseUrl'>;
+export type S3TtsCacheInitConfig = RequiredOnlyWhere<S3TtsCacheConfig, 'bucket', 'path', 'baseUrl'>;
 
 export class S3TtsCache extends TtsCachePlugin<S3TtsCacheConfig> {
   readonly client: S3Client;
@@ -36,19 +32,20 @@ export class S3TtsCache extends TtsCachePlugin<S3TtsCacheConfig> {
     super(config);
 
     this.client = new S3Client({
-      credentials: this.config.credentials,
+      ...this.config.libraryConfig
     });
+  }
+
+  getInitConfig(): S3TtsCacheInitConfig {
+    return {
+      bucket: '<YOUR-BUCKET-NAME>',
+      path: '<YOUR-PATH>',
+      baseUrl: '<YOUR-BASE-URL>',
+    }
   }
 
   getDefaultConfig(): S3TtsCacheConfig {
     return {
-      credentials: {
-        accessKeyId: '',
-        secretAccessKey: '',
-      },
-      bucket: '',
-      path: '',
-      baseUrl: '',
       returnEncodedAudio: false,
     };
   }

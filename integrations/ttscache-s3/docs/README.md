@@ -17,6 +17,7 @@ Learn more in the following sections:
 
 - [Installation](#installation)
 - [Configuration](#configuration)
+- [Example](#example)
 
 ## Installation
 
@@ -39,7 +40,11 @@ app.configure({
     new CorePlatform({
       plugins: [
         new PollyTts({
-          cache: new S3TtsCache(),
+          cache: new S3TtsCache({
+            bucket: '<YOUR-BUCKET-NAME>', // Example: 'mybucket-public'
+            path: '<YOUR-PATH>', // Example: 'tts'
+            baseUrl: '<YOUR-BASE-URL>', // Example: 'https://mybucket-public.s3.amazonaws.com'
+          }),
         }),
       ],
     }),
@@ -48,50 +53,86 @@ app.configure({
 });
 ```
 
+If you are running your Jovo app on [AWS Lambda](https://www.jovo.tech/marketplace/server-lambda), only the configurations above are required for the integration to work.
+
+For apps outside AWS Lambda, you also need to add a `region` and `credentials` to the [`libraryConfig`](#libraryconfig) like this:
+
+```typescript
+new S3TtsCache({
+  // ...
+  libraryConfig: {
+    region: 'us-east-1',
+    credentials: {
+      accessKeyId: '<YOUR-ACCESS-KEY-ID>',
+      secretAccessKey: '<YOUR-SECRET-ACCESS-KEY>'
+    },
+  },
+  // ...
+}),
+```
+
+Learn more about all configurations in the [configuration section](#configuration).
+
 ## Configuration
 
 The following configurations can be added:
 
 ```typescript
 new S3TtsCache({
-    credentials: {/* ... */},
-    bucket: 'mybucket-public',
-    path: 'tts',
-    baseUrl: 'https://mybucket-public.s3.amazonaws.com',
-    returnEncodedAudio: false
+  bucket: '<YOUR-BUCKET-NAME>', // Example: 'mybucket-public'
+  path: '<YOUR-PATH>', // Example: 'tts'
+  baseUrl: '<YOUR-BASE-URL>', // Example: 'https://mybucket-public.s3.amazonaws.com'
+  returnEncodedAudio: false,
+  libraryConfig: {
+    region: 'us-east-1',
+    // ...
+  }
 }),
 ```
 
-- `credentials`: Required. AWS credentials. See [credentials](#credentials) for more information.
-- `bucket`: Required. The S3 bucket to cache the audio files.
-- `path`: Required. Part of the key to store the object in the bucket.
-- `baseUrl`: Required. The base part of the Object URL for the S3 bucket. Used for the audio source URL.
-- `returnEncodedAudio`: Required. Default: false. When true, call to cache's `getItem()` function will retrieve the base64 encoded audio from S3. When false, only a check to see if the object exists in S3 is done.
+- `bucket`: The S3 bucket to cache the audio files. Required.
+- `path`: Part of the key to store the object in the bucket. Required.
+- `baseUrl`: The base part of the Object URL for the S3 bucket. Used for the audio source URL. Required.
+- `returnEncodedAudio`: When true, call to cache's `getItem()` function will retrieve the base64 encoded audio from S3. When false, only a check to see if the object exists in S3 is done. Default: `false`. 
+- [`libraryConfig`](#libraryconfig): [`S3ClientConfig` object](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-s3/interfaces/s3clientconfig.html) that is passed to the S3 client. Use this for configurations like `region` or `credentials`. Optional.
 
-### Credentials
 
-The AWS credentials includes:
+### libraryConfig
+
+The `libraryConfig` property can be used to pass configurations to the S3 SDK that is used by this integration.
 
 ```typescript
 new S3TtsCache({
-    credentials: {
-        accessKeyId: '',
-        secretAccessKey: '',
-    },
-    // ...
+  libraryConfig: { /* ... */ },
+  // ...
 }),
 ```
 
-- `accessKeyId`: AWS access key id
-- `secretAccessKey`: AWS secret access key
+You can learn more about all config options in the [official `S3TtsCache` reference](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-s3/interfaces/s3clientconfig.html).
 
-### Storage
+For example, you can add a `region` and `credentials` like shown below. This is necessary if you are hosting your Jovo app outside of an AWS environment.
+
+```typescript
+new S3TtsCache({
+  libraryConfig: {
+    region: 'us-east-1',
+    credentials: {
+      accessKeyId: '<YOUR-ACCESS-KEY-ID>',
+      secretAccessKey: '<YOUR-SECRET-ACCESS-KEY>'
+    },
+    // ...
+  },
+  // ...
+}),
+```
+
+## Example
 
 Files are stored in S3 with a storage class of 'Standard' and an ACL of 'public-read' meaning everyone can read it.
 
-The TTS cache uses values in `TtsData` (some of them coming from the TTS integration) and configuration to determine where the audio will be stored in S3.
+The TTS cache uses values in [`TtsData`](https://www.jovo.tech/docs/tts#ttsdata) (some of them coming from the TTS integration) and configuration to determine where the audio will be stored in S3.
 
-If the TtsData includes the following values:
+If the `TtsData` includes the following values:
 
 ```typescript
 {
@@ -103,7 +144,7 @@ If the TtsData includes the following values:
 }
 ```
 
-And the S3TtsCache is configured like this:
+And the `S3TtsCache` is configured like this:
 
 ```typescript
 {
@@ -114,7 +155,7 @@ And the S3TtsCache is configured like this:
 }
 ```
 
-And the TTS integration determines that the locale is `en` (which is passed to S3TtsCache).
+And the TTS integration determines that the locale is `en` (which is passed to `S3TtsCache`).
 
 Then the audio file will be stored in the `mybucket-public` S3 bucket at `tts/en/polly-matthew-a4a1acc36c97d06fe092511f0e2655e3.mp3`
 
