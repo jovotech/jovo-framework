@@ -21,6 +21,7 @@ Learn more about Jovo TTS integrations in the following sections:
 
 - [Integrations](#integrations)
 - [Configuration](#configuration)
+- [TTS Cache](#tts-cache)
 - [Custom Implementation](#custom-tts-integration)
 
 ## Integrations
@@ -28,6 +29,8 @@ Learn more about Jovo TTS integrations in the following sections:
 Currently, the following integrations are available with Jovo `v4`:
 
 - Polly TTS (_work in progress_)
+
+You can also build your own TTS plugin. Learn more in the [custom TTS integration](#custom-tts-integration) section.
 
 ## Configuration
 
@@ -61,9 +64,40 @@ new PollyTts({
 }),
 ```
 
-- `cache`: Initialize a TTS Cache integration here to store converted audio files on a cloud service, for example AWS S3. See [custom TTS cache](#custom-tts-cache) for more information.
+- `cache`: Initialize a TTS Cache integration here to store converted audio files on a cloud service, for example [AWS S3](https://www.jovo.tech/marketplace/ttscache-s3). See [TTS cache](#tts-cache) for more information.
 - `fallbackLocale`: The locale that gets used for the creation of the audio files in case no locale can be found in the [request](./request.md).
 - `fileExtension`: The desired format of the resulting audio, for example `mp3`.
+
+## TTS Cache
+
+The TTS integration could (over time) be called multiple times for the same speech or reprompt text. This could be costly and slow. A TTS Cache solves this issue by checking if the TTS response exists in the cache before it makes the call to the TTS client. If the cached entry exists, it will be used. If not, the TTS client will be called and the TTS response will be added to the cache. The `key` property in [`TtsData`](#tts-data) will be used as the cache key.
+
+The configure a TTS integration to use a cache, set the `cache` configuration value like in the example below (using [Core Platform](https://www.jovo.tech/marketplace/platform-core), [Polly TTS](https://www.jovo.tech/marketplace/tts-polly), and [S3 TTS Cache](https://www.jovo.tech/marketplace/ttscache-s3)):
+
+```ts
+import { CorePlatform } from '@jovotech/platform-core';
+import { PollyTts } from '@jovotech/tts-polly';
+import { S3TtsCache } from '@jovotech/ttscache-s3';
+// ...
+
+const app = new App({
+  plugins: [
+    new CorePlatform({
+      plugins: [
+        new PollyTts({
+          cache: new S3TtsCache({
+            // ...
+          }),
+        }),
+      ],
+    }),
+    // ...
+  ],
+});
+```
+
+You can also build your own TTS cache plugin. Learn more in the [custom TTS cache](#custom-tts-cache) section.
+
 
 ## Custom Implementation
 
@@ -160,33 +194,7 @@ export interface TtsData {
 
 ### Custom TTS Cache
 
-Without a TTS Cache, the TTS integration could (over time) be called multiple times for the same speech or reprompt text. This could be costly and slow. A TTS Cache solves this issue by checking if the TTS response exists in the cache before it makes the call to the TTS client. If the cached entry exists, it will be used. If not, the TTS client will be called and the TTS response will be added to the cache. The `key` property in `TtsData` will be used as the cache key.
-
-The configure a TTS integration to use a cache, set the `cache` configuration value:
-
-```ts
-import { CorePlatform } from '@jovotech/platform-core';
-import { SampleTts } from 'sample-tts';
-import { SampleTtsCache } from 'sample-tts-cache';
-// ...
-
-const app = new App({
-  plugins: [
-    new CorePlatform({
-      plugins: [
-        new SampleTts({
-          cache: new SampleTtsCache({
-            // ...
-          }),
-        }),
-      ],
-    }),
-    // ...
-  ],
-});
-```
-
-If you want to create your own TTS cache, you can build your own plugin.
+If you want to create your own [TTS cache](#tts-cache), you can build your own plugin.
 
 ```ts
 import { Jovo, TtsPlugin, TtsPluginConfig } from '@jovotech/framework';
