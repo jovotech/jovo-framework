@@ -1,15 +1,22 @@
 ---
 title: 'Amazon S3 TTS Cache'
-excerpt: 'Use a TTS cache plugin with a text to speech (TTS) integration to improve the speed of retrieval of TTS responses and reduce costs over re-generating the TTS for the same text multiple times. This integration stores TTS responses in an Amazon S3 bucket and is able to access the audio source URL using S3's Object URLs.'
+excerpt: 'This text to speech (TTS) cache plugin allows you to store generated TTS responses in Amazon S3.'
 ---
 
 # Amazon S3 TTS Cache
 
-Use a TTS cache plugin with a text to speech (TTS) integration to improve the speed of retrieval of TTS responses and reduce costs over re-generating the TTS for the same text multiple times. This integration stores TTS responses in an Amazon S3 bucket and is able to access the audio source URL using S3's Object URLs.
+This [text to speech (TTS) cache plugin](https://www.jovo.tech/docs/tts#tts-cache) allows you to store generated TTS responses in Amazon S3.
 
 ## Introduction
 
 [S3](https://aws.amazon.com/s3/) is an object storage service that allows for cost-effect storage and easy data retrieval.
+
+You can use this integration together with a [text to speech (TTS)](https://www.jovo.tech/docs/tts) integration to improve the speed of retrieval of TTS responses and reduce costs over re-generating the TTS for the same text multiple times. This integration stores TTS responses in an Amazon S3 bucket and is able to access the audio source URL using S3's Object URLs.
+
+Learn more in the following sections:
+
+- [Installation](#installation)
+- [Configuration](#configuration)
 
 ## Installation
 
@@ -25,7 +32,6 @@ A TTS cache plugin can be added to the `cache` property of a TTS integration plu
 import { CorePlatform } from '@jovotech/platform-core';
 import { PollyTts } from '@jovotech/tts-polly';
 import { S3TtsCache } from '@jovotech/ttscache-s3';
-
 // ...
 
 app.configure({
@@ -114,5 +120,4 @@ Then the audio file will be stored in the `mybucket-public` S3 bucket at `tts/en
 
 And the audio source URL will be: `https://mybucket-public.s3.amazonaws.com/tts/en/polly-matthew-a4a1acc36c97d06fe092511f0e2655e3.mp3`
 
-
-NOTE: You may want to create an S3 lifecycle rule to delete the cached audio files from the bucket that are older than a certain number of days. Use a filter to limit the rule to the TTS folder.
+You may want to create an S3 lifecycle rule to delete the cached audio files from the bucket that are older than a certain number of days. Use a filter to limit the rule to the TTS folder.
