@@ -23,7 +23,7 @@ export interface S3TtsCacheConfig extends TtsCachePluginConfig {
   libraryConfig?: S3ClientConfig;
 }
 
-export type S3TtsCacheInitConfig = RequiredOnlyWhere<S3TtsCacheConfig, 'bucket', 'path', 'baseUrl'>;
+export type S3TtsCacheInitConfig = RequiredOnlyWhere<S3TtsCacheConfig, 'bucket' | 'path' | 'baseUrl'>;
 
 export class S3TtsCache extends TtsCachePlugin<S3TtsCacheConfig> {
   readonly client: S3Client;
@@ -46,6 +46,9 @@ export class S3TtsCache extends TtsCachePlugin<S3TtsCacheConfig> {
 
   getDefaultConfig(): S3TtsCacheConfig {
     return {
+      bucket: '<YOUR-BUCKET-NAME>',
+      path: '<YOUR-PATH>',
+      baseUrl: '<YOUR-BASE-URL>',
       returnEncodedAudio: false,
     };
   }
