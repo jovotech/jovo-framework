@@ -24,6 +24,7 @@ Learn more in the sections below:
 - [Available Jovo clients](#available-jovo-clients)
 - [Jovo app integration](#jovo-app-integration)
 - [Custom client implementation](#custom-client-implementation)
+- [Examples](#examples)
 
 ## Available Jovo Clients
 
