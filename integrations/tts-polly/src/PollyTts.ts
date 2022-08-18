@@ -53,7 +53,7 @@ export class PollyTts extends TtsPlugin<PollyTtsConfig> {
     super(config);
 
     this.client = new PollyClient({
-      ...this.config.libraryConfig
+      ...this.config.libraryConfig,
     });
   }
 
