@@ -14,6 +14,7 @@ import {
   AudioUtilities,
   TtsTextType,
   TtsData,
+  DeepPartial,
 } from '@jovotech/framework';
 
 export interface PollyTtsConfig extends TtsPluginConfig {
@@ -26,7 +27,7 @@ export interface PollyTtsConfig extends TtsPluginConfig {
   libraryConfig?: PollyClientConfig; // @see https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-polly/interfaces/pollyclientconfig.html
 }
 
-export type PollyTtsInitConfig = PollyTtsConfig;
+export type PollyTtsInitConfig = DeepPartial<PollyTtsConfig>;
 
 export class PollyTts extends TtsPlugin<PollyTtsConfig> {
   readonly client: PollyClient;
@@ -48,7 +49,7 @@ export class PollyTts extends TtsPlugin<PollyTtsConfig> {
     'amazon:effect',
   ];
 
-  constructor(config: PollyTtsInitConfig) {
+  constructor(config?: PollyTtsInitConfig) {
     super(config);
 
     this.client = new PollyClient({
