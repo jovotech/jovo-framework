@@ -5,18 +5,71 @@ excerpt: 'Learn how to configure a Jovo app and how to add plugins, components, 
 
 # App Configuration
 
-The app configuration in `app.ts` is the place where you can add plugins, components, and other configurations to your Jovo app. [For project related configuration, take a look here](./project-config.md).
+The app configuration in `app.ts` is the place where you can add plugins, components, and other configurations to your Jovo app. [For project (CLI) related configuration, take a look here](./project-config.md).
 
 ## Introduction
 
-The app configuration files are the main entry point of your Jovo apps. Each Jovo project usually comes with at least two files for this:
+The app configuration files in the `src` folder are the main entry point of your Jovo apps. They usually include the following elements:
+- [Components](./components.md) can be registered
+- [Plugins](./plugins.md) and [Hooks](./hooks.md) can be added to extend the framework functionality
+- Framework configurations, like logging behavior, can be modified
 
-- `app.ts`: Default configurations
-- `app.dev.ts`: Configurations for local development ([FileDb](https://www.jovo.tech/marketplace/db-filedb), [Express server](https://www.jovo.tech/marketplace/server-express) and the [Jovo Debugger](https://www.jovo.tech/docs/debugger))
+Here is an example [`app.ts` file](https://github.com/jovotech/jovo-v4-template/blob/master/src/app.ts):
 
-Jovo offers different [ways to add configurations](#ways-to-add-configurations), [many configuration options](#configuration-elements), and [staging](#staging) that makes it possible to have different Jovo app versions for different deployment environments.
+```typescript
+import { App } from '@jovotech/framework';
+import { AlexaPlatform } from '@jovotech/platform-alexa';
+import { GlobalComponent } from './components/GlobalComponent';
+import { LoveHatePizzaComponent } from './components/LoveHatePizzaComponent';
+// ...
 
-## Ways to add Configurations
+const app = new App({
+  /*
+  |--------------------------------------------------------------------------
+  | Components
+  |--------------------------------------------------------------------------
+  |
+  | Components contain the Jovo app logic
+  | Learn more here: www.jovo.tech/docs/components
+  |
+  */
+  components: [GlobalComponent, LoveHatePizzaComponent],
+
+  /*
+  |--------------------------------------------------------------------------
+  | Plugins
+  |--------------------------------------------------------------------------
+  |
+  | Includes platforms, database integrations, third-party plugins, and more
+  | Learn more here: www.jovo.tech/marketplace
+  |
+  */
+  plugins: [new AlexaPlatform()],
+
+  /*
+  |--------------------------------------------------------------------------
+  | Other options
+  |--------------------------------------------------------------------------
+  |
+  | Includes all other configuration options like logging
+  | Learn more here: www.jovo.tech/docs/app-config
+  |
+  */
+  logging: true,
+});
+```
+
+Jovo also supports [staging](#staging) that makes it possible to have different app versions for different deployment environments. Each Jovo project usually comes with at least two files for this:
+- `app.ts` ([example](https://github.com/jovotech/jovo-v4-template/blob/master/src/app.ts)): Default configurations.
+- `app.dev.ts` ([example](https://github.com/jovotech/jovo-v4-template/blob/master/src/app.dev.ts)): Configurations for local development (for example [FileDb](https://www.jovo.tech/marketplace/db-filedb), [Express server](https://www.jovo.tech/marketplace/server-express) and the [Jovo Debugger](https://www.jovo.tech/docs/debugger)) that get merged into `app.ts`.
+
+Learn more about Jovo app configuration in the following sections:
+- [Ways to add configurations](#ways-to-add-configurations): Multiple methods are supported, depending on the use case
+- [Configuration elements](#configuration-elements): All elements like components, plugins, and logging
+- [Staging](#staging): Run your Jovo app in different environments
+
+
+## Ways to Add Configurations
 
 There are three ways how app configurations can be done:
 
@@ -24,11 +77,10 @@ There are three ways how app configurations can be done:
 - Using `app.configure()` for stage-specific configurations.
 - Using `app.use()` to add specific plugins and components anywhere in the app.
 
-In the `app.ts`, the configuration is added like this:
+In the `app.ts` ([example](https://github.com/jovotech/jovo-v4-template/blob/master/src/app.ts)), the configuration is added like this:
 
 ```typescript
 import { App } from '@jovotech/framework';
-
 // ...
 
 const app = new App({
@@ -36,7 +88,7 @@ const app = new App({
 });
 ```
 
-On top of the default configuration, you can add [stages](#staging) with specific options that can be added like this, for example in an `app.dev.ts` file:
+On top of the default configuration, you can add [stages](#staging) with specific options that can be added like this, for example in an `app.dev.ts` ([example](https://github.com/jovotech/jovo-v4-template/blob/master/src/app.dev.ts)) file:
 
 ```typescript
 import { app } from './app';
@@ -58,7 +110,7 @@ import { SomePlugin } from './plugin';
 
 app.use(
   new SomePlugin({
-    // Configuration
+    // Plugin Configuration
   }),
 );
 ```
@@ -90,7 +142,6 @@ You can [register root components](./components.md#register-root-components) wit
 
 ```typescript
 import { GlobalComponent } from './components/GlobalComponent';
-
 // ...
 
 {
@@ -116,7 +167,7 @@ import { AlexaPlatform } from '@jovotech/platform-alexa';
 {
   plugins: [
     new AlexaPlatform({
-      // Configuration
+      // Plugin Configuration
     })
     // ...
   ],
@@ -162,13 +213,15 @@ This can be helpful if you want to add additional configurations to the default 
 }
 ```
 
-You can also add granular configurations by turning `logging` into an object:
+You can also add granular configurations by turning `logging` into an object, for example:
 
 ```typescript
 {
   // ...
 
   logging: {
+    request: true,
+    response: false,
     // ...
   }
 }
@@ -194,7 +247,7 @@ You can also add granular configurations by turning `logging` into an object:
 
 Especially with apps that work across different platforms, it might happen that different platforms use different intent names.
 
-`intentMap` provides a way to map incoming intents to a unified intent that can be used in your [handler routing](./handlers.md#handler-routing-and-the-handle-decorator).
+`intentMap` provides a global way to map incoming intents to a unified intent that can be used in your [handler routing](./handlers.md#handler-routing-and-the-handle-decorator).
 
 ```typescript
 {
@@ -206,6 +259,29 @@ Especially with apps that work across different platforms, it might happen that 
     // ...
   },
   // ...
+}
+```
+
+It's also possible to add an `intentMap` to platforms like [Alexa](https://www.jovo.tech/marketplace/platform-alexa). The platform `intentMap` then gets merged into the global `routing.intentMap`.
+
+```typescript
+{
+  plugins: [
+    new AlexaPlatform({
+      intentMap: { // Gets merged into global intentMap below
+        'AMAZON.HelpIntent': 'HelpIntent',
+        // ...
+      },
+    }),
+    // ...
+  ],
+  routing: {
+    intentMap: {
+      'HelloIntent': 'StartIntent',
+      // ...
+    },
+    // ...
+  },
 }
 ```
 
@@ -258,7 +334,7 @@ If you're using an [NLU integration](./nlu.md), the original intent stays in the
 
 Stage-specific configurations from a file called `app.<stage>.ts` get merged into the default configuration from `app.ts`.
 
-For example, most Jovo projects include an `app.dev.ts` file that comes with specific configuration for local development ([FileDb](https://www.jovo.tech/marketplace/db-filedb), [Express server](https://www.jovo.tech/marketplace/server-express) and the [Jovo Debugger](https://www.jovo.tech/docs/debugger)).
+For example, most Jovo projects include an `app.dev.ts` [(example)](https://github.com/jovotech/jovo-v4-template/blob/master/src/app.dev.ts) file that comes with specific configuration for local development ([FileDb](https://www.jovo.tech/marketplace/db-filedb), [Express server](https://www.jovo.tech/marketplace/server-express) and the [Jovo Debugger](https://www.jovo.tech/docs/debugger)).
 
 You can create a new stage like this:
 
@@ -269,7 +345,7 @@ $ jovo new:stage <stage>
 $ jovo new:stage prod
 ```
 
-This creates a new file `app.prod.ts`. In the process, you can select plugins and a server integration to work with this stage.
+This creates a new file `app.prod.ts`. In the process, you can select plugins and a server integration to work with this stage. You can find an [example `app.prod.ts` file here](https://github.com/jovotech/jovo-sample-alexa-googleassistant-lambda/blob/main/src/app.prod.ts).
 
 Typically, a stage app config uses the `configure()` method to modify the configuration.
 
@@ -287,6 +363,8 @@ It is also possible to reference a plugin from the default configuration in `app
 Here is an example for [Dashbot Analytics](https://www.jovo.tech/marketplace/analytics-dashbot) being added to [Alexa](https://www.jovo.tech/marketplace/platform) in `app.prod.ts`:
 
 ```typescript
+// Example: app.prod.ts
+
 import { app } from './app';
 import { DashbotAnalytics } from '@jovotech/analytics-dashbot';
 // ...
