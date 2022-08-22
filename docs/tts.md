@@ -28,7 +28,7 @@ Learn more about Jovo TTS integrations in the following sections:
 
 Currently, the following integrations are available with Jovo `v4`:
 
-- Polly TTS (_work in progress_)
+- [Polly TTS](https://www.jovo.tech/marketplace/tts-polly)
 
 You can also build your own TTS plugin. Learn more in the [custom TTS integration](#custom-tts-integration) section.
 
@@ -60,13 +60,13 @@ new PollyTts({
   // ...
   cache: new S3TtsCache({ /* ... */ }),
   fallbackLocale: 'en',
-  fileExtension: 'mp3',
+  outputFormat: 'mp3',
 }),
 ```
 
 - `cache`: Initialize a TTS Cache integration here to store converted audio files on a cloud service, for example [AWS S3](https://www.jovo.tech/marketplace/ttscache-s3). See [TTS cache](#tts-cache) for more information.
 - `fallbackLocale`: The locale that gets used for the creation of the audio files in case no locale can be found in the [request](./request.md).
-- `fileExtension`: The desired format of the resulting audio, for example `mp3`.
+- `outputFormat`: The desired format of the resulting audio, for example `mp3`.
 
 ## TTS Cache
 

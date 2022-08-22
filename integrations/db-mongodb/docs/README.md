@@ -115,3 +115,18 @@ async someHandler() {
     const newDb = client.db("anotherDb");
 }
 ```
+
+
+## Deployment
+
+If you run into a problem during [deployment](https://www.jovo.tech/docs/deployment), you may be related to the `mongodb-client-encryption` dependency of MongoDb (see [this issue](https://github.com/jovotech/jovo-framework/issues/1381) for more information).
+
+To solve this, add `--external:mongodb-client-encryption` to the [`bundle` script](https://www.jovo.tech/docs/deployment#bundle) of your Jovo app's `package.json` (find an [example here](https://github.com/jovotech/jovo-v4-template/blob/master/package.json)).
+
+```json
+{
+  "scripts": {
+    "bundle": "[...] --external:mongodb-client-encryption",
+  }
+}
+```

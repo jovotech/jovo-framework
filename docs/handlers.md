@@ -210,7 +210,7 @@ The following options can be added to `$delegate()`:
 - `resolve`: Handlers that should be called after the child component [resolves](#resolve-a-component) with certain data.
   - Can include references to handler functions like `this.onYes` (doesn't work with anonymous functions)
   - Can include a string to the handler key: `'onYes'`
-- `config`: The config that is used by the child component. Can be accessed inside the child component with `this.config`
+- `config`: The config that is used by the child component. Can be accessed inside the child component with `this.$component.config`.
 
 ### Resolve a Component
 
