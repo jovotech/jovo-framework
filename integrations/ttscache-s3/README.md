@@ -1,4 +1,4 @@
-# Jovo Polly TTS Integration
+# Jovo S3 TTS Cache
 
 [![Jovo Framework](https://www.jovo.tech/img/github-header.png)](https://www.jovo.tech)
 
@@ -7,14 +7,14 @@
 </p>
 
 <p>
-<a href="https://www.npmjs.com/package/@jovotech/tts-polly" target="_blank"><img src="https://badge.fury.io/js/@jovotech%2Ftts-polly.svg"></a>      
+<a href="https://www.npmjs.com/package/@jovotech/ttscache-s3" target="_blank"><img src="https://badge.fury.io/js/@jovotech%2Fttscache-s3.svg"></a>      
 <a href="https://opencollective.com/jovo-framework" target="_blank"><img src="https://opencollective.com/jovo-framework/tiers/badge.svg"></a>
 </p>
 
-This package enables you to integrate your Jovo app with Amazon Polly TTS.
+This package add a TTS cache for your Jovo app with any TTS Integration.
 
 ```bash
-$ npm install @jovotech/tts-polly
+$ npm install @jovotech/ttscache-s3
 ```
 
-> Learn more in the docs: https://www.jovo.tech/marketplace/tts-polly
+> Learn more in the docs: https://www.jovo.tech/marketplace/ttscache-s3
