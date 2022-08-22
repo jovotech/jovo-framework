@@ -7,14 +7,20 @@ import {
   GetObjectCommand,
   GetObjectCommandInput,
   GetObjectCommandOutput,
-  S3ClientConfig
+  S3ClientConfig,
 } from '@aws-sdk/client-s3';
 
 import { Readable } from 'stream';
 
 import { urlJoin } from 'url-join-ts';
 
-import { TtsCachePlugin, TtsCachePluginConfig, TtsData, AudioUtilities, RequiredOnlyWhere } from '@jovotech/framework';
+import {
+  TtsCachePlugin,
+  TtsCachePluginConfig,
+  TtsData,
+  AudioUtilities,
+  RequiredOnlyWhere,
+} from '@jovotech/framework';
 
 export interface S3TtsCacheConfig extends TtsCachePluginConfig {
   bucket: string;
@@ -31,7 +37,7 @@ export class S3TtsCache extends TtsCachePlugin<S3TtsCacheConfig> {
     super(config);
 
     this.client = new S3Client({
-      ...this.config.libraryConfig
+      ...this.config.libraryConfig,
     });
   }
 
@@ -43,7 +49,7 @@ export class S3TtsCache extends TtsCachePlugin<S3TtsCacheConfig> {
     return {
       bucket: '<YOUR-BUCKET-NAME>',
       path: '<YOUR-PATH>',
-    }
+    };
   }
 
   getDefaultConfig(): S3TtsCacheConfig {
