@@ -5,13 +5,21 @@ excerpt: 'Learn more about Jovo Components, which are self-contained and reusabl
 
 # Components
 
-Components are self-contained and reusable elements in a Jovo app. Similar to web frameworks like Vue and React, Jovo allows you to build complex applications composed of components of varying sizes.
+Components are self-contained and reusable elements in a Jovo app that handle the conversational flow. Similar to web frameworks like Vue and React, Jovo allows you to build complex applications composed of components of varying sizes.
 
 ## Introduction
 
 You can see a component as an isolated part of your app that handles a specific task. It could be something small like asking for a confirmation (yes or no), and something bigger like collecting all necessary information for a restaurant table reservation. For larger cases like the latter example, it's also possible for a component to have multiple subcomponents.
 
-Components are located in the `src/components` folder of a Jovo app. While a component can be a [complete folder](#component-folder-structure) (that may contain its own [output](#output) classes, subcomponents, and more), the most common approach to get started is to have single component classes.
+```
+📦src
+ ┣ 📂components
+ ┃ ┣ 📜GlobalComponent.ts
+ ┃ ┣ 📜LoveHatePizzaComponent.ts
+ ┃ ┗ ...
+```
+
+Components are located in the `src/components` folder of a Jovo app. While a component can be a [complete folder](./project-structure.md#components) (that may contain its own [output classes](./output-classes.md), subcomponents, and more), the most common approach to get started is to have single component classes.
 
 For example, the [Jovo `v4` template](https://github.com/jovotech/jovo-v4-template) contains a [`GlobalComponent`](https://github.com/jovotech/jovo-v4-template/blob/master/src/components/GlobalComponent.ts) that looks like this:
 
@@ -41,7 +49,7 @@ export class GlobalComponent extends BaseComponent {
 
 The [component class](#component-class) section dives deeper into the contents of the example above.
 
-Root components like `GlobalComponent` are registered in the [`app.ts`](https://github.com/jovotech/jovo-v4-template/blob/master/src/app.ts) like this:
+Root components like `GlobalComponent` are [registered](#component-registration) in the `app.ts` ([example](https://github.com/jovotech/jovo-v4-template/blob/master/src/app.ts)) like this:
 
 ```typescript
 import { GlobalComponent } from './components/GlobalComponent';
@@ -62,7 +70,10 @@ const app = new App({
 });
 ```
 
-Learn more about [component registration](#component-registration) below.
+Learn more about components in the sections below:
+- [Component class](#component-class): How files like `YourComponent.ts` are structured
+- [Component registration](#component-registration): How components are added to your app
+- [Advanced component features](#advanced-component-features)
 
 ## Component Class
 
@@ -358,29 +369,7 @@ class YourComponent extends BaseComponent {
 }
 ```
 
-## Component Folder Structure
-
-There are multiple ways how a component can be structured:
-
-- A single file, for example `components/YourComponent.ts`
-- A folder, for example `components/YourComponent/YourComponent.ts`
-- A folder that contains a group of components, e.g. `components/YourComponent/YourComponent.ts` and its subcomponents like `components/YourComponent/SomeOtherComponent.ts`
-
-A folder allows for a modular approach where all relevant elements of a component can be included in one place:
-
-- `output`
-- `services`
-- subcomponents
-
-### Output
-
-This folder contains all output classes that are used by the Jovo `$send()` method. Learn more about this in our [output classes documentation](./output-classes.md).
-
-### Services
-
-We recommend placing all component specific backend services like API calls in a `services` folder inside the component folder.
-
-## Advanced
+## Advanced Component Features
 
 ### ComponentTree
 
