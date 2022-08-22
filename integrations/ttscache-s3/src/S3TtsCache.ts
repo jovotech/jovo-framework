@@ -26,16 +26,17 @@ export type S3TtsCacheInitConfig = RequiredOnlyWhere<S3TtsCacheConfig, 'bucket' 
 
 export class S3TtsCache extends TtsCachePlugin<S3TtsCacheConfig> {
   readonly client: S3Client;
-  baseUrl: string;
 
   constructor(config: S3TtsCacheInitConfig) {
     super(config);
 
-    this.baseUrl = `https://${this.config.bucket}.s3.amazonaws.com`;
-
     this.client = new S3Client({
       ...this.config.libraryConfig
     });
+  }
+
+  get baseUrl(): string {
+    return `https://${this.config.bucket}.s3.amazonaws.com`;
   }
 
   getInitConfig(): S3TtsCacheInitConfig {
