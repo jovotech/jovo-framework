@@ -9,6 +9,13 @@ The app configuration in `app.ts` is the place where you can add plugins, compon
 
 ## Introduction
 
+```
+📦src
+ ┣ 📜app.dev.ts
+ ┣ 📜app.ts
+ ┗ ...
+```
+
 The app configuration files in the `src` folder are the main entry point of your Jovo apps. They usually include the following elements:
 - [Components](./components.md) can be registered
 - [Plugins](./plugins.md) and [Hooks](./hooks.md) can be added to extend the framework functionality
