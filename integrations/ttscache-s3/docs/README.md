@@ -43,7 +43,6 @@ app.configure({
           cache: new S3TtsCache({
             bucket: '<YOUR-BUCKET-NAME>', // Example: 'mybucket-public'
             path: '<YOUR-PATH>', // Example: 'tts'
-            baseUrl: '<YOUR-BASE-URL>', // Example: 'https://mybucket-public.s3.amazonaws.com'
           }),
         }),
       ],
@@ -81,7 +80,6 @@ The following configurations can be added:
 new S3TtsCache({
   bucket: '<YOUR-BUCKET-NAME>', // Example: 'mybucket-public'
   path: '<YOUR-PATH>', // Example: 'tts'
-  baseUrl: '<YOUR-BASE-URL>', // Example: 'https://mybucket-public.s3.amazonaws.com'
   returnEncodedAudio: false,
   libraryConfig: {
     region: 'us-east-1',
@@ -92,7 +90,6 @@ new S3TtsCache({
 
 - `bucket`: The S3 bucket to cache the audio files. Required.
 - `path`: Part of the key to store the object in the bucket. Required.
-- `baseUrl`: The base part of the Object URL for the S3 bucket. Used for the audio source URL. Required.
 - `returnEncodedAudio`: When true, call to cache's `getItem()` function will retrieve the base64 encoded audio from S3. When false, only a check to see if the object exists in S3 is done. Default: `false`. 
 - [`libraryConfig`](#libraryconfig): [`S3ClientConfig` object](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-s3/interfaces/s3clientconfig.html) that is passed to the S3 client. Use this for configurations like `region` or `credentials`. Optional.
 
@@ -150,7 +147,6 @@ And the `S3TtsCache` is configured like this:
 {
     bucket: 'mybucket-public',
     path: 'tts',
-    baseUrl: 'https://mybucket-public.s3.amazonaws.com',
     returnEncodedAudio: false
 }
 ```

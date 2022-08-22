@@ -19,17 +19,19 @@ import { TtsCachePlugin, TtsCachePluginConfig, TtsData, AudioUtilities, Required
 export interface S3TtsCacheConfig extends TtsCachePluginConfig {
   bucket: string;
   path: string;
-  baseUrl: string;
   libraryConfig?: S3ClientConfig;
 }
 
-export type S3TtsCacheInitConfig = RequiredOnlyWhere<S3TtsCacheConfig, 'bucket' | 'path' | 'baseUrl'>;
+export type S3TtsCacheInitConfig = RequiredOnlyWhere<S3TtsCacheConfig, 'bucket' | 'path'>;
 
 export class S3TtsCache extends TtsCachePlugin<S3TtsCacheConfig> {
   readonly client: S3Client;
+  baseUrl: string;
 
   constructor(config: S3TtsCacheInitConfig) {
     super(config);
+
+    this.baseUrl = `https://${this.config.bucket}.s3.amazonaws.com`;
 
     this.client = new S3Client({
       ...this.config.libraryConfig
@@ -40,7 +42,6 @@ export class S3TtsCache extends TtsCachePlugin<S3TtsCacheConfig> {
     return {
       bucket: '<YOUR-BUCKET-NAME>',
       path: '<YOUR-PATH>',
-      baseUrl: '<YOUR-BASE-URL>',
     }
   }
 
@@ -48,7 +49,6 @@ export class S3TtsCache extends TtsCachePlugin<S3TtsCacheConfig> {
     return {
       bucket: '<YOUR-BUCKET-NAME>',
       path: '<YOUR-PATH>',
-      baseUrl: '<YOUR-BASE-URL>',
       returnEncodedAudio: false,
     };
   }
@@ -56,7 +56,7 @@ export class S3TtsCache extends TtsCachePlugin<S3TtsCacheConfig> {
   async getItem(key: string, locale: string, fileExtension: string): Promise<TtsData | undefined> {
     let command: HeadObjectCommand | GetObjectCommand;
     const filePath = this.getFilePath(key, locale, fileExtension);
-    const fullPath = urlJoin(this.config.baseUrl, filePath);
+    const fullPath = urlJoin(this.baseUrl, filePath);
 
     if (this.config.returnEncodedAudio) {
       command = this.buildGetCommand(filePath);
@@ -122,7 +122,7 @@ export class S3TtsCache extends TtsCachePlugin<S3TtsCacheConfig> {
     }
 
     const filePath = this.getFilePath(key, locale, data.fileExtension);
-    const fullPath = urlJoin(this.config.baseUrl, filePath);
+    const fullPath = urlJoin(this.baseUrl, filePath);
     const body = Buffer.from(data.encodedAudio, 'base64');
 
     const params: PutObjectCommandInput = {
