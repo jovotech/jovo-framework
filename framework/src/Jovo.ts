@@ -43,6 +43,7 @@ const DELEGATE_MIDDLEWARE = 'event.$delegate';
 const RESOLVE_MIDDLEWARE = 'event.$resolve';
 const REDIRECT_MIDDLEWARE = 'event.$redirect';
 const SEND_MIDDLEWARE = 'event.$send';
+const T_MIDDLEWARE = 'event.$t';
 
 export type JovoConstructor<
   REQUEST extends JovoRequest,
@@ -244,6 +245,11 @@ export abstract class Jovo<
     if (!options.platform) {
       options.platform = this.$platform.id;
     }
+
+    this.$handleRequest.middlewareCollection.run(T_MIDDLEWARE, this, {
+      path,
+      options,
+    });
 
     return this.$app.i18n.t(path, options);
   }
