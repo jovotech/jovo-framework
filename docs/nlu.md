@@ -30,7 +30,7 @@ NLU integrations are helpful for platforms that deal with raw text. The integrat
 }
 ```
 
-Learn more about Jovo TTS integrations in the following sections:
+Learn more about Jovo NLU integrations in the following sections:
 
 - [Integrations](#integrations)
 - [Configuration](#configuration)
