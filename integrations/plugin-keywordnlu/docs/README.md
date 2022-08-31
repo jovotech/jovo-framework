@@ -59,7 +59,7 @@ Add it as plugin to your [app configuration](https://www.jovo.tech/docs/app-conf
 
 ```typescript
 import { App } from '@jovotech/framework';
-import { AlexaPlatform } from '@jovotech/plugin-keywordnlu';
+import { KeywordNluPlugin } from '@jovotech/plugin-keywordnlu';
 // ...
 
 const app = new App({
