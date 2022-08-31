@@ -60,6 +60,9 @@ When extending Jovo, you usually hook into one of the RIDR middlewares that are 
 | `response.tts`         | TTS integrations turn text into speech output                                            |
 | `response.end`         | Leaves the `response` middleware group with propagated `$response` object                |
 
+You can also learn more about the middleware code here: [`Middleware`](https://github.com/jovotech/jovo-framework/blob/v4/latest/framework/src/Middleware.ts), [`MiddlewareCollection`](https://github.com/jovotech/jovo-framework/blob/v4/latest/framework/src/MiddlewareCollection.ts).
+
+
 ### Event Middlewares
 
 Event middlewares don't follow a linear process like the [RIDR middlewares](#ridr-middlewares): They get executed whenever a specific method gets called, so this can happen multiple times during one RIDR lifecycle.
@@ -90,6 +93,10 @@ Find all current event middlewares in the table below:
 
 ## Middleware Features
 
+- [Custom Middlewares](#custom-middlewares)
+- [Skip Middlewares](#skip-middlewares)
+- [Stop the Middleware Execution](#stop-the-middleware-execution)
+
 ### Custom Middlewares
 
 You can also use the `$handleRequest` object to run your own middlewares, for example:
@@ -107,6 +114,23 @@ app.hook('<YOUR_MIDDLEWARE_NAME>', async (jovo: Jovo, payload): Promise<void> =>
   // ...
 });
 ```
+
+### Skip Middlewares
+
+You can skip [RIDR middlewares](#ridr-middlewares) for the current request lifecycle by using the `skipMiddlewares()` method:
+
+```typescript
+someMethod(jovo: Jovo): void {
+  // ...
+
+  // Skip single middleware
+  jovo.$handleRequest.skipMiddlewares('interpretation.nlu');
+
+  // Skip multiple middlewares
+  jovo.$handleRequest.skipMiddlewares('interpretation.nlu', 'after.interpretation.nlu'); // Either add multiple strings or one array of strings
+}
+```
+
 
 ### Stop the Middleware Execution
 
