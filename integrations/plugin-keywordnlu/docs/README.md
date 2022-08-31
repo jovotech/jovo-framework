@@ -93,3 +93,5 @@ new KeywordNluPlugin({
   },
 }),
 ```
+
+Text input is transformed to lowercase, so make sure that the keywords are in lowercase as well.
