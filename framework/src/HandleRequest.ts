@@ -2,7 +2,7 @@ import _cloneDeep from 'lodash.clonedeep';
 import _merge from 'lodash.merge';
 import { App, AppConfig, AppInitConfig, AppMiddlewares } from './App';
 import { Extensible } from './Extensible';
-import { ComponentTree, ComponentTreeNode, MiddlewareCollection, Platform } from './index';
+import { ComponentTree, ComponentTreeNode, MiddlewareCollection, Platform, PossibleMiddlewareNames } from './index';
 import { Server } from './Server';
 
 export class HandleRequest extends Extensible<AppConfig, AppMiddlewares> {
@@ -37,6 +37,12 @@ export class HandleRequest extends Extensible<AppConfig, AppMiddlewares> {
 
   dismount(): Promise<void> {
     return this.dismountPlugins();
+  }
+
+  skipMiddlewares(...middlewares: PossibleMiddlewareNames<AppMiddlewares>[]): void;
+  skipMiddlewares(...middlewares: string[]): void;
+  skipMiddlewares(...middlewares: Array<string | PossibleMiddlewareNames<AppMiddlewares>>): void {
+    this.middlewareCollection.remove(...middlewares);
   }
 
   stopMiddlewareExecution(): void {
