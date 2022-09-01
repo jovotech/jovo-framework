@@ -14,13 +14,20 @@ This plugin is a lightweight [NLU integration](https://www.jovo.tech/docs/nlu) t
 - It maps common keywords (for example words that show up in [quick replies](https://www.jovo.tech/docs/output-templates#quickreplies) that don't necessarily need full fledged NLU) to an intent
 - It saves performance by skipping NLU service calls for common keywords
 
-The plugin uses a `keywordMap` that may look like this:
+The plugin uses a `keywordMap` that may look like this for the locales `en` (English) and `de` (German):
 
 ```typescript
 {
-  yes: 'YesIntent',
-  no: 'NoIntent',
-  'learn more': 'LearnMoreIntent',
+  en: {
+    yes: 'YesIntent',
+    no: 'NoIntent',
+    'learn more': 'LearnMoreIntent',
+  },
+  de: {
+    ja: 'YesIntent',
+    nein: 'NoIntent',
+    mehr: 'LearnMoreIntent',
+  },
 }
 ```
 
@@ -42,6 +49,8 @@ If the input contains `text` that is part of the `keywordMap`, the Keyword NLU a
 ```
 
 The Keyword NLU plugin hooks into the `before.interpretation.nlu` [RIDR middleware](https://www.jovo.tech/docs/middlewares#ridr-middlewares), which means it happens one step before other [NLU integrations](https://www.jovo.tech/docs/nlu). If the Keyword NLU is successful, the `interpretation.nlu` step is [skipped](https://www.jovo.tech/docs/middlewares#skip-middlewares), resulting in a faster response, because an external NLU service doesn't need to be called.
+
+You can find the code here: [`KeywordNluPlugin`](https://github.com/jovotech/jovo-framework/blob/v4/latest/integrations/plugin-keywordnlu/src/KeywordNluPlugin.ts).
 
 Learn more in the following sections:
 - [Installation](#installation)
@@ -66,9 +75,17 @@ const app = new App({
   plugins: [
     new KeywordNluPlugin({
       keywordMap: {
-        yes: 'YesIntent',
-        no: 'NoIntent',
-        'learn more': 'LearnMoreIntent',
+        en: {
+          yes: 'YesIntent',
+          no: 'NoIntent',
+          'learn more': 'LearnMoreIntent',
+        },
+        de: {
+          ja: 'YesIntent',
+          nein: 'NoIntent',
+          mehr: 'LearnMoreIntent',
+        },
+        // ...
       },
     }),
     // ...
@@ -76,22 +93,33 @@ const app = new App({
 });
 ```
 
-Learn more about configurations in the [configuration](#configuration) section.
+Learn more about config options in the [configuration](#configuration) section.
 
 
 ## Configuration
 
-Currently, the only configuration option for the Keyword NLU plugin is the required `keywordMap` that maps a keyword (key) to an intent (value), for example:
+The following configuration can be added to the Keyword NLU plugin:
 
 ```typescript
 new KeywordNluPlugin({
   keywordMap: {
-    yes: 'YesIntent',
-    no: 'NoIntent',
-    'learn more': 'LearnMoreIntent',
+    en: {
+      yes: 'YesIntent',
+      no: 'NoIntent',
+      'learn more': 'LearnMoreIntent',
+    },
+    de: {
+      ja: 'YesIntent',
+      nein: 'NoIntent',
+      mehr: 'LearnMoreIntent',
+    },
     // ...
   },
+  fallbackLocale: 'en',
 }),
 ```
 
-Text input is transformed to lowercase, so make sure that the keywords are in lowercase as well.
+- `keywordMap`: For each locale (e.g. `en`, `de`) it maps a keyword (key) to an intent (value). Text input is transformed to lowercase, so make sure that the keywords are in lowercase as well.
+- `fallbackLocale`: The locale to be used if the request does not contain one. Default: `en`.
+
+
