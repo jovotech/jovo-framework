@@ -9,12 +9,28 @@ Improve natural language understanding (NLU) perfomance by matching common keywo
 
 ## Introduction
 
-This plugin is a lightweight [NLU integration](https://www.jovo.tech/docs/nlu) that does two things:
+This plugin is a lightweight [NLU integration](https://www.jovo.tech/docs/nlu) that does three things:
 
+- It replaces words or phrases in the input `text` to adjust for ASR misunderstandings or names of people or locations
 - It maps common keywords (for example words that show up in [quick replies](https://www.jovo.tech/docs/output-templates#quickreplies) that don't necessarily need full fledged NLU) to an intent
 - It saves performance by skipping NLU service calls for common keywords
 
-The plugin uses a `keywordMap` that may look like this for the locales `en` (English) and `de` (German):
+The plugin first determines if there are string replacements to do by looking a `onGetReplaceMap` function. This is a function to allow for retrieval of the keywords list at runtime from `$cms`, a local JSON file, or an API call. The replace map can include multiple locales with the key being a word or phrase to search for in text and the value being a word or phrase to replace it:
+
+```typescript
+onGetReplaceMap: (jovo: Jovo) => {
+  return {
+    en: {
+      'know way': 'no',
+    }
+  }
+},
+```
+
+The replace map can also act as a pre-process to reduce the number of keys needed in the `keywordMap`.
+
+
+The plugin then uses a `keywordMap` that may look like this for the locales `en` (English) and `de` (German):
 
 ```typescript
 {
@@ -102,6 +118,17 @@ The following configuration can be added to the Keyword NLU plugin:
 
 ```typescript
 new KeywordNluPlugin({
+  onGetReplaceMap: (jovo: Jovo) => {
+    return {
+      en: {
+        'know way': 'no',
+      }
+    }
+  },
+  onReplace: (jovo: Jovo, locale: string, replaceMap: KeywordMap, text: string) => {
+    // ...
+    return text;
+  },  
   keywordMap: {
     en: {
       yes: 'YesIntent',
@@ -118,8 +145,9 @@ new KeywordNluPlugin({
   fallbackLocale: 'en',
 }),
 ```
-
-- `keywordMap`: For each locale (e.g. `en`, `de`) it maps a keyword (key) to an intent (value). Text input is transformed to lowercase, so make sure that the keywords are in lowercase as well.
+- `onGetReplaceMap`: Optional. A function that returns a replace map where the key is the search word or phrase and the value is the replacement word or phrase. If no function is defined, string replacement does not occur.
+- `onReplace`: Optional. The plugin has it's own implementation for replacing strings. Override this function if you want to implement your own strategy.
+- `keywordMap`: Optional. For each locale (e.g. `en`, `de`) it maps a keyword (key) to an intent (value). Text input is transformed to lowercase, so make sure that the keywords are in lowercase as well.
 - `fallbackLocale`: The locale to be used if the request does not contain one. Default: `en`.
 
-
+You can use `onGetReplaceMap` and `keywordMap` independently or in coordination with each other. The call to `onGetReplaceMap` happens first.

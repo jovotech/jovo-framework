@@ -24,6 +24,8 @@ export interface KeywordMap {
 }
 
 export interface KeywordNluPluginConfig extends PluginConfig {
+  onGetReplaceMap?: (jovo: Jovo) => KeywordMap | Promise<KeywordMap>;
+  onReplace: (jovo: Jovo, locale: string, replaceMap: KeywordMap, text: string) => string | Promise<string>;
   keywordMap: KeywordMap;
   fallbackLocale: string;
 }
@@ -33,6 +35,7 @@ export class KeywordNluPlugin extends Plugin<KeywordNluPluginConfig> {
     return {
       keywordMap: {},
       fallbackLocale: 'en',
+      onReplace: this.replaceText,
     };
   }
 
@@ -43,10 +46,17 @@ export class KeywordNluPlugin extends Plugin<KeywordNluPluginConfig> {
   }
 
   mount(parent: Extensible): Promise<void> | void {
-    parent.middlewareCollection.use('before.interpretation.nlu', (jovo: Jovo) => {
-      const text = jovo.$input.getText()?.toLowerCase();
+    parent.middlewareCollection.use('before.interpretation.nlu', async (jovo: Jovo) => {
+      let text = jovo.$input.getText()?.toLowerCase();
       const locale = this.getLocale(jovo);
 
+      // replace strings
+      if (text && this.config.onGetReplaceMap) {
+        const replaceMap = await this.config.onGetReplaceMap(jovo);
+        text = await this.config.onReplace(jovo, locale, replaceMap, text);
+      }
+
+      // keywordMap
       if (text && this.config.keywordMap[locale]?.hasOwnProperty(text)) {
         jovo.$input.intent = this.config.keywordMap[locale][text];
 
@@ -63,5 +73,16 @@ export class KeywordNluPlugin extends Plugin<KeywordNluPluginConfig> {
     const genericLocale = locale.split('-')[0];
 
     return genericLocale;
+  }
+
+  private replaceText(jovo: Jovo, locale: string, replaceMap: KeywordMap, text: string): string | Promise<string> {
+    if (replaceMap?.hasOwnProperty(locale)) {
+      const list = (replaceMap as any)[locale];
+      for (const [key, value] of Object.entries(list)) {
+        text = text.replaceAll(key, value as string);
+      }
+    }
+
+    return text;
   }
 }
