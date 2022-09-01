@@ -74,7 +74,7 @@ new PollyTts({
   lexiconNames: [],
   languageCode: 'en-IN',
   speechMarkTypes: [],
-  cache: new SampleTtsCache({/* ... */}),
+  cache: new S3TtsCache({/* ... */}),
   libraryConfig: {
     region: 'us-east-1',
     // ...
@@ -90,16 +90,30 @@ new PollyTts({
 - `lexiconNames`: List of one or more pronunciation lexicon names you want the service to apply during synthesis. See [`lexiconNames` Polly docs](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-polly/interfaces/synthesizespeechcommandinput.html#lexiconnames) for more information. Optional.
 - `languageCode`: Language code for the Synthesize Speech request. This is only necessary if using a bilingual voice, such as Aditi, which can be used for either Indian English (en-IN) or Hindi (hi-IN). See [`languageCode` Polly docs](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-polly/interfaces/synthesizespeechcommandinput.html#languagecode) for more information. Optional.
 - `speechMarkTypes`: The type of speech marks returned for the input text. See [`speechMarkTypes` Polly docs](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-polly/interfaces/synthesizespeechcommandinput.html#speechmarktypes) for more information. Optional.
-- `cache`: [TTS Cache](#tts-cache) integration. Optional.
+- `cache`: [TTS Cache](#tts-cache) integration, for example [S3 Cache](https://www.jovo.tech/marketplace/ttscache-s3). Optional.
 - [`libraryConfig`](#libraryconfig): [`PollyClientConfig` object](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-polly/interfaces/pollyclientconfig.html) that is passed to the Polly client. Use this for configurations like `region` or `credentials`. Optional.
 
 ### TTS Cache
 
-Without a TTS cache, each time text is passed to Polly, you will incur the cost and time of generating the TTS response.
+Without a TTS cache, each time text is passed to Polly, you will incur the cost and time of generating the TTS response. Use a TTS cache to reduce costs and save time.
 
-Use a TTS cache to reduce costs and save time.
+If you're hosting your Jovo app in the AWS environment, for example using [AWS Lambda](https://www.jovo.tech/marketplace/server-lambda), we recommend using [S3 Cache](https://www.jovo.tech/marketplace/ttscache-s3) to store generated audio files in an S3 bucket: 
 
-See [TTS](https://www.jovo.tech/docs/tts) for more information and a list of TTS cache implementations.
+```typescript
+import { PollyTts } from '@jovotech/tts-polly';
+import { S3TtsCache } from '@jovotech/ttscache-s3';
+// ...
+
+new PollyTts({
+  cache: new S3TtsCache({
+    bucket: '<YOUR-BUCKET-NAME>', // Example: 'mybucket-public'
+    path: '<YOUR-PATH>', // Example: 'tts'
+  }),
+  // ...
+}),
+```
+
+See [TTS](https://www.jovo.tech/docs/tts#tts-cache) for more information and a list of TTS cache implementations.
 
 
 ### libraryConfig

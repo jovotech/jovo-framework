@@ -13,6 +13,14 @@ Jovo CMS integrations help you for manage and localize content for your voice an
 
 You can store all kinds of data in the CMS services, including translations that go with the [Jovo i18n feature](./i18n.md).
 
+```typescript
+// Access i18n content from CMS
+this.$t('key')
+
+// Use $cms property to access other content from CMS
+this.$cms
+```
+
 ## Integrations
 
 Currently, the following integrations are available with Jovo `v4`:

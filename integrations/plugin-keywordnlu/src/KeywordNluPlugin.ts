@@ -51,8 +51,8 @@ export class KeywordNluPlugin extends Plugin<KeywordNluPluginConfig> {
       if (text && this.config.keywordMap[locale]?.hasOwnProperty(text)) {
           jovo.$input.intent = this.config.keywordMap[locale][text];
 
-          // If a keyword matches, skip other NLU integrations for better performance
-          jovo.$handleRequest.skipMiddlewares('interpretation.nlu');
+        // If a keyword matches, skip other NLU integrations for better performance
+        jovo.$handleRequest.skipMiddlewares('interpretation.nlu');
       }
     });
   }
