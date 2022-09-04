@@ -125,6 +125,7 @@ new SanityCms({
     articles: "*[_type == 'article' && !(_id in path('drafts.**'))]",
     siteSettings: "*[_type == 'siteSettings' && !(_id in path('drafts.**'))][0]",
   },
+  autoLoad: ['translations', 'siteSettings'],
 }),
 ```
 
@@ -135,6 +136,7 @@ new SanityCms({
   - [`apiVersion`](#apiversion): The version of the API. Uses the current date as default.
   - [`useCdn`](#usecdn): Determines whether to used the Sanity cached API CDN for faster response times. The default is `true`.
 - [`queries`](#queries): Define this list of GROQ queries to execute and the key under `$cms` to store the resulting JSON.
+- [`autoLoad`](#autoload): Optional. Define a list of query names that will be loaded at `request.start`.
 
 ### projectId
 
@@ -239,6 +241,24 @@ In this example:
 - `siteSettings` - a object for the single `siteSettings` type. Access with `this.$cms.siteSettings`.
 
 Information on query transformers can be found in the [query transformers section](#query-transformers).
+
+### autoLoad
+
+An array of query names to automatically load during the `request.start` middleware. Not setting this property will auto load all queries. Set to an empty array to not auto load any query.
+
+```typescript
+new SanityCms({
+  queries: {
+    translations: //...
+    products: //...
+    articles: //...
+    siteSettings: //...
+  },
+  autoLoad: ['translations', 'siteSettings'],
+}),
+```
+
+To load a query by name (with any associated query transformer) in a hook or handler, use `this.$sanity.load(['products', 'articles'])` and then access from `$cms`: `this.$cms.products`.
 
 ## Query Transformers
 
@@ -427,3 +447,36 @@ export class SampleQueryTransformer extends BaseSanityQueryTransformer<SampleTra
   // ...
 }
 ```
+
+## Usage
+
+### load
+
+Manually load one or more queries named in configuration:
+
+```typescript
+await this.$sanity.load('products');
+await this.$sanity.load(['products', 'articles']);
+
+const products = this.$cms.products;
+```
+
+### client
+
+Access the [Sanity SDK](https://github.com/sanity-io/client) client using `this.$sanity.client`:
+
+```typescript
+const result = await this.$sanity.client.fetch("*[_type == 'appSettings']")
+```
+
+## Jovo Debugger
+If using the Jovo Debugger, you must add `$sanity` to the list of properties the debugger ignores:
+
+```ts
+// app.dev.ts
+
+new JovoDebugger({
+  ignoredProperties: ['$app', '$handleRequest', '$platform', '$sanity'],
+}),
+```
+
