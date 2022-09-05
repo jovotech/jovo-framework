@@ -21,7 +21,8 @@ Learn more about the Sanity Jovo integration in the following sections:
 
 - [Installation](#installation): Set up Sanity and connect it to your Jovo app
 - [Configuration](#configuration): All configuration options for this integration
-- [Query transformers](#query-transformers): Change the structure of a query result before it is saved in the `$cms` property in Jovo
+- [Query Transformers](#query-transformers): Change the structure of a query result before it is saved in the `$cms` property in Jovo
+- [`$sanity` Object](#sanity-object): Access Sanity-specific features
 
 ## Installation
 
@@ -100,6 +101,26 @@ You need the `projectId` and `dataset` from your Sanity project which can be fou
 You will also need at least one query which consists of a key and a [GROQ](https://www.sanity.io/docs/groq) statement. The example adds `translations` for [i18n](https://www.jovo.tech/docs/i18n) (using the [`TranslationsQueryTransformer`](#translationsquerytransformer)), which can be accessed with `this.$t()`. For other data types, take a look at the [`queries` section](#queries).
 
 All configuration options can be found in the [configuration section](#configuration).
+
+### Ignore $sanity in Debugger
+
+If using the [Jovo Debugger](https://www.jovo.tech/docs/debugger), you must add `$sanity` to the list of properties the Debugger ignores:
+
+```ts
+// app.dev.ts
+
+new JovoDebugger({
+  ignoredProperties: ['$app', '$handleRequest', '$platform', '$sanity'],
+}),
+```
+
+Otherwise, the app could throw an error that looks like this:
+
+```
+RangeError: Maximum call stack size exceeded
+    at hasBinary ([...]/jovo-framework/node_modules/has-binary2/index.js:30:20)
+```
+
 
 ## Configuration
 
@@ -244,7 +265,7 @@ Information on query transformers can be found in the [query transformers sectio
 
 ### autoLoad
 
-An array of query names to automatically load during the `request.start` middleware. Not setting this property will auto load all queries. Set to an empty array to not auto load any query.
+An array of query names to automatically load during the [`request.start` middleware](https://www.jovo.tech/docs/middlewares#ridr-middlewares). Not setting this property will auto load all queries. Set to an empty array to not auto load any query.
 
 ```typescript
 new SanityCms({
@@ -258,7 +279,15 @@ new SanityCms({
 }),
 ```
 
-To load a query by name (with any associated query transformer) in a hook or handler, use `this.$sanity.load(['products', 'articles'])` and then access from `$cms`: `this.$cms.products`.
+Below is an example how to explicitly [load](#load) a query by name (with any associated query transformer) in a hook or handler:
+
+```typescript
+// Load queries into $cms
+await this.$sanity.load(['products', 'articles']);
+
+// Access query from $cms
+this.$cms.products
+```
 
 ## Query Transformers
 
@@ -448,11 +477,17 @@ export class SampleQueryTransformer extends BaseSanityQueryTransformer<SampleTra
 }
 ```
 
-## Usage
+## $sanity Object
+
+The `$sanity` object contains the following Sanity-specific features:
+
+- [load](#load)
+- [client](#client)
+
 
 ### load
 
-Manually load one or more queries named in configuration:
+Manually load one or more queries named in [configuration](#configuration):
 
 ```typescript
 await this.$sanity.load('products');
@@ -468,15 +503,3 @@ Access the [Sanity SDK](https://github.com/sanity-io/client) client using `this.
 ```typescript
 const result = await this.$sanity.client.fetch("*[_type == 'appSettings']")
 ```
-
-## Jovo Debugger
-If using the Jovo Debugger, you must add `$sanity` to the list of properties the debugger ignores:
-
-```ts
-// app.dev.ts
-
-new JovoDebugger({
-  ignoredProperties: ['$app', '$handleRequest', '$platform', '$sanity'],
-}),
-```
-
