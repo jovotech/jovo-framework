@@ -12,9 +12,20 @@ export type ListItem = {
 };
 
 // Available types of default lists
-export enum ListItemType {
-  SHOPPING_ITEM = '-SHOPPING_ITEM',
-  TASK = '-TASK',
+export type ListType = 'shopping-list' | 'todo-list';
+
+/**
+ * Returns the type of the list
+ * @param listId List to check
+ * @returns the type of the list
+ */
+export function getTypeOfList(listId: string): ListType {
+  const decodedListId = Buffer.from(listId, 'base64').toString('utf8');
+  if (decodedListId.endsWith('-SHOPPING_ITEM')) {
+    return 'shopping-list';
+  } else {
+    return 'todo-list';
+  }
 }
 
 export async function getListItem(
