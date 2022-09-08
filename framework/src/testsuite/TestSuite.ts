@@ -202,6 +202,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     this.$user = this.$platform.createUserInstance(this);
     this.$session = new JovoSession();
     this.$request = this.$platform.createRequestInstance({});
+    this.$app.data = {};
   }
 
   private prepareRequest(jovo: Jovo) {
@@ -221,6 +222,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     _merge(jovo.$session, this.$session);
     _merge(jovo.$request, this.$request);
     _merge(jovo.$data, this.$data);
+    _merge(jovo.$app.data, this.$app.data);
 
     jovo.$request.setUserId(this.config.userId);
     jovo.$request.setLocale(this.config.locale);
