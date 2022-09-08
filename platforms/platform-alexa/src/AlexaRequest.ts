@@ -18,11 +18,10 @@ import { AlexaEntity, Context, Request, Session, Unit } from './interfaces';
 import { ResolutionPerAuthority, ResolutionPerAuthorityStatusCode, Slot } from './output';
 import _set from 'lodash.set';
 export const ALEXA_REQUEST_TYPE_TO_INPUT_TYPE_MAP: Record<string, InputTypeLike> = {
-  'LaunchRequest': InputType.Launch,
-  'IntentRequest': InputType.Intent,
-  'Alexa.Presentation.APL.UserEvent': InputType.Intent,
-  'SessionEndedRequest': InputType.End,
-  'System.ExceptionEncountered': InputType.Error,
+  'LaunchRequest': InputType.Launch, // @see https://www.jovo.tech/docs/input#launch
+  'IntentRequest': InputType.Intent, // @see https://www.jovo.tech/docs/input#intent
+  'SessionEndedRequest': InputType.End, // @see https://www.jovo.tech/docs/input#end
+  'System.ExceptionEncountered': InputType.Error, // @see https://www.jovo.tech/docs/input#error
 };
 
 export class AlexaRequest extends JovoRequest {
@@ -35,6 +34,7 @@ export class AlexaRequest extends JovoRequest {
     return this.request?.locale;
   }
 
+  // @see https://www.jovo.tech/marketplace/platform-alexa/output#apl-user-events
   private getAplUserEventArg(key: string) {
     if (this?.request?.type === 'Alexa.Presentation.APL.UserEvent') {
       const args = this?.request.arguments || [];
@@ -130,6 +130,13 @@ export class AlexaRequest extends JovoRequest {
   }
 
   getInputType(): InputTypeLike | undefined {
+    // Transform requests that include an intent to Intent request types
+    // Example: 'Alexa.Presentation.APL.UserEvent' requests with APL arguments
+    // @see https://www.jovo.tech/marketplace/platform-alexa/output#apl-user-events
+    if (this.getIntent()) {
+      return InputType.Intent;
+    }
+
     return this.request?.type
       ? ALEXA_REQUEST_TYPE_TO_INPUT_TYPE_MAP[this.request.type] || this.request.type
       : undefined;
