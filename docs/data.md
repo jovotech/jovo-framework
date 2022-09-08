@@ -74,8 +74,6 @@ Other platforms (like Facebook Messenger) don't support this. For them, you need
 
 ### App Data
 
-> This feature is currently in implementation
-
 App data is a special data type that stores data into the app object, which exists as long as the server is running:
 
 ```typescript

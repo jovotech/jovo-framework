@@ -4,6 +4,8 @@ import { PluginConfig } from './Plugin';
 
 export interface Data extends AnyObject {}
 
+export interface AppData extends Data {}
+
 export interface RequestData extends Data {}
 
 export interface ComponentData extends Data {}

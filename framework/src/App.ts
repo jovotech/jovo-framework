@@ -1,6 +1,7 @@
 import { ArrayElement, JovoLoggerConfig } from '@jovotech/common';
 import _merge from 'lodash.merge';
 import {
+  AppData,
   ComponentTree,
   I18NextConfig,
   IntentMap,
@@ -73,6 +74,9 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
   readonly i18n: I18Next;
   private initialized = false;
   private errorListeners: AppErrorListener[] = [];
+
+  // @see https://www.jovo.tech/docs/data#app-data
+  data: AppData = {};
 
   constructor(config?: AppInitConfig) {
     super(config ? { ...config, components: undefined } : config);
