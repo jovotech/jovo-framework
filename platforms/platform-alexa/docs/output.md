@@ -526,8 +526,8 @@ Similar to how it works with [quick replies](#quickreplies) and [carousel items]
 "arguments": [
   {
     "type": "Selection",
-	  "intent": "ElementIntent",
-	  "entities": {
+    "intent": "ElementIntent",
+    "entities": {
       "element": {
         "value": "A"
       }
