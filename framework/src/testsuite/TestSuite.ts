@@ -202,6 +202,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     this.$user = this.$platform.createUserInstance(this);
     this.$session = new JovoSession();
     this.$request = this.$platform.createRequestInstance({});
+    this.$app.data = {};
   }
 
   private prepareRequest(jovo: Jovo) {
@@ -220,6 +221,8 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     _merge(jovo.$user.data, this.$user.data);
     _merge(jovo.$session, this.$session);
     _merge(jovo.$request, this.$request);
+    _merge(jovo.$data, this.$data);
+    _merge(jovo.$app.data, this.$app.data);
 
     jovo.$request.setUserId(this.config.userId);
     jovo.$request.setLocale(this.config.locale);
@@ -233,6 +236,7 @@ export class TestSuite<PLATFORM extends Platform = TestPlatform> extends Plugin<
     this.$session = jovo.$session;
     this.$response = jovo.$response as TestSuiteResponse<PLATFORM>['response'];
     this.$output = jovo.$output;
+    this.$data = {}; // Request data is only available for one request, @see https://www.jovo.tech/docs/data#request-data
   }
 
   private loadApp(): App {

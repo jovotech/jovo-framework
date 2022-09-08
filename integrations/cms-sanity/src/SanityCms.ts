@@ -1,6 +1,6 @@
 import { App, Jovo, Plugin, PluginConfig, JovoError } from '@jovotech/framework';
+import { JovoSanity } from './JovoSanity';
 import { BaseSanityQueryTransformer } from './transformers';
-import SanityClient from '@sanity/client';
 
 export interface SanityCmsConfig extends PluginConfig {
   client: {
@@ -11,6 +11,7 @@ export interface SanityCmsConfig extends PluginConfig {
     useCdn: boolean;
   };
   queries: Record<string, string | BaseSanityQueryTransformer>;
+  autoLoad?: string[];
 }
 
 export class SanityCms extends Plugin<SanityCmsConfig> {
@@ -48,32 +49,18 @@ export class SanityCms extends Plugin<SanityCmsConfig> {
   }
 
   async retrieveSanityData(jovo: Jovo): Promise<void> {
-    const client = new SanityClient(this.config.client);
-    const promises = [];
+    let queryKeys: string[] = [];
 
-    for (const [name, value] of Object.entries(this.config.queries)) {
-      const transformer = typeof value === 'string' ? null : (value as BaseSanityQueryTransformer);
-      const query: string = transformer ? transformer.config.query : (value as string);
-
-      if (!query) continue;
-
-      promises.push({ name, transformer, query, data: client.fetch(query) });
+    if (this.config.autoLoad) {
+      queryKeys = Object.keys(this.config.queries).filter((x) => this.config.autoLoad!.includes(x));
+    } else {
+      queryKeys = Object.keys(this.config.queries);
     }
 
-    const allPromises = await Promise.all(promises);
+    jovo.$sanity = new JovoSanity(this, jovo);
 
-    for (const p of allPromises) {
-      try {
-        const data = await p.data;
-
-        if (p.transformer) {
-          jovo.$cms[p.name] = p.transformer.execute(data, jovo);
-        } else {
-          jovo.$cms[p.name] = data;
-        }
-      } catch (error) {
-        throw new JovoError({ message: (error as Error).message });
-      }
+    if (queryKeys.length > 0) {
+      await jovo.$sanity.load(queryKeys);
     }
   }
 }
