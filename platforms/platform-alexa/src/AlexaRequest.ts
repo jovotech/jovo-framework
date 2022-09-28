@@ -131,9 +131,9 @@ export class AlexaRequest extends JovoRequest {
 
   getInputType(): InputTypeLike | undefined {
     // Transform requests that include an intent to Intent request types
-    // Example: 'Alexa.Presentation.APL.UserEvent' requests with APL arguments
-    // @see https://www.jovo.tech/marketplace/platform-alexa/output#apl-user-events
-    if (this.getIntent()) {
+    // Example: 'Alexa.Presentation.APL.UserEvent' requests with APL arguments, @see https://www.jovo.tech/marketplace/platform-alexa/output#apl-user-events
+    // Don't convert CanFulfillIntentRequest requests, @see https://github.com/jovotech/jovo-framework/issues/1426
+    if (this.getIntent() && this.request?.type !== 'CanFulfillIntentRequest') {
       return InputType.Intent;
     }
 
