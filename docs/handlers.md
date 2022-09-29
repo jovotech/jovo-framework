@@ -205,6 +205,37 @@ $state = [
 ];
 ```
 
+It's also possible to define an enum for resolve events:
+
+```typescript
+// src/components/YesNoComponent.ts
+
+export enum YesNoComponentEvent {
+  Yes = 'yes',
+  No = 'no',
+}
+
+
+// src/components/YourComponent.ts
+
+import { YesNoComponent, YesNoComponentEvent } from './YesNoComponent';
+// ...
+
+yourHandler() {
+  // ...
+
+  return this.$delegate(YesNoComponent, {
+    resolve: {
+      [YesNoComponentEvent.Yes]: this.onYes,
+      [YesNoComponentEvent.No]: this.onNo,
+    },
+    config: {
+      // ...
+    }
+  });
+}
+```
+
 The following options can be added to `$delegate()`:
 
 - `resolve`: Handlers that should be called after the child component [resolves](#resolve-a-component) with certain data.
