@@ -282,7 +282,7 @@ showMenu() {
 
 As components have their own [state management system](./state-stack.md), we usually recommend using the [`$delegate()` method](./handlers.md#delegate-to-components) if you have steps that need an additional state. However, sometimes it might be more convenient to have all handlers in one component.
 
-For this, you can set a `$subState` in your handlers
+For this, you can set a `$subState` in your handlers:
 
 ```typescript
 this.$subState = 'YourSubState';
@@ -323,6 +323,9 @@ showMenu() {
   // ...
 }
 ```
+
+> `subState` does not work with [global components](./components.md#global-components). We recommend using the [`$delegate()` method](./handlers.md#delegate-to-components).
+
 
 ### prioritizedOverUnhandled
 
