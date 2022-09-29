@@ -33,6 +33,10 @@ $state = [
 
 The component is removed from the stack once it resolves or the session closes.
 
+Learn more in the following sections:
+- [Stacking Components](#stacking-components)
+- [State Properties](#state-properties)
+
 ## Stacking Components
 
 The Jovo `$state` stack is an array, its last index (`$state.length - 1`) referencing the most recently active component.

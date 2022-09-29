@@ -164,6 +164,7 @@ A Jovo project usually comes with a [`GlobalComponent`](https://github.com/jovot
 - Each of its handlers is global, no need to add a [`global` property](./handle-decorators.md#global).
 - It does not get added to the [`$state` stack](./state-stack.md) (except it uses [`$delegate()`](./handlers.md#delegate-to-components), then it is added to the stack just until the delegation was resolved).
 - It does not store [component data](#component-data): If you want to store data, we recommend using [session data](./data.md#session-data).
+- [`subState`](./handle-decorators.md#substate) does not work. We recommend using [`$delegate()`](./handlers.md#delegate-to-components).
 
 You can either add the `global` property to the [component options](#component-options):
 
