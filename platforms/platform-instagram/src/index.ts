@@ -24,4 +24,5 @@ export * from './InstagramPlatform';
 export * from './InstagramRequest';
 export * from './InstagramResponse';
 export * from './InstagramUser';
+export * from './InstagramDevice';
 export * from './output';
