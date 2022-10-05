@@ -30,6 +30,7 @@ export * from './GoogleBusinessPlatform';
 export * from './GoogleBusinessRequest';
 export * from './GoogleBusinessResponse';
 export * from './GoogleBusinessUser';
+export * from './GoogleBusinessDevice';
 export * from './interfaces';
 export * from './constants';
 export * from './output';
