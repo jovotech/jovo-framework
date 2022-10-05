@@ -24,5 +24,6 @@ export * from './CorePlatform';
 export * from './CoreRequest';
 export * from './CoreResponse';
 export * from './CoreUser';
+export * from './CoreDevice';
 export * from './interfaces';
 export * from './output';
