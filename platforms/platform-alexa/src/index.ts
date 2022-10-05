@@ -37,3 +37,4 @@ export * from './constants';
 export * from './interfaces';
 export * from './output';
 export * from './AlexaHandles';
+export * from './AlexaDevice';
