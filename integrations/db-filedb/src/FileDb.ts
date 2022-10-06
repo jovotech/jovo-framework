@@ -1,4 +1,4 @@
-import { DbItem, DbPlugin, DbPluginConfig, Jovo } from '@jovotech/framework';
+import { DbItem, DbPlugin, DbPluginConfig, DeepPartial, Jovo } from '@jovotech/framework';
 import fs from 'fs';
 import path from 'path';
 import process from 'process';
@@ -8,8 +8,10 @@ export interface FileDbConfig extends DbPluginConfig {
   primaryKeyColumn?: string;
 }
 
+export type FileDbInitConfig = DeepPartial<FileDbConfig>;
+
 export class FileDb extends DbPlugin<FileDbConfig> {
-  constructor(config?: FileDbConfig) {
+  constructor(config?: FileDbInitConfig) {
     super(config);
   }
 

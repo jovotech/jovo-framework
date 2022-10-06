@@ -132,7 +132,7 @@ export abstract class Jovo<
     this.$data = {};
     this.$device = this.$platform.createDeviceInstance(this as unknown as JOVO);
     this.$entities = this.getEntityMap();
-    this.$history = new JovoHistory();
+    this.$history = new JovoHistory($platform);
     this.$session = this.getSession();
     this.$user = this.$platform.createUserInstance(this as unknown as JOVO);
 
