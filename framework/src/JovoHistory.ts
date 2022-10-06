@@ -1,7 +1,8 @@
 import { EntityMap, UnknownObject } from '@jovotech/common';
 import { JovoResponse, OutputTemplate } from '@jovotech/output';
-import { JovoInput, JovoRequest } from './index';
+import { Jovo, JovoInput, JovoRequest, Platform } from './index';
 import { JovoSession } from './JovoSession';
+import { plainToClass } from 'class-transformer';
 
 export interface JovoHistoryItem extends UnknownObject {
   request?: JovoRequest;
@@ -19,9 +20,11 @@ export interface PersistableHistoryData {
 }
 export class JovoHistory {
   items: JovoHistoryItem[];
+  platform: Platform;
 
-  constructor(items: JovoHistoryItem[] = []) {
+  constructor(platform: Platform, items: JovoHistoryItem[] = []) {
     this.items = items;
+    this.platform = platform;
   }
 
   get prev(): JovoHistoryItem | undefined {
@@ -36,6 +39,20 @@ export class JovoHistory {
 
   setPersistableData(data?: PersistableHistoryData): this {
     this.items = data?.items || [];
+    for (const item of this.items) {
+      if (item.request) {
+        item.request = plainToClass(this.platform.requestClass, item.request);
+      }
+      if (item.response) {
+        item.response = plainToClass(
+          this.platform.outputTemplateConverterStrategy.responseClass,
+          item.response,
+        );
+      }
+      if (item.input) {
+        item.input = plainToClass(JovoInput, item.input);
+      }
+    }
     return this;
   }
 }
