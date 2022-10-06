@@ -20,11 +20,8 @@ async someHandler() {
 
   try {
     const item = await this.$alexa!.$user.getListItem(listId, itemId);
-    
-    ...
-
+    // ...
     return this.$send({ message: 'Processed item update'});
-
   } catch(error: Error) {
       // ...
   }
@@ -32,7 +29,11 @@ async someHandler() {
 ```
 
 The `item` you receive from the method call is the same as defined [in the official Alexa documentation](https://developer.amazon.com/en-US/docs/alexa/list-skills/list-management-api-reference.html).
-To be able to get the item from Alexa, you need to [ask the user for permission](#permissions)
+
+Learn more in the following sections:
+- [Permissions](#permissions)
+- [Receive Item Update Requests from Alexa](#receive-item-update-requests-from-alexa)
+- [Get Items From A List](#get-items-from-alist)
 
 
 ## Permissions
@@ -65,7 +66,7 @@ const project = new ProjectConfig({
 
 Learn more about the [`permissions` field in the official Alexa documentation](https://developer.amazon.com/docs/alexa/smapi/skill-manifest.html#permissions).
 
-#### Ask for permission
+### Ask for Permission
 
 Voice permissions provide a frictionless way to ask users if they want to provide access to their lists. [Learn more in the official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/smapi/steps-to-create-a-list-skill.html#use-list-and-skill-events-in-your-list-skill-to-make-your-skill-responsive).
 
@@ -84,10 +85,11 @@ someHandler() {
 }
 ```
 
-## Getting called from Alexa on item updates
+## Receive Item Update Requests from Alexa
 
-Your skill will also be called from Alexa, when you subscribe to specific events. [Learn more in the official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/smapi/steps-to-create-a-list-skill.html#create-a-list-skill).
-First you have to add `householdList` to your used `apis`. You can't specify this using the Alexa console, that's why you have to enable it using the `skill.json`:
+Your skill will also be called from Alexa when you subscribe to specific events. [Learn more in the official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/smapi/steps-to-create-a-list-skill.html#create-a-list-skill).
+
+First you have to add `householdList` to your used `apis`. You can't specify this using the Alexa console, that's why you have to enable it using the `skill.json`. The below example does that by using the [`files` property in the Alexa project configuration](./project-config.md#files):
 
 ```js
 const project = new ProjectConfig({
@@ -146,8 +148,7 @@ const project = new ProjectConfig({
 });
 ```
 
-Now you only need to define handlers in your Jovo application to run a specific function on getting called with the events you want to subscribe.
-You can, for example, use the following [handlers](https://www.jovo.tech/docs/handlers):
+You can, for example, use the following [handlers](https://www.jovo.tech/docs/handlers) to receive event requests from Alexa:
 
 ```typescript
  // ITEMS CREATED
@@ -190,7 +191,7 @@ async handleDeletedItems() {
 }
 ```
 
-## Get items from a list
+## Get Items From aList
 
 ```typescript
 async someHandler() {
@@ -199,11 +200,8 @@ async someHandler() {
 
   try {
     const item = await this.$alexa!.$user.getListItem(listId, itemId);
-    
-    ...
-
+    // ...
     return this.$send({ message: 'Processed item update'});
-
   } catch(error: Error) {
       // ...
   }
