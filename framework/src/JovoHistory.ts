@@ -20,11 +20,11 @@ export interface PersistableHistoryData {
 }
 export class JovoHistory {
   items: JovoHistoryItem[];
-  jovo: Jovo;
+  platform: Platform;
 
-  constructor(jovo: Jovo, items: JovoHistoryItem[] = []) {
+  constructor(platform: Platform, items: JovoHistoryItem[] = []) {
     this.items = items;
-    this.jovo = jovo;
+    this.platform = platform;
   }
 
   get prev(): JovoHistoryItem | undefined {
@@ -41,11 +41,11 @@ export class JovoHistory {
     this.items = data?.items || [];
     for (const item of this.items) {
       if (item.request) {
-        item.request = plainToClass(this.jovo.$platform.requestClass, item.request);
+        item.request = plainToClass(this.platform.requestClass, item.request);
       }
       if (item.response) {
         item.response = plainToClass(
-          this.jovo.$platform.outputTemplateConverterStrategy.responseClass,
+          this.platform.outputTemplateConverterStrategy.responseClass,
           item.response,
         );
       }
