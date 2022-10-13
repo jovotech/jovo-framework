@@ -42,6 +42,9 @@ export class HandlerPlugin extends Plugin<HandlerPluginConfig> {
       if (!jovo.$session.state?.length) {
         jovo.$session.state = [stackItem];
       } else {
+        if (jovo.$route.resolved.stackIndex !== undefined) {
+          jovo.$session.state.splice(jovo.$route.resolved.stackIndex + 1);
+        }
         const currentStateStackItem = jovo.$session.state[jovo.$session.state.length - 1];
         // if the component path is a different one, omit every custom component data (resolve, config, $data)
         if (stackItem.component !== currentStateStackItem.component) {
