@@ -4,7 +4,11 @@ import { HandlerMetadata } from '../metadata/HandlerMetadata';
 export class RouteMatch {
   skip?: boolean;
 
-  constructor(readonly metadata: HandlerMetadata, readonly path: string[]) {}
+  constructor(
+    readonly metadata: HandlerMetadata,
+    readonly path: string[],
+    readonly stackIndex?: number,
+  ) {}
 
   get component(): string {
     return this.path.join('.');
