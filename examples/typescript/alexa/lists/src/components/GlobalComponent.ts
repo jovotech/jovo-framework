@@ -1,4 +1,4 @@
-import { BaseComponent, Component, Global, Handle, Jovo } from '@jovotech/framework';
+import { BaseComponent, Component, Global, Handle } from '@jovotech/framework';
 import { LoveHatePizzaComponent } from './LoveHatePizzaComponent';
 
 @Global()
@@ -15,13 +15,15 @@ export class GlobalComponent extends BaseComponent {
     platforms: ['alexa'],
   })
   handleCreatedItems() {
-    const { listId, listItemIds } = getIdsFromRequest(this);
-    console.log(`Added ${listItemIds} to ${listId}`);
-
-    if (!listItemIds || !listId) {
+    const ids = this.$alexa?.$user?.getListIdsFromRequest();
+    if (!ids?.listItemIds || !ids?.listId) {
       return;
     }
-    Promise.all(listItemIds.map(itemId => this.$alexa?.$user?.getListItem(listId, itemId)))
+    const listId = ids.listId;
+
+    console.log(`Added ${ids.listItemIds} to ${listId}`);
+
+    Promise.all(ids.listItemIds.map(itemId => this.$alexa?.$user?.getListItem(listId, itemId)))
         .then(result => console.log('The created items are: ', result))
   }
 
@@ -32,8 +34,8 @@ export class GlobalComponent extends BaseComponent {
     platforms: ['alexa'],
   })
   async handleUpdatedItems() {
-    const { listId, listItemIds } = getIdsFromRequest(this);
-    console.log(`Modified ${listItemIds} from ${listId}`);
+    const ids = this.$alexa?.$user?.getListIdsFromRequest();
+    console.log(`Modified ${ids?.listItemIds} from ${ids?.listId}`);
   }
 
   // ITEMS DELETED
@@ -43,24 +45,7 @@ export class GlobalComponent extends BaseComponent {
     platforms: ['alexa'],
   })
   async handleDeletedItems() {
-    const { listId, listItemIds } = getIdsFromRequest(this);
-    console.log(`Deleted ${listItemIds} from ${listId}`);
+    const ids = this.$alexa?.$user?.getListIdsFromRequest();
+    console.log(`Deleted ${ids?.listItemIds} from ${ids?.listId}`);
   }
-}
-
-type ListItemRequest = {
-  listId?: string;
-  listItemIds?: string[];
-};
-
-function getIdsFromRequest(jovo: Jovo): ListItemRequest {
-  const alexaRequest = jovo.$alexa?.$request;
-  const request = alexaRequest?.request;
-
-  const body = request?.body as ListItemRequest;
-
-  return {
-    listId: body?.listId,
-    listItemIds: body?.listItemIds,
-  };
 }

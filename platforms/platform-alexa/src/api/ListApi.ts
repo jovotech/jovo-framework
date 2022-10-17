@@ -1,4 +1,4 @@
-import { AxiosError, JovoError } from '@jovotech/framework';
+import { AxiosError, JovoError, Jovo } from '@jovotech/framework';
 import { AlexaApiError, AlexaApiErrorCode, AlexaApiOptions, sendApiRequest } from './AlexaApi';
 
 export type ListItem = {
@@ -26,6 +26,23 @@ export function getTypeOfList(listId: string): ListType {
   } else {
     return 'todo-list';
   }
+}
+
+export type ListItemRequest = {
+  listId?: string;
+  listItemIds?: string[];
+};
+
+export function getListIdsFromRequest(jovo: Jovo): ListItemRequest {
+  const alexaRequest = jovo.$alexa?.$request;
+  const request = alexaRequest?.request;
+
+  const body = request?.body as ListItemRequest;
+
+  return {
+    listId: body?.listId,
+    listItemIds: body?.listItemIds,
+  };
 }
 
 export async function getListItem(
