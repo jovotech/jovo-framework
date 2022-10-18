@@ -26,6 +26,12 @@ export type ListItem = {
   href: string;
 };
 
+// For requests of the type AlexaHouseholdListEvent
+export type HouseholdListEventBody = {
+  listId?: string;
+  listItemIds?: string[];
+};
+
 // Available types of default lists
 export type ListType = 'shopping-list' | 'todo-list';
 
@@ -60,23 +66,6 @@ export function getTypeOfList(listId: string): ListType {
   } else {
     return 'todo-list';
   }
-}
-
-export type ListItemRequest = {
-  listId?: string;
-  listItemIds?: string[];
-};
-
-export function getListIdsFromRequest(jovo: Jovo): ListItemRequest {
-  const alexaRequest = jovo.$alexa?.$request;
-  const request = alexaRequest?.request;
-
-  const body = request?.body as ListItemRequest;
-
-  return {
-    listId: body?.listId,
-    listItemIds: body?.listItemIds,
-  };
 }
 
 export async function getListItem(

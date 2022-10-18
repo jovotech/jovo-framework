@@ -19,14 +19,7 @@ import {
   setReminder,
   updateReminder,
 } from './api/ReminderApi';
-import {
-  getListIdsFromRequest,
-  getListItem,
-  getLists,
-  ListItem,
-  ListItemRequest,
-  ListMetadata,
-} from './api/ListApi';
+import { getListItem, getLists, ListItem, ListMetadata } from './api/ListApi';
 
 export class AlexaUser extends JovoUser<Alexa> {
   constructor(jovo: Alexa) {
@@ -134,9 +127,5 @@ export class AlexaUser extends JovoUser<Alexa> {
   getListItem(listId: string, itemId: string): Promise<ListItem[]> {
     const request: AlexaRequest = this.jovo.$request;
     return getListItem(listId, itemId, request.getApiEndpoint(), request.getApiAccessToken());
-  }
-
-  getListIdsFromRequest(): ListItemRequest {
-    return getListIdsFromRequest(this.jovo);
   }
 }

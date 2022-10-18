@@ -87,7 +87,7 @@ someHandler() {
 
 ## Receive Item Update Requests from Alexa
 
-Your skill will also be called from Alexa when you subscribe to specific events. [Learn more in the official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/smapi/steps-to-create-a-list-skill.html#create-a-list-skill).
+Your skill will also be called from Alexa when you subscribe to specific events. [Learn more in the official Alexa docs](https://developer.amazon.com/docs/alexa/smapi/list-events-in-alexa-skills.html).
 
 First you have to add `householdList` to your used `apis`. You can't specify this using the Alexa console, that's why you have to enable it using the `skill.json`. The below example does that by using the [`files` property in the Alexa project configuration](./project-config.md#files):
 
@@ -151,6 +151,9 @@ const project = new ProjectConfig({
 You can, for example, use the following [handlers](https://www.jovo.tech/docs/handlers) to receive event requests from Alexa:
 
 ```typescript
+import { HouseholdListEventBody } from '@jovotech/platform-alexa';
+// ...
+
  // ITEMS CREATED
 @Handle({
   global: true,
@@ -158,7 +161,7 @@ You can, for example, use the following [handlers](https://www.jovo.tech/docs/ha
   platforms: ['alexa'],
 })
 handleCreatedItems() {
-  const { listId, listItemIds } = getIdsFromRequest(this);
+  const { listId, listItemIds }: HouseholdListEventBody = this.$alexa?.$request.request?.body;
   console.log(`Added ${listItemIds} to ${listId}`);
 
   if (!listItemIds || !listId) {
@@ -175,7 +178,7 @@ handleCreatedItems() {
   platforms: ['alexa'],
 })
 async handleUpdatedItems() {
-  const { listId, listItemIds } = getIdsFromRequest(this);
+  const { listId, listItemIds }: HouseholdListEventBody = this.$alexa?.$request.request?.body;
   console.log(`Modified ${listItemIds} from ${listId}`);
 }
 
@@ -186,12 +189,14 @@ async handleUpdatedItems() {
   platforms: ['alexa'],
 })
 async handleDeletedItems() {
-  const { listId, listItemIds } = getIdsFromRequest(this);
+  const { listId, listItemIds }: HouseholdListEventBody = this.$alexa?.$request.request?.body;
   console.log(`Deleted ${listItemIds} from ${listId}`);
 }
 ```
 
 ## List Management Methods
+
+The following methods can be used to call the [Alexa List Management API](https://developer.amazon.com/docs/alexa/list-skills/list-management-api-reference.html)
 
 - [Get Lists](#get-lists)
 - [Get Items From a List](#get-items-from-a-list)
