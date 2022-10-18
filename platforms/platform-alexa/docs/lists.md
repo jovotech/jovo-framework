@@ -44,7 +44,7 @@ You need to [add permissions to your skill manifest](#add-list-read-permission-t
 
 To be able to get the items from a user-list, you need to add the permission to the Skill project
 
-While you can manually enable the permission in the Alexa developer console, we recommend adding it to the `skill.json` manifest directly using the [Alexa project config](https://www.jovo.tech/marketplace/platform-alexa/project-config):
+While you can manually enable the permission in the Alexa developer console, we recommend adding it to the `skill.json` manifest directly using the [`files` property in the Alexa project config](./project-config.md#files):
 
 ```js
 const project = new ProjectConfig({
@@ -70,7 +70,7 @@ Learn more about the [`permissions` field in the official Alexa documentation](h
 
 Voice permissions provide a frictionless way to ask users if they want to provide access to their lists. [Learn more in the official Alexa docs](https://developer.amazon.com/en-US/docs/alexa/smapi/steps-to-create-a-list-skill.html#use-list-and-skill-events-in-your-list-skill-to-make-your-skill-responsive).
 
-You can use the `AskForListReadPermissionOutput` for this:
+You can use the [`AskForListReadPermissionOutput`](https://github.com/jovotech/jovo-framework/blob/v4/latest/platforms/platform-alexa/src/output/templates/AskForListReadPermissionOutput.ts) (which extends [`AskForPermissionOutput`](https://github.com/jovotech/jovo-framework/blob/v4/latest/platforms/platform-alexa/src/output/templates/AskForPermissionOutput.ts)) for this:
 
 ```typescript
 import { AskForListReadPermissionOutput } from '@jovotech/platform-alexa';
@@ -192,6 +192,8 @@ async handleDeletedItems() {
 ```
 
 ## Get Items From a List
+
+The `getListItem()` method can be used to make an API call to the Alexa List Management API:
 
 ```typescript
 async someHandler() {
