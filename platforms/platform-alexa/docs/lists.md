@@ -33,7 +33,7 @@ The `item` you receive from the method call is the same as defined [in the offic
 Learn more in the following sections:
 - [Permissions](#permissions)
 - [Receive Item Update Requests from Alexa](#receive-item-update-requests-from-alexa)
-- [Get Items From A List](#get-items-from-alist)
+- [Get Items From A List](#get-items-from-a-list)
 
 
 ## Permissions
@@ -191,7 +191,7 @@ async handleDeletedItems() {
 }
 ```
 
-## Get Items From aList
+## Get Items From a List
 
 ```typescript
 async someHandler() {
