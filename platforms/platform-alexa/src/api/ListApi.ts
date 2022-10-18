@@ -1,4 +1,4 @@
-import { AxiosError, JovoError, Jovo } from '@jovotech/framework';
+import { AxiosError, JovoError } from '@jovotech/framework';
 import { AlexaApiError, AlexaApiErrorCode, AlexaApiOptions, sendApiRequest } from './AlexaApi';
 
 export type ListMetadata = {

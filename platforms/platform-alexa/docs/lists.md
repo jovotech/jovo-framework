@@ -151,17 +151,14 @@ const project = new ProjectConfig({
 You can, for example, use the following [handlers](https://www.jovo.tech/docs/handlers) to receive event requests from Alexa:
 
 ```typescript
-import { HouseholdListEventBody } from '@jovotech/platform-alexa';
-// ...
-
- // ITEMS CREATED
+// ITEMS CREATED
 @Handle({
   global: true,
   types: ['AlexaHouseholdListEvent.ItemsCreated'],
   platforms: ['alexa'],
 })
 handleCreatedItems() {
-  const { listId, listItemIds }: HouseholdListEventBody = this.$alexa?.$request.request?.body;
+  const { listId, listItemIds } = this.$alexa?.$request.request?.body;
   console.log(`Added ${listItemIds} to ${listId}`);
 
   if (!listItemIds || !listId) {
@@ -178,7 +175,7 @@ handleCreatedItems() {
   platforms: ['alexa'],
 })
 async handleUpdatedItems() {
-  const { listId, listItemIds }: HouseholdListEventBody = this.$alexa?.$request.request?.body;
+  const { listId, listItemIds } = this.$alexa?.$request.request?.body;
   console.log(`Modified ${listItemIds} from ${listId}`);
 }
 
@@ -189,7 +186,7 @@ async handleUpdatedItems() {
   platforms: ['alexa'],
 })
 async handleDeletedItems() {
-  const { listId, listItemIds }: HouseholdListEventBody = this.$alexa?.$request.request?.body;
+  const { listId, listItemIds } = this.$alexa?.$request.request?.body;
   console.log(`Deleted ${listItemIds} from ${listId}`);
 }
 ```

@@ -217,6 +217,10 @@ export interface Request {
   body?: {
     acceptedPermissions?: { scope: string }[];
     acceptedPersonPermissions?: { scope: string }[];
+
+    // For requests of the type AlexaHouseholdListEvent
+    listId?: string;
+    listItemIds?: string[];
   };
 }
 
