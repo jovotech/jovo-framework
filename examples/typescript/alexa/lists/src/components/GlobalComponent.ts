@@ -1,4 +1,6 @@
 import { BaseComponent, Component, Global, Handle } from '@jovotech/framework';
+import { HouseholdListEventBody } from '@jovotech/platform-alexa';
+
 import { LoveHatePizzaComponent } from './LoveHatePizzaComponent';
 
 @Global()
@@ -15,15 +17,15 @@ export class GlobalComponent extends BaseComponent {
     platforms: ['alexa'],
   })
   handleCreatedItems() {
-    const ids = this.$alexa?.$user?.getListIdsFromRequest();
-    if (!ids?.listItemIds || !ids?.listId) {
+    const body: HouseholdListEventBody = this.alexa!.$request.request!.body;
+    if (!body?.listItemIds || !body?.listId) {
       return;
     }
-    const listId = ids.listId;
+    const listId = body.listId;
 
-    console.log(`Added ${ids.listItemIds} to ${listId}`);
+    console.log(`Added ${body.listItemIds} to ${listId}`);
 
-    Promise.all(ids.listItemIds.map(itemId => this.$alexa?.$user?.getListItem(listId, itemId)))
+    Promise.all(body.listItemIds.map(itemId => this.$alexa?.$user?.getListItem(listId, itemId)))
         .then(result => console.log('The created items are: ', result))
   }
 
@@ -34,8 +36,8 @@ export class GlobalComponent extends BaseComponent {
     platforms: ['alexa'],
   })
   async handleUpdatedItems() {
-    const ids = this.$alexa?.$user?.getListIdsFromRequest();
-    console.log(`Modified ${ids?.listItemIds} from ${ids?.listId}`);
+    const body: HouseholdListEventBody = this.alexa!.$request.request!.body;
+    console.log(`Modified ${body?.listItemIds} from ${body?.listId}`);
   }
 
   // ITEMS DELETED
@@ -45,7 +47,7 @@ export class GlobalComponent extends BaseComponent {
     platforms: ['alexa'],
   })
   async handleDeletedItems() {
-    const ids = this.$alexa?.$user?.getListIdsFromRequest();
-    console.log(`Deleted ${ids?.listItemIds} from ${ids?.listId}`);
+    const body: HouseholdListEventBody = this.alexa!.$request.request!.body;
+    console.log(`Deleted ${body?.listItemIds} from ${body?.listId}`);
   }
 }
