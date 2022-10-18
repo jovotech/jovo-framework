@@ -193,9 +193,12 @@ async handleDeletedItems() {
 
 ## List Management Methods
 
+- [Get Lists](#get-lists)
+- [Get Items From a List](#get-items-from-a-list)
+
 ### Get Lists
 
-The `getLists()` method can be used to make an API call to the [lists metadata endpoint](hhttps://developer.amazon.com/docs/alexa/list-skills/list-management-api-reference.html#get-list-metadata) in the Alexa List Management API:
+The `getLists()` method can be used to make an API call to the [lists metadata endpoint](https://developer.amazon.com/docs/alexa/list-skills/list-management-api-reference.html#get-list-metadata) in the Alexa List Management API:
 
 ```typescript
 async someHandler() {
@@ -206,6 +209,29 @@ async someHandler() {
       // ...
   }
 },
+```
+
+This returns an array of the following structure:
+
+```typescript
+[
+  {
+    "listId": "MTIzLXRvLWRvLVRBU0s=",
+    "name": "Alexa to-do list",
+    "state": "active",
+    "version": 1,
+    "statusMap": [{
+            "href": "URL",
+            "status": "active"
+        },
+        {
+            "href": "URL",
+            "status": "completed"
+        }
+    ]
+  },
+  // ...
+]
 ```
 
 ### Get Items From a List

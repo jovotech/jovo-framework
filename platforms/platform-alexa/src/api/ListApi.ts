@@ -12,6 +12,10 @@ export type ListMetadata = {
   };
 };
 
+export type ListMetadataResponse = {
+  lists: ListMetadata[];
+};
+
 export type ListItem = {
   id: string;
   version: number;
@@ -36,8 +40,8 @@ export async function getLists(
     method: 'GET',
   };
   try {
-    const response = await sendApiRequest<ListMetadata[]>(options);
-    return response.data;
+    const response = await sendApiRequest<ListMetadataResponse>(options);
+    return response.data.lists;
   } catch (error) {
     handleListApiErrors(error as AxiosError);
   }
