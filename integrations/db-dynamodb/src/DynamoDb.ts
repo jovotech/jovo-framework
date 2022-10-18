@@ -26,6 +26,7 @@ export interface DynamoDbConfig extends DbPluginConfig {
     primaryKeyColumn?: string; // Name of primary key column
     readCapacityUnits?: number; // @see https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughput.html
     writeCapacityUnits?: number; // @see https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughput.html
+    billingMode?: 'PROVISIONED' | 'PAY_PER_REQUEST'; // @see https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html
   };
   libraryConfig?: {
     dynamoDbClient?: DynamoDBClientConfig;
@@ -60,6 +61,7 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
         createTableOnInit: true,
         readCapacityUnits: 2,
         writeCapacityUnits: 2,
+        billingMode: 'PROVISIONED',
       },
       libraryConfig: {
         marshall: {
@@ -121,6 +123,7 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
         ReadCapacityUnits: this.config.table.readCapacityUnits!,
         WriteCapacityUnits: this.config.table.writeCapacityUnits!,
       },
+      BillingMode: this.config.table.billingMode!,
       TableName: this.config.table.name!,
     };
 

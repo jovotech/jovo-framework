@@ -170,13 +170,9 @@ export class RoutingExecutor {
 
   private async getRankedLocalRouteMatches(): Promise<RouteMatch[]> {
     const routeMatches = await this.getLocalRouteMatches();
-    return routeMatches.sort((match, otherMatch) => {
-      // if the path is different, ignore
-      if (match.path !== otherMatch.path) {
-        return 0;
-      }
-      return this.compareRouteMatchRanking(match, otherMatch);
-    });
+    return routeMatches.sort((match, otherMatch) =>
+      this.compareRouteMatchRanking(match, otherMatch),
+    );
   }
 
   private isMatchingLocalHandler(metadata: HandlerMetadata, subState?: string): boolean {
@@ -192,40 +188,44 @@ export class RoutingExecutor {
       return [];
     }
     const routeMatches: RouteMatch[] = [];
-    const latestStateStackItem = this.jovo.$state[this.jovo.$state.length - 1];
-    const currentComponentPath = latestStateStackItem.component.split('.');
-    let subState = latestStateStackItem.subState;
 
-    // get the current node
-    let node: ComponentTreeNode | undefined =
-      this.jovo.$handleRequest.componentTree.getNodeAtOrFail(currentComponentPath);
-    // loop all nodes and their parent's as long as root is reached
-    while (node) {
-      // create a map-callback for the given node's path
-      const handlerMetadataToRouteMatchMapper = this.createHandlerMetadataToRouteMatchMapper(
-        node.path,
-      );
-      const relatedHandlerMetadata =
-        MetadataStorage.getInstance().getMergedHandlerMetadataOfComponent(node.metadata.target);
+    for (let stackIndex = this.jovo.$state.length - 1; stackIndex >= 0; stackIndex--) {
+      const stackItem = this.jovo.$state[stackIndex];
+      const currentComponentPath = stackItem.component.split('.');
+      let subState = stackItem.subState;
 
-      for (const metadata of relatedHandlerMetadata) {
-        // if the conditions are no fulfilled, do not add the handler
-        if (
-          !this.isMatchingLocalHandler(metadata, subState) ||
-          !(await this.areHandlerConditionsFulfilled(metadata))
-        ) {
-          continue;
+      // get the current node
+      let node: ComponentTreeNode | undefined =
+        this.jovo.$handleRequest.componentTree.getNodeAtOrFail(currentComponentPath);
+      // loop all nodes and their parent's as long as root is reached
+      while (node) {
+        // create a map-callback for the given node's path
+        const handlerMetadataToRouteMatchMapper = this.createHandlerMetadataToRouteMatchMapper(
+          node.path,
+        );
+        const relatedHandlerMetadata =
+          MetadataStorage.getInstance().getMergedHandlerMetadataOfComponent(node.metadata.target);
+
+        for (const metadata of relatedHandlerMetadata) {
+          // if the conditions are no fulfilled, do not add the handler
+          if (
+            !this.isMatchingLocalHandler(metadata, subState) ||
+            !(await this.areHandlerConditionsFulfilled(metadata))
+          ) {
+            continue;
+          }
+          routeMatches.push(handlerMetadataToRouteMatchMapper(metadata, stackIndex));
         }
-        routeMatches.push(handlerMetadataToRouteMatchMapper(metadata));
-      }
 
-      // if a subState is set, make sure to check the same node without subState before moving to the parent
-      if (subState) {
-        subState = undefined;
-      } else {
-        node = node.parent;
+        // if a subState is set, make sure to check the same node without subState before moving to the parent
+        if (subState) {
+          subState = undefined;
+        } else {
+          node = node.parent;
+        }
       }
     }
+
     return routeMatches;
   }
 
@@ -241,9 +241,9 @@ export class RoutingExecutor {
 
   private createHandlerMetadataToRouteMatchMapper(
     path: string[],
-  ): (metadata: HandlerMetadata) => RouteMatch {
-    return (metadata) => {
-      return new RouteMatch(metadata, path);
+  ): (metadata: HandlerMetadata, stackIndex?: number) => RouteMatch {
+    return (metadata, stackIndex) => {
+      return new RouteMatch(metadata, path, stackIndex);
     };
   }
 
@@ -252,6 +252,29 @@ export class RoutingExecutor {
     const otherMatchIsUnhandled = otherMatch.metadata.intentNames.includes(
       BuiltInHandler.Unhandled,
     );
+
+    if (match.stackIndex && otherMatch.stackIndex) {
+      if (match.stackIndex < otherMatch.stackIndex) {
+        // if otherMatch is higher in the stack, it will take precedence except when it is UNHANDLED and match is prioritizedOverUnhandled.
+        if (otherMatchIsUnhandled && match.prioritizedOverUnhandled) {
+          return -1;
+        } else {
+          return 1;
+        }
+      } else if (match.stackIndex > otherMatch.stackIndex) {
+        // same thing in the other direction. If match is higher in the stack, it will take precedence.
+        if (matchIsUnhandled && otherMatch.prioritizedOverUnhandled) {
+          return 1;
+        } else {
+          return -1;
+        }
+      }
+    }
+    if (match.path !== otherMatch.path) {
+      // if the path is different, and we are not on separate stack levels, ignore
+      return 0;
+    }
+
     if (matchIsUnhandled && !otherMatchIsUnhandled) {
       return 1;
     } else if (!matchIsUnhandled && otherMatchIsUnhandled) {
