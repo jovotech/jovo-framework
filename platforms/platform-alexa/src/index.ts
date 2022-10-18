@@ -33,6 +33,7 @@ export * from './AlexaRequestBuilder';
 export * from './AlexaUser';
 export * from './api';
 export * from './api/ReminderApi';
+export * from './api/ListApi';
 export * from './constants';
 export * from './interfaces';
 export * from './output';
