@@ -33,7 +33,7 @@ The `item` you receive from the method call is the same as defined [in the offic
 Learn more in the following sections:
 - [Permissions](#permissions)
 - [Receive Item Update Requests from Alexa](#receive-item-update-requests-from-alexa)
-- [Get Items From A List](#get-items-from-a-list)
+- [List Management Methods](#list-management-methods)
 
 
 ## Permissions
@@ -191,9 +191,26 @@ async handleDeletedItems() {
 }
 ```
 
-## Get Items From a List
+## List Management Methods
 
-The `getListItem()` method can be used to make an API call to the Alexa List Management API:
+### Get Lists
+
+The `getLists()` method can be used to make an API call to the [lists metadata endpoint](hhttps://developer.amazon.com/docs/alexa/list-skills/list-management-api-reference.html#get-list-metadata) in the Alexa List Management API:
+
+```typescript
+async someHandler() {
+  try {
+    const lists = await this.$alexa!.$user.getLists();
+    // ...
+  } catch(error: Error) {
+      // ...
+  }
+},
+```
+
+### Get Items From a List
+
+The `getListItem()` method can be used to make an API call to the [list item endpoint](https://developer.amazon.com/docs/alexa/list-skills/list-management-api-reference.html#get-list-item) in the Alexa List Management API:
 
 ```typescript
 async someHandler() {

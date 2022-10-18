@@ -1,6 +1,17 @@
 import { AxiosError, JovoError, Jovo } from '@jovotech/framework';
 import { AlexaApiError, AlexaApiErrorCode, AlexaApiOptions, sendApiRequest } from './AlexaApi';
 
+export type ListMetadata = {
+  listId: string;
+  name: string;
+  state: 'active' | 'archived';
+  version: number;
+  statusMap: {
+    URL: string;
+    status: 'active' | 'completed';
+  };
+};
+
 export type ListItem = {
   id: string;
   version: number;
@@ -13,6 +24,25 @@ export type ListItem = {
 
 // Available types of default lists
 export type ListType = 'shopping-list' | 'todo-list';
+
+export async function getLists(
+  apiEndpoint: string,
+  permissionToken: string,
+): Promise<ListMetadata[]> {
+  const options: AlexaApiOptions = {
+    endpoint: apiEndpoint,
+    path: `/v2/householdlists`,
+    permissionToken,
+    method: 'GET',
+  };
+  try {
+    const response = await sendApiRequest<ListMetadata[]>(options);
+    return response.data;
+  } catch (error) {
+    handleListApiErrors(error as AxiosError);
+  }
+  throw new Error('Unexpected error.');
+}
 
 /**
  * Returns the type of the list
