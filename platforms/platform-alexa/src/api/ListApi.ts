@@ -68,12 +68,23 @@ export function getTypeOfList(listId: string): ListType {
   }
 }
 
+export async function getListItems(
+  listId: string,
+  itemIds: string[],
+  apiEndpoint: string,
+  permissionToken: string,
+): Promise<ListItem[]> {
+  return Promise.all(
+    itemIds.map((itemId) => getListItem(listId, itemId, apiEndpoint, permissionToken)),
+  );
+}
+
 export async function getListItem(
   listId: string,
   itemId: string,
   apiEndpoint: string,
   permissionToken: string,
-): Promise<ListItem[]> {
+): Promise<ListItem> {
   const options: AlexaApiOptions = {
     endpoint: apiEndpoint,
     path: `/v2/householdlists/${listId}/items/${itemId}`,
@@ -81,7 +92,7 @@ export async function getListItem(
     method: 'GET',
   };
   try {
-    const response = await sendApiRequest<ListItem[]>(options);
+    const response = await sendApiRequest<ListItem>(options);
     return response.data;
   } catch (error) {
     handleListApiErrors(error as AxiosError);

@@ -24,7 +24,7 @@ export class GlobalComponent extends BaseComponent {
 
     console.log(`Added ${body.listItemIds} to ${listId}`);
 
-    Promise.all(body.listItemIds.map((itemId: string) => this.$alexa!.$user?.getListItem(listId, itemId)))
+    this.$alexa!.$user?.getListItems(listId, body.listItemIds)
         .then(result => console.log('The created items are: ', result))
   }
 

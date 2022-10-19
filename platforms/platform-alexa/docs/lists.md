@@ -1,5 +1,5 @@
 ---
-title: 'Alexa Reminders'
+title: 'Alexa Lists'
 excerpt: 'Learn how to use the Alexa Skill Lists feature with Jovo.'
 ---
 
@@ -238,9 +238,13 @@ This returns an array of the following structure:
 
 ### Get Items From a List
 
-The `getListItem()` method can be used to make an API call to the [list item endpoint](https://developer.amazon.com/docs/alexa/list-skills/list-management-api-reference.html#get-list-item) in the Alexa List Management API:
+The `getListItem()` and `getListItems()` methods can be used to make an API call to the [list item endpoint](https://developer.amazon.com/docs/alexa/list-skills/list-management-api-reference.html#get-list-item) in the Alexa List Management API:
 
 ```typescript
+await this.$alexa.$user.getListItem(listId: string, itemId: string) // Retrieve a single item
+await this.$alexa.$user.getListItems(listId: string, itemIds: string[]) // Retrieve multiple items
+
+// Example
 async someHandler() {
   const listId = '<LIST ID>';
   const itemId = '<ITEM ID>';

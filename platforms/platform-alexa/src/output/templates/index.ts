@@ -1,5 +1,6 @@
 export * from './ApiResponseOutput';
 export * from './DialogDelegateRequestOutput';
+export * from './AskForListReadPermissionOutput';
 export * from './AskForPermissionOutput';
 export * from './AskForTimersPermissionOutput';
 export * from './AskForPermissionConsentCardOutput';
