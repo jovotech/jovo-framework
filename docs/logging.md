@@ -1,6 +1,7 @@
 ---
 title: 'Logging'
 excerpt: 'Learn about logging features that help you debug your Jovo apps.'
+url: 'https://www.jovo.tech/docs/logging'
 ---
 
 # Logging

@@ -1,6 +1,7 @@
 ---
 title: 'Clients'
 excerpt: 'Clients are the user facing interfaces that handle the recording of user input and communicate with platform integrations in a Jovo app.'
+url: 'https://www.jovo.tech/docs/clients'
 ---
 
 # Clients

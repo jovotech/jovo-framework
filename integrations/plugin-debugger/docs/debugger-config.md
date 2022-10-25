@@ -1,6 +1,7 @@
 ---
 title: 'Debugger Configuration - jovo.debugger.js'
 excerpt: 'Learn how you can customize the Jovo Debugger.'
+url: 'https://www.jovo.tech/docs/debugger-config'
 ---
 
 # Debugger Configuration

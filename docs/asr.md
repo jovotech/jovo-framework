@@ -1,6 +1,7 @@
 ---
 title: 'ASR Integrations'
 excerpt: 'Learn more about automatic speech recognition (ASR) services that can be integrated with Jovo.'
+url: 'https://www.jovo.tech/docs/asr'
 ---
 
 # ASR Integrations

@@ -1,6 +1,7 @@
 ---
 title: 'Properties'
 excerpt: 'Learn more about Jovo properties, which are reserved variables that part of the Jovo object.'
+url: 'https://www.jovo.tech/docs/jovo-properties'
 ---
 
 # Jovo Properties

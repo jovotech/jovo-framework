@@ -1,6 +1,7 @@
 ---
 title: 'Contributing to Jovo Open Source'
 excerpt: 'Learn more about setting up your Jovo development environment and contributing to the open source framework by submitting pull requests on GitHub.'
+url: 'https://www.jovo.tech/docs/contributing'
 ---
 
 # Contributing to Jovo

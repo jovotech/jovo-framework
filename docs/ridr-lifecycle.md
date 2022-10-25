@@ -1,6 +1,7 @@
 ---
 title: 'RIDR Lifecycle'
 excerpt: 'Learn more about one of the key concepts of Jovo: The RIDR (Request - Interpretation - Dialogue & Logic - Response) Lifecycle.'
+url: 'https://www.jovo.tech/docs/ridr-lifecycle'
 ---
 
 # RIDR Lifecycle

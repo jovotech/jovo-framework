@@ -1,6 +1,7 @@
 ---
 title: 'Output Classes'
 excerpt: 'Learn more about Jovo Output classes, which offer a way to return structured output templates.'
+url: 'https://www.jovo.tech/docs/output-classes'
 ---
 
 # Output Classes

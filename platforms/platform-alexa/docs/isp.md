@@ -1,6 +1,7 @@
 ---
 title: 'Alexa In-Skill Purchases (ISP)'
 excerpt: 'Learn how to implement Alexa In-Skill Purchasing (ISP) with Jovo.'
+url: 'https://www.jovo.tech/marketplace/platform-alexa/isp'
 ---
 
 # Alexa In-Skill Purchases (ISP)

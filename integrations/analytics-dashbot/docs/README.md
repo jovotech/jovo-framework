@@ -1,6 +1,7 @@
 ---
 title: 'Dashbot Analytics Integration'
 excerpt: 'The Dashbot Jovo integration allows you to monitor and analyze conversations between your Jovo app and its users.'
+url: 'https://www.jovo.tech/marketplace/analytics-dashbot'
 ---
 
 # Dashbot Analytics Integration

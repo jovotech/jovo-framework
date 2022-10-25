@@ -1,6 +1,7 @@
 ---
 title: 'Migration from v3'
 excerpt: 'Learn how to migrate Jovo v3 projects to Jovo v4.'
+url: 'https://www.jovo.tech/docs/migration-from-v3'
 ---
 
 # Migration from Jovo v3

@@ -1,6 +1,7 @@
 ---
 title: 'Vue3 Web Client'
 excerpt: 'Build voice experiences and chatbots for the web with Jovo and VueJS v3.'
+url: 'https://www.jovo.tech/marketplace/client-web-vue3'
 ---
 
 # Web Client (Vue3)
@@ -9,7 +10,7 @@ Build voice experiences and chatbots for the web. This frontend client brings yo
 
 ## Introduction
 
-![Jovo Client and Jovo Core Platform](https://github.com/jovotech/jovo-framework/raw/master/jovo-platforms/jovo-platform-core/img/jovo-client-platform-communication.png 'How Jovo Core Platform communicates with clients like web apps')
+![Jovo Client and Jovo Core Platform](https://github.com/jovotech/jovo-framework/raw/v3/latest/jovo-platforms/jovo-platform-core/img/jovo-client-platform-communication.png 'How Jovo Core Platform communicates with clients like web apps')
 
 [Jovo Clients](https://www.jovo.tech/docs/clients) help with two tasks:
 

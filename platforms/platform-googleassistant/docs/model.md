@@ -1,6 +1,7 @@
 ---
 title: 'Google Assistant Language Model'
 excerpt: 'Learn more about Jovo output templates for Alexa.'
+url: 'https://www.jovo.tech/marketplace/platform-googleassistant/model'
 ---
 
 # Google Assistant Language Model

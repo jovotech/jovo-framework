@@ -1,6 +1,7 @@
 ---
 title: 'Alexa Output'
 excerpt: 'Learn more about Jovo output templates for Alexa.'
+url: 'https://www.jovo.tech/marketplace/platform-alexa/output'
 ---
 
 # Alexa Output

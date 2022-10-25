@@ -1,6 +1,7 @@
 ---
 title: 'Google Assistant Platform Integration'
 excerpt: 'The Google Assistant platform integration allows you to build custom Google Conversational Actions using Jovo.'
+url: 'https://www.jovo.tech/marketplace/platform-googleassistant'
 ---
 
 # Google Assistant Platform Integration

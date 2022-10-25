@@ -1,6 +1,7 @@
 ---
 title: 'Alexa CLI Commands'
 excerpt: 'Learn how to build and deploy Alexa projects using the Jovo CLI.'
+url: 'https://www.jovo.tech/marketplace/platform-alexa/cli-commands'
 ---
 
 # Alexa CLI Commands

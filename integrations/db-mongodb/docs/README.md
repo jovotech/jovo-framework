@@ -1,6 +1,7 @@
 ---
 title: 'MongoDB Database Integration'
 excerpt: 'The MongoDB Jovo integration allows you to store user specific data and more in a MongoDB database.'
+url: 'https://www.jovo.tech/marketplace/db-mongodb'
 ---
 
 # MongoDB Database Integration

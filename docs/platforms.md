@@ -1,6 +1,7 @@
 ---
 title: 'Platforms'
 excerpt: 'Learn more about Jovo Platform integrations are responsible for communicating with platforms like Alexa, Google Assistant, the web, and more.'
+url: 'https://www.jovo.tech/docs/platforms'
 ---
 
 # Platforms
