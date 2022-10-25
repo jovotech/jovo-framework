@@ -1,6 +1,7 @@
 ---
 title: 'Server Integrations'
 excerpt: 'Jovo offers a variety of server integrations that allow you to host your apps on your own server or cloud platforms like AWS.'
+url: 'https://www.jovo.tech/docs/server'
 ---
 
 # Server Integrations

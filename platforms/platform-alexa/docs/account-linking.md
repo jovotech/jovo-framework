@@ -1,6 +1,7 @@
 ---
 title: 'Alexa Account Linking'
 excerpt: 'Learn how to use account linking with Alexa and Jovo.'
+url: 'https://www.jovo.tech/marketplace/platform-alexa/account-linking'
 ---
 
 # Alexa Account Linking

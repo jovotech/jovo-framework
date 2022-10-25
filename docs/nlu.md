@@ -1,6 +1,7 @@
 ---
 title: 'NLU Integrations'
 excerpt: 'Learn more about natural language understanding (NLU) services that can be integrated with Jovo.'
+url: 'https://www.jovo.tech/docs/nlu'
 ---
 
 # NLU Integrations

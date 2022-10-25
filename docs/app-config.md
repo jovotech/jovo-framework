@@ -1,6 +1,7 @@
 ---
 title: 'App Configuration'
 excerpt: 'Learn how to configure a Jovo app and how to add plugins, components, and staging.'
+url: 'https://www.jovo.tech/docs/app-config'
 ---
 
 # App Configuration

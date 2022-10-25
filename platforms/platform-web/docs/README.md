@@ -1,6 +1,7 @@
 ---
 title: 'Web Platform'
 excerpt: 'The Jovo Web Platform is a standalone platform integration that can be used to deploy a voice and chat experiences to the web, including React and VueJS.'
+url: 'https://www.jovo.tech/marketplace/platform-web'
 ---
 
 # Web Platform

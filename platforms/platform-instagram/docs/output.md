@@ -1,6 +1,7 @@
 ---
 title: 'Instagram Output'
 excerpt: 'Learn more about Jovo output templates for Instagram bots.'
+url: 'https://www.jovo.tech/marketplace/platform-instagram/output'
 ---
 
 # Instagram Output

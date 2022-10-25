@@ -1,6 +1,7 @@
 ---
 title: 'Google Assistant Output'
 excerpt: 'Learn more about Jovo output templates for Google Assistant Output.'
+url: 'https://www.jovo.tech/marketplace/platform-googleassistant/output'
 ---
 
 # Google Assistant Output

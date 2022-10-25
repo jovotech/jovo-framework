@@ -1,6 +1,7 @@
 ---
 title: 'Express Server Integration'
 excerpt: 'Host Jovo apps on your own server using Express.'
+url: 'https://www.jovo.tech/marketplace/server-express'
 ---
 
 # Express Server Integration

@@ -1,6 +1,7 @@
 ---
 title: 'Facebook Messenger Output'
 excerpt: 'Learn more about Jovo output templates for Facebook Messenger.'
+url: 'https://www.jovo.tech/marketplace/platform-facebookmessenger/output'
 ---
 
 # Facebook Messenger Output

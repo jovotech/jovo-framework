@@ -1,6 +1,7 @@
 ---
 title: 'Deployment'
 excerpt: 'Learn how you can deploy your Jovo app to a server or cloud provider.'
+url: 'https://www.jovo.tech/docs/deployment'
 ---
 
 # Deployment

@@ -1,6 +1,7 @@
 ---
 title: 'Components'
 excerpt: 'Learn more about Jovo Components, which are self-contained and reusable elements in a Jovo app.'
+url: 'https://www.jovo.tech/docs/components'
 ---
 
 # Components

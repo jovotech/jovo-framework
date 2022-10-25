@@ -1,6 +1,7 @@
 ---
 title: 'Keyword NLU Plugin'
 excerpt: 'Improve NLU perfomance by matching common keywords to intents instead of making lengthy NLU API requests.'
+url: 'https://www.jovo.tech/marketplace/plugin-keywordnlu'
 ---
 
 # Keyword NLU Plugin

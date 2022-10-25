@@ -1,6 +1,7 @@
 ---
 title: 'Instagram Platform Integration'
 excerpt: 'The Instagram platform integration allows you to build custom Instagram messaging bots using Jovo.'
+url: 'https://www.jovo.tech/marketplace/platform-instagram'
 ---
 
 # Instagram Platform Integration

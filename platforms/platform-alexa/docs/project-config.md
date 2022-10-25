@@ -1,6 +1,7 @@
 ---
 title: 'Alexa Project Configuration'
 excerpt: 'Learn how to configure your Alexa projects using the Jovo CLI.'
+url: 'https://www.jovo.tech/marketplace/platform-alexa/project-config'
 ---
 
 # Alexa Project Configuration

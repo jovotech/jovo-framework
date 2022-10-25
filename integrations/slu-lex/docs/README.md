@@ -1,6 +1,7 @@
 ---
 title: 'Lex SLU Integration'
 excerpt: 'Turn speech input into structured meaning with the Jovo Framework integration for Amazon Lex.'
+url: 'https://www.jovo.tech/marketplace/slu-lex'
 ---
 
 # Lex SLU Integration

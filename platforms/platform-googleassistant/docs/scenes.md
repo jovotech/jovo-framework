@@ -1,6 +1,7 @@
 ---
 title: 'Google Assistant Scenes'
 excerpt: 'Learn how to use scenes when building Google Conversational Actions with Jovo.'
+url: 'https://www.jovo.tech/marketplace/platform-googleassistant/scenes'
 ---
 
 # Google Assistant Scenes

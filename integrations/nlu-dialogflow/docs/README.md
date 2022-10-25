@@ -1,6 +1,7 @@
 ---
 title: 'Dialogflow NLU Integration'
 excerpt: 'Turn raw text into structured meaning with the Jovo Framework integration for the natural language understanding service Dialogflow.'
+url: 'https://www.jovo.tech/marketplace/nlu-dialogflow'
 ---
 
 # Dialogflow NLU Integration
