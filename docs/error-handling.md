@@ -1,6 +1,7 @@
 ---
 title: 'Error Handling'
 excerpt: 'Learn more about different ways of error handling when building Jovo apps and plugins.'
+url: 'https://www.jovo.tech/docs/error-handling'
 ---
 
 # Error Handling

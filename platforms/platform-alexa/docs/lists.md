@@ -1,6 +1,7 @@
 ---
 title: 'Alexa Lists'
 excerpt: 'Learn how to use the Alexa Skill Lists feature with Jovo.'
+url: 'https://www.jovo.tech/marketplace/platform-alexa/lists'
 ---
 
 # Alexa Lists

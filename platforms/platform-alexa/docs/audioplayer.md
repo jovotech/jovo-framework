@@ -1,6 +1,7 @@
 ---
 title: 'Alexa AudioPlayer'
 excerpt: 'Learn how to build Alexa Skills with AudioPlayer functionality using Jovo.'
+url: 'https://www.jovo.tech/marketplace/platform-alexa/audioplayer'
 ---
 
 # Alexa AudioPlayer

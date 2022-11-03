@@ -1,6 +1,7 @@
 ---
 title: 'Google Assistant Account Linking'
 excerpt: 'Learn how to use account linking with Google Conversational Actions and Jovo.'
+url: 'https://www.jovo.tech/marketplace/platform-googleassistant/account-linking'
 ---
 
 # Google Assistant Account Linking

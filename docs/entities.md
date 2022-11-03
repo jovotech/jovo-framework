@@ -1,6 +1,7 @@
 ---
 title: 'Entities'
 excerpt: 'Learn how to access entities and configure dynamic entities using Jovo.'
+url: 'https://www.jovo.tech/docs/entities'
 ---
 
 # Entities

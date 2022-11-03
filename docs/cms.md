@@ -1,6 +1,7 @@
 ---
 title: 'CMS Integrations'
 excerpt: 'Learn more about content management system (CMS) services that can be integrated with Jovo.'
+url: 'https://www.jovo.tech/docs/cms'
 ---
 
 # CMS Integrations

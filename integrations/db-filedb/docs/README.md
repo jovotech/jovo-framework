@@ -1,6 +1,7 @@
 ---
 title: 'FileDb Local JSON Database Integration'
 excerpt: 'This is the default database for prototyping with Jovo: A file based system that stores data in a JSON file.'
+url: 'https://www.jovo.tech/marketplace/db-filedb'
 ---
 
 # FileDb Local JSON Database Integration

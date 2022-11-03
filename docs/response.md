@@ -1,6 +1,7 @@
 ---
 title: 'Response'
 excerpt: 'Learn more about the Jovo response object, which is the generated native JSON response which gets returned to voice and chat platforms.'
+url: 'https://www.jovo.tech/docs/response'
 ---
 
 # Response

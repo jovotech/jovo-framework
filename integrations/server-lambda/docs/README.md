@@ -1,6 +1,7 @@
 ---
 title: 'AWS Lambda Server Integration'
 excerpt: 'Host Jovo apps on AWS Lambda serverless functions.'
+url: 'https://www.jovo.tech/marketplace/server-lambda'
 ---
 
 # AWS Lambda Integration

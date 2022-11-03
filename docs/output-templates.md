@@ -1,6 +1,7 @@
 ---
 title: 'Output Template'
 excerpt: 'Learn more about the structure of Jovo output templates, which offer the ability to create cross-platform output for voice and chat experiences.'
+url: 'https://www.jovo.tech/docs/output-templates'
 ---
 
 # Output Templates

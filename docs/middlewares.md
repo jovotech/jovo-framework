@@ -1,6 +1,7 @@
 ---
 title: 'Middlewares'
 excerpt: 'Learn how you can extend Jovo by hooking into different types of middlewares.'
+url: 'https://www.jovo.tech/docs/middlewares'
 ---
 
 # Middlewares

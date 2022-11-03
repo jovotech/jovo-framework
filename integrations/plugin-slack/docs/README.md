@@ -1,6 +1,7 @@
 ---
 title: 'Slack Plugin'
 excerpt: 'Send error messages and other notifications from your Jovo app to Slack.'
+url: 'https://www.jovo.tech/marketplace/plugin-slack'
 ---
 
 # Slack Plugin

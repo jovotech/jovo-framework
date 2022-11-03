@@ -1,6 +1,7 @@
 ---
 title: 'Handlers'
 excerpt: 'Learn more about Jovo Handlers, which are methods inside a Jovo Component that are responsible for handling a request and returning output.'
+url: 'https://www.jovo.tech/docs/handlers'
 ---
 
 # Handlers

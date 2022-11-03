@@ -1,6 +1,7 @@
 ---
 title: 'GoogleSheets CMS Integration'
 excerpt: 'The GoogleSheets Jovo integration lets you manage your content in Google Spreadsheets.'
+url: 'https://www.jovo.tech/marketplace/cms-googlesheets'
 ---
 
 # GoogleSheets CMS Integration

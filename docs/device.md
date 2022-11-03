@@ -1,6 +1,7 @@
 ---
 title: 'Device'
 excerpt: 'Lear more about the Jovo Device class that allows you to retrieve device-specific features and capabilities.'
+url: 'https://www.jovo.tech/docs/device'
 ---
 
 # Device

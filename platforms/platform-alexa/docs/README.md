@@ -1,6 +1,7 @@
 ---
 title: 'Alexa Platform Integration'
 excerpt: 'The Amazon Alexa platform integration allows you to build custom Alexa Skills using Jovo.'
+url: 'https://www.jovo.tech/marketplace/platform-alexa'
 ---
 
 # Amazon Alexa Platform Integration

@@ -1,6 +1,7 @@
 ---
 title: 'Data'
 excerpt: 'Learn more about different types of data that can be used in a Jovo app. For example, some data might be only relevant for a specific interaction, a component, or session.'
+url: 'https://www.jovo.tech/docs/data'
 ---
 
 # Data

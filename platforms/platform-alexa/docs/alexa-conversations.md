@@ -1,6 +1,7 @@
 ---
 title: 'Alexa Conversations'
 excerpt: 'Learn how to build Alexa Skills with Alexa Conversations using Jovo.'
+url: 'https://www.jovo.tech/marketplace/platform-alexa/alexa-conversations'
 ---
 
 # Alexa Conversations

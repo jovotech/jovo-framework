@@ -1,6 +1,7 @@
 ---
 title: 'TTS Integrations'
 excerpt: 'Learn more about text to speech (TTS) services that can be integrated with Jovo.'
+url: 'https://www.jovo.tech/docs/tts'
 ---
 
 # TTS Integrations

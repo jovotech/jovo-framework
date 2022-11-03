@@ -1,6 +1,7 @@
 ---
 title: 'Hooks'
 excerpt: 'Learn how to extend Jovo apps using Hooks.'
+url: 'https://www.jovo.tech/docs/hooks'
 ---
 
 # Jovo Hooks

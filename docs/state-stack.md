@@ -1,6 +1,7 @@
 ---
 title: 'State Stack'
 excerpt: 'The Jovo State Stack remembers components that are relevant for the current user session.'
+url: 'https://www.jovo.tech/docs/state-stack'
 ---
 
 # State Stack

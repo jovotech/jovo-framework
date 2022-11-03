@@ -1,6 +1,7 @@
 ---
 title: 'Rasa NLU Integration'
 excerpt: 'Turn raw text into structured meaning with the Jovo Framework integration for the open source natural language understanding service Rasa NLU.'
+url: 'https://www.jovo.tech/marketplace/nlu-rasa'
 ---
 
 # Rasa NLU Integration

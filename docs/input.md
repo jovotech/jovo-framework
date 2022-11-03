@@ -1,6 +1,7 @@
 ---
 title: 'Input'
 excerpt: 'Learn more about the Jovo Input property, which includes structured user input.'
+url: 'https://www.jovo.tech/docs/input'
 ---
 
 # Input

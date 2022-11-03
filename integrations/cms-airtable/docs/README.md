@@ -1,6 +1,7 @@
 ---
 title: 'Airtable CMS Integration'
 excerpt: 'The Airtable Jovo integration lets you manage your voice and chatbot content in Airtable.'
+url: 'https://www.jovo.tech/marketplace/cms-airtable'
 ---
 
 # Airtable CMS Integration
