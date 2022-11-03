@@ -1,4 +1,4 @@
-import { ArrayElement, JovoLoggerConfig } from '@jovotech/common';
+import { ArrayElement, JovoLoggerConfig, UnknownObject } from '@jovotech/common';
 import _merge from 'lodash.merge';
 import {
   AppData,
@@ -77,6 +77,9 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
 
   // @see https://www.jovo.tech/docs/data#app-data
   data: AppData = {};
+
+  // @see https://www.jovo.tech/docs/cms
+  cms: UnknownObject = {};
 
   constructor(config?: AppInitConfig) {
     super(config ? { ...config, components: undefined } : config);
