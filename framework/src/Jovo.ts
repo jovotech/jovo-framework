@@ -321,13 +321,6 @@ export abstract class Jovo<
       this.$handleRequest.activeComponentNode?.path,
     );
 
-    if (
-      componentNode.metadata.options.isAvailable &&
-      !componentNode.metadata.options.isAvailable(this)
-    ) {
-      throw new ComponentNotAvailableError(componentName);
-    }
-
     // clear the state stack
     this.$session.state = [];
 
@@ -371,13 +364,6 @@ export abstract class Jovo<
       componentName,
       this.$handleRequest.activeComponentNode?.path,
     );
-
-    if (
-      componentNode.metadata.options.isAvailable &&
-      !componentNode.metadata.options.isAvailable(this)
-    ) {
-      throw new ComponentNotAvailableError(componentName);
-    }
 
     // if the component that is currently being executed is global
     if (this.$handleRequest.activeComponentNode?.metadata?.isGlobal) {
