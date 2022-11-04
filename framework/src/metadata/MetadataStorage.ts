@@ -189,6 +189,15 @@ export class MetadataStorage {
         relatedHandlerMetadata.mergeWith(optionMetadata);
       }
     });
+
+    const prototype = Object.getPrototypeOf(target);
+    // Object.getPrototypeOf of the topmost class in the superclass chain is {} (empty object)
+    // and Object.getPrototypeOf({}) of {} is Object.prototype.
+    if (prototype && Object.getPrototypeOf(prototype) !== Object.prototype) {
+      const parentMergedMetadata = this.getMergedHandlerMetadataOfComponent(prototype);
+      return [...mergedMetadata, ...parentMergedMetadata];
+    }
+
     return mergedMetadata;
   }
 
