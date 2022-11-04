@@ -7,6 +7,7 @@ import { HandlerMetadata } from '../metadata/HandlerMetadata';
 import { MetadataStorage } from '../metadata/MetadataStorage';
 import { RouteMatch } from './RouteMatch';
 import { JovoRoute } from './RouterPlugin';
+import * as console from 'console';
 
 export class RoutingExecutor {
   constructor(readonly jovo: Jovo) {}
@@ -236,6 +237,7 @@ export class RoutingExecutor {
         this.jovo.$platform.outputTemplateConverterStrategy.platformName,
       );
     const isConditionFulfilled = !metadata.options?.if || (await metadata.options?.if?.(this.jovo));
+    console.log({ isConditionFulfilled, isPlatformSupported });
     return isPlatformSupported && isConditionFulfilled;
   }
 
