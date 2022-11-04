@@ -21,7 +21,6 @@ import {
   I18NextTOptions,
   I18NextValueAt,
   JovoInput,
-  MatchingRouteNotFoundError,
   MetadataStorage,
   OutputConstructor,
   PersistableSessionData,
@@ -39,7 +38,6 @@ import { JovoUser } from './JovoUser';
 import { Platform } from './Platform';
 import { JovoRoute } from './plugins/RouterPlugin';
 import { forEachDeep } from './utilities';
-import { ComponentNotAvailableError } from './errors/ComponentNotAvailableError';
 
 const DELEGATE_MIDDLEWARE = 'event.$delegate';
 const RESOLVE_MIDDLEWARE = 'event.$resolve';
