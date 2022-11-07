@@ -53,8 +53,10 @@ export abstract class AlexaHook<EVENTS extends Events = DefaultEvents> extends P
    * Creates an empty ask config file.
    */
   createEmptyAskConfig(): void {
-    const config: AskConfig = _get(DefaultFiles, '[".ask/"]["ask-states.json"]');
-    writeFileSync(this.$plugin.askConfigPath, JSON.stringify(config, null, 2));
+    const config: AskConfig | undefined = _get(DefaultFiles, '[".ask/"]["ask-states.json"]');
+    if (config) {
+      writeFileSync(this.$plugin.askConfigPath, JSON.stringify(config, null, 2));
+    }
   }
 
   /**
