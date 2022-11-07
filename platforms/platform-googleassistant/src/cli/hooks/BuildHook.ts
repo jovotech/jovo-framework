@@ -514,9 +514,8 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
   /**
    * Gets configured actions from config.
    */
-  getProjectActions(): void {
-    const actions = _get(this.$plugin.config, 'files.["actions/"]');
-    return actions;
+  getProjectActions() {
+    return _get(this.$plugin.config, 'files.["actions/"]');
   }
 
   /**
@@ -531,7 +530,7 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
       [],
     ) as SupportedLocalesType[];
 
-    let defaultLocale: string =
+    let defaultLocale =
       _get(this.$plugin.config, 'files.settings/["settings.yaml"].defaultLocale') ||
       _get(this.$plugin.config, 'defaultLocale');
 
@@ -575,7 +574,7 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
    * @param locale - The locale to get the resolution from.
    */
   getProjectLocales(locale: string): string[] {
-    return _get(this.$plugin.config, `options.locales.${locale}`) as string[];
+    return _get(this.$plugin.config, `options.locales.${locale}`) as unknown as string[];
   }
 
   /**
