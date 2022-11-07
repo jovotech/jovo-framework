@@ -247,7 +247,7 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
     try {
       const askConfig = this.getAskConfig();
       const askProfile: string = this.$context.alexa.askProfile || 'default';
-      const skillId: string = _get(askConfig, `profiles.${askProfile}.skillId`);
+      const skillId: string = _get(askConfig, `profiles.${askProfile}.skillId`, '');
       if (skillId && skillId.length > 0) {
         return skillId;
       }
