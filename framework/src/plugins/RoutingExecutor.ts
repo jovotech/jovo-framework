@@ -170,9 +170,13 @@ export class RoutingExecutor {
 
   private async getRankedLocalRouteMatches(): Promise<RouteMatch[]> {
     const routeMatches = await this.getLocalRouteMatches();
-    return routeMatches.sort((match, otherMatch) =>
-      this.compareRouteMatchRanking(match, otherMatch),
-    );
+    return routeMatches.sort((match, otherMatch) => {
+      // if the path is different, ignore
+      if (match.path !== otherMatch.path) {
+        return 0;
+      }
+      return this.compareRouteMatchRanking(match, otherMatch);
+    });
   }
 
   private isMatchingLocalHandler(metadata: HandlerMetadata, subState?: string): boolean {
@@ -269,10 +273,6 @@ export class RoutingExecutor {
           return -1;
         }
       }
-    }
-    if (match.path !== otherMatch.path) {
-      // if the path is different, and we are not on separate stack levels, ignore
-      return 0;
     }
 
     if (matchIsUnhandled && !otherMatchIsUnhandled) {
