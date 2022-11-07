@@ -1,6 +1,7 @@
 ---
 title: 'Core Platform Output'
 excerpt: 'Learn more about Jovo output templates for Jovo Core Platform.'
+url: 'https://www.jovo.tech/marketplace/platform-core/output'
 ---
 
 # Core Platform Output

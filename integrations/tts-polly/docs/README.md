@@ -1,6 +1,7 @@
 ---
 title: 'Amazon Polly TTS Integration'
 excerpt: 'Turn text into audio files with the Jovo Framework text to speech (TTS) integration for Amazon Polly.'
+url: 'https://www.jovo.tech/marketplace/tts-polly'
 ---
 
 # Amazon Polly TTS Integration

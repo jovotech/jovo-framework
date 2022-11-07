@@ -1,6 +1,7 @@
 ---
 title: 'DynamoDB Database Integration'
 excerpt: 'The DynamoDB Jovo integration allows you to store user specific data in a DynamoDB table.'
+url: 'https://www.jovo.tech/marketplace/db-dynamodb'
 ---
 
 # DynamoDB Database Integration

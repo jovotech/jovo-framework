@@ -1,6 +1,7 @@
 ---
 title: 'Webhook'
 excerpt: 'Develop and test your voice apps and chatbots locally using Jovo.'
+url: 'https://www.jovo.tech/docs/webhook'
 ---
 
 # Jovo Webhook

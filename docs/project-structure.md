@@ -1,6 +1,7 @@
 ---
 title: 'Project Structure'
 excerpt: 'Learn how you can organize your Jovo project.'
+url: 'https://www.jovo.tech/docs/project-structure'
 ---
 
 # Project Structure

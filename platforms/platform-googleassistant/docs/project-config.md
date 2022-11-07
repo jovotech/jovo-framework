@@ -1,6 +1,7 @@
 ---
 title: 'Google Assistant Project Configuration'
 excerpt: 'Learn how to configure your Google Assistant projects using the Jovo CLI.'
+url: 'https://www.jovo.tech/marketplace/platform-googleassistant/project-config'
 ---
 
 # Google Assistant Project Configuration

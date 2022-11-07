@@ -1,6 +1,7 @@
 ---
 title: 'Alexa Reminders'
 excerpt: 'Learn how to use the Alexa Skill Reminders feature with Jovo.'
+url: 'https://www.jovo.tech/marketplace/platform-alexa/reminders'
 ---
 
 # Alexa Reminders

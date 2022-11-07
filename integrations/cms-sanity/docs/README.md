@@ -1,6 +1,7 @@
 ---
 title: 'Sanity CMS Integration'
 excerpt: 'The Sanity Jovo integration lets you manage your content using the Sanity.'
+url: 'https://www.jovo.tech/marketplace/cms-sanity'
 ---
 
 # Sanity CMS Integration

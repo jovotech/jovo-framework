@@ -1,6 +1,7 @@
 ---
 title: 'Output Configuration'
 excerpt: 'There are certain configurations that determine how an output template is translated into a native platform response.'
+url: 'https://www.jovo.tech/docs/output-config'
 ---
 
 # Output Configuration

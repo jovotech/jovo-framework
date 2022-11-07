@@ -1,6 +1,7 @@
 ---
 title: 'Google Assistant CLI Commands'
 excerpt: 'Learn how to build and deploy Google Assistant projects using the Jovo CLI.'
+url: 'https://www.jovo.tech/marketplace/platform-googleassistant/cli-commands'
 ---
 
 # Google Assistant CLI Commands

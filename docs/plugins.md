@@ -1,6 +1,7 @@
 ---
 title: 'Plugins'
 excerpt: 'Learn how you can build your own plugins to customize and extend the Jovo Framework.'
+url: 'https://www.jovo.tech/docs/plugins'
 ---
 
 # Plugins

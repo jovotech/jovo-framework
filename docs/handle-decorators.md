@@ -1,6 +1,7 @@
 ---
 title: 'Handle Decorators'
 excerpt: 'Learn more about Jovo Handle decorators, which determine which types of user input a handler should respond to.'
+url: 'https://www.jovo.tech/docs/handle-decorators'
 ---
 
 # Handle Decorators

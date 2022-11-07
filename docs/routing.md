@@ -1,6 +1,7 @@
 ---
 title: 'Routing'
 excerpt: 'Learn more about the different elements of routing: How the Jovo app decides which component and handler should respond to a request.'
+url: 'https://www.jovo.tech/docs/routing'
 ---
 
 # Routing

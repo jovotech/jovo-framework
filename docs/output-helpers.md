@@ -1,6 +1,7 @@
 ---
 title: 'Output Helpers'
 excerpt: 'Learn more about helper methods that make it easier to create Jovo output templates that work across voice and chat platforms.'
+url: 'https://www.jovo.tech/docs/output-helpers'
 ---
 
 # Output Helpers

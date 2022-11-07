@@ -1,6 +1,7 @@
 ---
 title: 'Installation'
 excerpt: 'Learn how to install Jovo, the open source framework for voice and chat apps.'
+url: 'https://www.jovo.tech/docs/installation'
 ---
 
 # Installation

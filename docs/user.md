@@ -1,6 +1,7 @@
 ---
 title: 'User'
 excerpt: 'Learn more about the Jovo User property.'
+url: 'https://www.jovo.tech/docs/user'
 ---
 
 # User
