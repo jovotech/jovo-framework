@@ -136,7 +136,7 @@ export abstract class Jovo<
     this.$session = this.getSession();
     this.$user = this.$platform.createUserInstance(this as unknown as JOVO);
 
-    this.$cms = {};
+    this.$cms = $app.cms;
   }
 
   get $config(): AppConfig {
