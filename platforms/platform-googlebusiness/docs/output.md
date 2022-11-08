@@ -1,6 +1,6 @@
 ---
 title: 'Google Business Messages Output'
-excerpt: 'Learn more about Jovo output templates for Google Business Messages.'
+excerpt: "Learn more about Jovo output templates for Google's Business Messages."
 url: 'https://www.jovo.tech/marketplace/platform-googlebusiness/output'
 ---
 
