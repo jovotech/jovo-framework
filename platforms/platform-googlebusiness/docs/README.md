@@ -1,16 +1,16 @@
 ---
 title: "Google's Business Messages"
-excerpt: 'Build conversational experiences right into your business location on Google Maps and Google Search with this Business Messages integration for Jovo.'
+excerpt: 'Build chatbots and conversational experiences right into your business location on Google Maps and Google Search with this Business Messages integration for Jovo.'
 url: 'https://www.jovo.tech/marketplace/platform-googlebusiness'
 ---
 
 # Google's Business Messages
 
-Build conversational experiences right into your business location on Google Maps and Google Search with this Business Messages [platform integration](https://www.jovo.tech/docs/platforms) for Jovo.
+Build conversational experiences and chatbots right into your business location on Google Maps and Google Search with this Business Messages [platform integration](https://www.jovo.tech/docs/platforms) for Jovo.
 
 ## Introduction
 
-[Google's Business Messages](https://developers.google.com/business-communications/business-messages) allows you to build conversational experiences that can be connected to many Google channels, including Maps and Search. You can [find the official documentation here](https://developers.google.com/business-communications/business-messages/guides).
+[Google's Business Messages](https://developers.google.com/business-communications/business-messages) allows you to build chatbots and conversational experiences that can be connected to many Google channels, including Maps and Search. You can [find the official documentation here](https://developers.google.com/business-communications/business-messages/guides).
 
 Learn more about getting started in the [installation](#installation) and [configuration](#configuration) sections. You can also [find a sample app here](https://github.com/jovotech/jovo-framework/tree/v4/latest/examples/typescript/googlebusiness/basic).
 
