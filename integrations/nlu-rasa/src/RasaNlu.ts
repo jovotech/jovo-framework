@@ -52,7 +52,7 @@ export class RasaNlu extends NluPlugin<RasaNluConfig> {
         },
         alternativeIntents: this.mapAlternativeIntents(rasaResponse.data.intent_ranking),
         entities: this.getEntityMapFromResponse(rasaResponse.data),
-        native: rasaResponse,
+        native: rasaResponse.data,
       };
     } catch (e) {
       // eslint-disable-next-line no-console

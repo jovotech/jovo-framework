@@ -56,7 +56,7 @@ export class DialogflowNlu extends NluPlugin<DialogflowNluConfig> {
       );
 
       const nluData: NluData = {
-        native: dialogflowResponse,
+        native: dialogflowResponse.data,
       };
       const displayName = dialogflowResponse.data.queryResult.intent.displayName;
       if (displayName) {
