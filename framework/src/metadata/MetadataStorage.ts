@@ -7,6 +7,9 @@ import { HandlerMetadata } from './HandlerMetadata';
 import { HandlerOptionMetadata } from './HandlerOptionMetadata';
 import { MethodDecoratorMetadata } from './MethodDecoratorMetadata';
 import { OutputMetadata } from './OutputMetadata';
+import { InjectableMetadata, InjectionToken } from './InjectableMetadata';
+import { Constructor } from '@jovotech/common';
+import { InjectMetadata } from './InjectMetadata';
 
 export class MetadataStorage {
   private static instance: MetadataStorage;
@@ -15,6 +18,8 @@ export class MetadataStorage {
   readonly handlerMetadata: HandlerMetadata[];
   readonly handlerOptionMetadata: HandlerOptionMetadata[];
   readonly outputMetadata: OutputMetadata[];
+  readonly injectableMetadata: InjectableMetadata[];
+  readonly injectMetadata: InjectMetadata[];
 
   private constructor() {
     this.componentMetadata = [];
@@ -22,6 +27,8 @@ export class MetadataStorage {
     this.handlerMetadata = [];
     this.handlerOptionMetadata = [];
     this.outputMetadata = [];
+    this.injectableMetadata = [];
+    this.injectMetadata = [];
   }
 
   static getInstance(): MetadataStorage {
@@ -205,10 +212,54 @@ export class MetadataStorage {
     return this.handlerOptionMetadata.filter((metadata) => metadata.target === target);
   }
 
+  addInjectableMetadata<PROVIDER>(metadata: InjectableMetadata<PROVIDER>): void {
+    if (this.getInjectableMetadata(metadata.target)) {
+      // for now, just skip (first only counts)
+      return;
+    }
+    this.injectableMetadata.push(metadata as InjectableMetadata);
+  }
+
+  getInjectableMetadata<PROVIDER>(
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    target: Constructor<PROVIDER> | Function,
+  ): InjectableMetadata<PROVIDER> | undefined {
+    return this.injectableMetadata.find(
+      (metadata) => metadata.target === target,
+    ) as InjectableMetadata<PROVIDER>;
+  }
+
+  addInjectMetadata<PROVIDER>(metadata: InjectMetadata<PROVIDER>): void {
+    if (this.getInjectMetadataAtIndex(metadata.target, metadata.index)) {
+      // for now, just skip (first only counts)
+      return;
+    }
+    this.injectMetadata.push(metadata as InjectMetadata);
+  }
+
+  getMergedInjectMetadata<PROVIDER>(
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    target: Constructor<PROVIDER> | Function,
+  ): InjectMetadata<PROVIDER>[] {
+    return this.injectMetadata.filter((metadata) => metadata.target === target);
+  }
+
+  getInjectMetadataAtIndex<PROVIDER>(
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    target: Constructor<PROVIDER> | Function,
+    index: number,
+  ): InjectMetadata<PROVIDER> | undefined {
+    return this.injectMetadata.find(
+      (metadata) => metadata.target === target && metadata.index === index,
+    );
+  }
+
   clearAll(): void {
     this.componentMetadata.length = 0;
     this.handlerMetadata.length = 0;
     this.handlerOptionMetadata.length = 0;
     this.outputMetadata.length = 0;
+    this.injectableMetadata.length = 0;
+    this.injectMetadata.length = 0;
   }
 }

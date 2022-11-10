@@ -1,10 +1,13 @@
-import { PickWhere } from '@jovotech/common';
+import { AnyObject, Constructor, PickWhere } from '@jovotech/common';
 import { BaseComponent, ComponentConstructor, ComponentDeclaration } from './BaseComponent';
 import { ComponentTree, Tree } from './ComponentTree';
 import { BuiltInHandler } from './enums';
 import { HandlerNotFoundError } from './errors/HandlerNotFoundError';
 import { Jovo } from './Jovo';
 import { ComponentMetadata } from './metadata/ComponentMetadata';
+import { MetadataStorage } from './metadata/MetadataStorage';
+import { InjectionToken, Provider } from './metadata/InjectableMetadata';
+import { DependencyInjector } from './DependencyInjector';
 
 export interface ComponentTreeNodeOptions<COMPONENT extends BaseComponent = BaseComponent> {
   metadata: ComponentMetadata<COMPONENT>;
@@ -68,10 +71,7 @@ export class ComponentTreeNode<COMPONENT extends BaseComponent = BaseComponent> 
     handler = BuiltInHandler.Start,
     callArgs,
   }: ExecuteHandlerOptions<COMPONENT, HANDLER, ARGS>): Promise<void> {
-    const componentInstance = new (this.metadata.target as ComponentConstructor<COMPONENT>)(
-      jovo,
-      this.metadata.options,
-    );
+    const componentInstance = this.instantiateComponent(jovo);
     try {
       if (!componentInstance[handler as keyof COMPONENT]) {
         throw new HandlerNotFoundError(componentInstance.constructor.name, handler.toString());
@@ -88,6 +88,15 @@ export class ComponentTreeNode<COMPONENT extends BaseComponent = BaseComponent> 
     } catch (e) {
       return jovo.$app.handleError(e, jovo);
     }
+  }
+
+  private instantiateComponent(jovo: Jovo): COMPONENT {
+    return DependencyInjector.instantiateClass(
+      jovo,
+      this.metadata.target as ComponentConstructor<COMPONENT>,
+      jovo,
+      this.metadata.options,
+    );
   }
 
   toJSON(): Omit<ComponentTreeNode<COMPONENT>, 'parent'> & { parent?: string } {

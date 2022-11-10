@@ -1,4 +1,10 @@
-import { ArrayElement, JovoLoggerConfig, UnknownObject } from '@jovotech/common';
+import {
+  AnyObject,
+  ArrayElement,
+  Constructor,
+  JovoLoggerConfig,
+  UnknownObject,
+} from '@jovotech/common';
 import _merge from 'lodash.merge';
 import {
   AppData,
@@ -11,6 +17,7 @@ import {
   MiddlewareFunction,
   Plugin,
   PossibleMiddlewareName,
+  Provider,
 } from '.';
 import { ComponentConstructor, ComponentDeclaration } from './BaseComponent';
 import { MatchingPlatformNotFoundError } from './errors/MatchingPlatformNotFoundError';
@@ -63,6 +70,7 @@ export interface AppConfig extends ExtensibleConfig {
   i18n?: I18NextConfig;
   logging?: AppLoggingConfig | boolean;
   routing?: AppRoutingConfig;
+  providers?: Provider<AnyObject>[];
 }
 
 export type AppInitConfig = ExtensibleInitConfig<AppConfig> & {
