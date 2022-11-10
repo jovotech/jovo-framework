@@ -313,16 +313,12 @@ describe('dependency overrides', () => {
       ],
     });
 
-    expect(app.providers.length).toEqual(3);
-    expect(app.providers.slice(0, 2)).toEqual([
+    expect(app.providers).toEqual([
       {
         provide: ExampleService,
         useClass: OverrideService,
       },
       UnrelatedService,
     ]);
-    expect(isSameProvide(app.providers[2], { provide: Jovo, useFactory: (jovo) => jovo })).toEqual(
-      true,
-    );
   });
 });

@@ -10,6 +10,7 @@ export type OutputConstructor<
   REQUEST extends JovoRequest = JovoRequest,
   RESPONSE extends JovoResponse = JovoResponse,
   JOVO extends Jovo<REQUEST, RESPONSE> = Jovo<REQUEST, RESPONSE>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ARGS extends unknown[] = any[],
 > = new (jovo: JOVO, options: DeepPartial<OUTPUT['options']> | undefined, ...args: ARGS) => OUTPUT;
 

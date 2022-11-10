@@ -1,12 +1,10 @@
-import { AnyObject, Constructor, PickWhere } from '@jovotech/common';
+import { PickWhere } from '@jovotech/common';
 import { BaseComponent, ComponentConstructor, ComponentDeclaration } from './BaseComponent';
 import { ComponentTree, Tree } from './ComponentTree';
 import { BuiltInHandler } from './enums';
 import { HandlerNotFoundError } from './errors/HandlerNotFoundError';
 import { Jovo } from './Jovo';
 import { ComponentMetadata } from './metadata/ComponentMetadata';
-import { MetadataStorage } from './metadata/MetadataStorage';
-import { InjectionToken, Provider } from './metadata/InjectableMetadata';
 import { DependencyInjector } from './DependencyInjector';
 
 export interface ComponentTreeNodeOptions<COMPONENT extends BaseComponent = BaseComponent> {

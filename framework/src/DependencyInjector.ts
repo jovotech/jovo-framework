@@ -8,7 +8,14 @@ export class DependencyInjector {
     jovo: Jovo,
     token: InjectionToken,
   ): TYPE | undefined {
-    const providers = jovo.$app.providers;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const providers: Provider<any>[] = [
+      ...jovo.$app.providers,
+      {
+        provide: Jovo,
+        useFactory: (jovo) => jovo,
+      },
+    ];
     const injection = providers.find((injection) => {
       if (typeof injection === 'function') {
         return injection === token;

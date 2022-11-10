@@ -107,10 +107,6 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
     this.i18n = new I18Next(this.config.i18n);
 
     this.providers = config?.providers || [];
-    this.providers.push({
-      provide: Jovo,
-      useFactory: (jovo) => jovo,
-    });
   }
 
   get isInitialized(): boolean {
