@@ -23,7 +23,7 @@ export abstract class InterpretationPlugin<
 
   abstract processText?(jovo: Jovo, text: string): Promise<NluData | undefined>;
 
-  abstract supportsIntentScoping?(): boolean; // @see https://www.jovo.tech/docs/nlu#intent-scoping
+  supportsIntentScoping?(): boolean; // @see https://www.jovo.tech/docs/nlu#intent-scoping
 
   mount(parent: Extensible): Promise<void> | void {
     if (!(parent instanceof Platform)) {
