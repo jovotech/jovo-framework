@@ -1,11 +1,11 @@
-import { Jovo, Output } from '@jovotech/framework';
+import { Jovo, Output, DeepPartial } from '@jovotech/framework';
 import { PermissionScope } from '../models';
-import { AskForPermissionOutput } from './AskForPermissionOutput';
+import { AskForPermissionOutput, AskForPermissionOutputOptions } from './AskForPermissionOutput';
 
 @Output()
 export class AskForTimersPermissionOutput extends AskForPermissionOutput {
-  constructor(jovo: Jovo) {
-    super(jovo);
+  constructor(jovo: Jovo, options: DeepPartial<AskForPermissionOutputOptions> | undefined) {
+    super(jovo, options);
     this.options.permissionScope = PermissionScope.ReadWriteTimers;
   }
 }
