@@ -12,7 +12,7 @@ Learn more about natural language understanding (NLU) services that can be integ
 
 Natural language understanding (in short, NLU) is the process of turning raw text into structured meaning. It is part of the `interpretation` step of the [RIDR lifecycle](./ridr-lifecycle.md).
 
-Jovo offers integrations with a variety of NLU services that can either be self-hosted or accessed via an API. [You can find all the current integrations here](#integrations).
+Jovo offers integrations with a variety of NLU services that can either be self-hosted or accessed via an API. [You can find all the current integrations below](#integrations).
 
 NLU integrations are helpful for platforms that deal with raw text. The integration then writes the results into an `nlu` object that is part of the [`$input` property](./input.md):
 
@@ -27,6 +27,9 @@ NLU integrations are helpful for platforms that deal with raw text. The integrat
         value: 'Max',
       },
     },
+    native: {
+      // Raw API response from the NLU service
+    }
   },
 }
 ```

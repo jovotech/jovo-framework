@@ -74,7 +74,9 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
     };
 
     const snipsNluResponse: SnipsNluResponse = await this.sendRequestToSnips(config);
-    const nluData: NluData = {};
+    const nluData: NluData = {
+      native: snipsNluResponse,
+    };
     if (snipsNluResponse.intent.intentName) {
       nluData.intent = { name: snipsNluResponse.intent.intentName };
     }
