@@ -273,9 +273,9 @@ For readability, you can also take a look at [imported decorators](https://www.j
 
 ## Dynamic Entities
 
-Dynamic entities offer the ability to dynamically add values (e.g. from an API call) to entity types during runtime. Currently, this feature is supported by the Alexa and Google Assistant platforms.
+Dynamic entities offer the ability to dynamically add values (e.g. from an API call) to entity types during runtime. Currently, this feature is supported by the following platforms and NLU services: [Alexa](https://www.jovo.tech/marketplace/platform-alexa), [Google Assistant](https://www.jovo.tech/marketplace/platform-googleassistant), [Snips NLU](https://www.jovo.tech/marketplace/nlu-snips).
 
-You can add dynamic entities to the `listen` property:
+You can add dynamic entities to the [`listen` property](./output-templates.md#listen):
 
 ```typescript
 {

@@ -41,9 +41,9 @@ Learn more about Jovo NLU integrations in the following sections:
 
 Currently, the following integrations are available with Jovo `v4`:
 
+- [Snips NLU](https://www.jovo.tech/marketplace/nlu-snips) (comes with an [open source server](https://github.com/jovotech/snips-nlu-server))
+- [NLP.js](https://www.jovo.tech/marketplace/nlu-nlpjs) (default for [Jovo Debugger](https://www.jovo.tech/docs/debugger))
 - [Rasa NLU](https://www.jovo.tech/marketplace/nlu-rasa)
-- [Snips NLU](https://www.jovo.tech/marketplace/nlu-snips)
-- [NLP.js](https://www.jovo.tech/marketplace/nlu-nlpjs)
 - [Lex SLU](https://www.jovo.tech/marketplace/slu-lex)
 
 To enhance performance, you can also add the [Keyword NLU plugin](https://www.jovo.tech/marketplace/plugin-keywordnlu), which maps common keywords to intents before other NLU integrations are called.
@@ -85,6 +85,11 @@ The `input` config property determines how the NLU integration should react to c
 
 ## Performance
 
+- [Speed](#speed): Increase response times by removing unnecessary NLU service calls
+- [Intent Scoping](#intent-scoping): Increase accuracy by prioritizing intents for some requests
+
+### Speed
+
 The NLU integration calls the respective NLU service/API for every request that includes a `text` and fulfills the `supportedTypes` [configuration](#configuration). Each request costs time and potentially money, depending on the service.
 
 For keywords that are used often (for example `yes`/`no`, or words that show up in [quick replies](https://www.jovo.tech/docs/output-templates#quickreplies)), it can be costly to call an NLU service each time a request contains straightforward input like this. 
@@ -110,3 +115,20 @@ const app = new App({
   ],
 });
 ```
+
+### Intent Scoping
+
+Some NLU services support the ability to prioritize certain intents. You can do so by adding a list of intent names to the [`listen` output property](./output-templates.md#listen):
+
+```typescript
+{
+  message: `Which city do you want to visit?`,
+  listen: {
+    intents: [ 'CityIntent' ],
+  },
+}
+```
+
+The list will be passed to the NLU service and taken into account when parsing input. When there are multiple output templates in the `$output` array that have `intents` as part of `listen`, the values will get merged.
+
+Currently, this feature is supported by [Snips NLU](https://www.jovo.tech/marketplace/nlu-snips).
