@@ -23,6 +23,8 @@ export abstract class InterpretationPlugin<
 
   abstract processText?(jovo: Jovo, text: string): Promise<NluData | undefined>;
 
+  abstract supportsIntentScoping?(): boolean; // @see https://www.jovo.tech/docs/nlu#intent-scoping
+
   mount(parent: Extensible): Promise<void> | void {
     if (!(parent instanceof Platform)) {
       throw new InvalidParentError(this.name, 'Platform');
@@ -35,6 +37,11 @@ export abstract class InterpretationPlugin<
     if (this.processText) {
       parent.middlewareCollection.use('interpretation.nlu', (jovo) => {
         return this.nlu(jovo);
+      });
+    }
+    if (this.supportsIntentScoping) {
+      parent.middlewareCollection.use('after.response.output', (jovo) => {
+        return this.storeListenIntents(jovo); // Store intents in _JOVO_LISTEN_INTENTS_ session variable
       });
     }
   }
@@ -74,5 +81,21 @@ export abstract class InterpretationPlugin<
       jovo.$input.nlu = nluProcessResult;
       jovo.$entities = nluProcessResult.entities || {};
     }
+  }
+  /**
+   * Extract the intents from the listen objects in all $output templates and store them for the next request
+   * @see https://www.jovo.tech/docs/nlu#intent-scoping
+   * @param jovo - Jovo instance
+   */
+  protected storeListenIntents(jovo: Jovo): void {
+    const intents: string[] = [];
+    for (const output of jovo.$output) {
+      const listen = output.platforms?.[jovo.$platform.name]?.listen ?? output.listen;
+      if (typeof listen !== 'object' || !listen.intents) {
+        continue;
+      }
+      intents.push(...listen.intents);
+    }
+    jovo.$session.data._JOVO_LISTEN_INTENTS_ = intents.length ? intents : undefined;
   }
 }

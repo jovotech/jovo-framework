@@ -129,6 +129,16 @@ Some NLU services support the ability to prioritize certain intents. You can do 
 }
 ```
 
-The list will be passed to the NLU service and taken into account when parsing input. When there are multiple output templates in the `$output` array that have `intents` as part of `listen`, the values will get merged.
+After adding `intents` to an output template, the following happens:
+- The array gets stored in a `_JOVO_LISTEN_INTENTS_` session variable in the `after.response.output` [middleware](./middlewares.md#ridr-middlewares). When there are multiple output templates in the `$output` array that have `intents` as part of `listen`, the values will get merged.
+- During the next request, the list will be passed to the NLU service and taken into account when parsing input.
 
 Currently, this feature is supported by [Snips NLU](https://www.jovo.tech/marketplace/nlu-snips).
+
+Each plugin that aims to support intent scoping needs to implement the `supportsIntentScoping` method (used by [`InterpretationPlugin`](https://github.com/jovotech/jovo-framework/blob/v4/latest/framework/src/plugins/InterpretationPlugin.ts) to determine whether data should be stored).
+
+```typescript
+supportsIntentScoping(): boolean {
+  return true;
+}
+```

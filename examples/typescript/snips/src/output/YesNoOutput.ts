@@ -14,7 +14,9 @@ export class YesNoOutput extends BaseOutput {
   build(): OutputTemplate | OutputTemplate[] {
     return {
       quickReplies: ['yes', 'no'],
-      listen: true,
+      listen: {
+        intents: [ 'YesIntent', 'NoIntent' ], // @see https://www.jovo.tech/marketplace/nlu-snips#intent-scoping
+      },
     };
   }
 }
