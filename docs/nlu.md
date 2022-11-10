@@ -135,7 +135,7 @@ After adding `intents` to an output template, the following happens:
 
 Currently, this feature is supported by [Snips NLU](https://www.jovo.tech/marketplace/nlu-snips).
 
-Each plugin that aims to support intent scoping needs to implement the `supportsIntentScoping` method (used by [`InterpretationPlugin`](https://github.com/jovotech/jovo-framework/blob/v4/latest/framework/src/plugins/InterpretationPlugin.ts) to determine whether data should be stored).
+Each plugin that aims to support intent scoping needs to implement the `supportsIntentScoping()` method (used by [`InterpretationPlugin`](https://github.com/jovotech/jovo-framework/blob/v4/latest/framework/src/plugins/InterpretationPlugin.ts) to determine whether data should be stored).
 
 ```typescript
 supportsIntentScoping(): boolean {
