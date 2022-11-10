@@ -79,7 +79,7 @@ export class DialogflowNlu extends NluPlugin<DialogflowNluConfig> {
 
       nluData.native = dialogflowResponse.data;
 
-      return nluData.intent ? nluData : undefined;
+      return nluData;
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error('Error while retrieving nlu-data from Dialogflow.', e);

@@ -94,7 +94,7 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
 
     nluData.native = snipsNluResponse;
 
-    return nluData?.intent ? nluData : undefined;
+    return nluData;
   }
 
   /**
