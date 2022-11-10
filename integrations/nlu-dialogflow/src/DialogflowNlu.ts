@@ -55,7 +55,9 @@ export class DialogflowNlu extends NluPlugin<DialogflowNluConfig> {
         jovo.$session.id,
       );
 
-      const nluData: NluData = {};
+      const nluData: NluData = {
+        native: dialogflowResponse.data,
+      };
       const displayName = dialogflowResponse.data.queryResult.intent.displayName;
       if (displayName) {
         nluData.intent = { name: displayName };

@@ -11,7 +11,7 @@ export interface Entity {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   value?: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  native?: any;
+  native?: any; // raw API response from the NLU service
 }
 
 export interface EntityMap<ENTITY_TYPE extends Entity = Entity> {
@@ -25,6 +25,8 @@ export interface AsrData extends UnknownObject {
 export interface NluData extends UnknownObject {
   intent?: Intent | string;
   entities?: EntityMap;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  native?: any; // raw API response from the NLU service
 }
 
 export enum InputType {

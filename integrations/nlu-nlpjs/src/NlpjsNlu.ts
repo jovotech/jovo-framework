@@ -117,7 +117,8 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
             name: nlpResult.intent,
           },
           entities,
-          raw: nlpResult, // TODO: temporary property
+          native: nlpResult,
+          raw: nlpResult, // @deprecated please use 'native' property
         }
       : undefined;
   }

@@ -1,5 +1,5 @@
 import { Client, InitConfig } from '@jovotech/client-web';
-import { Plugin, reactive } from 'vue';
+import { Plugin, reactive, UnwrapNestedRefs } from 'vue';
 
 declare global {
   interface Window {
@@ -9,7 +9,7 @@ declare global {
 
 declare module '@vue/runtime-core' {
   export interface ComponentCustomProperties {
-    $client: Client;
+    $client: UnwrapNestedRefs<Client>;
   }
 }
 
