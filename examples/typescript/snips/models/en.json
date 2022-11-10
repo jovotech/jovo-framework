@@ -1,0 +1,17 @@
+{
+  "invocation": "my test app",
+  "intents": [
+    {
+      "name": "HelloWorldIntent",
+      "phrases": ["hello", "say hello", "say hello world"]
+    },
+    {
+      "name": "YesIntent",
+      "phrases": ["yes", "yes please", "sure"]
+    },
+    {
+      "name": "NoIntent",
+      "phrases": ["no", "no thanks"]
+    }
+  ]
+}
