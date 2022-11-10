@@ -39,7 +39,7 @@ export abstract class InterpretationPlugin<
         return this.nlu(jovo);
       });
     }
-    if (this.supportsIntentScoping) {
+    if (this.supportsIntentScoping && this.supportsIntentScoping()) {
       parent.middlewareCollection.use('after.response.output', (jovo) => {
         return this.storeListenIntents(jovo); // Store intents in _JOVO_LISTEN_INTENTS_ session variable
       });
