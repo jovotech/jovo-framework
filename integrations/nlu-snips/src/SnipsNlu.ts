@@ -74,9 +74,7 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
     };
 
     const snipsNluResponse: SnipsNluResponse = await this.sendRequestToSnips(config);
-    const nluData: NluData = {
-      native: snipsNluResponse,
-    };
+    const nluData: NluData = {};
     if (snipsNluResponse.intent.intentName) {
       nluData.intent = { name: snipsNluResponse.intent.intentName };
     }
@@ -93,6 +91,8 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
         native: slot,
       };
     }
+
+    nluData.native = snipsNluResponse;
 
     return nluData?.intent ? nluData : undefined;
   }
