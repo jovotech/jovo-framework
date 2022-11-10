@@ -8,11 +8,7 @@ export class DependencyInjector {
     jovo: Jovo,
     token: InjectionToken,
   ): TYPE | undefined {
-    const providers = jovo.$app.config.providers ?? [];
-    providers.push({
-      provide: Jovo,
-      useFactory: (jovo) => jovo,
-    });
+    const providers = jovo.$app.providers;
     const injection = providers.find((injection) => {
       if (typeof injection === 'function') {
         return injection === token;

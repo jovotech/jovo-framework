@@ -15,6 +15,7 @@ import {
   DeepPartial,
   OutputOptions,
   Inject,
+  isSameProvide,
 } from '../src';
 import { ExamplePlatform, ExampleServer } from './utilities';
 
@@ -276,5 +277,52 @@ describe('dependency injection variations', () => {
         message: 'example1_example2_example3',
       },
     ]);
+  });
+});
+
+describe('dependency overrides', () => {
+  test('override provider with app.configure', () => {
+    @Injectable()
+    class ExampleService {
+      getExample() {
+        return 'example';
+      }
+    }
+
+    @Injectable()
+    class UnrelatedService {}
+
+    class OverrideService {
+      getExample() {
+        return 'override';
+      }
+    }
+
+    const app = new App({
+      plugins: [new ExamplePlatform()],
+      providers: [ExampleService, UnrelatedService],
+      components: [],
+    });
+
+    app.configure({
+      providers: [
+        {
+          provide: ExampleService,
+          useClass: OverrideService,
+        },
+      ],
+    });
+
+    expect(app.providers.length).toEqual(3);
+    expect(app.providers.slice(0, 2)).toEqual([
+      {
+        provide: ExampleService,
+        useClass: OverrideService,
+      },
+      UnrelatedService,
+    ]);
+    expect(isSameProvide(app.providers[2], { provide: Jovo, useFactory: (jovo) => jovo })).toEqual(
+      true,
+    );
   });
 });
