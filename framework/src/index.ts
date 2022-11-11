@@ -51,6 +51,7 @@ export * from './BaseOutput';
 export * from './ComponentPlugin';
 export * from './ComponentTree';
 export * from './ComponentTreeNode';
+export * from './DependencyInjector';
 export * from './Extensible';
 export * from './HandleRequest';
 export * from './I18Next';
@@ -86,6 +87,7 @@ export * from './decorators/PrioritizedOverUnhandled';
 export * from './decorators/SubState';
 export * from './decorators/Types';
 
+export * from './errors/CircularDependencyError';
 export * from './errors/ComponentNotFoundError';
 export * from './errors/DuplicateChildComponentsError';
 export * from './errors/DuplicateGlobalIntentsError';

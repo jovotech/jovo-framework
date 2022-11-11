@@ -15,7 +15,8 @@ import {
   DeepPartial,
   OutputOptions,
   Inject,
-  isSameProvide,
+  CircularDependencyError,
+  DependencyTree,
 } from '../src';
 import { ExamplePlatform, ExampleServer } from './utilities';
 
@@ -320,5 +321,115 @@ describe('dependency overrides', () => {
       },
       UnrelatedService,
     ]);
+  });
+});
+
+describe('circular dependency detection', () => {
+  test('circular dependency', async () => {
+    interface SecondServiceInterface {}
+    const SecondServiceToken = Symbol('SecondService');
+
+    @Injectable()
+    class FirstService {
+      constructor(@Inject(SecondServiceToken) readonly secondService: SecondServiceInterface) {}
+    }
+
+    @Injectable()
+    class SecondService {
+      constructor(readonly firstService: FirstService) {}
+    }
+
+    @Global()
+    @Component()
+    class ComponentA extends BaseComponent {
+      constructor(
+        jovo: Jovo,
+        options: ComponentOptions<UnknownObject> | undefined,
+        readonly firstService: FirstService,
+      ) {
+        super(jovo, options);
+      }
+
+      @Intents('IntentA')
+      handleIntentA() {
+        return this.$send('IntentA');
+      }
+    }
+
+    const app = new App({
+      plugins: [new ExamplePlatform()],
+      providers: [FirstService, { provide: SecondServiceToken, useClass: SecondService }],
+      components: [ComponentA],
+    });
+
+    const onError = jest.fn();
+    app.onError(onError);
+
+    await app.initialize();
+
+    const server = new ExampleServer({
+      input: {
+        type: InputType.Intent,
+        intent: 'IntentA',
+      },
+    });
+    await app.handle(server);
+    expect(server.response.output).toEqual([]);
+    expect(onError).toHaveBeenCalledTimes(1);
+    expect(onError.mock.calls[0][0]).toBeInstanceOf(CircularDependencyError);
+  });
+});
+
+describe('dependency injection middleware', () => {
+  test('middleware arguments', async () => {
+    @Injectable()
+    class ExampleService {}
+
+    @Global()
+    @Component()
+    class ComponentA extends BaseComponent {
+      constructor(
+        jovo: Jovo,
+        options: ComponentOptions<UnknownObject> | undefined,
+        readonly exampleService: ExampleService,
+      ) {
+        super(jovo, options);
+      }
+
+      @Intents('IntentA')
+      handleIntentA() {
+        return this.$send('IntentA');
+      }
+    }
+
+    const app = new App({
+      plugins: [new ExamplePlatform()],
+      providers: [ExampleService],
+      components: [ComponentA],
+    });
+
+    const middlewareFunction = jest.fn();
+    app.middlewareCollection.use(
+      'event.DependencyInjector.instantiateDependency',
+      middlewareFunction,
+    );
+    await app.initialize();
+
+    const server = new ExampleServer({
+      input: {
+        type: InputType.Intent,
+        intent: 'IntentA',
+      },
+    });
+    await app.handle(server);
+    expect(middlewareFunction).toHaveBeenCalledTimes(1);
+    const dependencyTree: DependencyTree<ComponentA> = middlewareFunction.mock.calls[0][1];
+
+    expect(dependencyTree.token).toEqual(ComponentA);
+    expect(dependencyTree.resolvedValue).toBeInstanceOf(ComponentA);
+    expect(dependencyTree.children.length).toEqual(1);
+    expect(dependencyTree.children[0].token).toEqual(ExampleService);
+    expect(dependencyTree.children[0].resolvedValue).toBeInstanceOf(ExampleService);
+    expect(dependencyTree.children[0].children.length).toEqual(0);
   });
 });

@@ -69,7 +69,7 @@ export class ComponentTreeNode<COMPONENT extends BaseComponent = BaseComponent> 
     handler = BuiltInHandler.Start,
     callArgs,
   }: ExecuteHandlerOptions<COMPONENT, HANDLER, ARGS>): Promise<void> {
-    const componentInstance = this.instantiateComponent(jovo);
+    const componentInstance = await this.instantiateComponent(jovo);
     try {
       if (!componentInstance[handler as keyof COMPONENT]) {
         throw new HandlerNotFoundError(componentInstance.constructor.name, handler.toString());
@@ -88,8 +88,8 @@ export class ComponentTreeNode<COMPONENT extends BaseComponent = BaseComponent> 
     }
   }
 
-  private instantiateComponent(jovo: Jovo): COMPONENT {
-    return DependencyInjector.instantiateClass(
+  private async instantiateComponent(jovo: Jovo): Promise<COMPONENT> {
+    return await DependencyInjector.instantiateClass(
       jovo,
       this.metadata.target as ComponentConstructor<COMPONENT>,
       jovo,

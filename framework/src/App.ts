@@ -1,10 +1,4 @@
-import {
-  AnyObject,
-  ArrayElement,
-  Constructor,
-  JovoLoggerConfig,
-  UnknownObject,
-} from '@jovotech/common';
+import { AnyObject, ArrayElement, JovoLoggerConfig, UnknownObject } from '@jovotech/common';
 import _merge from 'lodash.merge';
 import {
   AppData,
@@ -75,6 +69,7 @@ export interface AppConfig extends ExtensibleConfig {
 
 export type AppInitConfig = ExtensibleInitConfig<AppConfig> & {
   components?: Array<ComponentConstructor | ComponentDeclaration>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   providers?: Provider<any>[];
 };
 

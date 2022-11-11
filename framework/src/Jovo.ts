@@ -264,7 +264,7 @@ export abstract class Jovo<
   ): Promise<void> {
     let newOutput: OutputTemplate | OutputTemplate[];
     if (typeof outputConstructorOrTemplateOrMessage === 'function') {
-      const outputInstance = DependencyInjector.instantiateClass(
+      const outputInstance = await DependencyInjector.instantiateClass(
         this,
         outputConstructorOrTemplateOrMessage,
         this,

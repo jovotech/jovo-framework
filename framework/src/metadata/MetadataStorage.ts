@@ -7,7 +7,7 @@ import { HandlerMetadata } from './HandlerMetadata';
 import { HandlerOptionMetadata } from './HandlerOptionMetadata';
 import { MethodDecoratorMetadata } from './MethodDecoratorMetadata';
 import { OutputMetadata } from './OutputMetadata';
-import { InjectableMetadata, InjectionToken } from './InjectableMetadata';
+import { InjectableMetadata } from './InjectableMetadata';
 import { Constructor } from '@jovotech/common';
 import { InjectMetadata } from './InjectMetadata';
 
