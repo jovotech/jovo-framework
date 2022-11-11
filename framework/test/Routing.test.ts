@@ -9,13 +9,41 @@ test('test handler decorator inheritance', async () => {
     handleIntentA() {
       return this.$send('MyComponent.IntentA');
     }
+
+    @Intents('IntentB')
+    handleIntentB() {
+      return this.$send('MyComponent.IntentB');
+    }
+
+    @Intents('IntentC')
+    handleIntentC() {
+      return this.$send('MyComponent.IntentC');
+    }
+
+    UNHANDLED() {
+      return this.$send('MyComponent.UNHANDLED');
+    }
   }
 
   @Global()
   @Component()
   class ComponentA extends MyComponent {
+    @Intents('IntentA')
     handleIntentA() {
-      return this.$send('ComponentA.IntentC');
+      return this.$send('ComponentA.IntentA');
+    }
+
+    @Intents('IntentD')
+    handleIntentC() {
+      return super.handleIntentC();
+    }
+  }
+
+  @Global()
+  @Component()
+  class ComponentB extends BaseComponent {
+    someHandler() {
+      return this.$send('test');
     }
   }
 
@@ -25,7 +53,7 @@ test('test handler decorator inheritance', async () => {
   });
   await app.initialize();
 
-  const server = new ExampleServer({
+  let server = new ExampleServer({
     input: {
       type: InputType.Intent,
       intent: 'IntentA',
@@ -34,7 +62,46 @@ test('test handler decorator inheritance', async () => {
   await app.handle(server);
   expect(server.response.output).toEqual([
     {
-      message: 'ComponentA.IntentC',
+      message: 'ComponentA.IntentA',
+    },
+  ]);
+
+  server = new ExampleServer({
+    input: {
+      type: InputType.Intent,
+      intent: 'IntentB',
+    },
+  });
+  await app.handle(server);
+  expect(server.response.output).toEqual([
+    {
+      message: 'MyComponent.IntentB',
+    },
+  ]);
+
+  server = new ExampleServer({
+    input: {
+      type: InputType.Intent,
+      intent: 'IntentC',
+    },
+  });
+  await app.handle(server);
+  expect(server.response.output).toEqual([
+    {
+      message: 'MyComponent.UNHANDLED',
+    },
+  ]);
+
+  server = new ExampleServer({
+    input: {
+      type: InputType.Intent,
+      intent: 'IntentD',
+    },
+  });
+  await app.handle(server);
+  expect(server.response.output).toEqual([
+    {
+      message: 'MyComponent.IntentC',
     },
   ]);
 });
