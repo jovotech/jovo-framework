@@ -207,7 +207,38 @@ If you want the session to close, you need to set it to `false`:
 }
 ```
 
-It's also possible to turn `listen` into an object to tell the platform to listen for specific user input. You can add dynamic entities this way:
+It's also possible to turn `listen` into an object to tell the platform to listen for specific user input:
+
+```typescript
+{
+  message: `Which city do you want to visit?`,
+  listen: {
+    intents: [ 'CityIntent' ],
+    entities: { /* ... */ },
+  },
+}
+```
+
+Learn more in the sections below:
+- [`intents`](#intents)
+- [`entities`](#entities)
+
+#### intents
+
+Some NLU services offer intent scoping, which means the ability to tell the model to prioritize certain intents. [Learn more in the NLU documentation](./nlu.md#intent-scoping).
+
+```typescript
+{
+  message: `Which city do you want to visit?`,
+  listen: {
+    intents: [ 'CityIntent' ],
+  },
+}
+```
+
+#### entities
+
+By adding an `entities` object to the `listen` property, you can dynamically add values to the NLU model. This is also called "dynamic entities". [Learn more in the entities documentation](./entities.md#dynamic-entities).
 
 ```typescript
 {
@@ -227,9 +258,8 @@ It's also possible to turn `listen` into an object to tell the platform to liste
 }
 ```
 
-[Learn more about dynamic entities in the entities documentation](./entities.md).
-
 In the case that your output is an [array of objects](#array-of-output-templates) with differing `listen` values, the one of the last array will be prioritized. The only exception is that a `listen: true` value does not override dynamic entities, because setting dynamic entities implicitly sets `listen` to `true`. A last item in an array with `listen: false` closes the session and removes previous dynamic entities.
+
 
 ## Platform Specific Output Elements
 
