@@ -7,4 +7,7 @@ export class Listen {
   @ValidateNested()
   @Type(() => DynamicEntities)
   entities?: DynamicEntities;
+
+  @IsOptional()
+  intents?: string[];
 }

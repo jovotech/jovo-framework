@@ -55,9 +55,7 @@ export class DialogflowNlu extends NluPlugin<DialogflowNluConfig> {
         jovo.$session.id,
       );
 
-      const nluData: NluData = {
-        native: dialogflowResponse.data,
-      };
+      const nluData: NluData = {};
       const displayName = dialogflowResponse.data.queryResult.intent.displayName;
       if (displayName) {
         nluData.intent = { name: displayName };
@@ -79,7 +77,9 @@ export class DialogflowNlu extends NluPlugin<DialogflowNluConfig> {
         {},
       );
 
-      return nluData.intent ? nluData : undefined;
+      nluData.native = dialogflowResponse.data;
+
+      return nluData;
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error('Error while retrieving nlu-data from Dialogflow.', e);
