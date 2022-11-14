@@ -1,4 +1,4 @@
-import { AnyObject, ArrayElement, JovoLoggerConfig, UnknownObject } from '@jovotech/common';
+import { ArrayElement, JovoLoggerConfig, UnknownObject } from '@jovotech/common';
 import _merge from 'lodash.merge';
 import {
   AppData,
@@ -75,7 +75,10 @@ export type AppInitConfig = ExtensibleInitConfig<AppConfig> & {
 
 export class App extends Extensible<AppConfig, AppMiddlewares> {
   readonly componentTree: ComponentTree;
-  readonly providers: Provider<AnyObject>[] = [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly systemProviders: Provider<any>[] = [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly providers: Provider<any>[] = [];
   readonly i18n: I18Next;
   private initialized = false;
   private errorListeners: AppErrorListener[] = [];
@@ -102,6 +105,12 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
     this.i18n = new I18Next(this.config.i18n);
 
     this.providers = config?.providers || [];
+    this.systemProviders = [
+      {
+        provide: Jovo,
+        useFactory: (jovo) => jovo,
+      },
+    ];
   }
 
   get isInitialized(): boolean {

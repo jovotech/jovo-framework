@@ -1,6 +1,6 @@
 import { MetadataStorage } from './metadata/MetadataStorage';
 import { Jovo } from './Jovo';
-import { AnyObject, Constructor, ArrayElement } from '@jovotech/common';
+import { AnyObject, ArrayElement, Constructor } from '@jovotech/common';
 import { InjectionToken, Provider } from './metadata/InjectableMetadata';
 import { CircularDependencyError } from './errors/CircularDependencyError';
 
@@ -24,15 +24,10 @@ export class DependencyInjector {
     if (dependencyPath.includes(token)) {
       throw new CircularDependencyError(dependencyPath);
     }
+    const providers = [...jovo.$app.providers, ...jovo.$app.systemProviders];
+
     const updatedPath = [...dependencyPath, token];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const providers: Provider<any>[] = [
-      ...jovo.$app.providers,
-      {
-        provide: Jovo,
-        useFactory: (jovo) => jovo,
-      },
-    ];
     const injection = providers.find((injection) => {
       if (typeof injection === 'function') {
         return injection === token;
