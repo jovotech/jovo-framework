@@ -220,6 +220,7 @@ For some components, it may be helpful (or necessary) to add options for customi
 - `config`: The custom config used by the component. Can be accessed with `this.$component.config`.
 - `models`: Model files for component-specific intents and entities (_in development_).
 - `name`: If two components have the same class name, one component's name can be changed here.
+- `isAvailable`: A function that returns a boolean whether the component is available. If it returns `false`, the component is skipped during routing and redirecting or delegating to it causes a `ComponentNotAvailableError`.
 
 In the [register root components](#register-root-components) section, we already talked about how to pass options when registering existing components.
 
