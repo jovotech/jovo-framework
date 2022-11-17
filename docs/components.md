@@ -234,6 +234,7 @@ For some components, it may be helpful (or necessary) to add options for customi
 - `components`: Subcomponents that are used by this component.
 - `config`: The custom config used by the component. Can be accessed with `this.$component.config`.
 - `name`: If two components have the same class name, one component's name can be changed here.
+- `isAvailable`: A function that returns a boolean whether the component is available. If it returns `false`, the component is skipped during routing and redirecting or delegating to it causes a `ComponentNotAvailableError`.
 
 In the [register root components](#register-root-components) section, we already talked about how to pass options when registering existing components.
 
@@ -438,3 +439,37 @@ You can also access the active component like this:
 ```typescript
 this.$handleRequest.activeComponentNode;
 ```
+
+### Inheritance
+
+Components can inherit handlers from their superclass. This is useful for example if many of your components offer a similar workflow, like a help handler.
+
+```typescript
+import { BaseComponent } from '@jovotech/framework';
+
+abstract class ComponentWithHelp extends BaseComponent {
+  abstract showHelp(): Promise<void>;
+  
+  async repeatLastResponse() {
+    // ...
+  }
+  
+  @Intents('HelpIntent')
+  async help() {
+    await this.showHelp();
+    await this.repeatLastResponse();
+  }
+}
+
+@Component()
+class YourComponent extends ComponentWithHelp {
+  async showHelp() {
+    // ...
+  }
+}
+```
+
+When using inheritance, the following rules apply:
+
+- The subclass has to be annotated with `@Component` and registered in app. If the superclass is annotated with `@Component`, any options provided there will be ignored.
+- Handlers in the subclass will override handlers **and their decorators** in the superclass. This means that when overriding a handler for a specific intent, it will have to be annotated with `@Intents` / `@Handle` again.

@@ -151,6 +151,9 @@ export class RoutingExecutor {
       const handlerMetadataToRouteMatchMapper = this.createHandlerMetadataToRouteMatchMapper(
         node.path,
       );
+      if (node.metadata.options.isAvailable && !node.metadata.options.isAvailable(this.jovo)) {
+        continue;
+      }
       const relatedHandlerMetadata =
         MetadataStorage.getInstance().getMergedHandlerMetadataOfComponent(node.metadata.target);
       for (const metadata of relatedHandlerMetadata) {
@@ -207,18 +210,20 @@ export class RoutingExecutor {
         const handlerMetadataToRouteMatchMapper = this.createHandlerMetadataToRouteMatchMapper(
           node.path,
         );
-        const relatedHandlerMetadata =
-          MetadataStorage.getInstance().getMergedHandlerMetadataOfComponent(node.metadata.target);
+        if (!node.metadata.options.isAvailable || node.metadata.options.isAvailable(this.jovo)) {
+          const relatedHandlerMetadata =
+            MetadataStorage.getInstance().getMergedHandlerMetadataOfComponent(node.metadata.target);
 
-        for (const metadata of relatedHandlerMetadata) {
-          // if the conditions are no fulfilled, do not add the handler
-          if (
-            !this.isMatchingLocalHandler(metadata, subState) ||
-            !(await this.areHandlerConditionsFulfilled(metadata))
-          ) {
-            continue;
+          for (const metadata of relatedHandlerMetadata) {
+            // if the conditions are no fulfilled, do not add the handler
+            if (
+              !this.isMatchingLocalHandler(metadata, subState) ||
+              !(await this.areHandlerConditionsFulfilled(metadata))
+            ) {
+              continue;
+            }
+            routeMatches.push(handlerMetadataToRouteMatchMapper(metadata, stackIndex));
           }
-          routeMatches.push(handlerMetadataToRouteMatchMapper(metadata, stackIndex));
         }
 
         // if a subState is set, make sure to check the same node without subState before moving to the parent
