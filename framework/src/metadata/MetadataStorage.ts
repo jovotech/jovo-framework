@@ -189,6 +189,47 @@ export class MetadataStorage {
         relatedHandlerMetadata.mergeWith(optionMetadata);
       }
     });
+
+    const prototype = Object.getPrototypeOf(target);
+    // Object.getPrototypeOf of the topmost class in the superclass chain is {} (empty object)
+    // and Object.getPrototypeOf({}) is Object.prototype.
+    if (prototype && Object.getPrototypeOf(prototype) !== Object.prototype) {
+      const parentMergedMetadata = this.getMergedHandlerMetadataOfComponent(prototype);
+      return this.mergeHandlerMetadataWithParent(mergedMetadata, parentMergedMetadata);
+    }
+
+    return mergedMetadata;
+  }
+
+  /**
+   * Merges the handler metadata of a component with the handler metadata of its superclass.
+   * When a child class declares a handler with the same name as a handler of its superclass,
+   * the child class handler overrides the superclass handler and replaces all of its annotations.
+   *
+   * @param handlerMetadata
+   * @param parentMetadata
+   * @private
+   */
+  private mergeHandlerMetadataWithParent<COMPONENT extends BaseComponent>(
+    handlerMetadata: HandlerMetadata<COMPONENT, keyof COMPONENT>[],
+    parentMetadata: HandlerMetadata<COMPONENT, keyof COMPONENT>[],
+  ): HandlerMetadata<COMPONENT, keyof COMPONENT>[] {
+    const mergedMetadata = [...handlerMetadata];
+    for (const parentHandler of parentMetadata) {
+      const isOverride =
+        handlerMetadata.findIndex((meta) => {
+          if (meta.propertyKey !== parentHandler.propertyKey) {
+            return false;
+          }
+          return (
+            meta.target === parentHandler.target ||
+            Object.getPrototypeOf(meta.target) === parentHandler.target
+          );
+        }) >= 0;
+      if (!isOverride) {
+        mergedMetadata.push(parentHandler);
+      }
+    }
     return mergedMetadata;
   }
 

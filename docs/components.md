@@ -439,3 +439,37 @@ You can also access the active component like this:
 ```typescript
 this.$handleRequest.activeComponentNode;
 ```
+
+### Inheritance
+
+Components can inherit handlers from their superclass. This is useful for example if many of your components offer a similar workflow, like a help handler.
+
+```typescript
+import { BaseComponent } from '@jovotech/framework';
+
+abstract class ComponentWithHelp extends BaseComponent {
+  abstract showHelp(): Promise<void>;
+  
+  async repeatLastResponse() {
+    // ...
+  }
+  
+  @Intents('HelpIntent')
+  async help() {
+    await this.showHelp();
+    await this.repeatLastResponse();
+  }
+}
+
+@Component()
+class YourComponent extends ComponentWithHelp {
+  async showHelp() {
+    // ...
+  }
+}
+```
+
+When using inheritance, the following rules apply:
+
+- The subclass has to be annotated with `@Component` and registered in app. If the superclass is annotated with `@Component`, any options provided there will be ignored.
+- Handlers in the subclass will override handlers **and their decorators** in the superclass. This means that when overriding a handler for a specific intent, it will have to be annotated with `@Intents` / `@Handle` again.
