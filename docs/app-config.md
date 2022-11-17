@@ -20,6 +20,7 @@ The app configuration in `app.ts` is the place where you can add plugins, compon
 The app configuration files in the `src` folder are the main entry point of your Jovo apps. They usually include the following elements:
 - [Components](./components.md) can be registered
 - [Plugins](./plugins.md) and [Hooks](./hooks.md) can be added to extend the framework functionality
+- [Service providers](./service-providers-dependency-injection.md) can be added for dependency injection
 - Framework configurations, like logging behavior, can be modified
 
 Here is an example [`app.ts` file](https://github.com/jovotech/jovo-v4-template/blob/master/src/app.ts):
@@ -125,7 +126,7 @@ app.use(
 
 ## Configuration Elements
 
-The configuration object that can be passed to both the constructor and the `configure()` method contains [components](#components), [plugins](#plugins), [logging](#logging), and [routing](#routing).
+The configuration object that can be passed to both the constructor and the `configure()` method contains [components](#components), [plugins](#plugins), [providers](#providers), [logging](#logging), and [routing](#routing).
 
 ```typescript
 {
@@ -133,6 +134,9 @@ The configuration object that can be passed to both the constructor and the `con
     // ...
   ],
   plugins: [
+    // ...
+  ],
+  providers: [
     // ...
   ],
   logging: {
@@ -208,6 +212,39 @@ app.plugins.SomePlugin
 ```
 
 This can be helpful if you want to add additional configurations to the default plugin config outside `app.ts`. See [staging](#staging) for more information.
+
+### Providers
+
+You can add service providers for [dependency injection](./services-providers-dependency-injection.md) like this:
+
+```typescript
+import { OrderService } from './services/OrderService';
+// ...
+
+{
+  // ...
+
+  providers: [
+    OrderService,
+    // ...
+  ],
+}
+```
+
+It's also possible to use the `provide` option to specify a provider class or token. [Learn more about the different provider types here](./service-providers-dependency-injection.md#types-of-providers).
+
+```typescript
+{
+  providers: [
+    {
+      provide: OrderService,
+      useClass: MockOrderService,
+    },
+    // ...
+  ]
+}
+```
+
 
 ### Logging
 
