@@ -5,6 +5,7 @@ import { BuiltInHandler } from './enums';
 import { HandlerNotFoundError } from './errors/HandlerNotFoundError';
 import { Jovo } from './Jovo';
 import { ComponentMetadata } from './metadata/ComponentMetadata';
+import { ComponentNotAvailableError } from './errors/ComponentNotAvailableError';
 
 export interface ComponentTreeNodeOptions<COMPONENT extends BaseComponent = BaseComponent> {
   metadata: ComponentMetadata<COMPONENT>;
@@ -75,6 +76,10 @@ export class ComponentTreeNode<COMPONENT extends BaseComponent = BaseComponent> 
     try {
       if (!componentInstance[handler as keyof COMPONENT]) {
         throw new HandlerNotFoundError(componentInstance.constructor.name, handler.toString());
+      }
+
+      if (this.metadata.options.isAvailable && !this.metadata.options.isAvailable(jovo)) {
+        throw new ComponentNotAvailableError(this.metadata.target.name);
       }
 
       // Run any middlewares that are attached to 'event.ComponentTreeNode.executeHandler'

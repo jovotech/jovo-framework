@@ -84,6 +84,7 @@ export * from './decorators/PrioritizedOverUnhandled';
 export * from './decorators/SubState';
 export * from './decorators/Types';
 
+export * from './errors/ComponentNotAvailableError';
 export * from './errors/ComponentNotFoundError';
 export * from './errors/DuplicateChildComponentsError';
 export * from './errors/DuplicateGlobalIntentsError';
