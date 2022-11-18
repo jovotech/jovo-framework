@@ -6,11 +6,11 @@ url: 'https://www.jovo.tech/docs/services-providers-dependency-injection'
 
 # Services, Providers & Dependency Injection
 
-Learn how you can add custom providers to your Jovo app by using dependency injection.
+Learn how you can add custom providers to your Jovo app using dependency injection.
 
 ## Introduction
 
-To separate business logic from dialogue management (which is usually happening in [components](./components.md) and [output classes](./output-classes.md)), we recommend using service classes. For example, a class called `OrderService` could handle everything related to making orders and interact with an order backend or API.
+To separate business logic from dialogue management (which is usually happening in [components](./components.md) and [output classes](./output-classes.md)), we recommend using service classes. For example, a class called `OrderService` could handle everything related to making orders and interact with an order backend or API:
 
 ```typescript
 // src/services/OrderService.ts
@@ -94,9 +94,9 @@ You could import and instantiate the classes wherever needed. However, this come
 - It makes it a bit difficult to switch providers based on the [stage](./staging.md) you're in, or to mock API calls in [unit testing](./unit-testing.md).
 - If a service needs access to the `jovo` instance, this would need to be passed at every instantiation.
 
-To solve this, Jovo service providers can be passed to components and output classes using [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection). This feature is inspired by the dependency injection feature of [NestJS](https://docs.nestjs.com/fundamentals/custom-providers).
+To solve this, Jovo service providers can be passed to components and output classes using [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection). This feature is inspired by the dependency injection feature of [AngularJS](https://angular.io/guide/dependency-injection) and [NestJS](https://docs.nestjs.com/fundamentals/custom-providers).
 
-You can create a provider by adding the [`Injectable()` decorator](https://github.com/jovotech/jovo-framework/blob/v4/latest/framework/src/decorators/Injectable.ts) to a class:
+To make it possible to automatically instantiate a class with the dependency injection system, you must annotate it with the [`Injectable()` decorator](https://github.com/jovotech/jovo-framework/blob/v4/latest/framework/src/decorators/Injectable.ts):
 
 ```typescript
 import { Injectable } from '@jovotech/framework';
@@ -110,7 +110,7 @@ class OrderService {
 }
 ```
 
-You can then add providers to your [app configuration](./app-config.md):
+You can then add a provider for this type to your [app configuration](./app-config.md):
 
 ```typescript
 // src/app.ts
@@ -126,7 +126,8 @@ const app = new App({
 });
 ```
 
-This will instantiate the class and pass the instance to your components and output classes. By adding the service to the `constructor()`, you can then access it:
+You can then access your dependency by adding it to the `constructor()` of a component, an output class or another `@Injectable()` service itself.
+The dependency injection system will then instantiate the class for you and pass it to the constructor:
 
 ```typescript
 // src/components/OrderPizzaComponent.ts
@@ -150,12 +151,44 @@ class OrderPizzaComponent extends BaseComponent {
 ```
 
 Learn more in the following sections:
-- [Types of Providers](#types-of-providers)
+- [Dependency Tokens](#dependency-tokens)
+- [Providers](#types-of-providers)
+- [Dependency Access](#dependency-access)
 - [Unit Testing](#unit-testing)
 - [Middlewares](#middlewares)
 
 
-## Types of Providers
+## Dependency Tokens
+
+The dependency injection system uses tokens to identify dependencies. A token can be a `string`, `Symbol` or class type. 
+
+When a component, output class or a service like `OrderService` is instantiated, constructor parameters will be populated by the dependency injection system.
+To determine what to inject for a parameter, the dependency injection will identify the dependency token for this parameter.
+
+For parameters declared with a class type or abstract class type, this token can be automatically inferred.
+In the following example, the dependency token for the `otherService` constructor parameter is the `OtherService` class.
+
+```typescript
+class OrderService {
+  constructor(readonly otherService: OtherService) {}
+}
+```
+
+If you want to have more control over the dependency token or if you want to inject values of non-class types, you can use the [`@Inject` decorator](https://github.com/jovotech/jovo-framework/blob/v4/latest/framework/src/decorators/Inject.ts). In the following example, the dependency token for the `apiClient` constructor parameter is `'api_client'`:
+
+```typescript
+class OrderService {
+  constructor(@Inject('api_client') readonly apiClient: ApiClient) {}
+}
+```
+
+## Providers
+
+Now that you have declared `OrderService` with multiple constructor parameters, you can tell the dependency injection system what value to inject for each dependency using a provider. 
+
+A provider consists of two properties: A dependency token and information about what to inject for the token, the latter of which depends on what type of provider you are using.
+
+### Types of Providers
 
 Learn more about providers that can be used with Jovo's dependency injection feature.
 
@@ -165,31 +198,14 @@ Learn more about providers that can be used with Jovo's dependency injection fea
 
 #### Class Providers
 
-You can mark a class as a provider by adding the [`Injectable()` decorator](https://github.com/jovotech/jovo-framework/blob/v4/latest/framework/src/decorators/Injectable.ts):
+A provider can inject a class, which will be automatically instantiated by the dependency injection system.
+
+Such a class must be declared with the `@Injectable()` decorator:
 
 ```typescript
-// src/services/SomeService.ts
-
-import { Injectable } from '@jovotech/framework';
-// ...
-
 @Injectable()
 class SomeService {
   // ...
-}
-```
-
-In the `constructor()`, you can acess both the `jovo` instance (which is a `systemProvider`) and all other injected providers (`OtherService` in the example below):
-
-```typescript
-// src/services/SomeService.ts
-
-import { Injectable, Jovo } from '@jovotech/framework';
-// ...
-
-@Injectable()
-class SomeService {
-  constructor(readonly someOtherService: OtherService, jovo: Jovo) {}
 }
 ```
 
@@ -199,68 +215,80 @@ In the [app configuration](./app-config.md), you can then pass the class to the 
 // src/app.ts
 
 import { SomeService } from './services/SomeService';
-import { OtherService } from './services/OtherService';
 // ...
 
 const app = new App({
   providers: [
-    SomeService,
-    OtherService,
-    // ...
+    {
+      provide: SomeService,
+      useClass: SomeService
+    }
   ]
 });
 ```
 
-Alternatively (for example for [unit testing](#unit-testing)), you can also use the `useClass` option to provide a different class:
+Here, `provide` is the dependency token and `useClass` is the concrete class that will be instantiated.
+When `provide` and `useClass` are the same, you can also shorten the provider declaration:
+
+```typescript
+{
+  providers: [
+    SomeService,
+  ]
+}
+```
+
+The former notation is especially useful for [unit testing](#unit-testing)), where you can inject a mock instance:
 
 ```typescript
 {
   providers: [
     {
-      provide: OrderService,
-      useClass: MockOrderService,
-    },
-    // ...
+      provide: SomeService,
+      useClass: SomeServiceMock
+    }
   ]
 }
 ```
 
+Classes instantiated by the dependency injection system are not singletons. This means that if you inject the same class in multiple places or in later requests, you will get a new instance for each injection.
 
 #### Value Providers
 
-You can also use providers to inject values. For example, this can be helpful if you want to inject different values for different [stages](./staging.md) or for [unit testing](#unit-testing).
+You can also use providers to inject values. For example, this can be helpful if you want to inject configuration options.
 
 ```typescript
-export const EXAMPLE_TOKEN = Symbol('example');
-// ...
+// src/config.ts
+export const CONFIG_TOKEN = Symbol('config');
+```
+
+```typescript
+// src/app.ts
+import { CONFIG_TOKEN } from './config.ts';
 
 const app = new App({
-  {
-    provide: EXAMPLE_TOKEN,
-    useValue: '<SOME-VALUE>',
-  }
+  providers: [
+    {
+      provide: CONFIG_TOKEN,
+      useValue: '<SOME-VALUE>'
+    }
+  ]
 });
 ```
 
-Provider tokens can be:
-- `Symbol`
-- A `string` value
-- A class
-- An abstract class
-
-You can access the value by using the [`Inject()`](https://github.com/jovotech/jovo-framework/blob/v4/latest/framework/src/decorators/Inject.ts) decorator:
+You can then access the value by using the [`Inject()` decorator](https://github.com/jovotech/jovo-framework/blob/v4/latest/framework/src/decorators/Inject.ts):
 
 ```typescript
 // src/components/OrderPizzaComponent.ts
 
-import { EXAMPLE_TOKEN }  from '../app.ts';
+import { CONFIG_TOKEN }  from '../config.ts';
 // ...
 
 @Component()
 class OrderPizzaComponent extends BaseComponent {
   constructor(
     jovo: Jovo,
-    options: UnknownObject
+    options: UnknownObject | undefined,
     @Inject(EXAMPLE_TOKEN) private readonly example: string
   ) {
       super(jovo, options);
@@ -277,21 +305,25 @@ Factory providers can be used to access values of the [Jovo instance](https://ww
 Here are two examples:
 
 ```typescript
-import { JovoUser } from '@jovotech/framework';
-// ...
-
 export const APP_CONFIG_TOKEN = Symbol('AppConfig');
+```
+
+```typescript
+import { JovoUser } from '@jovotech/framework';
+import { APP_CONFIG_TOKEN } from './config.ts';
 // ...
 
 const app = new App({
-  {
-    provide: APP_CONFIG_TOKEN,
-    useFactory: (jovo: Jovo) => jovo.$config,
-  },
-  {
-    provide: JovoUser,
-    useFactory: (jovo: Jovo) => jovo.$user,
-  }
+  providers: [
+    {
+      provide: APP_CONFIG_TOKEN,
+      useFactory: (jovo: Jovo) => jovo.$config,
+    },
+    {
+      provide: JovoUser,
+      useFactory: (jovo: Jovo) => jovo.$user,
+    }
+  ]
 });
 ```
 
@@ -299,7 +331,7 @@ In a component or output class `constructor()`, you could then access them like 
 
 ```typescript
 import { JovoUser, Inject, AppConfig } from '@jovotech/framework';
-import { APP_CONFIG_TOKEN } from '../app.ts';
+import { APP_CONFIG_TOKEN } from '../config.ts';
 // ...
 
 constructor(
@@ -308,19 +340,16 @@ constructor(
 ) {}
 ```
 
-The example above shows that you can pass both tokens (see [value providers](#value-providers)) as well as classes (see [class providers](#class-providers)) using the `provide` option.
+The example above shows that you can use both Symbols and abstract classes as dependency tokens.
+
+Like class providers, factory providers are not cached. This means that the factory method is re-evaluated for each injection.
 
 
-### Provider Access
+## Dependency Access
 
-- [In Components](#in-components)
-- [In Output Classes](#in-output-classes)
-- [In Providers](#in-providers)
+Dependencies can be accessed using parameters of the `constructor()` in Components, Output Classes and Injectables.
 
-#### In Components
-
-In a [Jovo component](./components.md), you can access the instance using the component's `constructor()`:
-
+In components and output classes, parameters after the `Jovo` instance and the component `options` are resolved by the dependency injection system:
 ```typescript
 // src/components/OrderPizzaComponent.ts
 
@@ -331,7 +360,7 @@ import { OrderService } from '../services/OrderService.ts';
 
 @Component()
 class OrderPizzaComponent extends BaseComponent {
-  constructor(jovo: Jovo, options: UnknownObject, private readonly orderService: OrderService) {
+  constructor(jovo: Jovo, options: UnknownObject | undefined, private readonly orderService: OrderService) {
     super(jovo, options);
   }
 
@@ -346,10 +375,6 @@ class OrderPizzaComponent extends BaseComponent {
   }
 }
 ```
-
-#### In Output Classes
-
-In a [Jovo output class](./output-classes.md), you can access the instance using its `constructor()`:
 
 ```typescript
 // src/output/ExampleOutput.ts
@@ -377,9 +402,8 @@ class ExampleOutput extends BaseOutput {
 }
 ```
 
-### In Providers
-
-In the `constructor()` of a provider class, you can acess both the `jovo` instance (which is a `systemProvider`) and all other injected providers (`OtherService` in the example below):
+In Injectables, all parameters are resolved by the dependency injection system. 
+Besides all dependencies for which you defined providers, you can also access the `Jovo` instance, which is made accessible through a `systemProvider`:
 
 ```typescript
 // src/services/SomeService.ts
@@ -402,6 +426,7 @@ Below is an example how this can be done using [class providers](#class-provider
 
 ```typescript
 const testSuite = new TestSuite();
+
 testSuite.app.configure({providers: [{
   provide: OrderService,
   useClass: MockOrderService,
@@ -409,6 +434,8 @@ testSuite.app.configure({providers: [{
 ```
 
 ## Middlewares
+
+To understand the dependency resolution process, you can declare a `event.DependencyInjector.instantiateDependency` middleware.
 
 ```typescript
 app.middlewareCollection.use(

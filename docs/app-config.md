@@ -231,7 +231,7 @@ import { OrderService } from './services/OrderService';
 }
 ```
 
-It's also possible to use the `provide` option to specify a provider class or token. [Learn more about the different provider types here](./service-providers-dependency-injection.md#types-of-providers).
+It is also possible to use the `provide` option to specify a token, for which you want to inject a dependency, separately from the injected value or type. [Learn more about the different provider types here](./service-providers-dependency-injection.md#types-of-providers).
 
 ```typescript
 {
