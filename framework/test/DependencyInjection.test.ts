@@ -17,6 +17,7 @@ import {
   Inject,
   CircularDependencyError,
   DependencyTree,
+  UnresolvableDependencyError,
 } from '../src';
 import { ExamplePlatform, ExampleServer } from './utilities';
 
@@ -364,9 +365,7 @@ describe('circular dependency detection', () => {
 
     const onError = jest.fn();
     app.onError(onError);
-
     await app.initialize();
-
     const server = new ExampleServer({
       input: {
         type: InputType.Intent,
@@ -377,6 +376,47 @@ describe('circular dependency detection', () => {
     expect(server.response.output).toEqual([]);
     expect(onError).toHaveBeenCalledTimes(1);
     expect(onError.mock.calls[0][0]).toBeInstanceOf(CircularDependencyError);
+  });
+});
+
+describe('unresolvable dependency detection', () => {
+  test('unresolvable dependency', async () => {
+    @Global()
+    @Component()
+    class ComponentA extends BaseComponent {
+      constructor(
+        jovo: Jovo,
+        options: ComponentOptions<UnknownObject> | undefined,
+        readonly unresolvableDependency: unknown,
+      ) {
+        super(jovo, options);
+      }
+
+      @Intents('IntentA')
+      handleIntentA() {
+        return this.$send('IntentA');
+      }
+    }
+
+    const app = new App({
+      plugins: [new ExamplePlatform()],
+      providers: [],
+      components: [ComponentA],
+    });
+
+    const onError = jest.fn();
+    app.onError(onError);
+    await app.initialize();
+    const server = new ExampleServer({
+      input: {
+        type: InputType.Intent,
+        intent: 'IntentA',
+      },
+    });
+    await app.handle(server);
+    expect(server.response.output).toEqual([]);
+    expect(onError).toHaveBeenCalledTimes(1);
+    expect(onError.mock.calls[0][0]).toBeInstanceOf(UnresolvableDependencyError);
   });
 });
 

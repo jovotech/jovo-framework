@@ -93,9 +93,11 @@ export * from './errors/DuplicateChildComponentsError';
 export * from './errors/DuplicateGlobalIntentsError';
 export * from './errors/HandlerNotFoundError';
 export * from './errors/InvalidComponentTreeBuiltError';
+export * from './errors/InvalidDependencyError';
 export * from './errors/InvalidParentError';
 export * from './errors/MatchingRouteNotFoundError';
 export * from './errors/MatchingPlatformNotFoundError';
+export * from './errors/UnresolvableDependencyError';
 
 export * from './metadata/ClassDecoratorMetadata';
 export * from './metadata/ComponentMetadata';

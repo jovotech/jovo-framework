@@ -3,6 +3,8 @@ import { Jovo } from './Jovo';
 import { AnyObject, ArrayElement, Constructor } from '@jovotech/common';
 import { InjectionToken, Provider } from './metadata/InjectableMetadata';
 import { CircularDependencyError } from './errors/CircularDependencyError';
+import { UnresolvableDependencyError } from './errors/UnresolvableDependencyError';
+import { InvalidDependencyError } from './errors/InvalidDependencyError';
 
 const INSTANTIATE_DEPENDENCY_MIDDLEWARE = 'event.DependencyInjector.instantiateDependency';
 
@@ -20,7 +22,7 @@ export class DependencyInjector {
     jovo: Jovo,
     token: InjectionToken,
     dependencyPath: InjectionToken[],
-  ): DependencyTree<TYPE | undefined> {
+  ): DependencyTree<TYPE> | undefined {
     if (dependencyPath.includes(token)) {
       throw new CircularDependencyError(dependencyPath);
     }
@@ -36,11 +38,7 @@ export class DependencyInjector {
       }
     }) as Provider<TYPE> | undefined;
     if (!injection) {
-      return {
-        token,
-        resolvedValue: undefined,
-        children: [],
-      };
+      return undefined;
     }
 
     if (typeof injection === 'function') {
@@ -81,11 +79,7 @@ export class DependencyInjector {
         children: tree?.children ?? [],
       };
     } else {
-      return {
-        token,
-        resolvedValue: undefined,
-        children: [],
-      };
+      return undefined;
     }
   }
 
@@ -100,24 +94,34 @@ export class DependencyInjector {
     const injectMetadata = storage.getMergedInjectMetadata(clazz);
     const argTypes = Reflect.getMetadata('design:paramtypes', clazz) ?? [];
     const children: DependencyTree<unknown>[] = [];
-    for (let i = predefinedArgs.length; i < argTypes.length; i++) {
-      const injectMetadataForArg = injectMetadata.find((metadata) => metadata.index === i);
+    for (
+      let argumentIndex = predefinedArgs.length;
+      argumentIndex < argTypes.length;
+      argumentIndex++
+    ) {
+      const injectMetadataForArg = injectMetadata.find(
+        (metadata) => metadata.index === argumentIndex,
+      );
       let injectionToken: InjectionToken;
-      if (injectMetadataForArg) {
+      if (injectMetadataForArg?.token) {
         injectionToken = injectMetadataForArg.token;
       } else {
-        injectionToken = argTypes[i];
+        injectionToken = argTypes[argumentIndex];
       }
       if (!injectionToken) {
-        injectedArgs.push(undefined);
-        continue;
+        // the argType will usually never be undefined. Even for interfaces or unknown, it will be the Object type.
+        // Only when there is a circular import, the argType will be undefined.
+        throw new InvalidDependencyError(clazz, argumentIndex);
       }
       const childNode = DependencyInjector.resolveInjectionToken(
         jovo,
         injectionToken,
         dependencyPath,
       );
-      injectedArgs.push(childNode?.resolvedValue);
+      if (!childNode) {
+        throw new UnresolvableDependencyError(clazz, injectionToken, argumentIndex);
+      }
+      injectedArgs.push(childNode.resolvedValue);
       children.push(childNode);
     }
 
