@@ -195,6 +195,7 @@ Learn more about providers that can be used with Jovo's dependency injection fea
 - [Class Providers](#class-providers)
 - [Value Providers](#value-providers)
 - [Factory Providers](#factory-providers)
+- [Existing Providers](#existing-providers)
 
 #### Class Providers
 
@@ -343,6 +344,47 @@ constructor(
 The example above shows that you can use both Symbols and abstract classes as dependency tokens.
 
 Like class providers, factory providers are not cached. This means that the factory method is re-evaluated for each injection.
+
+#### Existing Providers
+
+Existing providers can be used to create an alias for a dependency token. This can for example be useful in situations where you want to narrow an interface:
+
+```typescript
+export interface OrderConfig {
+  // ...
+}
+
+export interface SomeOtherConfig {
+  // ...
+}
+
+export interface AppConfig extends OrderConfig, SomeOtherConfig {
+  // ...
+}
+
+@Injectable()
+class OrderService {
+  constructor(
+    @Inject('OrderConfig') readonly config: OrderConfig
+  ) {}
+}
+
+const app = new App({
+  providers: [
+    OrderService,
+    {
+      provide: 'AppConfig',
+      useValue: loadAppConfig(),
+    },
+    {
+      provide: 'OrderConfig',
+      useExisting: 'AppConfig',
+    }
+  ]
+});
+```
+
+In this case, the order service does not need to know about the `SomeOtherConfig` interface. It only needs to know about the `OrderConfig` interface and dependency token.
 
 
 ## Dependency Access
