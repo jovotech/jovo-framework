@@ -1,10 +1,10 @@
 ---
-title: 'Facebook Messenger Platform Integration'
+title: 'Facebook Messenger'
 excerpt: 'The Facebook Messenger platform integration allows you to build custom Messenger Bots using Jovo.'
 url: 'https://www.jovo.tech/marketplace/platform-facebookmessenger'
 ---
 
-# Facebook Messenger Platform Integration
+# Facebook Messenger
 
 The Facebook Messenger [platform integration](https://www.jovo.tech/docs/platforms) allows you to build custom Messenger bots using Jovo.
 

@@ -213,14 +213,28 @@ $state = [
 
 [Global components](#global-components) don't store component data because they're not added to the `$state` stack. We recommend using session data instead. [Learn more about the different Jovo data types here](./data.md).
 
+For type safety, you can also add an interface that extends `ComponentData`:
+
+```typescript
+import { Component, BaseComponent, ComponentData } from '@jovotech/framework';
+
+export interface YourComponentData extends ComponentData {
+  someKey: string;
+}
+
+class YourComponent extends BaseComponent<YourComponentData> {
+  // ...
+}
+```
+
 ### Component Options
 
 For some components, it may be helpful (or necessary) to add options for customization or configuration. The following options can be added:
 
 - `components`: Subcomponents that are used by this component.
 - `config`: The custom config used by the component. Can be accessed with `this.$component.config`.
-- `models`: Model files for component-specific intents and entities (_in development_).
 - `name`: If two components have the same class name, one component's name can be changed here.
+- `isAvailable`: A function that returns a boolean whether the component is available. If it returns `false`, the component is skipped during routing and redirecting or delegating to it causes a `ComponentNotAvailableError`.
 
 In the [register root components](#register-root-components) section, we already talked about how to pass options when registering existing components.
 
@@ -235,11 +249,27 @@ class YourComponent extends BaseComponent {
 }
 ```
 
+For type safety, you can also add an interface that extends `ComponentConfig`:
+
+```typescript
+import { Component, BaseComponent, ComponentConfig } from '@jovotech/framework';
+
+export interface YourComponentConfig extends ComponentConfig {
+  someKey: string;
+}
+
+class YourComponent extends BaseComponent<YourComponentConfig> {
+  // ...
+}
+```
+
 The hierarchy of options being used by the component is as follows (starting with the most important one):
 
 - Options passed using the constructor when registering the component
 - Options in the `@Component` decorator
 - Default options of the component
+
+
 
 ## Component Registration
 
@@ -409,3 +439,37 @@ You can also access the active component like this:
 ```typescript
 this.$handleRequest.activeComponentNode;
 ```
+
+### Inheritance
+
+Components can inherit handlers from their superclass. This is useful for example if many of your components offer a similar workflow, like a help handler.
+
+```typescript
+import { BaseComponent } from '@jovotech/framework';
+
+abstract class ComponentWithHelp extends BaseComponent {
+  abstract showHelp(): Promise<void>;
+  
+  async repeatLastResponse() {
+    // ...
+  }
+  
+  @Intents('HelpIntent')
+  async help() {
+    await this.showHelp();
+    await this.repeatLastResponse();
+  }
+}
+
+@Component()
+class YourComponent extends ComponentWithHelp {
+  async showHelp() {
+    // ...
+  }
+}
+```
+
+When using inheritance, the following rules apply:
+
+- The subclass has to be annotated with `@Component` and registered in app. If the superclass is annotated with `@Component`, any options provided there will be ignored.
+- Handlers in the subclass will override handlers **and their decorators** in the superclass. This means that when overriding a handler for a specific intent, it will have to be annotated with `@Intents` / `@Handle` again.

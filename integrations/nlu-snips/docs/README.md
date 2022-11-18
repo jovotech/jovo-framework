@@ -12,9 +12,15 @@ Turn raw text into structured meaning with the Jovo Framework integration for th
 
 [Snips NLU](https://github.com/snipsco/snips-nlu) is an open source [natural language understanding (NLU)](https://www.jovo.tech/docs/nlu) library.
 
-Since it is an open source service, you can host Snips NLU on your own servers without any external API calls. You can learn how to set up a server in the [official Snips NLU documentation](https://snips-nlu.readthedocs.io/en/latest/). Jovo also offers an open source repository repository that can be used to run a Snips NLU Python server that supports [dynamic entities](#dynamic-entities): [jovotech/snips-nlu-server](https://github.com/jovotech/snips-nlu-server).
+Since it is an open source service, you can host Snips NLU on your own servers without any external API calls. You can learn how to set up a server in the [official Snips NLU documentation](https://snips-nlu.readthedocs.io/en/latest/). Jovo also offers an open source repository repository that can be used to run a Snips NLU Python server that supports [intent scoping](#intent-scoping) and [dynamic entities](#dynamic-entities): [jovotech/snips-nlu-server](https://github.com/jovotech/snips-nlu-server).
 
-You can use the Jovo Snips NLU integration for projects where you receive raw text input that needs to be translated into structured meaning to work with the Jovo intent structure. Platforms like the [Jovo Core Platform](https://www.jovo.tech/marketplace/platform-core) (e.g. in conjunction with the [Jovo Web Client](https://www.jovo.tech/marketplace/jovo-client-web)), [Facebook Messenger](https://www.jovo.tech/marketplace/platform-facebookmessenger), and [Google Business Messages](https://www.jovo.tech/marketplace/platform-googlebusiness) are some examples where this would work.
+You can use the Jovo Snips NLU integration for projects where you receive raw text input that needs to be translated into structured meaning to work with the Jovo intent structure. Platforms like the [Jovo Core Platform](https://www.jovo.tech/marketplace/platform-core) or [Jovo Web Platform](https://www.jovo.tech/marketplace/platform-core) (e.g. in conjunction with the [Jovo Web Client](https://www.jovo.tech/marketplace/jovo-client-web)), [Facebook Messenger](https://www.jovo.tech/marketplace/platform-facebookmessenger), and [Google's Business Messages](https://www.jovo.tech/marketplace/platform-googlebusiness) are some examples where this would work.
+
+Learn more in the following sections:
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Entities](#entities)
+- [Intent Scoping](#intent-scoping)
 
 ## Installation
 
@@ -29,7 +35,6 @@ NLU plugins can be added to Jovo platform integrations. Here is an example how i
 ```typescript
 import { CorePlatform } from '@jovotech/platform-core';
 import { SnipsNlu } from '@jovotech/nlu-snips';
-
 // ...
 
 const app = new App({
@@ -63,6 +68,11 @@ new SnipsNlu({
 
 ## Entities
 
+- [Access Snips Slots](#access-snips-slots)
+- [Dynamic Entities](#dynamic-entities)
+
+### Access Snips Slots
+
 You can access Snips slots by using the `$entities` property. You can learn more in the [Jovo Model](https://www.jovo.tech/docs/models) and the [`$entities` documentation](https://www.jovo.tech/docs/entities).
 
 The Snips slot values are translated into the following Jovo entity properties:
@@ -78,7 +88,7 @@ The Snips slot values are translated into the following Jovo entity properties:
 
 You can learn more about the Snips slot format in the [official Snips documentation](https://snips-nlu.readthedocs.io/en/latest/data_model.html#slot).
 
-## Dynamic Entities
+### Dynamic Entities
 
 It is possible to set up Snips NLU to work with [dynamic entities](https://www.jovo.tech/docs/entities#dynamic-entities).
 
@@ -108,3 +118,20 @@ new SnipsNlu({
 - `passModels`: Since the server trains a new model that includes only the intents that use the dynamic entities, it needs access to the existing language model. You can either modify the server to access them, or pass the models using this NLU integration. If the latter, there are two options:
   - `modelsDirectory`: Reference the folder that includes all the model files. If you're deploying the app, make sure that the models files are included in the bundle.
   - `models`: Import the model files and reference them here. This property is prioritized over `modelsDirectory` if both are used.
+
+## Intent Scoping
+
+Snips provides the ability to prioritize intents when parsing the data. Learn more in the [official `parse` reference](https://snips-nlu.readthedocs.io/en/latest/api.html#snips_nlu.nlu_engine.nlu_engine.SnipsNLUEngine.parse).
+
+You can pass a list of intent names by using the [`listen.intents` output property](https://www.jovo.tech/docs/output-templates#intents):
+
+```typescript
+{
+  message: `Which city do you want to visit?`,
+  listen: {
+    intents: [ 'CityIntent' ],
+  },
+}
+```
+
+In the example above, `CityIntent` will be considered as prioritized intent when the Snips NLU is called.

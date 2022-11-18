@@ -70,7 +70,10 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
         engine_id: this.config.engineId,
         session_id: jovo.$session.id,
       },
-      data: { text },
+      data: {
+        text,
+        intents: jovo.$session.data._JOVO_LISTEN_INTENTS_, // Used for intent scoping, @see https://snips-nlu.readthedocs.io/en/latest/api.html#snips_nlu.nlu_engine.nlu_engine.SnipsNLUEngine.parse
+      },
     };
 
     const snipsNluResponse: SnipsNluResponse = await this.sendRequestToSnips(config);
@@ -92,7 +95,17 @@ export class SnipsNlu extends NluPlugin<SnipsNluConfig> {
       };
     }
 
-    return nluData?.intent ? nluData : undefined;
+    nluData.native = snipsNluResponse;
+
+    return nluData;
+  }
+
+  /**
+   * Used to to signal the parent to store intents in the session data
+   * @see https://www.jovo.tech/docs/nlu#intent-scoping
+   */
+  supportsIntentScoping(): boolean {
+    return true;
   }
 
   /**
