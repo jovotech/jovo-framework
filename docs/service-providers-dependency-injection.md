@@ -1,7 +1,7 @@
 ---
 title: 'Services, Providers & Dependency Injection'
 excerpt: 'Learn how you can add custom providers to your Jovo app using dependency injection.'
-url: 'https://www.jovo.tech/docs/services-providers-dependency-injection'
+url: 'https://www.jovo.tech/docs/service-providers-dependency-injection'
 ---
 
 # Services, Providers & Dependency Injection
