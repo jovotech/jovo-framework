@@ -12,10 +12,15 @@ export type ComponentConfig<COMPONENT extends BaseComponent = any> = Exclude<
   undefined
 >;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type ComponentConstructor<COMPONENT extends BaseComponent = any> = new (
+export type ComponentConstructor<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  COMPONENT extends BaseComponent = any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ARGS extends unknown[] = any[],
+> = new (
   jovo: Jovo,
-  options?: ComponentOptionsOf<COMPONENT>,
+  options: ComponentOptionsOf<COMPONENT> | undefined,
+  ...args: ARGS
 ) => COMPONENT;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -30,7 +35,7 @@ export abstract class BaseComponent<
   DATA extends ComponentData = ComponentData,
   CONFIG extends UnknownObject = UnknownObject,
 > extends JovoProxy {
-  constructor(jovo: Jovo, readonly options?: ComponentOptions<CONFIG>) {
+  constructor(jovo: Jovo, readonly options: ComponentOptions<CONFIG> | undefined) {
     super(jovo);
   }
 

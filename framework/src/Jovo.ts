@@ -38,6 +38,7 @@ import { JovoUser } from './JovoUser';
 import { Platform } from './Platform';
 import { JovoRoute } from './plugins/RouterPlugin';
 import { forEachDeep } from './utilities';
+import { DependencyInjector } from './DependencyInjector';
 
 const DELEGATE_MIDDLEWARE = 'event.$delegate';
 const RESOLVE_MIDDLEWARE = 'event.$resolve';
@@ -263,7 +264,12 @@ export abstract class Jovo<
   ): Promise<void> {
     let newOutput: OutputTemplate | OutputTemplate[];
     if (typeof outputConstructorOrTemplateOrMessage === 'function') {
-      const outputInstance = new outputConstructorOrTemplateOrMessage(this, options);
+      const outputInstance = await DependencyInjector.instantiateClass(
+        this,
+        outputConstructorOrTemplateOrMessage,
+        this,
+        options,
+      );
       const outputRes = outputInstance.build();
       const output = util.types.isPromise(outputRes) ? await outputRes : outputRes;
       // overwrite reserved properties of the built object i.e. message

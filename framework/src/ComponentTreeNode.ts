@@ -5,6 +5,7 @@ import { BuiltInHandler } from './enums';
 import { HandlerNotFoundError } from './errors/HandlerNotFoundError';
 import { Jovo } from './Jovo';
 import { ComponentMetadata } from './metadata/ComponentMetadata';
+import { DependencyInjector } from './DependencyInjector';
 import { ComponentNotAvailableError } from './errors/ComponentNotAvailableError';
 
 export interface ComponentTreeNodeOptions<COMPONENT extends BaseComponent = BaseComponent> {
@@ -69,10 +70,7 @@ export class ComponentTreeNode<COMPONENT extends BaseComponent = BaseComponent> 
     handler = BuiltInHandler.Start,
     callArgs,
   }: ExecuteHandlerOptions<COMPONENT, HANDLER, ARGS>): Promise<void> {
-    const componentInstance = new (this.metadata.target as ComponentConstructor<COMPONENT>)(
-      jovo,
-      this.metadata.options,
-    );
+    const componentInstance = await this.instantiateComponent(jovo);
     try {
       if (!componentInstance[handler as keyof COMPONENT]) {
         throw new HandlerNotFoundError(componentInstance.constructor.name, handler.toString());
@@ -93,6 +91,15 @@ export class ComponentTreeNode<COMPONENT extends BaseComponent = BaseComponent> 
     } catch (e) {
       return jovo.$app.handleError(e, jovo);
     }
+  }
+
+  private async instantiateComponent(jovo: Jovo): Promise<COMPONENT> {
+    return await DependencyInjector.instantiateClass(
+      jovo,
+      this.metadata.target as ComponentConstructor<COMPONENT>,
+      jovo,
+      this.metadata.options,
+    );
   }
 
   toJSON(): Omit<ComponentTreeNode<COMPONENT>, 'parent'> & { parent?: string } {
