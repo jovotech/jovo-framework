@@ -137,8 +137,9 @@ export class AlexaOutputTemplateConverterStrategy extends SingleResponseOutputTe
 
     const quickReplies = output.quickReplies;
     if (quickReplies && this.config.genericOutputToApl) {
-      const directive: AplRenderDocumentDirective | undefined = response.response
-        .directives?.[0] as AplRenderDocumentDirective | undefined;
+      const directive: AplRenderDocumentDirective | undefined = response.response.directives?.find(
+        (directive) => directive.type === 'Alexa.Presentation.APL.RenderDocument',
+      ) as AplRenderDocumentDirective | undefined;
       if (directive) {
         if (!directive.datasources?.data) {
           directive.datasources = {
