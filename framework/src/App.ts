@@ -5,12 +5,14 @@ import {
   ComponentTree,
   I18NextConfig,
   IntentMap,
+  isSameProvide,
   Jovo,
   Logger,
   Middleware,
   MiddlewareFunction,
   Plugin,
   PossibleMiddlewareName,
+  Provider,
 } from '.';
 import { ComponentConstructor, ComponentDeclaration } from './BaseComponent';
 import { MatchingPlatformNotFoundError } from './errors/MatchingPlatformNotFoundError';
@@ -67,10 +69,16 @@ export interface AppConfig extends ExtensibleConfig {
 
 export type AppInitConfig = ExtensibleInitConfig<AppConfig> & {
   components?: Array<ComponentConstructor | ComponentDeclaration>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  providers?: Provider<any>[];
 };
 
 export class App extends Extensible<AppConfig, AppMiddlewares> {
   readonly componentTree: ComponentTree;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly systemProviders: Provider<any>[] = [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly providers: Provider<any>[] = [];
   readonly i18n: I18Next;
   private initialized = false;
   private errorListeners: AppErrorListener[] = [];
@@ -82,7 +90,7 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
   cms: UnknownObject = {};
 
   constructor(config?: AppInitConfig) {
-    super(config ? { ...config, components: undefined } : config);
+    super(config ? { ...config, components: undefined, providers: undefined } : config);
 
     if (typeof this.config.logging === 'object' && this.config.logging.logger) {
       _merge(Logger.config, this.config.logging.logger);
@@ -95,6 +103,14 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
 
     this.componentTree = new ComponentTree(...(config?.components || []));
     this.i18n = new I18Next(this.config.i18n);
+
+    this.providers = config?.providers || [];
+    this.systemProviders = [
+      {
+        provide: Jovo,
+        useFactory: (jovo) => jovo,
+      },
+    ];
   }
 
   get isInitialized(): boolean {
@@ -109,6 +125,16 @@ export class App extends Extensible<AppConfig, AppMiddlewares> {
     _merge(this.config, { ...config, components: undefined, plugins: undefined });
     const usables: Usable[] = [...(config?.plugins || []), ...(config?.components || [])];
     this.use(...usables);
+    if (config.providers) {
+      const mergedProviders = [...config.providers];
+      for (const provider of this.providers) {
+        if (!mergedProviders.find((p) => isSameProvide(p, provider))) {
+          mergedProviders.push(provider);
+        }
+      }
+      this.providers.length = 0;
+      this.providers.push(...mergedProviders);
+    }
   }
 
   onError(listener: AppErrorListener): void {

@@ -10,14 +10,16 @@ export type OutputConstructor<
   REQUEST extends JovoRequest = JovoRequest,
   RESPONSE extends JovoResponse = JovoResponse,
   JOVO extends Jovo<REQUEST, RESPONSE> = Jovo<REQUEST, RESPONSE>,
-> = new (jovo: JOVO, options?: DeepPartial<OUTPUT['options']>, ...args: unknown[]) => OUTPUT;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ARGS extends unknown[] = any[],
+> = new (jovo: JOVO, options: DeepPartial<OUTPUT['options']> | undefined, ...args: ARGS) => OUTPUT;
 
 export interface OutputOptions extends OutputTemplate {}
 
 export abstract class BaseOutput<OPTIONS extends OutputOptions = OutputOptions> extends JovoProxy {
   readonly options: OPTIONS;
 
-  constructor(jovo: Jovo, options?: DeepPartial<OPTIONS>) {
+  constructor(jovo: Jovo, options: DeepPartial<OPTIONS> | undefined) {
     super(jovo);
     const defaultOptions = this.getDefaultOptions();
     this.options = options ? _merge(defaultOptions, options) : defaultOptions;

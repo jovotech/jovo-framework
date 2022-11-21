@@ -15,6 +15,9 @@ export type DeepPartial<T> = PartialDeep<T>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Constructor<T = AnyObject, ARGS extends unknown[] = any[]> = new (...args: ARGS) => T;
 
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type Abstract<T> = Function & { prototype: T };
+
 // Construct object from properties of T that extend U.
 export type PickWhere<T, U> = Pick<
   T,

@@ -3,6 +3,7 @@ import _get from 'lodash.get';
 import _intersection from 'lodash.intersection';
 import _set from 'lodash.set';
 import _unset from 'lodash.unset';
+import { Provider } from './metadata/InjectableMetadata';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function forEachDeep<T = any>(
@@ -95,4 +96,24 @@ export function copy<T extends AnyObject>(
   }
 
   return result as T;
+}
+
+/**
+ * Checks, whether two Providers have the same `provide` value.
+ * @param a - First Provider to compare
+ * @param b - Second Provider to compare
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function isSameProvide(a: Provider<any>, b: Provider<any>): boolean {
+  if (typeof a === 'function' && typeof b === 'function') {
+    return a === b;
+  } else if (typeof a === 'function' && typeof b !== 'function') {
+    return a === b.provide;
+  } else if (typeof a !== 'function' && typeof b === 'function') {
+    return a.provide === b;
+  } else if (typeof a !== 'function' && typeof b !== 'function') {
+    return a.provide === b.provide;
+  } else {
+    return false;
+  }
 }
