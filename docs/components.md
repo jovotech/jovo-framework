@@ -103,6 +103,7 @@ Besides those, the following stages also dive into the following concepts:
 - [Routing and state management](#routing-and-state-management)
 - [Global components](#global-components)
 - [Component data](#component-data)
+- [Component constructor](#component-constructor)
 
 ### Handlers
 
@@ -265,10 +266,34 @@ class YourComponent extends BaseComponent<YourComponentConfig> {
 
 The hierarchy of options being used by the component is as follows (starting with the most important one):
 
-- Options passed using the constructor when registering the component
+- Options passed using the [constructor](#component-constructor) when registering the component
 - Options in the `@Component` decorator
 - Default options of the component
 
+
+### Component Constructor
+
+You can also add a `constructor()` to your component:
+
+```typescript
+import { Jovo, UnknownObject, Component, BaseComponent } from '@jovotech/framework';
+
+class YourComponent extends BaseComponent {
+  constructor(
+    jovo: Jovo,
+    options: UnknownObject | undefined
+  ) {
+    super(jovo, options);
+    // ...
+  }
+  
+  // ...
+}
+```
+
+For the [`options`](#component-options), it is important that you use `UnknownObject | undefined`. This is a breaking change that was introduced with [this PR](https://github.com/jovotech/jovo-framework/pull/1461) in `v4.5`.
+
+If you run into errors, you can also try `ComponentOptions<UnknownObject> | undefined`:
 
 
 ## Component Registration
