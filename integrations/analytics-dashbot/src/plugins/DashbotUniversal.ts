@@ -88,6 +88,7 @@ export class DashbotUniversal extends DashbotAnalyticsPlugin {
         userId: jovo.$user.id || '',
         platformJson: response,
         buttons: this.getButtons(output.quickReplies),
+        sessionId: jovo.$session.id || '',
       };
 
       await this.sendDashbotRequest(url, responseLog);
