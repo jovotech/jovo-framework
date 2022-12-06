@@ -13,12 +13,16 @@ import { Inbox } from './Inbox';
 
 export interface JovoInboxConfig extends PluginConfig {
   defaultLocale: string;
-  serverUrl: string;
-  path: string;
+  server: {
+    url: string;
+    path: string;
+  };
   appId: string;
-  skipPlatforms?: string[];
-  skipLocales?: string[];
-  skipUserIds?: string[];
+  skip?: {
+    platforms?: string[];
+    locales?: string[];
+    userIds?: string[];
+  };
   storedElements: {
     request: true;
     response: true;
@@ -41,11 +45,18 @@ export class JovoInbox extends Plugin<JovoInboxConfig> {
     return {
       ...this.getInitConfig(),
       defaultLocale: 'en',
-      serverUrl: 'http://localhost:4000',
-      path: '/api/logs',
+      server: {
+        url: 'http://localhost:4000',
+        path: '/api/logs',
+      },
       skipPlatforms: [],
       skipLocales: [],
       skipUserIds: [],
+      skip: {
+        platforms: [],
+        locales: [],
+        userIds: [],
+      },
       storedElements: {
         request: true,
         response: true,
@@ -59,17 +70,15 @@ export class JovoInbox extends Plugin<JovoInboxConfig> {
   }
 
   mount(parent: HandleRequest): Promise<void> | void {
-
     parent.middlewareCollection.use('request.start', async (jovo: Jovo) => {
-
       // prepare data that is required in every turn
       const userId = jovo.$user.id || '';
       const platform = jovo.$platform.constructor.name;
       const locale = jovo.$request.getLocale() || this.config.defaultLocale;
 
-      const skipUserIds = this.config.skipUserIds?.includes(userId);
-      const skipPlatforms = this.config.skipPlatforms?.includes(platform);
-      const skipLocales = this.config.skipLocales?.includes(locale);
+      const skipUserIds = this.config.skip?.userIds?.includes(userId);
+      const skipPlatforms = this.config.skip?.platforms?.includes(platform);
+      const skipLocales = this.config.skip?.locales?.includes(locale);
 
       // generate a request id, store it into jovo.$data to make it available in
       // every middleware
@@ -86,49 +95,67 @@ export class JovoInbox extends Plugin<JovoInboxConfig> {
       if (jovo.$data._JOVO_INBOX_.skip) {
         return;
       }
-
       if (this.config.storedElements.request) {
-        const log = this.buildLog(jovo, InboxLogType.Request, jovo.$request);
-        await this.post(log);
+        jovo.$data._JOVO_INBOX_.logs.push(this.buildLog(jovo, InboxLogType.Request, jovo.$request));
       }
     });
+
+    parent.middlewareCollection.use('after.interpretation.end', async (jovo: Jovo) => {
+      if (jovo.$data._JOVO_INBOX_.skip) {
+        return;
+      }
+
+      if (this.config.storedElements.input) {
+        jovo.$data._JOVO_INBOX_.logs.push(
+          this.buildLog(jovo, InboxLogType.Input, jovo.$input || {}),
+        );
+      }
+
+      if (this.config.storedElements.nlu) {
+        jovo.$data._JOVO_INBOX_.logs.push(
+          this.buildLog(jovo, InboxLogType.Nlu, jovo.$input.nlu || {}),
+        );
+      }
+    });
+
+    parent.middlewareCollection.use('after.dialogue.router', async (jovo: Jovo) => {
+      if (jovo.$data._JOVO_INBOX_.skip) {
+        return;
+      }
+
+      if (this.config.storedElements.state) {
+        jovo.$data._JOVO_INBOX_.logs.push(this.buildLog(jovo, InboxLogType.State, jovo.$state));
+      }
+    });
+
     parent.middlewareCollection.use('after.response.end', async (jovo: Jovo) => {
       if (jovo.$data._JOVO_INBOX_.skip) {
         return;
       }
 
-      const logs: InboxLog[] = [];
-
-
-      if (this.config.storedElements.input) {
-        logs.push(this.buildLog(jovo, InboxLogType.Input, jovo.$input || {}));
-      }
-
-      if (this.config.storedElements.nlu) {
-        logs.push(this.buildLog(jovo, InboxLogType.Nlu, jovo.$input.nlu || {}));
-      }
-
-      if (this.config.storedElements.state) {
-        logs.push(this.buildLog(jovo, InboxLogType.State, jovo.$state));
-      }
-
       if (this.config.storedElements.output) {
-        logs.push(this.buildLog(jovo, InboxLogType.Output, jovo.$output));
+        jovo.$data._JOVO_INBOX_.logs.push(this.buildLog(jovo, InboxLogType.Output, jovo.$output));
       }
 
       if (this.config.storedElements.user) {
-        logs.push(this.buildLog(jovo, InboxLogType.User, jovo.$user.getPersistableData()));
+        jovo.$data._JOVO_INBOX_.logs.push(
+          this.buildLog(jovo, InboxLogType.User, jovo.$user.getPersistableData()),
+        );
       }
 
       if (this.config.storedElements.session) {
-        logs.push(this.buildLog(jovo, InboxLogType.Session, jovo.$session.getPersistableData()));
+        jovo.$data._JOVO_INBOX_.logs.push(
+          this.buildLog(jovo, InboxLogType.Session, jovo.$session.getPersistableData()),
+        );
       }
 
       if (this.config.storedElements.response) {
-        logs.push(this.buildLog(jovo, InboxLogType.Response, jovo.$response));
+        jovo.$data._JOVO_INBOX_.logs.push(
+          this.buildLog(jovo, InboxLogType.Response, jovo.$response),
+        );
       }
 
-      await this.post(logs);
+      await this.post(jovo.$data._JOVO_INBOX_.logs);
     });
   }
 
@@ -148,7 +175,7 @@ export class JovoInbox extends Plugin<JovoInboxConfig> {
   async post(log: InboxLog | InboxLog[]): Promise<void> {
     return axios.request({
       method: 'POST',
-      url: `${this.config.serverUrl}${this.config.path}`,
+      url: `${this.config.server.url}${this.config.server.path}`,
       data: log,
     });
   }
