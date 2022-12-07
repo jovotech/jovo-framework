@@ -1,3 +1,8 @@
+#The process to commit to the changes in the repository
+#Made few changes below
+
+
+
 # Jovo Framework: The React for Voice and Chat Apps
 
 > [**NEWS**: We just launched Jovo v4](https://www.jovo.tech/news/jovo-v4)
