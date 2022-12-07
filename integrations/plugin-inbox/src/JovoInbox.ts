@@ -12,7 +12,7 @@ import { v4 as uuidV4 } from 'uuid';
 import { Inbox } from './Inbox';
 
 export interface JovoInboxConfig extends PluginConfig {
-  defaultLocale: string;
+  fallbackLocale: string;
   server: {
     url: string;
     path: string;
@@ -44,7 +44,7 @@ export class JovoInbox extends Plugin<JovoInboxConfig> {
   getDefaultConfig(): JovoInboxConfig {
     return {
       ...this.getInitConfig(),
-      defaultLocale: 'en',
+      fallbackLocale: 'en',
       server: {
         url: 'http://localhost:4000',
         path: '/api/logs',
@@ -74,7 +74,7 @@ export class JovoInbox extends Plugin<JovoInboxConfig> {
       // prepare data that is required in every turn
       const userId = jovo.$user.id || '';
       const platform = jovo.$platform.constructor.name;
-      const locale = jovo.$request.getLocale() || this.config.defaultLocale;
+      const locale = jovo.$request.getLocale() || this.config.fallbackLocale;
 
       const skipUserIds = this.config.skip?.userIds?.includes(userId);
       const skipPlatforms = this.config.skip?.platforms?.includes(platform);
@@ -164,7 +164,7 @@ export class JovoInbox extends Plugin<JovoInboxConfig> {
       appId: this.config.appId,
       platform: jovo.$platform.constructor.name,
       userId: jovo.$user.id || '',
-      locale: jovo.$request.getLocale() || this.config.defaultLocale,
+      locale: jovo.$request.getLocale() || this.config.fallbackLocale,
       requestId: jovo.$data._JOVO_INBOX_.requestId,
       sessionId: jovo.$request.getSessionId() || '-',
       type,
