@@ -256,7 +256,20 @@ try {
 
 ## BigQuery
 
-To set up BigQuery, you need to create a service account, download the JSON file, and include it in your project's `src` folder. Typically, we name the file `serviceAccount.json`. 
+To set up BigQuery, you need to create a service account, download the JSON file, and include it in your project's `src` folder. Typically, we name the file `serviceAccount.json`.
+
+Steps:
+
+1. In the [console](https://console.cloud.google.com), create a new Google Cloud project.
+2. Select the project.
+3. Create a Service Account and set the Service Account ID.
+4. Assign the Service Account the role of "BigQuery Data Editor".
+5. Select the Service Account and on the Keys tab, click the Add Key button.
+6. Create a new key with JSON key type.
+7. The JSON file will download. Copy the file to your Jovo project's `src` folder and rename it to `serviceAccount.json`.
+8. In your Google project, open BigQuery and create a `dataset` and a `table`.
+9. Define the table schema using the [starter schema](./starter-schema.json)
+
 
 To learn more about service account credentials, see [Authenticating with a service account key file](https://cloud.google.com/bigquery/docs/authentication/service-account-file#node.js). The service account must include the BigQuery Data Editor role to insert rows to the table.
 
