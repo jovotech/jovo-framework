@@ -35,6 +35,7 @@ export enum InboxLogType {
 export type InboxLogTypeLike = EnumLike<InboxLogType> | string;
 
 export interface InboxLog {
+  createdAt: Date;
   type: InboxLogTypeLike;
   appId: string;
   platform: string;

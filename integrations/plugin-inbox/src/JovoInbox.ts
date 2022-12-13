@@ -1,5 +1,7 @@
 import {
+  App,
   axios,
+  Extensible,
   HandleRequest,
   Jovo,
   Plugin,
@@ -26,6 +28,7 @@ export interface JovoInboxConfig extends PluginConfig {
   storedElements: {
     request: true;
     response: true;
+    error?: StoredElement | boolean;
     state?: StoredElement | boolean;
     input?: StoredElement | boolean;
     output?: StoredElement | boolean;
@@ -60,6 +63,7 @@ export class JovoInbox extends Plugin<JovoInboxConfig> {
       storedElements: {
         request: true,
         response: true,
+        error: true,
       },
     };
   }
@@ -67,6 +71,24 @@ export class JovoInbox extends Plugin<JovoInboxConfig> {
     return {
       appId: '<APP_ID>',
     };
+  }
+
+  initialize(app: App): Promise<void> | void {
+    app.onError((error: Error, jovo?: Jovo) => {
+      if (jovo) {
+        if (jovo.$data._JOVO_INBOX_.skip) {
+          return;
+        }
+
+        if (this.config.storedElements.error) {
+          jovo.$data._JOVO_INBOX_.logs.push(
+            this.buildLog(jovo, InboxLogType.Error, {
+              message: error.message,
+            }),
+          );
+        }
+      }
+    });
   }
 
   mount(parent: HandleRequest): Promise<void> | void {
@@ -161,6 +183,7 @@ export class JovoInbox extends Plugin<JovoInboxConfig> {
 
   buildLog(jovo: Jovo, type: InboxLogTypeLike, payload: unknown): InboxLog {
     return {
+      createdAt: new Date(),
       appId: this.config.appId,
       platform: jovo.$platform.constructor.name,
       userId: jovo.$user.id || '',
