@@ -36,5 +36,7 @@
     "ts-toolbelt": "9.5.13",
     "typescript": "~4.4.4"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@jovotech/plugin-debugger": "^4.5.2"
+  }
 }
