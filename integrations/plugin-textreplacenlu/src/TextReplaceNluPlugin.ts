@@ -41,7 +41,12 @@ export interface ReplaceRule {
 
 export interface TextReplaceNluPluginConfig extends PluginConfig {
   onGetReplaceRules: (jovo: Jovo) => ReplaceRule[] | Promise<ReplaceRule[]>;
-  onReplaceAll: (jovo: Jovo, locale: string, replaceRules: ReplaceRule[], text: string) => string | Promise<string>;
+  onReplaceAll: (
+    jovo: Jovo,
+    locale: string,
+    replaceRules: ReplaceRule[],
+    text: string,
+  ) => string | Promise<string>;
   fallbackLocale: string;
 }
 
@@ -80,7 +85,12 @@ export class TextReplaceNluPlugin extends Plugin<TextReplaceNluPluginConfig> {
     return locale;
   }
 
-  private replaceAllText(jovo: Jovo, locale: string, replaceRules: ReplaceRule[], text: string): string | Promise<string> {
+  private replaceAllText(
+    jovo: Jovo,
+    locale: string,
+    replaceRules: ReplaceRule[],
+    text: string,
+  ): string | Promise<string> {
     for (const rule of replaceRules) {
       if (!rule.searchValue || !rule.replaceValue) {
         continue;
@@ -97,7 +107,7 @@ export class TextReplaceNluPlugin extends Plugin<TextReplaceNluPluginConfig> {
           searchValue = new RegExp(rule.searchValue, flags);
         }
 
-        text = text.replaceAll(searchValue, rule.replaceValue);
+        text = text.replace(searchValue, rule.replaceValue);
       }
     }
 
