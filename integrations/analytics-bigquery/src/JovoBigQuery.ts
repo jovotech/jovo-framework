@@ -104,6 +104,7 @@ export class JovoBigQuery {
     this.events.push(event);
 
     if ((this.config.logging as BigQueryLoggingConfig).addEvent) {
+      // eslint-disable-next-line no-console
       console.log('BigQuery addEvent', { event });
     }
   }
@@ -125,6 +126,7 @@ export class JovoBigQuery {
     }
 
     if ((this.config.logging as BigQueryLoggingConfig).sendEvents) {
+      // eslint-disable-next-line no-console
       console.time('BigQuery sendEvents');
     }
 
@@ -135,15 +137,18 @@ export class JovoBigQuery {
         .insert(this.events, this.config.insertRowsOptions);
 
       if ((this.config.logging as BigQueryLoggingConfig).sendEvents) {
+        // eslint-disable-next-line no-console
         console.log({ result });
       }
     } catch (error) {
       if ((this.config.logging as BigQueryLoggingConfig).sendEvents) {
+        // eslint-disable-next-line no-console
         console.log('BigQuery error', { error: JSON.stringify(error, null, 2) });
       }
     }
 
     if ((this.config.logging as BigQueryLoggingConfig).sendEvents) {
+      // eslint-disable-next-line no-console
       console.timeEnd('BigQuery sendEvents');
     }
   }
