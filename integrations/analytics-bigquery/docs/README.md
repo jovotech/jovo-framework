@@ -172,7 +172,7 @@ plugins: [
 ## Event Tracking
 
 ### Common Properties
-All calls to `$bigquery.addEvent(event)` track the following properties:
+All calls to `$bigQuery.addEvent(event)` track the following properties:
 - `eventId` (string) - generated UUID for the event
 - `appId` (string) - the appId from config
 - `eventDate` (string) - UTC date in ISO 8601 format
@@ -231,14 +231,14 @@ The following events are tracked automatically and add additional properties (as
 
 ### Custom Events
 
-Include your own custom events by calling `$bigquery.addEvent(event)` or `$bigquery.addError(error)`.
+Include your own custom events by calling `$bigQuery.addEvent(event)` or `$bigQuery.addError(error)`.
 
 For any custom properties you add in code, update the Google BigQuery table schema to include them.
 
 #### Event
 
 ```typescript
-await this.$bigquery.addEvent({
+await this.$bigQuery.addEvent({
     eventType: 'game_start',
     player: 'player-name',
 });
@@ -250,7 +250,7 @@ await this.$bigquery.addEvent({
 try {
   //...
 } catch (error) {
-  await this.$bigquery.addError(error);
+  await this.$bigQuery.addError(error);
 }
 ```
 
