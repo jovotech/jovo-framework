@@ -49,12 +49,6 @@ export class JovoBigQuery {
   async processRequest(jovo: Jovo): Promise<void> {
     this.initOnError(jovo);
 
-    if (jovo.$session.isNew) {
-      this.jovo.$session.data.bigquery = {
-        sessionStart: Date.now(),
-      };
-    }
-
     await this.addEventDeviceCapabilites(jovo);
     await this.addEventNewUser(jovo);
     await this.addEventSessionStart(jovo);
@@ -261,7 +255,7 @@ export class JovoBigQuery {
     const listen = lastOutput ? lastOutput.listen ?? true : false;
 
     if (!listen || reason === SessionEndReason.Error) {
-      const elapsed = Date.now() - this.jovo.$session.data.bigquery.sessionStart;
+      const elapsed = Date.now() - this.jovo.$session.createdAt.getTime();
 
       const event = {
         eventType: 'session_end',
