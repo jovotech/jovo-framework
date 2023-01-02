@@ -13,7 +13,7 @@ declare module '@jovotech/framework/dist/types/Extensible' {
 
 declare module '@jovotech/framework/dist/types/Jovo' {
   interface Jovo {
-    $bigquery: JovoBigQuery;
+    $bigQuery: JovoBigQuery;
   }
 }
 

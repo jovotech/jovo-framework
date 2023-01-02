@@ -113,19 +113,15 @@ export class BigQueryAnalytics extends AnalyticsPlugin<BigQueryAnalyticsPluginCo
   }
 
   async trackRequest(jovo: Jovo): Promise<void> {
-    jovo.$bigquery = new JovoBigQuery(this, jovo);
-    await jovo.$bigquery.processRequest(jovo);
+    jovo.$bigQuery = new JovoBigQuery(this, jovo);
+    await jovo.$bigQuery.processRequest(jovo);
   }
 
   async trackResponse(jovo: Jovo): Promise<void> {
-    await jovo.$bigquery.processResponse(jovo);
+    await jovo.$bigQuery.processResponse(jovo);
   }
 
   async eventExecuteHandler(jovo: Jovo, payload: AnyObject | undefined): Promise<void> {
-    await jovo.$bigquery.executeHandler(jovo, payload);
+    await jovo.$bigQuery.executeHandler(jovo, payload);
   }
-
-  // async eventT(jovo: Jovo, payload: AnyObject | undefined): Promise<void> {
-  //   await jovo.$bigquery.eventT(jovo, payload);
-  // }
 }
