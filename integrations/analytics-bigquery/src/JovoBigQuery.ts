@@ -109,7 +109,7 @@ export class JovoBigQuery {
     }
   }
 
-  async addError(error: Error) {
+  async addError(error: Error): Promise<void> {
     const event = {
       eventType: 'error',
       errorName: error.name,
