@@ -52,9 +52,6 @@ export class JovoInbox extends Plugin<JovoInboxConfig> {
         url: 'http://localhost:4000',
         path: '/api/logs',
       },
-      skipPlatforms: [],
-      skipLocales: [],
-      skipUserIds: [],
       skip: {
         platforms: [],
         locales: [],
