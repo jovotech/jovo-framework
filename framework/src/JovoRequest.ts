@@ -36,6 +36,7 @@ export abstract class JovoRequest {
   abstract getSessionData(): UnknownObject | undefined;
   abstract getSessionId(): string | undefined;
   abstract isNewSession(): boolean | undefined;
+  getRequestId?(): string | undefined;
 
   getSession(): Partial<JovoSession> | undefined {
     const sessionId = this.getSessionId();

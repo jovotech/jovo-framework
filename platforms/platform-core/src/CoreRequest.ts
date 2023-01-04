@@ -85,4 +85,8 @@ export class CoreRequest extends JovoRequest {
 
     this.context.user.id = userId;
   }
+
+  getRequestId(): string | undefined {
+    return this.id;
+  }
 }

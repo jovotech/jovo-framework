@@ -39,7 +39,7 @@ import { Platform } from './Platform';
 import { JovoRoute } from './plugins/RouterPlugin';
 import { forEachDeep } from './utilities';
 import { DependencyInjector } from './DependencyInjector';
-
+import { v4 as uuidv4 } from 'uuid';
 const DELEGATE_MIDDLEWARE = 'event.$delegate';
 const RESOLVE_MIDDLEWARE = 'event.$resolve';
 const REDIRECT_MIDDLEWARE = 'event.$redirect';
@@ -117,6 +117,7 @@ export abstract class Jovo<
   $route?: JovoRoute;
   $session: JovoSession;
   $user: USER;
+  $id: string;
 
   $cms: UnknownObject;
 
@@ -127,6 +128,7 @@ export abstract class Jovo<
     readonly $platform: PLATFORM,
   ) {
     this.$request = this.$platform.createRequestInstance($handleRequest.server.getRequestObject());
+    this.$id = this.$request.getRequestId ? this.$request.getRequestId() || uuidv4() : uuidv4();
     this.$input = this.$request.getInput();
     this.$output = [];
 

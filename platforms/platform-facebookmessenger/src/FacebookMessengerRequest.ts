@@ -84,4 +84,8 @@ export class FacebookMessengerRequest extends JovoRequest {
   setUserId(): void {
     return;
   }
+
+  getRequestId(): string | undefined {
+    return this.id;
+  }
 }
