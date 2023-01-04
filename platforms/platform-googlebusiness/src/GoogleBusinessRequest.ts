@@ -111,4 +111,8 @@ export class GoogleBusinessRequest extends JovoRequest {
   setUserId(): void {
     return;
   }
+
+  getRequestId(): string | undefined {
+    return this.requestId;
+  }
 }

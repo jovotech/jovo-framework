@@ -93,7 +93,18 @@ this.$route;
 
 Context properties contain information that was not explicitly stated by the user, but rather information accompanying the request.
 
-The properties include [`$data`](#data), [`$session`](#session), [`$user`](#user), [`$device`](#device), and [`$history`](#history).
+The properties include [`$id`](#id), [`$data`](#data), [`$session`](#session), [`$user`](#user), [`$device`](#device), and [`$history`](#history).
+
+### $id
+
+The `$id` property is a unique identifier for each request going through the [RIDR Lifecycle](#ridr-properties). This could be used for logging or analytics integrations, for example.
+
+```typescript
+this.$id;
+```
+
+The value is either retreived from the [`$request`](#request) object (if the platform provides a request ID) or generated using UUID v4.
+
 
 ### $data
 
