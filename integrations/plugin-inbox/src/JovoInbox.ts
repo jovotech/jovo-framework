@@ -19,7 +19,7 @@ export interface JovoInboxConfig extends PluginConfig {
     url: string;
     path: string;
   };
-  appId: string;
+  projectId: string;
   skip?: {
     platforms?: string[];
     locales?: string[];
@@ -38,7 +38,7 @@ export interface JovoInboxConfig extends PluginConfig {
   };
 }
 
-export type JovoInboxInitConfig = RequiredOnlyWhere<JovoInboxConfig, 'appId'>;
+export type JovoInboxInitConfig = RequiredOnlyWhere<JovoInboxConfig, 'projectId'>;
 
 export class JovoInbox extends Plugin<JovoInboxConfig> {
   constructor(config: JovoInboxInitConfig) {
@@ -69,7 +69,7 @@ export class JovoInbox extends Plugin<JovoInboxConfig> {
   }
   getInitConfig(): JovoInboxInitConfig {
     return {
-      appId: '<APP_ID>',
+      projectId: '<APP_ID>',
     };
   }
 
@@ -184,7 +184,7 @@ export class JovoInbox extends Plugin<JovoInboxConfig> {
   buildLog(jovo: Jovo, type: InboxLogTypeLike, payload: unknown): InboxLog {
     return {
       createdAt: new Date(),
-      appId: this.config.appId,
+      projectId: this.config.projectId,
       platform: jovo.$platform.constructor.name,
       userId: jovo.$user.id || '',
       locale: jovo.$request.getLocale() || this.config.fallbackLocale,
