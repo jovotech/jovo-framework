@@ -1,7 +1,7 @@
 ---
 title: 'Services, Providers & Dependency Injection'
 excerpt: 'Learn how you can add custom providers to your Jovo app using dependency injection.'
-url: 'https://www.jovo.tech/docs/services-providers-dependency-injection'
+url: 'https://www.jovo.tech/docs/service-providers-dependency-injection'
 ---
 
 # Services, Providers & Dependency Injection
@@ -62,7 +62,7 @@ class OrderPizzaComponent extends BaseComponent {
 }
 ```
 
-The service could also be instantiated in the `constructor()`. This is helpful if it's used across handlers.
+The service could also be instantiated in the `constructor()`. This is helpful if it's used across handlers. [Learn more about component constructors here](./components.md#component-constructor).
 
 ```typescript
 import { OrderService } from './services/OrderService';
@@ -72,7 +72,7 @@ import { OrderService } from './services/OrderService';
 class OrderPizzaComponent extends BaseComponent {
   orderService: OrderService;
 
-  constructor(jovo: Jovo, options: UnknownObject) {
+  constructor(jovo: Jovo, options: UnknownObject | undefined) {
     super(jovo, options);
     this.orderService = new OrderService(/* options could potentially be passed here */);
   }
@@ -134,7 +134,11 @@ The dependency injection system will then instantiate the class for you and pass
 
 @Component()
 class OrderPizzaComponent extends BaseComponent {
-  constructor(jovo: Jovo, options: UnknownObject, private readonly orderService: OrderService) {
+  constructor(
+    jovo: Jovo,
+    options: UnknownObject | undefined,
+    private readonly orderService: OrderService
+  ) {
     super(jovo, options);
   }
 
@@ -403,7 +407,11 @@ import { OrderService } from '../services/OrderService.ts';
 
 @Component()
 class OrderPizzaComponent extends BaseComponent {
-  constructor(jovo: Jovo, options: UnknownObject | undefined, private readonly orderService: OrderService) {
+  constructor(
+    jovo: Jovo,
+    options: UnknownObject | undefined,
+    private readonly orderService: OrderService
+  ) {
     super(jovo, options);
   }
 
@@ -471,7 +479,7 @@ Below is an example how this can be done using [class providers](#class-provider
 ```typescript
 const testSuite = new TestSuite();
 
-testSuite.app.configure({providers: [{
+testSuite.$app.configure({providers: [{
   provide: OrderService,
   useClass: MockOrderService,
 }]})

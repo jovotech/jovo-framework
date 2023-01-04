@@ -139,4 +139,8 @@ export class GoogleAssistantRequest extends JovoRequest {
 
     this.user.params.userId = userId;
   }
+
+  getRequestId(): string | undefined {
+    return;
+  }
 }

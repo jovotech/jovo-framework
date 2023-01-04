@@ -300,9 +300,9 @@ You can also modify this behavior in the `data` property:
 ```typescript
 const testSuite = new TestSuite({
   data: {
-    deleteAfterEach: true;
-    deleteAfterAll: true;
-  }
+    deleteAfterEach: true,
+    deleteAfterAll: true,
+  },
 });
 ```
 
@@ -329,7 +329,6 @@ For more advanced or custom use cases, the `app` property allows you to build yo
 
 ```typescript
 import app from '../src/myApp';
-
 // ...
 
 const testSuite = new TestSuite({ app });
@@ -559,3 +558,14 @@ Currently, you can modify the following properties that will be merged into the 
 - `testSuite.$session` for [session data](./data.md#session-data)
 - `testSuite.$request`
 - `testSuite.$data` for [request data](./data.md#request-data)
+
+You can also override your app config using the `$app` property. This is especially helpful when used with [dependency injection](./service-providers-dependency-injection.md):
+
+```typescript
+const testSuite = new TestSuite();
+
+testSuite.$app.configure({providers: [{
+  provide: OrderService,
+  useClass: MockOrderService,
+}]})
+```

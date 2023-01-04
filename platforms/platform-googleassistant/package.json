@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/platform-googleassistant",
-  "version": "4.5.0",
+  "version": "4.5.2",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -45,10 +45,10 @@
     "@jovotech/cli-command-get": "^4.0.0",
     "@jovotech/cli-command-new": "^4.0.0",
     "@jovotech/cli-core": "^4.0.0",
-    "@jovotech/common": "^4.5.0",
+    "@jovotech/common": "^4.5.2",
     "@jovotech/filebuilder": "^0.0.1",
-    "@jovotech/framework": "^4.5.0",
-    "@jovotech/output": "^4.5.0",
+    "@jovotech/framework": "^4.5.2",
+    "@jovotech/output": "^4.5.2",
     "@types/copyfiles": "^2.4.1",
     "@types/fs-extra": "^8.1.0",
     "@types/jest": "^26.0.20",
@@ -83,8 +83,8 @@
     "@jovotech/cli-core": "^4.0.0",
     "@jovotech/common": "^4.2.16",
     "@jovotech/filebuilder": "^0.0.1",
-    "@jovotech/framework": "4.5.0",
-    "@jovotech/output": "4.5.0"
+    "@jovotech/framework": "4.5.2",
+    "@jovotech/output": "4.5.2"
   },
   "gitHead": "5a9ba2fe3100f807f627f55117e7b2ad4bbce9c1",
   "prettier": "../../.prettierrc.js",
