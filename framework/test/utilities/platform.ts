@@ -27,6 +27,7 @@ import {
 export class ExamplePlatformRequest extends JovoRequest {
   input: Input = {};
   session?: Partial<JovoSession> = {};
+  requestId?: string = 'requestId';
 
   getUserId(): string | undefined {
     return;
@@ -42,6 +43,10 @@ export class ExamplePlatformRequest extends JovoRequest {
 
   setLocale(): void {
     return;
+  }
+
+  getRequestId(): string | undefined {
+    return this.requestId;
   }
 
   getIntent(): JovoInput['intent'] {

@@ -42,7 +42,7 @@ export class JovoBigQuery {
 
   constructor(readonly plugin: BigQueryAnalytics, readonly jovo: Jovo) {
     this.client = new BigQuery(this.config.libraryOptions);
-    this.requestId = uuidv4();
+    this.requestId = jovo.$id;
     this.requestStart = Date.now();
   }
 

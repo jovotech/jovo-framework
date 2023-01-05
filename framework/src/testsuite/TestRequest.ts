@@ -74,4 +74,8 @@ export class TestRequest extends JovoRequest {
   getDeviceCapabilities(): string[] | undefined {
     return;
   }
+
+  getRequestId(): string | undefined {
+    return;
+  }
 }
