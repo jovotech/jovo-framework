@@ -25,7 +25,7 @@ export interface BigQueryAnalyticsPluginConfig extends AnalyticsPluginConfig {
   dryRun: boolean;
   insertRowsOptions: InsertRowsOptions;
   logging?: BigQueryLoggingConfig | boolean;
-  onAddEvent?: (jovo: Jovo, event: AnalyticsEvent)=> Promise<void> | void;
+  onAddEvent?: (jovo: Jovo, event: AnalyticsEvent) => Promise<void> | void;
 }
 
 export type BigQueryAnalyticsPluginInitConfig = RequiredOnlyWhere<
@@ -75,7 +75,7 @@ export class BigQueryAnalytics extends AnalyticsPlugin<BigQueryAnalyticsPluginCo
 
     if (typeof this.config.logging === 'boolean') {
       const flag = this.config.logging;
-      
+
       // overwrite with individual flags
       this.config.logging = {
         addEvent: flag,
@@ -90,25 +90,23 @@ export class BigQueryAnalytics extends AnalyticsPlugin<BigQueryAnalyticsPluginCo
       'event.ComponentTreeNode.executeHandler',
       this.eventExecuteHandler.bind(this),
     );
-
-    // parent.middlewareCollection.use('event.$t', this.eventT.bind(this));
   }
 
   getDefaultConfig(): BigQueryAnalyticsPluginConfig {
     return {
       ...this.getInitConfig(),
-    };
-  }
-
-  getInitConfig(): BigQueryAnalyticsPluginConfig {
-    return {
-      appId: '',
-      datasetId: '',
-      tableId: '',
-      libraryOptions: {},
       dryRun: false,
       insertRowsOptions: { skipInvalidRows: true, ignoreUnknownValues: true },
       logging: false,
+    };
+  }
+
+  getInitConfig(): BigQueryAnalyticsPluginInitConfig {
+    return {
+      appId: '<YOUR-APP-ID>',
+      datasetId: '<YOUR-DATASET-ID>',
+      tableId: '<YOUR-TABLE-ID>',
+      libraryOptions: {},
     };
   }
 
