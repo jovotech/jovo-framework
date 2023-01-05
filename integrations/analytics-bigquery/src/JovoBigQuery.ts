@@ -1,11 +1,15 @@
 import { BigQuery } from '@google-cloud/bigquery';
 
 import { AnyObject, Capability, Jovo, RequiredOnlyWhere } from '@jovotech/framework';
-import { BigQueryAnalytics, BigQueryAnalyticsPluginConfig, BigQueryLoggingConfig } from './BigQueryAnalytics';
+import {
+  BigQueryAnalytics,
+  BigQueryAnalyticsPluginConfig,
+  BigQueryLoggingConfig,
+} from './BigQueryAnalytics';
 import { v4 as uuidv4 } from 'uuid';
 
 declare global {
-  interface ReadableStream { }
+  interface ReadableStream {}
 }
 
 enum SessionEndReason {
@@ -67,10 +71,6 @@ export class JovoBigQuery {
   async executeHandler(jovo: Jovo, payload: AnyObject | undefined): Promise<void> {
     await this.addEventExecuteHandler(jovo, payload);
   }
-
-  // async eventT(jovo: Jovo, payload: AnyObject | undefined): Promise<void> {
-  //   this.addEventT(jovo, payload);
-  // }
 
   clearEvents(): void {
     this.events = [];
@@ -287,26 +287,4 @@ export class JovoBigQuery {
 
     await this.addEvent(event);
   }
-
-  // private addEventT(jovo: Jovo, payload: AnyObject | undefined) {
-  //   let paths = [];
-
-  //   if (payload?.path) {
-  //     paths = payload?.path && Array.isArray(payload?.path) ? payload.path : [payload.path];
-
-  //     for (let index = 0; index < paths.length; index++) {
-  //       const path = paths[index];
-
-  //       const event = {
-  //         eventType: 'translation',
-  //         translationKey: path,
-  //         isFallbackKey: index > 0,
-  //         translationLanguage: payload?.options.lng,
-  //         translationPlatform: payload?.options.platform,
-  //       };
-
-  //       this.addEvent(event);
-  //     }
-  //   }
-  // }
 }
