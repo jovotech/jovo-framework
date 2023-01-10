@@ -146,7 +146,7 @@ After getting an initial understanding of how to create and add a plugin from th
 
 First, we're going to take a look at the [plugin lifecycle](#plugin-lifecycle) and how [plugin mounting](#plugin-mounting) works. We'll also learn more about parent and child plugins using the [Extensible structure](#jovo-extensible-structure).
 
-If you want to dive even deeper, take a look at the [`Plugin` class here](https://github.com/jovotech/jovo-framework/blob/v4dev/framework/src/Plugin.ts).
+If you want to dive even deeper, take a look at the [`Plugin` class here](https://github.com/jovotech/jovo-framework/blob/v4/latest/framework/src/Plugin.ts).
 
 ### Plugin Lifecycle
 
@@ -199,7 +199,7 @@ export class SomePlugin extends Plugin {
 }
 ```
 
-For more details about signatures, take a look at the [`Plugin` class here](https://github.com/jovotech/jovo-framework/blob/v4dev/framework/src/Plugin.ts).
+For more details about signatures, take a look at the [`Plugin` class here](https://github.com/jovotech/jovo-framework/blob/v4/latest/framework/src/Plugin.ts).
 
 ### Plugin Mounting
 
