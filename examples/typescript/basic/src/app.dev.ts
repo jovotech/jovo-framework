@@ -15,7 +15,9 @@ app.use(
   new FileDb({
     pathToFile: '../db/db.json',
   }),
-  new JovoDebugger(),
+  new JovoDebugger({
+    ignoredProperties: ['$app', '$handleRequest', '$platform', '$inbox'],
+  }),
 );
 
 export * from './server.express';

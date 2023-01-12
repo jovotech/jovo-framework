@@ -2,6 +2,7 @@ import { App } from '@jovotech/framework';
 import { AlexaPlatform } from '@jovotech/platform-alexa';
 import { GlobalComponent } from './components/GlobalComponent';
 import { LoveHatePizzaComponent } from './components/LoveHatePizzaComponent';
+import { JovoInbox } from '@jovotech/plugin-inbox';
 
 /*
 |--------------------------------------------------------------------------
@@ -12,6 +13,7 @@ import { LoveHatePizzaComponent } from './components/LoveHatePizzaComponent';
 | Learn more here: www.jovo.tech/docs/app-config
 |
 */
+
 const app = new App({
   /*
   |--------------------------------------------------------------------------
@@ -35,7 +37,22 @@ const app = new App({
   |
   */
 
-  plugins: [new AlexaPlatform()],
+  plugins: [
+    new AlexaPlatform(),
+    new JovoInbox({
+      projectId: 'foobar',
+      server: {
+        url: 'http://localhost:4000',
+      },
+      storedElements: {
+        nlu: true,
+        input: true,
+        output: true,
+        // error: true,
+        user: true,
+      },
+    }),
+  ],
 
   /*
   |--------------------------------------------------------------------------

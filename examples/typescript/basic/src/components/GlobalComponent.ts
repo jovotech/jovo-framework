@@ -4,7 +4,9 @@ import { LoveHatePizzaComponent } from './LoveHatePizzaComponent';
 @Global()
 @Component()
 export class GlobalComponent extends BaseComponent {
-  LAUNCH() {
+  async LAUNCH() {
+    // await this.$inbox.send({ foo: 'bar' });
+
     return this.$redirect(LoveHatePizzaComponent);
   }
 }
