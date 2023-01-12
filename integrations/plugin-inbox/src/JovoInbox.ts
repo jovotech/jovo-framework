@@ -1,7 +1,5 @@
 import {
-  App,
   axios,
-  Extensible,
   HandleRequest,
   Jovo,
   Plugin,
@@ -19,7 +17,7 @@ export interface JovoInboxConfig extends PluginConfig {
     url: string;
     path: string;
   };
-  projectId: string;
+  appId: string;
   skip?: {
     platforms?: string[];
     locales?: string[];
@@ -28,7 +26,6 @@ export interface JovoInboxConfig extends PluginConfig {
   storedElements: {
     request: true;
     response: true;
-    error?: StoredElement | boolean;
     state?: StoredElement | boolean;
     input?: StoredElement | boolean;
     output?: StoredElement | boolean;
@@ -38,7 +35,7 @@ export interface JovoInboxConfig extends PluginConfig {
   };
 }
 
-export type JovoInboxInitConfig = RequiredOnlyWhere<JovoInboxConfig, 'projectId'>;
+export type JovoInboxInitConfig = RequiredOnlyWhere<JovoInboxConfig, 'appId'>;
 
 export class JovoInbox extends Plugin<JovoInboxConfig> {
   constructor(config: JovoInboxInitConfig) {
@@ -60,32 +57,13 @@ export class JovoInbox extends Plugin<JovoInboxConfig> {
       storedElements: {
         request: true,
         response: true,
-        error: true,
       },
     };
   }
   getInitConfig(): JovoInboxInitConfig {
     return {
-      projectId: '<APP_ID>',
+      appId: '<APP_ID>',
     };
-  }
-
-  initialize(app: App): Promise<void> | void {
-    app.onError((error: Error, jovo?: Jovo) => {
-      if (jovo) {
-        if (jovo.$data._JOVO_INBOX_.skip) {
-          return;
-        }
-
-        if (this.config.storedElements.error) {
-          jovo.$data._JOVO_INBOX_.logs.push(
-            this.buildLog(jovo, InboxLogType.Error, {
-              message: error.message,
-            }),
-          );
-        }
-      }
-    });
   }
 
   mount(parent: HandleRequest): Promise<void> | void {
@@ -180,8 +158,7 @@ export class JovoInbox extends Plugin<JovoInboxConfig> {
 
   buildLog(jovo: Jovo, type: InboxLogTypeLike, payload: unknown): InboxLog {
     return {
-      createdAt: new Date(),
-      projectId: this.config.projectId,
+      appId: this.config.appId,
       platform: jovo.$platform.constructor.name,
       userId: jovo.$user.id || '',
       locale: jovo.$request.getLocale() || this.config.fallbackLocale,
