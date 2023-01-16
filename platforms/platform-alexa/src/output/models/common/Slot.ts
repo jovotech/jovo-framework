@@ -1,6 +1,6 @@
 import { IsEnum, IsNotEmpty, IsOptional, IsString, Type, ValidateNested } from '@jovotech/output';
-import { ConfirmationStatus, ConfirmationStatusLike } from './Intent';
 import { Resolutions } from './Resolutions';
+import { ConfirmationStatus, ConfirmationStatusLike } from '../index';
 
 export class Slot {
   [key: string]: unknown;
