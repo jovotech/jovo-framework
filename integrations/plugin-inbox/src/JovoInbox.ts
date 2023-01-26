@@ -193,10 +193,14 @@ export class JovoInbox extends Plugin<JovoInboxConfig> {
   }
 
   async post(log: InboxLog | InboxLog[]): Promise<void> {
-    return axios.request({
-      method: 'POST',
-      url: `${this.config.server.url}${this.config.server.path}`,
-      data: log,
-    });
+    try {
+      await axios.request({
+        method: 'POST',
+        url: `${this.config.server.url}${this.config.server.path}`,
+        data: log,
+      });
+    } catch (e) {
+      console.error(e);
+    }
   }
 }
