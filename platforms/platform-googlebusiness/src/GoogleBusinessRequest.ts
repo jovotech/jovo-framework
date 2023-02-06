@@ -31,13 +31,36 @@ export class GoogleBusinessRequest extends JovoRequest {
     text: string;
     createTime: string; // RFC3339 UTC "Zulu" format
   };
-  // defined suggestion request
+  // @see https://developers.google.com/business-communications/business-messages/reference/rest/v1/SuggestionResponse
   suggestionResponse?: {
     message: string;
     postbackData: string;
     createTime: string; // RFC3339 UTC "Zulu" format
     text: string;
-    suggestionType: 'UNKNOWN' | 'ACTION' | 'REPLY';
+    suggestionType: 'SUGGESTION_TYPE_UNSPECIFIED' | 'ACTION' | 'REPLY';
+  };
+  // @see https://developers.google.com/business-communications/business-messages/reference/rest/v1/SurveyResponse
+  surveyResponse?: {
+    survey: string;
+    rating:
+      | 'SURVEY_RATING_UNSPECIFIED'
+      | 'VERY_DISSATISFIED'
+      | 'SOMEWHAT_DISSATISFIED'
+      | 'NEITHER_SATISFIED_NOR_DISSATISFIED'
+      | 'SOMEWHAT_SATISFIED'
+      | 'VERY_SATISFIED';
+    createTime: string; // RFC3339 UTC "Zulu" format
+    surveyQuestionId: string;
+    questionResponseText: string;
+    questionResponsePostbackData: string;
+    questionType:
+      | 'SURVEY_QUESTION_TYPE_UNSPECIFIED'
+      | 'GOOGLE_STANDARD_QUESTION'
+      | 'GOOGLE_TEMPLATE_QUESTION'
+      | 'PARTNER_CUSTOM_QUESTION';
+    questionIndex: number;
+    totalQuestionCount: number;
+    surveyTriggerSource?: 'SURVEY_TRIGGER_SOURCE_UNSPECIFIED' | 'PARTNER' | 'GOOGLE';
   };
   userStatus?: {
     isTyping: boolean;
@@ -110,5 +133,9 @@ export class GoogleBusinessRequest extends JovoRequest {
 
   setUserId(): void {
     return;
+  }
+
+  getRequestId(): string | undefined {
+    return this.requestId;
   }
 }
