@@ -61,18 +61,6 @@ export class BigQueryAnalytics extends AnalyticsPlugin<BigQueryAnalyticsPluginCo
       });
     }
 
-    if (!this.config.libraryOptions?.keyFilename) {
-      throw new JovoError({
-        message: `Can not send request to BigQuery. Key-Filename is missing.`,
-      });
-    }
-
-    if (!this.config.libraryOptions?.projectId) {
-      throw new JovoError({
-        message: `Can not send request to BigQuery. Project-ID is missing.`,
-      });
-    }
-
     if (typeof this.config.logging === 'boolean') {
       const flag = this.config.logging;
 
