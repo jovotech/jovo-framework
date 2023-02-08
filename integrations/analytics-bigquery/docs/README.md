@@ -70,8 +70,7 @@ app.configure({
       datasetId: '<YOUR-DATASET-ID>',
       tableId: '<YOUR-TABLE-ID>', 
       libraryConfig: {
-        projectId: serviceAccount.project_id,
-        keyFilename: './serviceAccount.json',
+        credentials: serviceAccount,
       },
       // ...
     }),
@@ -129,14 +128,28 @@ import serviceAccount from './serviceAccount.json';
 
 new BigQueryAnalytics({
   libraryConfig: {
-    projectId: serviceAccount.project_id,
-    keyFilename: './src/serviceAccount.json',
+    credentials: serviceAccount,
     // ...
   },
   // ...
 }),
 ```
+or:
+```typescript
+import { BigQueryAnalytics } from '@jovotech/analytics-bigquery';
+import serviceAccount from './serviceAccount.json';
+// ...
 
+new BigQueryAnalytics({
+  libraryConfig: {
+    projectId: serviceAccount.project_id,
+    keyFilename: './serviceAccount.json',
+  },
+  // ...
+}),
+```
+
+- `credentials`: imported service account JSON (including project_id)
 - `projectId`: BigQuery project id.
 - `keyFilename`: Path to the service account JSON file.
 - For more properties, see the [official reference](https://cloud.google.com/nodejs/docs/reference/bigquery/latest/bigquery/bigqueryoptions).
