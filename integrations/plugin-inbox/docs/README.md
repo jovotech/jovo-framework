@@ -53,7 +53,7 @@ app.configure({
 });
 ```
 
-For the plugin to work, at least the `appId` config needs to be set. Learn more about all [configuration](#configuration) options below.
+For the plugin to work, at least the `projectId` config needs to be set. Learn more about all [configuration](#configuration) options below.
 
 
 ## Configuration
