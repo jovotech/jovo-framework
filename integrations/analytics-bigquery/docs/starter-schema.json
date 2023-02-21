@@ -1,0 +1,130 @@
+[
+    {
+        "name": "eventType",
+        "type": "STRING"
+    },
+    {
+        "name": "eventId",
+        "type": "STRING"
+    },
+    {
+        "name": "appId",
+        "type": "STRING"
+    },
+    {
+        "name": "eventDate",
+        "type": "STRING"
+    },
+    {
+        "name": "epochMilliseconds",
+        "type": "INTEGER"
+    },
+    {
+        "name": "epochSeconds",
+        "type": "INTEGER"
+    },
+    {
+        "name": "locale",
+        "type": "STRING"
+    },
+    {
+        "name": "timeZone",
+        "type": "STRING"
+    },
+    {
+        "name": "userId",
+        "type": "STRING"
+    },
+    {
+        "name": "sessionId",
+        "type": "STRING"
+    },
+    {
+        "name": "requestId",
+        "type": "STRING"
+    },
+    {
+        "name": "errorName",
+        "type": "STRING"
+    },
+    {
+        "name": "message",
+        "type": "STRING"
+    },
+    {
+        "name": "stack",
+        "type": "STRING"
+    },
+    {
+        "name": "deviceId",
+        "type": "STRING"
+    },
+    {
+        "name": "supportScreen",
+        "type": "BOOLEAN"
+    },
+    {
+        "name": "supportAudio",
+        "type": "BOOLEAN"
+    },
+    {
+        "name": "supportLongformAudio",
+        "type": "BOOLEAN"
+    },
+    {
+        "name": "supportVideo",
+        "type": "BOOLEAN"
+    },
+    {
+        "name": "transcriptText",
+        "type": "STRING"
+    },
+    {
+        "name": "intent",
+        "type": "STRING"
+    },
+    {
+        "name": "entityName",
+        "type": "STRING"
+    },
+    {
+        "name": "entityId",
+        "type": "STRING"
+    },
+    {
+        "name": "entityResolved",
+        "type": "STRING"
+    },
+    {
+        "name": "entityValue",
+        "type": "STRING"
+    },
+    {
+        "name": "elapsed",
+        "type": "INTEGER"
+    },
+    {
+        "name": "reason",
+        "type": "STRING"
+    },
+    {
+        "name": "component",
+        "type": "STRING"
+    },
+    {
+        "name": "handler",
+        "type": "STRING"
+    },
+    {
+        "name": "stringValue",
+        "type": "STRING"
+    },
+    {
+        "name": "integerValue",
+        "type": "INTEGER"
+    },
+    {
+        "name": "booleanValue",
+        "type": "BOOLEAN"
+    }
+]
