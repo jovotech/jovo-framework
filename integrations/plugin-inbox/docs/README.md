@@ -46,14 +46,14 @@ import { JovoInbox } from '@jovotech/plugin-inbox';
 app.configure({
   plugins: [
     new JovoInbox({
-      appId: '<APP_ID>',
+      projectId: '<PROJECT_ID>',
     }),
     // ...
   ],
 });
 ```
 
-For the plugin to work, at least the `appId` config needs to be set. Learn more about all [configuration](#configuration) options below.
+For the plugin to work, at least the `projectId` config needs to be set. Learn more about all [configuration](#configuration) options below.
 
 
 ## Configuration
@@ -69,7 +69,7 @@ import { JovoInbox } from '@jovotech/plugin-inbox';
 app.configure({
   plugins: [
     new JovoInbox({
-      appId: '<APP_ID>',
+      projectId: '<PROJECT_ID>',
       fallbackLocale: 'en',
       server: {
         url: 'http://localhost:4000',
@@ -93,7 +93,7 @@ app.configure({
 
 The configuration includes the following properties:
 
-- `appId`: The ID that is used as a reference in the Jovo Inbox.
+- `projectId`: The ID that is used as a reference in the Jovo Inbox.
 - `fallbackLocale`: The locale that is used if the request doesn't contain one.
 - [`server`](#server): Where the Inbox API can be reached. Includes a `url` and a `path`.
 - [`skip`](#skip): It's possible to skip the API call for certain requests. Includes `userIds`, `platforms`, and `locales`.
