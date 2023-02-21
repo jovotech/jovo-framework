@@ -8,14 +8,7 @@ import {
   ValidateNested,
 } from '@jovotech/output';
 import { Slot } from './Slot';
-
-export enum ConfirmationStatus {
-  None = 'NONE',
-  Confirmed = 'CONFIRMED',
-  Denied = 'DENIED',
-}
-
-export type ConfirmationStatusLike = EnumLike<ConfirmationStatus>;
+import { ConfirmationStatus, ConfirmationStatusLike } from '../index';
 
 export class Intent {
   @IsString()

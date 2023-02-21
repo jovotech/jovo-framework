@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/output",
-  "version": "4.5.2",
+  "version": "4.5.3",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
   "es2015": "dist/esm2015/index.js",
@@ -19,9 +19,9 @@
     "test": "jest"
   },
   "dependencies": {
-    "@jovotech/common": "^4.5.2",
+    "@jovotech/common": "^4.5.3",
     "class-transformer": "^0.4.0",
-    "class-validator": "^0.13.1",
+    "class-validator": "^0.14.0",
     "lodash.merge": "^4.6.2",
     "lodash.mergewith": "^4.6.2",
     "lodash.unset": "^4.5.2",
@@ -43,7 +43,7 @@
     "jest": "^29.2.1",
     "prettier": "^2.4.1",
     "rimraf": "^3.0.2",
-    "ts-jest": "^29.0.3",
+    "ts-jest": "^29.0.4",
     "typescript": "~4.4.4"
   },
   "bugs": {

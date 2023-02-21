@@ -57,7 +57,7 @@ Learn more about its configuration options in the [Debugger plugin configuration
 You can configure the Jovo Debugger plugin in the [app configuration](https://www.jovo.tech/docs/app-config). It includes everything that is needed from the app side for the Debugger to work properly ([for Debugger frontend customization, take a look here](#debugger-customization)).
 
 ```typescript
-import { JovoDebugger } from '@jovotech/plugin-debugger';
+import { JovoDebugger, DEFAULT_INCLUDED_PROPERTIES } from '@jovotech/plugin-debugger';
 // ...
 
 app.configure({
@@ -68,7 +68,8 @@ app.configure({
       webhookUrl: 'https://webhook.jovo.cloud',
       debuggerConfigPath: './jovo.debugger.js',
       modelsPath: './models',
-      ignoredProperties: ['$app', '$handleRequest', '$platform'],
+      includedProperties: DEFAULT_INCLUDED_PROPERTIES,
+      ignoredProperties: ['$app', '$handleRequest', '$platform'], // We recommend using includedProperties instead
     }),
     // ...
   ],
@@ -82,7 +83,8 @@ It includes the following properties:
 - `webhookUrl`: The webhook to pass to the Debugger. By default, your [Jovo Webhook](https://www.jovo.tech/docs/webhook) URL is used.
 - [`debuggerConfigPath`](#debugger-customization): The path to the Debugger Config file. Learn more in the [Debugger customization](#debugger-customization) section.
 - `modelsPath`: The path to the [Jovo Models](https://www.jovo.tech/docs/models) folder.
-- `ignoredProperties`: The [Jovo properties](https://www.jovo.tech/docs/jovo-properties) that should be ignored by the Debugger lifecycle view.
+- [`includedProperties`](#includedproperties): The [Jovo properties](https://www.jovo.tech/docs/jovo-properties) that should be included in the Debugger lifecycle view.
+- `ignoredProperties`: The [Jovo properties](https://www.jovo.tech/docs/jovo-properties) that should be ignored by the Debugger lifecycle view. This is an old config property. We recommend using [`includedProperties`](#includedproperties) instead.
 
 ### nlu
 
@@ -168,6 +170,30 @@ app.configure({
   ],
 });
 ```
+
+### includedProperties
+
+The Debugger lifecycle view displays updates to [Jovo properties](https://www.jovo.tech/docs/jovo-properties) that happen during a request-response lifecycle. This is helpful to track more detailed changes to your app's data.
+
+If you have an additional property that you want to track using the Debugger, you can add it using the `includedProperties` array. We recommend the following approach:
+
+```typescript
+import { DEFAULT_INCLUDED_PROPERTIES, JovoDebugger } from '@jovotech/plugin-debugger';
+// ...
+
+app.configure({
+  plugins: [
+    new JovoDebugger({
+      includedProperties: [...DEFAULT_INCLUDED_PROPERTIES, '$yourProperty'],
+      // ...
+    }),
+    // ...
+  ],
+});
+```
+
+Note: Properties that contain a reference to the `Jovo` object can cause `Maximum call stack size exceeded` exceptions.
+
 
 ## Debugger Customization
 

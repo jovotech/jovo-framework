@@ -59,6 +59,7 @@ export interface JovoDebuggerConfig extends PluginConfig {
   debuggerConfigPath: string;
   modelsPath: string;
   ignoredProperties: Array<keyof Jovo | string>;
+  includedProperties: Array<keyof Jovo | string>;
   plugins: Plugin[];
 }
 
@@ -71,6 +72,22 @@ export function getDefaultLanguageMap(): UnknownObject {
     it: LangIt,
   };
 }
+
+export const DEFAULT_INCLUDED_PROPERTIES = [
+  '$request',
+  '$id',
+  '$input',
+  '$history',
+  '$device',
+  '$session',
+  '$entities',
+  '$cms',
+  '$route',
+  '$user',
+  '$data',
+  '$output',
+  '$response',
+];
 
 export class JovoDebuggerPlatform extends CorePlatform<'JovoDebuggerPlatform'> {}
 
@@ -92,6 +109,8 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       debuggerConfigPath: './jovo.debugger.js',
       modelsPath: './models',
       ignoredProperties: ['$app', '$handleRequest', '$platform'],
+      includedProperties: DEFAULT_INCLUDED_PROPERTIES,
+
       plugins: [],
     };
   }
@@ -234,12 +253,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
             typeof value === 'object' && !Array.isArray(value) && !Object.keys(value || {}).length;
           const isEmptyArray = Array.isArray(value) && !((value as unknown[]) || []).length;
 
-          if (
-            this.config.ignoredProperties.includes(key) ||
-            !value ||
-            isEmptyObject ||
-            isEmptyArray
-          ) {
+          if (!this.propertiesToInclude.includes(key) || !value || isEmptyObject || isEmptyArray) {
             continue;
           }
           this.emitUpdate(handleRequest.debuggerRequestId, {
@@ -300,7 +314,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
           !((value as AnyObject) instanceof Jovo);
 
         const shouldCreateProxy =
-          value && !value.__isProxy && !this.config.ignoredProperties.includes(stringKey);
+          value && !value.__isProxy && this.propertiesToInclude.includes(stringKey);
 
         // if the value is a supported object and not ignored, nor a proxy already
         if (isSupportedObject && shouldCreateProxy) {
@@ -328,7 +342,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
         const stringKey = key.toString();
 
         // only emit changes
-        if (!isEqual(previousValue, value) && !this.config.ignoredProperties.includes(stringKey)) {
+        if (!isEqual(previousValue, value) && this.propertiesToInclude.includes(stringKey)) {
           const stringKey = key.toString();
           this.emitUpdate(handleRequest.debuggerRequestId, {
             key: stringKey,
@@ -353,6 +367,12 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
         return true;
       },
     };
+  }
+
+  get propertiesToInclude(): Array<keyof Jovo | string> {
+    return this.config.includedProperties.filter(
+      (prop) => !this.config.ignoredProperties.includes(prop),
+    );
   }
 
   private createStateMutationProxyHandler<KEY extends StateMutatingJovoMethodKey>(
