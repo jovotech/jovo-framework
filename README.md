@@ -54,7 +54,7 @@ Install the Jovo CLI:
 $ npm install -g @jovotech/cli
 ```
 
-Create a new Jovo project ([find the v4 template here](https://github.com/jovotech/jovo-v4-template)):
+Create/start a new Jovo project ([find the v4 template here](https://github.com/jovotech/jovo-v4-template)):
 
 ```sh
 $ jovo new <directory>
