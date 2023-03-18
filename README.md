@@ -15,7 +15,7 @@
 <a href="https://twitter.com/intent/tweet?text=Jovo Framework: The React for Voice and Chat Apps @jovotech https://github.com/jovotech/jovo-framework/" target="_blank"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social"></a>
 </p>
 
-Build conversational and multimodal experiences for the web, Alexa, Google Assistant, Messenger, Instagram, Google Business Messages, mobile apps, and more. Fully customizable and open source. Works with TypeScript and JavaScript.
+Form conversational and multimodal experiences for the web, Alexa, Google Assistant, Messenger, Instagram, Google Business Messages, mobile apps, and more. Fully customizable and open source. Works with TypeScript and JavaScript.
 
 ```typescript
 @Component()
