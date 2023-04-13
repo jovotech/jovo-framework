@@ -25,9 +25,18 @@ export interface DynamicEntityType {
   }>;
 }
 
+type YES_NO_MAYBE = 'YES' | 'NO' | 'MAYBE';
+
+interface CanFulfillSlotEntry {
+  canUnderstand: YES_NO_MAYBE,
+  canCullFill: YES_NO_MAYBE,
+}
+
 export interface Response {
   shouldEndSession?: boolean;
   directives?: Directive[];
+  CanFulfillRequest?: YES_NO_MAYBE;
+  CanFulfillSlot?: Record<string, CanFulfillSlotEntry>;
 }
 
 export interface AlexaResponseJSON {
