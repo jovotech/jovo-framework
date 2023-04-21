@@ -135,7 +135,7 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
 
       let jovoModelData;
       if (extension === 'js') {
-        jovoModelData = require(filePath);
+        jovoModelData = require(join(process.cwd(), filePath));
       } else if (extension === 'json') {
         const fileBuffer = await promises.readFile(filePath);
         jovoModelData = JSON.parse(fileBuffer.toString());
