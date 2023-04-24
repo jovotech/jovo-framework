@@ -67,8 +67,8 @@ export class CanFulfillIntent implements Plugin {
         throw new Error('canFulfill must be one the following values: YES | NO');
       }
       _set(this.$output, `Alexa.CanFulfillSlot.${slotName}`, {
-        canUnderstandSlot,
-        canFulfillSlot,
+        canUnderstand: canUnderstandSlot,
+        canFulfill: canFulfillSlot,
       });
       return this;
     };
