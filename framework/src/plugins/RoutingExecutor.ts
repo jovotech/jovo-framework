@@ -90,7 +90,9 @@ export class RoutingExecutor {
       i < lastRouteMatchIndexWithPrioritizedOverUnhandled;
       i++
     ) {
-      rankedRouteMatches[i].skip = true;
+      if (rankedRouteMatches[i].type === BuiltInHandler.Unhandled || !rankedRouteMatches[i].prioritizedOverUnhandled) {
+        rankedRouteMatches[i].skip = true;
+      }
     }
   }
 
