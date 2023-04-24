@@ -1,4 +1,4 @@
-import _merge from 'lodash.merge';
+import _mergeWith from 'lodash.mergewith';
 import { AnyObject, DeepPartial } from '.';
 
 export abstract class Configurable<CONFIG extends AnyObject = AnyObject> {
@@ -8,11 +8,22 @@ export abstract class Configurable<CONFIG extends AnyObject = AnyObject> {
   constructor(config?: DeepPartial<CONFIG>) {
     this.initConfig = config;
     const defaultConfig = this.getDefaultConfig();
-    this.config = config ? _merge(defaultConfig, config) : defaultConfig;
+
+    this.config = config
+      ? _mergeWith(defaultConfig, config, (objValue, srcValue) => {
+          if (Array.isArray(objValue)) {
+            return srcValue;
+          }
+        })
+      : defaultConfig;
   }
 
   mergeConfig(config?: DeepPartial<CONFIG>): void {
-    this.config = _merge(this.config, config);
+    this.config = _mergeWith(this.config, config, (objValue, srcValue) => {
+      if (Array.isArray(objValue)) {
+        return srcValue;
+      }
+    });
   }
 
   get name(): string {
