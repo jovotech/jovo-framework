@@ -96,6 +96,23 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
   hasOverriddenWrite = false;
   hasShownConnectionError = false;
 
+  constructor(config?: Partial<JovoDebuggerConfig>) {
+    super(config);
+
+    if (config?.includedProperties && config?.ignoredProperties) {
+      throw new Error(
+        'You can only use either `includedProperties` or `ignoredProperties`, not both.',
+      );
+    }
+
+    if (config?.includedProperties) {
+      this.config.ignoredProperties = [];
+    }
+    if (config?.ignoredProperties) {
+      this.config.includedProperties = [];
+    }
+  }
+
   getDefaultConfig(): JovoDebuggerConfig {
     return {
       skipTests: true,
@@ -167,6 +184,11 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       requestId,
       data,
     };
+
+    if (this.config.includedProperties.length > 0 && !this.isPathIncluded(data.path)) {
+      return;
+    }
+
     this.socket?.emit(JovoDebuggerEvent.AppJovoUpdate, payload);
   }
 
@@ -175,6 +197,9 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       requestId,
       data,
     };
+    if (this.config.includedProperties.length > 0 && !this.isPathIncluded(data.key)) {
+      return;
+    }
     this.socket?.emit(JovoDebuggerEvent.AppStateMutation, payload);
   }
 
@@ -188,6 +213,11 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       data: response,
     };
     this.socket.emit(JovoDebuggerEvent.AppResponse, payload);
+  }
+
+  isPathIncluded(path: string): boolean {
+    const nKey = path.split('.').length > 0 ? path.split('.')[0] : path;
+    return this.config.includedProperties.includes(nKey as keyof Jovo);
   }
 
   // Augment the server given in app.handle to emit a response event when setResponse is called
@@ -244,6 +274,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
       platform.createJovoInstance = (app, handleRequest) => {
         const jovo = createJovoFn.call(platform, app, handleRequest);
         // propagate initial values, might not be required, TBD
+
         for (const key in jovo) {
           if (!jovo.hasOwnProperty(key)) {
             continue;
@@ -253,7 +284,9 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
             typeof value === 'object' && !Array.isArray(value) && !Object.keys(value || {}).length;
           const isEmptyArray = Array.isArray(value) && !((value as unknown[]) || []).length;
 
-          if (!this.propertiesToInclude.includes(key) || !value || isEmptyObject || isEmptyArray) {
+          const isInvalid = !value || isEmptyObject || isEmptyArray;
+
+          if (this.config.ignoredProperties.includes(key) || isInvalid) {
             continue;
           }
           this.emitUpdate(handleRequest.debuggerRequestId, {
@@ -314,7 +347,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
           !((value as AnyObject) instanceof Jovo);
 
         const shouldCreateProxy =
-          value && !value.__isProxy && this.propertiesToInclude.includes(stringKey);
+          value && !value.__isProxy && !this.config.ignoredProperties.includes(stringKey);
 
         // if the value is a supported object and not ignored, nor a proxy already
         if (isSupportedObject && shouldCreateProxy) {
@@ -342,7 +375,7 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
         const stringKey = key.toString();
 
         // only emit changes
-        if (!isEqual(previousValue, value) && this.propertiesToInclude.includes(stringKey)) {
+        if (!isEqual(previousValue, value) && !this.config.ignoredProperties.includes(stringKey)) {
           const stringKey = key.toString();
           this.emitUpdate(handleRequest.debuggerRequestId, {
             key: stringKey,
@@ -367,12 +400,6 @@ export class JovoDebugger extends Plugin<JovoDebuggerConfig> {
         return true;
       },
     };
-  }
-
-  get propertiesToInclude(): Array<keyof Jovo | string> {
-    return this.config.includedProperties.filter(
-      (prop) => !this.config.ignoredProperties.includes(prop),
-    );
   }
 
   private createStateMutationProxyHandler<KEY extends StateMutatingJovoMethodKey>(
