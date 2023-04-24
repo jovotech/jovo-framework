@@ -74,7 +74,7 @@ export class ExamplePlatformRequest extends JovoRequest {
   }
 
   getSessionData(): UnknownObject | undefined {
-    return this.session?.data;
+    return this.session;
   }
 
   setSessionData(): void {
