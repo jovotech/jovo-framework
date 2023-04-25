@@ -1,4 +1,12 @@
-import {App, BaseComponent, Component, Global, InputType, Intents, PrioritizedOverUnhandled} from '../src';
+import {
+  App,
+  BaseComponent,
+  Component,
+  Global,
+  InputType,
+  Intents,
+  PrioritizedOverUnhandled,
+} from '../src';
 import { ExamplePlatform, ExampleServer } from './utilities';
 
 test('test handler decorator inheritance', async () => {
@@ -107,7 +115,7 @@ test('test handler decorator inheritance', async () => {
 });
 
 test('test prioritized handlers not being skipped', async () => {
-  @Component({name: 'BottomComponent'})
+  @Component({ name: 'BottomComponent' })
   class BottomComponent extends BaseComponent {
     @PrioritizedOverUnhandled()
     @Intents('IntentA')
@@ -116,7 +124,7 @@ test('test prioritized handlers not being skipped', async () => {
     }
   }
 
-  @Component({name: 'MiddleComponent'})
+  @Component({ name: 'MiddleComponent' })
   class MiddleComponent extends BaseComponent {
     @PrioritizedOverUnhandled()
     @Intents('IntentA')
@@ -129,7 +137,7 @@ test('test prioritized handlers not being skipped', async () => {
     }
   }
 
-  @Component({name: 'TopComponent'})
+  @Component({ name: 'TopComponent' })
   class TopComponent extends BaseComponent {
     UNHANDLED() {
       return this.$send('TopComponent.UNHANDLED');
@@ -148,27 +156,27 @@ test('test prioritized handlers not being skipped', async () => {
       intent: 'IntentA',
     },
     session: {
-      id: '1234',
-      data: {},
-      state: [
-        {
-          component: 'BottomComponent',
-        },
-        {
-          component: 'MiddleComponent',
-          resolve: {},
-        },
-        {
-          component: 'TopComponent',
-          resolve: {},
-        }
-      ]
-    }
+      data: {
+        state: [
+          {
+            component: 'BottomComponent',
+          },
+          {
+            component: 'MiddleComponent',
+            resolve: {},
+          },
+          {
+            component: 'TopComponent',
+            resolve: {},
+          },
+        ],
+      },
+    },
   });
   await app.handle(server);
   expect(server.response.output).toEqual([
     {
       message: 'MiddleComponent.IntentA',
-    }
+    },
   ]);
 });
