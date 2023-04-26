@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/output",
-  "version": "4.5.5",
+  "version": "4.5.6",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
   "es2015": "dist/esm2015/index.js",
@@ -19,7 +19,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@jovotech/common": "^4.5.5",
+    "@jovotech/common": "^4.5.6",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.14.0",
     "lodash.merge": "^4.6.2",
