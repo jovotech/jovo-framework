@@ -8,7 +8,7 @@ export interface JovoHistoryItem extends UnknownObject {
   request?: JovoRequest;
   input?: JovoInput;
 
-  state?: JovoSession['$state'];
+  state?: JovoSession['state'];
   entities?: EntityMap;
 
   output?: OutputTemplate[];
