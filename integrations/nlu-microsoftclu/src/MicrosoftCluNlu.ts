@@ -30,7 +30,7 @@ export interface MicrosoftCluLibraryConfig {
 export interface MicrosoftCluNluConfig extends InterpretationPluginConfig {
   endpoint: string;
   credential: TokenCredential | KeyCredential | string;
-  fallbackLocale: string;
+  fallbackLanguage: string;
   libraryConfig: MicrosoftCluLibraryConfig;
 }
 
@@ -107,7 +107,7 @@ export class MicrosoftCluNlu extends NluPlugin<MicrosoftCluNluConfig> {
     );
 
     const body: ConversationalTask = {
-      kind: 'Conversation',
+      kind: PROJECTKIND_CONVERSATION,
       analysisInput: {
         conversationItem: {
           participantId: this.config.libraryConfig.participantId,
@@ -149,7 +149,7 @@ export class MicrosoftCluNlu extends NluPlugin<MicrosoftCluNluConfig> {
   }
 
   private getLocale(jovo: Jovo): string {
-    const locale = jovo.$request.getLocale() || this.config.fallbackLocale;
+    const locale = jovo.$request.getLocale() || this.config.fallbackLanguage;
 
     // Only use generic locales like 'en' instead of e.g. 'en-US'
     const genericLocale = locale.split('-')[0];
