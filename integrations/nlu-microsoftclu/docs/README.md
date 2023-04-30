@@ -1,126 +1,113 @@
 ---
-title: 'Keyword NLU Plugin'
-excerpt: 'Improve NLU perfomance by matching common keywords to intents instead of making lengthy NLU API requests.'
-url: 'https://www.jovo.tech/marketplace/plugin-keywordnlu'
+title: 'Microsoft CLU NLU Integration'
+excerpt: 'Turn raw text into structured meaning with the Jovo Framework integration for the conversational language understanding service from Microsoft.'
+url: 'https://www.jovo.tech/marketplace/nlu-microsoftclu'
 ---
 
-# Keyword NLU Plugin
+# Microsoft Conversational Language Understanding (CLU) NLU Integration
 
-Improve natural language understanding (NLU) perfomance by matching common keywords to intents instead of making lengthy NLU API requests
+Turn raw text into structured meaning with the Jovo Framework integration for the conversational language understanding service from Microsoft.
 
 ## Introduction
 
-This plugin is a lightweight [NLU integration](https://www.jovo.tech/docs/nlu) that does two things:
+[Microsoft CLU](https://learn.microsoft.com/en-us/azure/cognitive-services/language-service/conversational-language-understanding/overview) is a [natural language understanding (NLU)](https://www.jovo.tech/docs/nlu) service offered by Microsoft Azure. You can learn more in the [official Microsoft CLU documentation](https://learn.microsoft.com/en-us/rest/api/language/2022-05-01/conversation-analysis-runtime/analyze-conversation).
 
-- It maps common keywords (for example words that show up in [quick replies](https://www.jovo.tech/docs/output-templates#quickreplies) that don't necessarily need full fledged NLU) to an intent
-- It saves performance by skipping NLU service calls for common keywords
+You can use the Jovo Microsoft CLU NLU integration for projects where you receive raw text input that needs to be translated into structured meaning to work with the Jovo intent structure. Learn more in the [NLU integration docs](https://www.jovo.tech/docs/nlu).
 
-The plugin uses a `keywordMap` that may look like this for the locales `en` (English) and `de` (German):
-
-```typescript
-{
-  en: {
-    yes: 'YesIntent',
-    no: 'NoIntent',
-    'learn more': 'LearnMoreIntent',
-  },
-  de: {
-    ja: 'YesIntent',
-    nein: 'NoIntent',
-    mehr: 'LearnMoreIntent',
-  },
-}
-```
-
-If the input contains `text` that is part of the `keywordMap`, the Keyword NLU adds the resulting `intent` to the [`$input` object](https://www.jovo.tech/docs/input), which is then used for the routing. Here's example:
-
-```typescript
-// Before Keyword NLU
-{
-  type: 'TEXT',
-  text: 'yes',
-}
-
-// After Keyword NLU
-{
-  type: 'TEXT',
-  text: 'yes',
-  intent: 'YesIntent',
-}
-```
-
-The Keyword NLU plugin hooks into the `before.interpretation.nlu` [RIDR middleware](https://www.jovo.tech/docs/middlewares#ridr-middlewares), which means it happens one step before other [NLU integrations](https://www.jovo.tech/docs/nlu). If the Keyword NLU is successful, the `interpretation.nlu` step is [skipped](https://www.jovo.tech/docs/middlewares#skip-middlewares), resulting in a faster response, because an external NLU service doesn't need to be called.
-
-You can find the code here: [`KeywordNluPlugin`](https://github.com/jovotech/jovo-framework/blob/v4/latest/integrations/plugin-keywordnlu/src/KeywordNluPlugin.ts).
-
-Learn more in the following sections:
-- [Installation](#installation)
-- [Configuration](#configuration)
 
 ## Installation
 
 You can install the plugin like this:
 
 ```sh
-$ npm install @jovotech/plugin-keywordnlu
+$ npm install @jovotech/nlu-microsoftclu
 ```
 
-Add it as plugin to your [app configuration](https://www.jovo.tech/docs/app-config), e.g. `app.ts`:
+NLU plugins can be added to Jovo platform integrations. Here is an example how it can be added to the Jovo Core Platform in [`app.ts`](https://www.jovo.tech/docs/app-config):
 
 ```typescript
 import { App } from '@jovotech/framework';
-import { KeywordNluPlugin } from '@jovotech/plugin-keywordnlu';
-// ...
+import { CorePlatform } from '@jovotech/platform-core';
+import { MicrosoftCluNlu } from '@jovotech/nlu-microsoftclu';
 
 const app = new App({
   plugins: [
-    new KeywordNluPlugin({
-      keywordMap: {
-        en: {
-          yes: 'YesIntent',
-          no: 'NoIntent',
-          'learn more': 'LearnMoreIntent',
-        },
-        de: {
-          ja: 'YesIntent',
-          nein: 'NoIntent',
-          mehr: 'LearnMoreIntent',
-        },
-        // ...
-      },
+    new CorePlatform({
+      plugins: [
+        new MicrosoftCluNlu({
+          endpoint: 'https://x.cognitiveservices.azure.com/',
+          credential: 'your-key',
+          libraryConfig: {
+            taskParameters: {
+              projectName: 'project-name',
+              deploymentName: 'deployment-name',
+            },
+          },          
+        }),
+      ],
     }),
     // ...
   ],
 });
 ```
 
-Learn more about config options in the [configuration](#configuration) section.
-
+To access the Microsoft CLU API, you need to provide an endpoint, credential, projectName and deploymentName.
 
 ## Configuration
 
-The following configuration can be added to the Keyword NLU plugin:
+The following configurations can be added:
 
 ```typescript
-new KeywordNluPlugin({
-  keywordMap: {
-    en: {
-      yes: 'YesIntent',
-      no: 'NoIntent',
-      'learn more': 'LearnMoreIntent',
+new MicrosoftCluNlu({
+  endpoint: 'https://x.cognitiveservices.azure.com/',
+  credential: 'your-key',
+  libraryConfig: {
+    taskParameters: {
+      projectName: 'project-name',
+      deploymentName: 'deployment-name',
     },
-    de: {
-      ja: 'YesIntent',
-      nein: 'NoIntent',
-      mehr: 'LearnMoreIntent',
-    },
-    // ...
-  },
-  fallbackLocale: 'en',
+  },          
 }),
 ```
 
-- `keywordMap`: For each locale (e.g. `en`, `de`) it maps a keyword (key) to an intent (value). Text input is transformed to lowercase, so make sure that the keywords are in lowercase as well.
-- `fallbackLocale`: The locale to be used if the request does not contain one. Default: `en`.
+- `endpoint`: Supported Cognitive Services endpoint (e.g., https://.api.cognitiveservices.azure.com).
+- `credential`: Credential used to access your Cognitive Service API. Setting to a string (`my-key`) is the same as setting it to `new AzureKeyCredential('my-key')`. Can also be set to [TokenCredential](https://github.com/Azure/azure-sdk-for-js/blob/6758bdbdd6f1e077921eaed6e9dc7cae3cb30a82/sdk/core/core-auth/src/tokenCredential.ts) or [KeyCredential](https://github.com/Azure/azure-sdk-for-js/blob/6758bdbdd6f1e077921eaed6e9dc7cae3cb30a82/sdk/core/core-auth/src/azureKeyCredential.ts).
+- `fallbackLanguage`: The language that gets used if the request does not come with a locale property. Default: `en`.
+- [`libraryConfig`](#libraryconfig): Settings specific to the client libary used to call Azure CLU.
 
+### libraryConfig
+
+To access the Conversaton Analysis Runtime API, you need to specify various parameters for the client SDK. Other parameters are optional.
+
+- `id`: The ID of a conversation item. Default: generated UUID.
+- `participantId`: The participant ID of a conversation item. Default: generated UUID.
+- `options`: Optional parameters for the Conversation Analysis Client. For more info, see the [ConversationAnalysisClientOptionalParams](https://github.com/Azure/azure-sdk-for-js/blob/8c9b021b3566b12a10296a656433b4d9c44629e5/sdk/cognitivelanguage/ai-language-conversations/src/models.ts#L2174) interface.
+- [`taskParameters`](#taskparameters): Parameters necessary for a Conversation task.
+
+### taskParameters
+
+Each request to the Conversation Analysis API is a task. Only `projectName` and `deploymentName` are required.
+
+- `projectName`: The name of the project.
+- `deploymentName`: The name of the deployment.
+- `verbose`: If true, the service will return more detailed information in the response.
+- `isLoggingEnabled`: If true, the service will keep the query for further review.
+
+For other properties, see the [ConversationTaskParameters](https://github.com/Azure/azure-sdk-for-js/blob/8c9b021b3566b12a10296a656433b4d9c44629e5/sdk/cognitivelanguage/ai-language-conversations/src/models.ts#L202) interface.
+
+
+## Entities
+
+You can access Microsoft CLU entities by using the `$entities` property. You can learn more in the [Jovo Model](https://www.jovo.tech/docs/models) and the [`$entities` documentation](https://www.jovo.tech/docs/entities).
+
+The Microsoft CLU entity values are translated into the following Jovo entity properties:
+
+```typescript
+{
+  value: text, // what the user said
+  resolved: resolved, // the resolved value
+  id: resolved, // same as resolved
+  native: { /* raw API response for this entity */ }
+}
+```
 
