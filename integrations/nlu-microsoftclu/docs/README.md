@@ -10,7 +10,7 @@ Turn raw text into structured meaning with the Jovo Framework integration for th
 
 ## Introduction
 
-[Microsoft CLU](https://learn.microsoft.com/en-us/azure/cognitive-services/language-service/conversational-language-understanding/overview) is a [natural language understanding (NLU)](https://www.jovo.tech/docs/nlu) service offered by Microsoft Azure. You can learn more in the [official Microsoft CLU documentation](https://learn.microsoft.com/en-us/rest/api/language/2022-05-01/conversation-analysis-runtime/analyze-conversation).
+[Microsoft CLU](https://learn.microsoft.com/en-us/azure/cognitive-services/language-service/conversational-language-understanding/overview) is a [natural language understanding (NLU)](https://www.jovo.tech/docs/nlu) service offered by Microsoft Azure. You can learn more in the [official Microsoft CLU documentation](https://learn.microsoft.com/en-us/azure/cognitive-services/language-service/conversational-language-understanding/how-to/create-project?tabs=language-studio%2CLanguage-Studio).
 
 You can use the Jovo Microsoft CLU NLU integration for projects where you receive raw text input that needs to be translated into structured meaning to work with the Jovo intent structure. Learn more in the [NLU integration docs](https://www.jovo.tech/docs/nlu).
 
@@ -51,7 +51,7 @@ const app = new App({
 });
 ```
 
-To access the Microsoft CLU API, you need to provide an endpoint, credential, projectName and deploymentName.
+To access the Microsoft CLU API, you need to provide an `endpoint`, `credential`, `projectName` and `deploymentName`.
 
 ## Configuration
 
