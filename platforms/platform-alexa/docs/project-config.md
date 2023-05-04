@@ -67,6 +67,58 @@ new AlexaCli({
 });
 ```
 
+In combination with the [`files` property](#files), you can use the generic `locales` to populate publishing and privacy & compliance information in the Alexa Skill Manifest:
+
+```js
+new AlexaCli({
+  locales: {
+    en: ['en-US', 'en-GB', 'en-IN'],
+    de: ['de-DE'],
+  },
+  files: {
+    'skill-package/skill.json': {
+      manifest: {
+        publishingInformation: {
+          locales: {
+            en: {
+              info: "All EN locales have this"
+            },
+            de: {
+              info: "All DE locales have this"
+            }
+          }
+        },
+        privacyAndCompliance: {
+          locales: {
+            'de': {
+              privacyPolicyUrl: 'https://test.com/de/datenschutz/',
+              termsOfUseUrl: 'https://test.com/de/agb/',
+            },
+            // Will be applied to en-US and en-IN
+            'en': {
+              privacyPolicyUrl: 'https://test.com/en/privacy/',
+              termsOfUseUrl: 'https://test.com/en/tos/',
+            },
+            // It's still possible to add locale-specific information like below
+            'en-GB': {
+              privacyPolicyUrl: 'https://test-au.com/en/privacy-australia/',
+              termsOfUseUrl: 'https://test-au.com/en/tos-australia/',
+            },
+          },
+          allowsPurchases: false,
+          containsAds: false,
+          isChildDirected: false,
+          isExportCompliant: true,
+          usesPersonalInfo: false,
+        },
+      },
+    },
+  }
+  // ...
+});
+```
+
+
 ## skillId
 
 The first time you run the [`deploy` command](./cli-commands.md#deploy) for a new project, a new Alexa Skill project with a new ID is created in the [Alexa Developer Console](https://developer.amazon.com/alexa/console/ask#/).
