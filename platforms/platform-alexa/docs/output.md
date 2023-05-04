@@ -453,22 +453,25 @@ You can add an APL RenderDocument directive ([see official Alexa docs](https://d
 }
 ```
 
-Alternatively you could also just use the `AplRenderDocumentOutput` class provided by Jovo, which will wrap your data in a directive in the response for you:
+Alternatively you could also just use the [`AplRenderDocumentOutput`](https://github.com/jovotech/jovo-framework/blob/v4/latest/platforms/platform-alexa/src/output/templates/AplRenderDocumentOutput.ts) class provided by Jovo, which will wrap your data in a directive in the response for you:
 
 ```typescript
 import { AplRenderDocumentOutput } from '@jovotech/platform-alexa';
-
 // ...
 
-this.jovo.$send(AplRenderDocumentOutput, {
-  token: '<some-token>',
-  document: {
-    /* ... */
-  },
-  datasources: {
-    /* ... */
-  },
-});
+someHandler() {
+  // ...
+
+  return this.$send(AplRenderDocumentOutput, {
+    token: '<some-token>',
+    document: {
+      /* ... */
+    },
+    datasources: {
+      /* ... */
+    },
+  });
+}
 ```
 
 Learn more about APL in the following sections:
