@@ -13,6 +13,8 @@ export * from './LinkAccountCardOutput';
 export * from './AudioPlayerPlayOutput';
 export * from './AudioPlayerStopOutput';
 
+export * from './VideoAppLaunchOutput';
+
 export * from './ConnectionAddToShoppingCartOutput';
 export * from './ConnectionAskForPermissionConsentOutput';
 export * from './ConnectionBuyShoppingProductsOutput';
@@ -26,3 +28,5 @@ export * from './ConnectionVerifyPersonOutput';
 export * from './ConnectionScheduleFoodEstablishmentReservationOutput';
 export * from './ProgressiveResponseOutput';
 export * from './CanFulfillIntentOutput';
+
+export * from './AplRenderDocumentOutput';

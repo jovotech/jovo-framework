@@ -225,6 +225,9 @@ export class AlexaRequest extends JovoRequest {
     if (supportedInterfaces['Alexa.Presentation.APL']) {
       capabilities.push(Capability.Screen, AlexaCapability.Apl);
     }
+    if (supportedInterfaces.VideoApp) {
+      capabilities.push(Capability.Video);
+    }
     return capabilities;
   }
 

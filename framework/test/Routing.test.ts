@@ -1,4 +1,12 @@
-import { App, BaseComponent, Component, Global, InputType, Intents } from '../src';
+import {
+  App,
+  BaseComponent,
+  Component,
+  Global,
+  InputType,
+  Intents,
+  PrioritizedOverUnhandled,
+} from '../src';
 import { ExamplePlatform, ExampleServer } from './utilities';
 
 test('test handler decorator inheritance', async () => {
@@ -102,6 +110,73 @@ test('test handler decorator inheritance', async () => {
   expect(server.response.output).toEqual([
     {
       message: 'MyComponent.IntentC',
+    },
+  ]);
+});
+
+test('test prioritized handlers not being skipped', async () => {
+  @Component({ name: 'BottomComponent' })
+  class BottomComponent extends BaseComponent {
+    @PrioritizedOverUnhandled()
+    @Intents('IntentA')
+    handleIntentA() {
+      return this.$send('BottomComponent.IntentA');
+    }
+  }
+
+  @Component({ name: 'MiddleComponent' })
+  class MiddleComponent extends BaseComponent {
+    @PrioritizedOverUnhandled()
+    @Intents('IntentA')
+    handleIntentA() {
+      return this.$send('MiddleComponent.IntentA');
+    }
+
+    UNHANDLED() {
+      return this.$send('MiddleComponent.UNHANDLED');
+    }
+  }
+
+  @Component({ name: 'TopComponent' })
+  class TopComponent extends BaseComponent {
+    UNHANDLED() {
+      return this.$send('TopComponent.UNHANDLED');
+    }
+  }
+
+  const app = new App({
+    plugins: [new ExamplePlatform()],
+    components: [BottomComponent, MiddleComponent, TopComponent],
+  });
+  await app.initialize();
+
+  const server = new ExampleServer({
+    input: {
+      type: InputType.Intent,
+      intent: 'IntentA',
+    },
+    session: {
+      data: {
+        state: [
+          {
+            component: 'BottomComponent',
+          },
+          {
+            component: 'MiddleComponent',
+            resolve: {},
+          },
+          {
+            component: 'TopComponent',
+            resolve: {},
+          },
+        ],
+      },
+    },
+  });
+  await app.handle(server);
+  expect(server.response.output).toEqual([
+    {
+      message: 'MiddleComponent.IntentA',
     },
   ]);
 });
