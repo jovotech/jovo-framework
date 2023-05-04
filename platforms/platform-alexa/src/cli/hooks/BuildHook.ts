@@ -438,38 +438,73 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       _set(projectFiles, skillIdPath, skillId);
     }
 
+    this.checkLocales(projectFiles);
+
+    FileBuilder.buildDirectory(projectFiles, this.$plugin.platformPath);
+  }
+
+  checkLocales(projectFiles: FileObject): void {
     const skillName: string = this.$cli.project!.getProjectName();
     const locales: string[] = this.$context.locales.reduce((locales: string[], locale: string) => {
       locales.push(...getResolvedLocales(locale, SupportedLocales, this.$plugin.config.locales));
       return locales;
     }, []);
 
+    const privacyAndCompliances = _get(
+      projectFiles,
+      `skill-package/["skill.json"].manifest.privacyAndCompliance.locales`,
+    ) as FileObject;
+    const publishingInfos = _get(
+      projectFiles,
+      `skill-package/["skill.json"].manifest.publishingInformation.locales`,
+    ) as FileObject;
+
     for (const locale of locales) {
+      const genericLocaleKey = Object.keys(this.$plugin.config.locales || {}).find((key) =>
+        ([...this.$plugin.config.locales![key]!] as string[]).includes(locale),
+      );
+
       // Check whether publishing information has already been set.
-      const publishingInformationPath = `skill-package/["skill.json"].manifest.publishingInformation.locales.${locale}`;
-      if (!_has(projectFiles, publishingInformationPath)) {
-        _set(projectFiles, publishingInformationPath, {
-          summary: 'Sample Short Description',
-          examplePhrases: ['Alexa open hello world'],
-          keywords: ['hello', 'world'],
-          name: skillName,
-          description: 'Sample Full Description',
-          smallIconUri: 'https://via.placeholder.com/108/09f/09f.png',
-          largeIconUri: 'https://via.placeholder.com/512/09f/09f.png',
-        });
+      if (!_has(publishingInfos, locale)) {
+        const fallback = genericLocaleKey ? _get(publishingInfos, genericLocaleKey) : undefined;
+        _set(
+          publishingInfos,
+          locale,
+          fallback || {
+            summary: 'Sample Short Description',
+            examplePhrases: ['Alexa open hello world'],
+            keywords: ['hello', 'world'],
+            name: skillName,
+            description: 'Sample Full Description',
+            smallIconUri: 'https://via.placeholder.com/108/09f/09f.png',
+            largeIconUri: 'https://via.placeholder.com/512/09f/09f.png',
+          },
+        );
       }
 
-      const privacyAndCompliancePath = `skill-package/["skill.json"].manifest.privacyAndCompliance.locales.${locale}`;
       // Check whether privacy and compliance information has already been set.
-      if (!_has(projectFiles, privacyAndCompliancePath)) {
-        _set(projectFiles, privacyAndCompliancePath, {
-          privacyPolicyUrl: 'http://example.com/policy',
-          termsOfUseUrl: '',
-        });
+      if (!_has(privacyAndCompliances, locale)) {
+        const fallback = genericLocaleKey
+          ? _get(privacyAndCompliances, genericLocaleKey)
+          : undefined;
+        _set(
+          privacyAndCompliances,
+          locale,
+          fallback || {
+            privacyPolicyUrl: 'http://example.com/policy',
+            termsOfUseUrl: '',
+          },
+        );
       }
     }
 
-    FileBuilder.buildDirectory(projectFiles, this.$plugin.platformPath);
+    // clear generic locales from projectFiles
+    for (const key of Object.keys(privacyAndCompliances)) {
+      if (!locales.includes(key)) delete privacyAndCompliances[key];
+    }
+    for (const key of Object.keys(publishingInfos)) {
+      if (!locales.includes(key)) delete publishingInfos[key];
+    }
   }
 
   /**
