@@ -28,3 +28,5 @@ export * from './ConnectionVerifyPersonOutput';
 export * from './ConnectionScheduleFoodEstablishmentReservationOutput';
 export * from './ProgressiveResponseOutput';
 export * from './CanFulfillIntentOutput';
+
+export * from './AplRenderDocumentOutput';
