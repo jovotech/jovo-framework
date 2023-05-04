@@ -19,6 +19,7 @@ export class VideoAppLaunchOutput extends BaseOutput<VideoAppLaunchOutputOptions
           nativeResponse: {
             response: {
               directives: [videoAppLaunchDirective],
+              // Responses containing a VideoApp.Launch Directive must not have a shouldEndSession parameter
               shouldEndSession: undefined,
             },
           },
