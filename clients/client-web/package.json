@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/client-web",
-  "version": "4.5.6",
+  "version": "4.5.7",
   "description": "",
   "main": "dist/JovoWebClient.cjs.js",
   "module": "dist/JovoWebClient.esm.js",
@@ -24,9 +24,9 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@jovotech/common": "^4.5.6",
-    "@jovotech/output": "^4.5.6",
-    "@jovotech/platform-core": "^4.5.6",
+    "@jovotech/common": "^4.5.7",
+    "@jovotech/output": "^4.5.7",
+    "@jovotech/platform-core": "^4.5.7",
     "detect-browser": "^5.2.1",
     "events": "^3.3.0",
     "lodash.defaultsdeep": "^4.6.1",
