@@ -25,6 +25,7 @@ The app configuration files in the `src` folder are the main entry point of your
 
 Here is an example [`app.ts` file](https://github.com/jovotech/jovo-v4-template/blob/master/src/app.ts):
 
+<!-- Commented texts -->
 ```typescript
 import { App } from '@jovotech/framework';
 import { AlexaPlatform } from '@jovotech/platform-alexa';
