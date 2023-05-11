@@ -79,8 +79,6 @@ new MicrosoftCluNlu({
 
 To access the Conversaton Analysis Runtime API, you need to specify various parameters for the client SDK. Other parameters are optional.
 
-- `id`: The ID of a conversation item. Default: generated UUID.
-- `participantId`: The participant ID of a conversation item. Default: generated UUID.
 - `options`: Optional parameters for the Conversation Analysis Client. For more info, see the [ConversationAnalysisClientOptionalParams](https://github.com/Azure/azure-sdk-for-js/blob/8c9b021b3566b12a10296a656433b4d9c44629e5/sdk/cognitivelanguage/ai-language-conversations/src/models.ts#L2174) interface.
 - [`taskParameters`](#taskparameters): Parameters necessary for a Conversation task.
 

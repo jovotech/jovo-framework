@@ -18,11 +18,9 @@ import {
 
 import { AzureKeyCredential, KeyCredential, TokenCredential } from '@azure/core-auth';
 import { v4 as uuidV4 } from 'uuid';
-import { INTENT_NONE, PROJECTKIND_CONVERSATION } from './constants';
+import { INTENT_NONE, PROJECTKIND_CONVERSATION, PARTICIPANT_USER } from './constants';
 
 export interface MicrosoftCluLibraryConfig {
-  id: string;
-  participantId: string;
   taskParameters: ConversationTaskParameters;
   options?: ConversationAnalysisClientOptionalParams;
 }
@@ -41,8 +39,6 @@ export class MicrosoftCluNlu extends NluPlugin<MicrosoftCluNluConfig> {
       fallbackLanguage: 'en',
       endpoint: '',
       libraryConfig: {
-        id: uuidV4(),
-        participantId: uuidV4(),
         taskParameters: {
           projectName: '',
           deploymentName: '',
@@ -70,31 +66,19 @@ export class MicrosoftCluNlu extends NluPlugin<MicrosoftCluNluConfig> {
       });
     }
 
-    try {
-      const result = await this.sendTextToServer(jovo, text);
+    const result = await this.sendTextToServer(jovo, text);
 
-      if (
-        result &&
-        result.prediction &&
-        result.prediction.projectKind === PROJECTKIND_CONVERSATION
-      ) {
-        const topIntent = result.prediction.topIntent || INTENT_NONE;
+    if (result.prediction.projectKind === PROJECTKIND_CONVERSATION) {
+      const topIntent = result.prediction.topIntent || INTENT_NONE;
 
-        const nluData: NluData = {};
+      const nluData: NluData = {};
 
-        nluData.intent = { name: topIntent };
-        nluData.entities = this.getEntityMapFromResponse(result);
-        nluData.native = result;
+      nluData.intent = { name: topIntent };
+      nluData.entities = this.getEntityMapFromResponse(result);
+      nluData.native = result;
 
-        return nluData;
-      }
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.error('Error while retrieving nlu-data from MicrosoftClu-server: ', e);
-      return;
+      return nluData;
     }
-
-    return;
   }
 
   private async sendTextToServer(jovo: Jovo, text: string): Promise<AnalyzeConversationResult> {
@@ -110,8 +94,8 @@ export class MicrosoftCluNlu extends NluPlugin<MicrosoftCluNluConfig> {
       kind: PROJECTKIND_CONVERSATION,
       analysisInput: {
         conversationItem: {
-          participantId: this.config.libraryConfig.participantId,
-          id: this.config.libraryConfig.id,
+          participantId: PARTICIPANT_USER,
+          id: jovo.$request.getRequestId ? jovo.$request.getRequestId() || uuidV4() : uuidV4(),
           language: this.getLocale(jovo),
           text,
         },
