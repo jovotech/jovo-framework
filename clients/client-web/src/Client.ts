@@ -33,6 +33,7 @@ import {
   VoidListener,
 } from './index';
 import { EventListenerMap, TypedEventEmitter } from './utilities/TypedEventEmitter';
+import { Output } from '../../../framework/dist/types';
 
 export type ClientRequest = PlainObjectType<CoreRequest>;
 export type ClientResponse = PlainObjectType<CoreResponse>;
@@ -183,8 +184,10 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
     });
 
     this.on(ClientEvent.RepromptLimitReached, () => {
-      this.store.resetSession();
-      this.store.save();
+      if(this.repromptProcessor.config.resetSessionOnRepromptLimit) {
+        this.store.resetSession();
+        this.store.save();
+      }
     });
 
     this.on(ClientEvent.Input, async (input) => {
