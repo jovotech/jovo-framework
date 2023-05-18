@@ -397,12 +397,16 @@ The configuration for the [`SpeechSynthesizer`](https://github.com/jovotech/jovo
 speechSynthesizer: {
   enabled: true,
   language: 'en',
-  voice: SpeechSynthesisVoice
+  voice: SpeechSynthesisVoice,
+  rate: number,
+  pitch: number
 },
 ```
 
 - `language`: Can also be overridden using the `locale` property in the root of the [client configuration](#configuration).
 - `voice`: Learn more in the [official documentation by Mozilla](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesisVoice).
+- `rate`: Learn more in the [official documentation by Mozilla](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesisUtterance/rate).
+- `pitch`: Learn more in the [official documentation by Mozilla](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesisUtterance/pitch).
 
 The player has the following features:
 
@@ -447,10 +451,12 @@ Reprompts are played by the [`RepromptProcessor`](https://github.com/jovotech/jo
 reprompts: {
   enabled: true,
   maxAttempts: 1,
+  resetSessionOnRepromptLimit: true
 },
 ```
 
-The `maxAttempts` property defines how many reprompts should be played before closing the session.
+- `maxAttempts` property defines how many reprompts should be played before closing the session.
+- `resetSessionOnRepromptLimit` property determines if the current session will be closed after the the maximum number of reprompts has been played. The default is `true`.
 
 ## Deployment
 
