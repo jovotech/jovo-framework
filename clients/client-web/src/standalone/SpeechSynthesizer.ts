@@ -115,7 +115,7 @@ export class SpeechSynthesizer extends TypedEventEmitter<SpeechSynthesizerEventL
       if (this.config.rate) {
         utterance.rate = this.config.rate;
       }
-      if (this.config.pitch) {
+      if (this.config.pitch !== undefined) {
         utterance.pitch = this.config.pitch;
       }
 
