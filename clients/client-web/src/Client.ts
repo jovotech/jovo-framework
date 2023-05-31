@@ -184,7 +184,7 @@ export class Client extends TypedEventEmitter<ClientEventListenerMap> {
     });
 
     this.on(ClientEvent.RepromptLimitReached, () => {
-      if(this.repromptProcessor.config.resetSessionOnRepromptLimit) {
+      if (this.repromptProcessor.config.resetSessionOnRepromptLimit) {
         this.store.resetSession();
         this.store.save();
       }

@@ -24,7 +24,7 @@ export interface SpeechSynthesizerConfig {
   language: string;
   voice?: SpeechSynthesisVoice;
   rate?: number;
-  pitch?: number; 
+  pitch?: number;
 }
 
 export class SpeechSynthesizer extends TypedEventEmitter<SpeechSynthesizerEventListenerMap> {

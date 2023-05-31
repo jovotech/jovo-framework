@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/plugin-keywordnlu",
-  "version": "4.5.7",
+  "version": "4.5.8",
   "description": "Match common keywords to intents and skip lengthy NLU service calls.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -22,7 +22,7 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@jovotech/framework": "^4.5.7",
+    "@jovotech/framework": "^4.5.8",
     "@types/jest": "^26.0.20",
     "@types/node": "^12.20.37",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
@@ -37,7 +37,7 @@
     "typescript": "~4.4.4"
   },
   "peerDependencies": {
-    "@jovotech/framework": "4.5.7"
+    "@jovotech/framework": "4.5.8"
   },
   "gitHead": "5a9ba2fe3100f807f627f55117e7b2ad4bbce9c1",
   "prettier": "../../.prettierrc.js",
