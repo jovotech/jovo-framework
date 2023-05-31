@@ -8,8 +8,17 @@ export abstract class DashbotAnalyticsPlugin {
       await axios.post(url, data);
     } catch (error) {
       if (error.isAxiosError) {
+        let message: string;
+        if (Array.isArray(error.response.data.errors)) {
+          message = error.response.data.errors.join('\n');
+        } else if (typeof error.response.data === 'string') {
+          message = error.response.data;
+        } else {
+          message = JSON.stringify(error.response.data);
+        }
+
         throw new JovoError({
-          message: `Request to Dashbot failed: ${error.response.data.errors.join('\n')}`,
+          message: `Request to Dashbot failed: ${message}`,
         });
       }
 
