@@ -208,6 +208,17 @@ parts.push(getKeyHash(userId));
 // ...
 ```
 
+If you want to use the session ID as part of the key for the entry with an `id` of `'session'`:
+
+```ts
+// ...
+if (configEntry.id === 'session') {
+  parts.push(jovo.$request.getSessionId() ?? userId);
+}
+// ...
+```
+
+
 ### onDecodeValue
 
 The default `onDecodeValue` function parses the string from Redis into a JSON object:
