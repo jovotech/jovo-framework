@@ -75,8 +75,8 @@ new RedisDb({
     {
       id: 'data',
       user: true,
-      session: false,
-      history: false,
+      session: true,
+      history: true,
       createdAt: true,
       updatedAt: true,
       ttlSeconds: 0,
