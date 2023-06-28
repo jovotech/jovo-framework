@@ -2,7 +2,7 @@ import { JovoLogger } from '@jovotech/common';
 import axios from 'axios';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-require('source-map-support').install();
+//require('source-map-support').install();
 
 export const Logger = new JovoLogger();
 
