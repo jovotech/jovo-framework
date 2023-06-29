@@ -1,8 +1,11 @@
 import { JovoLogger } from '@jovotech/common';
 import axios from 'axios';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-//require('source-map-support').install();
+// do not use source map support with jest.
+if (process.env.JEST_WORKER_ID === undefined) {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  require('source-map-support').install();
+}
 
 export const Logger = new JovoLogger();
 
