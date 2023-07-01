@@ -3,7 +3,8 @@
   "compilerOptions": {
     "outDir": "dist/esm5",
     "module": "es2015",
-    "target": "es5"
+    "target": "es5",
+    "skipLibCheck": true,
   },
   "include": [
     "src"
