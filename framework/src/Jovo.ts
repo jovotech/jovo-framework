@@ -40,6 +40,8 @@ import { JovoRoute } from './plugins/RouterPlugin';
 import { forEachDeep } from './utilities';
 import { DependencyInjector } from './DependencyInjector';
 import { v4 as uuidv4 } from 'uuid';
+import {BaseDelegateComponent} from "./BaseDelegateComponent";
+
 const DELEGATE_MIDDLEWARE = 'event.$delegate';
 const RESOLVE_MIDDLEWARE = 'event.$resolve';
 const REDIRECT_MIDDLEWARE = 'event.$redirect';
@@ -431,7 +433,8 @@ export abstract class Jovo<
   }
 
   // TODO determine whether an error should be thrown if $resolve is called from a context outside a delegation
-  async $resolve<ARGS extends unknown[]>(eventName: string, ...eventArgs: ARGS): Promise<void> {
+    // TODO Move the implementation to the BaseDelegatedComponent. So also the previously TODO can be removed.
+    async $resolve<ARGS extends any[]>(eventName: string, ...eventArgs: ARGS): Promise<void> {
     if (!this.$state) {
       return;
     }

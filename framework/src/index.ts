@@ -47,6 +47,7 @@ export {
 export * from './App';
 export * from './AsyncJovo';
 export * from './BaseComponent';
+export * from './BaseDelegateComponent';
 export * from './BaseOutput';
 export * from './ComponentPlugin';
 export * from './ComponentTree';
