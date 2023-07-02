@@ -40,7 +40,6 @@ import { JovoRoute } from './plugins/RouterPlugin';
 import { forEachDeep } from './utilities';
 import { DependencyInjector } from './DependencyInjector';
 import { v4 as uuidv4 } from 'uuid';
-
 const DELEGATE_MIDDLEWARE = 'event.$delegate';
 const RESOLVE_MIDDLEWARE = 'event.$resolve';
 const REDIRECT_MIDDLEWARE = 'event.$redirect';
