@@ -7,7 +7,7 @@ import util from 'util';
 import { App, AppConfig } from './App';
 import { HandleRequest } from './HandleRequest';
 import {
-  BaseComponent,
+  BaseComponent, BaseDelegateComponent,
   BaseOutput,
   ComponentConfig,
   ComponentConstructor,
@@ -40,7 +40,6 @@ import { JovoRoute } from './plugins/RouterPlugin';
 import { forEachDeep } from './utilities';
 import { DependencyInjector } from './DependencyInjector';
 import { v4 as uuidv4 } from 'uuid';
-import {BaseDelegateComponent} from "./BaseDelegateComponent";
 
 const DELEGATE_MIDDLEWARE = 'event.$delegate';
 const RESOLVE_MIDDLEWARE = 'event.$resolve';
@@ -356,6 +355,12 @@ export abstract class Jovo<
     });
   }
 
+  async $delegate<COMPONENT extends BaseDelegateComponent<any>>(
+      component: ComponentConstructor<COMPONENT> | string,
+      options: DelegateOptions<ComponentConfig<COMPONENT>, COMPONENT extends BaseDelegateComponent<infer RESOLVE, any, any>
+          ? keyof RESOLVE
+          : never>,
+  ): Promise<void>
   async $delegate<COMPONENT extends BaseComponent>(
     constructor: ComponentConstructor<COMPONENT>,
     options: DelegateOptions<ComponentConfig<COMPONENT>>,

@@ -1,5 +1,5 @@
 import { UnknownObject } from '@jovotech/common';
-import { BaseComponent, ComponentData } from './';
+import { BaseComponent, ComponentData } from './index';
 
 export type ExtractDelegatedEventData<
     T extends BaseDelegateComponent<Record<string, unknown>>,
