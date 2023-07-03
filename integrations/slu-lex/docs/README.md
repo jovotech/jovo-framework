@@ -47,11 +47,6 @@ const app = new App({
             id: '<your-bot-id>',
             aliasId: '<your-alias-id>',
           },
-          region: '<your-aws-region>',
-          credentials: {
-            accessKeyId: '<your-access-key-id>',
-            secretAccessKey: '<your-secret-access-key>',
-          },
         }),
       ],
     }),
@@ -62,6 +57,48 @@ const app = new App({
 
 For the integration to work, you need to add all configurations shown in the code snippet above. For more information, take a look at the [configuration section](#configuration).
 
+The rest of this section provides an introduction to the steps you need to take depending on where you host your Jovo app:
+
+- [On AWS (e.g. Lambda)](#for-apps-hosted-on-aws)
+- [Outside AWS](#for-apps-hosted-outside-aws)
+
+### For Apps Hosted on AWS
+
+If you host your app on [AWS Lambda](https://www.jovo.tech/marketplace/server-lambda) and want to use Lex v2 in the same region, you only need to add the bot id and aliasId to get started:
+
+```typescript
+new LexSlu({
+  bot: {
+    id: '<your-bot-id>',
+    aliasId: '<your-alias-id>',
+  },
+}),
+```
+
+### For Apps Hosted Outside AWS
+
+If you want to use Lex v2 from outside AWS Lambda, you need to set it up for programmatic access. Learn more in the official guide by Amazon: [Identity and access management for Amazon Lex V2](https://docs.aws.amazon.com/lexv2/latest/dg/security-iam.html) and [Setting credentials in Node.js](https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/setting-credentials-node.html).
+
+You can then add the necessary keys using the [`libraryConfig` property](#libraryconfig):
+
+```typescript
+new LexSlu({
+  bot: {
+    id: '<your-bot-id>',
+    aliasId: '<your-alias-id>',
+  },
+  libraryConfig: {
+    lexRuntimeV2Client: {
+      region: 'us-east-1',
+      credentials: {
+        accessKeyId: 'myAccessKeyId',
+        secretAccessKey: 'mySecretAccessKey',
+      },
+    }
+  }
+  // ...
+}),
+```
 ## Configuration
 
 The following configurations can be added:
@@ -71,11 +108,6 @@ new LexSlu({
   bot: {
     id: '',
     aliasId: ''
-  },
-  region: '',
-  credentials: {
-    accessKeyId: '',
-    secretAccessKey: '',
   },
   fallbackLocale: 'en_US',
   localeMap: {
@@ -88,12 +120,44 @@ new LexSlu({
 ```
 
 - `bot`: Includes information about your created Lex bot.
-- `region`: The AWS region of the Lex bot, for example `us-east-1`.
-- `credentials`: Your AWS security credentials.
+- `libraryConfig`: Any configuration for the AWS Lex v2 SDK can be passed here. [Learn more below](#libraryconfig).
+- `region`: (deprecated: use `libraryConfig`) The AWS region of the Lex bot, for example `us-east-1`.
+- `credentials`: (deprecated: use `libraryConfig`) Your AWS security credentials.
 - `fallbackLocale`: Locale that should be used if none could be found in the request. Default: `en_US`.
 - `localeMap` (optional): This is used to map a request locale to a Lex localeId.
 - `asr`: Determines whether the Lex [ASR](https://www.jovo.tech/docs/asr) capabilities should be used. Default: `true`.
 - `nlu`: Determines whether the Lex [NLU](https://www.jovo.tech/docs/nlu) capabilities should be used. Default: `true`.
+
+### libraryConfig
+
+The `libraryConfig` property can be used to pass configurations to the AWS Lex v2 SDK that is used by this integration.
+
+Currently, it includes options for the [LexRuntimeV2Client](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/lex-runtime-v2/):
+
+```typescript
+new LexSlu({
+  bot: { /* ... */ },
+  libraryConfig: { /* ... */ }
+  // ...
+}),
+```
+
+For example, you can add `credentials` like this:
+
+```typescript
+new LexSlu({
+  libraryConfig: {
+    lexRuntimeV2Client: {
+      region: 'us-east-1',
+      credentials: {
+        accessKeyId: 'myAccessKeyId',
+        secretAccessKey: 'mySecretAccessKey',
+      },
+    }
+  }
+
+}),
+```
 
 ## Entities
 

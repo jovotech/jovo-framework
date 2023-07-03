@@ -8,8 +8,9 @@ import {
   RecognizeUtteranceCommand,
   RecognizeUtteranceCommandInput,
   DialogAction,
+  LexRuntimeV2ClientConfig,
 } from '@aws-sdk/client-lex-runtime-v2';
-import type { Credentials } from '@aws-sdk/types';
+import type { AwsCredentialIdentity } from '@aws-sdk/types';
 import {
   AsrData,
   DeepPartial,
@@ -57,17 +58,19 @@ export interface LexSluConfig extends InterpretationPluginConfig {
     id: string;
     aliasId: string;
   };
-  credentials: Credentials;
-  region: string;
+  credentials?: AwsCredentialIdentity; // @deprecated use libraryConfig
+  region?: string; // @deprecated use libraryConfig
   locale?: string;
   localeMap?: Record<string, string>;
   fallbackLocale: string;
   asr: boolean;
   nlu: boolean;
+  libraryConfig?: {
+    lexRuntimeV2Client?: LexRuntimeV2ClientConfig;
+  };
 }
 
-export type LexSluInitConfig = DeepPartial<LexSluConfig> &
-  Pick<LexSluConfig, 'bot' | 'credentials' | 'region'>;
+export type LexSluInitConfig = DeepPartial<LexSluConfig> & Pick<LexSluConfig, 'bot'>;
 
 export class LexSlu extends SluPlugin<LexSluConfig> {
   targetSampleRate = 16000;
@@ -99,35 +102,36 @@ export class LexSlu extends SluPlugin<LexSluConfig> {
   constructor(config: LexSluInitConfig) {
     super(config);
 
-    this.client = new LexRuntimeV2Client({
-      credentials: this.config.credentials,
-      region: this.config.region,
-    });
+    const clientConfig = this.config?.libraryConfig || {};
+    if (!clientConfig.lexRuntimeV2Client) {
+      clientConfig.lexRuntimeV2Client = {};
+    }
+
+    // handle deprecated properties
+    if (this.config.credentials) {
+      clientConfig.lexRuntimeV2Client.credentials = this.config.credentials;
+    }
+
+    if (this.config.region) {
+      clientConfig.lexRuntimeV2Client.region = this.config.region;
+    }
+
+    this.client = new LexRuntimeV2Client(clientConfig.lexRuntimeV2Client);
   }
 
   getDefaultConfig(): LexSluConfig {
     return {
       ...super.getDefaultConfig(),
       bot: { id: '', aliasId: '' },
-      region: '',
-      credentials: {
-        accessKeyId: '',
-        secretAccessKey: '',
-      },
       fallbackLocale: 'en_US',
       asr: true,
       nlu: true,
     };
   }
 
-  getInitConfig(): RequiredOnlyWhere<LexSluConfig, 'credentials' | 'region' | 'bot'> {
+  getInitConfig(): RequiredOnlyWhere<LexSluConfig, 'bot'> {
     return {
       bot: { id: '', aliasId: '' },
-      region: '',
-      credentials: {
-        accessKeyId: '',
-        secretAccessKey: '',
-      },
     };
   }
 
