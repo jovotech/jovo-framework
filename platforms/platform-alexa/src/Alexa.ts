@@ -7,6 +7,7 @@ import { AlexaUser } from './AlexaUser';
 import { AlexaEntity } from './interfaces';
 import { AlexaIsp } from './AlexaIsp';
 import { AlexaAudioPlayer } from './AlexaAudioPlayer';
+import { AlexaTask } from './AlexaTask';
 
 export class Alexa extends Jovo<
   AlexaRequest,
@@ -19,11 +20,13 @@ export class Alexa extends Jovo<
   $entities!: EntityMap<AlexaEntity>;
   isp: AlexaIsp;
   audioPlayer: AlexaAudioPlayer;
+  task: AlexaTask;
 
   constructor($app: App, $handleRequest: HandleRequest, $platform: AlexaPlatform) {
     super($app, $handleRequest, $platform);
     this.isp = new AlexaIsp(this);
     this.audioPlayer = new AlexaAudioPlayer(this);
+    this.task = new AlexaTask(this);
   }
   getSkillId(): string | undefined {
     return (
