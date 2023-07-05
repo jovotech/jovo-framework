@@ -29,7 +29,7 @@ type YES_NO_MAYBE = 'YES' | 'NO' | 'MAYBE';
 
 interface CanFulfillSlotEntry {
   canUnderstand: YES_NO_MAYBE,
-  canCullFill: YES_NO_MAYBE,
+  canFulFill: YES_NO_MAYBE,
 }
 
 export interface Response {
