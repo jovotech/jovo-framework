@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/plugin-slack",
-  "version": "4.5.10",
+  "version": "4.5.11",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm5/index.js",
@@ -25,7 +25,7 @@
     "@slack/webhook": "^6.0.0"
   },
   "devDependencies": {
-    "@jovotech/framework": "^4.5.10",
+    "@jovotech/framework": "^4.5.11",
     "@types/jest": "^26.0.20",
     "@types/node": "^12.20.37",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
@@ -40,7 +40,7 @@
     "typescript": "~4.4.4"
   },
   "peerDependencies": {
-    "@jovotech/framework": "4.5.10"
+    "@jovotech/framework": "4.5.11"
   },
   "gitHead": "5a9ba2fe3100f807f627f55117e7b2ad4bbce9c1",
   "prettier": "../../.prettierrc.js",
