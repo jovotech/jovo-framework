@@ -1,5 +1,5 @@
-import { UnknownObject } from '@jovotech/common';
-import { BaseComponent, ComponentData } from './index';
+import {UnknownObject} from '@jovotech/common';
+import {BaseComponent, ComponentData} from './index';
 
 export type ExtractDelegatedEventData<
     T extends BaseDelegateComponent<Record<string, unknown>>,
@@ -18,13 +18,9 @@ export abstract class BaseDelegateComponent<
     override async $resolve<ARGS extends RESOLVE[KEY], KEY extends keyof RESOLVE = keyof RESOLVE>(
         eventName: Extract<KEY, string>,
         ...eventArgs: ARGS extends Array<unknown> ? ARGS : ARGS[]
-    ): Promise<void>;
-    override async $resolve<ARGS extends RESOLVE[KEY], KEY extends keyof RESOLVE = keyof RESOLVE>(
-        eventName: Extract<KEY, string>,
-        eventArg: ARGS,
     ): Promise<void> {
         // because of the JovoProxy class, this implementation of the $resolve will not be called.
         // But it's ok, we need only types work.
-        return super.$resolve(eventName as string, ...(eventArg as unknown[]));
+        return super.$resolve(eventName as string, ...(eventArgs as unknown[]));
     }
 }
