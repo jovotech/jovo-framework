@@ -6,8 +6,10 @@ export type ExtractDelegatedEventData<
     KEY extends keyof T['__resolve'],
 > = T extends BaseDelegateComponent<infer RESOLVE> ? RESOLVE[KEY] : never;
 
+type IsTuple<T> = T extends [any, ...any] ? true : false
+
 export abstract class BaseDelegateComponent<
-    RESOLVE extends UnknownObject,
+    RESOLVE extends Record<string, any>,
     DATA extends ComponentData = ComponentData,
     CONFIG extends UnknownObject = UnknownObject,
 > extends BaseComponent<DATA, CONFIG> {
@@ -17,10 +19,10 @@ export abstract class BaseDelegateComponent<
 
     override async $resolve<ARGS extends RESOLVE[KEY], KEY extends keyof RESOLVE = keyof RESOLVE>(
         eventName: Extract<KEY, string>,
-        ...eventArgs: ARGS extends Array<unknown> ? [...ARGS] : [ARGS]
+        ...eventArgs: ARGS extends Array<unknown> ? (IsTuple<ARGS> extends true ? ARGS : [ARGS]) : [ARGS]
     ): Promise<void> {
         // because of the JovoProxy class, this implementation of the $resolve will not be called.
         // But it's ok, we need only types work.
-        return super.$resolve(eventName as string, ...(eventArgs as unknown[]));
+        return super.$resolve(eventName as string, ...eventArgs);
     }
 }
