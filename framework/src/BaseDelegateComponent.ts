@@ -17,7 +17,7 @@ export abstract class BaseDelegateComponent<
 
     override async $resolve<ARGS extends RESOLVE[KEY], KEY extends keyof RESOLVE = keyof RESOLVE>(
         eventName: Extract<KEY, string>,
-        ...eventArgs: ARGS extends Array<unknown> ? ARGS : ARGS[]
+        ...eventArgs: ARGS extends Array<unknown> ? [...ARGS] : [ARGS]
     ): Promise<void> {
         // because of the JovoProxy class, this implementation of the $resolve will not be called.
         // But it's ok, we need only types work.
