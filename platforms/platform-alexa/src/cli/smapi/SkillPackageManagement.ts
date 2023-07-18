@@ -94,9 +94,11 @@ export async function getImportStatus(
 }
 
 function parseImportUrl({ headers }: ImportResponse): string | undefined {
-  // Try to parse the import url from command result
-  return headers
-    .find((header) => header.key === 'location')
-    ?.value.split('/')
-    .pop();
+  const headersArray = Object.entries(headers);
+  const locationHeader = headersArray.find(([key]) => key === 'location');
+  if (locationHeader) {
+    const [, value] = locationHeader;
+    return value.split('/').pop();
+  }
+  return undefined;
 }
