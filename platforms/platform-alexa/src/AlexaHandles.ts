@@ -1,4 +1,4 @@
-import { EnumLike, HandleOptions, Jovo } from '@jovotech/framework';
+import { EnumLike, HandleOptions, InputType, Jovo } from '@jovotech/framework';
 import { AlexaRequest } from './AlexaRequest';
 import { PermissionStatus, PurchaseResultLike } from './interfaces';
 
@@ -91,6 +91,19 @@ export class AlexaHandles {
       global: true,
       types: ['CanFulfillIntentRequest'],
       platforms: ['alexa'],
+    };
+  }
+
+  static onTask(taskName: string, taskVersion?: number | string): HandleOptions {
+    return {
+      types: [InputType.Launch],
+      if: (jovo: Jovo) => {
+        const task = jovo.$alexa?.task.getTask();
+        if (!task) return false;
+        if (!jovo.$alexa?.task.hasTaskName(taskName)) return false;
+        if (taskVersion && !jovo.$alexa.task.isVersion(taskVersion)) return false;
+        return true;
+      },
     };
   }
 }

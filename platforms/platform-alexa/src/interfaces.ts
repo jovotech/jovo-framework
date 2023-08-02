@@ -222,6 +222,11 @@ export interface Request {
     listId?: string;
     listItemIds?: string[];
   };
+  task?: {
+    name: string;
+    version: string;
+    input: Record<string, unknown>;
+  };
 }
 
 // Defines a target for Alexa Conversations

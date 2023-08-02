@@ -631,6 +631,50 @@ This would result in the following output template:
 }
 ```
 
+### Custom Tasks
+
+You can handle [custom tasks](https://developer.amazon.com/en-US/docs/alexa/custom-skills/understand-tasks.html) with the following features:
+
+- `this.$alexa.task` property that offers helper methods and properties to access task related values
+- `AlexaHandles.onTask()` for the [`@Handle` decorator](https://www.jovo.tech/docs/handle-decorators) to accept task requests
+
+Here is an example:
+
+```typescript
+import { AlexaHandles } from '@jovotech/platform-alexa';
+// ...
+
+@Handle(AlexaHandles.onTask('Reminder', 1))
+reminderTask(): Promise<void> {
+  const task = this.$alexa?.task.getTask();
+  const taskName = this.$alexa?.task.name;
+  const taskVersion = this.$alexa?.task.version;
+  const input = this.$alexa?.task.input;
+  console.log(task, taskName, taskVersion, input);
+
+  // ...
+}
+```
+
+To learn more about all features of the `task` property, take a look at the [`AlexaTask.ts` file](https://github.com/jovotech/jovo-framework/blob/v4/latest/platforms/platform-alexa/src/AlexaTask.ts).
+
+
+Under the hood, `onTask()` as part of [`AlexaHandles`](https://github.com/jovotech/jovo-framework/blob/v4/latest/platforms/platform-alexa/src/AlexaHandles.ts) looks like this with the parameters `taskName: string` and optional `taskVersion?: number | string`:
+
+```typescript
+{
+  types: [InputType.Launch],
+  if: (jovo: Jovo) => {
+    const task = jovo.$alexa?.task.getTask();
+    if (!task) return false;
+    if (!jovo.$alexa?.task.hasTaskName(taskName)) return false;
+    if (taskVersion && !jovo.$alexa.task.isVersion(taskVersion)) return false;
+    return true;
+  },
+}
+```
+
+
 ### Name-free Interaction
 
 You can handle [name-free interactions](https://developer.amazon.com/docs/alexa/custom-skills/implement-canfulfillintentrequest-for-name-free-interaction.html) by responding to `CanFulfillIntentRequest` requests. To do this, you can use the following two helpers:
