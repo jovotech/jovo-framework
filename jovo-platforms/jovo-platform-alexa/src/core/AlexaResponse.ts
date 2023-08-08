@@ -60,14 +60,19 @@ export class AlexaResponse implements JovoResponse {
   getDirectives() {
     return _get(this, 'response.directives');
   }
+  
   getDirective(directiveType?: string) {
     const allDirectives = this.getDirectives();
-
-    for (const directiveItem of allDirectives) {
-      if (directiveItem.type && directiveItem.type.indexOf(directiveType) > -1) {
-        return directiveItem;
+    
+    if (allDirectives) {
+      for (const directiveItem of allDirectives) {
+        if (directiveItem.type && directiveItem.type.indexOf(directiveType) > -1) {
+          return directiveItem;
+        }
       }
     }
+
+    return;
   }
 
   getAplDirective() {
@@ -83,6 +88,7 @@ export class AlexaResponse implements JovoResponse {
 
     return;
   }
+  
   hasAplDirective(): boolean {
     if (!this.getAplDirective()) {
       return false;
@@ -104,6 +110,7 @@ export class AlexaResponse implements JovoResponse {
 
     return;
   }
+  
   hasApltDirective(): boolean {
     if (!this.getApltDirective()) {
       return false;
@@ -126,6 +133,7 @@ export class AlexaResponse implements JovoResponse {
 
     return true;
   }
+  
   getAudioDirective() {
     if (this.getDirectives()) {
       return this.getDirective('AudioPlayer');
@@ -140,6 +148,7 @@ export class AlexaResponse implements JovoResponse {
 
     return true;
   }
+  
   getVideoDirective() {
     if (this.getDirectives()) {
       return this.getDirective('VideoApp');
@@ -162,6 +171,7 @@ export class AlexaResponse implements JovoResponse {
       return this.getSessionAttributes();
     }
   }
+  
   // tslint:disable-next-line
   hasSessionData(name: string, value?: any): boolean {
     return this.hasSessionAttribute(name, value);
@@ -186,6 +196,7 @@ export class AlexaResponse implements JovoResponse {
     }
     return SpeechBuilder.removeSpeakTags(_get(this, 'response.outputSpeech.ssml'));
   }
+  
   getReprompt() {
     if (!_get(this, 'response.reprompt.outputSpeech.ssml')) {
       return;
@@ -201,6 +212,7 @@ export class AlexaResponse implements JovoResponse {
 
     return SpeechBuilder.removeSSML(speech);
   }
+  
   getRepromptPlain() {
     const reprompt = this.getReprompt();
     if (!reprompt) {
