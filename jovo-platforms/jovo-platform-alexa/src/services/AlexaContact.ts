@@ -55,7 +55,7 @@ export class AlexaContact {
           code === 'ACCESS_DENIED' &&
           message === 'Access denied with reason: ACCESS_NOT_REQUESTED'
         ) {
-          apiError.code = ApiError.NO_USER_PERMISSION; // dev needs to set correct permissions in ASK console
+          apiError.code = ApiError.NO_USER_PERMISSION; // user needs to grant access in app
         }
         // skip catch
         return Promise.reject(apiError);

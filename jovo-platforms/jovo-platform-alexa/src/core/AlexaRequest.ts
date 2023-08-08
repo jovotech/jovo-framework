@@ -77,6 +77,7 @@ export interface System {
   device: Device;
   apiEndpoint: string;
   apiAccessToken?: string;
+  unit?: { unitId?: string, persistentUnitId?: string}
 }
 
 export interface Viewport {
