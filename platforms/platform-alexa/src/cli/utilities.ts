@@ -21,10 +21,11 @@ import { AskSkillChoice, AskSkillList } from './interfaces';
 export async function checkForAskCli(): Promise<void> {
   try {
     const { stdout } = await execAsync('ask --version');
-    const majorVersion: string = stdout![0];
-    if (parseInt(majorVersion) < 2) {
+    const majorVersion: number = parseInt(stdout![0]);
+    const minorVersion: number = parseInt(stdout!.slice(2, 4));
+    if (majorVersion < 2 || (majorVersion == 2 && minorVersion < 30)) {
       throw new JovoCliError({
-        message: 'Jovo CLI requires ASK CLI @v2 or above.',
+        message: 'Jovo CLI requires ASK CLI @v2.30.0 or above.',
         module: 'AlexaCli',
         hint: 'Please update your ASK CLI using "npm install ask-cli -g".',
       });

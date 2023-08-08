@@ -98,7 +98,7 @@ export interface ImportStatus {
 
 export interface ImportResponse {
   body: UnknownObject;
-  headers: { key: string; value: string }[];
+  headers: {[key: string]: string};
 }
 
 export interface SkillStatusError {

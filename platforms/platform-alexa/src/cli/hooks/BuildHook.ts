@@ -453,10 +453,12 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
     const privacyAndCompliances = _get(
       projectFiles,
       `skill-package/["skill.json"].manifest.privacyAndCompliance.locales`,
+      {},
     ) as FileObject;
     const publishingInfos = _get(
       projectFiles,
       `skill-package/["skill.json"].manifest.publishingInformation.locales`,
+      {},
     ) as FileObject;
 
     for (const locale of locales) {
