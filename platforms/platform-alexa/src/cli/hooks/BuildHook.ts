@@ -507,6 +507,17 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
     for (const key of Object.keys(publishingInfos)) {
       if (!locales.includes(key)) delete publishingInfos[key];
     }
+
+    _set(
+      projectFiles,
+      'skill-package/["skill.json"].manifest.publishingInformation.locales',
+      publishingInfos,
+    );
+    _set(
+      projectFiles,
+      'skill-package/["skill.json"].manifest.privacyAndCompliance.locales',
+      privacyAndCompliances,
+    );
   }
 
   /**
