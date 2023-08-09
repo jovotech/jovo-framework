@@ -43,7 +43,7 @@
     "@jovotech/cli-command-new": "^4.0.0",
     "@jovotech/cli-core": "^4.0.0",
     "@jovotech/common": "^4.5.13",
-    "@jovotech/filebuilder": "^0.0.3",
+    "@jovotech/filebuilder": "^0.0.4",
     "@jovotech/framework": "^4.5.13",
     "@jovotech/output": "^4.5.13",
     "@types/jest": "^26.0.20",
@@ -77,7 +77,7 @@
     "@jovotech/cli-command-new": "^4.0.0",
     "@jovotech/cli-core": "^4.0.0",
     "@jovotech/common": "^4.2.16",
-    "@jovotech/filebuilder": "^0.0.3",
+    "@jovotech/filebuilder": "^0.0.4",
     "@jovotech/framework": "4.5.13",
     "@jovotech/output": "4.5.13"
   },

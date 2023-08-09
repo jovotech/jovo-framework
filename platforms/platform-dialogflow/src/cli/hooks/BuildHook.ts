@@ -207,7 +207,9 @@ export class BuildHook extends PluginHook<BuildPlatformEvents> {
   }
 
   createDialogflowProjectFiles(): void {
-    const files: FileObject = FileBuilder.normalizeFileObject(this.$plugin.config.files || {});
+    const files: FileObject = FileBuilder.normalizeFileObject(
+      (this.$plugin.config.files || {}) as FileObject,
+    );
     // If platforms folder doesn't exist, take default files and parse them with project.js config into FileBuilder.
     const projectFiles: FileObject = this.$cli.project!.hasPlatform(this.$plugin.platformDirectory)
       ? files
