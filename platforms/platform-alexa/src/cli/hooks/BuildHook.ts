@@ -373,7 +373,7 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
    */
   buildProjectFiles(): void {
     const files: FileObject = FileBuilder.normalizeFileObject(
-      _get(this.$plugin.config, 'files', {}),
+      _get(this.$plugin.config, 'files', {}) as FileObject,
     );
 
     // If platforms folder doesn't exist, take default files and parse them with project.js config into FileBuilder.
