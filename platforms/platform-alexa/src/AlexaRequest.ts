@@ -225,10 +225,14 @@ export class AlexaRequest extends JovoRequest {
     if (supportedInterfaces['Alexa.Presentation.APL']) {
       capabilities.push(Capability.Screen, AlexaCapability.Apl);
     }
+    if (supportedInterfaces['Alexa.Presentation.HTML']) {
+      capabilities.push(Capability.Screen, AlexaCapability.Html);
+    }
     if (supportedInterfaces.VideoApp) {
       capabilities.push(Capability.Video);
     }
-    return capabilities;
+    // remove duplicates
+    return [...new Set(capabilities)];
   }
 
   getDeviceId(): string {
