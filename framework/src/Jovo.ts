@@ -66,11 +66,9 @@ export interface JovoPersistableData {
 export interface JovoComponentInfo<
   DATA extends ComponentData = ComponentData,
   CONFIG extends UnknownObject = UnknownObject,
-  EVENTS extends string = string,
 > {
   data: DATA;
   config?: CONFIG;
-  resolve?: Record<EVENTS, string | ((this: BaseComponent, ...args: any[]) => any)>;
 }
 
 export interface DelegateOptions<
@@ -220,11 +218,6 @@ export abstract class Jovo<
       },
       set config(value: UnknownObject | undefined) {
         latestStateStackItem.config = value;
-      },
-      get resolve():
-        | Record<string, string | ((this: BaseComponent, ...args: any[]) => any)>
-        | undefined {
-        return latestStateStackItem.resolve;
       },
     };
   }
@@ -441,10 +434,7 @@ export abstract class Jovo<
   }
 
   // TODO determine whether an error should be thrown if $resolve is called from a context outside a delegation
-  async $resolve<ARGS extends unknown[]>(
-    eventName: Extract<keyof Exclude<this['$component']['resolve'], undefined>, string> | string,
-    ...eventArgs: ARGS
-  ): Promise<void> {
+  async $resolve<ARGS extends unknown[]>(eventName: string, ...eventArgs: ARGS): Promise<void> {
     if (!this.$state) {
       return;
     }

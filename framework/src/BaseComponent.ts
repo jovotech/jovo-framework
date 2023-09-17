@@ -12,10 +12,8 @@ export type ComponentConfig<COMPONENT extends BaseComponent = any> = Exclude<
   undefined
 >;
 
-export type ComponentEvents<COMPONENT extends BaseComponent = any> = Extract<
-  keyof Exclude<COMPONENT['$component']['resolve'], undefined>,
-  string
->;
+export type ComponentEvents<COMPONENT extends BaseComponent = any> =
+  COMPONENT extends BaseComponent<infer DATA, infer CONFIG, infer EVENTS> ? EVENTS : never;
 
 export type ComponentConstructor<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -45,14 +43,14 @@ export abstract class BaseComponent<
     super(jovo);
   }
 
-  get $component(): JovoComponentInfo<DATA, CONFIG, EVENTS> {
+  get $component(): JovoComponentInfo<DATA, CONFIG> {
     return {
       data: this.jovo.$component.data as DATA,
       config: { ...(this.options?.config || {}), ...(this.jovo.$component.config || {}) } as CONFIG,
-      resolve: this.jovo.$component.resolve as Record<
-        EVENTS,
-        string | ((this: BaseComponent, ...args: any[]) => any)
-      >,
     };
+  }
+
+  async $resolve<ARGS extends unknown[]>(eventName: EVENTS, ...eventArgs: ARGS): Promise<void> {
+    return super.$resolve(eventName, eventArgs);
   }
 }
