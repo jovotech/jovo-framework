@@ -232,7 +232,7 @@ export class AlexaRequest extends JovoRequest {
       capabilities.push(Capability.Video);
     }
     // remove duplicates
-    return [...new Set(capabilities)];
+    return Array.from(new Set(capabilities));
   }
 
   getDeviceId(): string {
