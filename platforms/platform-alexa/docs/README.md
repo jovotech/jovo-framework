@@ -409,6 +409,10 @@ if (this.$device.supports('ALEXA:APL')) {
 }
 ```
 
+The following Alexa specific capabilities are available:
+- `AlexaCapability.Apl` or `'ALEXA:APL'` for the `Alexa.Presentation.APL` interface
+- `AlexaCapability.Html` or `'ALEXA:HTML'` for the `Alexa.Presentation.HTML` interface
+
 There are also various Alexa specific features added to the [device class](https://www.jovo.tech/docs/device) that can be accessed like this:
 
 ```typescript
