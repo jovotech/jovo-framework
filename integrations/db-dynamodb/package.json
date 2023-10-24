@@ -22,8 +22,8 @@
   "author": "jovotech",
   "license": "Apache-2.0",
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.18.0",
-    "@aws-sdk/util-dynamodb": "^3.18.0"
+    "@aws-sdk/client-dynamodb": "^3.433.0",
+    "@aws-sdk/util-dynamodb": "^3.433.0"
   },
   "devDependencies": {
     "@jovotech/framework": "^4.5.15",

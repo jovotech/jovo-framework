@@ -13,6 +13,7 @@ import { getSystemTimeZone } from './api/SettingsApi';
 
 export enum AlexaCapability {
   Apl = 'ALEXA:APL',
+  Html = 'ALEXA:HTML',
 }
 
 export type AlexaCapabilityType = CapabilityType | AlexaCapability | `${AlexaCapability}`;
