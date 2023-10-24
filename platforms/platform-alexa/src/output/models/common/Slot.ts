@@ -1,6 +1,14 @@
 import { IsEnum, IsNotEmpty, IsOptional, IsString, Type, ValidateNested } from '@jovotech/output';
 import { Resolutions } from './Resolutions';
-import { ConfirmationStatus, ConfirmationStatusLike } from '../index';
+import { EnumLike } from '@jovotech/common';
+
+export enum SlotConfirmationStatus {
+  None = 'NONE',
+  Confirmed = 'CONFIRMED',
+  Denied = 'DENIED',
+}
+
+export type SlotConfirmationStatusLike = EnumLike<SlotConfirmationStatus>;
 
 export class Slot {
   [key: string]: unknown;
@@ -13,8 +21,8 @@ export class Slot {
   @IsNotEmpty()
   value!: string;
 
-  @IsEnum(ConfirmationStatus)
-  confirmationStatus!: ConfirmationStatusLike;
+  @IsEnum(SlotConfirmationStatus)
+  confirmationStatus!: SlotConfirmationStatusLike;
 
   @IsOptional()
   @ValidateNested()

@@ -1,5 +1,6 @@
 import {
   CreateTableCommand,
+  CreateTableCommandInput,
   DescribeTableCommand,
   DynamoDBClient,
   DynamoDBClientConfig,
@@ -106,7 +107,7 @@ export class DynamoDb extends DbPlugin<DynamoDbConfig> {
   }
 
   async createTable(): Promise<void> {
-    const params = {
+    const params: CreateTableCommandInput = {
       AttributeDefinitions: [
         {
           AttributeName: this.config.table.primaryKeyColumn,

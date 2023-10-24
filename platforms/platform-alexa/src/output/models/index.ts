@@ -1,13 +1,3 @@
-import { EnumLike } from '@jovotech/common';
-
-export enum ConfirmationStatus {
-  None = 'NONE',
-  Confirmed = 'CONFIRMED',
-  Denied = 'DENIED',
-}
-
-export type ConfirmationStatusLike = EnumLike<ConfirmationStatus>;
-
 export * from './AlexaOutputTemplate';
 export * from './AlexaOutputTemplateResponse';
 export * from './Directive';
