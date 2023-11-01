@@ -7,7 +7,7 @@ import util from 'util';
 import { App, AppConfig } from './App';
 import { HandleRequest } from './HandleRequest';
 import {
-  BaseComponent,
+  BaseComponent, BaseDelegateComponent,
   BaseOutput,
   ComponentConfig,
   ComponentConstructor,
@@ -354,6 +354,12 @@ export abstract class Jovo<
     });
   }
 
+  async $delegate<COMPONENT extends BaseDelegateComponent<any>>(
+      component: ComponentConstructor<COMPONENT> | string,
+      options: DelegateOptions<ComponentConfig<COMPONENT>, COMPONENT extends BaseDelegateComponent<infer RESOLVE, any, any>
+          ? keyof RESOLVE
+          : never>,
+  ): Promise<void>
   async $delegate<COMPONENT extends BaseComponent>(
     constructor: ComponentConstructor<COMPONENT>,
     options: DelegateOptions<ComponentConfig<COMPONENT>>,
@@ -431,7 +437,8 @@ export abstract class Jovo<
   }
 
   // TODO determine whether an error should be thrown if $resolve is called from a context outside a delegation
-  async $resolve<ARGS extends unknown[]>(eventName: string, ...eventArgs: ARGS): Promise<void> {
+    // TODO Move the implementation to the BaseDelegatedComponent. So also the previously TODO can be removed.
+    async $resolve<ARGS extends [any]>(eventName: string, ...eventArgs: ARGS): Promise<void> {
     if (!this.$state) {
       return;
     }
