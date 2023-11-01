@@ -181,7 +181,7 @@ export class JovoInbox extends Plugin<JovoInboxConfig> {
   buildLog(jovo: Jovo, type: InboxLogTypeLike, payload: unknown): InboxLog {
     return {
       createdAt: new Date(),
-      projectId: this.config.projectId,
+      projectId: jovo.$data._JOVO_INBOX_.projectId || this.config.projectId,
       platform: jovo.$platform.constructor.name,
       userId: jovo.$user.id || '',
       locale: jovo.$request.getLocale() || this.config.fallbackLocale,
