@@ -1,6 +1,6 @@
 {
   "name": "@jovotech/platform-dialogflow",
-  "version": "4.5.16",
+  "version": "4.5.17",
   "private": true,
   "description": "",
   "main": "dist/cjs/index.js",
@@ -30,7 +30,7 @@
     "@jovotech/cli-command-new": "^4.0.0",
     "@jovotech/cli-core": "^4.0.0",
     "@jovotech/filebuilder": "^0.0.4",
-    "@jovotech/framework": "^4.5.16",
+    "@jovotech/framework": "^4.5.17",
     "@jovotech/model": "^4.0.0",
     "@jovotech/model-dialogflow": "^4.0.0",
     "@jovotech/model-google": "^4.0.0",
@@ -45,8 +45,8 @@
     "lodash.uniq": "^4.5.0"
   },
   "devDependencies": {
-    "@jovotech/common": "^4.5.16",
-    "@jovotech/output": "^4.5.16",
+    "@jovotech/common": "^4.5.17",
+    "@jovotech/output": "^4.5.17",
     "@types/adm-zip": "^0.4.34",
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.has": "^4.5.6",
@@ -71,8 +71,8 @@
     "typescript": "~4.4.4"
   },
   "peerDependencies": {
-    "@jovotech/framework": "4.5.16",
-    "@jovotech/output": "4.5.16"
+    "@jovotech/framework": "4.5.17",
+    "@jovotech/output": "4.5.17"
   },
   "browser": {
     "@jovotech/cli-command-build": false,
