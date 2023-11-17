@@ -99,6 +99,8 @@ new BigQueryAnalytics({
   onAddEvent: async (jovo: Jovo, event: AnalyticsEvent) => {
     event.timeZone = '';
   },
+  addEventFilter: (jovo: Jovo, event: AnalyticsEvent) =>
+    event.eventType !== 'device_capabilities',
 }),
 ```
 
@@ -112,6 +114,7 @@ It includes these properties:
 - `insertRowOptions`: Used to configure the insert of rows into BigQuery. See [insertRowOptions](#insertrowoptions) for more information.
 - `logging`: Default is `false`. When `true`, logs plugin calls for `addEvent` and `sendEvents`. See [logging](#logging) for more information.
 - `onAddEvent`: Optional. Allows modification of the `event` before it is sent to BigQuery. See [onAddEvent](#onaddevent) for more information.
+- `addEventFilter`: Optional. Allows filtering an `event` before it is sent to BigQuery. See [addEventFilter](#addEventFilter) for more information.
 
 ### libraryConfig
 
@@ -197,7 +200,7 @@ new BigQueryAnalytics({
   // ...
 }),
 ```
-- `addEvent`: This logs the event just after the optional call to the `onAddEvent` function defined in config.
+- `addEvent`: This logs the event just after the optional call to the `onAddEvent` function defined in config, or before being filtered by the optional `addEventFilter` function.
 - `sendEvents`: Sends the events to BigQuery. If there are errors inserting the rows, they will be logged.
 
 ### onAddEvent
@@ -232,6 +235,23 @@ plugins: [
     // ...
   }),
 ]
+```
+
+### addEventFilter
+
+Define a `addEventFilter` function, in order to filter out events from being sent to BigQuery. This function returning or resolving to `false` will filter the event out.
+
+This shows how to filter out events with `eventType === 'device_capabilities'`:
+
+```typescript
+import { BigQueryAnalytics, AnalyticsEvent } from '@jovotech/analytics-bigquery';
+// ...
+
+new BigQueryAnalytics({
+  addEventFilter: (jovo: Jovo, event: AnalyticsEvent) =>
+    event.eventType !== 'device_capabilities',
+  // ...
+}),
 ```
 
 ## Event Tracking
