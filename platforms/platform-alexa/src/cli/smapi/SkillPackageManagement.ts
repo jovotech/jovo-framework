@@ -80,12 +80,11 @@ export async function getImportStatus(
     await wait(500);
     return await getImportStatus(importId, askProfile);
   } else if (status.status === 'FAILED') {
+    const errorResource = status.skill.resources.find((r) => r.errors);
     throw new JovoCliError({
       message: 'Errors occured while importing your skill package',
-      hint: status.skill.resources.length
-        ? status.skill.resources[0].errors.length
-          ? status.skill.resources[0].errors[0].message
-          : JSON.stringify(status.skill.resources, null, 2)
+      hint: errorResource
+        ? errorResource.errors[0].message
         : JSON.stringify(status.skill.resources, null, 2),
     });
   }
