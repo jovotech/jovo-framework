@@ -89,7 +89,7 @@ export interface ImportResource {
 export interface ImportStatus {
   skill: {
     eTag: string;
-    resources: [ImportResource];
+    resources: ImportResource[];
     skillId: string;
   };
   status: SkillStatus;
