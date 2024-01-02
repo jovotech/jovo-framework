@@ -104,15 +104,22 @@ export function getAskError(method: string, stderr: string): JovoCliError {
   const errorIndex: number = stderr.indexOf(splitter);
   if (errorIndex > -1) {
     const errorString: string = getRawString(stderr.substring(errorIndex + splitter.length));
-    try {
-      const parsedError = JSON.parse(errorString);
-      const payload = _get(parsedError, 'detail.response', parsedError);
-      const details = getViolations(payload);
+    const parsedError = JSON.parse(errorString);
+    const payload = _get(parsedError, 'detail.response', parsedError);
+    const message: string = payload.message;
+    let violations = '';
 
-      return new JovoCliError({ message: `${method}: ${payload.message}`, module, details });
-    } catch (error) {
-      return new JovoCliError({ message: `${method}: ${errorString}`, module });
+    if (payload.violations) {
+      for (const violation of payload.violations) {
+        violations += violation.message;
+      }
     }
+
+    if (payload.detail) {
+      violations = payload.detail.response.message;
+    }
+
+    return new JovoCliError({ message: `${method}: ${message}`, module, details: violations });
   } else {
     // Try parsing for alternative error message.
     let i: number, pathRegex: RegExp;
@@ -151,20 +158,6 @@ export function getAskError(method: string, stderr: string): JovoCliError {
   }
 
   return new JovoCliError({ message: stderr, module });
-}
-
-function getViolations(payload: any): string {
-  let violations = '';
-  if (payload.violations) {
-    for (const violation of payload.violations) {
-      violations += violation.message;
-    }
-  }
-
-  if (payload.detail) {
-    violations = payload.detail.response.message;
-  }
-  return violations;
 }
 
 export function copyFiles(src: string, dest: string): void {
