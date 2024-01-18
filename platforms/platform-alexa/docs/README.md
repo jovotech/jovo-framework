@@ -668,6 +668,7 @@ Under the hood, `onTask()` as part of [`AlexaHandles`](https://github.com/jovote
 ```typescript
 {
   types: [InputType.Launch],
+  global: true,
   if: (jovo: Jovo) => {
     const task = jovo.$alexa?.task.getTask();
     if (!task) return false;
