@@ -105,7 +105,7 @@ describe('mergeInstances', () => {
       },
     };
 
-    expect(mergeInstances(a, b)).toEqual(merged);
+    expect(mergeInstances(b, a)).toEqual(merged);
   });
 
   test('test merging of nested arrays', () => {
