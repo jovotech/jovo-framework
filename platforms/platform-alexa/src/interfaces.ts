@@ -7,7 +7,7 @@ export interface Session {
   application: Application;
   attributes: JovoSession;
   user: User;
-  person: Person;
+  person?: Person;
 }
 
 export interface Context {
@@ -74,7 +74,7 @@ export interface Unit {
 export interface System {
   application: Application;
   user: User;
-  person: Person;
+  person?: Person;
   device: Device;
   apiEndpoint: string;
   apiAccessToken: string;
@@ -146,6 +146,9 @@ export interface User {
 export interface Person {
   personId: string;
   accessToken: string;
+  authenticationConfidenceLevel: {
+    level: number;
+  };
 }
 
 export interface Permission {
