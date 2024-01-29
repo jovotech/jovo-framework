@@ -1,5 +1,11 @@
 import { AxiosError, JovoError } from '@jovotech/framework';
-import { AlexaApiError, AlexaApiErrorCode, AlexaApiOptions, sendApiRequest } from './AlexaApi';
+import {
+  AlexaApiError,
+  AlexaApiErrorCode,
+  AlexaApiErrorData,
+  AlexaApiOptions,
+  sendApiRequest,
+} from './AlexaApi';
 
 export const ADDRESS = 'address';
 export const COUNTRY_AND_POSTAL_CODE = 'address/countryAndPostalCode';
@@ -64,7 +70,7 @@ export async function getDeviceAddress(
 // TODO: needs to be refactored after completion of all Alexa APIs
 export function handleDeviceLocationApiErrors(error: AxiosError): Error | void {
   if (error.isAxiosError) {
-    const { message, code } = error.response?.data || {};
+    const { message, code } = (error.response?.data as AlexaApiErrorData) || {};
     let errorCode: AlexaApiErrorCode = AlexaApiErrorCode.ERROR;
 
     if (error.response?.status === 401) {
