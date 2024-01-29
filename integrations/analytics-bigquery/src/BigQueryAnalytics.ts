@@ -26,6 +26,7 @@ export interface BigQueryAnalyticsPluginConfig extends AnalyticsPluginConfig {
   insertRowsOptions: InsertRowsOptions;
   logging?: BigQueryLoggingConfig | boolean;
   onAddEvent?: (jovo: Jovo, event: AnalyticsEvent) => Promise<void> | void;
+  addEventFilter?: (jovo: Jovo, event: AnalyticsEvent) => Promise<boolean> | boolean;
 }
 
 export type BigQueryAnalyticsPluginInitConfig = RequiredOnlyWhere<
