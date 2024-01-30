@@ -1,5 +1,11 @@
 import { AxiosError, JovoError } from '@jovotech/framework';
-import { AlexaApiError, AlexaApiErrorCode, AlexaApiOptions, sendApiRequest } from './AlexaApi';
+import {
+  AlexaApiError,
+  AlexaApiErrorCode,
+  AlexaApiErrorData,
+  AlexaApiOptions,
+  sendApiRequest,
+} from './AlexaApi';
 
 export type ListMetadata = {
   listId: string;
@@ -106,7 +112,7 @@ export async function getListItem(
  */
 function handleListApiErrors(error: AxiosError): Error | void {
   if (error.isAxiosError) {
-    const { message } = error.response?.data;
+    const { message } = error.response?.data as AlexaApiErrorData;
     let errorCode: AlexaApiErrorCode = AlexaApiErrorCode.ERROR;
 
     const status = error.response?.status;

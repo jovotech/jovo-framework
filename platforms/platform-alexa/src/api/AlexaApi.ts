@@ -27,6 +27,12 @@ export interface AlexaApiErrorOptions extends JovoErrorOptions {
   code: AlexaApiErrorCode;
 }
 
+export interface AlexaApiErrorData {
+  [key: string]: unknown;
+  message: string;
+  code: string;
+}
+
 export class AlexaApiError extends JovoError {
   code: AlexaApiErrorCode;
 
