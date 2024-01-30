@@ -428,6 +428,53 @@ class YourComponent extends BaseComponent {
 
 ## Advanced Component Features
 
+### Type Safety
+
+You can pass the following interfaces and types to `BaseComponent`:
+
+- [Component options](#component-options)
+- [Component data](#component-data)
+- Component events when [delegating to a component](./handlers.md#delegate-to-components)
+
+For example, this could look like this:
+
+```typescript
+import { Component, BaseComponent, ComponentConfig, ComponentData } from '@jovotech/framework';
+
+export interface YourComponentConfig extends ComponentConfig {
+  someKey: string;
+}
+
+export interface YourComponentData extends ComponentData {
+  someKey: string;
+}
+
+export enum YourComponentEvents {
+  Yes = 'onYes',
+  No = 'onNo',
+}
+
+class YourComponent extends BaseComponent<YourComponentData, YourComponentConfig, YourComponentEvents> {
+  // ...
+}
+```
+
+You don't need to pass all three elements:
+
+```typescript
+import { Component, BaseComponent } from '@jovotech/framework';
+
+export enum YourComponentEvents {
+  Yes = 'onYes',
+  No = 'onNo',
+}
+
+class YourComponent extends BaseComponent<{}, {}, YourComponentEvents> {
+  // ...
+}
+```
+
+
 ### ComponentTree
 
 The [`ComponentTree`](https://github.com/jovotech/jovo-framework/blob/v4/latest/framework/src/ComponentTree.ts) contains all [registered components](#component-registration):

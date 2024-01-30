@@ -189,6 +189,13 @@ onNo() {
 }
 ```
 
+The following options can be added to `$delegate()`:
+
+- `resolve`: Handlers that should be called after the child component [resolves](#resolve-a-component) with certain data.
+  - Can include references to handler functions like `this.onYes` (doesn't work with anonymous functions)
+  - Can include a string to the handler key: `'onYes'`
+- `config`: The config that is used by the child component. Can be accessed inside the child component with `this.$component.config`.
+
 In the above example, the [`$state` stack](./state-stack.md) gets updated like this:
 
 ```typescript
@@ -237,12 +244,22 @@ yourHandler() {
 }
 ```
 
-The following options can be added to `$delegate()`:
+You can also pass that enum to the component for [type safety](./components.md#type-safety):
 
-- `resolve`: Handlers that should be called after the child component [resolves](#resolve-a-component) with certain data.
-  - Can include references to handler functions like `this.onYes` (doesn't work with anonymous functions)
-  - Can include a string to the handler key: `'onYes'`
-- `config`: The config that is used by the child component. Can be accessed inside the child component with `this.$component.config`.
+```typescript
+// src/components/YesNoComponent.ts
+
+export enum YesNoComponentEvent {
+  Yes = 'yes',
+  No = 'no',
+}
+
+class YesNoComponent extends BaseComponent<{}, {}, YesNoComponentEvent> {
+  // ...
+}
+```
+
+
 
 ### Resolve a Component
 
