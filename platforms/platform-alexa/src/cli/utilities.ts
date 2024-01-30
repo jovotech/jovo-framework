@@ -115,7 +115,7 @@ export function getAskError(method: string, stderr: string): JovoCliError {
       }
     }
 
-    if (payload.detail) {
+    if (payload.detail?.response?.message) {
       violations = payload.detail.response.message;
     }
 
