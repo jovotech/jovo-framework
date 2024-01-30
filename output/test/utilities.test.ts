@@ -127,6 +127,6 @@ describe('mergeInstances', () => {
       },
     };
 
-    expect(mergeInstances(b, a)).toEqual(merged);
+    expect(mergeInstances(a, b)).toEqual(merged);
   });
 });

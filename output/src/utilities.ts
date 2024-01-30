@@ -104,7 +104,7 @@ export function mergeInstances<D extends object, S extends any[]>(
     // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any
     (value: any, srcValue: any, key: string, object: any) => {
       if (Array.isArray(srcValue) && Array.isArray(value)) {
-        return srcValue.concat(value);
+        return value.concat(srcValue);
       }
       if (typeof srcValue === 'undefined') {
         _unset(object, key);
