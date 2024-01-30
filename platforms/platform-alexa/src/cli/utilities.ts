@@ -161,7 +161,7 @@ function getViolations(payload: any): string {
     }
   }
 
-  if (payload.detail) {
+  if (payload.detail?.response?.message) {
     violations = payload.detail.response.message;
   }
   return violations;
