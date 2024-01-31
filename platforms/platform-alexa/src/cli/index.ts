@@ -101,7 +101,7 @@ export class AlexaCli extends JovoCliPlugin<AlexaCliConfig> {
     return initConfig;
   }
 
-  getHooks(): typeof PluginHook[] {
+  getHooks(): (typeof PluginHook)[] {
     return [BuildHook, GetHook, DeployHook, NewHook];
   }
 

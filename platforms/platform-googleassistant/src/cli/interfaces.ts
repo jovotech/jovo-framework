@@ -12,7 +12,7 @@ export interface GoogleActionActions {
   };
 }
 
-export type SupportedLocalesType = typeof SupportedLocales[number];
+export type SupportedLocalesType = (typeof SupportedLocales)[number];
 
 export interface GoogleCliConfig extends PluginConfig {
   projectId: string;

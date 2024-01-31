@@ -23,7 +23,7 @@ export interface AskSkillChoice {
   };
 }
 
-export type SupportedLocalesType = typeof SupportedLocales[number];
+export type SupportedLocalesType = (typeof SupportedLocales)[number];
 
 export interface AlexaConversationsConfig {
   enabled: boolean;

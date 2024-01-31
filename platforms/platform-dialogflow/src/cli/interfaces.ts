@@ -1,7 +1,7 @@
 import { PluginConfig } from '@jovotech/cli-core';
 import { SupportedLocales } from './constants';
 
-export type SupportedLocalesType = typeof SupportedLocales[number];
+export type SupportedLocalesType = (typeof SupportedLocales)[number];
 
 export interface DialogflowConfig extends PluginConfig {
   endpoint?: string;

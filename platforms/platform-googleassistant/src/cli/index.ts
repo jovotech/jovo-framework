@@ -32,7 +32,7 @@ export class GoogleAssistantCli extends JovoCliPlugin<GoogleCliConfig> {
     return `${this.type}.${this.id}`;
   }
 
-  getHooks(): typeof PluginHook[] {
+  getHooks(): (typeof PluginHook)[] {
     return [BuildHook, GetHook, DeployHook];
   }
 

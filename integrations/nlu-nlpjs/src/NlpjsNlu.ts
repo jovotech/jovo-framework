@@ -158,13 +158,13 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
 
     return nlpResult?.intent
       ? {
-        intent: {
-          name: nlpResult.intent,
-        },
-        entities,
-        native: nlpResult,
-        raw: nlpResult, // @deprecated please use 'native' property
-      }
+          intent: {
+            name: nlpResult.intent,
+          },
+          entities,
+          native: nlpResult,
+          raw: nlpResult, // @deprecated please use 'native' property
+        }
       : undefined;
   }
 
