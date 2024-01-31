@@ -197,6 +197,9 @@ export class DeployHook extends AlexaHook<DeployPlatformEvents> {
 
       this.$context.alexa.importId = importId;
 
+      // requesting import status right away sometimes leads to no skill info being returned
+      if (this.$context.flags.async) await wait(3000);
+
       // Check import status
       const status: ImportStatus = await smapi.getImportStatus(
         importId,
