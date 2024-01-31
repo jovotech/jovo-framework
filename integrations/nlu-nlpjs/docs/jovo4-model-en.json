@@ -1,0 +1,110 @@
+{
+  "invocation": "my test app",
+  "version": "4.0",
+  "intents": {
+    "YesIntent": {
+      "phrases": [
+        "yes",
+        "yes please",
+        "sure"
+      ]
+    },
+    "NoIntent": {
+      "phrases": [
+        "no",
+        "no thanks"
+      ]
+    },
+    "ColorIntent": {
+      "phrases": [
+        "i pick {color}",
+        "my favorite color is {color}"
+      ],
+      "entities": {
+        "color": {
+          "type": "CUSTOM_COLORS"
+        }
+      }
+    },
+    "PetIntent": {
+      "phrases": [
+        "i have a {pet}",
+        "i want {number} {pet}"
+      ],
+      "entities": {
+        "pet": {
+          "type": {
+            "nlpjs": "CUSTOM_PET"
+          }
+        }
+      }
+    },
+    "EmailIntent": {
+      "phrases": [
+        "send to {email}"
+      ]
+    },
+    "SsnIntent": {
+      "phrases": [
+        "my tax id is {ssn}"
+      ],
+      "entities": {
+        "ssn": {
+          "type": "regex:/(?!000)(?!666)(?!9)[0-9]{3}[ -]?(?!00)[0-9]{2}[ -]?(?!0000)[0-9]{4}/g"
+        }
+      }
+    },
+    "NumberIntent": {
+      "phrases": [
+        "the number is {number}",
+        "pick a number between {number_0} and {number_1}"
+      ]
+    }
+  },
+  "entityTypes": {
+    "CUSTOM_PET": {
+      "name": "CUSTOM_PET",
+      "values": [
+        {
+          "value": "dog",
+          "synonyms": ["dogs"]
+        },
+        {
+          "value": "cat",
+          "synonyms": ["cats"]
+        }
+      ]
+    },
+    "CUSTOM_COLORS": {
+      "name": "CUSTOM_COLORS",
+      "values": [
+        {
+          "value": "red",
+          "synonyms": [
+            "crimson"
+          ]
+        },
+        {
+          "value": "yellow",
+          "synonyms": []
+        },
+        {
+          "value": "blue",
+          "synonyms": []
+        },
+        {
+          "value": "green",
+          "synonyms": []
+        },
+        {
+          "value": "orange",
+          "synonyms": []
+        },
+        {
+          "value": "purple",
+          "synonyms": []
+        }
+      ]
+    }
+  }
+}

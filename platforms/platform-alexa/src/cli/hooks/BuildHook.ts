@@ -444,7 +444,6 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
   }
 
   checkLocales(projectFiles: FileObject): void {
-    const skillName: string = this.$cli.project!.getProjectName();
     const locales: string[] = this.$context.locales.reduce((locales: string[], locale: string) => {
       locales.push(...getResolvedLocales(locale, SupportedLocales, this.$plugin.config.locales));
       return locales;
@@ -466,38 +465,17 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
         ([...this.$plugin.config.locales![key]!] as string[]).includes(locale),
       );
 
+      this.mergeGenericLocale(publishingInfos, locale, genericLocaleKey);
+
       // Check whether publishing information has already been set.
-      if (!_has(publishingInfos, locale)) {
-        const fallback = genericLocaleKey ? _get(publishingInfos, genericLocaleKey) : undefined;
-        _set(
-          publishingInfos,
-          locale,
-          fallback || {
-            summary: 'Sample Short Description',
-            examplePhrases: ['Alexa open hello world'],
-            keywords: ['hello', 'world'],
-            name: skillName,
-            description: 'Sample Full Description',
-            smallIconUri: 'https://via.placeholder.com/108/09f/09f.png',
-            largeIconUri: 'https://via.placeholder.com/512/09f/09f.png',
-          },
-        );
-      }
+      if (!publishingInfos[locale])
+        publishingInfos[locale] = this.getDefaultPublishingInformation();
+
+      this.mergeGenericLocale(privacyAndCompliances, locale, genericLocaleKey);
 
       // Check whether privacy and compliance information has already been set.
-      if (!_has(privacyAndCompliances, locale)) {
-        const fallback = genericLocaleKey
-          ? _get(privacyAndCompliances, genericLocaleKey)
-          : undefined;
-        _set(
-          privacyAndCompliances,
-          locale,
-          fallback || {
-            privacyPolicyUrl: 'http://example.com/policy',
-            termsOfUseUrl: '',
-          },
-        );
-      }
+      if (!privacyAndCompliances[locale])
+        privacyAndCompliances[locale] = this.getDefaultPrivacyAndCompliances();
     }
 
     // clear generic locales from projectFiles
@@ -518,6 +496,32 @@ export class BuildHook extends AlexaHook<BuildPlatformEvents> {
       'skill-package/["skill.json"].manifest.privacyAndCompliance.locales',
       privacyAndCompliances,
     );
+  }
+
+  private mergeGenericLocale(fileObject: FileObject, locale: string, genericLocale?: string) {
+    if (genericLocale && fileObject[genericLocale]) {
+      fileObject[locale] = _merge({}, fileObject[genericLocale], fileObject[locale]);
+    }
+  }
+
+  private getDefaultPublishingInformation() {
+    const skillName: string = this.$cli.project!.getProjectName();
+    return {
+      summary: 'Sample Short Description',
+      examplePhrases: ['Alexa open hello world'],
+      keywords: ['hello', 'world'],
+      name: skillName,
+      description: 'Sample Full Description',
+      smallIconUri: 'https://via.placeholder.com/108/09f/09f.png',
+      largeIconUri: 'https://via.placeholder.com/512/09f/09f.png',
+    };
+  }
+
+  private getDefaultPrivacyAndCompliances() {
+    return {
+      privacyPolicyUrl: 'http://example.com/policy',
+      termsOfUseUrl: '',
+    };
   }
 
   /**

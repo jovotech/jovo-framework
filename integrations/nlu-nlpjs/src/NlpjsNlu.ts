@@ -21,6 +21,49 @@ export interface Nlp {
   [key: string]: any;
 }
 
+export interface NlpJsEntityResolutionDuration {
+  timex?: string;
+  type?: string;
+  value?: string;
+}
+
+export interface NlpJsEntityResolution {
+  strValue?: string;
+  strFutureValue?: string;
+  value?: string | number;
+  subType?: string;
+  values?: NlpJsEntityResolutionDuration[];
+  timex?: string;
+}
+
+export enum NlpJsEntityType {
+  Age = 'age',
+  Boolean = 'boolean',
+  Currency = 'currency',
+  Date = 'date',
+  DateRange = 'daterange',
+  DateTime = 'datetime',
+  DateTimeRange = 'datetimerange',
+  Dimension = 'dimension',
+  Duration = 'duration',
+  Email = 'email',
+  Enum = 'enum',
+  Hashtag = 'hashtag',
+  Ip = 'ip',
+  Mention = 'mention',
+  Number = 'number',
+  NumberRange = 'numberrange',
+  Ordinal = 'ordinal',
+  Percentage = 'percentage',
+  PhoneNumber = 'phoneNumber',
+  Regex = 'regex',
+  Temperature = 'temperature',
+  Time = 'time',
+  TimeRange = 'timerange',
+  Timezone = 'timezone',
+  Url = 'url',
+}
+
 export interface NlpJsEntity {
   start: number;
   end: number;
@@ -28,11 +71,12 @@ export interface NlpJsEntity {
   levenshtein: number;
   accuracy: number;
   entity: string;
-  type: 'enum' | string;
+  type: 'enum' | string | NlpJsEntityType;
   option: string;
   sourceText: string;
   utteranceText: string;
   alias?: string;
+  resolution?: NlpJsEntityResolution;
 }
 
 export type SetupModelFunction = (parent: Platform, nlp: Nlp) => void | Promise<void>;
@@ -100,9 +144,10 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
     const entities = (nlpResult?.entities || []).reduce(
       (entityMap: EntityMap, entity: NlpJsEntity) => {
         const entityName = entity.alias || entity.entity;
+        const resolvedValue = this.getResolvedValue(entity);
         entityMap[entityName] = {
-          id: entity.option,
-          resolved: entity.option,
+          id: resolvedValue,
+          resolved: resolvedValue,
           value: entity.utteranceText,
           native: entity,
         };
@@ -113,13 +158,13 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
 
     return nlpResult?.intent
       ? {
-          intent: {
-            name: nlpResult.intent,
-          },
-          entities,
-          native: nlpResult,
-          raw: nlpResult, // @deprecated please use 'native' property
-        }
+        intent: {
+          name: nlpResult.intent,
+        },
+        entities,
+        native: nlpResult,
+        raw: nlpResult, // @deprecated please use 'native' property
+      }
       : undefined;
   }
 
@@ -146,6 +191,62 @@ export class NlpjsNlu extends NluPlugin<NlpjsNluConfig> {
       nlpJsModeFiles.forEach((model) => {
         this.nlpjs?.addCorpus(model.content);
       });
+    }
+  }
+
+  private getResolvedValue(entity: NlpJsEntity): string {
+    switch (entity.type) {
+      case NlpJsEntityType.Enum:
+        return entity.option ?? entity.utteranceText;
+
+      case NlpJsEntityType.Regex:
+        return entity.utteranceText;
+
+      case NlpJsEntityType.Age:
+      case NlpJsEntityType.Currency:
+      case NlpJsEntityType.Dimension:
+      case NlpJsEntityType.Number:
+      case NlpJsEntityType.Ordinal:
+      case NlpJsEntityType.Temperature:
+        return entity?.resolution?.strValue ?? entity.utteranceText;
+
+      case NlpJsEntityType.Date:
+        return (
+          entity?.resolution?.strValue ?? entity?.resolution?.strFutureValue ?? entity.utteranceText
+        );
+
+      case NlpJsEntityType.Boolean:
+      case NlpJsEntityType.Percentage:
+        return entity?.resolution?.value
+          ? entity.resolution.value.toString()
+          : entity.utteranceText;
+
+      case NlpJsEntityType.Time:
+      case NlpJsEntityType.DateTime:
+        return entity?.resolution?.values?.[0]?.value ?? entity.utteranceText;
+
+      case NlpJsEntityType.Duration:
+      case NlpJsEntityType.TimeRange:
+        return entity?.resolution?.values?.[0]?.timex ?? entity.utteranceText;
+
+      case NlpJsEntityType.Email:
+      case NlpJsEntityType.Hashtag:
+      case NlpJsEntityType.Ip:
+      case NlpJsEntityType.Mention:
+      case NlpJsEntityType.PhoneNumber:
+      case NlpJsEntityType.Url:
+        return entity?.resolution?.value?.toString() ?? entity.utteranceText;
+
+      case NlpJsEntityType.DateRange:
+      case NlpJsEntityType.DateTimeRange:
+        return entity?.resolution?.timex ?? entity.utteranceText;
+
+      case NlpJsEntityType.NumberRange:
+      case NlpJsEntityType.Timezone:
+      default:
+        // if no explicit mapping, use utteranceText
+        // can still access full details from "native" property
+        return entity.utteranceText;
     }
   }
 }

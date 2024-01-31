@@ -1,0 +1,99 @@
+[
+  {
+    "path": [
+      "en.json"
+    ],
+    "content": {
+      "data": [
+        {
+          "intent": "YesIntent",
+          "utterances": [
+            "yes",
+            "yes please",
+            "sure"
+          ]
+        },
+        {
+          "intent": "NoIntent",
+          "utterances": [
+            "no",
+            "no thanks"
+          ]
+        },
+        {
+          "intent": "ColorIntent",
+          "utterances": [
+            "i pick @color",
+            "my favorite color is @color"
+          ]
+        },
+        {
+          "intent": "PetIntent",
+          "utterances": [
+            "i have a @pet",
+            "i want @number @pet"
+          ]
+        },
+        {
+          "intent": "EmailIntent",
+          "utterances": [
+            "send to @email"
+          ]
+        },
+        {
+          "intent": "SsnIntent",
+          "utterances": [
+            "my tax id is @ssn"
+          ]
+        },
+        {
+          "intent": "NumberIntent",
+          "utterances": [
+            "the number is @number",
+            "pick a number between @number_0 and @number_1"
+          ]
+        }
+      ],
+      "name": "",
+      "locale": "en",
+      "entities": {
+        "color": {
+          "options": {
+            "red": [
+              "red",
+              "crimson"
+            ],
+            "yellow": [
+              "yellow"
+            ],
+            "blue": [
+              "blue"
+            ],
+            "green": [
+              "green"
+            ],
+            "orange": [
+              "orange"
+            ],
+            "purple": [
+              "purple"
+            ]
+          }
+        },
+        "pet": {
+          "options": {
+            "dog": [
+              "dog",
+              "dogs"
+            ],
+            "cat": [
+              "cat",
+              "cats"
+            ]
+          }
+        },
+        "ssn": "/(?!000)(?!666)(?!9)[0-9]{3}[ -]?(?!00)[0-9]{2}[ -]?(?!0000)[0-9]{4}/g"
+      }
+    }
+  }
+]

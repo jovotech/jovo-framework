@@ -1,11 +1,11 @@
-import { Equals, IsDataURI, IsObject, IsOptional, IsString } from '@jovotech/output';
+import { Equals, IsObject, IsOptional, IsString, IsUrl } from '@jovotech/output';
 
 export class HtmlRequest {
-  @IsDataURI()
+  @IsUrl()
   uri!: string;
 
   @Equals('GET')
-  methods!: 'GET';
+  method!: 'GET';
 
   @IsOptional()
   @IsObject()

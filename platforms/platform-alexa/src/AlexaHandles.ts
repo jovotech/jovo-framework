@@ -97,6 +97,7 @@ export class AlexaHandles {
   static onTask(taskName: string, taskVersion?: number | string): HandleOptions {
     return {
       types: [InputType.Launch],
+      global: true,
       if: (jovo: Jovo) => {
         const task = jovo.$alexa?.task.getTask();
         if (!task) return false;
