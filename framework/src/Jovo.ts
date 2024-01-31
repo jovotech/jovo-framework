@@ -12,6 +12,7 @@ import {
   ComponentConfig,
   ComponentConstructor,
   ComponentData,
+  ComponentEvents,
   DbPluginStoredElementsConfig,
   I18NextAutoPath,
   I18NextResourcesLanguageKeys,
@@ -75,7 +76,7 @@ export interface DelegateOptions<
   EVENTS extends string = string,
 > {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  resolve: Record<EVENTS, string | ((this: BaseComponent, ...args: any[]) => any)>;
+  resolve: Partial<Record<EVENTS, string | ((this: BaseComponent, ...args: any[]) => any)>>;
   config?: CONFIG;
 }
 
@@ -356,7 +357,7 @@ export abstract class Jovo<
 
   async $delegate<COMPONENT extends BaseComponent>(
     constructor: ComponentConstructor<COMPONENT>,
-    options: DelegateOptions<ComponentConfig<COMPONENT>>,
+    options: DelegateOptions<ComponentConfig<COMPONENT>, ComponentEvents<COMPONENT>>,
   ): Promise<void>;
   async $delegate(name: string, options: DelegateOptions): Promise<void>;
   async $delegate(
@@ -388,7 +389,9 @@ export abstract class Jovo<
     for (const key in options.resolve) {
       if (options.resolve.hasOwnProperty(key)) {
         const value = options.resolve[key];
-        serializableResolve[key] = typeof value === 'string' ? value : value.name;
+        if (typeof value !== 'undefined') {
+          serializableResolve[key] = typeof value === 'string' ? value : value.name;
+        }
       }
     }
 
