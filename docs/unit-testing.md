@@ -558,6 +558,7 @@ Currently, you can modify the following properties that will be merged into the 
 - `testSuite.$session` for [session data](./data.md#session-data)
 - `testSuite.$request`
 - `testSuite.$data` for [request data](./data.md#request-data)
+- `testSuite.$history` for [history data](./data.md#history)
 
 You can also override your app config using the `$app` property. This is especially helpful when used with [dependency injection](./service-providers-dependency-injection.md):
 
